@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Menu -->
+    <string name="menu_map">Carte</string>
+    <string name="menu_events">Evènements</string>
+    <string name="menu_hikers">Randonneurs</string>
+
+</resources>

@@ -1,0 +1,10 @@
+<resources>
+
+    <string name="app_name" translatable="false">TogeTrail</string>
+
+    <!-- Menu -->
+    <string name="menu_map">Map</string>
+    <string name="menu_events">Events</string>
+    <string name="menu_hikers">Hikers</string>
+
+</resources>
