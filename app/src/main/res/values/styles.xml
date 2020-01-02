@@ -5,6 +5,14 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="floatingActionButtonStyle">@style/FloatingActionButtonTheme</item>
+    </style>
+
+    <!-- FloatingActionsButtons. -->
+    <style name="FloatingActionButtonTheme" parent="@style/Widget.MaterialComponents.FloatingActionButton">
+        <item name="backgroundTint">@color/colorPrimary</item>
+        <item name="tint">@color/colorAccent</item>
+        <item name="rippleColor">@color/colorAccentLight</item>
     </style>
 
 </resources>
