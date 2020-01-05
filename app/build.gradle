@@ -26,6 +26,11 @@ android {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -42,4 +47,13 @@ dependencies {
 
     //Material design
     api 'com.google.android.material:material:1.1.0-alpha10'
+
+    //Joda time
+    implementation 'net.danlew:android.joda:2.10.3'
+
+    //Gpx parser
+    api 'io.ticofab.androidgpxparser:parser:1.6.0'
+
+    //Robolectric
+    androidTestImplementation 'androidx.test:core:1.2.0'
 }

@@ -25,32 +25,32 @@ class TrailTrackTest {
     }
 
     @Test
-    fun getDuration() {
+    fun given_trailTrack_when_getDuration_then_checkResultIs270() {
         assertEquals(270, this.trailTrack.getDuration())
     }
 
     @Test
-    fun getDistance() {
+    fun given_trailTrack_when_getDistance_then_checkResultIs1282() {
         assertEquals(1282, this.trailTrack.getDistance())
     }
 
     @Test
-    fun getAscent() {
+    fun given_trailTrack_when_getAscent_then_checkResultIs133() {
         assertEquals(133, this.trailTrack.getAscent())
     }
 
     @Test
-    fun getDescent() {
+    fun given_trailTrack_when_getDescent_then_checkResultIs78() {
         assertEquals(78, this.trailTrack.getDescent())
     }
 
     @Test
-    fun getMaxElevation() {
+    fun given_trailTrack_when_getMaxElevation_then_wheckResultIs766() {
         assertEquals(766, this.trailTrack.getMaxElevation())
     }
 
     @Test
-    fun getMinElevation() {
+    fun given_trailTrack_when_getMinElevation_then_checkResultIs647() {
         assertEquals(647, this.trailTrack.getMinElevation())
     }
 }
