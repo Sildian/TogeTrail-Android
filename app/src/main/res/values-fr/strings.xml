@@ -3,7 +3,12 @@
 
     <!-- Menu -->
     <string name="menu_map">Carte</string>
+    <string name="menu_trails">Randos</string>
     <string name="menu_events">Evènements</string>
-    <string name="menu_hikers">Randonneurs</string>
+    <string name="menu_new_trail">Nouvelle rando</string>
+    <string name="menu_new_event">Nouvel évènement</string>
+    <string name="menu_new_trail_load_gpx">Charger un GPX</string>
+    <string name="menu_new_trail_draw">Dessiner sur la carte</string>
+    <string name="menu_new_trail_record">Enregistrer en temps réel</string>
 
 </resources>

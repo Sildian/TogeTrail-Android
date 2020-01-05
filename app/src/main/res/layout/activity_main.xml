@@ -24,12 +24,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="@android:color/white"
-        app:backgroundTint="@color/colorPrimary"
-        app:itemIconTint="@color/colorset_menu"
-        app:itemTextColor="@color/colorset_menu"
-        app:itemRippleColor="@color/colorAccentLight"
-        app:menu="@menu/menu_bottom_navigation_view"/>
+        app:menu="@menu/menu_main"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/activity_main_button_add"

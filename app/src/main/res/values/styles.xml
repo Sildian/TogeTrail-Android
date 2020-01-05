@@ -1,18 +1,44 @@
 <resources>
 
-    <!-- Base application theme. -->
+    <!-- Base application theme -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="popupMenuStyle">@style/PopupMenuTheme</item>
+        <item name="textAppearancePopupMenuHeader">@style/PopupMenuTextAppearanceHeader</item>
+        <item name="textAppearanceLargePopupMenu">@style/PopupMenuTextAppearanceBody</item>
+        <item name="textAppearanceSmallPopupMenu">@style/PopupMenuTextAppearanceBody</item>
+        <item name="bottomNavigationStyle">@style/BottomNavigationViewTheme</item>
         <item name="floatingActionButtonStyle">@style/FloatingActionButtonTheme</item>
     </style>
 
-    <!-- FloatingActionsButtons. -->
+    <!-- PopupMenus -->
+    <style name="PopupMenuTheme" parent="@style/Widget.MaterialComponents.PopupMenu">
+        <item name="android:popupBackground">@drawable/shape_background_menu</item>
+    </style>
+    <style name="PopupMenuTextAppearanceHeader" parent="@style/TextAppearance.MaterialComponents.Overline">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+    <style name="PopupMenuTextAppearanceBody" parent="@style/TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+    
+    <!-- BottomNavigationViews -->
+    <style name="BottomNavigationViewTheme" parent="@style/Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:background">@color/colorWhite</item>
+        <item name="backgroundTint">@color/colorPrimary</item>
+        <item name="itemIconTint">@color/colorset_menu</item>
+        <item name="itemTextColor">@color/colorset_menu</item>
+        <item name="itemRippleColor">@color/colorSecondaryLight</item>
+    </style>
+
+    <!-- FloatingActionsButtons -->
     <style name="FloatingActionButtonTheme" parent="@style/Widget.MaterialComponents.FloatingActionButton">
         <item name="backgroundTint">@color/colorPrimary</item>
         <item name="tint">@color/colorAccent</item>
-        <item name="rippleColor">@color/colorAccentLight</item>
+        <item name="rippleColor">@color/colorSecondaryLight</item>
     </style>
 
 </resources>

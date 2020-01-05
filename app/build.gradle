@@ -14,7 +14,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary="true"
+        vectorDrawables.useSupportLibrary = "true"
     }
     buildTypes {
         release {
@@ -46,7 +46,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     //Material design
-    api 'com.google.android.material:material:1.1.0-alpha10'
+    api 'com.google.android.material:material:1.1.0-beta01'
 
     //Joda time
     implementation 'net.danlew:android.joda:2.10.3'

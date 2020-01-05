@@ -1,13 +1,18 @@
 package com.sildian.apps.togetrail.trail
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.PolylineOptions
+import com.sildian.apps.togetrail.trail.model.Trail
 
 /*************************************************************************************************
  * Base for all Trail fragments using a map
@@ -30,6 +35,10 @@ abstract class BaseTrailMapFragment : Fragment(), OnMapReadyCallback {
 
     abstract fun getLayoutId():Int
     abstract fun getMapViewId():Int
+
+    /***************************************Data*************************************************/
+
+    protected var currentTrail: Trail?=null             //The current trail shown on the map
 
     /**********************************UI component**********************************************/
 
@@ -88,6 +97,13 @@ abstract class BaseTrailMapFragment : Fragment(), OnMapReadyCallback {
         this.mapView.onSaveInstanceState(mapViewBundle)
     }
 
+    /**********************************Data monitoring*******************************************/
+
+    fun updateCurrentTrail(trail:Trail?){
+        this.currentTrail=trail
+        showTrailOnMap()
+    }
+
     /**********************************Maps monitoring*******************************************/
 
     private fun initializeMap(savedInstanceState: Bundle?){
@@ -107,6 +123,26 @@ abstract class BaseTrailMapFragment : Fragment(), OnMapReadyCallback {
         }
         else{
             //TODO handle exception
+        }
+    }
+
+    protected fun showTrailOnMap(){
+        if(this.currentTrail!=null){
+
+            /*Creates and shows the polyline from the trailPoints*/
+
+            val polylineOption=PolylineOptions()
+            this.currentTrail?.trailTrack?.trailPoints?.forEach { trailPoint->
+                polylineOption.add(LatLng(trailPoint.latitude, trailPoint.longitude))
+            }
+            this.map.addPolyline(polylineOption)
+
+            /*Moves the camera to the first point and zoom in*/
+
+            val firstPoint=this.currentTrail?.trailTrack!!.trailPoints[0]
+            this.map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                LatLng(firstPoint.latitude, firstPoint.longitude), 13.0f
+            ))
         }
     }
 }
