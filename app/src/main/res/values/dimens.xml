@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Components -->
     <dimen name="components_margin_small">8dp</dimen>
     <dimen name="components_margin_medium">16dp</dimen>
     <dimen name="components_margin_large">32dp</dimen>
-    <dimen name="corner_small">10dp</dimen>
-    <dimen name="corner_medium">20dp</dimen>
-    <dimen name="corner_large">50dp</dimen>
+    <dimen name="components_corner_small">10dp</dimen>
+    <dimen name="components_corner_medium">20dp</dimen>
+    <dimen name="components_corner_large">50dp</dimen>
+
+    <!-- Text -->
+    <dimen name="text_size_body">12sp</dimen>
+    <dimen name="text_size_title">15sp</dimen>
+
 </resources>

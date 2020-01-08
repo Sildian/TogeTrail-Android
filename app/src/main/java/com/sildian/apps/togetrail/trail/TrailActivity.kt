@@ -83,7 +83,7 @@ class TrailActivity : AppCompatActivity() {
             try {
                 val gpx = gpxParser.parse(inputStream)
                 this.trail=TrailFactory.buildFromGpx(gpx)
-                this.fragment.updateCurrentTrail(this.trail)
+                this.fragment.updateTrail(this.trail)
             }
 
             /*Handles exceptions*/
