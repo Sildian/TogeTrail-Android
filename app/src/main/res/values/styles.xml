@@ -16,7 +16,7 @@
 
     <!-- PopupMenus -->
     <style name="PopupMenuTheme" parent="@style/Widget.MaterialComponents.PopupMenu">
-        <item name="android:popupBackground">@drawable/shape_background_menu</item>
+        <item name="android:popupBackground">@drawable/shape_corners_round_color_primary</item>
     </style>
     <style name="PopupMenuTextAppearanceHeader" parent="@style/TextAppearance.MaterialComponents.Overline">
         <item name="android:textColor">@color/colorAccent</item>

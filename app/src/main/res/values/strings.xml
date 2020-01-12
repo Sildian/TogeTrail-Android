@@ -12,7 +12,29 @@
     <string name="menu_new_trail_draw">Draw on map</string>
     <string name="menu_new_trail_record">Realtime record</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Labels -->
+    <string name="label_trail_name">Name</string>
+    <string name="label_trail_description">Description</string>
+    <string name="label_trail_level_easy">Lv Easy</string>
+    <string name="label_trail_level_medium">Lv Medium</string>
+    <string name="label_trail_level_hard">Lv Hard</string>
+    <string name="label_trail_type_hiking">Hiking</string>
+    <string name="label_trail_type_biking">Biking</string>
+    <string name="label_trail_type_other">Other</string>
+    <string name="label_trail_ascent_short">Asc</string>
+    <string name="label_trail_descent_short">Desc</string>
+    <string name="label_trail_distance_short">Dist</string>
+    <string name="label_trail_max_elevation_short">Max elv</string>
+    <string name="label_trail_min_elevation_short">Min elv</string>
+
+    <!-- Examples for layout preview -->
+    <string name="example_trail_name">The super century\s trail</string>
+    <string name="example_trail_description">A really wonderful trail.</string>
+    <string name="example_trail_duration">1 h</string>
+    <string name="example_trail_ascent">500 m\nAsc</string>
+    <string name="example_trail_descent">500 m\nDesc</string>
+    <string name="example_trail_distance">10 km\nDist</string>
+    <string name="example_trail_max_elevation">2000 m\nMax elv</string>
+    <string name="example_trail_min_elevation">1500 m\nMin elv</string>
 
 </resources>

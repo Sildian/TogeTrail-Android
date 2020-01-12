@@ -119,7 +119,7 @@ class TrailActivity : AppCompatActivity() {
 
     private fun showFragment(fragmentId:Int){
         when(fragmentId){
-            ID_FRAGMENT_TRAIL_DETAIL ->this.fragment=TrailDetailFragment()
+            ID_FRAGMENT_TRAIL_DETAIL ->this.fragment=TrailMapDetailFragment()
             //TODO handle other fragments
         }
         supportFragmentManager.beginTransaction()

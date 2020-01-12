@@ -12,6 +12,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.MapMarkersUtilities
 import com.sildian.apps.togetrail.trail.model.Trail
@@ -33,28 +34,26 @@ abstract class BaseTrailMapFragment : Fragment(), OnMapReadyCallback {
         const val KEY_BUNDLE_MAP_VIEW="KEY_BUNDLE_MAP_VIEW"
     }
 
-    /**********************************Abstract methods******************************************/
-
-    abstract fun getLayoutId():Int
-    abstract fun getMapViewId():Int
-
     /***************************************Data*************************************************/
 
     protected var trail: Trail?=null                    //The current trail shown on the map
 
     /**********************************UI component**********************************************/
 
-    protected lateinit var layout:View
-    protected lateinit var mapView:MapView
+    protected lateinit var layout:View                  //The fragment's layout
+    protected lateinit var mapView:MapView              //The map view
+    protected lateinit var infoBottomSheet:BottomSheetBehavior<View>    //Bottom sheet with additional info
+    protected lateinit var infoFragment:Fragment        //Nested fragment within the bottomSheet
 
     /************************************Map support*********************************************/
 
-    protected lateinit var map: GoogleMap
+    protected lateinit var map: GoogleMap               //Map
 
     /************************************Life cycle**********************************************/
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
         this.layout=inflater.inflate(getLayoutId(), container, false)
+        initializeInfoBottomSheet()
         initializeMap(savedInstanceState)
         return this.layout
     }
@@ -101,9 +100,28 @@ abstract class BaseTrailMapFragment : Fragment(), OnMapReadyCallback {
 
     /**********************************Data monitoring*******************************************/
 
+    /**
+     * Updates the current trail then shows it on the map and shows its related info
+     * @param trail : the trail to be shown
+     */
+
     fun updateTrail(trail:Trail?){
         this.trail=trail
         showTrailOnMap()
+        showDefaultInfoFragment()
+    }
+
+    /************************************UI monitoring*******************************************/
+
+    abstract fun getLayoutId():Int
+
+    abstract fun getMapViewId():Int
+
+    abstract fun getInfoBottomSheetId():Int
+
+    private fun initializeInfoBottomSheet(){
+        this.infoBottomSheet=
+            BottomSheetBehavior.from(this.layout.findViewById(getInfoBottomSheetId()))
     }
 
     /***********************************Map monitoring*******************************************/
@@ -174,5 +192,23 @@ abstract class BaseTrailMapFragment : Fragment(), OnMapReadyCallback {
                 LatLng(firstPoint.latitude, firstPoint.longitude), 14.0f
             ))
         }
+    }
+
+    /**************************Nested Fragments monitoring***************************************/
+
+    abstract fun showInfoFragment(fragmentId:Int)
+
+    abstract fun showDefaultInfoFragment()
+
+    protected fun hideInfoBottomSheet(){
+        this.infoBottomSheet.state=BottomSheetBehavior.STATE_HIDDEN
+    }
+
+    protected fun collapseInfoBottomSheet(){
+        this.infoBottomSheet.state=BottomSheetBehavior.STATE_COLLAPSED
+    }
+
+    protected fun expandInfoBottomSheet(){
+        this.infoBottomSheet.state=BottomSheetBehavior.STATE_EXPANDED
     }
 }
