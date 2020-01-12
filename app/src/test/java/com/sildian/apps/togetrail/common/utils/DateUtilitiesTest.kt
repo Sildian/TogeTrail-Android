@@ -34,4 +34,9 @@ class DateUtilitiesTest {
         val expectedResult=calendar.time
         assertEquals(expectedResult, DateUtilities.getDateAndTime(2019, 10, 18, 9, 30))
     }
+
+    @Test
+    fun given_150min_when_displayDuration_then_checkResultIs2h30m(){
+        assertEquals("2h30m", DateUtilities.displayDuration(150))
+    }
 }

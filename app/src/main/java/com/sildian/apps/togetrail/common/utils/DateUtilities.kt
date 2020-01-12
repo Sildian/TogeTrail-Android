@@ -1,5 +1,10 @@
 package com.sildian.apps.togetrail.common.utils
 
+import org.joda.time.Duration
+import org.joda.time.format.PeriodFormat
+import org.joda.time.format.PeriodFormatter
+import org.joda.time.format.PeriodFormatterBuilder
+import java.io.IOException
 import java.util.*
 
 /*************************************************************************************************
@@ -48,5 +53,22 @@ object DateUtilities {
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
         return calendar.time
+    }
+
+    /**
+     * Displays a duration as a string
+     * @param minutes : the total number of minutes
+     * @return a string to display the duration
+     */
+
+    fun displayDuration(minutes:Long):String{
+        val duration = Duration.standardMinutes(minutes)
+        val period = duration.toPeriod()
+        val periodFormat = PeriodFormatterBuilder()
+            .appendHours()
+            .appendSuffix("h")
+            .appendMinutes()
+            .appendSuffix("m")
+        return periodFormat.toFormatter().print(period)
     }
 }

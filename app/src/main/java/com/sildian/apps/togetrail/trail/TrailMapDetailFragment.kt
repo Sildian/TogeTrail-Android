@@ -56,7 +56,7 @@ class TrailMapDetailFragment : BaseTrailMapFragment() {
 
     override fun showInfoFragment(fragmentId:Int){
         when(fragmentId){
-            ID_NESTED_FRAGMENT_INFO_TRAIL ->this.infoFragment=TrailInfoFragment()
+            ID_NESTED_FRAGMENT_INFO_TRAIL ->this.infoFragment=TrailInfoFragment(this.trail)
             //TODO handle other fragments
         }
         childFragmentManager.beginTransaction()
@@ -68,7 +68,7 @@ class TrailMapDetailFragment : BaseTrailMapFragment() {
      */
 
     override fun showDefaultInfoFragment() {
-        this.infoFragment=TrailInfoFragment()
+        this.infoFragment=TrailInfoFragment(this.trail)
         childFragmentManager.beginTransaction()
             .replace(R.id.fragment_trail_map_detail_fragment_info, this.infoFragment).commit()
         collapseInfoBottomSheet()
