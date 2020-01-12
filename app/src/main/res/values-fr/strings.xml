@@ -12,6 +12,7 @@
     <string name="menu_new_trail_record">Enregistrer en temps réel</string>
 
     <!-- Labels -->
+    <!-- Trail -->
     <string name="label_trail_name">Nom</string>
     <string name="label_trail_description">Description</string>
     <string name="label_trail_level_easy">Nv Facile</string>
@@ -25,8 +26,13 @@
     <string name="label_trail_distance_short">Dist</string>
     <string name="label_trail_max_elevation_short">Alt max</string>
     <string name="label_trail_min_elevation_short">Alt min</string>
+    <!-- TrailPointOfInterest -->
+    <string name="label_trail_poi_name">Nom</string>
+    <string name="label_trail_poi_description">Description</string>
+    <string name="label_trail_poi_elevation">Altitude</string>
 
     <!-- Examples for layout preview -->
+    <!-- Trail -->
     <string name="example_trail_name">La super rando du siècle</string>
     <string name="example_trail_description">Une rando vraiment géniale.</string>
     <string name="example_trail_duration">1 h</string>
@@ -35,5 +41,19 @@
     <string name="example_trail_distance">10 km\nDist</string>
     <string name="example_trail_max_elevation">2000 m\nAlt max</string>
     <string name="example_trail_min_elevation">1500 m\nAlt min</string>
+    <!-- TrailPointOfInterest -->
+    <string name="example_trail_poi_name">La plus belle vue du monde</string>
+    <string name="example_trail_poi_description">Je vous assure, c\'est la plus belle vue du monde!</string>
+    <string name="example_trail_poi_elevation">2000 m Altitude</string>
+
+    <!-- Messages to the user -->
+    <string name="message_unknown">\?</string>
+    <string name="message_no_description_available">Aucune description n\'est disponible</string>
+
+    <!-- Metrics -->
+    <string name="metric_hour">h</string>
+    <string name="metric_minute">min</string>
+    <string name="metric_meter">m</string>
+    <string name="metric_kilometer">km</string>
 
 </resources>

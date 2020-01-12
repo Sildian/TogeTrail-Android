@@ -1,7 +1,6 @@
 package com.sildian.apps.togetrail.common.utils
 
 import org.junit.Test
-
 import org.junit.Assert.*
 import java.util.*
 
@@ -37,6 +36,9 @@ class DateUtilitiesTest {
 
     @Test
     fun given_150min_when_displayDuration_then_checkResultIs2h30m(){
-        assertEquals("2h30m", DateUtilities.displayDuration(150))
+        Locale.setDefault(Locale.US)
+        val hourMetric="h"
+        val minuteMetric="min"
+        assertEquals("2 h 30 min", DateUtilities.displayDuration(150, hourMetric, minuteMetric))
     }
 }

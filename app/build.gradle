@@ -55,5 +55,6 @@ dependencies {
     api 'io.ticofab.androidgpxparser:parser:1.6.0'
 
     //Robolectric
+    testImplementation 'androidx.test:core:1.2.0'
     androidTestImplementation 'androidx.test:core:1.2.0'
 }

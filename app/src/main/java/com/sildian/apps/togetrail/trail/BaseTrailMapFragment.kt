@@ -9,9 +9,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.MapMarkersUtilities
@@ -140,11 +138,21 @@ abstract class BaseTrailMapFragment : Fragment(), OnMapReadyCallback {
         if(map!=null) {
             this.map = map
             this.map.mapType= GoogleMap.MAP_TYPE_TERRAIN
+            this.map.setOnPolylineClickListener { polyline ->
+                handleOnPolylineClick(polyline)
+            }
+            this.map.setOnMarkerClickListener { marker ->
+                handleOnMarkerClick(marker)
+            }
         }
         else{
             //TODO handle exception
         }
     }
+
+    abstract fun handleOnPolylineClick(polyline: Polyline)
+
+    abstract fun handleOnMarkerClick(marker:Marker):Boolean
 
     protected fun showTrailOnMap(){
 
@@ -170,11 +178,13 @@ abstract class BaseTrailMapFragment : Fragment(), OnMapReadyCallback {
                 .position(LatLng(firstPoint.latitude, firstPoint.longitude))
                 .icon(MapMarkersUtilities.createMapMarkerFromVector(
                     context, R.drawable.ic_location_green)))
+                .tag=firstPoint
 
             this.map.addMarker(MarkerOptions()
                 .position(LatLng(lastPoint.latitude, lastPoint.longitude))
                 .icon(MapMarkersUtilities.createMapMarkerFromVector(
                     context, R.drawable.ic_flag_green)))
+                .tag=lastPoint
 
             /*Adds a marker for each trailPointOfInterest including its number*/
 
@@ -184,6 +194,7 @@ abstract class BaseTrailMapFragment : Fragment(), OnMapReadyCallback {
                     .position(LatLng(trailPointOfInterest.latitude, trailPointOfInterest.longitude))
                     .icon(MapMarkersUtilities.createMapMarkerFromVector(
                         context, R.drawable.ic_location_color_secondary, (i+1).toString())))
+                    .tag=trailPointOfInterest
             }
 
             /*Moves the camera to the first point and zoom in*/
@@ -195,8 +206,6 @@ abstract class BaseTrailMapFragment : Fragment(), OnMapReadyCallback {
     }
 
     /**************************Nested Fragments monitoring***************************************/
-
-    abstract fun showInfoFragment(fragmentId:Int)
 
     abstract fun showDefaultInfoFragment()
 

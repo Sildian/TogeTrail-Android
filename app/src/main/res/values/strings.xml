@@ -13,6 +13,7 @@
     <string name="menu_new_trail_record">Realtime record</string>
 
     <!-- Labels -->
+    <!-- Trail -->
     <string name="label_trail_name">Name</string>
     <string name="label_trail_description">Description</string>
     <string name="label_trail_level_easy">Lv Easy</string>
@@ -26,8 +27,13 @@
     <string name="label_trail_distance_short">Dist</string>
     <string name="label_trail_max_elevation_short">Max elv</string>
     <string name="label_trail_min_elevation_short">Min elv</string>
+    <!-- TrailPointOfInterest -->
+    <string name="label_trail_poi_name">Name</string>
+    <string name="label_trail_poi_description">Description</string>
+    <string name="label_trail_poi_elevation">Elevation</string>
 
     <!-- Examples for layout preview -->
+    <!-- Trail -->
     <string name="example_trail_name">The super century\s trail</string>
     <string name="example_trail_description">A really wonderful trail.</string>
     <string name="example_trail_duration">1 h</string>
@@ -36,5 +42,19 @@
     <string name="example_trail_distance">10 km\nDist</string>
     <string name="example_trail_max_elevation">2000 m\nMax elv</string>
     <string name="example_trail_min_elevation">1500 m\nMin elv</string>
+    <!-- TrailPointOfInterest -->
+    <string name="example_trail_poi_name">The best view in the world</string>
+    <string name="example_trail_poi_description">I ensure you, this is the most beautiful view in the world!</string>
+    <string name="example_trail_poi_elevation">2000 m Elevation</string>
+
+    <!-- Messages to the user -->
+    <string name="message_unknown">\?</string>
+    <string name="message_no_description_available">No description is available</string>
+
+    <!-- Metrics -->
+    <string name="metric_hour">h</string>
+    <string name="metric_minute">min</string>
+    <string name="metric_meter">m</string>
+    <string name="metric_kilometer">km</string>
 
 </resources>

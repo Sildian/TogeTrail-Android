@@ -9,6 +9,7 @@ import android.view.ViewGroup
 
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.DateUtilities
+import com.sildian.apps.togetrail.common.utils.NumberUtilities
 import com.sildian.apps.togetrail.trail.model.Trail
 import com.sildian.apps.togetrail.trail.model.TrailLevel
 import com.sildian.apps.togetrail.trail.model.TrailType
@@ -113,49 +114,85 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
     }
 
     private fun initializeDuration(){
+        //TODO solve the duration problem then remove the logs
+        Log.d("TEST", this.trail?.trailTrack?.trailPoints?.first()?.time.toString())
+        Log.d("TEST", this.trail?.trailTrack?.trailPoints?.last()?.time.toString())
         val duration=this.trail?.trailTrack?.getDuration()
+        val hourMetric=resources.getString(R.string.metric_hour)
+        val minuteMetric=resources.getString(R.string.metric_minute)
+        val unkownText=resources.getString(R.string.message_unknown)
         this.durationText.text=
-            if(duration!=null)DateUtilities.displayDuration(duration.toLong()) else "?"
+            if(duration!=null)
+                DateUtilities.displayDuration(duration.toLong(), hourMetric, minuteMetric)
+            else unkownText
     }
 
     private fun initializeAscentText(){
         val ascent=this.trail?.trailTrack?.getAscent()
-        val metric=resources.getString(R.string.label_trail_ascent_short)
+        val metric=resources.getString(R.string.metric_meter)
+        val suffix=resources.getString(R.string.label_trail_ascent_short)
+        val unkownText=resources.getString(R.string.message_unknown)
         this.ascentText.text=
-            if(ascent!=null)"$ascent m\n$metric" else "?"
+            if(ascent!=null)
+                NumberUtilities.displayNumberWithMetricAndSuffix(
+                    ascent.toDouble(), 0, metric, suffix, true)
+            else unkownText
     }
 
     private fun initializeDescentText(){
         val descent=this.trail?.trailTrack?.getDescent()
-        val metric=resources.getString(R.string.label_trail_descent_short)
+        val metric=resources.getString(R.string.metric_meter)
+        val suffix=resources.getString(R.string.label_trail_descent_short)
+        val unkownText=resources.getString(R.string.message_unknown)
         this.descentText.text=
-            if(descent!=null)"$descent m\n$metric" else "?"
+            if(descent!=null)
+                NumberUtilities.displayNumberWithMetricAndSuffix(
+                    descent.toDouble(), 0, metric, suffix, true)
+            else unkownText
     }
 
     private fun initializeDistanceText(){
         val distance=this.trail?.trailTrack?.getDistance()
-        val metric=resources.getString(R.string.label_trail_distance_short)
+        val metric=resources.getString(R.string.metric_kilometer)
+        val suffix=resources.getString(R.string.label_trail_distance_short)
+        val unkownText=resources.getString(R.string.message_unknown)
         this.distanceText.text=
-            if(distance!=null)"$distance m\n$metric" else "?"
+            if(distance!=null)
+                NumberUtilities.displayNumberWithMetricAndSuffix(
+                    distance.toDouble()/1000, 1, metric, suffix, true)
+            else unkownText
     }
 
     private fun initializeMaxElevationText(){
         val maxElevation=this.trail?.trailTrack?.getMaxElevation()
-        val metric=resources.getString(R.string.label_trail_max_elevation_short)
+        val metric=resources.getString(R.string.metric_meter)
+        val suffix=resources.getString(R.string.label_trail_max_elevation_short)
+        val unkownText=resources.getString(R.string.message_unknown)
         this.maxElevationText.text=
-            if(maxElevation!=null)"$maxElevation m\n$metric" else "?"
+            if(maxElevation!=null)
+                NumberUtilities.displayNumberWithMetricAndSuffix(
+                    maxElevation.toDouble(), 0, metric, suffix, true)
+            else unkownText
     }
 
     private fun initializeMinElevationText(){
         val minElevation=this.trail?.trailTrack?.getMinElevation()
-        val metric=resources.getString(R.string.label_trail_min_elevation_short)
+        val metric=resources.getString(R.string.metric_meter)
+        val suffix=resources.getString(R.string.label_trail_min_elevation_short)
+        val unkownText=resources.getString(R.string.message_unknown)
         this.minElevationText.text=
-            if(minElevation!=null)"$minElevation m\n$metric" else "?"
+            if(minElevation!=null)
+                NumberUtilities.displayNumberWithMetricAndSuffix(
+                    minElevation.toDouble(), 0, metric, suffix, true)
+            else unkownText
     }
 
     private fun initializeDescriptionText(){
         val description=this.trail?.description
-        this.descriptionText.text=
-            if(!description.isNullOrEmpty())description else "No description is available"
+        if(!description.isNullOrEmpty()){
+            this.descriptionText.text=description
+        }else{
+            this.descriptionText.setText(R.string.message_no_description_available)
+        }
     }
 }

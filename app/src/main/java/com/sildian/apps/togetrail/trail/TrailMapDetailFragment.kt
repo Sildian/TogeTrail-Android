@@ -5,11 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.Polyline
 
 import com.sildian.apps.togetrail.R
-import kotlinx.android.synthetic.main.fragment_trail_map_detail.view.*
+import com.sildian.apps.togetrail.trail.model.TrailPoint
+import com.sildian.apps.togetrail.trail.model.TrailPointOfInterest
 
 /*************************************************************************************************
  * Shows a specific trail on the map and allows :
@@ -18,15 +19,6 @@ import kotlinx.android.synthetic.main.fragment_trail_map_detail.view.*
  ************************************************************************************************/
 
 class TrailMapDetailFragment : BaseTrailMapFragment() {
-
-    /**********************************Static items**********************************************/
-
-    companion object{
-
-        /**Nested Fragments Ids***/
-        const val ID_NESTED_FRAGMENT_INFO_TRAIL=1
-        const val ID_NESTED_FRAGMENT_INFO_POINT_OF_INTEREST=2
-    }
 
     /**********************************UI component**********************************************/
 
@@ -47,28 +39,43 @@ class TrailMapDetailFragment : BaseTrailMapFragment() {
 
     override fun getInfoBottomSheetId(): Int = R.id.fragment_trail_map_detail_bottom_sheet_info
 
-    /******************************Nested Fragments monitoring***********************************/
+    /***********************************Map monitoring*******************************************/
 
-    /**
-     * Shows a nested info fragment
-     * @param fragmentId : defines which fragment to display (choice within ID_NESTED_FRAGMENT_xxx)
-     */
-
-    override fun showInfoFragment(fragmentId:Int){
-        when(fragmentId){
-            ID_NESTED_FRAGMENT_INFO_TRAIL ->this.infoFragment=TrailInfoFragment(this.trail)
-            //TODO handle other fragments
-        }
-        childFragmentManager.beginTransaction()
-            .replace(R.id.fragment_trail_map_detail_fragment_info, this.infoFragment).commit()
+    override fun handleOnPolylineClick(polyline: Polyline) {
+        showTrailInfoFragment()
     }
 
-    /**
-     * Shows the default info fragment and sets the bottomSheet's state to 'collapse'
-     */
+    override fun handleOnMarkerClick(marker: Marker): Boolean {
+        return when(marker.tag){
+            is TrailPointOfInterest->{
+                val trailPointOfInterest=marker.tag as TrailPointOfInterest
+                showTrailPOIInfoFragment(trailPointOfInterest)
+                true
+            }
+            is TrailPoint->{
+                showTrailInfoFragment()
+                true
+            }
+            else->
+                false
+        }
+    }
+
+    /******************************Nested Fragments monitoring***********************************/
 
     override fun showDefaultInfoFragment() {
+        showTrailInfoFragment()
+    }
+
+    private fun showTrailInfoFragment(){
         this.infoFragment=TrailInfoFragment(this.trail)
+        childFragmentManager.beginTransaction()
+            .replace(R.id.fragment_trail_map_detail_fragment_info, this.infoFragment).commit()
+        collapseInfoBottomSheet()
+    }
+
+    private fun showTrailPOIInfoFragment(trailPointOfInterest: TrailPointOfInterest){
+        this.infoFragment=TrailPOIInfoFragment(trailPointOfInterest)
         childFragmentManager.beginTransaction()
             .replace(R.id.fragment_trail_map_detail_fragment_info, this.infoFragment).commit()
         collapseInfoBottomSheet()

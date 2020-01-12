@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.Polyline
 import com.sildian.apps.togetrail.R
 
 /*************************************************************************************************
@@ -32,11 +34,17 @@ class TrailMapFragment : BaseTrailMapFragment()
 
     override fun getInfoBottomSheetId(): Int = R.id.fragment_trail_map_bottom_sheet_info
 
-    /****************************Nested Fragments monitoring*************************************/
+    /***********************************Map monitoring*******************************************/
 
-    override fun showInfoFragment(fragmentId: Int) {
+    override fun handleOnPolylineClick(polyline: Polyline) {
 
     }
+
+    override fun handleOnMarkerClick(marker: Marker): Boolean {
+        return true
+    }
+
+    /****************************Nested Fragments monitoring*************************************/
 
     override fun showDefaultInfoFragment() {
 
