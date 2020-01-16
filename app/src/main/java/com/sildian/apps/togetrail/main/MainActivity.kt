@@ -11,8 +11,8 @@ import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.trail.TrailActivity
-import com.sildian.apps.togetrail.trail.TrailMapFragment
+import com.sildian.apps.togetrail.trail.map.TrailActivity
+import com.sildian.apps.togetrail.trail.map.TrailMapFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import net.danlew.android.joda.JodaTimeAndroid
 
@@ -154,7 +154,8 @@ class MainActivity :
 
     private fun showFragment(fragmentId:Int){
         when(fragmentId){
-            ID_FRAGMENT_MAP->this.fragment=TrailMapFragment()
+            ID_FRAGMENT_MAP->this.fragment=
+                TrailMapFragment()
             //TODO handle other fragments
         }
         supportFragmentManager.beginTransaction()

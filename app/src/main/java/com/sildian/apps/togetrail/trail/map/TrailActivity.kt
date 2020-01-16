@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.trail
+package com.sildian.apps.togetrail.trail.map
 
 import android.app.Activity
 import android.content.Intent
@@ -6,6 +6,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.main.MainActivity
 import com.sildian.apps.togetrail.trail.model.Trail
@@ -45,7 +46,8 @@ class TrailActivity : AppCompatActivity() {
 
     /**************************************Data**************************************************/
 
-    private var currentAction= ACTION_TRAIL_SEE                 //Action defining what the user is performing
+    private var currentAction=
+        ACTION_TRAIL_SEE                 //Action defining what the user is performing
     private var trail:Trail?=null                               //Current trail shown
 
     /**********************************UI component**********************************************/
@@ -62,12 +64,22 @@ class TrailActivity : AppCompatActivity() {
         startTrailAction()
     }
 
+    override fun onBackPressed() {
+        if(this.fragment.getInfoBottomSheetState()!=BottomSheetBehavior.STATE_HIDDEN){
+            this.fragment.hideInfoBottomSheet()
+        }else{
+            super.onBackPressed()
+        }
+    }
+
     /***********************************Data monitoring******************************************/
 
     private fun readDataFromIntent(intent: Intent?){
         if(intent!=null){
             if(intent.hasExtra(MainActivity.KEY_BUNDLE_TRAIL_ACTION)){
-                this.currentAction=intent.getIntExtra(MainActivity.KEY_BUNDLE_TRAIL_ACTION, ACTION_TRAIL_SEE)
+                this.currentAction=intent.getIntExtra(MainActivity.KEY_BUNDLE_TRAIL_ACTION,
+                    ACTION_TRAIL_SEE
+                )
             }
         }
     }
@@ -119,7 +131,8 @@ class TrailActivity : AppCompatActivity() {
 
     private fun showFragment(fragmentId:Int){
         when(fragmentId){
-            ID_FRAGMENT_TRAIL_DETAIL ->this.fragment=TrailMapDetailFragment()
+            ID_FRAGMENT_TRAIL_DETAIL ->this.fragment=
+                TrailMapDetailFragment()
             //TODO handle other fragments
         }
         supportFragmentManager.beginTransaction()
@@ -130,9 +143,9 @@ class TrailActivity : AppCompatActivity() {
 
     private fun startTrailAction(){
         when(this.currentAction){
-            ACTION_TRAIL_SEE->
+            ACTION_TRAIL_SEE ->
                 showFragment(ID_FRAGMENT_TRAIL_DETAIL)
-            ACTION_TRAIL_CREATE_FROM_GPX->{
+            ACTION_TRAIL_CREATE_FROM_GPX ->{
                 showFragment(ID_FRAGMENT_TRAIL_DETAIL)
                 loadGpx()
             }
@@ -146,7 +159,9 @@ class TrailActivity : AppCompatActivity() {
         val loadGpxIntent=Intent(Intent.ACTION_OPEN_DOCUMENT)
         loadGpxIntent.addCategory(Intent.CATEGORY_OPENABLE)
         loadGpxIntent.type="*/*"
-        startActivityForResult(loadGpxIntent, KEY_REQUEST_LOAD_GPX)
+        startActivityForResult(loadGpxIntent,
+            KEY_REQUEST_LOAD_GPX
+        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".trail.TrailInfoFragment"
+    tools:context=".trail.info.TrailInfoFragment"
     android:background="@drawable/shape_top_corners_round_color_primary"
     android:orientation="vertical">
 
@@ -131,6 +131,26 @@
             android:textSize="@dimen/text_size_body"
             android:text="@string/example_trail_min_elevation"
             android:drawableTop="@drawable/ic_min_elevation"
+            android:drawablePadding="@dimen/components_margin_small"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/components_margin_small"
+        android:orientation="vertical"
+        android:background="@drawable/shape_corners_round_color_white">
+
+        <TextView
+            android:id="@+id/fragment_trail_info_text_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/components_margin_medium"
+            android:gravity="center_vertical"
+            android:textSize="@dimen/text_size_body"
+            android:text="@string/example_location"
+            android:drawableStart="@drawable/ic_location_trail"
             android:drawablePadding="@dimen/components_margin_small"/>
 
     </LinearLayout>

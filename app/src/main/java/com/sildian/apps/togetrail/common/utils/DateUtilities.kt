@@ -55,6 +55,8 @@ object DateUtilities {
     /**
      * Displays a duration as a string
      * @param minutes : the total number of minutes
+     * @param hourMetric : the metric used to display hours
+     * @param minuteMetric : the metric used to display minutes
      * @return a string to display the duration
      */
 

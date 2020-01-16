@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.trail
+package com.sildian.apps.togetrail.trail.info
 
 import android.os.Bundle
 import android.util.Log
@@ -60,7 +60,7 @@ class TrailPOIInfoFragment (val trailPointOfInterest:TrailPointOfInterest?=null)
         val elevation=this.trailPointOfInterest?.elevation
         val metric=resources.getString(R.string.metric_meter)
         val suffix=resources.getString(R.string.label_trail_poi_elevation)
-        val unkownText=resources.getString(R.string.message_unknown)
+        val unkownText=resources.getString(R.string.message_unknown_short)
         this.elevationText.text=
             if(elevation!=null)
                 NumberUtilities.displayNumberWithMetricAndSuffix(

@@ -1,12 +1,14 @@
-package com.sildian.apps.togetrail.trail
+package com.sildian.apps.togetrail.trail.map
 
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.Polyline
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 
 /*************************************************************************************************
@@ -36,12 +38,16 @@ class TrailMapFragment : BaseTrailMapFragment()
 
     /***********************************Map monitoring*******************************************/
 
-    override fun handleOnPolylineClick(polyline: Polyline) {
-
+    override fun onMapClick(point: LatLng?) {
+        hideInfoBottomSheet()
     }
 
-    override fun handleOnMarkerClick(marker: Marker): Boolean {
+    override fun onMarkerClick(marker: Marker?): Boolean {
         return true
+    }
+
+    override fun onPolylineClick(polyline: Polyline?) {
+
     }
 
     /****************************Nested Fragments monitoring*************************************/

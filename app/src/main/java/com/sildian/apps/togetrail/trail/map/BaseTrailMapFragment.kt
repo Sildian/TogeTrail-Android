@@ -1,6 +1,7 @@
-package com.sildian.apps.togetrail.trail
+package com.sildian.apps.togetrail.trail.map
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +20,13 @@ import com.sildian.apps.togetrail.trail.model.Trail
  * Base for all Trail fragments using a map
  ************************************************************************************************/
 
-abstract class BaseTrailMapFragment : Fragment(), OnMapReadyCallback {
+abstract class BaseTrailMapFragment :
+    Fragment(),
+    OnMapReadyCallback,
+    GoogleMap.OnMapClickListener,
+    GoogleMap.OnMarkerClickListener,
+    GoogleMap.OnPolylineClickListener
+{
 
     /**********************************Static items**********************************************/
 
@@ -27,6 +34,7 @@ abstract class BaseTrailMapFragment : Fragment(), OnMapReadyCallback {
 
         /**Logs**/
         const val TAG_FRAGMENT="TAG_FRAGMENT"
+        const val TAG_MAP="TAG_MAP"
 
         /**Bundles keys**/
         const val KEY_BUNDLE_MAP_VIEW="KEY_BUNDLE_MAP_VIEW"
@@ -136,23 +144,18 @@ abstract class BaseTrailMapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(map: GoogleMap?) {
         if(map!=null) {
+            Log.d(TAG_MAP, "Map is ready in '${this.javaClass.simpleName}'")
             this.map = map
             this.map.mapType= GoogleMap.MAP_TYPE_TERRAIN
-            this.map.setOnPolylineClickListener { polyline ->
-                handleOnPolylineClick(polyline)
-            }
-            this.map.setOnMarkerClickListener { marker ->
-                handleOnMarkerClick(marker)
-            }
+            this.map.setOnMapClickListener(this)
+            this.map.setOnMarkerClickListener(this)
+            this.map.setOnPolylineClickListener(this)
         }
         else{
             //TODO handle exception
+            Log.w(TAG_MAP, "Map couldn't be loaded in '${this.javaClass.simpleName}'")
         }
     }
-
-    abstract fun handleOnPolylineClick(polyline: Polyline)
-
-    abstract fun handleOnMarkerClick(marker:Marker):Boolean
 
     protected fun showTrailOnMap(){
 
@@ -177,13 +180,13 @@ abstract class BaseTrailMapFragment : Fragment(), OnMapReadyCallback {
             this.map.addMarker(MarkerOptions()
                 .position(LatLng(firstPoint.latitude, firstPoint.longitude))
                 .icon(MapMarkersUtilities.createMapMarkerFromVector(
-                    context, R.drawable.ic_location_green)))
+                    context, R.drawable.ic_location_trail_map)))
                 .tag=firstPoint
 
             this.map.addMarker(MarkerOptions()
                 .position(LatLng(lastPoint.latitude, lastPoint.longitude))
                 .icon(MapMarkersUtilities.createMapMarkerFromVector(
-                    context, R.drawable.ic_flag_green)))
+                    context, R.drawable.ic_flag_map)))
                 .tag=lastPoint
 
             /*Adds a marker for each trailPointOfInterest including its number*/
@@ -193,7 +196,7 @@ abstract class BaseTrailMapFragment : Fragment(), OnMapReadyCallback {
                 this.map.addMarker(MarkerOptions()
                     .position(LatLng(trailPointOfInterest.latitude, trailPointOfInterest.longitude))
                     .icon(MapMarkersUtilities.createMapMarkerFromVector(
-                        context, R.drawable.ic_location_color_secondary, (i+1).toString())))
+                        context, R.drawable.ic_location_trail_poi_map, (i+1).toString())))
                     .tag=trailPointOfInterest
             }
 
@@ -209,15 +212,17 @@ abstract class BaseTrailMapFragment : Fragment(), OnMapReadyCallback {
 
     abstract fun showDefaultInfoFragment()
 
-    protected fun hideInfoBottomSheet(){
+    fun getInfoBottomSheetState():Int = this.infoBottomSheet.state
+
+    fun hideInfoBottomSheet(){
         this.infoBottomSheet.state=BottomSheetBehavior.STATE_HIDDEN
     }
 
-    protected fun collapseInfoBottomSheet(){
+    fun collapseInfoBottomSheet(){
         this.infoBottomSheet.state=BottomSheetBehavior.STATE_COLLAPSED
     }
 
-    protected fun expandInfoBottomSheet(){
+    fun expandInfoBottomSheet(){
         this.infoBottomSheet.state=BottomSheetBehavior.STATE_EXPANDED
     }
 }

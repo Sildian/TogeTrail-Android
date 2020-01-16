@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".trail.TrailPOIInfoFragment"
+    tools:context=".trail.info.TrailPOIInfoFragment"
     android:background="@drawable/shape_top_corners_round_color_primary"
     android:orientation="vertical">
 

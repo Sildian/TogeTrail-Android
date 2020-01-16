@@ -1,21 +1,22 @@
-package com.sildian.apps.togetrail.trail
+package com.sildian.apps.togetrail.trail.map
 
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.Polyline
 
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.trail.info.TrailInfoFragment
+import com.sildian.apps.togetrail.trail.info.TrailPOIInfoFragment
 import com.sildian.apps.togetrail.trail.model.TrailPoint
 import com.sildian.apps.togetrail.trail.model.TrailPointOfInterest
 
 /*************************************************************************************************
- * Shows a specific trail on the map and allows :
- * - to see all its detail information
- * - to edit its information
+ * Shows a specific trail on the map and allows to see all its detail information
  ************************************************************************************************/
 
 class TrailMapDetailFragment : BaseTrailMapFragment() {
@@ -41,12 +42,16 @@ class TrailMapDetailFragment : BaseTrailMapFragment() {
 
     /***********************************Map monitoring*******************************************/
 
-    override fun handleOnPolylineClick(polyline: Polyline) {
-        showTrailInfoFragment()
+    override fun onMapClick(point: LatLng?) {
+        hideInfoBottomSheet()
     }
 
-    override fun handleOnMarkerClick(marker: Marker): Boolean {
-        return when(marker.tag){
+    override fun onMarkerClick(marker: Marker?): Boolean {
+        Log.d(TAG_MAP, "Click on marker '${marker.toString()}'")
+
+        /*Shows an info nested fragment depending on the tag of the marker*/
+
+        return when(marker?.tag){
             is TrailPointOfInterest->{
                 val trailPointOfInterest=marker.tag as TrailPointOfInterest
                 showTrailPOIInfoFragment(trailPointOfInterest)
@@ -61,6 +66,11 @@ class TrailMapDetailFragment : BaseTrailMapFragment() {
         }
     }
 
+    override fun onPolylineClick(polyline: Polyline?) {
+        Log.d(TAG_MAP, "Click on polyline '${polyline.toString()}'")
+        showTrailInfoFragment()
+    }
+
     /******************************Nested Fragments monitoring***********************************/
 
     override fun showDefaultInfoFragment() {
@@ -68,14 +78,18 @@ class TrailMapDetailFragment : BaseTrailMapFragment() {
     }
 
     private fun showTrailInfoFragment(){
-        this.infoFragment=TrailInfoFragment(this.trail)
+        this.infoFragment=
+            TrailInfoFragment(this.trail)
         childFragmentManager.beginTransaction()
             .replace(R.id.fragment_trail_map_detail_fragment_info, this.infoFragment).commit()
         collapseInfoBottomSheet()
     }
 
     private fun showTrailPOIInfoFragment(trailPointOfInterest: TrailPointOfInterest){
-        this.infoFragment=TrailPOIInfoFragment(trailPointOfInterest)
+        this.infoFragment=
+            TrailPOIInfoFragment(
+                trailPointOfInterest
+            )
         childFragmentManager.beginTransaction()
             .replace(R.id.fragment_trail_map_detail_fragment_info, this.infoFragment).commit()
         collapseInfoBottomSheet()

@@ -13,6 +13,11 @@
     <string name="menu_new_trail_record">Realtime record</string>
 
     <!-- Labels -->
+    <!-- Location -->
+    <string name="label_location">Location</string>
+    <string name="label_location_country">Country</string>
+    <string name="label_location_region">State / Region</string>
+    <string name="label_location_town">City / Town</string>
     <!-- Trail -->
     <string name="label_trail_name">Name</string>
     <string name="label_trail_description">Description</string>
@@ -33,6 +38,8 @@
     <string name="label_trail_poi_elevation">Elevation</string>
 
     <!-- Examples for layout preview -->
+    <!-- Location -->
+    <string name="example_location">Chamonix, Savoie, France</string>
     <!-- Trail -->
     <string name="example_trail_name">The super century\s trail</string>
     <string name="example_trail_description">A really wonderful trail.</string>
@@ -48,7 +55,8 @@
     <string name="example_trail_poi_elevation">2000 m Elevation</string>
 
     <!-- Messages to the user -->
-    <string name="message_unknown">\?</string>
+    <string name="message_unknown_short">\?</string>
+    <string name="message_no_location_available">The location is unknown</string>
     <string name="message_no_description_available">No description is available</string>
 
     <!-- Metrics -->
