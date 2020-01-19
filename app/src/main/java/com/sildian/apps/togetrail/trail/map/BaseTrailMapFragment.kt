@@ -52,7 +52,7 @@ abstract class BaseTrailMapFragment :
 
     /************************************Map support*********************************************/
 
-    protected lateinit var map: GoogleMap               //Map
+    protected var map: GoogleMap?=null                  //Map
 
     /************************************Life cycle**********************************************/
 
@@ -71,10 +71,12 @@ abstract class BaseTrailMapFragment :
     override fun onResume() {
         super.onResume()
         this.mapView.onResume()
+        this.map?.isMyLocationEnabled = true
     }
 
     override fun onPause() {
         super.onPause()
+        this.map?.isMyLocationEnabled=false
         this.mapView.onPause()
     }
 
@@ -148,10 +150,11 @@ abstract class BaseTrailMapFragment :
         if(map!=null) {
             Log.d(TAG_MAP, "Map is ready in '${this.javaClass.simpleName}'")
             this.map = map
-            this.map.mapType= GoogleMap.MAP_TYPE_TERRAIN
-            this.map.setOnMapClickListener(this)
-            this.map.setOnMarkerClickListener(this)
-            this.map.setOnPolylineClickListener(this)
+            this.map?.mapType= GoogleMap.MAP_TYPE_TERRAIN
+            this.map?.setOnMapClickListener(this)
+            this.map?.setOnMarkerClickListener(this)
+            this.map?.setOnPolylineClickListener(this)
+            this.map?.isMyLocationEnabled=true
             proceedAdditionalOnMapReadyActions()
         }
         else{
@@ -179,7 +182,7 @@ abstract class BaseTrailMapFragment :
                 polylineOption.add(LatLng(trailPoint.latitude, trailPoint.longitude))
             }
             polylineOption.color(resources.getColor(R.color.colorSecondaryDark))
-            this.map.addPolyline(polylineOption)
+            this.map?.addPolyline(polylineOption)
 
             /*Gets the first and the last trailPoints*/
 
@@ -188,27 +191,27 @@ abstract class BaseTrailMapFragment :
 
             /*Adds markers on the first and the last trailPoints*/
 
-            this.map.addMarker(MarkerOptions()
+            this.map?.addMarker(MarkerOptions()
                 .position(LatLng(firstPoint.latitude, firstPoint.longitude))
                 .icon(MapMarkersUtilities.createMapMarkerFromVector(
                     context, R.drawable.ic_location_trail_map)))
-                .tag=firstPoint
+                ?.tag=firstPoint
 
-            this.map.addMarker(MarkerOptions()
+            this.map?.addMarker(MarkerOptions()
                 .position(LatLng(lastPoint.latitude, lastPoint.longitude))
                 .icon(MapMarkersUtilities.createMapMarkerFromVector(
                     context, R.drawable.ic_flag_map)))
-                .tag=lastPoint
+                ?.tag=lastPoint
 
             /*Adds a marker for each trailPointOfInterest including its number*/
 
             for(i in this.trail?.trailTrack?.trailPointsOfInterest!!.indices){
                 val trailPointOfInterest=this.trail?.trailTrack?.trailPointsOfInterest!![i]
-                this.map.addMarker(MarkerOptions()
+                this.map?.addMarker(MarkerOptions()
                     .position(LatLng(trailPointOfInterest.latitude, trailPointOfInterest.longitude))
                     .icon(MapMarkersUtilities.createMapMarkerFromVector(
                         context, R.drawable.ic_location_trail_poi_map, (i+1).toString())))
-                    .tag=trailPointOfInterest
+                    ?.tag=trailPointOfInterest
             }
         }
     }

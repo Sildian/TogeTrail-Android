@@ -98,7 +98,7 @@ class TrailMapDetailFragment : BaseTrailMapFragment() {
 
             /*Moves the camera to the first point and zoom in*/
 
-            this.map.animateCamera(
+            this.map?.animateCamera(
                 CameraUpdateFactory.newLatLngZoom(
                     LatLng(firstPoint.latitude, firstPoint.longitude), 14.0f)
             )

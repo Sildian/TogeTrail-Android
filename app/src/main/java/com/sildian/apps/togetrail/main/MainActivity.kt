@@ -91,7 +91,6 @@ class MainActivity :
                 }
             }
             R.id.menu_add_new_trail-> {
-                //TODO handle clicks
                 when (item.itemId) {
                     R.id.menu_add_trail_load_gpx -> {
                         Log.d(TAG_MENU, "Menu '${item.title}' clicked")
@@ -101,8 +100,10 @@ class MainActivity :
                         Log.d(TAG_MENU, "Menu '${item.title}' clicked")
                         startTrailActivity(TrailActivity.ACTION_TRAIL_DRAW)
                     }
-                    R.id.menu_add_trail_record ->
+                    R.id.menu_add_trail_record -> {
                         Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+                        startTrailActivity(TrailActivity.ACTION_TRAIL_RECORD)
+                    }
                 }
             }
         }

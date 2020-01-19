@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".trail.map.TrailMapRecordFragment">
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/fragment_trail_map_record_map_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fragment_trail_map_record_button_play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/components_margin_medium"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/anim_record_play"/>
+
+        <FrameLayout
+            android:id="@+id/fragment_trail_map_record_bottom_sheet_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+            app:behavior_hideable="true">
+
+            <FrameLayout
+                android:id="@+id/fragment_trail_map_record_fragment_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </FrameLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</FrameLayout>

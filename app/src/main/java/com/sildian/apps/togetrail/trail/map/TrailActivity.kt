@@ -133,7 +133,8 @@ class TrailActivity : AppCompatActivity() {
                 this.fragment= TrailMapDetailFragment()
             ID_FRAGMENT_TRAIL_DRAW ->
                 this.fragment = TrailMapDrawFragment()
-            //TODO handle other fragments
+            ID_FRAGMENT_TRAIL_RECORD ->
+                this.fragment = TrailMapRecordFragment()
         }
         supportFragmentManager.beginTransaction()
             .replace(R.id.activity_trail_fragment, this.fragment).commit()
@@ -151,7 +152,8 @@ class TrailActivity : AppCompatActivity() {
             }
             ACTION_TRAIL_DRAW ->
                 showFragment(ID_FRAGMENT_TRAIL_DRAW)
-            //TODO handle other cases
+            ACTION_TRAIL_RECORD ->
+                showFragment(ID_FRAGMENT_TRAIL_RECORD)
         }
     }
 

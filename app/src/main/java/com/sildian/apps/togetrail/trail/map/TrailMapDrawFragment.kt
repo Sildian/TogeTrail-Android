@@ -96,8 +96,8 @@ class TrailMapDrawFragment :
     /***********************************Map monitoring*******************************************/
 
     override fun proceedAdditionalOnMapReadyActions() {
-        this.map.setInfoWindowAdapter(this)
-        this.map.setOnInfoWindowClickListener(this)
+        this.map?.setInfoWindowAdapter(this)
+        this.map?.setOnInfoWindowClickListener(this)
     }
 
     override fun onMapClick(point: LatLng?) {
@@ -181,7 +181,7 @@ class TrailMapDrawFragment :
 
             /*Moves the camera to the last point*/
 
-            this.map.animateCamera(
+            this.map?.animateCamera(
                 CameraUpdateFactory.newLatLng(
                     LatLng(lastPoint.latitude, lastPoint.longitude))
             )
@@ -199,7 +199,7 @@ class TrailMapDrawFragment :
 
         val trailPoint= TrailPoint(point.latitude, point.longitude)
         this.trail?.trailTrack?.trailPoints?.add(trailPoint)
-        this.map.clear()
+        this.map?.clear()
         showTrailOnMap()
 
         /*If this is the first trailPoint, reveals the actions buttons*/
@@ -232,7 +232,7 @@ class TrailMapDrawFragment :
 
             /*Then updates the track on the map*/
 
-            this.map.clear()
+            this.map?.clear()
             if(this.trail!!.trailTrack.trailPoints.isNotEmpty()) {
                 showTrailOnMap()
             }
@@ -267,7 +267,7 @@ class TrailMapDrawFragment :
 
             /*Then updates the track on the map*/
 
-            this.map.clear()
+            this.map?.clear()
             showTrailOnMap()
         }
     }
@@ -280,14 +280,14 @@ class TrailMapDrawFragment :
     private fun removeTrailPointOfInterest(trailPointOfInterest:TrailPointOfInterest){
         this.trail?.trailTrack?.trailPointsOfInterest?.remove(trailPointOfInterest)
         hideInfoBottomSheet()
-        this.map.clear()
+        this.map?.clear()
         showTrailOnMap()
     }
 
     /******************************Nested Fragments monitoring***********************************/
 
     override fun showDefaultInfoFragment() {
-
+        showTrailInfoFragment()
     }
 
     private fun showTrailInfoFragment(){
