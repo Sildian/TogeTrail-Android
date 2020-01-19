@@ -128,6 +128,9 @@ abstract class BaseTrailMapFragment :
     private fun initializeInfoBottomSheet(){
         this.infoBottomSheet=
             BottomSheetBehavior.from(this.layout.findViewById(getInfoBottomSheetId()))
+        val peekHeight=resources.getDimension(R.dimen.bottom_sheet_peek_height).toInt()
+        this.infoBottomSheet.peekHeight=peekHeight
+        hideInfoBottomSheet()
     }
 
     /***********************************Map monitoring*******************************************/
@@ -157,7 +160,13 @@ abstract class BaseTrailMapFragment :
         }
     }
 
-    protected fun showTrailOnMap(){
+    /***********************************Trail monitoring*****************************************/
+
+    /**
+     * Shows the current trail on the map
+     */
+
+    protected open fun showTrailOnMap(){
 
         if(this.trail!=null){
 
@@ -199,12 +208,6 @@ abstract class BaseTrailMapFragment :
                         context, R.drawable.ic_location_trail_poi_map, (i+1).toString())))
                     .tag=trailPointOfInterest
             }
-
-            /*Moves the camera to the first point and zoom in*/
-
-            this.map.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                LatLng(firstPoint.latitude, firstPoint.longitude), 14.0f
-            ))
         }
     }
 

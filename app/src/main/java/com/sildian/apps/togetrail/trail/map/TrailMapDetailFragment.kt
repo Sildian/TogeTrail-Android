@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.Polyline
@@ -43,32 +44,61 @@ class TrailMapDetailFragment : BaseTrailMapFragment() {
     /***********************************Map monitoring*******************************************/
 
     override fun onMapClick(point: LatLng?) {
+        Log.d(TAG_MAP, "Click on map at point lat ${point?.latitude} lng ${point?.longitude}")
         hideInfoBottomSheet()
     }
 
     override fun onMarkerClick(marker: Marker?): Boolean {
-        Log.d(TAG_MAP, "Click on marker '${marker.toString()}'")
 
         /*Shows an info nested fragment depending on the tag of the marker*/
 
         return when(marker?.tag){
             is TrailPointOfInterest->{
+                Log.d(TAG_MAP, "Click on marker (TrailPointOfInterest)")
                 val trailPointOfInterest=marker.tag as TrailPointOfInterest
                 showTrailPOIInfoFragment(trailPointOfInterest)
                 true
             }
             is TrailPoint->{
+                Log.d(TAG_MAP, "Click on marker (TrailPoint)")
                 showTrailInfoFragment()
                 true
             }
-            else->
+            else-> {
+                Log.w(TAG_MAP, "Click on marker (Unknown category)")
                 false
+            }
         }
     }
 
     override fun onPolylineClick(polyline: Polyline?) {
-        Log.d(TAG_MAP, "Click on polyline '${polyline.toString()}'")
+        Log.d(TAG_MAP, "Click on polyline")
         showTrailInfoFragment()
+    }
+
+    /***********************************Trail monitoring*****************************************/
+
+    /**
+     * Shows the current trail on the map and zoom in to the first point
+     */
+
+    override fun showTrailOnMap() {
+
+        if(this.trail!=null) {
+
+            super.showTrailOnMap()
+
+            /*Gets the first trailPoint*/
+
+            val firstPoint = this.trail?.trailTrack!!.trailPoints.first()
+
+            /*Moves the camera to the first point and zoom in*/
+
+            this.map.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    LatLng(firstPoint.latitude, firstPoint.longitude), 14.0f)
+            )
+        }
     }
 
     /******************************Nested Fragments monitoring***********************************/

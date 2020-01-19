@@ -46,8 +46,7 @@ class TrailActivity : AppCompatActivity() {
 
     /**************************************Data**************************************************/
 
-    private var currentAction=
-        ACTION_TRAIL_SEE                 //Action defining what the user is performing
+    private var currentAction= ACTION_TRAIL_SEE                 //Action defining what the user is performing
     private var trail:Trail?=null                               //Current trail shown
 
     /**********************************UI component**********************************************/
@@ -77,9 +76,8 @@ class TrailActivity : AppCompatActivity() {
     private fun readDataFromIntent(intent: Intent?){
         if(intent!=null){
             if(intent.hasExtra(MainActivity.KEY_BUNDLE_TRAIL_ACTION)){
-                this.currentAction=intent.getIntExtra(MainActivity.KEY_BUNDLE_TRAIL_ACTION,
-                    ACTION_TRAIL_SEE
-                )
+                this.currentAction=
+                    intent.getIntExtra(MainActivity.KEY_BUNDLE_TRAIL_ACTION, ACTION_TRAIL_SEE)
             }
         }
     }
@@ -131,8 +129,10 @@ class TrailActivity : AppCompatActivity() {
 
     private fun showFragment(fragmentId:Int){
         when(fragmentId){
-            ID_FRAGMENT_TRAIL_DETAIL ->this.fragment=
-                TrailMapDetailFragment()
+            ID_FRAGMENT_TRAIL_DETAIL ->
+                this.fragment= TrailMapDetailFragment()
+            ID_FRAGMENT_TRAIL_DRAW ->
+                this.fragment = TrailMapDrawFragment()
             //TODO handle other fragments
         }
         supportFragmentManager.beginTransaction()
@@ -149,6 +149,8 @@ class TrailActivity : AppCompatActivity() {
                 showFragment(ID_FRAGMENT_TRAIL_DETAIL)
                 loadGpx()
             }
+            ACTION_TRAIL_DRAW ->
+                showFragment(ID_FRAGMENT_TRAIL_DRAW)
             //TODO handle other cases
         }
     }
@@ -166,13 +168,15 @@ class TrailActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(resultCode== Activity.RESULT_OK){
-            if(requestCode== KEY_REQUEST_LOAD_GPX){
-                val uri=data?.data
-                createTrailFromGpx(uri)
+        if(requestCode== KEY_REQUEST_LOAD_GPX){
+            when(resultCode) {
+                Activity.RESULT_OK-> {
+                    val uri = data?.data
+                    createTrailFromGpx(uri)
+                }
+                Activity.RESULT_CANCELED->
+                    finish()
             }
-        }else{
-            //TODO handle
         }
     }
 }

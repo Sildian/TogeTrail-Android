@@ -41,4 +41,19 @@
         <item name="rippleColor">@color/colorSecondaryLight</item>
     </style>
 
+    <!-- Map buttons -->
+    <style name="MapButtonStyle" parent="@style/Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/colorPrimary</item>
+        <item name="rippleColor">@color/colorSecondaryLight</item>
+        <item name="iconTint">@color/colorSecondary</item>
+        <item name="android:textColor">@color/colorSecondary</item>
+        <item name="android:textSize">@dimen/text_size_body</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="shapeAppearance">@style/ShapeAppearanceOverlay.MapButton</item>
+    </style>
+    <style name="ShapeAppearanceOverlay.MapButton">
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSizeBottomRight">@dimen/components_corner_medium</item>
+    </style>
+
 </resources>

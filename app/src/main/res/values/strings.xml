@@ -12,6 +12,12 @@
     <string name="menu_new_trail_draw">Draw on map</string>
     <string name="menu_new_trail_record">Realtime record</string>
 
+    <!-- Buttons -->
+    <!-- Trail -->
+    <string name="button_trail_point_remove">Remove last point</string>
+    <string name="button_trail_poi_add">Add point of interest</string>
+    <string name="button_trail_poi_remove">Remove point of interest</string>
+
     <!-- Labels -->
     <!-- Location -->
     <string name="label_location">Location</string>

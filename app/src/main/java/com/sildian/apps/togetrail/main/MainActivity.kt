@@ -97,8 +97,10 @@ class MainActivity :
                         Log.d(TAG_MENU, "Menu '${item.title}' clicked")
                         startTrailActivity(TrailActivity.ACTION_TRAIL_CREATE_FROM_GPX)
                     }
-                    R.id.menu_add_trail_draw ->
+                    R.id.menu_add_trail_draw -> {
                         Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+                        startTrailActivity(TrailActivity.ACTION_TRAIL_DRAW)
+                    }
                     R.id.menu_add_trail_record ->
                         Log.d(TAG_MENU, "Menu '${item.title}' clicked")
                 }

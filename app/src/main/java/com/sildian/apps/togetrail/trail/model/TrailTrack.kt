@@ -21,12 +21,16 @@ class TrailTrack(
      */
 
     fun getDuration():Int?{
-        val firstTrailPointTime=this.trailPoints.first().time
-        val lastTrailPointTime=this.trailPoints.last().time
-        return if(firstTrailPointTime==null||lastTrailPointTime==null){
-            null
+        return if(this.trailPoints.isNotEmpty()) {
+            val firstTrailPointTime = this.trailPoints.first().time
+            val lastTrailPointTime = this.trailPoints.last().time
+            if (firstTrailPointTime == null || lastTrailPointTime == null) {
+                null
+            } else {
+                ((lastTrailPointTime.time - firstTrailPointTime.time) / 60000).toInt()
+            }
         }else{
-            ((lastTrailPointTime.time-firstTrailPointTime.time)/60000).toInt()
+            null
         }
     }
 

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".trail.map.TrailMapDrawFragment">
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/fragment_trail_map_draw_map_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/MapButtonStyle"
+            android:id="@+id/fragment_trail_map_draw_button_point_remove"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/components_margin_large"
+            android:layout_marginBottom="@dimen/components_margin_small"
+            app:icon="@drawable/ic_backspace_white"
+            android:text="@string/button_trail_point_remove" />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/MapButtonStyle"
+            android:id="@+id/fragment_trail_map_draw_button_poi_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/components_margin_small"
+            android:layout_marginBottom="@dimen/components_margin_small"
+            app:icon="@drawable/ic_poi_add_white"
+            android:text="@string/button_trail_poi_add" />
+
+    </LinearLayout>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom">
+
+        <FrameLayout
+            android:id="@+id/fragment_trail_map_draw_bottom_sheet_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+            app:behavior_hideable="true">
+
+            <FrameLayout
+                android:id="@+id/fragment_trail_map_draw_fragment_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </FrameLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</FrameLayout>

@@ -11,6 +11,12 @@
     <string name="menu_new_trail_draw">Dessiner sur la carte</string>
     <string name="menu_new_trail_record">Enregistrer en temps réel</string>
 
+    <!-- Buttons -->
+    <!-- Trail -->
+    <string name="button_trail_point_remove">Retirer dernier point</string>
+    <string name="button_trail_poi_add">Ajouter point d\'intérêt</string>
+    <string name="button_trail_poi_remove">Retirer point d\'intérêt</string>
+
     <!-- Labels -->
     <!-- Location -->
     <string name="label_location">Emplacement</string>

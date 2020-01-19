@@ -13,4 +13,7 @@
     <dimen name="text_size_body">12sp</dimen>
     <dimen name="text_size_title">15sp</dimen>
 
+    <!-- BottomSheets -->
+    <dimen name="bottom_sheet_peek_height">112dp</dimen>
+
 </resources>
