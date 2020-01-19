@@ -127,4 +127,18 @@ class TrailTrack(
             null
         }
     }
+
+    /**
+     * Finds a trailPointOfInterest matching the latitude and longitude of the given trailPoint
+     * @param trailPoint : the given trailPoint
+     * @return the index of the resulted trailPointOfInterest, or null if no one matches
+     */
+
+    fun findTrailPointOfInterest(trailPoint:TrailPoint):Int?{
+        val index= this.trailPointsOfInterest.indexOfFirst { trailPoi->
+            trailPoi.latitude==trailPoint.latitude
+                    && trailPoi.longitude==trailPoint.longitude
+        }
+        return if(index!=-1) index else null
+    }
 }

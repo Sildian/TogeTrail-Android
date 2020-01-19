@@ -43,6 +43,10 @@ class TrailMapDetailFragment : BaseTrailMapFragment() {
 
     /***********************************Map monitoring*******************************************/
 
+    override fun proceedAdditionalOnMapReadyActions() {
+
+    }
+
     override fun onMapClick(point: LatLng?) {
         Log.d(TAG_MAP, "Click on map at point lat ${point?.latitude} lng ${point?.longitude}")
         hideInfoBottomSheet()

@@ -13,9 +13,13 @@
         android:layout_height="match_parent" />
 
     <LinearLayout
+        android:id="@+id/fragment_trail_map_draw_layout_actions_buttons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layoutAnimation="@anim/anim_layout_appear_right"
+        android:gravity="start"
+        android:visibility="gone">
 
         <com.google.android.material.button.MaterialButton
             style="@style/MapButtonStyle"

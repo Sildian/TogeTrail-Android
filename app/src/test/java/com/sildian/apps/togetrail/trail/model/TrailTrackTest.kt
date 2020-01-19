@@ -22,6 +22,8 @@ class TrailTrackTest {
         val trailPoint5=TrailPoint(44.708152, 4.338279, 702,
             DateUtilities.getDateAndTime(2019, 11, 15, 15, 55))
         this.trailTrack.trailPoints.addAll(listOf(trailPoint1, trailPoint2, trailPoint3, trailPoint4, trailPoint5))
+        val trailPointOfInterest=TrailPointOfInterest(trailPoint3.latitude, trailPoint3.longitude)
+        this.trailTrack.trailPointsOfInterest.add(trailPointOfInterest)
     }
 
     @Test
@@ -52,5 +54,16 @@ class TrailTrackTest {
     @Test
     fun given_trailTrack_when_getMinElevation_then_checkResultIs647() {
         assertEquals(647, this.trailTrack.getMinElevation())
+    }
+
+    @Test
+    fun given_trailPoint1_when_findTrailPointOfInterest_then_checkResultIsNull(){
+        assertNull(this.trailTrack.findTrailPointOfInterest(this.trailTrack.trailPoints[0]))
+    }
+
+    @Test
+    fun given_trailPoint3_when_findTrailPointOfInterest_then_checkResultIs0(){
+        assertEquals(0,
+            this.trailTrack.findTrailPointOfInterest(this.trailTrack.trailPoints[2]))
     }
 }

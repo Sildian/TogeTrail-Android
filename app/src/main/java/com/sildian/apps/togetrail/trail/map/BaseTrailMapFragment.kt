@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -153,12 +152,15 @@ abstract class BaseTrailMapFragment :
             this.map.setOnMapClickListener(this)
             this.map.setOnMarkerClickListener(this)
             this.map.setOnPolylineClickListener(this)
+            proceedAdditionalOnMapReadyActions()
         }
         else{
             //TODO handle exception
             Log.w(TAG_MAP, "Map couldn't be loaded in '${this.javaClass.simpleName}'")
         }
     }
+
+    abstract fun proceedAdditionalOnMapReadyActions()
 
     /***********************************Trail monitoring*****************************************/
 
