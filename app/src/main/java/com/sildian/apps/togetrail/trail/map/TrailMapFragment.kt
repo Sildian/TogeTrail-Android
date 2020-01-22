@@ -36,6 +36,8 @@ class TrailMapFragment : BaseTrailMapFragment()
 
     override fun getInfoBottomSheetId(): Int = R.id.fragment_trail_map_bottom_sheet_info
 
+    override fun getInfoFragmentId(): Int = R.id.fragment_trail_map_fragment_info
+
     /***********************************Map monitoring*******************************************/
 
     override fun proceedAdditionalOnMapReadyActions() {

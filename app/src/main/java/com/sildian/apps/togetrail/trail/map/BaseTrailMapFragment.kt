@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -13,7 +15,10 @@ import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.MapMarkersUtilities
+import com.sildian.apps.togetrail.trail.info.TrailInfoFragment
+import com.sildian.apps.togetrail.trail.info.TrailPOIInfoFragment
 import com.sildian.apps.togetrail.trail.model.Trail
+import com.sildian.apps.togetrail.trail.model.TrailPointOfInterest
 
 /*************************************************************************************************
  * Base for all Trail fragments using a map
@@ -34,6 +39,7 @@ abstract class BaseTrailMapFragment :
         /**Logs**/
         const val TAG_FRAGMENT="TAG_FRAGMENT"
         const val TAG_MAP="TAG_MAP"
+        const val TAG_LOCATION="TAG_LOCATION"
 
         /**Bundles keys**/
         const val KEY_BUNDLE_MAP_VIEW="KEY_BUNDLE_MAP_VIEW"
@@ -50,9 +56,13 @@ abstract class BaseTrailMapFragment :
     protected lateinit var infoBottomSheet:BottomSheetBehavior<View>    //Bottom sheet with additional info
     protected lateinit var infoFragment:Fragment        //Nested fragment within the bottomSheet
 
-    /************************************Map support*********************************************/
+    /**************************************Map support*******************************************/
 
-    protected var map: GoogleMap?=null                  //Map
+    protected var map: GoogleMap?=null                                      //Map
+
+    /************************************Location support****************************************/
+
+    protected lateinit var userLocation: FusedLocationProviderClient        //User location
 
     /************************************Life cycle**********************************************/
 
@@ -60,6 +70,7 @@ abstract class BaseTrailMapFragment :
         this.layout=inflater.inflate(getLayoutId(), container, false)
         initializeInfoBottomSheet()
         initializeMap(savedInstanceState)
+        initializeUserLocation()
         return this.layout
     }
 
@@ -114,7 +125,7 @@ abstract class BaseTrailMapFragment :
 
     fun updateTrail(trail:Trail?){
         this.trail=trail
-        showTrailOnMap()
+        showTrailTrackOnMap()
         showDefaultInfoFragment()
     }
 
@@ -125,6 +136,8 @@ abstract class BaseTrailMapFragment :
     abstract fun getMapViewId():Int
 
     abstract fun getInfoBottomSheetId():Int
+
+    abstract fun getInfoFragmentId():Int
 
     private fun initializeInfoBottomSheet(){
         this.infoBottomSheet=
@@ -165,13 +178,19 @@ abstract class BaseTrailMapFragment :
 
     abstract fun proceedAdditionalOnMapReadyActions()
 
+    /********************************Location monitoring*****************************************/
+
+    private fun initializeUserLocation(){
+        this.userLocation=LocationServices.getFusedLocationProviderClient(context!!)
+    }
+
     /***********************************Trail monitoring*****************************************/
 
     /**
-     * Shows the current trail on the map
+     * Shows the current trail's track on the map
      */
 
-    protected open fun showTrailOnMap(){
+    protected open fun showTrailTrackOnMap(){
 
         if(this.trail!=null){
 
@@ -219,6 +238,24 @@ abstract class BaseTrailMapFragment :
     /**************************Nested Fragments monitoring***************************************/
 
     abstract fun showDefaultInfoFragment()
+
+    protected fun showTrailInfoFragment(){
+        this.infoFragment=
+            TrailInfoFragment(this.trail)
+        childFragmentManager.beginTransaction()
+            .replace(getInfoFragmentId(), this.infoFragment).commit()
+        collapseInfoBottomSheet()
+    }
+
+    protected fun showTrailPOIInfoFragment(trailPointOfInterest: TrailPointOfInterest){
+        this.infoFragment=
+            TrailPOIInfoFragment(
+                trailPointOfInterest
+            )
+        childFragmentManager.beginTransaction()
+            .replace(getInfoFragmentId(), this.infoFragment).commit()
+        collapseInfoBottomSheet()
+    }
 
     fun getInfoBottomSheetState():Int = this.infoBottomSheet.state
 

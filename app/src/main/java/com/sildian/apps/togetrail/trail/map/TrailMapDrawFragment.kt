@@ -56,6 +56,8 @@ class TrailMapDrawFragment :
 
     override fun getInfoBottomSheetId(): Int = R.id.fragment_trail_map_draw_bottom_sheet_info
 
+    override fun getInfoFragmentId(): Int = R.id.fragment_trail_map_draw_fragment_info
+
     private fun initializeRemovePointButton(){
         this.removePointButton.setOnClickListener {
             removeLastTrailPoint()
@@ -169,11 +171,11 @@ class TrailMapDrawFragment :
      * Shows the current trail on the map and moves the camera to the last point
      */
 
-    override fun showTrailOnMap() {
+    override fun showTrailTrackOnMap() {
 
         if(this.trail!=null) {
 
-            super.showTrailOnMap()
+            super.showTrailTrackOnMap()
 
             /*Gets the last trailPoint*/
 
@@ -200,7 +202,7 @@ class TrailMapDrawFragment :
         val trailPoint= TrailPoint(point.latitude, point.longitude)
         this.trail?.trailTrack?.trailPoints?.add(trailPoint)
         this.map?.clear()
-        showTrailOnMap()
+        showTrailTrackOnMap()
 
         /*If this is the first trailPoint, reveals the actions buttons*/
 
@@ -234,7 +236,7 @@ class TrailMapDrawFragment :
 
             this.map?.clear()
             if(this.trail!!.trailTrack.trailPoints.isNotEmpty()) {
-                showTrailOnMap()
+                showTrailTrackOnMap()
             }
 
             /*If there is no remaining trailPoint, hides the actions buttons*/
@@ -268,7 +270,12 @@ class TrailMapDrawFragment :
             /*Then updates the track on the map*/
 
             this.map?.clear()
-            showTrailOnMap()
+            showTrailTrackOnMap()
+
+            /*And shows the info fragment related to the trailPointOfInterest*/
+
+            val lastPoi=this.trail?.trailTrack?.trailPointsOfInterest?.last()!!
+            showTrailPOIInfoFragment(lastPoi)
         }
     }
 
@@ -281,30 +288,12 @@ class TrailMapDrawFragment :
         this.trail?.trailTrack?.trailPointsOfInterest?.remove(trailPointOfInterest)
         hideInfoBottomSheet()
         this.map?.clear()
-        showTrailOnMap()
+        showTrailTrackOnMap()
     }
 
     /******************************Nested Fragments monitoring***********************************/
 
     override fun showDefaultInfoFragment() {
         showTrailInfoFragment()
-    }
-
-    private fun showTrailInfoFragment(){
-        this.infoFragment=
-            TrailInfoFragment(this.trail)
-        childFragmentManager.beginTransaction()
-            .replace(R.id.fragment_trail_map_draw_fragment_info, this.infoFragment).commit()
-        collapseInfoBottomSheet()
-    }
-
-    private fun showTrailPOIInfoFragment(trailPointOfInterest: TrailPointOfInterest){
-        this.infoFragment=
-            TrailPOIInfoFragment(
-                trailPointOfInterest
-            )
-        childFragmentManager.beginTransaction()
-            .replace(R.id.fragment_trail_map_draw_fragment_info, this.infoFragment).commit()
-        collapseInfoBottomSheet()
     }
 }

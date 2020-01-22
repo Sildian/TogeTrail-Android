@@ -29,7 +29,7 @@ class TrailMapDetailFragment : BaseTrailMapFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
         super.onCreateView(inflater, container, savedInstanceState)
         Log.d(TAG_FRAGMENT, "Fragment '${javaClass.simpleName}' created")
-        showTrailOnMap()
+        showTrailTrackOnMap()
         return this.layout
     }
 
@@ -40,6 +40,8 @@ class TrailMapDetailFragment : BaseTrailMapFragment() {
     override fun getMapViewId(): Int = R.id.fragment_trail_map_detail_map_view
 
     override fun getInfoBottomSheetId(): Int = R.id.fragment_trail_map_detail_bottom_sheet_info
+
+    override fun getInfoFragmentId(): Int = R.id.fragment_trail_map_detail_fragment_info
 
     /***********************************Map monitoring*******************************************/
 
@@ -86,11 +88,11 @@ class TrailMapDetailFragment : BaseTrailMapFragment() {
      * Shows the current trail on the map and zoom in to the first point
      */
 
-    override fun showTrailOnMap() {
+    override fun showTrailTrackOnMap() {
 
         if(this.trail!=null) {
 
-            super.showTrailOnMap()
+            super.showTrailTrackOnMap()
 
             /*Gets the first trailPoint*/
 
@@ -109,23 +111,5 @@ class TrailMapDetailFragment : BaseTrailMapFragment() {
 
     override fun showDefaultInfoFragment() {
         showTrailInfoFragment()
-    }
-
-    private fun showTrailInfoFragment(){
-        this.infoFragment=
-            TrailInfoFragment(this.trail)
-        childFragmentManager.beginTransaction()
-            .replace(R.id.fragment_trail_map_detail_fragment_info, this.infoFragment).commit()
-        collapseInfoBottomSheet()
-    }
-
-    private fun showTrailPOIInfoFragment(trailPointOfInterest: TrailPointOfInterest){
-        this.infoFragment=
-            TrailPOIInfoFragment(
-                trailPointOfInterest
-            )
-        childFragmentManager.beginTransaction()
-            .replace(R.id.fragment_trail_map_detail_fragment_info, this.infoFragment).commit()
-        collapseInfoBottomSheet()
     }
 }
