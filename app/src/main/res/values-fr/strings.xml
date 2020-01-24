@@ -61,6 +61,8 @@
 
     <!-- Messages to the user -->
     <string name="message_unknown_short">\?</string>
+    <string name="message_trail_name_unknown">Parcours inconnu</string>
+    <string name="message_trail_poi_name_unknown">Point d\'intérêt inconnu</string>
     <string name="message_no_location_available">L\'emplacement n\'est pas disponible</string>
     <string name="message_no_description_available">Aucune description n\'est disponible</string>
 

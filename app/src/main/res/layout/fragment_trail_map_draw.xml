@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layoutAnimation="@anim/anim_layout_appear_right"
+        android:layoutAnimation="@anim/layout_appear_right"
         android:gravity="start"
         android:visibility="gone">
 

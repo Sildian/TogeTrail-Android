@@ -58,7 +58,7 @@ class TrailTrack(
      */
 
     fun getAscent():Int?{
-        if(this.trailPoints.find { it.elevation==null } ==null){
+        if(this.trailPoints.isNotEmpty() && this.trailPoints.find { it.elevation==null } ==null){
             var ascent = 0
             for (i in this.trailPoints.indices) {
                 if (i > 0) {
@@ -83,7 +83,7 @@ class TrailTrack(
      */
 
     fun getDescent():Int?{
-        if(this.trailPoints.find { it.elevation==null } ==null){
+        if(this.trailPoints.isNotEmpty() && this.trailPoints.find { it.elevation==null } ==null){
             var descent = 0
             for (i in this.trailPoints.indices) {
                 if (i > 0) {

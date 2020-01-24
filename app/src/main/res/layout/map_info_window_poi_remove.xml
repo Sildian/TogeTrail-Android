@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:background="@drawable/shape_corners_round_color_primary"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.google.android.material.button.MaterialButton
-        style="@style/MapButtonStyle"
-        android:id="@+id/fragment_trail_map_draw_button_poi_add"
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/components_margin_small"
-        android:layout_marginBottom="@dimen/components_margin_small"
-        app:icon="@drawable/ic_poi_remove_white"
+        android:layout_marginStart="@dimen/components_margin_medium"
+        app:srcCompat="@drawable/ic_poi_remove_white"
+        android:tint="@color/colorSecondary"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/fragment_trail_map_draw_button_poi_add"
+        app:backgroundTint="@android:color/transparent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:textSize="@dimen/text_size_body"
+        android:textColor="@color/colorSecondary"
         android:text="@string/button_trail_poi_remove" />
 
-</FrameLayout>
+</LinearLayout>

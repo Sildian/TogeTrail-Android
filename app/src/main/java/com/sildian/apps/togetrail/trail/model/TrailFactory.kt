@@ -1,6 +1,7 @@
 package com.sildian.apps.togetrail.trail.model
 
 import io.ticofab.androidgpxparser.parser.domain.Gpx
+import java.util.*
 
 /*************************************************************************************************
  * Provides with functions allowing to build a Trail
@@ -28,6 +29,23 @@ object TrailFactory {
      */
 
     class TrailBuildTooManyTracksException(message:String):Exception(message)
+
+    /**
+     * Builds a new Trail from nothing but a name. Sets the source as TogeTrail and the date as today.
+     * @param name : the name of the trail
+     * @return the resulted trail
+     */
+
+    fun buildFromNothing(name:String):Trail{
+        val source="TogeTrail"
+        val date= Date()
+        return Trail(
+            name=name,
+            source=source,
+            creationDate = date,
+            lastUpdate = date
+        )
+    }
 
     /**
      * Builds a Trail by uploading a gpx file
@@ -60,13 +78,16 @@ object TrailFactory {
             else if (gpx.tracks[0].trackName != null) gpx.tracks[0].trackName
             else ""
         val source =
-            if (gpx.metadata.link.text != null) gpx.metadata.link.text
-            else if (gpx.tracks[0].trackLink.text != null) gpx.tracks[0].trackLink.text
+            if (gpx.creator != null) gpx.creator
             else ""
         val description =
             if (gpx.metadata.desc != null) gpx.metadata.desc
             else if (gpx.tracks[0].trackDesc != null) gpx.tracks[0].trackDesc
             else ""
+
+        /*Date as of today*/
+
+        val date=Date()
 
         val trailTrack = TrailTrack()
 
@@ -101,6 +122,8 @@ object TrailFactory {
             name = name,
             source = source,
             description = description,
+            creationDate = date,
+            lastUpdate = date,
             trailTrack = trailTrack
         )
     }

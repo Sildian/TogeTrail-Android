@@ -1,37 +1,39 @@
 package com.sildian.apps.togetrail.trail.map
 
-import android.graphics.drawable.AnimationDrawable
-import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.gms.maps.CameraUpdateFactory
+import android.view.animation.AnimationUtils
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.Polyline
 
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.utils.DateUtilities
-import com.sildian.apps.togetrail.trail.model.Trail
+import com.sildian.apps.togetrail.common.utils.GeoUtilities
 import com.sildian.apps.togetrail.trail.model.TrailPoint
+import com.sildian.apps.togetrail.trail.model.TrailPointOfInterest
 import kotlinx.android.synthetic.main.fragment_trail_map_record.view.*
-import java.util.*
 import java.util.concurrent.Executors
 
 /*************************************************************************************************
  * Lets the user record a trail in real time
  ************************************************************************************************/
 
-class TrailMapRecordFragment : BaseTrailMapFragment() {
+class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
 
     /**********************************Static items**********************************************/
 
     companion object{
 
-        /**Record data**/ //TODO change the value later
-        private const val RECORD_TIME_INTERVAL=5000     //The time interval between each point record (in milliseconds)
+        /**Record data**/
+
+        //The time interval between each point record (in milliseconds)
+        private const val VALUE_RECORD_TIME_INTERVAL=60000
+
+        //The minimum required distance between two points to check before register (in meters)
+        private const val VALUE_RECORD_MIN_DISTANCE=100
     }
 
     /***************************************Data*************************************************/
@@ -40,6 +42,8 @@ class TrailMapRecordFragment : BaseTrailMapFragment() {
 
     /**********************************UI component**********************************************/
 
+    private val actionsButtonsLayout by lazy {layout.fragment_trail_map_record_layout_actions_buttons}
+    private val addPoiButton by lazy {layout.fragment_trail_map_record_button_poi_add}
     private val playButton by lazy {layout.fragment_trail_map_record_button_play}
 
     /************************************Life cycle**********************************************/
@@ -47,7 +51,7 @@ class TrailMapRecordFragment : BaseTrailMapFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         Log.d(TAG_FRAGMENT, "Fragment '${javaClass.simpleName}' created")
-        this.trail= Trail()
+        initializeAddPoiButton()
         initializePlayButton()
         return this.layout
     }
@@ -67,6 +71,12 @@ class TrailMapRecordFragment : BaseTrailMapFragment() {
 
     override fun getInfoFragmentId(): Int = R.id.fragment_trail_map_record_fragment_info
 
+    private fun initializeAddPoiButton(){
+        this.addPoiButton.setOnClickListener {
+            addTrailPointOfInterest()
+        }
+    }
+
     private fun initializePlayButton(){
         this.playButton.setOnClickListener {
             when(this.isRecording){
@@ -76,22 +86,75 @@ class TrailMapRecordFragment : BaseTrailMapFragment() {
         }
     }
 
+    override fun revealActionsButtons(){
+        this.actionsButtonsLayout.visibility=View.VISIBLE
+        this.actionsButtonsLayout.layoutAnimation=
+            AnimationUtils.loadLayoutAnimation(context, R.anim.layout_appear_right)
+        this.actionsButtonsLayout.animate()
+    }
+
+    override fun hideActionsButtons() {
+
+    }
+
     /***********************************Map monitoring*******************************************/
 
     override fun proceedAdditionalOnMapReadyActions() {
-
+        this.map?.setInfoWindowAdapter(this)
+        this.map?.setOnInfoWindowClickListener(this)
     }
 
     override fun onMapClick(point: LatLng?) {
-
+        Log.d(TAG_MAP, "Click on map at point lat ${point?.latitude} lng ${point?.longitude}")
+        hideInfoBottomSheet()
     }
 
     override fun onMarkerClick(marker: Marker?): Boolean {
-        return true
+
+        /*Shows an info nested fragment depending on the tag of the marker*/
+
+        return when(marker?.tag){
+            is TrailPointOfInterest->{
+                Log.d(TAG_MAP, "Click on marker (TrailPointOfInterest)")
+                val trailPointOfInterest=marker.tag as TrailPointOfInterest
+                showTrailPOIInfoFragment(trailPointOfInterest)
+                marker.showInfoWindow()
+                true
+            }
+            is TrailPoint->{
+                Log.d(TAG_MAP, "Click on marker (TrailPoint)")
+                showTrailInfoFragment()
+                true
+            }
+            else-> {
+                Log.w(TAG_MAP, "Click on marker (Unknown category)")
+                false
+            }
+        }
     }
 
     override fun onPolylineClick(polyline: Polyline?) {
+        Log.d(TAG_MAP, "Click on polyline")
+        showTrailInfoFragment()
+    }
 
+    override fun getInfoWindow(marker: Marker?): View? {
+        return layoutInflater.inflate(R.layout.map_info_window_poi_remove, this.layout as ViewGroup, false)
+    }
+
+    override fun getInfoContents(marker: Marker?): View? {
+        return null
+    }
+
+    override fun onInfoWindowClick(marker: Marker?) {
+        if(marker?.tag is TrailPointOfInterest) {
+            Log.d(TAG_MAP, "Click on info window (TrailPointOfInterest)")
+            val trailPointOfInterest=marker.tag as TrailPointOfInterest
+            removeTrailPointOfInterest(trailPointOfInterest)
+        }
+        else{
+            Log.w(TAG_MAP, "Click on info window (Unknown category)")
+        }
     }
 
     /*************************************Record actions*****************************************/
@@ -102,9 +165,7 @@ class TrailMapRecordFragment : BaseTrailMapFragment() {
 
     private fun startRecord(){
         this.isRecording=true
-        this.playButton.setImageResource(R.drawable.anim_record_play)
-        val animation=this.playButton.drawable as AnimationDrawable
-        animation.start()
+        this.playButton.setImageResource(R.drawable.ic_record_pause_white)
         recordTrail()
     }
 
@@ -114,9 +175,7 @@ class TrailMapRecordFragment : BaseTrailMapFragment() {
 
     private fun stopRecord(){
         this.isRecording=false
-        this.playButton.setImageResource(R.drawable.anim_record_pause)
-        val animation=this.playButton.drawable as AnimationDrawable
-        animation.start()
+        this.playButton.setImageResource(R.drawable.ic_record_play_white)
     }
 
     /**
@@ -127,8 +186,8 @@ class TrailMapRecordFragment : BaseTrailMapFragment() {
     private fun recordTrail(){
         Executors.newSingleThreadExecutor().execute {
             while(isRecording){
-                getUserLocation()
-                var remainingTime= RECORD_TIME_INTERVAL
+                registerUserLocation()
+                var remainingTime= VALUE_RECORD_TIME_INTERVAL
                 while(remainingTime > 0){
                     Thread.sleep(1000)
                     remainingTime-=1000
@@ -139,12 +198,30 @@ class TrailMapRecordFragment : BaseTrailMapFragment() {
 
     /********************************Location monitoring*****************************************/
 
-    private fun getUserLocation(){
+    /**
+     * Gets the user location and use it to add a new trailPoint
+     */
+
+    private fun registerUserLocation(){
+
+        /*Gets the user location*/
+
         this.userLocation.lastLocation
             .addOnSuccessListener { userLocation->
-                Log.d(TAG_LOCATION,
-                    "Point registered at lat ${userLocation.latitude} lng ${userLocation.longitude}")
-                addTrailPoint(userLocation)
+                val trailPoint= TrailPoint(
+                    userLocation.latitude, userLocation.longitude, userLocation.altitude.toInt())
+
+                /*If minimum distance to previous point is fulfilled, adds the new trailPoint*/
+
+                if(checkMinDistanceToPreviousPointIsFulfilled(trailPoint)) {
+                    Log.d(TAG_LOCATION,
+                        "Point registered at lat ${trailPoint.latitude} lng ${trailPoint.longitude}")
+                    addTrailPoint(trailPoint)
+                }
+                else{
+                    Log.d(TAG_LOCATION,
+                        "Point not registered, too closed to the previous point")
+                }
             }
             .addOnFailureListener { e->
                 //TODO handle
@@ -152,55 +229,31 @@ class TrailMapRecordFragment : BaseTrailMapFragment() {
             }
     }
 
-    /***********************************Trail monitoring*****************************************/
-
     /**
-     * Shows the current trail on the map and moves the camera to the last point
+     * Checks that the distance between a trailPoint and the previous registered point is
+     * higher than the minimum required distance
+     * @param trailPoint : the new trailPoint to register
+     * @return true if the minimum distance is fulfilled or if no point was previously recorded
      */
 
-    override fun showTrailTrackOnMap() {
-
-        if(this.trail!=null) {
-
-            super.showTrailTrackOnMap()
-
-            /*Gets the last trailPoint*/
-
-            val lastPoint = this.trail?.trailTrack!!.trailPoints.last()
-
-            /*Moves the camera to the last point*/
-
-            this.map?.animateCamera(
-                CameraUpdateFactory.newLatLng(
-                    LatLng(lastPoint.latitude, lastPoint.longitude))
-            )
+    private fun checkMinDistanceToPreviousPointIsFulfilled(trailPoint:TrailPoint):Boolean{
+        return if(!this.trail?.trailTrack?.trailPoints.isNullOrEmpty()) {
+            val previousPoint = this.trail?.trailTrack?.trailPoints?.last()
+            if (previousPoint != null) {
+                val pointA = LatLng(trailPoint.latitude, trailPoint.longitude)
+                val pointB = LatLng(previousPoint.latitude, previousPoint.longitude)
+                GeoUtilities.getDistance(pointA, pointB) >= VALUE_RECORD_MIN_DISTANCE
+            } else {
+                true
+            }
+        }else{
+            true
         }
-    }
-
-    /**
-     * Adds a trailPoint to the current trail
-     * @param point : the point to be added
-     */
-
-    private fun addTrailPoint(point: Location){
-
-        /*Adds a new trailPoint and updates the track on the map*/
-
-        val trailPoint= TrailPoint(point.latitude, point.longitude, point.altitude.toInt(), Date())
-        this.trail?.trailTrack?.trailPoints?.add(trailPoint)
-        this.map?.clear()
-        showTrailTrackOnMap()
-
-        /*If this is the first trailPoint, reveals the actions buttons*/
-
-        /*if(this.trail?.trailTrack?.trailPoints?.size==1) {
-            revealActionsButtons()
-        }*/
     }
 
     /******************************Nested Fragments monitoring***********************************/
 
     override fun showDefaultInfoFragment() {
-
+        showTrailInfoFragment()
     }
 }
