@@ -69,7 +69,23 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
 
     override fun getInfoBottomSheetId(): Int = R.id.fragment_trail_map_record_bottom_sheet_info
 
+    override fun getInfoEditSideSheetId(): Int = R.id.fragment_trail_map_record_side_sheet_info_edit
+
     override fun getInfoFragmentId(): Int = R.id.fragment_trail_map_record_fragment_info
+
+    override fun getInfoEditFragmentId(): Int = R.id.fragment_trail_map_record_fragment_info_edit
+
+    override fun enableUI() {
+        this.map?.uiSettings?.setAllGesturesEnabled(true)
+        this.addPoiButton.isEnabled=true
+        this.playButton.isEnabled=true
+    }
+
+    override fun disableUI() {
+        this.map?.uiSettings?.setAllGesturesEnabled(false)
+        this.addPoiButton.isEnabled=false
+        this.playButton.isEnabled=false
+    }
 
     private fun initializeAddPoiButton(){
         this.addPoiButton.setOnClickListener {
@@ -249,11 +265,5 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
         }else{
             true
         }
-    }
-
-    /******************************Nested Fragments monitoring***********************************/
-
-    override fun showDefaultInfoFragment() {
-        showTrailInfoFragment()
     }
 }

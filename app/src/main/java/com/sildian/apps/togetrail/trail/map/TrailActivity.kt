@@ -6,6 +6,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.main.MainActivity
@@ -64,10 +65,13 @@ class TrailActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if(this.fragment.getInfoBottomSheetState()!=BottomSheetBehavior.STATE_HIDDEN){
-            this.fragment.hideInfoBottomSheet()
-        }else{
-            super.onBackPressed()
+        when{
+            this.fragment.getInfoBottomSheetState()!=BottomSheetBehavior.STATE_HIDDEN->
+                this.fragment.hideInfoBottomSheet()
+            this.fragment.getInfoEditSideSheetState()!= View.GONE->
+                this.fragment.hideInfoEditSideSheet()
+            else->
+                super.onBackPressed()
         }
     }
 

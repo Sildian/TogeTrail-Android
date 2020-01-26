@@ -46,7 +46,23 @@ class TrailMapDrawFragment : BaseTrailMapGenerateFragment(){
 
     override fun getInfoBottomSheetId(): Int = R.id.fragment_trail_map_draw_bottom_sheet_info
 
+    override fun getInfoEditSideSheetId(): Int = R.id.fragment_trail_map_draw_side_sheet_info_edit
+
     override fun getInfoFragmentId(): Int = R.id.fragment_trail_map_draw_fragment_info
+
+    override fun getInfoEditFragmentId(): Int = R.id.fragment_trail_map_draw_fragment_info_edit
+
+    override fun enableUI() {
+        this.map?.uiSettings?.setAllGesturesEnabled(true)
+        this.removePointButton.isEnabled=true
+        this.addPoiButton.isEnabled=true
+    }
+
+    override fun disableUI() {
+        this.map?.uiSettings?.setAllGesturesEnabled(false)
+        this.removePointButton.isEnabled=false
+        this.addPoiButton.isEnabled=false
+    }
 
     private fun initializeRemovePointButton(){
         this.removePointButton.setOnClickListener {
@@ -154,11 +170,5 @@ class TrailMapDrawFragment : BaseTrailMapGenerateFragment(){
         else{
             Log.w(TAG_MAP, "Click on info window (Unknown category)")
         }
-    }
-
-    /******************************Nested Fragments monitoring***********************************/
-
-    override fun showDefaultInfoFragment() {
-        showTrailInfoFragment()
     }
 }

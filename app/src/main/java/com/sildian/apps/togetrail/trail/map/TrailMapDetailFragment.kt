@@ -41,7 +41,19 @@ class TrailMapDetailFragment : BaseTrailMapFragment() {
 
     override fun getInfoBottomSheetId(): Int = R.id.fragment_trail_map_detail_bottom_sheet_info
 
+    override fun getInfoEditSideSheetId(): Int = R.id.fragment_trail_map_detail_side_sheet_info_edit
+
     override fun getInfoFragmentId(): Int = R.id.fragment_trail_map_detail_fragment_info
+
+    override fun getInfoEditFragmentId(): Int = R.id.fragment_trail_map_detail_fragment_info_edit
+
+    override fun enableUI() {
+        this.map?.uiSettings?.setAllGesturesEnabled(true)
+    }
+
+    override fun disableUI() {
+        this.map?.uiSettings?.setAllGesturesEnabled(false)
+    }
 
     /***********************************Map monitoring*******************************************/
 
@@ -105,11 +117,5 @@ class TrailMapDetailFragment : BaseTrailMapFragment() {
                     LatLng(firstPoint.latitude, firstPoint.longitude), 14.0f)
             )
         }
-    }
-
-    /******************************Nested Fragments monitoring***********************************/
-
-    override fun showDefaultInfoFragment() {
-        showTrailInfoFragment()
     }
 }

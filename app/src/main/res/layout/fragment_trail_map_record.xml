@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layoutAnimation="@anim/layout_appear_right"
-        android:gravity="start"
+        android:gravity="left"
         android:visibility="gone">
 
         <com.google.android.material.button.MaterialButton
@@ -32,6 +32,20 @@
             android:text="@string/button_trail_poi_add" />
 
     </LinearLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/fragment_trail_map_record_side_sheet_info_edit"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <FrameLayout
+            android:id="@+id/fragment_trail_map_record_fragment_info_edit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorWhite"/>
+
+    </com.google.android.material.card.MaterialCardView>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"

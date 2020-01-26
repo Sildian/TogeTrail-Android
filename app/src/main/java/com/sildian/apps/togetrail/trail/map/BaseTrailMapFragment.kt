@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.GoogleMap
@@ -15,7 +17,9 @@ import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.MapMarkersUtilities
+import com.sildian.apps.togetrail.trail.info.TrailInfoEditFragment
 import com.sildian.apps.togetrail.trail.info.TrailInfoFragment
+import com.sildian.apps.togetrail.trail.info.TrailPOIInfoEditFragment
 import com.sildian.apps.togetrail.trail.info.TrailPOIInfoFragment
 import com.sildian.apps.togetrail.trail.model.Trail
 import com.sildian.apps.togetrail.trail.model.TrailPointOfInterest
@@ -54,7 +58,9 @@ abstract class BaseTrailMapFragment :
     protected lateinit var layout:View                  //The fragment's layout
     protected lateinit var mapView:MapView              //The map view
     protected lateinit var infoBottomSheet:BottomSheetBehavior<View>    //Bottom sheet with additional info
-    protected lateinit var infoFragment:Fragment        //Nested fragment within the bottomSheet
+    protected lateinit var infoEditSideSheet:ViewGroup  //Side sheet with additional info to edit
+    protected lateinit var infoFragment:Fragment        //Nested fragment allowing to see info about the trail
+    protected lateinit var infoEditFragment:Fragment    //Nested fragment allowing to edit info about the trail
 
     /**************************************Map support*******************************************/
 
@@ -69,6 +75,7 @@ abstract class BaseTrailMapFragment :
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
         this.layout=inflater.inflate(getLayoutId(), container, false)
         initializeInfoBottomSheet()
+        initializeInfoEditSideSheet()
         initializeMap(savedInstanceState)
         initializeUserLocation()
         return this.layout
@@ -126,7 +133,7 @@ abstract class BaseTrailMapFragment :
     fun updateTrail(trail:Trail?){
         this.trail=trail
         showTrailTrackOnMap()
-        showDefaultInfoFragment()
+        showTrailInfoFragment()
     }
 
     /************************************UI monitoring*******************************************/
@@ -137,7 +144,15 @@ abstract class BaseTrailMapFragment :
 
     abstract fun getInfoBottomSheetId():Int
 
+    abstract fun getInfoEditSideSheetId():Int
+
     abstract fun getInfoFragmentId():Int
+
+    abstract fun getInfoEditFragmentId():Int
+
+    abstract fun enableUI()
+
+    abstract fun disableUI()
 
     private fun initializeInfoBottomSheet(){
         this.infoBottomSheet=
@@ -145,6 +160,14 @@ abstract class BaseTrailMapFragment :
         val peekHeight=resources.getDimension(R.dimen.bottom_sheet_peek_height).toInt()
         this.infoBottomSheet.peekHeight=peekHeight
         hideInfoBottomSheet()
+    }
+
+    private fun initializeInfoEditSideSheet(){
+        //TODO Remove condition, set all ids within each child fragment
+        if(getInfoEditSideSheetId()!=0) {
+            this.infoEditSideSheet = this.layout.findViewById(getInfoEditSideSheetId())
+            hideInfoEditSideSheet()
+        }
     }
 
     /***********************************Map monitoring*******************************************/
@@ -235,27 +258,7 @@ abstract class BaseTrailMapFragment :
         }
     }
 
-    /**************************Nested Fragments monitoring***************************************/
-
-    abstract fun showDefaultInfoFragment()
-
-    protected fun showTrailInfoFragment(){
-        this.infoFragment=
-            TrailInfoFragment(this.trail)
-        childFragmentManager.beginTransaction()
-            .replace(getInfoFragmentId(), this.infoFragment).commit()
-        collapseInfoBottomSheet()
-    }
-
-    protected fun showTrailPOIInfoFragment(trailPointOfInterest: TrailPointOfInterest){
-        this.infoFragment=
-            TrailPOIInfoFragment(
-                trailPointOfInterest
-            )
-        childFragmentManager.beginTransaction()
-            .replace(getInfoFragmentId(), this.infoFragment).commit()
-        collapseInfoBottomSheet()
-    }
+    /*****************************Bottom sheet monitoring****************************************/
 
     fun getInfoBottomSheetState():Int = this.infoBottomSheet.state
 
@@ -269,5 +272,73 @@ abstract class BaseTrailMapFragment :
 
     fun expandInfoBottomSheet(){
         this.infoBottomSheet.state=BottomSheetBehavior.STATE_EXPANDED
+    }
+
+    /*******************************Side sheet monitoring****************************************/
+
+    fun getInfoEditSideSheetState():Int = this.infoEditSideSheet.visibility
+
+    fun hideInfoEditSideSheet(){
+        val animation=AnimationUtils.loadAnimation(context, R.anim.vanish_right)
+        animation.setAnimationListener(object :Animation.AnimationListener{
+            override fun onAnimationRepeat(animation: Animation?) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+                infoEditSideSheet.visibility=View.GONE
+                enableUI()
+            }
+
+            override fun onAnimationStart(animation: Animation?) {
+
+            }
+        })
+        this.infoEditSideSheet.startAnimation(animation)
+    }
+
+    fun showInfoEditSideSheet(){
+        disableUI()
+        this.infoEditSideSheet.visibility=View.VISIBLE
+        this.infoEditSideSheet.startAnimation(
+            AnimationUtils.loadAnimation(context, R.anim.appear_left))
+    }
+
+    /**************************Nested Fragments monitoring***************************************/
+
+    fun showTrailInfoFragment(){
+        this.infoFragment=
+            TrailInfoFragment(this.trail)
+        childFragmentManager.beginTransaction()
+            .replace(getInfoFragmentId(), this.infoFragment).commit()
+        collapseInfoBottomSheet()
+    }
+
+    fun showTrailPOIInfoFragment(trailPointOfInterest: TrailPointOfInterest){
+        this.infoFragment=
+            TrailPOIInfoFragment(
+                trailPointOfInterest
+            )
+        childFragmentManager.beginTransaction()
+            .replace(getInfoFragmentId(), this.infoFragment).commit()
+        collapseInfoBottomSheet()
+    }
+
+    fun showTrailInfoEditFragment(){
+        hideInfoBottomSheet()
+        this.infoEditFragment=
+            TrailInfoEditFragment()
+        childFragmentManager.beginTransaction()
+            .replace(getInfoFragmentId(), this.infoEditFragment).commit()
+        showInfoEditSideSheet()
+    }
+
+    fun showTrailPOIInfoEditFragment(trailPointOfInterest: TrailPointOfInterest){
+        hideInfoBottomSheet()
+        this.infoEditFragment=
+            TrailPOIInfoEditFragment()
+        childFragmentManager.beginTransaction()
+            .replace(getInfoFragmentId(), this.infoEditFragment).commit()
+        showInfoEditSideSheet()
     }
 }

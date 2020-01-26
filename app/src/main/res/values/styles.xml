@@ -56,4 +56,12 @@
         <item name="cornerSizeBottomRight">@dimen/components_corner_medium</item>
     </style>
 
+    <!-- Icon buttons -->
+    <style name="IconButtonStyle" parent="@style/Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="rippleColor">@color/colorSecondaryLight</item>
+        <item name="iconTint">@color/colorSecondary</item>
+        <item name="iconGravity">textStart</item>
+    </style>
+
 </resources>

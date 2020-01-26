@@ -9,6 +9,7 @@ import android.view.ViewGroup
 
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.NumberUtilities
+import com.sildian.apps.togetrail.trail.map.BaseTrailMapFragment
 import com.sildian.apps.togetrail.trail.model.TrailPointOfInterest
 import kotlinx.android.synthetic.main.fragment_trail_poi_info.view.*
 
@@ -32,6 +33,7 @@ class TrailPOIInfoFragment (val trailPointOfInterest:TrailPointOfInterest?=null)
 
     private lateinit var layout:View
     private val nameText by lazy {layout.fragment_trail_poi_info_text_name}
+    private val editButton by lazy {layout.fragment_trail_poi_info_button_edit}
     private val elevationText by lazy {layout.fragment_trail_poi_info_text_elevation}
     private val descriptionText by lazy {layout.fragment_trail_poi_info_text_description}
 
@@ -48,12 +50,20 @@ class TrailPOIInfoFragment (val trailPointOfInterest:TrailPointOfInterest?=null)
 
     private fun initializeAllUIComponents(){
         initializeNameText()
+        initializeEditButton()
         initializeElevationText()
         initializeDescriptionText()
     }
 
     private fun initializeNameText(){
         this.nameText.text=this.trailPointOfInterest?.name
+    }
+
+    private fun initializeEditButton(){
+        this.editButton.setOnClickListener {
+            (parentFragment as BaseTrailMapFragment)
+                .showTrailPOIInfoEditFragment(this.trailPointOfInterest!!)
+        }
     }
 
     private fun initializeElevationText(){
