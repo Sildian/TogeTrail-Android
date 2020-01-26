@@ -15,6 +15,9 @@ import com.sildian.apps.togetrail.trail.map.TrailActivity
 import com.sildian.apps.togetrail.trail.map.TrailMapFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import net.danlew.android.joda.JodaTimeAndroid
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 
 /*************************************************************************************************
  * Lets the user navigate between the main screens
@@ -32,11 +35,18 @@ class MainActivity :
         /**Logs**/
         const val TAG_ACTIVITY="TAG_ACTIVITY"
         const val TAG_MENU="TAG_MENU"
+        const val TAG_PERMISSION="TAG_PERMISSION"
 
         /**Fragments Ids***/
         const val ID_FRAGMENT_MAP=1
         const val ID_FRAGMENT_TRAILS=2
         const val ID_FRAGMENT_EVENTS=3
+
+        /**Request keys for permissions**/
+        const val KEY_REQUEST_PERMISSION_LOCATION=2001
+
+        /**Bundle keys for permissions**/
+        const val KEY_BUNDLE_PERMISSION_LOCATION=Manifest.permission.ACCESS_FINE_LOCATION
 
         /**Bundle keys for intents**/
         const val KEY_BUNDLE_TRAIL_ACTION="KEY_BUNDLE_TRAIL_ACTION"
@@ -57,7 +67,7 @@ class MainActivity :
         JodaTimeAndroid.init(this)
         initializeBottomNavigationView()
         initializeAddButton()
-        showFragment(ID_FRAGMENT_MAP)
+        requestLocationPermission()
     }
 
     /*******************************Menu monitoring**********************************************/
@@ -163,6 +173,47 @@ class MainActivity :
         }
         supportFragmentManager.beginTransaction()
             .replace(R.id.activity_main_fragment, this.fragment).commit()
+    }
+
+    /***********************************Permissions**********************************************/
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            KEY_REQUEST_PERMISSION_LOCATION->if(grantResults.isNotEmpty()){
+                when(grantResults[0]){
+                    PackageManager.PERMISSION_GRANTED -> {
+                        Log.d(TAG_PERMISSION,
+                            "Permission '$KEY_BUNDLE_PERMISSION_LOCATION' granted")
+                        showFragment(ID_FRAGMENT_MAP)
+                    }
+                    PackageManager.PERMISSION_DENIED -> {
+                        //TODO handle
+                        Log.d(TAG_PERMISSION,
+                            "Permission '$KEY_BUNDLE_PERMISSION_LOCATION' denied")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun requestLocationPermission(){
+        if(Build.VERSION.SDK_INT>=23
+            &&checkSelfPermission(KEY_BUNDLE_PERMISSION_LOCATION)!= PackageManager.PERMISSION_GRANTED){
+
+            /*If permission not already granted, requests it*/
+
+            if(shouldShowRequestPermissionRationale(KEY_BUNDLE_PERMISSION_LOCATION)){
+                //TODO handle
+            }else{
+                requestPermissions(
+                    arrayOf(KEY_BUNDLE_PERMISSION_LOCATION), KEY_REQUEST_PERMISSION_LOCATION)
+            }
+        }else{
+
+            /*If SDK <23 or permission already granted, directly shows the map fragment*/
+
+            showFragment(ID_FRAGMENT_MAP)
+        }
     }
 
     /***********************************Navigation***********************************************/
