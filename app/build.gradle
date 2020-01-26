@@ -60,4 +60,7 @@ dependencies {
 
     //Gpx parser
     api 'io.ticofab.androidgpxparser:parser:1.6.0'
+
+    //Circular SeekBar
+    implementation 'com.sdsmdg.harjot:croller:1.0.7'
 }

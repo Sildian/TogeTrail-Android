@@ -64,4 +64,18 @@
         <item name="iconGravity">textStart</item>
     </style>
 
+    <!-- Text input fields -->
+    <style name="TextInputFieldStyle" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:textSize">@dimen/text_size_body</item>
+        <item name="boxStrokeColor">@color/colorSecondaryDark</item>
+        <item name="hintTextColor">@color/colorSecondaryDark</item>
+    </style>
+
+    <!-- Text input fields with dropDown menu-->
+    <style name="TextInputFieldDropDownMenuStyle" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="android:textSize">@dimen/text_size_body</item>
+        <item name="boxStrokeColor">@color/colorSecondaryDark</item>
+        <item name="hintTextColor">@color/colorSecondaryDark</item>
+    </style>
+
 </resources>

@@ -19,7 +19,7 @@ class TrailPOIInfoEditFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_trail_poiinfo_edit, container, false)
+        return inflater.inflate(R.layout.fragment_trail_poi_info_edit, container, false)
     }
 
 

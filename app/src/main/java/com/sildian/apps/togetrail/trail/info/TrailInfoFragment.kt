@@ -139,60 +139,60 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
         val ascent=this.trail?.ascent
         val metric=resources.getString(R.string.metric_meter)
         val suffix=resources.getString(R.string.label_trail_ascent_short)
-        val unkownText=resources.getString(R.string.message_unknown_short)
+        val unknownText=resources.getString(R.string.message_unknown_short)
         this.ascentText.text=
             if(ascent!=null)
                 NumberUtilities.displayNumberWithMetricAndSuffix(
                     ascent.toDouble(), 0, metric, suffix, true)
-            else unkownText
+            else unknownText
     }
 
     private fun initializeDescentText(){
         val descent=this.trail?.descent
         val metric=resources.getString(R.string.metric_meter)
         val suffix=resources.getString(R.string.label_trail_descent_short)
-        val unkownText=resources.getString(R.string.message_unknown_short)
+        val unknownText=resources.getString(R.string.message_unknown_short)
         this.descentText.text=
             if(descent!=null)
                 NumberUtilities.displayNumberWithMetricAndSuffix(
                     descent.toDouble(), 0, metric, suffix, true)
-            else unkownText
+            else unknownText
     }
 
     private fun initializeDistanceText(){
         val distance=this.trail?.distance
         val metric=resources.getString(R.string.metric_kilometer)
         val suffix=resources.getString(R.string.label_trail_distance_short)
-        val unkownText=resources.getString(R.string.message_unknown_short)
+        val unknownText=resources.getString(R.string.message_unknown_short)
         this.distanceText.text=
             if(distance!=null)
                 NumberUtilities.displayNumberWithMetricAndSuffix(
                     distance.toDouble()/1000, 1, metric, suffix, true)
-            else unkownText
+            else unknownText
     }
 
     private fun initializeMaxElevationText(){
         val maxElevation=this.trail?.maxElevation
         val metric=resources.getString(R.string.metric_meter)
         val suffix=resources.getString(R.string.label_trail_max_elevation_short)
-        val unkownText=resources.getString(R.string.message_unknown_short)
+        val unknownText=resources.getString(R.string.message_unknown_short)
         this.maxElevationText.text=
             if(maxElevation!=null)
                 NumberUtilities.displayNumberWithMetricAndSuffix(
                     maxElevation.toDouble(), 0, metric, suffix, true)
-            else unkownText
+            else unknownText
     }
 
     private fun initializeMinElevationText(){
         val minElevation=this.trail?.minElevation
         val metric=resources.getString(R.string.metric_meter)
         val suffix=resources.getString(R.string.label_trail_min_elevation_short)
-        val unkownText=resources.getString(R.string.message_unknown_short)
+        val unknownText=resources.getString(R.string.message_unknown_short)
         this.minElevationText.text=
             if(minElevation!=null)
                 NumberUtilities.displayNumberWithMetricAndSuffix(
                     minElevation.toDouble(), 0, metric, suffix, true)
-            else unkownText
+            else unknownText
     }
 
     private fun initializeLocationText(){

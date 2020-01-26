@@ -327,9 +327,9 @@ abstract class BaseTrailMapFragment :
     fun showTrailInfoEditFragment(){
         hideInfoBottomSheet()
         this.infoEditFragment=
-            TrailInfoEditFragment()
+            TrailInfoEditFragment(this.trail)
         childFragmentManager.beginTransaction()
-            .replace(getInfoFragmentId(), this.infoEditFragment).commit()
+            .replace(getInfoEditFragmentId(), this.infoEditFragment).commit()
         showInfoEditSideSheet()
     }
 
@@ -338,7 +338,7 @@ abstract class BaseTrailMapFragment :
         this.infoEditFragment=
             TrailPOIInfoEditFragment()
         childFragmentManager.beginTransaction()
-            .replace(getInfoFragmentId(), this.infoEditFragment).commit()
+            .replace(getInfoEditFragmentId(), this.infoEditFragment).commit()
         showInfoEditSideSheet()
     }
 }

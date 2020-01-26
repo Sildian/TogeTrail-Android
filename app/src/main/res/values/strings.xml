@@ -25,11 +25,14 @@
     <string name="label_location_region">State / Region</string>
     <string name="label_location_town">City / Town</string>
     <!-- Trail -->
+    <string name="label_trail_main_info">Main info</string>
     <string name="label_trail_name">Name</string>
     <string name="label_trail_description">Description</string>
-    <string name="label_trail_level_easy">Lv Easy</string>
-    <string name="label_trail_level_medium">Lv Medium</string>
-    <string name="label_trail_level_hard">Lv Hard</string>
+    <string name="label_trail_level">Level</string>
+    <string name="label_trail_level_easy">Lvl Easy</string>
+    <string name="label_trail_level_medium">Lvl Medium</string>
+    <string name="label_trail_level_hard">Lvl Hard</string>
+    <string name="label_trail_type">Type</string>
     <string name="label_trail_type_hiking">Hiking</string>
     <string name="label_trail_type_biking">Biking</string>
     <string name="label_trail_type_other">Other</string>
@@ -72,5 +75,19 @@
     <string name="metric_minute">min</string>
     <string name="metric_meter">m</string>
     <string name="metric_kilometer">km</string>
+
+    <!-- Trail level array -->
+    <string-array name="array_trail_levels">
+        <item>Easy</item>
+        <item>Medium</item>
+        <item>Hard</item>
+    </string-array>
+
+    <!-- Trail level array -->
+    <string-array name="array_trail_types">
+        <item>Hiking</item>
+        <item>Biking</item>
+        <item>Other</item>
+    </string-array>
 
 </resources>

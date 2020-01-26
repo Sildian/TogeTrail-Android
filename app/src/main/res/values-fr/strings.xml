@@ -24,11 +24,14 @@
     <string name="label_location_region">Etat / Région</string>
     <string name="label_location_town">Ville / Village</string>
     <!-- Trail -->
+    <string name="label_trail_main_info">Infos principales</string>
     <string name="label_trail_name">Nom</string>
     <string name="label_trail_description">Description</string>
+    <string name="label_trail_level">Niveau</string>
     <string name="label_trail_level_easy">Nv Facile</string>
     <string name="label_trail_level_medium">Nv Moyen</string>
     <string name="label_trail_level_hard">Nv Difficile</string>
+    <string name="label_trail_type">Type</string>
     <string name="label_trail_type_hiking">A pieds</string>
     <string name="label_trail_type_biking">A vélo</string>
     <string name="label_trail_type_other">Autre</string>
@@ -71,5 +74,19 @@
     <string name="metric_minute">min</string>
     <string name="metric_meter">m</string>
     <string name="metric_kilometer">km</string>
+
+    <!-- Trail level array -->
+    <string-array name="array_trail_levels">
+        <item>Facile</item>
+        <item>Moyen</item>
+        <item>Difficile</item>
+    </string-array>
+
+    <!-- Trail level array -->
+    <string-array name="array_trail_types">
+        <item>A pieds</item>
+        <item>A vélo</item>
+        <item>Autre</item>
+    </string-array>
 
 </resources>

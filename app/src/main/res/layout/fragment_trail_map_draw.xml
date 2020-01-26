@@ -52,8 +52,7 @@
         <FrameLayout
             android:id="@+id/fragment_trail_map_draw_fragment_info_edit"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorWhite"/>
+            android:layout_height="match_parent" />
 
     </com.google.android.material.card.MaterialCardView>
 
