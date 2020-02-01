@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.GoogleMap
@@ -223,7 +224,7 @@ abstract class BaseTrailMapFragment :
             this.trail?.trailTrack?.trailPoints?.forEach { trailPoint->
                 polylineOption.add(LatLng(trailPoint.latitude, trailPoint.longitude))
             }
-            polylineOption.color(resources.getColor(R.color.colorSecondaryDark))
+            polylineOption.color(ContextCompat.getColor(context!!, R.color.colorSecondaryDark))
             this.map?.addPolyline(polylineOption)
 
             /*Gets the first and the last trailPoints*/
@@ -336,7 +337,7 @@ abstract class BaseTrailMapFragment :
     fun showTrailPOIInfoEditFragment(trailPointOfInterest: TrailPointOfInterest){
         hideInfoBottomSheet()
         this.infoEditFragment=
-            TrailPOIInfoEditFragment()
+            TrailPOIInfoEditFragment(trailPointOfInterest)
         childFragmentManager.beginTransaction()
             .replace(getInfoEditFragmentId(), this.infoEditFragment).commit()
         showInfoEditSideSheet()

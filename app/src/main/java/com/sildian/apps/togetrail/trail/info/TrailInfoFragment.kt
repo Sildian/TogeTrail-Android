@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.DateUtilities
@@ -88,17 +89,17 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
         when(this.trail?.level){
             TrailLevel.EASY->{
                 this.levelText.compoundDrawablesRelative[0]=
-                    resources.getDrawable(R.drawable.ic_level_easy)
+                    ContextCompat.getDrawable(context!!, R.drawable.ic_level_easy)
                 this.levelText.setText(R.string.label_trail_level_easy)
             }
             TrailLevel.MEDIUM->{
                 this.levelText.compoundDrawablesRelative[0]=
-                    resources.getDrawable(R.drawable.ic_level_medium)
+                    ContextCompat.getDrawable(context!!, R.drawable.ic_level_medium)
                 this.levelText.setText(R.string.label_trail_level_medium)
             }
             TrailLevel.HARD->{
                 this.levelText.compoundDrawablesRelative[0]=
-                    resources.getDrawable(R.drawable.ic_level_hard)
+                    ContextCompat.getDrawable(context!!, R.drawable.ic_level_hard)
                 this.levelText.setText(R.string.label_trail_level_hard)
             }
         }
@@ -108,17 +109,17 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
         when(this.trail?.type){
             TrailType.HIKING->{
                 this.typeText.compoundDrawablesRelative[0]=
-                    resources.getDrawable(R.drawable.ic_hiking_white)
+                    ContextCompat.getDrawable(context!!, R.drawable.ic_hiking_white)
                 this.typeText.setText(R.string.label_trail_type_hiking)
             }
             TrailType.BIKING->{
                 this.typeText.compoundDrawablesRelative[0]=
-                    resources.getDrawable(R.drawable.ic_biking_white)
+                    ContextCompat.getDrawable(context!!, R.drawable.ic_biking_white)
                 this.typeText.setText(R.string.label_trail_type_biking)
             }
             TrailType.OTHER->{
                 this.typeText.compoundDrawablesRelative[0]=
-                    resources.getDrawable(R.drawable.ic_trail_white)
+                    ContextCompat.getDrawable(context!!, R.drawable.ic_trail_white)
                 this.typeText.setText(R.string.label_trail_type_other)
             }
         }

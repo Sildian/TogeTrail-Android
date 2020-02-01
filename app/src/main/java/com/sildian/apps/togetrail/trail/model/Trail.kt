@@ -28,15 +28,53 @@ data class Trail (
 )
 {
     init{
+        autoCalculateMetrics()
+    }
 
-        /*Populates the following fields with the data from trailTracks.
-        * These fields still can be modified by the user.*/
+    /**Calculates all metrics from the trailTrack info**/
 
+    fun autoCalculateMetrics(){
+        autoCalculateDuration()
+        autoCalculateDistance()
+        autoCalculateAscent()
+        autoCalculateDescent()
+        autoCalculateMaxElevation()
+        autoCalculateMinElevation()
+    }
+
+    /**Calculates duration from the trailTrack info**/
+
+    fun autoCalculateDuration(){
         this.duration=this.trailTrack.getDuration()
+    }
+
+    /**Calculates distance from the trailTrack info**/
+
+    fun autoCalculateDistance(){
         this.distance=this.trailTrack.getDistance()
+    }
+
+    /**Calculates ascent from the trailTrack info**/
+
+    fun autoCalculateAscent(){
         this.ascent=this.trailTrack.getAscent()
+    }
+
+    /**Calculates descent from the trailTrack info**/
+
+    fun autoCalculateDescent(){
         this.descent=this.trailTrack.getDescent()
+    }
+
+    /**Calculates max elevation from the trailTrack info**/
+
+    fun autoCalculateMaxElevation(){
         this.maxElevation=this.trailTrack.getMaxElevation()
+    }
+
+    /**Calculates min elevation from the trailTrack info**/
+
+    fun autoCalculateMinElevation(){
         this.minElevation=this.trailTrack.getMinElevation()
     }
 }

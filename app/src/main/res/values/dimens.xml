@@ -9,6 +9,12 @@
     <dimen name="components_corner_small">10dp</dimen>
     <dimen name="components_corner_medium">20dp</dimen>
     <dimen name="components_corner_large">50dp</dimen>
+    <dimen name="components_size_small">32dp</dimen>
+    <dimen name="components_size_medium">64dp</dimen>
+    <dimen name="components_size_large">128dp</dimen>
+    <dimen name="components_stroke_small">1dp</dimen>
+    <dimen name="components_stroke_medium">2dp</dimen>
+    <dimen name="components_stroke_large">4dp</dimen>
 
     <!-- Text -->
     <dimen name="text_size_body">12sp</dimen>

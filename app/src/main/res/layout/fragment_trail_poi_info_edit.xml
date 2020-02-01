@@ -1,11 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".trail.info.TrailPOIInfoEditFragment"
     android:background="@color/colorPrimary">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="@dimen/components_margin_medium"
+            android:background="@drawable/shape_corners_round_color_white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/components_margin_medium"
+                android:layout_marginBottom="@dimen/components_margin_small"
+                android:layout_marginStart="@dimen/components_margin_medium"
+                android:layout_marginEnd="@dimen/components_margin_medium"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_title"
+                android:textColor="@color/colorSecondaryDark"
+                android:text="@string/label_trail_poi_main_info"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/TextInputFieldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/components_margin_small"
+                android:layout_marginBottom="@dimen/components_margin_medium"
+                android:layout_marginStart="@dimen/components_margin_medium"
+                android:layout_marginEnd="@dimen/components_margin_medium"
+                android:hint="@string/label_trail_poi_name">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fragment_trail_poi_info_edit_text_field_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapSentences"
+                    android:textSize="@dimen/text_size_body"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="@dimen/components_margin_medium"
+            android:padding="@dimen/components_margin_medium"
+            android:background="@drawable/shape_corners_round_color_white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/components_margin_medium"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_title"
+                android:textColor="@color/colorSecondaryDark"
+                android:text="@string/label_trail_poi_metrics"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_corners_round_color_white">
+
+                <com.sdsmdg.harjot.crollerTest.Croller
+                    android:id="@+id/fragment_trail_poi_info_edit_croller_metrics"
+                    android:layout_width="@dimen/components_size_large"
+                    android:layout_height="@dimen/components_size_large"
+                    android:padding="@dimen/components_margin_medium"
+                    app:is_continuous="true"
+                    app:main_circle_color="@color/colorPrimary"
+                    app:back_circle_color="@color/colorSecondaryDark"
+                    app:label_color="@color/colorSecondaryDark"
+                    app:label_size="22"
+                    app:indicator_color="@color/colorSecondary"
+                    app:indicator_width="10"
+                    app:progress_primary_color="@color/colorSecondaryDark"
+                    app:progress_primary_stroke_width="8"
+                    app:progress_secondary_color="@color/colorPrimary"
+                    app:progress_secondary_stroke_width="4"
+                    app:min="0"
+                    app:max="1000"
+                    app:start_offset="45"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <TextView
+                    android:id="@+id/fragment_trail_poi_info_edit_text_elevation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/components_margin_small"
+                    android:padding="@dimen/components_margin_small"
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="center_horizontal"
+                    android:drawableTop="@drawable/ic_trail_black"
+                    android:textSize="@dimen/text_size_body"
+                    android:text="@string/example_trail_poi_elevation"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintCircle="@id/fragment_trail_poi_info_edit_croller_metrics"
+                    app:layout_constraintCircleRadius="@dimen/constraint_circle_radius"
+                    app:layout_constraintCircleAngle="270" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="@dimen/components_margin_medium"
+            android:background="@drawable/shape_corners_round_color_white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/components_margin_medium"
+                android:layout_marginBottom="@dimen/components_margin_small"
+                android:layout_marginStart="@dimen/components_margin_medium"
+                android:layout_marginEnd="@dimen/components_margin_medium"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_title"
+                android:textColor="@color/colorSecondaryDark"
+                android:text="@string/label_trail_poi_description"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/TextInputFieldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/components_margin_small"
+                android:layout_marginBottom="@dimen/components_margin_medium"
+                android:layout_marginStart="@dimen/components_margin_medium"
+                android:layout_marginEnd="@dimen/components_margin_medium"
+                android:hint="@string/label_trail_poi_description">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fragment_trail_poi_info_edit_text_field_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapSentences"
+                    android:textSize="@dimen/text_size_body"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

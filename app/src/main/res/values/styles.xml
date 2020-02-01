@@ -56,6 +56,18 @@
         <item name="cornerSizeBottomRight">@dimen/components_corner_medium</item>
     </style>
 
+    <!-- Classic buttons -->
+    <style name="ClassicButtonStyle" parent="@style/Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/colorSecondaryDark</item>
+        <item name="android:textSize">@dimen/text_size_body</item>
+        <item name="shapeAppearance">@style/ShapeAppearanceOverlay.ClassicButton</item>
+    </style>
+    <style name="ShapeAppearanceOverlay.ClassicButton">
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSizeTopLeft">@dimen/components_corner_medium</item>
+        <item name="cornerSizeBottomRight">@dimen/components_corner_medium</item>
+    </style>
+
     <!-- Icon buttons -->
     <style name="IconButtonStyle" parent="@style/Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="backgroundTint">@android:color/transparent</item>

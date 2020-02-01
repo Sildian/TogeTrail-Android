@@ -11,8 +11,6 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.Polyline
 
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.trail.info.TrailInfoFragment
-import com.sildian.apps.togetrail.trail.info.TrailPOIInfoFragment
 import com.sildian.apps.togetrail.trail.model.TrailPoint
 import com.sildian.apps.togetrail.trail.model.TrailPointOfInterest
 

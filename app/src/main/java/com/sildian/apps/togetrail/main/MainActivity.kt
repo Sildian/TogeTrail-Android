@@ -172,29 +172,10 @@ class MainActivity :
             //TODO handle other fragments
         }
         supportFragmentManager.beginTransaction()
-            .replace(R.id.activity_main_fragment, this.fragment).commit()
+            .replace(R.id.activity_main_fragment, this.fragment).commitAllowingStateLoss()
     }
 
     /***********************************Permissions**********************************************/
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            KEY_REQUEST_PERMISSION_LOCATION->if(grantResults.isNotEmpty()){
-                when(grantResults[0]){
-                    PackageManager.PERMISSION_GRANTED -> {
-                        Log.d(TAG_PERMISSION,
-                            "Permission '$KEY_BUNDLE_PERMISSION_LOCATION' granted")
-                        showFragment(ID_FRAGMENT_MAP)
-                    }
-                    PackageManager.PERMISSION_DENIED -> {
-                        //TODO handle
-                        Log.d(TAG_PERMISSION,
-                            "Permission '$KEY_BUNDLE_PERMISSION_LOCATION' denied")
-                    }
-                }
-            }
-        }
-    }
 
     private fun requestLocationPermission(){
         if(Build.VERSION.SDK_INT>=23
@@ -213,6 +194,25 @@ class MainActivity :
             /*If SDK <23 or permission already granted, directly shows the map fragment*/
 
             showFragment(ID_FRAGMENT_MAP)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            KEY_REQUEST_PERMISSION_LOCATION->if(grantResults.isNotEmpty()){
+                when(grantResults[0]){
+                    PackageManager.PERMISSION_GRANTED -> {
+                        Log.d(TAG_PERMISSION,
+                            "Permission '$KEY_BUNDLE_PERMISSION_LOCATION' granted")
+                        showFragment(ID_FRAGMENT_MAP)
+                    }
+                    PackageManager.PERMISSION_DENIED -> {
+                        //TODO handle
+                        Log.d(TAG_PERMISSION,
+                            "Permission '$KEY_BUNDLE_PERMISSION_LOCATION' denied")
+                    }
+                }
+            }
         }
     }
 

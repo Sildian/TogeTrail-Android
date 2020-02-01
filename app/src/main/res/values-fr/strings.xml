@@ -16,6 +16,7 @@
     <string name="button_trail_point_remove">Retirer dernier point</string>
     <string name="button_trail_poi_add">Ajouter point d\'intérêt</string>
     <string name="button_trail_poi_remove">Retirer point d\'intérêt</string>
+    <string name="button_trail_metric_autocalculate">Calculer automatiquement</string>
 
     <!-- Labels -->
     <!-- Location -->
@@ -35,14 +36,17 @@
     <string name="label_trail_type_hiking">A pieds</string>
     <string name="label_trail_type_biking">A vélo</string>
     <string name="label_trail_type_other">Autre</string>
+    <string name="label_trail_metrics">Mesures</string>
     <string name="label_trail_ascent_short">Dnv +</string>
     <string name="label_trail_descent_short">Dnv -</string>
     <string name="label_trail_distance_short">Dist</string>
     <string name="label_trail_max_elevation_short">Alt max</string>
     <string name="label_trail_min_elevation_short">Alt min</string>
     <!-- TrailPointOfInterest -->
+    <string name="label_trail_poi_main_info">Infos principales</string>
     <string name="label_trail_poi_name">Nom</string>
     <string name="label_trail_poi_description">Description</string>
+    <string name="label_trail_poi_metrics">Mesures</string>
     <string name="label_trail_poi_elevation">Altitude</string>
 
     <!-- Examples for layout preview -->
