@@ -39,11 +39,7 @@ class TrailMapDetailFragment : BaseTrailMapFragment() {
 
     override fun getInfoBottomSheetId(): Int = R.id.fragment_trail_map_detail_bottom_sheet_info
 
-    override fun getInfoEditSideSheetId(): Int = R.id.fragment_trail_map_detail_side_sheet_info_edit
-
     override fun getInfoFragmentId(): Int = R.id.fragment_trail_map_detail_fragment_info
-
-    override fun getInfoEditFragmentId(): Int = R.id.fragment_trail_map_detail_fragment_info_edit
 
     override fun enableUI() {
         this.map?.uiSettings?.setAllGesturesEnabled(true)
@@ -72,7 +68,8 @@ class TrailMapDetailFragment : BaseTrailMapFragment() {
             is TrailPointOfInterest->{
                 Log.d(TAG_MAP, "Click on marker (TrailPointOfInterest)")
                 val trailPointOfInterest=marker.tag as TrailPointOfInterest
-                showTrailPOIInfoFragment(trailPointOfInterest)
+                val trailPoiPosition=marker.snippet.toInt()
+                showTrailPOIInfoFragment(trailPointOfInterest, trailPoiPosition)
                 true
             }
             is TrailPoint->{

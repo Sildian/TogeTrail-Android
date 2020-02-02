@@ -1,16 +1,19 @@
 package com.sildian.apps.togetrail.trail.model
 
+import android.os.Parcelable
 import com.sildian.apps.togetrail.common.model.Location
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 /*************************************************************************************************
  * Trail
  ************************************************************************************************/
 
+@Parcelize
 data class Trail (
     var name:String="",
     val source:String="",
-    val location: Location = Location(),
+    var location: Location = Location(),
     var description:String="",
     val creationDate:Date=Date(),
     var lastUpdate:Date=Date(),
@@ -24,11 +27,20 @@ data class Trail (
     var ascent:Int?=null,
     var descent:Int?=null,
     var maxElevation:Int?=null,
-    var minElevation:Int?=null
+    var minElevation:Int?=null,
+    val autoCalculateMetrics:Boolean=false
 )
+    :Parcelable
 {
+    /**Init**/
+
     init{
-        autoCalculateMetrics()
+
+        /*Auto-calculates metrics only if it is asked in the constructor*/
+
+        if(this.autoCalculateMetrics) {
+            autoCalculateMetrics()
+        }
     }
 
     /**Calculates all metrics from the trailTrack info**/

@@ -1,14 +1,19 @@
 package com.sildian.apps.togetrail.common.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
 /*************************************************************************************************
  * Location
  ************************************************************************************************/
 
+@Parcelize
 data class Location (
     val country:String?=null,
     val region:String?=null,
     val town:String?=null
 )
+    :Parcelable
 {
 
     /**

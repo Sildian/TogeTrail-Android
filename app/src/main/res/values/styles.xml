@@ -24,7 +24,21 @@
     <style name="PopupMenuTextAppearanceBody" parent="@style/TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">@color/colorWhite</item>
     </style>
-    
+
+    <!-- Toolbar -->
+    <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">@color/colorWhite</item>
+        <item name="titleTextAppearance">@style/ToolbarTitleTextAppearance</item>
+        <item name="itemTextAppearance">@style/ToolbarItemTextAppearance</item>
+    </style>
+    <style name="ToolbarTitleTextAppearance" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">@dimen/text_size_title</item>
+    </style>
+    <style name="ToolbarItemTextAppearance" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">@dimen/text_size_title</item>
+    </style>
+
     <!-- BottomNavigationViews -->
     <style name="BottomNavigationViewTheme" parent="@style/Widget.MaterialComponents.BottomNavigationView">
         <item name="android:background">@color/colorWhite</item>

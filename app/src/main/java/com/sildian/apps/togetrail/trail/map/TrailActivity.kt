@@ -6,10 +6,10 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.main.MainActivity
+import com.sildian.apps.togetrail.trail.infoEdit.TrailInfoEditActivity
 import com.sildian.apps.togetrail.trail.model.Trail
 import com.sildian.apps.togetrail.trail.model.TrailFactory
 import io.ticofab.androidgpxparser.parser.GPXParser
@@ -41,8 +41,14 @@ class TrailActivity : AppCompatActivity() {
         const val ACTION_TRAIL_DRAW=3
         const val ACTION_TRAIL_RECORD=4
 
+        /**Bundle keys for intent**/
+        const val KEY_BUNDLE_TRAIL_EDIT_ACTION="KEY_BUNDLE_TRAIL_EDIT_ACTION"
+        const val KEY_BUNDLE_TRAIL="KEY_BUNDLE_TRAIL"
+        const val KEY_BUNDLE_TRAIL_POI_POSITION="KEY_BUNDLE_TRAIL_POI_POSITION"
+
         /**Request keys for intent**/
         const val KEY_REQUEST_LOAD_GPX=1001
+        const val KEY_REQUEST_EDIT_TRAIL_INFO=1002
     }
 
     /**************************************Data**************************************************/
@@ -64,12 +70,12 @@ class TrailActivity : AppCompatActivity() {
         startTrailAction()
     }
 
+    /********************************Navigation control******************************************/
+
     override fun onBackPressed() {
         when{
             this.fragment.getInfoBottomSheetState()!=BottomSheetBehavior.STATE_HIDDEN->
                 this.fragment.hideInfoBottomSheet()
-            this.fragment.getInfoEditSideSheetState()!= View.GONE->
-                this.fragment.hideInfoEditSideSheet()
             else->
                 super.onBackPressed()
         }
@@ -97,7 +103,7 @@ class TrailActivity : AppCompatActivity() {
             try {
                 val gpx = gpxParser.parse(inputStream)
                 this.trail=TrailFactory.buildFromGpx(gpx)
-                this.fragment.updateTrail(this.trail)
+                this.fragment.updateTrailAndShowInfo(this.trail)
             }
 
             /*Handles exceptions*/
@@ -122,6 +128,11 @@ class TrailActivity : AppCompatActivity() {
         else{
             //TODO handle
         }
+    }
+
+    private fun updateTrail(trail:Trail){
+        this.trail=trail
+        this.fragment.updateTrail(this.trail)
     }
 
     /******************************Fragments monitoring******************************************/
@@ -152,7 +163,7 @@ class TrailActivity : AppCompatActivity() {
                 showFragment(ID_FRAGMENT_TRAIL_DETAIL)
             ACTION_TRAIL_CREATE_FROM_GPX ->{
                 showFragment(ID_FRAGMENT_TRAIL_DETAIL)
-                loadGpx()
+                startLoadGpx()
             }
             ACTION_TRAIL_DRAW ->
                 showFragment(ID_FRAGMENT_TRAIL_DRAW)
@@ -161,27 +172,77 @@ class TrailActivity : AppCompatActivity() {
         }
     }
 
+    fun updateTrailAndEditInfo(trail:Trail){
+        updateTrail(trail)
+        startTrailInfoEditActivity(TrailInfoEditActivity.ACTION_TRAIL_EDIT_INFO, null)
+    }
+
+    fun updateTrailAndEditPoiInfo(trail:Trail, poiPosition:Int){
+        updateTrail(trail)
+        startTrailInfoEditActivity(TrailInfoEditActivity.ACTION_TRAIL_EDIT_POI_INFO, poiPosition)
+    }
+
     /***********************************Navigation***********************************************/
 
-    private fun loadGpx(){
+    /**
+     * Starts loading a Gpx file
+     */
+
+    private fun startLoadGpx(){
         val loadGpxIntent=Intent(Intent.ACTION_OPEN_DOCUMENT)
         loadGpxIntent.addCategory(Intent.CATEGORY_OPENABLE)
         loadGpxIntent.type="*/*"
-        startActivityForResult(loadGpxIntent,
-            KEY_REQUEST_LOAD_GPX
-        )
+        startActivityForResult(loadGpxIntent, KEY_REQUEST_LOAD_GPX)
     }
+
+    /**
+     * Starts TrailInfoEditActivity
+     * @param trailEditActionId : defines which action should be performed (among TrailInfoEditActivity.ACTION_TRAIL_xxx)
+     * @param trailPointOfInterestPosition : if a trailPointOfInterest is edited, defines its position in the trailTrack
+     */
+
+    private fun startTrailInfoEditActivity(trailEditActionId:Int, trailPointOfInterestPosition:Int?){
+        val trailInfoEditActivityIntent=Intent(this, TrailInfoEditActivity::class.java)
+        trailInfoEditActivityIntent.putExtra(KEY_BUNDLE_TRAIL_EDIT_ACTION, trailEditActionId)
+        trailInfoEditActivityIntent.putExtra(KEY_BUNDLE_TRAIL, this.trail)
+        if(trailPointOfInterestPosition!=null) {
+            trailInfoEditActivityIntent
+                .putExtra(KEY_BUNDLE_TRAIL_POI_POSITION, trailPointOfInterestPosition)
+        }
+        startActivityForResult(trailInfoEditActivityIntent, KEY_REQUEST_EDIT_TRAIL_INFO)
+    }
+
+    /**Activity result**/
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode== KEY_REQUEST_LOAD_GPX){
-            when(resultCode) {
-                Activity.RESULT_OK-> {
-                    val uri = data?.data
-                    createTrailFromGpx(uri)
-                }
-                Activity.RESULT_CANCELED->
-                    finish()
+        Log.d(TAG_ACTIVITY, "Activity '$requestCode' resulted with $resultCode")
+        when(requestCode) {
+            KEY_REQUEST_LOAD_GPX -> handleLoadGpxResult(resultCode, data)
+            KEY_REQUEST_EDIT_TRAIL_INFO -> handleTrailInfoEditResult(resultCode, data)
+        }
+    }
+
+    /**Handles load gpx result**/
+
+    private fun handleLoadGpxResult(resultCode: Int, data:Intent?){
+        when (resultCode) {
+            Activity.RESULT_OK -> {
+                val uri = data?.data
+                createTrailFromGpx(uri)
+            }
+            Activity.RESULT_CANCELED ->
+                finish()
+        }
+    }
+
+    /**Handles trail info edit result**/
+
+    private fun handleTrailInfoEditResult(resultCode: Int, data: Intent?){
+        if(resultCode== Activity.RESULT_OK){
+            if(data!=null&&data.hasExtra(KEY_BUNDLE_TRAIL)) {
+                val updatedTrail = data.getParcelableExtra<Trail>(KEY_BUNDLE_TRAIL)!!
+                updateTrail(updatedTrail)
             }
         }
     }

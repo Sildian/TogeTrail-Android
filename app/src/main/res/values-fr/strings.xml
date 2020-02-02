@@ -10,6 +10,10 @@
     <string name="menu_new_trail_load_gpx">Charger un GPX</string>
     <string name="menu_new_trail_draw">Dessiner sur la carte</string>
     <string name="menu_new_trail_record">Enregistrer en temps réel</string>
+    <string name="menu_edit_save">Enregistrer</string>
+
+    <!-- Toolbar Names -->
+    <string name="toolbar_trail_info">Infos rando</string>
 
     <!-- Buttons -->
     <!-- Trail -->

@@ -81,7 +81,7 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
 
     private fun initializeEditButton(){
         this.editButton.setOnClickListener {
-            (parentFragment as BaseTrailMapFragment).showTrailInfoEditFragment()
+            (parentFragment as BaseTrailMapFragment).editTrailInfo()
         }
     }
 

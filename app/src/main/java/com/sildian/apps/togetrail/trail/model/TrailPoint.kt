@@ -1,5 +1,7 @@
 package com.sildian.apps.togetrail.trail.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 /*************************************************************************************************
@@ -10,9 +12,11 @@ import java.util.*
  * @param time : the registered time of the point
  ************************************************************************************************/
 
+@Parcelize
 open class TrailPoint (
-    var latitude:Double=0.0,
-    var longitude:Double=0.0,
-    var elevation:Int?=null,
-    var time:Date?=null
+    open var latitude:Double=0.0,
+    open var longitude:Double=0.0,
+    open var elevation:Int?=null,
+    open var time:Date?=null
 )
+    :Parcelable

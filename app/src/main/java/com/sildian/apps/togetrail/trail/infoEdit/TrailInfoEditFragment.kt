@@ -1,8 +1,7 @@
-package com.sildian.apps.togetrail.trail.info
+package com.sildian.apps.togetrail.trail.infoEdit
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +9,7 @@ import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import com.sdsmdg.harjot.crollerTest.Croller
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.common.model.Location
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.utils.NumberUtilities
 import com.sildian.apps.togetrail.trail.model.Trail
@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_trail_info_edit.view.*
  ************************************************************************************************/
 
 class TrailInfoEditFragment(val trail: Trail?=null) :
-    Fragment(),
+    BaseTrailInfoEditFragment(),
     Croller.onProgressChangedListener
 {
 
@@ -65,7 +65,6 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
     private val distanceText by lazy {layout.fragment_trail_info_edit_text_distance}
     private val maxElevationText by lazy {layout.fragment_trail_info_edit_text_max_elevation}
     private val minElevationText by lazy {layout.fragment_trail_info_edit_text_min_elevation}
-    private val autocalculateMetricButton by lazy {layout.fragment_trail_info_edit_button_metric_autocalculate}
     private val countryTextField by lazy {layout.fragment_trail_info_edit_text_field_country}
     private val regionTextField by lazy {layout.fragment_trail_info_edit_text_field_region}
     private val townTextField by lazy {layout.fragment_trail_info_edit_text_field_town}
@@ -91,6 +90,21 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
         return this.layout
     }
 
+    /*********************************Data monitoring********************************************/
+
+    override fun saveData() {
+        this.trail?.name=this.nameTextField.text.toString()
+        this.trail?.level=TrailLevel.fromValue(this.levelTextFieldDropDown.tag.toString().toInt())
+        this.trail?.type=TrailType.fromValue(this.typeTextFieldDropDown.tag.toString().toInt())
+        this.trail?.location = Location(
+            this.countryTextField.text.toString(),
+            this.regionTextField.text.toString(),
+            this.townTextField.text.toString()
+        )
+        this.trail?.description=this.descriptionTextField.text.toString()
+        (activity as TrailInfoEditActivity).updateTrailAndSave(this.trail!!)
+    }
+
     /***********************************UI monitoring********************************************/
 
     private fun initializeAllUIComponents(){
@@ -104,7 +118,6 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
         initializeDistanceText()
         initializeMaxElevationText()
         initializeMinElevationText()
-        initialierCalculateMetricButton()
         initializeCountryTextField()
         initializeRegionTextField()
         initializeTownTextField()
@@ -125,7 +138,7 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
         this.levelTextFieldDropDown.setText(currentText.toString(), false)
         this.levelTextFieldDropDown.tag=currentValue
         this.levelTextFieldDropDown.setOnItemClickListener { adapterView, view, position, id ->
-            adapterView.tag=position+1
+            this.levelTextFieldDropDown.tag=position+1
         }
     }
 
@@ -139,7 +152,7 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
         this.typeTextFieldDropDown.tag=currentValue
         this.typeTextFieldDropDown.adapter.getItem(currentValue-1)
         this.typeTextFieldDropDown.setOnItemClickListener { adapterView, view, position, id ->
-            adapterView.tag=position+1
+            this.typeTextFieldDropDown.tag=position+1
         }
     }
 
@@ -209,12 +222,6 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
         }
     }
 
-    private fun initialierCalculateMetricButton(){
-        this.autocalculateMetricButton.setOnClickListener {
-            autoCalculateCurrentMetric()
-        }
-    }
-
     private fun initializeCountryTextField(){
         this.countryTextField.setText(this.trail?.location?.country)
     }
@@ -245,38 +252,34 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
         }
     }
 
-    private fun autoCalculateCurrentMetric(){
-        when(this.currentMetricToSet){
-            METRIC_DURATION -> this.trail?.autoCalculateDuration()
-            METRIC_ASCENT -> this.trail?.autoCalculateAscent()
-            METRIC_DESCENT -> this.trail?.autoCalculateDescent()
-            METRIC_DISTANCE -> this.trail?.autoCalculateDistance()
-            METRIC_MAX_ELEVATION -> this.trail?.autoCalculateMaxElevation()
-            METRIC_MIN_ELEVATION -> this.trail?.autoCalculateMinElevation()
-        }
-    }
-
     /*****************************Metrics monitoring with croller*********************************/
 
     override fun onProgressChanged(progress: Int) {
-        when(this.currentMetricToSet){
-            METRIC_DURATION -> updateDuration(progress, true)
-            METRIC_ASCENT -> updateAscent(progress, true)
-            METRIC_DESCENT -> updateDescent(progress, true)
-            METRIC_DISTANCE -> updateDistance(progress, true)
-            METRIC_MAX_ELEVATION -> updateMaxElevation(progress, true)
-            METRIC_MIN_ELEVATION -> updateMinElevation(progress, true)
-        }
+        updateCurrentMetric(progress)
     }
 
     private fun updateCroller(valueToSet:Int, currentValue:Int?){
         this.currentMetricToSet=valueToSet
         when(this.currentMetricToSet){
-            METRIC_DURATION -> this.metricsCroller.max= VALUE_MAX_DURATION
-            METRIC_DISTANCE-> this.metricsCroller.max= VALUE_MAX_DISTANCE
-            else -> this.metricsCroller.max= VALUE_MAX_ALTITUDE
+            METRIC_DURATION -> this.metricsCroller.max=
+                VALUE_MAX_DURATION
+            METRIC_DISTANCE -> this.metricsCroller.max=
+                VALUE_MAX_DISTANCE
+            else -> this.metricsCroller.max=
+                VALUE_MAX_ALTITUDE
         }
         this.metricsCroller.progress=currentValue?:0
+    }
+
+    private fun updateCurrentMetric(value:Int?){
+        when(this.currentMetricToSet){
+            METRIC_DURATION -> updateDuration(value?:this.trail?.duration, true)
+            METRIC_ASCENT -> updateAscent(value?:this.trail?.ascent, true)
+            METRIC_DESCENT -> updateDescent(value?:this.trail?.descent, true)
+            METRIC_DISTANCE -> updateDistance(value?:this.trail?.distance?:0, true)
+            METRIC_MAX_ELEVATION -> updateMaxElevation(value?:this.trail?.maxElevation, true)
+            METRIC_MIN_ELEVATION -> updateMinElevation(value?:this.trail?.minElevation, true)
+        }
     }
 
     private fun updateDuration(duration:Int?, updateCroller:Boolean){

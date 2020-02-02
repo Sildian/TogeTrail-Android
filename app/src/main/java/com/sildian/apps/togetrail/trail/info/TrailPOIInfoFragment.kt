@@ -17,9 +17,14 @@ import kotlinx.android.synthetic.main.fragment_trail_poi_info.view.*
  * Shows information about a point of interest
  * This fragment should be used as a nested fragment within a BottomSheet
  * @param trailPointOfInterest : the related point of interest
+ * @param trailPointOfInterestPosition : the position of the trailPointOfInterest in the trailTrack
  ************************************************************************************************/
 
-class TrailPOIInfoFragment (val trailPointOfInterest:TrailPointOfInterest?=null) : Fragment() {
+class TrailPOIInfoFragment (
+    val trailPointOfInterest:TrailPointOfInterest?=null,
+    val trailPointOfInterestPosition:Int?=null
+)
+    : Fragment() {
 
     /**********************************Static items**********************************************/
 
@@ -62,7 +67,7 @@ class TrailPOIInfoFragment (val trailPointOfInterest:TrailPointOfInterest?=null)
     private fun initializeEditButton(){
         this.editButton.setOnClickListener {
             (parentFragment as BaseTrailMapFragment)
-                .showTrailPOIInfoEditFragment(this.trailPointOfInterest!!)
+                .editTrailPoiInfo(this.trailPointOfInterestPosition!!)
         }
     }
 

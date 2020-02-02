@@ -1,5 +1,7 @@
 package com.sildian.apps.togetrail.trail.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 /*************************************************************************************************
@@ -14,13 +16,15 @@ import java.util.*
  * @param photoUrl : the url of the photo representing the place
  ************************************************************************************************/
 
+@Parcelize
 class TrailPointOfInterest(
-    latitude:Double=0.0,
-    longitude:Double=0.0,
-    elevation:Int?=null,
-    time:Date?=null,
+    override var latitude:Double=0.0,
+    override var longitude:Double=0.0,
+    override var elevation:Int?=null,
+    override var time:Date?=null,
     var name:String?=null,
     var description:String?=null,
     var photoUrl:String?=null
 )
-    :TrailPoint(latitude, longitude, elevation, time)
+    :TrailPoint(latitude, longitude, elevation, time),
+        Parcelable

@@ -124,7 +124,8 @@ object TrailFactory {
             description = description,
             creationDate = date,
             lastUpdate = date,
-            trailTrack = trailTrack
+            trailTrack = trailTrack,
+            autoCalculateMetrics = true
         )
     }
 }

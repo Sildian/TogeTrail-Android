@@ -35,11 +35,7 @@ class TrailMapFragment : BaseTrailMapFragment()
 
     override fun getInfoBottomSheetId(): Int = R.id.fragment_trail_map_bottom_sheet_info
 
-    override fun getInfoEditSideSheetId(): Int = 0
-
     override fun getInfoFragmentId(): Int = R.id.fragment_trail_map_fragment_info
-
-    override fun getInfoEditFragmentId(): Int = 0
 
     override fun enableUI() {
         this.map?.uiSettings?.setAllGesturesEnabled(true)

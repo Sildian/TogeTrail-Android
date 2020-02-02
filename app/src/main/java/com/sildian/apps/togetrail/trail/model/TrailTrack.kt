@@ -1,7 +1,9 @@
 package com.sildian.apps.togetrail.trail.model
 
+import android.os.Parcelable
 import com.google.android.gms.maps.model.LatLng
 import com.sildian.apps.togetrail.common.utils.GeoUtilities
+import kotlinx.android.parcel.Parcelize
 
 /*************************************************************************************************
  * A TrailTrack is a path related to a trail
@@ -9,10 +11,12 @@ import com.sildian.apps.togetrail.common.utils.GeoUtilities
  * @param trailPointsOfInterest : in addition, some points of interest can add some information
  ************************************************************************************************/
 
+@Parcelize
 class TrailTrack(
     val trailPoints:ArrayList<TrailPoint> = arrayListOf(),
     val trailPointsOfInterest:ArrayList<TrailPointOfInterest> = arrayListOf()
 )
+    :Parcelable
 {
 
     /**

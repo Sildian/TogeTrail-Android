@@ -154,7 +154,8 @@ abstract class BaseTrailMapGenerateFragment :
             /*And shows the info fragment related to the trailPointOfInterest*/
 
             val lastPoi=this.trail?.trailTrack?.trailPointsOfInterest?.last()!!
-            showTrailPOIInfoFragment(lastPoi)
+            val lastPoiIndex=this.trail?.trailTrack?.trailPointsOfInterest?.indexOf(lastPoi)!!
+            showTrailPOIInfoFragment(lastPoi, lastPoiIndex)
         }
     }
 

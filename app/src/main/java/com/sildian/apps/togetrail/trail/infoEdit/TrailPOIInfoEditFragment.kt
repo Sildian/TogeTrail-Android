@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.trail.info
+package com.sildian.apps.togetrail.trail.infoEdit
 
 import android.os.Bundle
 import android.util.Log
@@ -11,7 +11,6 @@ import com.sdsmdg.harjot.crollerTest.Croller
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.NumberUtilities
 import com.sildian.apps.togetrail.trail.model.TrailPointOfInterest
-import kotlinx.android.synthetic.main.fragment_trail_poi_info.view.*
 import kotlinx.android.synthetic.main.fragment_trail_poi_info_edit.view.*
 
 /*************************************************************************************************
@@ -20,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_trail_poi_info_edit.view.*
  ************************************************************************************************/
 
 class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=null) :
-    Fragment(),
+    BaseTrailInfoEditFragment(),
     Croller.onProgressChangedListener
 {
 
@@ -50,6 +49,14 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
         this.layout= inflater.inflate(R.layout.fragment_trail_poi_info_edit, container, false)
         initializeAllUIComponents()
         return this.layout
+    }
+
+    /*********************************Data monitoring********************************************/
+
+    override fun saveData() {
+        this.trailPointOfInterest?.name=this.nameTextField.text.toString()
+        this.trailPointOfInterest?.description=this.descriptionTextField.text.toString()
+        (activity as TrailInfoEditActivity).updateTrailPoiAndSave(this.trailPointOfInterest!!)
     }
 
     /***********************************UI monitoring********************************************/
@@ -87,7 +94,8 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
     }
 
     private fun updateCroller(currentValue:Int?){
-        this.metricsCroller.max= VALUE_MAX_ALTITUDE
+        this.metricsCroller.max=
+            VALUE_MAX_ALTITUDE
         this.metricsCroller.progress=currentValue?:0
     }
 

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".trail.info.TrailInfoEditFragment"
+    tools:context=".trail.infoEdit.TrailInfoEditFragment"
     android:background="@color/colorPrimary">
 
     <LinearLayout
@@ -245,14 +245,6 @@
                     app:layout_constraintCircleAngle="135"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <com.google.android.material.button.MaterialButton
-                style="@style/ClassicButtonStyle"
-                android:id="@+id/fragment_trail_info_edit_button_metric_autocalculate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/components_margin_medium"
-                android:text="@string/button_trail_metric_autocalculate"/>
 
         </LinearLayout>
 
