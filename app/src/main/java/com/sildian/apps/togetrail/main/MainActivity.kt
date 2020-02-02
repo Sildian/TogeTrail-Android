@@ -16,8 +16,13 @@ import com.sildian.apps.togetrail.trail.map.TrailMapFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import net.danlew.android.joda.JodaTimeAndroid
 import android.Manifest
+import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Build
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.ErrorCodes
+import com.firebase.ui.auth.IdpResponse
+import com.google.firebase.auth.FirebaseAuth
 
 /*************************************************************************************************
  * Lets the user navigate between the main screens
@@ -35,6 +40,7 @@ class MainActivity :
         /**Logs**/
         const val TAG_ACTIVITY="TAG_ACTIVITY"
         const val TAG_MENU="TAG_MENU"
+        const val TAG_LOGIN="TAG_LOGIN"
         const val TAG_PERMISSION="TAG_PERMISSION"
 
         /**Fragments Ids***/
@@ -43,6 +49,7 @@ class MainActivity :
         const val ID_FRAGMENT_EVENTS=3
 
         /**Request keys for permissions**/
+        const val KEY_REQUEST_LOGIN=1001
         const val KEY_REQUEST_PERMISSION_LOCATION=2001
 
         /**Bundle keys for permissions**/
@@ -67,6 +74,7 @@ class MainActivity :
         JodaTimeAndroid.init(this)
         initializeBottomNavigationView()
         initializeAddButton()
+        login()
         requestLocationPermission()
     }
 
@@ -158,6 +166,17 @@ class MainActivity :
         }
     }
 
+    /******************************Login / Logout************************************************/
+
+    private fun login(){
+        val user=FirebaseAuth.getInstance().currentUser
+        if(user==null){
+            startLoginActivity()
+        }else{
+            //TODO handle
+        }
+    }
+
     /******************************Fragments monitoring******************************************/
 
     /**
@@ -219,6 +238,21 @@ class MainActivity :
     /***********************************Navigation***********************************************/
 
     /**
+     * Starts login on the server
+     */
+
+    private fun startLoginActivity(){
+        startActivityForResult(
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(listOf(AuthUI.IdpConfig.EmailBuilder().build()))
+                .setIsSmartLockEnabled(false, true)
+                .build(),
+            KEY_REQUEST_LOGIN
+        )
+    }
+
+    /**
      * Starts the TrailActivity
      * @param trailActionId : defines which action should be performed (choice within TrailActivity.ACTION_TRAIL_xxx)
      */
@@ -227,5 +261,38 @@ class MainActivity :
         val trailActivityIntent= Intent(this, TrailActivity::class.java)
         trailActivityIntent.putExtra(KEY_BUNDLE_TRAIL_ACTION, trailActionId)
         startActivity(trailActivityIntent)
+    }
+
+    /**Activity result**/
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode== KEY_REQUEST_LOGIN){
+            handleLoginResult(resultCode, data)
+        }
+    }
+
+    /**Handles login result**/
+
+    private fun handleLoginResult(resultCode: Int, data: Intent?){
+        val idpResponse=IdpResponse.fromResultIntent(data)
+        when{
+            resultCode== Activity.RESULT_OK -> {
+                //TODO handle
+                Log.d(TAG_LOGIN, "Login successful")
+            }
+            resultCode==Activity.RESULT_CANCELED -> {
+                //TODO handle
+                Log.d(TAG_LOGIN, "Login canceled")
+            }
+            idpResponse?.error!=null -> {
+                //TODO handle
+                Log.w(TAG_LOGIN, "Login failed : ${idpResponse.error?.message}")
+            }
+            else -> {
+                //TODO handle
+                Log.w(TAG_LOGIN, "Login failed : unknown error")
+            }
+        }
     }
 }

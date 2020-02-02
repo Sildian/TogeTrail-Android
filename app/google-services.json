@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "678240548909",
+    "firebase_url": "https://togetrail.firebaseio.com",
+    "project_id": "togetrail",
+    "storage_bucket": "togetrail.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:678240548909:android:cdc9ea0ed2d4eab3f460a4",
+        "android_client_info": {
+          "package_name": "com.sildian.apps.togetrail"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "678240548909-pre44bhaqg12q0lam59miugto1rqaebb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sildian.apps.togetrail",
+            "certificate_hash": "ba5e89cd21190bf91c9d6b79f158c3feb880f3a6"
+          }
+        },
+        {
+          "client_id": "678240548909-0ka2ki7an1sit978jaud3vn67qputvo0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3Vm7NxFkEhBy3VeDu8RRdRfjfyXxJbwg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "678240548909-0ka2ki7an1sit978jaud3vn67qputvo0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,8 +1,7 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 29
@@ -51,9 +50,16 @@ dependencies {
     //Google Play services Location
     implementation 'com.google.android.gms:play-services-location:17.0.0'
 
+    //Firebase
+    implementation 'com.google.firebase:firebase-core:17.2.2'
+    implementation 'com.google.firebase:firebase-analytics:17.2.2'
+    implementation 'com.firebaseui:firebase-ui-auth:5.0.0'
+
     //Robolectric
     testImplementation 'androidx.test:core:1.2.0'
     androidTestImplementation 'androidx.test:core:1.2.0'
+
+    /**********************************EXTERNAL LIBRARIES****************************************/
 
     //Joda time
     implementation 'net.danlew:android.joda:2.10.3'
