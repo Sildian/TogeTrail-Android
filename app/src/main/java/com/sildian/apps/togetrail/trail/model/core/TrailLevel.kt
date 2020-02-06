@@ -1,34 +1,34 @@
-package com.sildian.apps.togetrail.trail.model
+package com.sildian.apps.togetrail.trail.model.core
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 /*************************************************************************************************
- * The type of a trail
+ * The difficulty level of a trail
  ************************************************************************************************/
 
 @Parcelize
-enum class TrailType (val value:Int) : Parcelable {
-    HIKING(1),
-    BIKING(2),
-    OTHER(3);
+enum class TrailLevel (val value:Int) :Parcelable {
+    EASY(1),
+    MEDIUM(2),
+    HARD(3);
 
     /*********************************Static items***********************************************/
 
     companion object {
 
         /**
-         * Creates an instance of TrailType from a value
+         * Creates an instance of TrailLevel from a value
          * @param value : the related value
-         * @return the TrailType, HIKING by default
+         * @return the TrailLevel, MEDIUM by default
          */
 
-        fun fromValue(value: Int): TrailType {
+        fun fromValue(value: Int): TrailLevel {
             return when (value) {
-                1 -> HIKING
-                2 -> BIKING
-                3 -> OTHER
-                else -> HIKING
+                1 -> EASY
+                2 -> MEDIUM
+                3 -> HARD
+                else -> MEDIUM
             }
         }
     }

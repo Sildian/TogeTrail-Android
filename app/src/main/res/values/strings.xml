@@ -14,14 +14,14 @@
     <string name="menu_edit_save">Save</string>
 
     <!-- Toolbar Names -->
+    <string name="toolbar_trail">Trail</string>
     <string name="toolbar_trail_info">Trail info</string>
 
     <!-- Buttons -->
     <!-- Trail -->
     <string name="button_trail_point_remove">Remove last point</string>
     <string name="button_trail_poi_add">Add point of interest</string>
-    <string name="button_trail_poi_remove">Remove point of interest</string>
-    <string name="button_trail_metric_autocalculate">Auto-calculate</string>
+    <string name="button_trail_poi_remove">Remove</string>
 
     <!-- Labels -->
     <!-- Location -->
@@ -77,6 +77,7 @@
     <string name="message_trail_poi_name_unknown">Unknown point of interest</string>
     <string name="message_no_location_available">The location is unknown</string>
     <string name="message_no_description_available">No description is available</string>
+    <string name="message_wait">Just a bit of waiting…</string>
 
     <!-- Metrics -->
     <string name="metric_hour">h</string>
@@ -97,8 +98,5 @@
         <item>Biking</item>
         <item>Other</item>
     </string-array>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

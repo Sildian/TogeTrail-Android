@@ -12,8 +12,8 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.Polyline
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.trail.model.TrailPoint
-import com.sildian.apps.togetrail.trail.model.TrailPointOfInterest
+import com.sildian.apps.togetrail.trail.model.core.TrailPoint
+import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 import kotlinx.android.synthetic.main.fragment_trail_map_draw.view.*
 
 /*************************************************************************************************
@@ -111,7 +111,11 @@ class TrailMapDrawFragment : BaseTrailMapGenerateFragment(){
         else {
             if (point != null) {
                 Log.d(TAG_MAP, "Click on map at point lat ${point.latitude} lng ${point.longitude}")
-                val trailPoint=TrailPoint(point.latitude, point.longitude)
+                val trailPoint=
+                    TrailPoint(
+                        point.latitude,
+                        point.longitude
+                    )
                 addTrailPoint(trailPoint)
             } else {
                 //TODO handle
@@ -125,7 +129,7 @@ class TrailMapDrawFragment : BaseTrailMapGenerateFragment(){
         /*Shows an info nested fragment depending on the tag of the marker*/
 
         return when(marker?.tag){
-            is TrailPointOfInterest->{
+            is TrailPointOfInterest ->{
                 Log.d(TAG_MAP, "Click on marker (TrailPointOfInterest)")
                 val trailPointOfInterest=marker.tag as TrailPointOfInterest
                 val trailPoiPosition=marker.snippet.toInt()
@@ -133,7 +137,7 @@ class TrailMapDrawFragment : BaseTrailMapGenerateFragment(){
                 marker.showInfoWindow()
                 true
             }
-            is TrailPoint->{
+            is TrailPoint ->{
                 Log.d(TAG_MAP, "Click on marker (TrailPoint)")
                 showTrailInfoFragment()
                 true

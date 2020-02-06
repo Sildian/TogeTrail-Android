@@ -6,13 +6,18 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.main.MainActivity
 import com.sildian.apps.togetrail.trail.infoEdit.TrailInfoEditActivity
-import com.sildian.apps.togetrail.trail.model.Trail
-import com.sildian.apps.togetrail.trail.model.TrailFactory
+import com.sildian.apps.togetrail.trail.model.core.Trail
+import com.sildian.apps.togetrail.trail.model.support.TrailFactory
+import com.sildian.apps.togetrail.trail.model.support.TrailFirebaseQueries
 import io.ticofab.androidgpxparser.parser.GPXParser
+import kotlinx.android.synthetic.main.activity_trail.*
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 
@@ -28,7 +33,9 @@ class TrailActivity : AppCompatActivity() {
 
         /**Logs**/
         const val TAG_ACTIVITY="TAG_ACTIVITY"
+        const val TAG_MENU="TAG_MENU"
         const val TAG_FILE="TAG_FILE"
+        const val TAG_STORAGE="TAG_STORAGE"
 
         /**Fragments Ids***/
         const val ID_FRAGMENT_TRAIL_DETAIL=1
@@ -54,10 +61,11 @@ class TrailActivity : AppCompatActivity() {
     /**************************************Data**************************************************/
 
     private var currentAction= ACTION_TRAIL_SEE                 //Action defining what the user is performing
-    private var trail:Trail?=null                               //Current trail shown
+    private var trail: Trail?=null                               //Current trail shown
 
     /**********************************UI component**********************************************/
 
+    private val toolbar by lazy {activity_trail_toolbar}
     private lateinit var fragment: BaseTrailMapFragment
 
     /************************************Life cycle**********************************************/
@@ -67,6 +75,7 @@ class TrailActivity : AppCompatActivity() {
         Log.d(TAG_ACTIVITY, "Activity '${javaClass.simpleName}' created")
         setContentView(R.layout.activity_trail)
         readDataFromIntent(intent)
+        initializeToolbar()
         startTrailAction()
     }
 
@@ -77,8 +86,35 @@ class TrailActivity : AppCompatActivity() {
             this.fragment.getInfoBottomSheetState()!=BottomSheetBehavior.STATE_HIDDEN->
                 this.fragment.hideInfoBottomSheet()
             else->
-                super.onBackPressed()
+                finishCancel() //TODO ask the user if he wants to save
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        //TODO ask the user if he wants to sabe
+        finishCancel()
+        return true
+    }
+
+    /********************************Menu monitoring*********************************************/
+
+    /**Generates the menu within the toolbar**/
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_edit, menu)
+        return true
+    }
+
+    /**Click on menu item from toolbar**/
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.groupId==R.id.menu_edit){
+            if(item.itemId==R.id.menu_edit_save){
+                Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+                this.fragment.saveData()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     /***********************************Data monitoring******************************************/
@@ -102,7 +138,8 @@ class TrailActivity : AppCompatActivity() {
             val inputStream = contentResolver.openInputStream(uri)
             try {
                 val gpx = gpxParser.parse(inputStream)
-                this.trail=TrailFactory.buildFromGpx(gpx)
+                this.trail=
+                    TrailFactory.buildFromGpx(gpx)
                 this.fragment.updateTrailAndShowInfo(this.trail)
             }
 
@@ -116,11 +153,11 @@ class TrailActivity : AppCompatActivity() {
                 Log.w(TAG_FILE, e.message.toString())
                 //TODO handle
             }
-            catch(e:TrailFactory.TrailBuildNoTrackException){
+            catch(e: TrailFactory.TrailBuildNoTrackException){
                 Log.w(TAG_FILE, e.message.toString())
                 //TODO handle
             }
-            catch(e:TrailFactory.TrailBuildTooManyTracksException){
+            catch(e: TrailFactory.TrailBuildTooManyTracksException){
                 Log.w(TAG_FILE, e.message.toString())
                 //TODO handle
             }
@@ -130,9 +167,64 @@ class TrailActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateTrail(trail:Trail){
+    private fun updateTrail(trail: Trail){
         this.trail=trail
         this.fragment.updateTrail(this.trail)
+    }
+
+    fun updateTrailAndSave(trail:Trail){
+
+        /*Updates the trail*/
+
+        this.trail=trail
+
+        /*Shows a progress dialog*/
+
+        val progressDialog=DialogHelper.createProgressDialog(this)
+        progressDialog.show()
+
+        /*If the trail has no id, it means it was not created in the database yet. Then creates it.*/
+
+        if(this.trail?.id==null){
+            TrailFirebaseQueries.createTrail(this.trail!!)
+                .addOnSuccessListener {
+                    Log.d(TAG_STORAGE, "Trail created in the database")
+                    progressDialog.dismiss()
+                    //TODO show a snackbar when finished
+                    finishOk()
+                }
+                .addOnFailureListener { e ->
+                    Log.w(TAG_STORAGE, e.message.toString())
+                    progressDialog.dismiss()
+                    //TODO handle
+                    finishCancel()
+                }
+
+            /*Else updates it*/
+
+        }else{
+            TrailFirebaseQueries.updateTrail(this.trail!!)
+                .addOnSuccessListener {
+                    Log.d(TAG_STORAGE, "Trail updated in the database")
+                    progressDialog.dismiss()
+                    //TODO show a snackbar when finished
+                    finishOk()
+                }
+                .addOnFailureListener { e ->
+                    Log.w(TAG_STORAGE, e.message.toString())
+                    progressDialog.dismiss()
+                    //TODO handle
+                    finishCancel()
+                }
+        }
+    }
+
+    /*************************************UI monitoring******************************************/
+
+    private fun initializeToolbar(){
+        setSupportActionBar(this.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setTitle(R.string.toolbar_trail)
     }
 
     /******************************Fragments monitoring******************************************/
@@ -172,12 +264,12 @@ class TrailActivity : AppCompatActivity() {
         }
     }
 
-    fun updateTrailAndEditInfo(trail:Trail){
+    fun updateTrailAndEditInfo(trail: Trail){
         updateTrail(trail)
         startTrailInfoEditActivity(TrailInfoEditActivity.ACTION_TRAIL_EDIT_INFO, null)
     }
 
-    fun updateTrailAndEditPoiInfo(trail:Trail, poiPosition:Int){
+    fun updateTrailAndEditPoiInfo(trail: Trail, poiPosition:Int){
         updateTrail(trail)
         startTrailInfoEditActivity(TrailInfoEditActivity.ACTION_TRAIL_EDIT_POI_INFO, poiPosition)
     }
@@ -245,5 +337,19 @@ class TrailActivity : AppCompatActivity() {
                 updateTrail(updatedTrail)
             }
         }
+    }
+
+    /**Finish with ok result (the trail is saved)**/
+
+    private fun finishOk(){
+        setResult(Activity.RESULT_OK)
+        finish()
+    }
+
+    /**Finish with cancel result (the trail is not saved)**/
+
+    private fun finishCancel(){
+        setResult(Activity.RESULT_CANCELED)
+        finish()
     }
 }

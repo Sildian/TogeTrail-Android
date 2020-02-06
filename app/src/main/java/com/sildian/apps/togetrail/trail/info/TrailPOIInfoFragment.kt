@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.NumberUtilities
 import com.sildian.apps.togetrail.trail.map.BaseTrailMapFragment
-import com.sildian.apps.togetrail.trail.model.TrailPointOfInterest
+import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 import kotlinx.android.synthetic.main.fragment_trail_poi_info.view.*
 
 /*************************************************************************************************
@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_trail_poi_info.view.*
  ************************************************************************************************/
 
 class TrailPOIInfoFragment (
-    val trailPointOfInterest:TrailPointOfInterest?=null,
+    val trailPointOfInterest: TrailPointOfInterest?=null,
     val trailPointOfInterestPosition:Int?=null
 )
     : Fragment() {

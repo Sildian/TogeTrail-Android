@@ -1,5 +1,9 @@
-package com.sildian.apps.togetrail.trail.model
+package com.sildian.apps.togetrail.trail.model.support
 
+import com.sildian.apps.togetrail.trail.model.core.Trail
+import com.sildian.apps.togetrail.trail.model.core.TrailPoint
+import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
+import com.sildian.apps.togetrail.trail.model.core.TrailTrack
 import io.ticofab.androidgpxparser.parser.domain.Gpx
 import java.util.*
 
@@ -36,12 +40,12 @@ object TrailFactory {
      * @return the resulted trail
      */
 
-    fun buildFromNothing(name:String):Trail{
+    fun buildFromNothing(name:String): Trail {
         val source="TogeTrail"
         val date= Date()
         return Trail(
-            name=name,
-            source=source,
+            name = name,
+            source = source,
             creationDate = date,
             lastUpdate = date
         )
@@ -53,7 +57,7 @@ object TrailFactory {
      * @return the resulted Trail
      */
 
-    fun buildFromGpx(gpx:Gpx):Trail {
+    fun buildFromGpx(gpx:Gpx): Trail {
 
         /*If no track is available in the gpx, raises a TrailBuildNoTrackException*/
 
@@ -61,13 +65,17 @@ object TrailFactory {
             || gpx.tracks[0].trackSegments.isNullOrEmpty()
             || gpx.tracks[0].trackSegments.isNullOrEmpty()
         ) {
-            throw TrailBuildNoTrackException(EXCEPTION_MESSAGE_BUILD_GPX_NO_TRACK)
+            throw TrailBuildNoTrackException(
+                EXCEPTION_MESSAGE_BUILD_GPX_NO_TRACK
+            )
         }
 
         /*If more than 1 track are available in the fpx, raises a TrailBuildTooManyTracksException*/
 
         if(gpx.tracks.size>1){
-            throw TrailBuildTooManyTracksException(EXCEPTION_MESSAGE_BUILD_GPX_TOO_MANY_TRACKS)
+            throw TrailBuildTooManyTracksException(
+                EXCEPTION_MESSAGE_BUILD_GPX_TOO_MANY_TRACKS
+            )
         }
 
         /*Name, source and description are populated by the metadata or by the track.

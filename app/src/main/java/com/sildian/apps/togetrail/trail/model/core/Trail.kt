@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.trail.model
+package com.sildian.apps.togetrail.trail.model.core
 
 import android.os.Parcelable
 import com.sildian.apps.togetrail.common.model.Location
@@ -11,17 +11,18 @@ import java.util.*
 
 @Parcelize
 data class Trail (
+    var id:String?=null,
     var name:String="",
     val source:String="",
     var location: Location = Location(),
     var description:String="",
     val creationDate:Date=Date(),
     var lastUpdate:Date=Date(),
-    var type:TrailType=TrailType.HIKING,
-    var level:TrailLevel=TrailLevel.MEDIUM,
+    var type: TrailType = TrailType.HIKING,
+    var level: TrailLevel = TrailLevel.MEDIUM,
     val photosUrls:ArrayList<String> = arrayListOf(),
     var loop:Boolean=true,
-    val trailTrack:TrailTrack= TrailTrack(),
+    val trailTrack: TrailTrack = TrailTrack(),
     var duration:Int?=null,
     var distance:Int=0,
     var ascent:Int?=null,

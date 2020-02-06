@@ -2,7 +2,6 @@ package com.sildian.apps.togetrail.trail.infoEdit
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,7 @@ import com.sdsmdg.harjot.crollerTest.Croller
 
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.NumberUtilities
-import com.sildian.apps.togetrail.trail.model.TrailPointOfInterest
+import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 import kotlinx.android.synthetic.main.fragment_trail_poi_info_edit.view.*
 
 /*************************************************************************************************

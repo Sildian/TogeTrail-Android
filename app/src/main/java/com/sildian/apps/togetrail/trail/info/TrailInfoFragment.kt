@@ -12,9 +12,9 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.utils.NumberUtilities
 import com.sildian.apps.togetrail.trail.map.BaseTrailMapFragment
-import com.sildian.apps.togetrail.trail.model.Trail
-import com.sildian.apps.togetrail.trail.model.TrailLevel
-import com.sildian.apps.togetrail.trail.model.TrailType
+import com.sildian.apps.togetrail.trail.model.core.Trail
+import com.sildian.apps.togetrail.trail.model.core.TrailLevel
+import com.sildian.apps.togetrail.trail.model.core.TrailType
 import kotlinx.android.synthetic.main.fragment_trail_info.view.*
 
 /*************************************************************************************************

@@ -12,9 +12,9 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.model.Location
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.utils.NumberUtilities
-import com.sildian.apps.togetrail.trail.model.Trail
-import com.sildian.apps.togetrail.trail.model.TrailLevel
-import com.sildian.apps.togetrail.trail.model.TrailType
+import com.sildian.apps.togetrail.trail.model.core.Trail
+import com.sildian.apps.togetrail.trail.model.core.TrailLevel
+import com.sildian.apps.togetrail.trail.model.core.TrailType
 import kotlinx.android.synthetic.main.fragment_trail_info_edit.view.*
 
 /*************************************************************************************************
@@ -94,8 +94,9 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
 
     override fun saveData() {
         this.trail?.name=this.nameTextField.text.toString()
-        this.trail?.level=TrailLevel.fromValue(this.levelTextFieldDropDown.tag.toString().toInt())
-        this.trail?.type=TrailType.fromValue(this.typeTextFieldDropDown.tag.toString().toInt())
+        this.trail?.level=
+            TrailLevel.fromValue(this.levelTextFieldDropDown.tag.toString().toInt())
+        this.trail?.type= TrailType.fromValue(this.typeTextFieldDropDown.tag.toString().toInt())
         this.trail?.location = Location(
             this.countryTextField.text.toString(),
             this.regionTextField.text.toString(),
@@ -133,7 +134,7 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
         val choice=resources.getStringArray(R.array.array_trail_levels)
         val adapter=ArrayAdapter<String>(context!!, R.layout.item_dropdown_menu, choice)
         this.levelTextFieldDropDown.setAdapter(adapter)
-        val currentValue=this.trail?.level?.value?:TrailLevel.MEDIUM.value
+        val currentValue=this.trail?.level?.value?: TrailLevel.MEDIUM.value
         val currentText=this.levelTextFieldDropDown.adapter.getItem(currentValue-1)
         this.levelTextFieldDropDown.setText(currentText.toString(), false)
         this.levelTextFieldDropDown.tag=currentValue

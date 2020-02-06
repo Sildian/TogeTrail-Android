@@ -7,11 +7,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import androidx.fragment.app.Fragment
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.trail.map.TrailActivity
-import com.sildian.apps.togetrail.trail.model.Trail
-import com.sildian.apps.togetrail.trail.model.TrailPointOfInterest
+import com.sildian.apps.togetrail.trail.model.core.Trail
+import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 import kotlinx.android.synthetic.main.activity_trail_info_edit.*
 
 /*************************************************************************************************
@@ -41,7 +40,7 @@ class TrailInfoEditActivity : AppCompatActivity() {
 
     private var currentAction= ACTION_TRAIL_EDIT_INFO           //Action defining what the user is performing
     private var trail: Trail?=null                              //Current trail to be edited
-    private var trailPointOfInterest:TrailPointOfInterest?=null //Current trailPointOfInterest to be edited
+    private var trailPointOfInterest: TrailPointOfInterest?=null //Current trailPointOfInterest to be edited
     private var trailPointOfInterestPosition:Int?=null          //The trailPoi's position within the trailTrack
 
     /**********************************UI component**********************************************/
@@ -113,13 +112,23 @@ class TrailInfoEditActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateTrail(trail:Trail){
+    private fun updateTrail(trail: Trail){
         this.trail=trail
     }
 
     private fun updateTrailPointOfInterest(trailPointOfInterest: TrailPointOfInterest){
         this.trailPointOfInterest=trailPointOfInterest
         this.trail!!.trailTrack.trailPointsOfInterest[this.trailPointOfInterestPosition!!]=trailPointOfInterest
+    }
+
+    fun updateTrailAndSave(trail: Trail){
+        updateTrail(trail)
+        finishOk()
+    }
+
+    fun updateTrailPoiAndSave(trailPointOfInterest: TrailPointOfInterest){
+        updateTrailPointOfInterest(trailPointOfInterest)
+        finishOk()
     }
 
     /*************************************UI monitoring******************************************/
@@ -137,16 +146,6 @@ class TrailInfoEditActivity : AppCompatActivity() {
             ACTION_TRAIL_EDIT_INFO -> showFragment(ID_FRAGMENT_TRAIL_INFO_EDIT)
             ACTION_TRAIL_EDIT_POI_INFO -> showFragment(ID_FRAGMENT_TRAIL_POI_INFO_EDIT)
         }
-    }
-
-    fun updateTrailAndSave(trail:Trail){
-        updateTrail(trail)
-        finishOk()
-    }
-
-    fun updateTrailPoiAndSave(trailPointOfInterest: TrailPointOfInterest){
-        updateTrailPointOfInterest(trailPointOfInterest)
-        finishOk()
     }
 
     /******************************Fragments monitoring******************************************/

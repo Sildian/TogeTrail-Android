@@ -1,6 +1,7 @@
-package com.sildian.apps.togetrail.trail.model
+package com.sildian.apps.togetrail.trail.model.core
 
 import android.os.Parcelable
+import com.sildian.apps.togetrail.trail.model.core.TrailPoint
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 
@@ -26,5 +27,5 @@ class TrailPointOfInterest(
     var description:String?=null,
     var photoUrl:String?=null
 )
-    :TrailPoint(latitude, longitude, elevation, time),
+    : TrailPoint(latitude, longitude, elevation, time),
         Parcelable

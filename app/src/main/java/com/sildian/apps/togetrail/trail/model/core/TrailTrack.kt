@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.trail.model
+package com.sildian.apps.togetrail.trail.model.core
 
 import android.os.Parcelable
 import com.google.android.gms.maps.model.LatLng
@@ -138,7 +138,7 @@ class TrailTrack(
      * @return the index of the resulted trailPointOfInterest, or null if no one matches
      */
 
-    fun findTrailPointOfInterest(trailPoint:TrailPoint):Int?{
+    fun findTrailPointOfInterest(trailPoint: TrailPoint):Int?{
         val index= this.trailPointsOfInterest.indexOfFirst { trailPoi->
             trailPoi.latitude==trailPoint.latitude
                     && trailPoi.longitude==trailPoint.longitude

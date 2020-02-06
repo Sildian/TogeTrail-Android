@@ -18,8 +18,8 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.MapMarkersUtilities
 import com.sildian.apps.togetrail.trail.info.TrailInfoFragment
 import com.sildian.apps.togetrail.trail.info.TrailPOIInfoFragment
-import com.sildian.apps.togetrail.trail.model.Trail
-import com.sildian.apps.togetrail.trail.model.TrailPointOfInterest
+import com.sildian.apps.togetrail.trail.model.core.Trail
+import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 
 /*************************************************************************************************
  * Base for all Trail fragments using a map
@@ -124,7 +124,7 @@ abstract class BaseTrailMapFragment :
      * @param trail : the trail
      */
 
-    fun updateTrail(trail:Trail?){
+    fun updateTrail(trail: Trail?){
         this.trail=trail
         this.map?.clear()
         showTrailTrackOnMap()
@@ -135,7 +135,7 @@ abstract class BaseTrailMapFragment :
      * @param trail : the trail to be shown
      */
 
-    fun updateTrailAndShowInfo(trail:Trail?){
+    fun updateTrailAndShowInfo(trail: Trail?){
         this.trail=trail
         this.map?.clear()
         showTrailTrackOnMap()
@@ -194,6 +194,12 @@ abstract class BaseTrailMapFragment :
     }
 
     abstract fun proceedAdditionalOnMapReadyActions()
+
+    /*********************************Data monitoring********************************************/
+
+    fun saveData(){
+        (activity as TrailActivity).updateTrailAndSave(this.trail!!)
+    }
 
     /********************************Location monitoring*****************************************/
 

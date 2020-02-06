@@ -6,12 +6,18 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="materialAlertDialogTheme">@style/AlertDialogTheme</item>
         <item name="popupMenuStyle">@style/PopupMenuTheme</item>
         <item name="textAppearancePopupMenuHeader">@style/PopupMenuTextAppearanceHeader</item>
         <item name="textAppearanceLargePopupMenu">@style/PopupMenuTextAppearanceBody</item>
         <item name="textAppearanceSmallPopupMenu">@style/PopupMenuTextAppearanceBody</item>
         <item name="bottomNavigationStyle">@style/BottomNavigationViewTheme</item>
         <item name="floatingActionButtonStyle">@style/FloatingActionButtonTheme</item>
+    </style>
+
+    <!-- Alert dialogs -->
+    <style name="AlertDialogTheme" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="android:textColor">@color/colorWhite</item>
     </style>
 
     <!-- PopupMenus -->

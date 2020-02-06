@@ -11,8 +11,8 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.Polyline
 
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.trail.model.TrailPoint
-import com.sildian.apps.togetrail.trail.model.TrailPointOfInterest
+import com.sildian.apps.togetrail.trail.model.core.TrailPoint
+import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 
 /*************************************************************************************************
  * Shows a specific trail on the map and allows to see all its detail information
@@ -65,14 +65,14 @@ class TrailMapDetailFragment : BaseTrailMapFragment() {
         /*Shows an info nested fragment depending on the tag of the marker*/
 
         return when(marker?.tag){
-            is TrailPointOfInterest->{
+            is TrailPointOfInterest ->{
                 Log.d(TAG_MAP, "Click on marker (TrailPointOfInterest)")
                 val trailPointOfInterest=marker.tag as TrailPointOfInterest
                 val trailPoiPosition=marker.snippet.toInt()
                 showTrailPOIInfoFragment(trailPointOfInterest, trailPoiPosition)
                 true
             }
-            is TrailPoint->{
+            is TrailPoint ->{
                 Log.d(TAG_MAP, "Click on marker (TrailPoint)")
                 showTrailInfoFragment()
                 true

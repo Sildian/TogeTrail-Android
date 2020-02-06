@@ -8,9 +8,9 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.trail.model.TrailFactory
-import com.sildian.apps.togetrail.trail.model.TrailPoint
-import com.sildian.apps.togetrail.trail.model.TrailPointOfInterest
+import com.sildian.apps.togetrail.trail.model.support.TrailFactory
+import com.sildian.apps.togetrail.trail.model.core.TrailPoint
+import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 
 /*************************************************************************************************
  * Base for all Trail fragments using a map and allowing to generate a new Trail with the app
@@ -34,7 +34,7 @@ abstract class BaseTrailMapGenerateFragment :
 
     private fun initializeTrail(){
         val name=resources.getString(R.string.message_trail_name_unknown)
-        this.trail=TrailFactory.buildFromNothing(name)
+        this.trail= TrailFactory.buildFromNothing(name)
     }
 
     /************************************UI monitoring*******************************************/
@@ -143,7 +143,8 @@ abstract class BaseTrailMapGenerateFragment :
                     lastPoint.longitude,
                     lastPoint.elevation,
                     lastPoint.time,
-                    resources.getString(R.string.message_trail_poi_name_unknown))
+                    resources.getString(R.string.message_trail_poi_name_unknown)
+                )
             this.trail?.trailTrack?.trailPointsOfInterest?.add(trailPointOfInterest)
 
             /*Then updates the track on the map*/
@@ -164,7 +165,7 @@ abstract class BaseTrailMapGenerateFragment :
      * @param trailPointOfInterest : the trailPointOfInterest to be removed
      */
 
-    protected fun removeTrailPointOfInterest(trailPointOfInterest:TrailPointOfInterest){
+    protected fun removeTrailPointOfInterest(trailPointOfInterest: TrailPointOfInterest){
         this.trail?.trailTrack?.trailPointsOfInterest?.remove(trailPointOfInterest)
         hideInfoBottomSheet()
         this.map?.clear()

@@ -12,8 +12,8 @@ import com.google.android.gms.maps.model.Polyline
 
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.GeoUtilities
-import com.sildian.apps.togetrail.trail.model.TrailPoint
-import com.sildian.apps.togetrail.trail.model.TrailPointOfInterest
+import com.sildian.apps.togetrail.trail.model.core.TrailPoint
+import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 import kotlinx.android.synthetic.main.fragment_trail_map_record.view.*
 import java.util.concurrent.Executors
 
@@ -126,7 +126,7 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
         /*Shows an info nested fragment depending on the tag of the marker*/
 
         return when(marker?.tag){
-            is TrailPointOfInterest->{
+            is TrailPointOfInterest ->{
                 Log.d(TAG_MAP, "Click on marker (TrailPointOfInterest)")
                 val trailPointOfInterest=marker.tag as TrailPointOfInterest
                 val trailPoiPosition=marker.snippet.toInt()
@@ -134,7 +134,7 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
                 marker.showInfoWindow()
                 true
             }
-            is TrailPoint->{
+            is TrailPoint ->{
                 Log.d(TAG_MAP, "Click on marker (TrailPoint)")
                 showTrailInfoFragment()
                 true
@@ -221,8 +221,10 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
 
         this.userLocation.lastLocation
             .addOnSuccessListener { userLocation->
-                val trailPoint= TrailPoint(
-                    userLocation.latitude, userLocation.longitude, userLocation.altitude.toInt())
+                val trailPoint=
+                    TrailPoint(
+                        userLocation.latitude, userLocation.longitude, userLocation.altitude.toInt()
+                    )
 
                 /*If minimum distance to previous point is fulfilled, adds the new trailPoint*/
 
@@ -249,7 +251,7 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
      * @return true if the minimum distance is fulfilled or if no point was previously recorded
      */
 
-    private fun checkMinDistanceToPreviousPointIsFulfilled(trailPoint:TrailPoint):Boolean{
+    private fun checkMinDistanceToPreviousPointIsFulfilled(trailPoint: TrailPoint):Boolean{
         return if(!this.trail?.trailTrack?.trailPoints.isNullOrEmpty()) {
             val previousPoint = this.trail?.trailTrack?.trailPoints?.last()
             if (previousPoint != null) {
