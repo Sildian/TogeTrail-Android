@@ -23,6 +23,8 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
+import com.sildian.apps.togetrail.trail.model.core.Trail
+import com.sildian.apps.togetrail.trail.model.support.TrailFirebaseQueries
 
 /*************************************************************************************************
  * Lets the user navigate between the main screens
@@ -41,6 +43,7 @@ class MainActivity :
         const val TAG_ACTIVITY="TAG_ACTIVITY"
         const val TAG_MENU="TAG_MENU"
         const val TAG_LOGIN="TAG_LOGIN"
+        const val TAG_STORAGE="TAG_STORAGE"
         const val TAG_PERMISSION="TAG_PERMISSION"
 
         /**Fragments Ids***/
@@ -57,7 +60,12 @@ class MainActivity :
 
         /**Bundle keys for intents**/
         const val KEY_BUNDLE_TRAIL_ACTION="KEY_BUNDLE_TRAIL_ACTION"
+        const val KEY_BUNDLE_TRAIL="KEY_BUNDLE_TRAIL"
     }
+
+    /****************************************Data************************************************/
+
+    private val trails= arrayListOf<Trail>()            //The list of trails to display
 
     /**********************************UI component**********************************************/
 
@@ -86,8 +94,10 @@ class MainActivity :
         if(item.groupId== R.id.menu_main){
             //TODO handle clicks
             when(item.itemId){
-                R.id.menu_main_map ->
+                R.id.menu_main_map -> {
                     Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+                    showFragment(ID_FRAGMENT_MAP)
+                }
                 R.id.menu_main_trails ->
                     Log.d(TAG_MENU, "Menu '${item.title}' clicked")
                 R.id.menu_main_events ->
@@ -154,6 +164,42 @@ class MainActivity :
         menuPopupHelper.show(menuPopupMargin, menuPopupMargin)
     }
 
+    /****************************Data monitoring**************************************************/
+
+    /**
+     * Loads the trails from the database
+     * @param listener : the listener which handles the result
+     */
+
+    fun loadTrails(listener:TrailFirebaseQueries.OnTrailQueryResultListener){
+
+        //TODO add a progress bar
+        
+        TrailFirebaseQueries.getTrails()
+            .addSnapshotListener { querySnapshot, e ->
+
+                /*If the query is a success, displays the results*/
+
+                if(querySnapshot!=null){
+                    Log.d(TAG_STORAGE, "Query finished with ${querySnapshot.size()} trails")
+                    this.trails.clear()
+                    querySnapshot.forEach { documentSnapshot ->
+                        val trail=documentSnapshot.toObject(Trail::class.java)
+                        trail.id=documentSnapshot.id
+                        this.trails.add(trail)
+                        listener.onTrailsQueryResult(this.trails)
+                    }
+                }
+
+                /*Else*/
+
+                else if(e!=null){
+                    //TODO handle
+                    Log.w(TAG_STORAGE, e.message.toString())
+                }
+            }
+    }
+
     /******************************UI monitoring**************************************************/
 
     private fun initializeBottomNavigationView(){
@@ -187,7 +233,7 @@ class MainActivity :
     private fun showFragment(fragmentId:Int){
         when(fragmentId){
             ID_FRAGMENT_MAP->this.fragment=
-                TrailMapFragment()
+                TrailMapFragment(this.trails)
             //TODO handle other fragments
         }
         supportFragmentManager.beginTransaction()
@@ -255,11 +301,15 @@ class MainActivity :
     /**
      * Starts the TrailActivity
      * @param trailActionId : defines which action should be performed (choice within TrailActivity.ACTION_TRAIL_xxx)
+     * @param trail (optionnal) : the trail to see
      */
 
-    private fun startTrailActivity(trailActionId: Int){
+    fun startTrailActivity(trailActionId: Int, trail:Trail?=null){
         val trailActivityIntent= Intent(this, TrailActivity::class.java)
         trailActivityIntent.putExtra(KEY_BUNDLE_TRAIL_ACTION, trailActionId)
+        if(trailActionId==TrailActivity.ACTION_TRAIL_SEE){
+            trailActivityIntent.putExtra(KEY_BUNDLE_TRAIL, trail)
+        }
         startActivity(trailActivityIntent)
     }
 

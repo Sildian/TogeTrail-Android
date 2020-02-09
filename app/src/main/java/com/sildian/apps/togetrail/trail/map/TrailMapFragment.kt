@@ -7,14 +7,24 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.Polyline
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.common.utils.MapMarkersUtilities
+import com.sildian.apps.togetrail.main.MainActivity
+import com.sildian.apps.togetrail.trail.model.core.Trail
+import com.sildian.apps.togetrail.trail.model.support.TrailFirebaseQueries
 
 /*************************************************************************************************
  * Shows the list of trails on a map
+ * @param trails : the list of trails to be shown
  ************************************************************************************************/
 
-class TrailMapFragment : BaseTrailMapFragment()
+class TrailMapFragment (
+    private var trails: List<Trail> = emptyList()
+) :
+    BaseTrailMapFragment(),
+    TrailFirebaseQueries.OnTrailQueryResultListener
 {
 
     /**********************************UI component**********************************************/
@@ -25,6 +35,13 @@ class TrailMapFragment : BaseTrailMapFragment()
         super.onCreateView(inflater, container, savedInstanceState)
         Log.d(TAG_FRAGMENT, "Fragment '${javaClass.simpleName}' created")
         return this.layout
+    }
+
+    /**********************************Data monitoring*******************************************/
+
+    override fun onTrailsQueryResult(trails: List<Trail>) {
+        this.trails=trails
+        showTrailsOnMap()
     }
 
     /************************************UI monitoring*******************************************/
@@ -47,8 +64,12 @@ class TrailMapFragment : BaseTrailMapFragment()
 
     /***********************************Map monitoring*******************************************/
 
-    override fun proceedAdditionalOnMapReadyActions() {
-
+    override fun onMapReadyActionsFinished() {
+        if(this.trails.isEmpty()){
+            (activity as MainActivity).loadTrails(this)
+        }else {
+            showTrailsOnMap()
+        }
     }
 
     override fun onMapClick(point: LatLng?) {
@@ -57,10 +78,47 @@ class TrailMapFragment : BaseTrailMapFragment()
     }
 
     override fun onMarkerClick(marker: Marker?): Boolean {
-        return true
+        return when(marker?.tag){
+            is Trail -> {
+                Log.d(TAG_MAP, "Click on marker (Trail)")
+                this.trail=marker.tag as Trail
+                showTrailInfoFragment()
+                true
+            }
+            else -> {
+                Log.w(TAG_MAP, "Click on marker (Unknown category)")
+                false
+            }
+        }
     }
 
     override fun onPolylineClick(polyline: Polyline?) {
 
+    }
+
+    /***********************************Trails monitoring****************************************/
+
+    /**Shows the list of trails on the map**/
+
+    private fun showTrailsOnMap(){
+
+        this.map?.clear()
+
+        /*For each trail in the list, shows a marker at the first trailPoint's location*/
+
+        this.trails.forEach { trail ->
+            val firstPoint=trail.trailTrack.trailPoints.first()
+            this.map?.addMarker(MarkerOptions()
+                .position(LatLng(firstPoint.latitude, firstPoint.longitude))
+                .icon(MapMarkersUtilities.createMapMarkerFromVector(
+                    context, R.drawable.ic_location_trail_map)))
+                ?.tag=trail
+        }
+    }
+
+    /**Shows the current trail's detail**/
+
+    fun showTrailDetail(){
+        (activity as MainActivity).startTrailActivity(TrailActivity.ACTION_TRAIL_SEE, this.trail)
     }
 }

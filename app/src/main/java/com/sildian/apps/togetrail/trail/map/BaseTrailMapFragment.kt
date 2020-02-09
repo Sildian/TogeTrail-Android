@@ -124,7 +124,16 @@ abstract class BaseTrailMapFragment :
      * @param trail : the trail
      */
 
-    fun updateTrail(trail: Trail?){
+    fun updateTrail(trail:Trail?){
+        this.trail=trail
+    }
+
+    /**
+     * Updates the current trail then shows it on the map
+     * @param trail : the trail
+     */
+
+    fun updateTrailAndShowTrack(trail: Trail?){
         this.trail=trail
         this.map?.clear()
         showTrailTrackOnMap()
@@ -135,7 +144,7 @@ abstract class BaseTrailMapFragment :
      * @param trail : the trail to be shown
      */
 
-    fun updateTrailAndShowInfo(trail: Trail?){
+    fun updateTrailAndShowTrackAndInfo(trail: Trail?){
         this.trail=trail
         this.map?.clear()
         showTrailTrackOnMap()
@@ -185,7 +194,7 @@ abstract class BaseTrailMapFragment :
             this.map?.setOnMarkerClickListener(this)
             this.map?.setOnPolylineClickListener(this)
             this.map?.isMyLocationEnabled=true
-            proceedAdditionalOnMapReadyActions()
+            onMapReadyActionsFinished()
         }
         else{
             //TODO handle exception
@@ -193,7 +202,7 @@ abstract class BaseTrailMapFragment :
         }
     }
 
-    abstract fun proceedAdditionalOnMapReadyActions()
+    abstract fun onMapReadyActionsFinished()
 
     /*********************************Data monitoring********************************************/
 

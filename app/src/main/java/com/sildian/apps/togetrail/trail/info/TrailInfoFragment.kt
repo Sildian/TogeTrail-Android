@@ -12,6 +12,7 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.utils.NumberUtilities
 import com.sildian.apps.togetrail.trail.map.BaseTrailMapFragment
+import com.sildian.apps.togetrail.trail.map.TrailMapFragment
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailLevel
 import com.sildian.apps.togetrail.trail.model.core.TrailType
@@ -37,6 +38,7 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
 
     private lateinit var layout:View
     private val nameText by lazy {layout.fragment_trail_info_text_name}
+    private val seeButton by lazy {layout.fragment_trail_info_button_see}
     private val editButton by lazy {layout.fragment_trail_info_button_edit}
     private val levelText by lazy {layout.fragment_trail_info_text_level}
     private val typeText by lazy {layout.fragment_trail_info_text_type}
@@ -62,6 +64,7 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
 
     private fun initializeAllUIComponents(){
         initializeNameText()
+        initializeSeeButton()
         initializeEditButton()
         initializeLevelText()
         initializeTypeText()
@@ -79,9 +82,19 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
         this.nameText.text=this.trail?.name
     }
 
+    private fun initializeSeeButton(){
+        this.seeButton.setOnClickListener {
+            if(parentFragment is TrailMapFragment) {
+                (parentFragment as TrailMapFragment).showTrailDetail()
+            }
+        }
+    }
+
     private fun initializeEditButton(){
         this.editButton.setOnClickListener {
-            (parentFragment as BaseTrailMapFragment).editTrailInfo()
+            if(parentFragment is BaseTrailMapFragment) {
+                (parentFragment as BaseTrailMapFragment).editTrailInfo()
+            }
         }
     }
 

@@ -99,7 +99,7 @@ class TrailMapDrawFragment : BaseTrailMapGenerateFragment(){
 
     /***********************************Map monitoring*******************************************/
 
-    override fun proceedAdditionalOnMapReadyActions() {
+    override fun onMapReadyActionsFinished() {
         this.map?.setInfoWindowAdapter(this)
         this.map?.setOnInfoWindowClickListener(this)
     }

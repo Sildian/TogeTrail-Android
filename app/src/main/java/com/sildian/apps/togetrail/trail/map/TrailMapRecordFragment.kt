@@ -57,8 +57,8 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         isRecording=false
+        super.onDestroy()
     }
 
     /************************************UI monitoring*******************************************/
@@ -111,7 +111,7 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
 
     /***********************************Map monitoring*******************************************/
 
-    override fun proceedAdditionalOnMapReadyActions() {
+    override fun onMapReadyActionsFinished() {
         this.map?.setInfoWindowAdapter(this)
         this.map?.setOnInfoWindowClickListener(this)
     }

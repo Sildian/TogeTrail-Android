@@ -20,6 +20,7 @@ import io.ticofab.androidgpxparser.parser.GPXParser
 import kotlinx.android.synthetic.main.activity_trail.*
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
+import java.util.*
 
 /*************************************************************************************************
  * This activity monitors the trails and lets the user see or edit a trail
@@ -61,7 +62,7 @@ class TrailActivity : AppCompatActivity() {
     /**************************************Data**************************************************/
 
     private var currentAction= ACTION_TRAIL_SEE                 //Action defining what the user is performing
-    private var trail: Trail?=null                               //Current trail shown
+    private var trail: Trail?=null                              //Current trail shown
 
     /**********************************UI component**********************************************/
 
@@ -125,6 +126,10 @@ class TrailActivity : AppCompatActivity() {
                 this.currentAction=
                     intent.getIntExtra(MainActivity.KEY_BUNDLE_TRAIL_ACTION, ACTION_TRAIL_SEE)
             }
+            if(intent.hasExtra(MainActivity.KEY_BUNDLE_TRAIL)){
+                this.trail=
+                    intent.getParcelableExtra(MainActivity.KEY_BUNDLE_TRAIL)
+            }
         }
     }
 
@@ -140,7 +145,7 @@ class TrailActivity : AppCompatActivity() {
                 val gpx = gpxParser.parse(inputStream)
                 this.trail=
                     TrailFactory.buildFromGpx(gpx)
-                this.fragment.updateTrailAndShowInfo(this.trail)
+                this.fragment.updateTrailAndShowTrackAndInfo(this.trail)
             }
 
             /*Handles exceptions*/
@@ -169,7 +174,7 @@ class TrailActivity : AppCompatActivity() {
 
     private fun updateTrail(trail: Trail){
         this.trail=trail
-        this.fragment.updateTrail(this.trail)
+        this.fragment.updateTrailAndShowTrack(this.trail)
     }
 
     fun updateTrailAndSave(trail:Trail){
@@ -177,6 +182,7 @@ class TrailActivity : AppCompatActivity() {
         /*Updates the trail*/
 
         this.trail=trail
+        this.trail?.lastUpdate= Date()
 
         /*Shows a progress dialog*/
 
@@ -251,8 +257,10 @@ class TrailActivity : AppCompatActivity() {
 
     private fun startTrailAction(){
         when(this.currentAction){
-            ACTION_TRAIL_SEE ->
+            ACTION_TRAIL_SEE -> {
                 showFragment(ID_FRAGMENT_TRAIL_DETAIL)
+                this.fragment.updateTrail(this.trail)
+            }
             ACTION_TRAIL_CREATE_FROM_GPX ->{
                 showFragment(ID_FRAGMENT_TRAIL_DETAIL)
                 startLoadGpx()

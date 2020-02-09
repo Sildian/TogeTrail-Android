@@ -27,7 +27,6 @@ class TrailMapDetailFragment : BaseTrailMapFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
         super.onCreateView(inflater, container, savedInstanceState)
         Log.d(TAG_FRAGMENT, "Fragment '${javaClass.simpleName}' created")
-        showTrailTrackOnMap()
         return this.layout
     }
 
@@ -51,8 +50,8 @@ class TrailMapDetailFragment : BaseTrailMapFragment() {
 
     /***********************************Map monitoring*******************************************/
 
-    override fun proceedAdditionalOnMapReadyActions() {
-
+    override fun onMapReadyActionsFinished() {
+        showTrailTrackOnMap()
     }
 
     override fun onMapClick(point: LatLng?) {
