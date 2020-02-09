@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_margin="@dimen/components_margin_medium"
+            android:layout_margin="@dimen/components_margin_small"
             android:background="@drawable/shape_corners_round_color_white">
 
             <TextView
@@ -56,7 +56,7 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/components_margin_medium"
+            android:layout_margin="@dimen/components_margin_small"
             app:cardCornerRadius="@dimen/components_corner_medium"
             app:cardElevation="0dp">
 
@@ -112,7 +112,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_margin="@dimen/components_margin_medium"
+            android:layout_margin="@dimen/components_margin_small"
             android:padding="@dimen/components_margin_medium"
             android:background="@drawable/shape_corners_round_color_white">
 
@@ -179,7 +179,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_margin="@dimen/components_margin_medium"
+            android:layout_margin="@dimen/components_margin_small"
             android:background="@drawable/shape_corners_round_color_white">
 
             <TextView

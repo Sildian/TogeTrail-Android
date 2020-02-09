@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
@@ -68,6 +69,7 @@ class TrailActivity : AppCompatActivity() {
 
     private val toolbar by lazy {activity_trail_toolbar}
     private lateinit var fragment: BaseTrailMapFragment
+    private lateinit var progressDialog:AlertDialog
 
     /************************************Life cycle**********************************************/
 
@@ -186,8 +188,8 @@ class TrailActivity : AppCompatActivity() {
 
         /*Shows a progress dialog*/
 
-        val progressDialog=DialogHelper.createProgressDialog(this)
-        progressDialog.show()
+        this.progressDialog=DialogHelper.createProgressDialog(this)
+        this.progressDialog.show()
 
         /*If the trail has no id, it means it was not created in the database yet. Then creates it.*/
 
@@ -340,9 +342,11 @@ class TrailActivity : AppCompatActivity() {
 
     private fun handleTrailInfoEditResult(resultCode: Int, data: Intent?){
         if(resultCode== Activity.RESULT_OK){
-            if(data!=null&&data.hasExtra(KEY_BUNDLE_TRAIL)) {
-                val updatedTrail = data.getParcelableExtra<Trail>(KEY_BUNDLE_TRAIL)!!
-                updateTrail(updatedTrail)
+            if(data!=null){
+                if(data.hasExtra(KEY_BUNDLE_TRAIL)) {
+                    val updatedTrail = data.getParcelableExtra<Trail>(KEY_BUNDLE_TRAIL)!!
+                    updateTrail(updatedTrail)
+                }
             }
         }
     }

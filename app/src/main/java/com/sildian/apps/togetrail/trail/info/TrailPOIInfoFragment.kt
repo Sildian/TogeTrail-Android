@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.NumberUtilities
@@ -38,6 +40,8 @@ class TrailPOIInfoFragment (
 
     private lateinit var layout:View
     private val nameText by lazy {layout.fragment_trail_poi_info_text_name}
+    private val photoText by lazy {layout.fragment_trail_poi_info_text_photo}
+    private val photoImageView by lazy {layout.fragment_trail_poi_info_image_view_photo}
     private val editButton by lazy {layout.fragment_trail_poi_info_button_edit}
     private val elevationText by lazy {layout.fragment_trail_poi_info_text_elevation}
     private val descriptionText by lazy {layout.fragment_trail_poi_info_text_description}
@@ -58,6 +62,7 @@ class TrailPOIInfoFragment (
         initializeEditButton()
         initializeElevationText()
         initializeDescriptionText()
+        updatePhoto()
     }
 
     private fun initializeNameText(){
@@ -89,6 +94,31 @@ class TrailPOIInfoFragment (
             this.descriptionText.text=description
         }else{
             this.descriptionText.setText(R.string.message_no_description_available)
+        }
+    }
+
+    private fun updatePhoto(){
+        Glide.with(context!!)
+            .load(this.trailPointOfInterest?.photoUrl)
+            .apply(RequestOptions.fitCenterTransform())
+            .placeholder(R.drawable.ic_trail_black)
+            .into(this.photoImageView)
+        updatePhotoVisibility()
+    }
+
+    private fun updatePhotoVisibility() {
+
+        /*If no photo is available, shows a text to notify the user*/
+
+        if (this.trailPointOfInterest?.photoUrl.isNullOrEmpty()) {
+            this.photoText.visibility = View.VISIBLE
+            this.photoImageView.visibility = View.INVISIBLE
+        }
+
+        /*Else shows the image*/
+        else {
+            this.photoText.visibility = View.INVISIBLE
+            this.photoImageView.visibility = View.VISIBLE
         }
     }
 }

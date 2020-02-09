@@ -7,10 +7,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.common.utils.storageHelpers.ImageFirebaseStorageHelper
+import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.trail.map.TrailActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
+import com.sildian.apps.togetrail.trail.model.support.TrailFirebaseQueries
 import kotlinx.android.synthetic.main.activity_trail_info_edit.*
 
 /*************************************************************************************************
@@ -26,6 +30,7 @@ class TrailInfoEditActivity : AppCompatActivity() {
         /**Logs**/
         private const val TAG_ACTIVITY="TAG_ACTIVITY"
         private const val TAG_MENU="TAG_MENU"
+        private const val TAG_STORAGE="TAG_STORAGE"
 
         /**Fragments Ids***/
         private const val ID_FRAGMENT_TRAIL_INFO_EDIT=1
@@ -38,15 +43,21 @@ class TrailInfoEditActivity : AppCompatActivity() {
 
     /**************************************Data**************************************************/
 
-    private var currentAction= ACTION_TRAIL_EDIT_INFO           //Action defining what the user is performing
-    private var trail: Trail?=null                              //Current trail to be edited
-    private var trailPointOfInterest: TrailPointOfInterest?=null //Current trailPointOfInterest to be edited
-    private var trailPointOfInterestPosition:Int?=null          //The trailPoi's position within the trailTrack
+    private var currentAction= ACTION_TRAIL_EDIT_INFO               //Action defining what the user is performing
+    private var trail: Trail?=null                                  //Current trail to be edited
+    private var trailPointOfInterest: TrailPointOfInterest?=null    //Current trailPointOfInterest to be edited
+    private var trailPointOfInterestPosition:Int?=null              //The trailPoi's position within the trailTrack
 
     /**********************************UI component**********************************************/
 
     private val toolbar by lazy {activity_trail_info_edit_toolbar}
     private lateinit var fragment:BaseTrailInfoEditFragment
+    private lateinit var progressDialog:AlertDialog
+
+    /**********************************Pictures support******************************************/
+
+    private var imagePathToUploadIntoDatabase:String?=null      //Path of image to upload into the database
+    private var imagePathToDeleteFromDatabase:String?=null      //Path of image to delete from the database
 
     /************************************Life cycle**********************************************/
 
@@ -123,12 +134,119 @@ class TrailInfoEditActivity : AppCompatActivity() {
 
     fun updateTrailAndSave(trail: Trail){
         updateTrail(trail)
-        finishOk()
+        this.progressDialog=DialogHelper.createProgressDialog(this)
+        this.progressDialog.show()
+        saveTrail()
     }
 
     fun updateTrailPoiAndSave(trailPointOfInterest: TrailPointOfInterest){
         updateTrailPointOfInterest(trailPointOfInterest)
-        finishOk()
+        this.progressDialog=DialogHelper.createProgressDialog(this)
+        this.progressDialog.show()
+        if(this.imagePathToUploadIntoDatabase!=null) {
+            saveImage()
+        }
+        else{
+            saveTrail()
+        }
+        if(this.imagePathToDeleteFromDatabase!=null) {
+            deleteImage()
+        }
+    }
+
+    private fun saveImage(){
+
+        /*Uploads the image matching the path indicated within the image path to upload*/
+
+        ImageFirebaseStorageHelper.uploadImage(this.imagePathToUploadIntoDatabase.toString())
+            .addOnSuccessListener { uploadTask ->
+                Log.d(TAG_STORAGE, "Uploaded image to database with success")
+
+                /*When success, fetches the url of the created image in the database*/
+
+                uploadTask?.storage?.downloadUrl
+                    ?.addOnSuccessListener { url ->
+                        Log.d(TAG_STORAGE, "Image uploaded with url '${url}'")
+
+                        /*Then updates the trailPOI with this url*/
+
+                        this.trailPointOfInterest?.photoUrl=url.toString()
+                        updateTrailPointOfInterest(this.trailPointOfInterest!!)
+                        saveTrail()
+                    }
+                    ?.addOnFailureListener { e ->
+                        //TODO handle
+                        Log.w(TAG_STORAGE, e.message.toString())
+                        saveTrail()
+                    }
+            }
+            .addOnFailureListener { e ->
+                //TODO handle
+                Log.w(TAG_STORAGE, e.message.toString())
+                saveTrail()
+            }
+    }
+
+    private fun deleteImage(){
+
+        /*Deletes the image matching the url indicated within the image path to delete*/
+
+        ImageFirebaseStorageHelper.deleteImage(this.imagePathToDeleteFromDatabase.toString())
+            .addOnSuccessListener {
+                Log.d(TAG_STORAGE, "Deleted image from database with success")
+            }
+            .addOnFailureListener { e ->
+                //TODO handle
+                Log.w(TAG_STORAGE, e.message.toString())
+            }
+    }
+
+    private fun saveTrail(){
+
+        /*If the trail has no id, it means it was not created in the database yet. Then creates it.*/
+
+        if(this.trail?.id==null){
+            TrailFirebaseQueries.createTrail(this.trail!!)
+                .addOnSuccessListener {
+                    Log.d(TAG_STORAGE, "Trail created in the database")
+                    this.progressDialog.dismiss()
+                    //TODO show a snackbar when finished
+                    finishOk()
+                }
+                .addOnFailureListener { e ->
+                    Log.w(TAG_STORAGE, e.message.toString())
+                    this.progressDialog.dismiss()
+                    //TODO handle
+                    finishCancel()
+                }
+
+            /*Else updates it*/
+
+        }else{
+            TrailFirebaseQueries.updateTrail(this.trail!!)
+                .addOnSuccessListener {
+                    Log.d(TAG_STORAGE, "Trail updated in the database")
+                    this.progressDialog.dismiss()
+                    //TODO show a snackbar when finished
+                    finishOk()
+                }
+                .addOnFailureListener { e ->
+                    Log.w(TAG_STORAGE, e.message.toString())
+                    this.progressDialog.dismiss()
+                    //TODO handle
+                    finishCancel()
+                }
+        }
+    }
+
+    fun updateImagePathToUploadIntoDatabase(imagePath:String?){
+        this.imagePathToUploadIntoDatabase=imagePath
+    }
+
+    fun updateImagePathToDeleteFromDatabase(imagePath:String){
+        if(imagePath.startsWith("https://")){
+            this.imagePathToDeleteFromDatabase=imagePath
+        }
     }
 
     /*************************************UI monitoring******************************************/

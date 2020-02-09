@@ -65,7 +65,8 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
 
     /**********************************Pictures support******************************************/
 
-    private lateinit var easyImage: EasyImage       //EasyImage support allowing to pick pictures on the device
+    //EasyImage support allowing to pick pictures on the device
+    private lateinit var easyImage: EasyImage
 
     /************************************Life cycle**********************************************/
 
@@ -218,12 +219,18 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
 
     private fun addPhoto(filePath:String){
         this.trailPointOfInterest?.photoUrl=filePath
+        (activity as TrailInfoEditActivity)
+            .updateImagePathToUploadIntoDatabase(this.trailPointOfInterest?.photoUrl)
         updatePhoto()
     }
 
     private fun deletePhoto(){
-        this.trailPointOfInterest?.photoUrl=null
-        updatePhoto()
+        if(!this.trailPointOfInterest?.photoUrl.isNullOrEmpty()) {
+            (activity as TrailInfoEditActivity)
+                .updateImagePathToDeleteFromDatabase(this.trailPointOfInterest?.photoUrl!!)
+            this.trailPointOfInterest.photoUrl = null
+            updatePhoto()
+        }
     }
 
     /***********************************Permissions**********************************************/
