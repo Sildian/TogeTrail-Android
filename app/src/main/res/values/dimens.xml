@@ -20,6 +20,11 @@
     <dimen name="text_size_body">12sp</dimen>
     <dimen name="text_size_title">15sp</dimen>
 
+    <!-- Images -->
+    <dimen name="image_size_small">16dp</dimen>
+    <dimen name="image_size_medium">48dp</dimen>
+    <dimen name="image_size_large">192dp</dimen>
+
     <!-- BottomSheets -->
     <dimen name="bottom_sheet_peek_height">112dp</dimen>
 

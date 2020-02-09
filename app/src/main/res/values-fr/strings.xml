@@ -54,6 +54,7 @@
     <string name="label_trail_poi_elevation">Altitude</string>
 
     <!-- Examples for layout preview -->
+    <string name="example_image_content_description">Image</string>
     <!-- Location -->
     <string name="example_location">Chamonix, Savoie, France</string>
     <!-- Trail -->
@@ -76,6 +77,7 @@
     <string name="message_trail_poi_name_unknown">Point d\'intérêt inconnu</string>
     <string name="message_no_location_available">L\'emplacement n\'est pas disponible</string>
     <string name="message_no_description_available">Aucune description n\'est disponible</string>
+    <string name="message_no_photo_available">Aucune photo n\'est disponible</string>
     <string name="message_wait">Un tout petit peu d\'attente…</string>
 
     <!-- Metrics -->

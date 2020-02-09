@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 
 android {
@@ -74,4 +75,11 @@ dependencies {
 
     //Circular SeekBar
     implementation 'com.sdsmdg.harjot:croller:1.0.7'
+
+    //EasyImage
+    implementation 'com.github.jkwiecien:EasyImage:3.0.3'
+
+    //Glide
+    implementation 'com.github.bumptech.glide:glide:4.10.0'
+    kapt 'com.github.bumptech.glide:compiler:4.10.0'
 }

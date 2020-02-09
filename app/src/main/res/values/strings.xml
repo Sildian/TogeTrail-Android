@@ -55,6 +55,7 @@
     <string name="label_trail_poi_elevation">Elevation</string>
 
     <!-- Examples for layout preview -->
+    <string name="example_image_content_description">Image</string>
     <!-- Location -->
     <string name="example_location">Chamonix, Savoie, France</string>
     <!-- Trail -->
@@ -77,6 +78,7 @@
     <string name="message_trail_poi_name_unknown">Unknown point of interest</string>
     <string name="message_no_location_available">The location is unknown</string>
     <string name="message_no_description_available">No description is available</string>
+    <string name="message_no_photo_available">No photo is available</string>
     <string name="message_wait">Just a bit of waiting…</string>
 
     <!-- Metrics -->

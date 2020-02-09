@@ -1,16 +1,23 @@
 package com.sildian.apps.togetrail.trail.infoEdit
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.sdsmdg.harjot.crollerTest.Croller
 
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.NumberUtilities
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 import kotlinx.android.synthetic.main.fragment_trail_poi_info_edit.view.*
+import pl.aprilapps.easyphotopicker.*
 
 /*************************************************************************************************
  * Allows to edit information about a trailPointOfInterest
@@ -27,7 +34,17 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
     companion object{
 
         /**Logs**/
-        const val TAG_FRAGMENT="TAG_FRAGMENT"
+        private const val TAG_FRAGMENT="TAG_FRAGMENT"
+        private const val TAG_PERMISSION="TAG_PERMISSION"
+        private const val TAG_PHOTO="TAG_PHOTO"
+
+        /**Request keys for permissions**/
+        private const val KEY_REQUEST_PERMISSION_WRITE=2001
+        private const val KEY_REQUEST_PERMISSION_WRITE_AND_CAMERA=2002
+
+        /**Bundle keys for permissions**/
+        private const val KEY_BUNDLE_PERMISSION_WRITE= Manifest.permission.WRITE_EXTERNAL_STORAGE
+        private const val KEY_BUNDLE_PERMISSION_CAMERA= Manifest.permission.CAMERA
 
         /**Values max**/
         private const val VALUE_MAX_ALTITUDE=4000       //Max value for an altitude (in meters)
@@ -37,15 +54,25 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
 
     private lateinit var layout:View
     private val nameTextField by lazy {layout.fragment_trail_poi_info_edit_text_field_name}
+    private val photoText by lazy {layout.fragment_trail_poi_info_edit_text_photo}
+    private val photoImageView by lazy {layout.fragment_trail_poi_info_edit_image_view_photo}
+    private val deletePhotoButton by lazy {layout.fragment_trail_poi_info_edit_button_delete_photo}
+    private val addPhotoButton by lazy {layout.fragment_trail_poi_info_edit_button_add_photo}
+    private val takePhotoButton by lazy {layout.fragment_trail_poi_info_edit_button_take_photo}
     private val metricsCroller by lazy {layout.fragment_trail_poi_info_edit_croller_metrics}
     private val elevationText by lazy {layout.fragment_trail_poi_info_edit_text_elevation}
     private val descriptionTextField by lazy {layout.fragment_trail_poi_info_edit_text_field_description}
+
+    /**********************************Pictures support******************************************/
+
+    private lateinit var easyImage: EasyImage       //EasyImage support allowing to pick pictures on the device
 
     /************************************Life cycle**********************************************/
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Log.d(TAG_FRAGMENT, "Fragment '${javaClass.simpleName}' created")
         this.layout= inflater.inflate(R.layout.fragment_trail_poi_info_edit, container, false)
+        initializeEasyImage()
         initializeAllUIComponents()
         return this.layout
     }
@@ -62,13 +89,35 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
 
     private fun initializeAllUIComponents(){
         initializeNameTextField()
+        initializeDeletePhotoButton()
+        initializeAddPhotoButton()
+        initializeTakePhotoButton()
         initializeMetricsCroller()
         initializeElevationText()
         initializeDescriptionTextField()
+        updatePhoto()
     }
 
     private fun initializeNameTextField(){
         this.nameTextField.setText(this.trailPointOfInterest?.name)
+    }
+
+    private fun initializeDeletePhotoButton(){
+        this.deletePhotoButton.setOnClickListener {
+            deletePhoto()
+        }
+    }
+
+    private fun initializeAddPhotoButton(){
+        this.addPhotoButton.setOnClickListener {
+            requestWritePermission()
+        }
+    }
+
+    private fun initializeTakePhotoButton(){
+        this.takePhotoButton.setOnClickListener {
+            requestWriteAndCameraPermission()
+        }
     }
 
     private fun initializeMetricsCroller(){
@@ -84,6 +133,50 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
 
     private fun initializeDescriptionTextField(){
         this.descriptionTextField.setText(this.trailPointOfInterest?.description)
+    }
+
+    private fun updatePhoto(){
+        Glide.with(context!!)
+            .load(this.trailPointOfInterest?.photoUrl)
+            .apply(RequestOptions.fitCenterTransform())
+            .placeholder(R.drawable.ic_trail_black)
+            .into(this.photoImageView)
+        updatePhotoVisibility()
+    }
+
+    private fun updatePhotoVisibility(){
+
+        /*If no photo is available, shows a text to notify the user*/
+
+        if(this.trailPointOfInterest?.photoUrl.isNullOrEmpty()){
+            this.photoText.visibility=View.VISIBLE
+            this.photoImageView.visibility=View.INVISIBLE
+            this.deletePhotoButton.visibility=View.INVISIBLE
+        }
+
+        /*Else shows the image*/
+
+        else{
+            this.photoText.visibility=View.INVISIBLE
+            this.photoImageView.visibility=View.VISIBLE
+            this.deletePhotoButton.visibility=View.VISIBLE
+        }
+
+        /*If the permission to add photos is granted, shows the buttons allowing to add photos*/
+
+        if(hasWritePermission()){
+            this.addPhotoButton.visibility=View.VISIBLE
+        }
+        else{
+            this.addPhotoButton.visibility=View.INVISIBLE
+        }
+
+        if(hasWriteAndCameraPermission()){
+            this.takePhotoButton.visibility=View.VISIBLE
+        }
+        else{
+            this.takePhotoButton.visibility=View.INVISIBLE
+        }
     }
 
     /*****************************Metrics monitoring with croller*********************************/
@@ -112,5 +205,167 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
         val ascentCroller =
             NumberUtilities.displayNumberWithMetric(elevation?.toDouble()?:0.toDouble(), 0, metric)
         this.metricsCroller.label = ascentCroller
+    }
+
+    /*******************************Photos monitoring********************************************/
+
+    private fun initializeEasyImage(){
+        this.easyImage= EasyImage.Builder(context!!)
+            .setChooserType(ChooserType.CAMERA_AND_GALLERY)
+            .allowMultiple(false)
+            .build()
+    }
+
+    private fun addPhoto(filePath:String){
+        this.trailPointOfInterest?.photoUrl=filePath
+        updatePhoto()
+    }
+
+    private fun deletePhoto(){
+        this.trailPointOfInterest?.photoUrl=null
+        updatePhoto()
+    }
+
+    /***********************************Permissions**********************************************/
+
+    private fun requestWritePermission(){
+        if(Build.VERSION.SDK_INT>=23
+            && activity?.checkSelfPermission(KEY_BUNDLE_PERMISSION_WRITE)!= PackageManager.PERMISSION_GRANTED){
+
+            /*If permission not already granted, requests it*/
+
+            if(shouldShowRequestPermissionRationale(KEY_BUNDLE_PERMISSION_WRITE)){
+
+                //TODO handle
+
+            }else{
+                requestPermissions(
+                    arrayOf(KEY_BUNDLE_PERMISSION_WRITE), KEY_REQUEST_PERMISSION_WRITE)
+            }
+        }else{
+
+            /*If SDK <23 or permission already granted, directly proceeds the action*/
+
+            startAddPhoto()
+        }
+    }
+
+    private fun requestWriteAndCameraPermission(){
+        if(Build.VERSION.SDK_INT>=23
+            &&(activity?.checkSelfPermission(KEY_BUNDLE_PERMISSION_WRITE)!= PackageManager.PERMISSION_GRANTED
+                    ||activity?.checkSelfPermission(KEY_BUNDLE_PERMISSION_CAMERA)!= PackageManager.PERMISSION_GRANTED)){
+
+            /*If permission not already granted, requests it*/
+
+            if(shouldShowRequestPermissionRationale(KEY_BUNDLE_PERMISSION_WRITE)
+                || shouldShowRequestPermissionRationale(KEY_BUNDLE_PERMISSION_CAMERA)){
+
+                //TODO handle
+
+            }else{
+                requestPermissions(
+                    arrayOf(
+                        KEY_BUNDLE_PERMISSION_WRITE,
+                        KEY_BUNDLE_PERMISSION_CAMERA
+                    ),
+                    KEY_REQUEST_PERMISSION_WRITE_AND_CAMERA
+                )
+            }
+        }else{
+
+            /*If SDK <23 or permission already granted, directly proceeds the action*/
+
+            startTakePhoto()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            KEY_REQUEST_PERMISSION_WRITE->if(grantResults.isNotEmpty()){
+                when(grantResults[0]) {
+                    PackageManager.PERMISSION_GRANTED -> {
+                        Log.d(
+                            TAG_PERMISSION,
+                            "Permission '${KEY_BUNDLE_PERMISSION_WRITE}' granted"
+                        )
+                        startAddPhoto()
+                    }
+                    PackageManager.PERMISSION_DENIED -> {
+                        //TODO handle
+                        Log.d(
+                            TAG_PERMISSION,
+                            "Permission '${KEY_BUNDLE_PERMISSION_WRITE}' denied"
+                        )
+                    }
+                }
+            }
+            KEY_REQUEST_PERMISSION_WRITE_AND_CAMERA ->if(grantResults.isNotEmpty()){
+                when(grantResults[0]){
+                    PackageManager.PERMISSION_GRANTED -> {
+                        Log.d(
+                            TAG_PERMISSION,
+                            "Permission '${KEY_BUNDLE_PERMISSION_WRITE}' granted")
+                        Log.d(
+                            TAG_PERMISSION,
+                            "Permission '${KEY_BUNDLE_PERMISSION_CAMERA}' granted")
+                        startTakePhoto()
+                    }
+                    PackageManager.PERMISSION_DENIED -> {
+                        //TODO handle
+                        Log.d(
+                            TAG_PERMISSION,
+                            "Permission '${KEY_BUNDLE_PERMISSION_WRITE}' denied")
+                        Log.d(
+                            TAG_PERMISSION,
+                            "Permission '${KEY_BUNDLE_PERMISSION_CAMERA}' denied")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun hasWritePermission():Boolean{
+        return (Build.VERSION.SDK_INT<23
+                ||(activity?.checkSelfPermission(KEY_BUNDLE_PERMISSION_WRITE)== PackageManager.PERMISSION_GRANTED))
+    }
+
+    private fun hasWriteAndCameraPermission():Boolean{
+        return (Build.VERSION.SDK_INT<23
+                ||(activity?.checkSelfPermission(KEY_BUNDLE_PERMISSION_WRITE)== PackageManager.PERMISSION_GRANTED
+                && activity?.checkSelfPermission(KEY_BUNDLE_PERMISSION_CAMERA)== PackageManager.PERMISSION_GRANTED))
+    }
+
+    /***********************************Navigation***********************************************/
+
+    private fun startAddPhoto(){
+        this.easyImage.openGallery(this)
+    }
+
+    private fun startTakePhoto(){
+        this.easyImage.openCameraForImage(this)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        handleNewPhotoResult(requestCode, resultCode, data)
+    }
+
+    private fun handleNewPhotoResult(requestCode: Int, resultCode: Int, data: Intent?){
+
+        this.easyImage.handleActivityResult(requestCode, resultCode, data, activity!!, object: DefaultCallback(){
+
+            override fun onMediaFilesPicked(imageFiles: Array<MediaFile>, source: MediaSource) {
+                Log.d(TAG_PHOTO, "Successfully added new photo")
+                for(image in imageFiles){
+                    addPhoto(image.file.toURI().path)
+                }
+            }
+
+            override fun onImagePickerError(error: Throwable, source: MediaSource) {
+                super.onImagePickerError(error, source)
+                Log.w(TAG_PHOTO, error.message.toString())
+                //TODO handle
+            }
+        })
     }
 }

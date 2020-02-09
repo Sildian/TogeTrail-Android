@@ -31,7 +31,7 @@ class TrailPOIInfoFragment (
     companion object{
 
         /**Logs**/
-        const val TAG_FRAGMENT="TAG_FRAGMENT"
+        private const val TAG_FRAGMENT="TAG_FRAGMENT"
     }
 
     /**********************************UI component**********************************************/

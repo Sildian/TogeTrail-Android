@@ -33,15 +33,15 @@ class TrailActivity : AppCompatActivity() {
     companion object{
 
         /**Logs**/
-        const val TAG_ACTIVITY="TAG_ACTIVITY"
-        const val TAG_MENU="TAG_MENU"
-        const val TAG_FILE="TAG_FILE"
-        const val TAG_STORAGE="TAG_STORAGE"
+        private const val TAG_ACTIVITY="TAG_ACTIVITY"
+        private const val TAG_MENU="TAG_MENU"
+        private const val TAG_FILE="TAG_FILE"
+        private const val TAG_STORAGE="TAG_STORAGE"
 
         /**Fragments Ids***/
-        const val ID_FRAGMENT_TRAIL_DETAIL=1
-        const val ID_FRAGMENT_TRAIL_DRAW=2
-        const val ID_FRAGMENT_TRAIL_RECORD=3
+        private const val ID_FRAGMENT_TRAIL_DETAIL=1
+        private const val ID_FRAGMENT_TRAIL_DRAW=2
+        private const val ID_FRAGMENT_TRAIL_RECORD=3
 
         /**Trail actions defining what the user is performing**/
         const val ACTION_TRAIL_SEE=1
@@ -49,14 +49,14 @@ class TrailActivity : AppCompatActivity() {
         const val ACTION_TRAIL_DRAW=3
         const val ACTION_TRAIL_RECORD=4
 
+        /**Request keys for intent**/
+        private const val KEY_REQUEST_LOAD_GPX=1001
+        private const val KEY_REQUEST_EDIT_TRAIL_INFO=1002
+
         /**Bundle keys for intent**/
         const val KEY_BUNDLE_TRAIL_EDIT_ACTION="KEY_BUNDLE_TRAIL_EDIT_ACTION"
         const val KEY_BUNDLE_TRAIL="KEY_BUNDLE_TRAIL"
         const val KEY_BUNDLE_TRAIL_POI_POSITION="KEY_BUNDLE_TRAIL_POI_POSITION"
-
-        /**Request keys for intent**/
-        const val KEY_REQUEST_LOAD_GPX=1001
-        const val KEY_REQUEST_EDIT_TRAIL_INFO=1002
     }
 
     /**************************************Data**************************************************/

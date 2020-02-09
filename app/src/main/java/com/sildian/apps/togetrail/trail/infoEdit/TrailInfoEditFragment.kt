@@ -32,7 +32,7 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
     companion object{
 
         /**Logs**/
-        const val TAG_FRAGMENT="TAG_FRAGMENT"
+        private const val TAG_FRAGMENT="TAG_FRAGMENT"
 
         /**Metrics to set with the croller**/
         private const val METRIC_DURATION=0

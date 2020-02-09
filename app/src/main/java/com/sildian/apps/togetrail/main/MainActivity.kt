@@ -40,27 +40,29 @@ class MainActivity :
     companion object{
 
         /**Logs**/
-        const val TAG_ACTIVITY="TAG_ACTIVITY"
-        const val TAG_MENU="TAG_MENU"
-        const val TAG_LOGIN="TAG_LOGIN"
-        const val TAG_STORAGE="TAG_STORAGE"
-        const val TAG_PERMISSION="TAG_PERMISSION"
+        private const val TAG_ACTIVITY="TAG_ACTIVITY"
+        private const val TAG_MENU="TAG_MENU"
+        private const val TAG_LOGIN="TAG_LOGIN"
+        private const val TAG_STORAGE="TAG_STORAGE"
+        private const val TAG_PERMISSION="TAG_PERMISSION"
 
         /**Fragments Ids***/
-        const val ID_FRAGMENT_MAP=1
-        const val ID_FRAGMENT_TRAILS=2
-        const val ID_FRAGMENT_EVENTS=3
+        private const val ID_FRAGMENT_MAP=1
+        private const val ID_FRAGMENT_TRAILS=2
+        private const val ID_FRAGMENT_EVENTS=3
+
+        /**Request keys for activities**/
+        private const val KEY_REQUEST_LOGIN=1001
 
         /**Request keys for permissions**/
-        const val KEY_REQUEST_LOGIN=1001
-        const val KEY_REQUEST_PERMISSION_LOCATION=2001
-
-        /**Bundle keys for permissions**/
-        const val KEY_BUNDLE_PERMISSION_LOCATION=Manifest.permission.ACCESS_FINE_LOCATION
+        private const val KEY_REQUEST_PERMISSION_LOCATION=2001
 
         /**Bundle keys for intents**/
         const val KEY_BUNDLE_TRAIL_ACTION="KEY_BUNDLE_TRAIL_ACTION"
         const val KEY_BUNDLE_TRAIL="KEY_BUNDLE_TRAIL"
+
+        /**Bundle keys for permissions**/
+        private const val KEY_BUNDLE_PERMISSION_LOCATION=Manifest.permission.ACCESS_FINE_LOCATION
     }
 
     /****************************************Data************************************************/

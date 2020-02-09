@@ -24,12 +24,12 @@ class TrailInfoEditActivity : AppCompatActivity() {
     companion object{
 
         /**Logs**/
-        const val TAG_ACTIVITY="TAG_ACTIVITY"
-        const val TAG_MENU="TAG_MENU"
+        private const val TAG_ACTIVITY="TAG_ACTIVITY"
+        private const val TAG_MENU="TAG_MENU"
 
         /**Fragments Ids***/
-        const val ID_FRAGMENT_TRAIL_INFO_EDIT=1
-        const val ID_FRAGMENT_TRAIL_POI_INFO_EDIT=2
+        private const val ID_FRAGMENT_TRAIL_INFO_EDIT=1
+        private const val ID_FRAGMENT_TRAIL_POI_INFO_EDIT=2
 
         /**Trail actions defining what the user is performing**/
         const val ACTION_TRAIL_EDIT_INFO=1
