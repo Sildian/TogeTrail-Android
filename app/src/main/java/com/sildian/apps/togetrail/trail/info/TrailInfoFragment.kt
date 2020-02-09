@@ -43,6 +43,9 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
     private val levelText by lazy {layout.fragment_trail_info_text_level}
     private val typeText by lazy {layout.fragment_trail_info_text_type}
     private val durationText by lazy {layout.fragment_trail_info_text_duration}
+    private val photoText by lazy {layout.fragment_trail_info_text_photo}
+    private val photosRecyclerView by lazy {layout.fragment_trail_info_recycler_view_photos}
+    private lateinit var photoAdapter:PhotoAdapter
     private val ascentText by lazy {layout.fragment_trail_info_text_ascent}
     private val descentText by lazy {layout.fragment_trail_info_text_descent}
     private val distanceText by lazy {layout.fragment_trail_info_text_distance}
@@ -50,6 +53,10 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
     private val minElevationText by lazy {layout.fragment_trail_info_text_min_elevation}
     private val locationText by lazy {layout.fragment_trail_info_text_location}
     private val descriptionText by lazy {layout.fragment_trail_info_text_description}
+
+    /**************************************Data**************************************************/
+
+    private val photosUrls:ArrayList<String> = arrayListOf()        //The list of photos urls of the trail
 
     /************************************Life cycle**********************************************/
 
@@ -69,6 +76,7 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
         initializeLevelText()
         initializeTypeText()
         initializeDuration()
+        initializePhotosRecyclerView()
         initializeAscentText()
         initializeDescentText()
         initializeDistanceText()
@@ -76,6 +84,7 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
         initializeMinElevationText()
         initializeLocationText()
         initializeDescriptionText()
+        updatePhotos()
     }
 
     private fun initializeNameText(){
@@ -147,6 +156,11 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
             if(duration!=null)
                 DateUtilities.displayDuration(duration.toLong(), hourMetric, minuteMetric)
             else unkownText
+    }
+
+    private fun initializePhotosRecyclerView(){
+        this.photoAdapter= PhotoAdapter(this.photosUrls)
+        this.photosRecyclerView.adapter=this.photoAdapter
     }
 
     private fun initializeAscentText(){
@@ -224,6 +238,28 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
             this.descriptionText.text=description
         }else{
             this.descriptionText.setText(R.string.message_no_description_available)
+        }
+    }
+
+    private fun updatePhotos(){
+        this.photosUrls.clear()
+        this.trail?.trailTrack?.trailPointsOfInterest?.forEach { trailPointOfInteret ->
+            if(!trailPointOfInteret.photoUrl.isNullOrEmpty()){
+                this.photosUrls.add(trailPointOfInteret.photoUrl!!)
+            }
+        }
+        this.photoAdapter.notifyDataSetChanged()
+        updatePhotosVisibility()
+    }
+
+    private fun updatePhotosVisibility(){
+        if(this.photosUrls.isEmpty()){
+            this.photoText.visibility=View.VISIBLE
+            this.photosRecyclerView.visibility=View.INVISIBLE
+        }
+        else{
+            this.photoText.visibility=View.INVISIBLE
+            this.photosRecyclerView.visibility=View.VISIBLE
         }
     }
 }

@@ -92,124 +92,166 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/components_margin_small"
-        android:orientation="horizontal"
-        android:background="@drawable/shape_corners_round_color_white">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/fragment_trail_info_text_ascent"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="@dimen/components_margin_small"
-            android:gravity="center"
-            android:textSize="@dimen/text_size_body"
-            android:text="@string/example_trail_ascent"
-            android:drawableTop="@drawable/ic_ascent"
-            android:drawablePadding="@dimen/components_margin_small"/>
-
-        <TextView
-            android:id="@+id/fragment_trail_info_text_descent"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="@dimen/components_margin_small"
-            android:gravity="center"
-            android:textSize="@dimen/text_size_body"
-            android:text="@string/example_trail_descent"
-            android:drawableTop="@drawable/ic_descent"
-            android:drawablePadding="@dimen/components_margin_small"/>
-
-        <TextView
-            android:id="@+id/fragment_trail_info_text_distance"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="@dimen/components_margin_small"
-            android:gravity="center"
-            android:textSize="@dimen/text_size_body"
-            android:text="@string/example_trail_distance"
-            android:drawableTop="@drawable/ic_distance"
-            android:drawablePadding="@dimen/components_margin_small"/>
-
-        <TextView
-            android:id="@+id/fragment_trail_info_text_max_elevation"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="@dimen/components_margin_small"
-            android:gravity="center"
-            android:textSize="@dimen/text_size_body"
-            android:text="@string/example_trail_max_elevation"
-            android:drawableTop="@drawable/ic_max_elevation"
-            android:drawablePadding="@dimen/components_margin_small"/>
-
-        <TextView
-            android:id="@+id/fragment_trail_info_text_min_elevation"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="@dimen/components_margin_small"
-            android:gravity="center"
-            android:textSize="@dimen/text_size_body"
-            android:text="@string/example_trail_min_elevation"
-            android:drawableTop="@drawable/ic_min_elevation"
-            android:drawablePadding="@dimen/components_margin_small"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/components_margin_small"
-        android:orientation="vertical"
-        android:background="@drawable/shape_corners_round_color_white">
-
-        <TextView
-            android:id="@+id/fragment_trail_info_text_location"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/components_margin_medium"
-            android:gravity="center_vertical"
-            android:textSize="@dimen/text_size_body"
-            android:text="@string/example_location"
-            android:drawableStart="@drawable/ic_location_trail"
-            android:drawablePadding="@dimen/components_margin_small"/>
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/components_margin_small"
+                app:cardCornerRadius="@dimen/components_corner_medium"
+                app:cardElevation="0dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/components_margin_small"
-        android:orientation="vertical"
-        android:background="@drawable/shape_corners_round_color_white">
+                <TextView
+                    android:id="@+id/fragment_trail_info_text_photo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textSize="@dimen/text_size_body"
+                    android:text="@string/message_no_photo_available"
+                    android:drawableStart="@drawable/ic_trail_black"
+                    android:drawablePadding="@dimen/components_margin_small"
+                    android:visibility="invisible"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/components_margin_medium"
-            android:layout_marginBottom="@dimen/components_margin_small"
-            android:layout_marginStart="@dimen/components_margin_medium"
-            android:layout_marginEnd="@dimen/components_margin_medium"
-            android:textSize="@dimen/text_size_title"
-            android:textColor="@color/colorSecondaryDark"
-            android:text="@string/label_trail_description"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/fragment_trail_info_recycler_view_photos"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/image_size_large"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:reverseLayout="false"/>
 
-        <TextView
-            android:id="@+id/fragment_trail_info_text_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/components_margin_small"
-            android:layout_marginBottom="@dimen/components_margin_medium"
-            android:layout_marginStart="@dimen/components_margin_medium"
-            android:layout_marginEnd="@dimen/components_margin_medium"
-            android:textSize="@dimen/text_size_body"
-            android:text="@string/example_trail_description"/>
+            </com.google.android.material.card.MaterialCardView>
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/components_margin_small"
+                android:orientation="horizontal"
+                android:background="@drawable/shape_corners_round_color_white">
+
+                <TextView
+                    android:id="@+id/fragment_trail_info_text_ascent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="@dimen/components_margin_small"
+                    android:gravity="center"
+                    android:textSize="@dimen/text_size_body"
+                    android:text="@string/example_trail_ascent"
+                    android:drawableTop="@drawable/ic_ascent"
+                    android:drawablePadding="@dimen/components_margin_small"/>
+
+                <TextView
+                    android:id="@+id/fragment_trail_info_text_descent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="@dimen/components_margin_small"
+                    android:gravity="center"
+                    android:textSize="@dimen/text_size_body"
+                    android:text="@string/example_trail_descent"
+                    android:drawableTop="@drawable/ic_descent"
+                    android:drawablePadding="@dimen/components_margin_small"/>
+
+                <TextView
+                    android:id="@+id/fragment_trail_info_text_distance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="@dimen/components_margin_small"
+                    android:gravity="center"
+                    android:textSize="@dimen/text_size_body"
+                    android:text="@string/example_trail_distance"
+                    android:drawableTop="@drawable/ic_distance"
+                    android:drawablePadding="@dimen/components_margin_small"/>
+
+                <TextView
+                    android:id="@+id/fragment_trail_info_text_max_elevation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="@dimen/components_margin_small"
+                    android:gravity="center"
+                    android:textSize="@dimen/text_size_body"
+                    android:text="@string/example_trail_max_elevation"
+                    android:drawableTop="@drawable/ic_max_elevation"
+                    android:drawablePadding="@dimen/components_margin_small"/>
+
+                <TextView
+                    android:id="@+id/fragment_trail_info_text_min_elevation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="@dimen/components_margin_small"
+                    android:gravity="center"
+                    android:textSize="@dimen/text_size_body"
+                    android:text="@string/example_trail_min_elevation"
+                    android:drawableTop="@drawable/ic_min_elevation"
+                    android:drawablePadding="@dimen/components_margin_small"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/components_margin_small"
+                android:orientation="vertical"
+                android:background="@drawable/shape_corners_round_color_white">
+
+                <TextView
+                    android:id="@+id/fragment_trail_info_text_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/components_margin_medium"
+                    android:gravity="center_vertical"
+                    android:textSize="@dimen/text_size_body"
+                    android:text="@string/example_location"
+                    android:drawableStart="@drawable/ic_location_trail"
+                    android:drawablePadding="@dimen/components_margin_small"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/components_margin_small"
+                android:orientation="vertical"
+                android:background="@drawable/shape_corners_round_color_white">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/components_margin_medium"
+                    android:layout_marginBottom="@dimen/components_margin_small"
+                    android:layout_marginStart="@dimen/components_margin_medium"
+                    android:layout_marginEnd="@dimen/components_margin_medium"
+                    android:textSize="@dimen/text_size_title"
+                    android:textColor="@color/colorSecondaryDark"
+                    android:text="@string/label_trail_description"/>
+
+                <TextView
+                    android:id="@+id/fragment_trail_info_text_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/components_margin_small"
+                    android:layout_marginBottom="@dimen/components_margin_medium"
+                    android:layout_marginStart="@dimen/components_margin_medium"
+                    android:layout_marginEnd="@dimen/components_margin_medium"
+                    android:textSize="@dimen/text_size_body"
+                    android:text="@string/example_trail_description"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>
