@@ -7,6 +7,9 @@
     <string name="menu_events">Evènements</string>
     <string name="menu_user_profile">Mon profil</string>
     <string name="menu_user_login">Connexion / Déconnexion</string>
+    <string name="menu_user_info">Mes infos</string>
+    <string name="menu_user_trails">Mes parcours</string>
+    <string name="menu_user_settings">Mes paramètres</string>
     <string name="menu_new_trail">Nouvelle rando</string>
     <string name="menu_new_event">Nouvel évènement</string>
     <string name="menu_new_trail_load_gpx">Charger un GPX</string>
@@ -15,6 +18,7 @@
     <string name="menu_edit_save">Enregistrer</string>
 
     <!-- Toolbar Names -->
+    <string name="toolbar_profile">Mon profil</string>
     <string name="toolbar_trail">Rando</string>
     <string name="toolbar_trail_info">Infos rando</string>
 

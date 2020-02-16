@@ -21,23 +21,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:gravity="center">
 
         <ImageView
             android:id="@+id/navigation_view_header_user_image"
-            android:layout_width="@dimen/image_size_small"
-            android:layout_height="@dimen/image_size_small"
+            android:layout_width="@dimen/image_size_medium"
+            android:layout_height="@dimen/image_size_medium"
             android:layout_margin="@dimen/components_margin_medium"
             android:contentDescription="@string/example_image_content_description"
-            app:srcCompat="@drawable/ic_user_white" />
+            app:srcCompat="@drawable/ic_user_black"
+            android:tint="@color/colorWhite"/>
 
         <TextView
-            android:id="@+id/navigation_view_header_user_name"
+            android:id="@+id/navigation_view_header_text_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/components_margin_medium"
             android:layout_gravity="center"
-            android:textSize="@dimen/text_size_title"
+            android:textSize="@dimen/text_size_important"
             android:textColor="@android:color/white"
             android:text="@string/example_hiker_name" />
 

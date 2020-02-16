@@ -22,6 +22,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.hiker.ProfileActivity
+import com.sildian.apps.togetrail.hiker.model.core.Hiker
+import com.sildian.apps.togetrail.hiker.model.support.HikerFactory
+import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
 import com.sildian.apps.togetrail.trail.map.TrailActivity
 import com.sildian.apps.togetrail.trail.map.TrailMapFragment
 import com.sildian.apps.togetrail.trail.model.core.Trail
@@ -63,6 +67,7 @@ class MainActivity :
         private const val KEY_REQUEST_PERMISSION_LOCATION=2001
 
         /**Bundle keys for intents**/
+        const val KEY_BUNDLE_HIKER="KEY_BUNDLE_HIKER"
         const val KEY_BUNDLE_TRAIL_ACTION="KEY_BUNDLE_TRAIL_ACTION"
         const val KEY_BUNDLE_TRAIL="KEY_BUNDLE_TRAIL"
 
@@ -72,6 +77,7 @@ class MainActivity :
 
     /****************************************Data************************************************/
 
+    private var currentHiker: Hiker?=null               //The current hiker connected to the app
     private val trails= arrayListOf<Trail>()            //The list of trails to display
 
     /**********************************UI component**********************************************/
@@ -87,7 +93,7 @@ class MainActivity :
         navigationViewHeader.navigation_view_header_user_image
     }
     private val navigationHeaderUserNameText by lazy {
-        navigationViewHeader.navigation_view_header_user_name
+        navigationViewHeader.navigation_view_header_text_user_name
     }
     private val bottomNavigationView by lazy {activity_main_bottom_navigation_view}
     private val addButton by lazy {activity_main_button_add}
@@ -104,6 +110,7 @@ class MainActivity :
         initializeBottomNavigationView()
         initializeAddButton()
         requestLocationPermission()
+        updateAndSaveCurrentHiker()
     }
 
     /*******************************Menu monitoring**********************************************/
@@ -127,10 +134,14 @@ class MainActivity :
                 true
             }
             R.id.menu_user -> {
-                //TODO handle clicks
                 when (item.itemId) {
                     R.id.menu_user_profile -> {
                         Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+                        if(FirebaseAuth.getInstance().currentUser!=null){
+                            startProfileActivity()
+                        }else{
+                            //TODO handle user not connected
+                        }
                     }
                     R.id.menu_user_login -> {
                         Log.d(TAG_MENU, "Menu '${item.title}' clicked")
@@ -203,6 +214,53 @@ class MainActivity :
     /****************************Data monitoring**************************************************/
 
     /**
+     * Updates and saves the current hiker in the database
+     */
+
+    private fun updateAndSaveCurrentHiker(){
+
+        /*Checks if the user is connected*/
+
+        val user=FirebaseAuth.getInstance().currentUser
+        if(user!=null) {
+
+            /*If the user is connected, gets its related hiker profile from the database*/
+
+            HikerFirebaseQueries.getHiker(user.uid)
+                .addOnSuccessListener { documentSnapshot ->
+
+                    Log.d(TAG_STORAGE, "Hiker loaded from the database")
+                    val hiker=documentSnapshot.toObject(Hiker::class.java)
+
+                    /*If the profile exists, then updates the currentHiker*/
+
+                    if(hiker!=null) {
+                        this.currentHiker = hiker
+                    }
+
+                    /*Else, creates a hiker profile in the database*/
+
+                    else{
+                        this.currentHiker=HikerFactory.buildFromFirebaseUser(user)
+                        HikerFirebaseQueries.createOrUpdateHiker(this.currentHiker!!)
+                            .addOnSuccessListener {
+                                //TODO handle
+                                Log.d(TAG_STORAGE, "Hiker registered in the database")
+                            }
+                            .addOnFailureListener { e ->
+                                //TODO handle
+                                Log.w(TAG_STORAGE, e.message.toString())
+                            }
+                    }
+                }
+                .addOnFailureListener { e ->
+                    //TODO handle
+                    Log.w(TAG_STORAGE, e.message.toString())
+                }
+        }
+    }
+
+    /**
      * Loads the trails from the database
      * @param listener : the listener which handles the result
      */
@@ -268,7 +326,7 @@ class MainActivity :
 
         val user=FirebaseAuth.getInstance().currentUser
         if(user==null){
-            this.navigationHeaderUserImage.setImageResource(R.drawable.ic_user_white)
+            this.navigationHeaderUserImage.setImageResource(R.drawable.ic_user_black)
             this.navigationHeaderUserNameText.setText(R.string.message_user_unknown)
         }
 
@@ -278,7 +336,7 @@ class MainActivity :
             Glide.with(this)
                 .load(user.photoUrl)
                 .apply(RequestOptions.circleCropTransform())
-                .placeholder(R.drawable.ic_user_white)
+                .placeholder(R.drawable.ic_user_black)
                 .into(this.navigationHeaderUserImage)
             this.navigationHeaderUserNameText.text=user.displayName
         }
@@ -374,6 +432,14 @@ class MainActivity :
         )
     }
 
+    /**Starts profile activity**/
+
+    private fun startProfileActivity(){
+        val profileActivityIntent=Intent(this, ProfileActivity::class.java)
+        profileActivityIntent.putExtra(KEY_BUNDLE_HIKER, this.currentHiker)
+        startActivity(profileActivityIntent)
+    }
+
     /**
      * Starts the TrailActivity
      * @param trailActionId : defines which action should be performed (choice within TrailActivity.ACTION_TRAIL_xxx)
@@ -404,9 +470,9 @@ class MainActivity :
         val idpResponse=IdpResponse.fromResultIntent(data)
         when{
             resultCode== Activity.RESULT_OK -> {
-                //TODO handle
                 Log.d(TAG_LOGIN, "Login successful")
                 updateNavigationViewUserItems()
+                updateAndSaveCurrentHiker()
             }
             resultCode==Activity.RESULT_CANCELED -> {
                 //TODO handle

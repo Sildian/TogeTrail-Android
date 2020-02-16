@@ -5,10 +5,10 @@
         <item
             android:id="@+id/menu_user_profile"
             android:title="@string/menu_user_profile"
-            android:icon="@drawable/ic_user_white"/>
+            android:icon="@drawable/ic_user_black"/>
         <item
             android:id="@+id/menu_user_login"
             android:title="@string/menu_user_login"
-            android:icon="@drawable/ic_login_white"/>
+            android:icon="@drawable/ic_login_black"/>
     </group>
 </menu>

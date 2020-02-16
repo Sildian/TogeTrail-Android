@@ -62,6 +62,17 @@
         <item name="itemRippleColor">@color/colorSecondaryLight</item>
     </style>
 
+    <!-- TabLayouts -->
+    <style name="TabLayoutTheme" parent="@style/Widget.MaterialComponents.TabLayout">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="tabIconTint">@color/colorset_menu</item>
+        <item name="tabBackground">@color/colorPrimary</item>
+        <item name="tabTextColor">@color/colorWhite</item>
+        <item name="tabSelectedTextColor">@color/colorSecondary</item>
+        <item name="tabIndicatorColor">@color/colorSecondary</item>
+        <item name="tabRippleColor">@color/colorSecondaryLight</item>
+    </style>
+
     <!-- FloatingActionsButtons -->
     <style name="FloatingActionButtonTheme" parent="@style/Widget.MaterialComponents.FloatingActionButton">
         <item name="backgroundTint">@color/colorPrimary</item>
