@@ -9,9 +9,10 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.utils.DateUtilities
-import com.sildian.apps.togetrail.common.utils.NumberUtilities
+import com.sildian.apps.togetrail.common.utils.MetricsHelper
+import com.sildian.apps.togetrail.main.MainActivity
 import com.sildian.apps.togetrail.trail.map.BaseTrailMapFragment
+import com.sildian.apps.togetrail.trail.map.TrailActivity
 import com.sildian.apps.togetrail.trail.map.TrailMapFragment
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailLevel
@@ -92,18 +93,24 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
     }
 
     private fun initializeSeeButton(){
-        this.seeButton.setOnClickListener {
-            if(parentFragment is TrailMapFragment) {
+        if(activity is MainActivity) {
+            this.seeButton.setOnClickListener {
                 (parentFragment as TrailMapFragment).showTrailDetail()
             }
+        }
+        else{
+            this.seeButton.visibility=View.GONE
         }
     }
 
     private fun initializeEditButton(){
-        this.editButton.setOnClickListener {
-            if(parentFragment is BaseTrailMapFragment) {
+        if(activity is TrailActivity) {
+            this.editButton.setOnClickListener {
                 (parentFragment as BaseTrailMapFragment).editTrailInfo()
             }
+        }
+        else{
+            this.editButton.visibility=View.GONE
         }
     }
 
@@ -148,14 +155,8 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
     }
 
     private fun initializeDuration(){
-        val duration=this.trail?.duration
-        val hourMetric=resources.getString(R.string.metric_hour)
-        val minuteMetric=resources.getString(R.string.metric_minute)
-        val unkownText=resources.getString(R.string.message_unknown_short)
-        this.durationText.text=
-            if(duration!=null)
-                DateUtilities.displayDuration(duration.toLong(), hourMetric, minuteMetric)
-            else unkownText
+        val durationToDisplay=MetricsHelper.displayDuration(context!!, this.trail?.duration?.toLong())
+        this.durationText.text=durationToDisplay
     }
 
     private fun initializePhotosRecyclerView(){
@@ -164,63 +165,33 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
     }
 
     private fun initializeAscentText(){
-        val ascent=this.trail?.ascent
-        val metric=resources.getString(R.string.metric_meter)
-        val suffix=resources.getString(R.string.label_trail_ascent_short)
-        val unknownText=resources.getString(R.string.message_unknown_short)
-        this.ascentText.text=
-            if(ascent!=null)
-                NumberUtilities.displayNumberWithMetricAndSuffix(
-                    ascent.toDouble(), 0, metric, suffix, true)
-            else unknownText
+        val ascentToDisplay=MetricsHelper.displayAscent(
+            context!!, this.trail?.ascent, true, true)
+        this.ascentText.text=ascentToDisplay
     }
 
     private fun initializeDescentText(){
-        val descent=this.trail?.descent
-        val metric=resources.getString(R.string.metric_meter)
-        val suffix=resources.getString(R.string.label_trail_descent_short)
-        val unknownText=resources.getString(R.string.message_unknown_short)
-        this.descentText.text=
-            if(descent!=null)
-                NumberUtilities.displayNumberWithMetricAndSuffix(
-                    descent.toDouble(), 0, metric, suffix, true)
-            else unknownText
+        val descentToDisplay=MetricsHelper.displayDescent(
+            context!!, this.trail?.descent, true, true)
+        this.descentText.text=descentToDisplay
     }
 
     private fun initializeDistanceText(){
-        val distance=this.trail?.distance
-        val metric=resources.getString(R.string.metric_kilometer)
-        val suffix=resources.getString(R.string.label_trail_distance_short)
-        val unknownText=resources.getString(R.string.message_unknown_short)
-        this.distanceText.text=
-            if(distance!=null)
-                NumberUtilities.displayNumberWithMetricAndSuffix(
-                    distance.toDouble()/1000, 1, metric, suffix, true)
-            else unknownText
+        val distanceToDisplay=MetricsHelper.displayDistance(
+            context!!, this.trail?.distance, true, true)
+        this.distanceText.text=distanceToDisplay
     }
 
     private fun initializeMaxElevationText(){
-        val maxElevation=this.trail?.maxElevation
-        val metric=resources.getString(R.string.metric_meter)
-        val suffix=resources.getString(R.string.label_trail_max_elevation_short)
-        val unknownText=resources.getString(R.string.message_unknown_short)
-        this.maxElevationText.text=
-            if(maxElevation!=null)
-                NumberUtilities.displayNumberWithMetricAndSuffix(
-                    maxElevation.toDouble(), 0, metric, suffix, true)
-            else unknownText
+        val maxElevationToDisplay=MetricsHelper.displayMaxElevation(
+            context!!, this.trail?.maxElevation, true, true)
+        this.maxElevationText.text=maxElevationToDisplay
     }
 
     private fun initializeMinElevationText(){
-        val minElevation=this.trail?.minElevation
-        val metric=resources.getString(R.string.metric_meter)
-        val suffix=resources.getString(R.string.label_trail_min_elevation_short)
-        val unknownText=resources.getString(R.string.message_unknown_short)
-        this.minElevationText.text=
-            if(minElevation!=null)
-                NumberUtilities.displayNumberWithMetricAndSuffix(
-                    minElevation.toDouble(), 0, metric, suffix, true)
-            else unknownText
+        val minElevationToDisplay=MetricsHelper.displayMinElevation(
+            context!!, this.trail?.minElevation, true, true)
+        this.minElevationText.text=minElevationToDisplay
     }
 
     private fun initializeLocationText(){

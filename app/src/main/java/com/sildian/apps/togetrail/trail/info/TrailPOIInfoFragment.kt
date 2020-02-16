@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.utils.NumberUtilities
+import com.sildian.apps.togetrail.common.utils.MetricsHelper
 import com.sildian.apps.togetrail.trail.map.BaseTrailMapFragment
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 import kotlinx.android.synthetic.main.fragment_trail_poi_info.view.*
@@ -77,15 +77,9 @@ class TrailPOIInfoFragment (
     }
 
     private fun initializeElevationText(){
-        val elevation=this.trailPointOfInterest?.elevation
-        val metric=resources.getString(R.string.metric_meter)
-        val suffix=resources.getString(R.string.label_trail_poi_elevation)
-        val unkownText=resources.getString(R.string.message_unknown_short)
-        this.elevationText.text=
-            if(elevation!=null)
-                NumberUtilities.displayNumberWithMetricAndSuffix(
-                    elevation.toDouble(), 0, metric, suffix, false)
-            else unkownText
+        val elevationToDisplay=MetricsHelper.displayElevation(
+            context!!, this.trailPointOfInterest?.elevation, true, true)
+        this.elevationText.text=elevationToDisplay
     }
 
     private fun initializeDescriptionText(){

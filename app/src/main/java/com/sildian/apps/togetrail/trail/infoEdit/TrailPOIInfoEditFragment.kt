@@ -14,7 +14,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.sdsmdg.harjot.crollerTest.Croller
 
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.utils.NumberUtilities
+import com.sildian.apps.togetrail.common.utils.MetricsHelper
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 import kotlinx.android.synthetic.main.fragment_trail_poi_info_edit.view.*
 import pl.aprilapps.easyphotopicker.*
@@ -162,22 +162,6 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
             this.photoImageView.visibility=View.VISIBLE
             this.deletePhotoButton.visibility=View.VISIBLE
         }
-
-        /*If the permission to add photos is granted, shows the buttons allowing to add photos*/
-
-        if(hasWritePermission()){
-            this.addPhotoButton.visibility=View.VISIBLE
-        }
-        else{
-            this.addPhotoButton.visibility=View.INVISIBLE
-        }
-
-        if(hasWriteAndCameraPermission()){
-            this.takePhotoButton.visibility=View.VISIBLE
-        }
-        else{
-            this.takePhotoButton.visibility=View.INVISIBLE
-        }
     }
 
     /*****************************Metrics monitoring with croller*********************************/
@@ -187,25 +171,18 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
     }
 
     private fun updateCroller(currentValue:Int?){
-        this.metricsCroller.max=
-            VALUE_MAX_ALTITUDE
+        this.metricsCroller.max= VALUE_MAX_ALTITUDE
         this.metricsCroller.progress=currentValue?:0
     }
 
     private fun updateElevation(elevation:Int?){
         this.trailPointOfInterest?.elevation=elevation
-        val metric=resources.getString(R.string.metric_meter)
-        val suffix=resources.getString(R.string.label_trail_poi_elevation)
-        val unknownText=resources.getString(R.string.message_unknown_short)
-        val elevationToDisplay=
-            if(elevation!=null)
-                NumberUtilities.displayNumberWithMetricAndSuffix(
-                    elevation.toDouble(), 0, metric, suffix, true)
-            else unknownText
+        val elevationToDisplay=MetricsHelper.displayElevation(
+            context!!, elevation, true, true)
+        val elevationToDisplayInCroller=MetricsHelper.displayElevation(
+            context!!, elevation, false, false)
         this.elevationText.text=elevationToDisplay
-        val ascentCroller =
-            NumberUtilities.displayNumberWithMetric(elevation?.toDouble()?:0.toDouble(), 0, metric)
-        this.metricsCroller.label = ascentCroller
+        this.metricsCroller.label = elevationToDisplayInCroller
     }
 
     /*******************************Photos monitoring********************************************/
@@ -329,17 +306,6 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
                 }
             }
         }
-    }
-
-    private fun hasWritePermission():Boolean{
-        return (Build.VERSION.SDK_INT<23
-                ||(activity?.checkSelfPermission(KEY_BUNDLE_PERMISSION_WRITE)== PackageManager.PERMISSION_GRANTED))
-    }
-
-    private fun hasWriteAndCameraPermission():Boolean{
-        return (Build.VERSION.SDK_INT<23
-                ||(activity?.checkSelfPermission(KEY_BUNDLE_PERMISSION_WRITE)== PackageManager.PERMISSION_GRANTED
-                && activity?.checkSelfPermission(KEY_BUNDLE_PERMISSION_CAMERA)== PackageManager.PERMISSION_GRANTED))
     }
 
     /***********************************Navigation***********************************************/

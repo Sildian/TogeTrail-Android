@@ -244,6 +244,7 @@ class TrailInfoEditActivity : AppCompatActivity() {
     }
 
     fun updateImagePathToDeleteFromDatabase(imagePath:String){
+        this.imagePathToUploadIntoDatabase=null
         if(imagePath.startsWith("https://")){
             this.imagePathToDeleteFromDatabase=imagePath
         }

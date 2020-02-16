@@ -5,13 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import com.sdsmdg.harjot.crollerTest.Croller
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.model.Location
-import com.sildian.apps.togetrail.common.utils.DateUtilities
-import com.sildian.apps.togetrail.common.utils.NumberUtilities
+import com.sildian.apps.togetrail.common.utils.uiHelpers.DropdownMenuHelper
+import com.sildian.apps.togetrail.common.utils.MetricsHelper
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailLevel
 import com.sildian.apps.togetrail.trail.model.core.TrailType
@@ -95,8 +94,9 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
     override fun saveData() {
         this.trail?.name=this.nameTextField.text.toString()
         this.trail?.level=
-            TrailLevel.fromValue(this.levelTextFieldDropDown.tag.toString().toInt())
-        this.trail?.type= TrailType.fromValue(this.typeTextFieldDropDown.tag.toString().toInt())
+            TrailLevel.fromValue(this.levelTextFieldDropDown.tag.toString().toInt()+1)
+        this.trail?.type=
+            TrailType.fromValue(this.typeTextFieldDropDown.tag.toString().toInt()+1)
         this.trail?.location = Location(
             this.countryTextField.text.toString(),
             this.regionTextField.text.toString(),
@@ -132,29 +132,14 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
 
     private fun initializeLevelTextFieldDropDown(){
         val choice=resources.getStringArray(R.array.array_trail_levels)
-        val adapter=ArrayAdapter<String>(context!!, R.layout.item_dropdown_menu, choice)
-        this.levelTextFieldDropDown.setAdapter(adapter)
-        val currentValue=this.trail?.level?.value?: TrailLevel.MEDIUM.value
-        val currentText=this.levelTextFieldDropDown.adapter.getItem(currentValue-1)
-        this.levelTextFieldDropDown.setText(currentText.toString(), false)
-        this.levelTextFieldDropDown.tag=currentValue
-        this.levelTextFieldDropDown.setOnItemClickListener { adapterView, view, position, id ->
-            this.levelTextFieldDropDown.tag=position+1
-        }
+        val initialValue=(this.trail?.level?.value?: TrailLevel.MEDIUM.value)-1
+        DropdownMenuHelper.populateDropdownMenu(this.levelTextFieldDropDown, choice, initialValue)
     }
 
     private fun initializeTypeTextFieldDropDown(){
         val choice=resources.getStringArray(R.array.array_trail_types)
-        val adapter=ArrayAdapter<String>(context!!, R.layout.item_dropdown_menu, choice)
-        this.typeTextFieldDropDown.setAdapter(adapter)
-        val currentValue=this.trail?.type?.value?: TrailType.HIKING.value
-        val currentText=this.typeTextFieldDropDown.adapter.getItem(currentValue-1)
-        this.typeTextFieldDropDown.setText(currentText.toString(), false)
-        this.typeTextFieldDropDown.tag=currentValue
-        this.typeTextFieldDropDown.adapter.getItem(currentValue-1)
-        this.typeTextFieldDropDown.setOnItemClickListener { adapterView, view, position, id ->
-            this.typeTextFieldDropDown.tag=position+1
-        }
+        val initialValue=(this.trail?.type?.value?: TrailType.HIKING.value)-1
+        DropdownMenuHelper.populateDropdownMenu(this.typeTextFieldDropDown, choice, initialValue)
     }
 
     private fun initializeMetricsCroller(){
@@ -262,12 +247,9 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
     private fun updateCroller(valueToSet:Int, currentValue:Int?){
         this.currentMetricToSet=valueToSet
         when(this.currentMetricToSet){
-            METRIC_DURATION -> this.metricsCroller.max=
-                VALUE_MAX_DURATION
-            METRIC_DISTANCE -> this.metricsCroller.max=
-                VALUE_MAX_DISTANCE
-            else -> this.metricsCroller.max=
-                VALUE_MAX_ALTITUDE
+            METRIC_DURATION -> this.metricsCroller.max= VALUE_MAX_DURATION
+            METRIC_DISTANCE -> this.metricsCroller.max= VALUE_MAX_DISTANCE
+            else -> this.metricsCroller.max= VALUE_MAX_ALTITUDE
         }
         this.metricsCroller.progress=currentValue?:0
     }
@@ -285,13 +267,7 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
 
     private fun updateDuration(duration:Int?, updateCroller:Boolean){
         this.trail?.duration=duration
-        val hourMetric=resources.getString(R.string.metric_hour)
-        val minuteMetric=resources.getString(R.string.metric_minute)
-        val unknownText=resources.getString(R.string.message_unknown_short)
-        val durationToDisplay=
-            if(duration!=null)
-                DateUtilities.displayDuration(duration.toLong(), hourMetric, minuteMetric)
-            else unknownText
+        val durationToDisplay=MetricsHelper.displayDuration(context!!, duration?.toLong())
         this.durationText.text=durationToDisplay
         if(updateCroller) {
             this.metricsCroller.label = durationToDisplay
@@ -300,87 +276,66 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
 
     private fun updateAscent(ascent:Int?, updateCroller: Boolean){
         this.trail?.ascent=ascent
-        val metric=resources.getString(R.string.metric_meter)
-        val suffix=resources.getString(R.string.label_trail_ascent_short)
-        val unknownText=resources.getString(R.string.message_unknown_short)
-        val ascentToDisplay=
-            if(ascent!=null)
-                NumberUtilities.displayNumberWithMetricAndSuffix(
-                    ascent.toDouble(), 0, metric, suffix, true)
-            else unknownText
+        val ascentToDisplay=MetricsHelper.displayAscent(
+            context!!, ascent, true, true)
         this.ascentText.text=ascentToDisplay
         if(updateCroller) {
-            val ascentCroller =
-                NumberUtilities.displayNumberWithMetric(ascent?.toDouble()?:0.toDouble(), 0, metric)
-            this.metricsCroller.label = ascentCroller
+            val ascentToDisplayInCroller =
+                MetricsHelper.displayAscent(
+                    context!!, ascent, false, false)
+            this.metricsCroller.label = ascentToDisplayInCroller
         }
     }
 
     private fun updateDescent(descent:Int?, updateCroller: Boolean){
         this.trail?.descent=descent
-        val metric=resources.getString(R.string.metric_meter)
-        val suffix=resources.getString(R.string.label_trail_descent_short)
-        val unknownText=resources.getString(R.string.message_unknown_short)
-        val descentToDisplay=
-            if(descent!=null)
-                NumberUtilities.displayNumberWithMetricAndSuffix(
-                    descent.toDouble(), 0, metric, suffix, true)
-            else unknownText
+        val descentToDisplay=MetricsHelper.displayDescent(
+            context!!, descent, true, true)
         this.descentText.text=descentToDisplay
         if(updateCroller) {
-            val descentCroller =
-                NumberUtilities.displayNumberWithMetric(descent?.toDouble()?:0.toDouble(), 0, metric)
-            this.metricsCroller.label = descentCroller
+            val descentToDisplayInCroller =
+                MetricsHelper.displayAscent(
+                    context!!, descent, false, false)
+            this.metricsCroller.label = descentToDisplayInCroller
         }
     }
 
     private fun updateDistance(distance:Int, updateCroller: Boolean){
         this.trail?.distance=distance
-        val metric=resources.getString(R.string.metric_kilometer)
-        val suffix=resources.getString(R.string.label_trail_distance_short)
-        val distanceToDisplay=NumberUtilities.displayNumberWithMetricAndSuffix(
-            distance.toDouble()/1000, 1, metric, suffix, true)
+        val distanceToDisplay=MetricsHelper.displayDistance(
+            context!!, distance, true, true)
         this.distanceText.text=distanceToDisplay
         if(updateCroller) {
-            val distanceCroller =
-                NumberUtilities.displayNumberWithMetric(distance.toDouble() / 1000, 1, metric)
-            this.metricsCroller.label = distanceCroller
+            val distanceToDisplayInCroller =
+                MetricsHelper.displayAscent(
+                    context!!, distance, false, false)
+            this.metricsCroller.label = distanceToDisplayInCroller
         }
     }
 
     private fun updateMaxElevation(elevation:Int?, updateCroller: Boolean){
         this.trail?.maxElevation=elevation
-        val metric=resources.getString(R.string.metric_meter)
-        val suffix=resources.getString(R.string.label_trail_max_elevation_short)
-        val unknownText=resources.getString(R.string.message_unknown_short)
-        val elevationToDisplay=
-            if(elevation!=null)
-                NumberUtilities.displayNumberWithMetricAndSuffix(
-                    elevation.toDouble(), 0, metric, suffix, true)
-            else unknownText
-        this.maxElevationText.text=elevationToDisplay
+        val maxElevationToDisplay=MetricsHelper.displayMaxElevation(
+            context!!, elevation, true, true)
+        this.maxElevationText.text=maxElevationToDisplay
         if(updateCroller) {
-            val elevationCroller =
-                NumberUtilities.displayNumberWithMetric(elevation?.toDouble()?:0.toDouble(), 0, metric)
-            this.metricsCroller.label = elevationCroller
+            val maxElevationToDisplayInCroller =
+                MetricsHelper.displayMaxElevation(
+                    context!!, elevation, false, false)
+            this.metricsCroller.label = maxElevationToDisplayInCroller
         }
     }
 
     private fun updateMinElevation(elevation:Int?, updateCroller: Boolean){
         this.trail?.minElevation=elevation
-        val metric=resources.getString(R.string.metric_meter)
-        val suffix=resources.getString(R.string.label_trail_min_elevation_short)
-        val unknownText=resources.getString(R.string.message_unknown_short)
-        val elevationToDisplay=
-            if(elevation!=null)
-                NumberUtilities.displayNumberWithMetricAndSuffix(
-                    elevation.toDouble(), 0, metric, suffix, true)
-            else unknownText
-        this.minElevationText.text=elevationToDisplay
+        val minElevationToDisplay=MetricsHelper.displayMinElevation(
+            context!!, elevation, true, true)
+        this.minElevationText.text=minElevationToDisplay
         if(updateCroller) {
-            val elevationCroller =
-                NumberUtilities.displayNumberWithMetric(elevation?.toDouble()?:0.toDouble(), 0, metric)
-            this.metricsCroller.label = elevationCroller
+            val minElevationToDisplayInCroller =
+                MetricsHelper.displayMinElevation(
+                    context!!, elevation, false, false)
+            this.metricsCroller.label = minElevationToDisplayInCroller
         }
     }
 }

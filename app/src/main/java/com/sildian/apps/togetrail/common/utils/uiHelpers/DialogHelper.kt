@@ -1,7 +1,6 @@
 package com.sildian.apps.togetrail.common.utils.uiHelpers
 
 import android.content.Context
-import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
