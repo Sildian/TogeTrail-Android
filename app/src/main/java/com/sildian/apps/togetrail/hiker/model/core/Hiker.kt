@@ -20,7 +20,6 @@ data class Hiker (
     var liveLocation:Location=Location(),
     var description:String="",
     val registrationDate:Date=Date(),
-    var password:String="",
     val createdTrailsIds:ArrayList<String> = arrayListOf()
 )
     :Parcelable

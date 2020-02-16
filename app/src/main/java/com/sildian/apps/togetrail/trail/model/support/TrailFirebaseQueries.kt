@@ -34,9 +34,8 @@ object TrailFirebaseQueries {
      * @return a task result
      */
 
-    fun getTrails():Query{
-        return getCollection().orderBy("creationDate", Query.Direction.DESCENDING)
-    }
+    fun getTrails():Query =
+        getCollection().orderBy("creationDate", Query.Direction.DESCENDING)
 
     /**
      * Gets a given trail
@@ -44,9 +43,8 @@ object TrailFirebaseQueries {
      * @return a task result
      */
 
-    fun getTrail(id:String):Task<DocumentSnapshot>{
-        return getCollection().document(id).get()
-    }
+    fun getTrail(id:String):Task<DocumentSnapshot> =
+        getCollection().document(id).get()
 
     /**
      * Creates a new trail in the database
