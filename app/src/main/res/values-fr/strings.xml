@@ -5,6 +5,8 @@
     <string name="menu_map">Carte</string>
     <string name="menu_trails">Randos</string>
     <string name="menu_events">Evènements</string>
+    <string name="menu_user_profile">Mon profil</string>
+    <string name="menu_user_login">Connexion / Déconnexion</string>
     <string name="menu_new_trail">Nouvelle rando</string>
     <string name="menu_new_event">Nouvel évènement</string>
     <string name="menu_new_trail_load_gpx">Charger un GPX</string>
@@ -15,6 +17,10 @@
     <!-- Toolbar Names -->
     <string name="toolbar_trail">Rando</string>
     <string name="toolbar_trail_info">Infos rando</string>
+
+    <!-- Navigation drawer events -->
+    <string name="navigation_drawer_open">Ouverture du navigation drawer</string>
+    <string name="navigation_drawer_close">Fermeture du navigation drawer</string>
 
     <!-- Buttons -->
     <!-- Trail -->
@@ -70,9 +76,12 @@
     <string name="example_trail_poi_name">La plus belle vue du monde</string>
     <string name="example_trail_poi_description">Je vous assure, c\'est la plus belle vue du monde!</string>
     <string name="example_trail_poi_elevation">2000 m Altitude</string>
+    <!-- Hiker -->
+    <string name="example_hiker_name">Toto</string>
 
     <!-- Messages to the user -->
     <string name="message_unknown_short">\?</string>
+    <string name="message_user_unknown">Utilisateur inconnu</string>
     <string name="message_trail_name_unknown">Parcours inconnu</string>
     <string name="message_trail_poi_name_unknown">Point d\'intérêt inconnu</string>
     <string name="message_no_location_available">L\'emplacement n\'est pas disponible</string>

@@ -6,6 +6,8 @@
     <string name="menu_map">Map</string>
     <string name="menu_trails">Trails</string>
     <string name="menu_events">Events</string>
+    <string name="menu_user_profile">My profile</string>
+    <string name="menu_user_login">Log in / off</string>
     <string name="menu_new_trail">New trail</string>
     <string name="menu_new_event">New event</string>
     <string name="menu_new_trail_load_gpx">Load GPX</string>
@@ -16,6 +18,10 @@
     <!-- Toolbar Names -->
     <string name="toolbar_trail">Trail</string>
     <string name="toolbar_trail_info">Trail info</string>
+
+    <!-- Navigation drawer events -->
+    <string name="navigation_drawer_open">Opening navigation drawer</string>
+    <string name="navigation_drawer_close">Closing navigation drawer</string>
 
     <!-- Buttons -->
     <!-- Trail -->
@@ -71,9 +77,12 @@
     <string name="example_trail_poi_name">The best view in the world</string>
     <string name="example_trail_poi_description">I ensure you, this is the most beautiful view in the world!</string>
     <string name="example_trail_poi_elevation">2000 m Elevation</string>
+    <!-- Hiker -->
+    <string name="example_hiker_name">Toto</string>
 
     <!-- Messages to the user -->
     <string name="message_unknown_short">\?</string>
+    <string name="message_user_unknown">Unknown user</string>
     <string name="message_trail_name_unknown">Unknown trail</string>
     <string name="message_trail_poi_name_unknown">Unknown point of interest</string>
     <string name="message_no_location_available">The location is unknown</string>

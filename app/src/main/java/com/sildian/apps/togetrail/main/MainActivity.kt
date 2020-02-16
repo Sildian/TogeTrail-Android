@@ -1,30 +1,34 @@
 package com.sildian.apps.togetrail.main
 
+import android.Manifest
+import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.trail.map.TrailActivity
 import com.sildian.apps.togetrail.trail.map.TrailMapFragment
-import kotlinx.android.synthetic.main.activity_main.*
-import net.danlew.android.joda.JodaTimeAndroid
-import android.Manifest
-import android.app.Activity
-import android.content.pm.PackageManager
-import android.os.Build
-import com.firebase.ui.auth.AuthUI
-import com.firebase.ui.auth.ErrorCodes
-import com.firebase.ui.auth.IdpResponse
-import com.google.firebase.auth.FirebaseAuth
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.support.TrailFirebaseQueries
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.navigation_view_header.view.*
+import net.danlew.android.joda.JodaTimeAndroid
 
 /*************************************************************************************************
  * Lets the user navigate between the main screens
@@ -32,6 +36,7 @@ import com.sildian.apps.togetrail.trail.model.support.TrailFirebaseQueries
 
 class MainActivity :
     AppCompatActivity(),
+    NavigationView.OnNavigationItemSelectedListener,
     BottomNavigationView.OnNavigationItemSelectedListener
 {
 
@@ -72,6 +77,18 @@ class MainActivity :
     /**********************************UI component**********************************************/
 
     private lateinit var fragment:Fragment
+    private val toolbar by lazy {activity_main_toolbar}
+    private val drawerLayout by lazy {activity_main_drawer_layout}
+    private val navigationView by lazy {activity_main_navigation_view}
+    private val navigationViewHeader by lazy {
+        layoutInflater.inflate(R.layout.navigation_view_header, this.navigationView)
+    }
+    private val navigationHeaderUserImage by lazy {
+        navigationViewHeader.navigation_view_header_user_image
+    }
+    private val navigationHeaderUserNameText by lazy {
+        navigationViewHeader.navigation_view_header_user_name
+    }
     private val bottomNavigationView by lazy {activity_main_bottom_navigation_view}
     private val addButton by lazy {activity_main_button_add}
 
@@ -82,9 +99,10 @@ class MainActivity :
         Log.d(TAG_ACTIVITY, "Activity '${javaClass.simpleName}' created")
         setContentView(R.layout.activity_main)
         JodaTimeAndroid.init(this)
+        initializeToolbar()
+        initializeNavigationView()
         initializeBottomNavigationView()
         initializeAddButton()
-        login()
         requestLocationPermission()
     }
 
@@ -93,20 +111,36 @@ class MainActivity :
     /**Click on menu item from BottomNavigationView**/
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        if(item.groupId== R.id.menu_main){
-            //TODO handle clicks
-            when(item.itemId){
-                R.id.menu_main_map -> {
-                    Log.d(TAG_MENU, "Menu '${item.title}' clicked")
-                    showFragment(ID_FRAGMENT_MAP)
+        return when(item.groupId) {
+            R.id.menu_main -> {
+                //TODO handle clicks
+                when (item.itemId) {
+                    R.id.menu_main_map -> {
+                        Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+                        showFragment(ID_FRAGMENT_MAP)
+                    }
+                    R.id.menu_main_trails ->
+                        Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+                    R.id.menu_main_events ->
+                        Log.d(TAG_MENU, "Menu '${item.title}' clicked")
                 }
-                R.id.menu_main_trails ->
-                    Log.d(TAG_MENU, "Menu '${item.title}' clicked")
-                R.id.menu_main_events ->
-                    Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+                true
             }
+            R.id.menu_user -> {
+                //TODO handle clicks
+                when (item.itemId) {
+                    R.id.menu_user_profile -> {
+                        Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+                    }
+                    R.id.menu_user_login -> {
+                        Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+                        login()
+                    }
+                }
+                true
+            }
+            else -> false
         }
-        return true
     }
 
     /**Click on menu item from PopupMenu**/
@@ -204,6 +238,20 @@ class MainActivity :
 
     /******************************UI monitoring**************************************************/
 
+    private fun initializeToolbar(){
+        setSupportActionBar(this.toolbar)
+    }
+
+    private fun initializeNavigationView(){
+        val toggle = ActionBarDrawerToggle(
+            this, this.drawerLayout, this.toolbar,
+            R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        this.drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+        this.navigationView.setNavigationItemSelectedListener(this)
+        updateNavigationViewUserItems()
+    }
+
     private fun initializeBottomNavigationView(){
         this.bottomNavigationView.setOnNavigationItemSelectedListener(this)
     }
@@ -214,15 +262,40 @@ class MainActivity :
         }
     }
 
+    private fun updateNavigationViewUserItems(){
+
+        /*If the user is null, then shows default info*/
+
+        val user=FirebaseAuth.getInstance().currentUser
+        if(user==null){
+            this.navigationHeaderUserImage.setImageResource(R.drawable.ic_user_white)
+            this.navigationHeaderUserNameText.setText(R.string.message_user_unknown)
+        }
+
+        /*Else shows the user's info*/
+
+        else{
+            Glide.with(this)
+                .load(user.photoUrl)
+                .apply(RequestOptions.circleCropTransform())
+                .placeholder(R.drawable.ic_user_white)
+                .into(this.navigationHeaderUserImage)
+            this.navigationHeaderUserNameText.text=user.displayName
+        }
+    }
+
     /******************************Login / Logout************************************************/
 
     private fun login(){
+        //TODO add a progress bar
         val user=FirebaseAuth.getInstance().currentUser
         if(user==null){
             startLoginActivity()
         }else{
-            //TODO handle
+            FirebaseAuth.getInstance().signOut()
+            updateNavigationViewUserItems()
         }
+        this.drawerLayout.closeDrawers()
     }
 
     /******************************Fragments monitoring******************************************/
@@ -293,6 +366,7 @@ class MainActivity :
         startActivityForResult(
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
+                .setTheme(R.style.LoginTheme)
                 .setAvailableProviders(listOf(AuthUI.IdpConfig.EmailBuilder().build()))
                 .setIsSmartLockEnabled(false, true)
                 .build(),
@@ -332,6 +406,7 @@ class MainActivity :
             resultCode== Activity.RESULT_OK -> {
                 //TODO handle
                 Log.d(TAG_LOGIN, "Login successful")
+                updateNavigationViewUserItems()
             }
             resultCode==Activity.RESULT_CANCELED -> {
                 //TODO handle
