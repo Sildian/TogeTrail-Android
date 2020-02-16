@@ -149,8 +149,8 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
     }
 
     private fun initializeDurationText(){
-        val duration=this.trail?.duration
-        updateDuration(duration, false)
+        val durationToDisplay=MetricsHelper.displayDuration(context!!, this.trail?.duration?.toLong())
+        this.durationText.text=durationToDisplay
         this.durationText.setOnClickListener {
             val duration=this.trail?.duration
             updateCurrentMetricToSet(METRIC_DURATION)
@@ -159,8 +159,9 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
     }
 
     private fun initializeAscentText(){
-        val ascent=this.trail?.ascent
-        updateAscent(ascent, false)
+        val ascentToDisplay=MetricsHelper.displayAscent(
+            context!!, this.trail?.ascent, true, true)
+        this.ascentText.text=ascentToDisplay
         this.ascentText.setOnClickListener {
             val ascent=this.trail?.ascent
             updateCurrentMetricToSet(METRIC_ASCENT)
@@ -169,8 +170,9 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
     }
 
     private fun initializeDescentText(){
-        val descent=this.trail?.descent
-        updateDescent(descent, false)
+        val descentToDisplay=MetricsHelper.displayDescent(
+            context!!, this.trail?.descent, true, true)
+        this.descentText.text=descentToDisplay
         this.descentText.setOnClickListener {
             val descent=this.trail?.descent
             updateCurrentMetricToSet(METRIC_DESCENT)
@@ -179,8 +181,9 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
     }
 
     private fun initializeDistanceText(){
-        val distance=this.trail?.distance
-        updateDistance(distance?:0, false)
+        val distanceToDisplay=MetricsHelper.displayDistance(
+            context!!, this.trail?.distance, true, true)
+        this.distanceText.text=distanceToDisplay
         this.distanceText.setOnClickListener {
             val distance=this.trail?.distance
             updateCurrentMetricToSet(METRIC_DISTANCE)
@@ -189,8 +192,9 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
     }
 
     private fun initializeMaxElevationText(){
-        val maxElevation=this.trail?.maxElevation
-        updateMaxElevation(maxElevation, false)
+        val maxElevationToDisplay=MetricsHelper.displayMaxElevation(
+            context!!, this.trail?.maxElevation, true, true)
+        this.maxElevationText.text=maxElevationToDisplay
         this.maxElevationText.setOnClickListener {
             val maxElevation=this.trail?.maxElevation
             updateCurrentMetricToSet(METRIC_MAX_ELEVATION)
@@ -199,8 +203,9 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
     }
 
     private fun initializeMinElevationText(){
-        val minElevation=this.trail?.minElevation
-        updateMinElevation(minElevation, false)
+        val minElevationToDisplay=MetricsHelper.displayMinElevation(
+            context!!, this.trail?.minElevation, true, true)
+        this.minElevationText.text=minElevationToDisplay
         this.minElevationText.setOnClickListener {
             val minElevation=this.trail?.minElevation
             updateCurrentMetricToSet(METRIC_MIN_ELEVATION)
@@ -256,86 +261,69 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
 
     private fun updateCurrentMetric(value:Int?){
         when(this.currentMetricToSet){
-            METRIC_DURATION -> updateDuration(value?:this.trail?.duration, true)
-            METRIC_ASCENT -> updateAscent(value?:this.trail?.ascent, true)
-            METRIC_DESCENT -> updateDescent(value?:this.trail?.descent, true)
-            METRIC_DISTANCE -> updateDistance(value?:this.trail?.distance?:0, true)
-            METRIC_MAX_ELEVATION -> updateMaxElevation(value?:this.trail?.maxElevation, true)
-            METRIC_MIN_ELEVATION -> updateMinElevation(value?:this.trail?.minElevation, true)
+            METRIC_DURATION -> updateDuration(value?:this.trail?.duration)
+            METRIC_ASCENT -> updateAscent(value?:this.trail?.ascent)
+            METRIC_DESCENT -> updateDescent(value?:this.trail?.descent)
+            METRIC_DISTANCE -> updateDistance(value?:this.trail?.distance?:0)
+            METRIC_MAX_ELEVATION -> updateMaxElevation(value?:this.trail?.maxElevation)
+            METRIC_MIN_ELEVATION -> updateMinElevation(value?:this.trail?.minElevation)
         }
     }
 
-    private fun updateDuration(duration:Int?, updateCroller:Boolean){
+    private fun updateDuration(duration:Int?){
         this.trail?.duration=duration
         val durationToDisplay=MetricsHelper.displayDuration(context!!, duration?.toLong())
         this.durationText.text=durationToDisplay
-        if(updateCroller) {
-            this.metricsCroller.label = durationToDisplay
-        }
+        this.metricsCroller.label = durationToDisplay
     }
 
-    private fun updateAscent(ascent:Int?, updateCroller: Boolean){
-        this.trail?.ascent=ascent
-        val ascentToDisplay=MetricsHelper.displayAscent(
+    private fun updateAscent(ascent:Int?) {
+        this.trail?.ascent = ascent
+        val ascentToDisplay = MetricsHelper.displayAscent(
             context!!, ascent, true, true)
-        this.ascentText.text=ascentToDisplay
-        if(updateCroller) {
-            val ascentToDisplayInCroller =
-                MetricsHelper.displayAscent(
-                    context!!, ascent, false, false)
-            this.metricsCroller.label = ascentToDisplayInCroller
-        }
+        val ascentToDisplayInCroller = MetricsHelper.displayAscent(
+            context!!, ascent, false, false)
+        this.ascentText.text = ascentToDisplay
+        this.metricsCroller.label = ascentToDisplayInCroller
     }
 
-    private fun updateDescent(descent:Int?, updateCroller: Boolean){
-        this.trail?.descent=descent
-        val descentToDisplay=MetricsHelper.displayDescent(
+    private fun updateDescent(descent:Int?) {
+        this.trail?.descent = descent
+        val descentToDisplay = MetricsHelper.displayDescent(
             context!!, descent, true, true)
-        this.descentText.text=descentToDisplay
-        if(updateCroller) {
-            val descentToDisplayInCroller =
-                MetricsHelper.displayAscent(
-                    context!!, descent, false, false)
-            this.metricsCroller.label = descentToDisplayInCroller
-        }
+        val descentToDisplayInCroller = MetricsHelper.displayAscent(
+            context!!, descent, false, false)
+        this.descentText.text = descentToDisplay
+        this.metricsCroller.label = descentToDisplayInCroller
     }
 
-    private fun updateDistance(distance:Int, updateCroller: Boolean){
-        this.trail?.distance=distance
-        val distanceToDisplay=MetricsHelper.displayDistance(
+    private fun updateDistance(distance:Int) {
+        this.trail?.distance = distance
+        val distanceToDisplay = MetricsHelper.displayDistance(
             context!!, distance, true, true)
-        this.distanceText.text=distanceToDisplay
-        if(updateCroller) {
-            val distanceToDisplayInCroller =
-                MetricsHelper.displayAscent(
-                    context!!, distance, false, false)
-            this.metricsCroller.label = distanceToDisplayInCroller
-        }
+        val distanceToDisplayInCroller = MetricsHelper.displayAscent(
+            context!!, distance, false, false)
+        this.distanceText.text = distanceToDisplay
+        this.metricsCroller.label = distanceToDisplayInCroller
     }
 
-    private fun updateMaxElevation(elevation:Int?, updateCroller: Boolean){
-        this.trail?.maxElevation=elevation
-        val maxElevationToDisplay=MetricsHelper.displayMaxElevation(
+    private fun updateMaxElevation(elevation:Int?) {
+        this.trail?.maxElevation = elevation
+        val maxElevationToDisplay = MetricsHelper.displayMaxElevation(
             context!!, elevation, true, true)
-        this.maxElevationText.text=maxElevationToDisplay
-        if(updateCroller) {
-            val maxElevationToDisplayInCroller =
-                MetricsHelper.displayMaxElevation(
-                    context!!, elevation, false, false)
-            this.metricsCroller.label = maxElevationToDisplayInCroller
-        }
+        val maxElevationToDisplayInCroller = MetricsHelper.displayMaxElevation(
+            context!!, elevation, false, false)
+        this.maxElevationText.text = maxElevationToDisplay
+        this.metricsCroller.label = maxElevationToDisplayInCroller
     }
 
-    private fun updateMinElevation(elevation:Int?, updateCroller: Boolean){
-        this.trail?.minElevation=elevation
-        val minElevationToDisplay=MetricsHelper.displayMinElevation(
+    private fun updateMinElevation(elevation:Int?) {
+        this.trail?.minElevation = elevation
+        val minElevationToDisplay = MetricsHelper.displayMinElevation(
             context!!, elevation, true, true)
-        this.minElevationText.text=minElevationToDisplay
-        if(updateCroller) {
-            val minElevationToDisplayInCroller =
-                MetricsHelper.displayMinElevation(
-                    context!!, elevation, false, false)
-            this.metricsCroller.label = minElevationToDisplayInCroller
-        }
+        val minElevationToDisplayInCroller = MetricsHelper.displayMinElevation(
+            context!!, elevation, false, false)
+        this.minElevationText.text = minElevationToDisplay
+        this.metricsCroller.label = minElevationToDisplayInCroller
     }
 }
