@@ -22,9 +22,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.hiker.ProfileActivity
+import com.sildian.apps.togetrail.hiker.profileEdit.ProfileEditActivity
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
-import com.sildian.apps.togetrail.hiker.model.support.HikerFactory
+import com.sildian.apps.togetrail.hiker.model.support.HikerHelper
 import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
 import com.sildian.apps.togetrail.trail.map.TrailActivity
 import com.sildian.apps.togetrail.trail.map.TrailMapFragment
@@ -62,6 +62,7 @@ class MainActivity :
 
         /**Request keys for activities**/
         private const val KEY_REQUEST_LOGIN=1001
+        private const val KEY_REQUEST_PROFILE=1002
 
         /**Request keys for permissions**/
         private const val KEY_REQUEST_PERMISSION_LOCATION=2001
@@ -115,10 +116,13 @@ class MainActivity :
 
     /*******************************Menu monitoring**********************************************/
 
-    /**Click on menu item from BottomNavigationView**/
+    /**Click on menu item from...**/
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         return when(item.groupId) {
+
+            /*Bottom Navigation View*/
+
             R.id.menu_main -> {
                 //TODO handle clicks
                 when (item.itemId) {
@@ -133,7 +137,11 @@ class MainActivity :
                 }
                 true
             }
+
+            /*Navigation View*/
+
             R.id.menu_user -> {
+                //TODO handle clicks
                 when (item.itemId) {
                     R.id.menu_user_profile -> {
                         Log.d(TAG_MENU, "Menu '${item.title}' clicked")
@@ -241,7 +249,7 @@ class MainActivity :
                     /*Else, creates a hiker profile in the database*/
 
                     else{
-                        this.currentHiker=HikerFactory.buildFromFirebaseUser(user)
+                        this.currentHiker=HikerHelper.buildFromFirebaseUser(user)
                         HikerFirebaseQueries.createOrUpdateHiker(this.currentHiker!!)
                             .addOnSuccessListener {
                                 //TODO handle
@@ -265,7 +273,7 @@ class MainActivity :
      * @param listener : the listener which handles the result
      */
 
-    fun loadTrails(listener:TrailFirebaseQueries.OnTrailQueryResultListener){
+    fun loadTrails(listener:TrailFirebaseQueries.OnTrailsQueryResultListener){
 
         //TODO add a progress bar
         
@@ -435,9 +443,9 @@ class MainActivity :
     /**Starts profile activity**/
 
     private fun startProfileActivity(){
-        val profileActivityIntent=Intent(this, ProfileActivity::class.java)
+        val profileActivityIntent=Intent(this, ProfileEditActivity::class.java)
         profileActivityIntent.putExtra(KEY_BUNDLE_HIKER, this.currentHiker)
-        startActivity(profileActivityIntent)
+        startActivityForResult(profileActivityIntent, KEY_REQUEST_PROFILE)
     }
 
     /**
@@ -459,8 +467,9 @@ class MainActivity :
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode== KEY_REQUEST_LOGIN){
-            handleLoginResult(resultCode, data)
+        when(requestCode){
+            KEY_REQUEST_LOGIN -> handleLoginResult(resultCode, data)
+            KEY_REQUEST_PROFILE -> handleProfileResult(resultCode, data)
         }
     }
 
@@ -485,6 +494,14 @@ class MainActivity :
             else -> {
                 //TODO handle
                 Log.w(TAG_LOGIN, "Login failed : unknown error")
+            }
+        }
+    }
+
+    private fun handleProfileResult(resultCode: Int, data: Intent?){
+        if(resultCode== Activity.RESULT_OK){
+            if(data!=null && data.hasExtra(KEY_BUNDLE_HIKER)){
+                this.currentHiker=data.getParcelableExtra(KEY_BUNDLE_HIKER)
             }
         }
     }

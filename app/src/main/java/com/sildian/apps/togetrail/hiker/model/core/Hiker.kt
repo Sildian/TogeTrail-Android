@@ -16,11 +16,10 @@ data class Hiker (
     val email:String="",
     var name:String="",
     var photoUrl:String?=null,
-    var birthDate: Date?=null,
+    var birthday: Date?=null,
     var liveLocation:Location=Location(),
     var description:String="",
-    val registrationDate:Date=Date(),
-    val createdTrailsIds:ArrayList<String> = arrayListOf()
+    val registrationDate:Date=Date()
 )
     :Parcelable
 {
@@ -31,8 +30,8 @@ data class Hiker (
      */
 
     fun getAge(currentDate: Date):Int?{
-        return if(this.birthDate!=null)
-            floor((currentDate.time.toDouble() - this.birthDate!!.time.toDouble())
+        return if(this.birthday!=null)
+            floor((currentDate.time.toDouble() - this.birthday!!.time.toDouble())
                     /60000/60/24/365).toInt()
         else null
     }

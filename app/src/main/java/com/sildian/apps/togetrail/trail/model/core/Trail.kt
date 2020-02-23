@@ -29,8 +29,8 @@ data class Trail (
     var descent:Int?=null,
     var maxElevation:Int?=null,
     var minElevation:Int?=null,
-    val autoCalculateMetrics:Boolean=false,
-    val creatorId:String=""
+    var authorId:String?=null,
+    val autoCalculateMetrics:Boolean=false
 )
     :Parcelable
 {

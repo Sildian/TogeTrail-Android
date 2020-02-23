@@ -7,10 +7,9 @@
     <string name="menu_trails">Trails</string>
     <string name="menu_events">Events</string>
     <string name="menu_user_profile">My profile</string>
-    <string name="menu_user_login">Log in / off</string>
-    <string name="menu_user_info">My info</string>
     <string name="menu_user_trails">My trails</string>
     <string name="menu_user_settings">My settings</string>
+    <string name="menu_user_login">Log in / off</string>
     <string name="menu_new_trail">New trail</string>
     <string name="menu_new_event">New event</string>
     <string name="menu_new_trail_load_gpx">Load GPX</string>
@@ -32,6 +31,8 @@
     <string name="button_trail_point_remove">Remove last point</string>
     <string name="button_trail_poi_add">Add point of interest</string>
     <string name="button_trail_poi_remove">Remove</string>
+    <!-- Hiker -->
+    <string name="button_hiker_profile_photo_change">Change my photo</string>
 
     <!-- Labels -->
     <!-- Location -->
@@ -63,6 +64,15 @@
     <string name="label_trail_poi_description">Description</string>
     <string name="label_trail_poi_metrics">Metrics</string>
     <string name="label_trail_poi_elevation">Elevation</string>
+    <!-- Hiker -->
+    <string name="label_hiker_info">My info</string>
+    <string name="label_hiker_email">My email</string>
+    <string name="label_hiker_name">My name</string>
+    <string name="label_hiker_birthday">My birthday</string>
+    <string name="label_hiker_live_location">My home</string>
+    <string name="label_hiker_description">About me</string>
+    <string name="label_hiker_description2">Some words about me</string>
+    <string name="label_hiker_other_settings">Other settings</string>
 
     <!-- Examples for layout preview -->
     <string name="example_image_content_description">Image</string>
@@ -83,6 +93,8 @@
     <string name="example_trail_poi_elevation">2000 m Elevation</string>
     <!-- Hiker -->
     <string name="example_hiker_name">Toto</string>
+    <string name="example_hiker_email">toto@toto.com</string>
+    <string name="example_hiker_registration_date">2020/02/18</string>
 
     <!-- Messages to the user -->
     <string name="message_unknown_short">\?</string>

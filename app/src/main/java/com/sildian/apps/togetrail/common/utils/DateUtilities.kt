@@ -2,6 +2,8 @@ package com.sildian.apps.togetrail.common.utils
 
 import org.joda.time.Duration
 import org.joda.time.format.PeriodFormatterBuilder
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.util.*
 
 /*************************************************************************************************
@@ -50,6 +52,68 @@ object DateUtilities {
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
         return calendar.time
+    }
+
+    /**
+     * Displays a date (short format)
+     * @param date : the date
+     * @return a string
+     */
+
+    fun displayDateShort(date:Date):String{
+        val format=SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT)
+        return format.format(date)
+    }
+
+    /**
+     * Displays a date (medium format)
+     * @param date : the date
+     * @return a string
+     */
+
+    fun displayDateMedium(date:Date):String{
+        val format=SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM)
+        return format.format(date)
+    }
+
+    /**
+     * Displays a date (full format)
+     * @param date : the date
+     * @return a string
+     */
+
+    fun displayDateFull(date:Date):String{
+        val format=SimpleDateFormat.getDateInstance(SimpleDateFormat.FULL)
+        return format.format(date)
+    }
+
+    /**
+     * Displays a time (short format)
+     * @param date : the date
+     * @return a string
+     */
+
+    fun displayTime(date:Date):String{
+        val format=SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT)
+        return format.format(date)
+    }
+
+    /**
+     * Gets a date from a string (short format)
+     * @param displayedDate : the string
+     * @return the date, or null if the string is not recognized
+     */
+
+    @Throws(ParseException::class)
+    fun getDateFromString(displayedDate:String):Date?{
+        return try {
+            val format = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT)
+            format.parse(displayedDate)
+        }
+        catch(e:ParseException){
+            e.printStackTrace()
+            null
+        }
     }
 
     /**

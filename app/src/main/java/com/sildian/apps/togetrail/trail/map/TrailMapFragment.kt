@@ -24,7 +24,7 @@ class TrailMapFragment (
     private var trails: List<Trail> = emptyList()
 ) :
     BaseTrailMapFragment(),
-    TrailFirebaseQueries.OnTrailQueryResultListener
+    TrailFirebaseQueries.OnTrailsQueryResultListener
 {
 
     /**********************************UI component**********************************************/

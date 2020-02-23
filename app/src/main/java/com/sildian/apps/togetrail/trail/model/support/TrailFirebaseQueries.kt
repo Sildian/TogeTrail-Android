@@ -12,7 +12,7 @@ object TrailFirebaseQueries {
 
     /****************************************Callbacks*******************************************/
 
-    interface OnTrailQueryResultListener{
+    interface OnTrailsQueryResultListener{
 
         /**
          * This event is triggered when a list of trails is successfully returned from the query

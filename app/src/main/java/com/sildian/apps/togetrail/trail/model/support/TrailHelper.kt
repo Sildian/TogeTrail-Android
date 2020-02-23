@@ -11,7 +11,7 @@ import java.util.*
  * Provides with functions allowing to build a Trail
  ************************************************************************************************/
 
-object TrailFactory {
+object TrailHelper {
 
     /******************************Exceptions messages*******************************************/
 
@@ -42,12 +42,9 @@ object TrailFactory {
 
     fun buildFromNothing(name:String): Trail {
         val source="TogeTrail"
-        val date= Date()
         return Trail(
             name = name,
-            source = source,
-            creationDate = date,
-            lastUpdate = date
+            source = source
         )
     }
 
@@ -93,10 +90,6 @@ object TrailFactory {
             else if (gpx.tracks[0].trackDesc != null) gpx.tracks[0].trackDesc
             else ""
 
-        /*Date as of today*/
-
-        val date=Date()
-
         val trailTrack = TrailTrack()
 
         /*The trailPoints are populated by each trackPoint in the gpx*/
@@ -130,8 +123,6 @@ object TrailFactory {
             name = name,
             source = source,
             description = description,
-            creationDate = date,
-            lastUpdate = date,
             trailTrack = trailTrack,
             autoCalculateMetrics = true
         )

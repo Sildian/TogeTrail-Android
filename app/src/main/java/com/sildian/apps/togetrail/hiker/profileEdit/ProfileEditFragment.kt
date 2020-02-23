@@ -1,35 +1,36 @@
-package com.sildian.apps.togetrail.trail.infoEdit
+package com.sildian.apps.togetrail.hiker.profileEdit
 
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.text.format.DateUtils
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.sdsmdg.harjot.crollerTest.Croller
-
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.listeners.OnSaveDataListener
-import com.sildian.apps.togetrail.common.utils.MetricsHelper
-import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
-import kotlinx.android.synthetic.main.fragment_trail_poi_info_edit.view.*
+import com.sildian.apps.togetrail.common.model.Location
+import com.sildian.apps.togetrail.common.utils.DateUtilities
+import com.sildian.apps.togetrail.common.utils.uiHelpers.DropdownMenuHelper
+import com.sildian.apps.togetrail.hiker.model.core.Hiker
+import kotlinx.android.synthetic.main.fragment_profile_edit.view.*
 import pl.aprilapps.easyphotopicker.*
 
 /*************************************************************************************************
- * Allows to edit information about a trailPointOfInterest
- * @param trailPointOfInterest : the related trailPointOfInterest
+ * Lets the user edit its profile's information
+ * @param hiker : the current user
  ************************************************************************************************/
 
-class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=null) :
+class ProfileEditFragment(val hiker: Hiker?=null) :
     Fragment(),
-    OnSaveDataListener,
-    Croller.onProgressChangedListener
+    OnSaveDataListener
 {
 
     /**********************************Static items**********************************************/
@@ -48,23 +49,20 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
         /**Bundle keys for permissions**/
         private const val KEY_BUNDLE_PERMISSION_WRITE= Manifest.permission.WRITE_EXTERNAL_STORAGE
         private const val KEY_BUNDLE_PERMISSION_CAMERA= Manifest.permission.CAMERA
-
-        /**Values max**/
-        private const val VALUE_MAX_ALTITUDE=4000       //Max value for an altitude (in meters)
     }
 
     /**********************************UI component**********************************************/
 
     private lateinit var layout:View
-    private val nameTextField by lazy {layout.fragment_trail_poi_info_edit_text_field_name}
-    private val photoText by lazy {layout.fragment_trail_poi_info_edit_text_photo}
-    private val photoImageView by lazy {layout.fragment_trail_poi_info_edit_image_view_photo}
-    private val deletePhotoButton by lazy {layout.fragment_trail_poi_info_edit_button_delete_photo}
-    private val addPhotoButton by lazy {layout.fragment_trail_poi_info_edit_button_add_photo}
-    private val takePhotoButton by lazy {layout.fragment_trail_poi_info_edit_button_take_photo}
-    private val metricsCroller by lazy {layout.fragment_trail_poi_info_edit_croller_metrics}
-    private val elevationText by lazy {layout.fragment_trail_poi_info_edit_text_elevation}
-    private val descriptionTextField by lazy {layout.fragment_trail_poi_info_edit_text_field_description}
+    private val photoImageView by lazy {layout.fragment_profile_edit_image_view_photo}
+    private val addPhotoButton by lazy {layout.fragment_profile_edit_button_add_photo}
+    private val takePhotoButton by lazy {layout.fragment_profile_edit_button_take_photo}
+    private val nameTextField by lazy {layout.fragment_profile_edit_text_field_name}
+    private val birthdayTextFieldDropdown by lazy {layout.fragment_profile_edit_text_field_dropdown_birthday}
+    private val countryTextField by lazy {layout.fragment_profile_edit_text_field_country}
+    private val regionTextField by lazy {layout.fragment_profile_edit_text_field_region}
+    private val townTextField by lazy {layout.fragment_profile_edit_text_field_town}
+    private val descriptionTextField by lazy {layout.fragment_profile_edit_text_field_description}
 
     /**********************************Pictures support******************************************/
 
@@ -75,41 +73,41 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Log.d(TAG_FRAGMENT, "Fragment '${javaClass.simpleName}' created")
-        this.layout= inflater.inflate(R.layout.fragment_trail_poi_info_edit, container, false)
+        this.layout=inflater.inflate(R.layout.fragment_profile_edit, container, false)
         initializeEasyImage()
         initializeAllUIComponents()
         return this.layout
     }
 
-    /*********************************Data monitoring********************************************/
+    /*****************************************Data***********************************************/
 
     override fun onSaveData() {
-        this.trailPointOfInterest?.name=this.nameTextField.text.toString()
-        this.trailPointOfInterest?.description=this.descriptionTextField.text.toString()
-        (activity as TrailInfoEditActivity).updateTrailPoiAndSave(this.trailPointOfInterest!!)
+        this.hiker?.name=this.nameTextField.text.toString()
+        this.hiker?.birthday=
+            if(!this.birthdayTextFieldDropdown.text.isNullOrEmpty())
+                DateUtilities.getDateFromString(this.birthdayTextFieldDropdown.text.toString())
+            else null
+        this.hiker?.liveLocation=
+            Location(
+                this.countryTextField.text.toString(),
+                this.regionTextField.text.toString(),
+                this.townTextField.text.toString())
+        this.hiker?.description=this.descriptionTextField.text.toString()
+        (activity as ProfileEditActivity).updateHikerAndSave(this.hiker!!)
     }
 
     /***********************************UI monitoring********************************************/
 
     private fun initializeAllUIComponents(){
-        initializeNameTextField()
-        initializeDeletePhotoButton()
         initializeAddPhotoButton()
         initializeTakePhotoButton()
-        initializeMetricsCroller()
-        initializeElevationText()
+        initializeNameTextField()
+        initializeBirthdayTextFieldDropdown()
+        initializeCountryTextField()
+        initializeRegionTextField()
+        initializeTownTextField()
         initializeDescriptionTextField()
         updatePhoto()
-    }
-
-    private fun initializeNameTextField(){
-        this.nameTextField.setText(this.trailPointOfInterest?.name)
-    }
-
-    private fun initializeDeletePhotoButton(){
-        this.deletePhotoButton.setOnClickListener {
-            deletePhoto()
-        }
     }
 
     private fun initializeAddPhotoButton(){
@@ -124,68 +122,37 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
         }
     }
 
-    private fun initializeMetricsCroller(){
-        val elevation=this.trailPointOfInterest?.elevation
-        updateCroller(elevation)
-        this.metricsCroller.setOnProgressChangedListener(this)
+    private fun initializeNameTextField(){
+        this.nameTextField.setText(this.hiker?.name)
     }
 
-    private fun initializeElevationText(){
-        val elevation=this.trailPointOfInterest?.elevation
-        updateElevation(elevation)
+    private fun initializeBirthdayTextFieldDropdown(){
+        DropdownMenuHelper.populateDropdownMenuWithDatePicker(
+            this.birthdayTextFieldDropdown, activity as AppCompatActivity, this.hiker?.birthday)
+    }
+
+    private fun initializeCountryTextField(){
+        this.countryTextField.setText(this.hiker?.liveLocation?.country)
+    }
+
+    private fun initializeRegionTextField(){
+        this.regionTextField.setText(this.hiker?.liveLocation?.region)
+    }
+
+    private fun initializeTownTextField(){
+        this.townTextField.setText(this.hiker?.liveLocation?.town)
     }
 
     private fun initializeDescriptionTextField(){
-        this.descriptionTextField.setText(this.trailPointOfInterest?.description)
+        this.descriptionTextField.setText(this.hiker?.description)
     }
 
     private fun updatePhoto(){
-        Glide.with(context!!)
-            .load(this.trailPointOfInterest?.photoUrl)
-            .apply(RequestOptions.fitCenterTransform())
-            .placeholder(R.drawable.ic_trail_black)
+        Glide.with(this)
+            .load(this.hiker?.photoUrl)
+            .apply(RequestOptions.circleCropTransform())
+            .placeholder(R.drawable.ic_user_black)
             .into(this.photoImageView)
-        updatePhotoVisibility()
-    }
-
-    private fun updatePhotoVisibility(){
-
-        /*If no photo is available, shows a text to notify the user*/
-
-        if(this.trailPointOfInterest?.photoUrl.isNullOrEmpty()){
-            this.photoText.visibility=View.VISIBLE
-            this.photoImageView.visibility=View.INVISIBLE
-            this.deletePhotoButton.visibility=View.INVISIBLE
-        }
-
-        /*Else shows the image*/
-
-        else{
-            this.photoText.visibility=View.INVISIBLE
-            this.photoImageView.visibility=View.VISIBLE
-            this.deletePhotoButton.visibility=View.VISIBLE
-        }
-    }
-
-    /*****************************Metrics monitoring with croller*********************************/
-
-    override fun onProgressChanged(progress: Int) {
-        updateElevation(progress)
-    }
-
-    private fun updateCroller(currentValue:Int?){
-        this.metricsCroller.max= VALUE_MAX_ALTITUDE
-        this.metricsCroller.progress=currentValue?:0
-    }
-
-    private fun updateElevation(elevation:Int?){
-        this.trailPointOfInterest?.elevation=elevation
-        val elevationToDisplay=MetricsHelper.displayElevation(
-            context!!, elevation, true, true)
-        val elevationToDisplayInCroller=MetricsHelper.displayElevation(
-            context!!, elevation, false, false)
-        this.elevationText.text=elevationToDisplay
-        this.metricsCroller.label = elevationToDisplayInCroller
     }
 
     /*******************************Photos monitoring********************************************/
@@ -198,19 +165,10 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
     }
 
     private fun addPhoto(filePath:String){
-        (activity as TrailInfoEditActivity)
+        (activity as ProfileEditActivity)
             .updateImagePathToUploadIntoDatabase(filePath)
-        this.trailPointOfInterest?.photoUrl=filePath
+        this.hiker?.photoUrl=filePath
         updatePhoto()
-    }
-
-    private fun deletePhoto(){
-        if(!this.trailPointOfInterest?.photoUrl.isNullOrEmpty()) {
-            (activity as TrailInfoEditActivity)
-                .updateImagePathToDeleteFromDatabase(this.trailPointOfInterest?.photoUrl!!)
-            this.trailPointOfInterest.photoUrl = null
-            updatePhoto()
-        }
     }
 
     /***********************************Permissions**********************************************/
@@ -251,12 +209,8 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
 
             }else{
                 requestPermissions(
-                    arrayOf(
-                        KEY_BUNDLE_PERMISSION_WRITE,
-                        KEY_BUNDLE_PERMISSION_CAMERA
-                    ),
-                    KEY_REQUEST_PERMISSION_WRITE_AND_CAMERA
-                )
+                    arrayOf(KEY_BUNDLE_PERMISSION_WRITE, KEY_BUNDLE_PERMISSION_CAMERA),
+                    KEY_REQUEST_PERMISSION_WRITE_AND_CAMERA)
             }
         }else{
 
@@ -268,12 +222,12 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
-            KEY_REQUEST_PERMISSION_WRITE->if(grantResults.isNotEmpty()){
+            KEY_REQUEST_PERMISSION_WRITE ->if(grantResults.isNotEmpty()){
                 when(grantResults[0]) {
                     PackageManager.PERMISSION_GRANTED -> {
                         Log.d(
                             TAG_PERMISSION,
-                            "Permission '${KEY_BUNDLE_PERMISSION_WRITE}' granted"
+                            "Permission '$KEY_BUNDLE_PERMISSION_WRITE' granted"
                         )
                         startAddPhoto()
                     }
@@ -281,7 +235,7 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
                         //TODO handle
                         Log.d(
                             TAG_PERMISSION,
-                            "Permission '${KEY_BUNDLE_PERMISSION_WRITE}' denied"
+                            "Permission '$KEY_BUNDLE_PERMISSION_WRITE' denied"
                         )
                     }
                 }
@@ -291,20 +245,20 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
                     PackageManager.PERMISSION_GRANTED -> {
                         Log.d(
                             TAG_PERMISSION,
-                            "Permission '${KEY_BUNDLE_PERMISSION_WRITE}' granted")
+                            "Permission '$KEY_BUNDLE_PERMISSION_WRITE' granted")
                         Log.d(
                             TAG_PERMISSION,
-                            "Permission '${KEY_BUNDLE_PERMISSION_CAMERA}' granted")
+                            "Permission '$KEY_BUNDLE_PERMISSION_CAMERA' granted")
                         startTakePhoto()
                     }
                     PackageManager.PERMISSION_DENIED -> {
                         //TODO handle
                         Log.d(
                             TAG_PERMISSION,
-                            "Permission '${KEY_BUNDLE_PERMISSION_WRITE}' denied")
+                            "Permission '$KEY_BUNDLE_PERMISSION_WRITE' denied")
                         Log.d(
                             TAG_PERMISSION,
-                            "Permission '${KEY_BUNDLE_PERMISSION_CAMERA}' denied")
+                            "Permission '$KEY_BUNDLE_PERMISSION_CAMERA' denied")
                     }
                 }
             }

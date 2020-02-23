@@ -7,7 +7,7 @@ import com.sildian.apps.togetrail.hiker.model.core.Hiker
  * Provides with functions allowing to build a Hiker
  ************************************************************************************************/
 
-object HikerFactory {
+object HikerHelper {
 
     /**
      * Builds a Hiker from a FirebaseUser

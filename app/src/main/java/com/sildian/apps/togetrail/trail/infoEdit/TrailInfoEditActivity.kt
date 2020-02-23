@@ -8,7 +8,9 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.common.listeners.OnSaveDataListener
 import com.sildian.apps.togetrail.common.utils.storageHelpers.ImageFirebaseStorageHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.trail.map.TrailActivity
@@ -51,8 +53,12 @@ class TrailInfoEditActivity : AppCompatActivity() {
     /**********************************UI component**********************************************/
 
     private val toolbar by lazy {activity_trail_info_edit_toolbar}
-    private lateinit var fragment:BaseTrailInfoEditFragment
+    private lateinit var fragment: Fragment
     private lateinit var progressDialog:AlertDialog
+
+    /**************************************Listeners*********************************************/
+
+    private lateinit var onSaveDataListener:OnSaveDataListener      //Listener called when the user clicks on save menu
 
     /**********************************Pictures support******************************************/
 
@@ -98,7 +104,7 @@ class TrailInfoEditActivity : AppCompatActivity() {
         if(item.groupId==R.id.menu_edit){
             if(item.itemId==R.id.menu_edit_save){
                 Log.d(TAG_MENU, "Menu '${item.title}' clicked")
-                this.fragment.saveData()
+                this.onSaveDataListener.onSaveData()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -239,7 +245,10 @@ class TrailInfoEditActivity : AppCompatActivity() {
         }
     }
 
-    fun updateImagePathToUploadIntoDatabase(imagePath:String?){
+    fun updateImagePathToUploadIntoDatabase(imagePath:String){
+        if(this.trailPointOfInterest?.photoUrl!=null && this.trailPointOfInterest?.photoUrl!!.startsWith("https://")){
+            this.imagePathToDeleteFromDatabase=this.trailPointOfInterest?.photoUrl
+        }
         this.imagePathToUploadIntoDatabase=imagePath
     }
 
@@ -287,6 +296,7 @@ class TrailInfoEditActivity : AppCompatActivity() {
                         this.trailPointOfInterest
                     )
         }
+        this.onSaveDataListener=this.fragment as OnSaveDataListener
         supportFragmentManager.beginTransaction()
             .replace(R.id.activity_trail_info_edit_fragment, this.fragment).commit()
     }

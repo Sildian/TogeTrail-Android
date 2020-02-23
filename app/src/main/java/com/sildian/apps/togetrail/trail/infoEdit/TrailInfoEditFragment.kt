@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.sdsmdg.harjot.crollerTest.Croller
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.common.listeners.OnSaveDataListener
 import com.sildian.apps.togetrail.common.model.Location
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DropdownMenuHelper
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
@@ -22,7 +24,8 @@ import kotlinx.android.synthetic.main.fragment_trail_info_edit.view.*
  ************************************************************************************************/
 
 class TrailInfoEditFragment(val trail: Trail?=null) :
-    BaseTrailInfoEditFragment(),
+    Fragment(),
+    OnSaveDataListener,
     Croller.onProgressChangedListener
 {
 
@@ -91,7 +94,7 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
 
     /*********************************Data monitoring********************************************/
 
-    override fun saveData() {
+    override fun onSaveData() {
         this.trail?.name=this.nameTextField.text.toString()
         this.trail?.level=
             TrailLevel.fromValue(this.levelTextFieldDropDown.tag.toString().toInt()+1)

@@ -18,7 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".hiker.ProfileActivity"></activity>
+        <activity android:name=".hiker.profileEdit.ProfileEditActivity"></activity>
         <activity android:name=".trail.infoEdit.TrailInfoEditActivity" />
         <activity android:name=".trail.map.TrailActivity" />
         <!--

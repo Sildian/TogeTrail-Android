@@ -15,7 +15,7 @@ import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.main.MainActivity
 import com.sildian.apps.togetrail.trail.infoEdit.TrailInfoEditActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
-import com.sildian.apps.togetrail.trail.model.support.TrailFactory
+import com.sildian.apps.togetrail.trail.model.support.TrailHelper
 import com.sildian.apps.togetrail.trail.model.support.TrailFirebaseQueries
 import io.ticofab.androidgpxparser.parser.GPXParser
 import kotlinx.android.synthetic.main.activity_trail.*
@@ -146,7 +146,7 @@ class TrailActivity : AppCompatActivity() {
             try {
                 val gpx = gpxParser.parse(inputStream)
                 this.trail=
-                    TrailFactory.buildFromGpx(gpx)
+                    TrailHelper.buildFromGpx(gpx)
                 this.fragment.updateTrailAndShowTrackAndInfo(this.trail)
             }
 
@@ -160,11 +160,11 @@ class TrailActivity : AppCompatActivity() {
                 Log.w(TAG_FILE, e.message.toString())
                 //TODO handle
             }
-            catch(e: TrailFactory.TrailBuildNoTrackException){
+            catch(e: TrailHelper.TrailBuildNoTrackException){
                 Log.w(TAG_FILE, e.message.toString())
                 //TODO handle
             }
-            catch(e: TrailFactory.TrailBuildTooManyTracksException){
+            catch(e: TrailHelper.TrailBuildTooManyTracksException){
                 Log.w(TAG_FILE, e.message.toString())
                 //TODO handle
             }

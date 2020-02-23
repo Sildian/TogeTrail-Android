@@ -6,10 +6,9 @@
     <string name="menu_trails">Randos</string>
     <string name="menu_events">Evènements</string>
     <string name="menu_user_profile">Mon profil</string>
-    <string name="menu_user_login">Connexion / Déconnexion</string>
-    <string name="menu_user_info">Mes infos</string>
-    <string name="menu_user_trails">Mes parcours</string>
+    <string name="menu_user_trails">Mes randos</string>
     <string name="menu_user_settings">Mes paramètres</string>
+    <string name="menu_user_login">Connexion / Déconnexion</string>
     <string name="menu_new_trail">Nouvelle rando</string>
     <string name="menu_new_event">Nouvel évènement</string>
     <string name="menu_new_trail_load_gpx">Charger un GPX</string>
@@ -31,6 +30,8 @@
     <string name="button_trail_point_remove">Retirer dernier point</string>
     <string name="button_trail_poi_add">Ajouter point d\'intérêt</string>
     <string name="button_trail_poi_remove">Retirer</string>
+    <!-- Hiker -->
+    <string name="button_hiker_profile_photo_change">Changer ma photo</string>
 
     <!-- Labels -->
     <!-- Location -->
@@ -62,6 +63,15 @@
     <string name="label_trail_poi_description">Description</string>
     <string name="label_trail_poi_metrics">Mesures</string>
     <string name="label_trail_poi_elevation">Altitude</string>
+    <!-- Hiker -->
+    <string name="label_hiker_info">Mes infos</string>
+    <string name="label_hiker_email">Mon email</string>
+    <string name="label_hiker_name">Mon nom</string>
+    <string name="label_hiker_birthday">Mon anniversaire</string>
+    <string name="label_hiker_live_location">Ma maison</string>
+    <string name="label_hiker_description">A propos de moi</string>
+    <string name="label_hiker_description2">Quelques mots à propos de moi</string>
+    <string name="label_hiker_other_settings">Autres paramètres</string>
 
     <!-- Examples for layout preview -->
     <string name="example_image_content_description">Image</string>
@@ -82,6 +92,8 @@
     <string name="example_trail_poi_elevation">2000 m Altitude</string>
     <!-- Hiker -->
     <string name="example_hiker_name">Toto</string>
+    <string name="example_hiker_email">toto@toto.com</string>
+    <string name="example_hiker_registration_date">18/02/2020</string>
 
     <!-- Messages to the user -->
     <string name="message_unknown_short">\?</string>

@@ -10,7 +10,7 @@ class HikerTest {
     @Test
     fun given_toto_when_getAge_then_checkAgeIs34() {
         val birthDate=DateUtilities.getDate(1985, 6, 20)
-        val hiker=Hiker(name="Toto", birthDate = birthDate)
+        val hiker=Hiker(name="Toto", birthday = birthDate)
         val currentDate=DateUtilities.getDate(2020, 1, 16)
         assertEquals(34, hiker.getAge(currentDate))
     }

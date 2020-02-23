@@ -3,18 +3,18 @@ package com.sildian.apps.togetrail.trail.model
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.trail.model.support.TrailFactory
+import com.sildian.apps.togetrail.trail.model.support.TrailHelper
 import io.ticofab.androidgpxparser.parser.GPXParser
 import org.junit.Test
 import org.junit.Assert.*
 
-class TrailFactoryTest {
+class TrailHelperTest {
 
     @Test
     fun given_name_when_buildFromNothing_then_checkResultIsOk(){
         val context = ApplicationProvider.getApplicationContext<Context>()
         val name=context.resources.getString(R.string.message_trail_name_unknown)
-        val trail= TrailFactory.buildFromNothing(name)
+        val trail= TrailHelper.buildFromNothing(name)
         assertEquals(name, trail.name)
         assertEquals("TogeTrail", trail.source)
     }
@@ -27,7 +27,7 @@ class TrailFactoryTest {
         val gpx = gpxParser.parse(inputStream)
         assertNotNull(gpx)
 
-        val trail= TrailFactory.buildFromGpx(gpx)
+        val trail= TrailHelper.buildFromGpx(gpx)
         assertEquals("Test", trail.name)
         assertEquals("Sildian apps", trail.source)
         assertTrue(trail.trailTrack.trailPoints.size>0)
@@ -45,9 +45,9 @@ class TrailFactoryTest {
         assertNotNull(gpx)
 
         try {
-            val trail = TrailFactory.buildFromGpx(gpx)
+            val trail = TrailHelper.buildFromGpx(gpx)
         }
-        catch(e: TrailFactory.TrailBuildNoTrackException){
+        catch(e: TrailHelper.TrailBuildNoTrackException){
             assertEquals("No track is available in the gpx.", e.message)
         }
     }
@@ -61,9 +61,9 @@ class TrailFactoryTest {
         assertNotNull(gpx)
 
         try {
-            val trail = TrailFactory.buildFromGpx(gpx)
+            val trail = TrailHelper.buildFromGpx(gpx)
         }
-        catch(e: TrailFactory.TrailBuildTooManyTracksException){
+        catch(e: TrailHelper.TrailBuildTooManyTracksException){
             assertEquals("Gpx with more than one track are not supported.", e.message)
         }
     }

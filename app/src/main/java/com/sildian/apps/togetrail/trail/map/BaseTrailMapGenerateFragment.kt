@@ -8,7 +8,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.trail.model.support.TrailFactory
+import com.sildian.apps.togetrail.trail.model.support.TrailHelper
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 
@@ -34,7 +34,7 @@ abstract class BaseTrailMapGenerateFragment :
 
     private fun initializeTrail(){
         val name=resources.getString(R.string.message_trail_name_unknown)
-        this.trail= TrailFactory.buildFromNothing(name)
+        this.trail= TrailHelper.buildFromNothing(name)
     }
 
     /************************************UI monitoring*******************************************/
