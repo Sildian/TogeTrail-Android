@@ -27,12 +27,16 @@
     <string name="navigation_drawer_close">Closing navigation drawer</string>
 
     <!-- Buttons -->
+    <!-- Common -->
+    <string name="button_common_yes">Yes</string>
+    <string name="button_common_no">No</string>
     <!-- Trail -->
     <string name="button_trail_point_remove">Remove last point</string>
     <string name="button_trail_poi_add">Add point of interest</string>
     <string name="button_trail_poi_remove">Remove</string>
     <!-- Hiker -->
-    <string name="button_hiker_profile_photo_change">Change my photo</string>
+    <string name="button_hiker_password_change">Validate password</string>
+    <string name="button_hiker_account_delete">Delete my account</string>
 
     <!-- Labels -->
     <!-- Location -->
@@ -66,13 +70,19 @@
     <string name="label_trail_poi_elevation">Elevation</string>
     <!-- Hiker -->
     <string name="label_hiker_info">My info</string>
-    <string name="label_hiker_email">My email</string>
     <string name="label_hiker_name">My name</string>
     <string name="label_hiker_birthday">My birthday</string>
     <string name="label_hiker_live_location">My home</string>
     <string name="label_hiker_description">About me</string>
     <string name="label_hiker_description2">Some words about me</string>
-    <string name="label_hiker_other_settings">Other settings</string>
+    <string name="label_hiker_settings">My settings</string>
+    <string name="label_hiker_email">My email</string>
+    <string name="label_hiker_registration_date">Registered since</string>
+    <string name="label_hiker_password_change">Change my password</string>
+    <string name="label_hiker_password_current">Current</string>
+    <string name="label_hiker_password_new">New</string>
+    <string name="label_hiker_password_new_check">Check</string>
+    <string name="label_hiker_account">My account</string>
 
     <!-- Examples for layout preview -->
     <string name="example_image_content_description">Image</string>
@@ -99,6 +109,12 @@
     <!-- Messages to the user -->
     <string name="message_unknown_short">\?</string>
     <string name="message_user_unknown">Unknown user</string>
+    <string name="message_password_not_valid_short">Password not valid</string>
+    <string name="message_password_not_valid_long">Oops! The same password should be filled twice.</string>
+    <string name="message_password_confirmation_title">New password</string>
+    <string name="message_password_confirmation_message">So you want to change your password?</string>
+    <string name="message_account_delete_confirmation_title">Account deletion</string>
+    <string name="message_account_delete_confirmation_message">Wooh! You\'re about to definitely delete your account. Are you sure?</string>
     <string name="message_trail_name_unknown">Unknown trail</string>
     <string name="message_trail_poi_name_unknown">Unknown point of interest</string>
     <string name="message_no_location_available">The location is unknown</string>

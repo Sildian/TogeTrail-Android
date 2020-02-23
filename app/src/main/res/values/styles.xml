@@ -23,9 +23,44 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <!-- Alert dialogs -->
+    <!-- Alert dialogs theme -->
     <style name="AlertDialogTheme" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="android:textColor">@color/colorWhite</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/AlertDialogTitleTextStyle</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/AlertDialogBodyTextStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/AlertDialogButtonPositiveStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/AlertDialogButtonNegativeStyle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/AlertDialogButtonNegativeStyle</item>
+        <item name="materialAlertDialogTitleIconStyle">@style/AlertDialogIconStyle</item>
+    </style>
+    <style name="AlertDialogCriticalStyle" parent="@style/AlertDialogTheme">
+        <item name="materialAlertDialogTitleIconStyle">@style/AlertDialogIconCriticalStyle</item>
+    </style>
+    <style name="AlertDialogTitleTextStyle" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textSize">@dimen/text_size_title</item>
+        <item name="android:textColor">@color/colorSecondary</item>
+    </style>
+    <style name="AlertDialogBodyTextStyle" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
+        <item name="android:textSize">@dimen/text_size_body</item>
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+    <style name="AlertDialogButtonPositiveStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="rippleColor">@color/colorSecondaryLight</item>
+        <item name="android:textSize">@dimen/text_size_title</item>
+        <item name="android:textColor">@color/colorSecondary</item>
+    </style>
+    <style name="AlertDialogButtonNegativeStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="rippleColor">@color/colorWhite</item>
+        <item name="android:textSize">@dimen/text_size_title</item>
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+    <style name="AlertDialogIconStyle" parent="MaterialAlertDialog.MaterialComponents.Title.Icon">
+        <item name="android:tint">@color/colorWhite</item>
+    </style>
+    <style name="AlertDialogIconCriticalStyle" parent="MaterialAlertDialog.MaterialComponents.Title.Icon">
+        <item name="android:tint">@color/colorRed</item>
     </style>
 
     <!-- PopupMenus -->
@@ -84,15 +119,6 @@
         <item name="cornerSizeBottomRight">@dimen/components_corner_medium</item>
     </style>
 
-    <!-- DatePicker theme -->
-    <style name="DatePickerTheme" parent="@style/ThemeOverlay.MaterialComponents.Dialog">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorSecondary">@color/colorSecondary</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="buttonBarButtonStyle">@style/Widget.MaterialComponents.Button.TextButton</item>
-    </style>
-
     <!-- Classic buttons -->
     <style name="ClassicButtonStyle" parent="@style/Widget.MaterialComponents.Button">
         <item name="backgroundTint">@color/colorSecondaryDark</item>
@@ -100,6 +126,18 @@
         <item name="shapeAppearance">@style/ShapeAppearanceOverlay.ClassicButton</item>
     </style>
     <style name="ShapeAppearanceOverlay.ClassicButton">
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSizeTopLeft">@dimen/components_corner_medium</item>
+        <item name="cornerSizeBottomRight">@dimen/components_corner_medium</item>
+    </style>
+
+    <!-- Alert buttons -->
+    <style name="CriticalButtonStyle" parent="@style/Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/colorRed</item>
+        <item name="android:textSize">@dimen/text_size_body</item>
+        <item name="shapeAppearance">@style/ShapeAppearanceOverlay.ClassicButton</item>
+    </style>
+    <style name="ShapeAppearanceOverlay.CriticalButton">
         <item name="cornerFamily">cut</item>
         <item name="cornerSizeTopLeft">@dimen/components_corner_medium</item>
         <item name="cornerSizeBottomRight">@dimen/components_corner_medium</item>
@@ -125,6 +163,15 @@
         <item name="android:textSize">@dimen/text_size_body</item>
         <item name="boxStrokeColor">@color/colorSecondaryDark</item>
         <item name="hintTextColor">@color/colorSecondaryDark</item>
+    </style>
+
+    <!-- DatePicker theme -->
+    <style name="DatePickerTheme" parent="@style/ThemeOverlay.MaterialComponents.Dialog">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="buttonBarButtonStyle">@style/Widget.MaterialComponents.Button.TextButton</item>
     </style>
 
 </resources>

@@ -101,9 +101,9 @@ class TrailInfoEditActivity : AppCompatActivity() {
     /**Click on menu item from toolbar**/
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        Log.d(TAG_MENU, "Menu '${item.title}' clicked")
         if(item.groupId==R.id.menu_edit){
             if(item.itemId==R.id.menu_edit_save){
-                Log.d(TAG_MENU, "Menu '${item.title}' clicked")
                 this.onSaveDataListener.onSaveData()
             }
         }

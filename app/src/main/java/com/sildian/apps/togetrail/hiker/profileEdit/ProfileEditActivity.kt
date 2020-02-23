@@ -36,10 +36,15 @@ class ProfileEditActivity : AppCompatActivity() {
         /**Fragments ids**/
         private const val ID_FRAGMENT_INFO=1
         private const val ID_FRAGMENT_SETTINGS=2
+
+        /**Actions to perform**/
+        const val ACTION_PROFILE_EDIT_INFO=1
+        const val ACTION_PROFILE_EDIT_SETTINGS=2
     }
 
     /****************************************Data************************************************/
 
+    private var currentAction= ACTION_PROFILE_EDIT_INFO         //Action defining what the user is performing
     private var hiker: Hiker?=null
 
     /**********************************UI component**********************************************/
@@ -65,7 +70,7 @@ class ProfileEditActivity : AppCompatActivity() {
         setContentView(R.layout.activity_profile_edit)
         readDataFromIntent(intent)
         initializeToolbar()
-        showFragment(ID_FRAGMENT_INFO) //TODO give the fragment with the intent
+        startProfileAction()
     }
 
     /********************************Navigation control******************************************/
@@ -93,9 +98,9 @@ class ProfileEditActivity : AppCompatActivity() {
     /**Click on menu item from toolbar**/
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        Log.d(TAG_MENU, "Menu '${item.title}' clicked")
         if(item.groupId==R.id.menu_edit){
             if(item.itemId==R.id.menu_edit_save){
-                Log.d(TAG_MENU, "Menu '${item.title}' clicked")
                 this.onSaveDataListener.onSaveData()
             }
         }
@@ -106,6 +111,9 @@ class ProfileEditActivity : AppCompatActivity() {
 
     private fun readDataFromIntent(intent: Intent?){
         if(intent!=null){
+            if(intent.hasExtra(MainActivity.KEY_BUNDLE_PROFILE_ACTION)){
+                this.currentAction=intent.getIntExtra(MainActivity.KEY_BUNDLE_PROFILE_ACTION, ACTION_PROFILE_EDIT_INFO)
+            }
             if(intent.hasExtra(MainActivity.KEY_BUNDLE_HIKER)){
                 this.hiker= intent.getParcelableExtra(MainActivity.KEY_BUNDLE_HIKER)
             }
@@ -215,6 +223,15 @@ class ProfileEditActivity : AppCompatActivity() {
         supportActionBar?.setTitle(R.string.toolbar_profile)
     }
 
+    /*********************************Starts profile action**************************************/
+
+    private fun startProfileAction(){
+        when(this.currentAction){
+            ACTION_PROFILE_EDIT_INFO -> showFragment(ID_FRAGMENT_INFO)
+            ACTION_PROFILE_EDIT_SETTINGS -> showFragment(ID_FRAGMENT_SETTINGS)
+        }
+    }
+
     /******************************Fragments monitoring******************************************/
 
     /**
@@ -225,8 +242,9 @@ class ProfileEditActivity : AppCompatActivity() {
     private fun showFragment(fragmentId:Int){
         when(fragmentId){
             ID_FRAGMENT_INFO ->
-                this.fragment= ProfileEditFragment(this.hiker)
-            //TODO add other fragments
+                this.fragment= ProfileInfoEditFragment(this.hiker)
+            ID_FRAGMENT_SETTINGS ->
+                this.fragment=ProfileSettingsEditFragment(this.hiker)
         }
         this.onSaveDataListener=this.fragment as OnSaveDataListener
         supportFragmentManager.beginTransaction()

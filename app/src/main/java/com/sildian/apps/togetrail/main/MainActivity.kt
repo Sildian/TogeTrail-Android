@@ -68,6 +68,7 @@ class MainActivity :
         private const val KEY_REQUEST_PERMISSION_LOCATION=2001
 
         /**Bundle keys for intents**/
+        const val KEY_BUNDLE_PROFILE_ACTION="KEY_BUNDLE_PROFILE_ACTION"
         const val KEY_BUNDLE_HIKER="KEY_BUNDLE_HIKER"
         const val KEY_BUNDLE_TRAIL_ACTION="KEY_BUNDLE_TRAIL_ACTION"
         const val KEY_BUNDLE_TRAIL="KEY_BUNDLE_TRAIL"
@@ -119,6 +120,9 @@ class MainActivity :
     /**Click on menu item from...**/
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+
+        Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+
         return when(item.groupId) {
 
             /*Bottom Navigation View*/
@@ -126,10 +130,8 @@ class MainActivity :
             R.id.menu_main -> {
                 //TODO handle clicks
                 when (item.itemId) {
-                    R.id.menu_main_map -> {
-                        Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+                    R.id.menu_main_map ->
                         showFragment(ID_FRAGMENT_MAP)
-                    }
                     R.id.menu_main_trails ->
                         Log.d(TAG_MENU, "Menu '${item.title}' clicked")
                     R.id.menu_main_events ->
@@ -144,17 +146,16 @@ class MainActivity :
                 //TODO handle clicks
                 when (item.itemId) {
                     R.id.menu_user_profile -> {
-                        Log.d(TAG_MENU, "Menu '${item.title}' clicked")
                         if(FirebaseAuth.getInstance().currentUser!=null){
-                            startProfileActivity()
+                            startProfileActivity(ProfileEditActivity.ACTION_PROFILE_EDIT_INFO)
                         }else{
                             //TODO handle user not connected
                         }
                     }
-                    R.id.menu_user_login -> {
-                        Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+                    R.id.menu_user_settings ->
+                        startProfileActivity(ProfileEditActivity.ACTION_PROFILE_EDIT_SETTINGS)
+                    R.id.menu_user_login ->
                         login()
-                    }
                 }
                 true
             }
@@ -440,10 +441,14 @@ class MainActivity :
         )
     }
 
-    /**Starts profile activity**/
+    /**
+     * Starts profile activity
+     * @param profileActionId : defines which action should be performed (choice within ProfileEditActivity.ACTION_PROFILE_xxx
+     */
 
-    private fun startProfileActivity(){
+    private fun startProfileActivity(profileActionId:Int){
         val profileActivityIntent=Intent(this, ProfileEditActivity::class.java)
+        profileActivityIntent.putExtra(KEY_BUNDLE_PROFILE_ACTION, profileActionId)
         profileActivityIntent.putExtra(KEY_BUNDLE_HIKER, this.currentHiker)
         startActivityForResult(profileActivityIntent, KEY_REQUEST_PROFILE)
     }

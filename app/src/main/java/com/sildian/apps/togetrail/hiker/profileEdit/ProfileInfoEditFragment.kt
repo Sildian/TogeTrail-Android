@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.text.format.DateUtils
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -28,7 +27,7 @@ import pl.aprilapps.easyphotopicker.*
  * @param hiker : the current user
  ************************************************************************************************/
 
-class ProfileEditFragment(val hiker: Hiker?=null) :
+class ProfileInfoEditFragment(val hiker: Hiker?=null) :
     Fragment(),
     OnSaveDataListener
 {
@@ -54,15 +53,15 @@ class ProfileEditFragment(val hiker: Hiker?=null) :
     /**********************************UI component**********************************************/
 
     private lateinit var layout:View
-    private val photoImageView by lazy {layout.fragment_profile_edit_image_view_photo}
-    private val addPhotoButton by lazy {layout.fragment_profile_edit_button_add_photo}
-    private val takePhotoButton by lazy {layout.fragment_profile_edit_button_take_photo}
-    private val nameTextField by lazy {layout.fragment_profile_edit_text_field_name}
-    private val birthdayTextFieldDropdown by lazy {layout.fragment_profile_edit_text_field_dropdown_birthday}
-    private val countryTextField by lazy {layout.fragment_profile_edit_text_field_country}
-    private val regionTextField by lazy {layout.fragment_profile_edit_text_field_region}
-    private val townTextField by lazy {layout.fragment_profile_edit_text_field_town}
-    private val descriptionTextField by lazy {layout.fragment_profile_edit_text_field_description}
+    private val photoImageView by lazy {layout.fragment_profile_info_edit_image_view_photo}
+    private val addPhotoButton by lazy {layout.fragment_profile_info_edit_button_add_photo}
+    private val takePhotoButton by lazy {layout.fragment_profile_info_edit_button_take_photo}
+    private val nameTextField by lazy {layout.fragment_profile_info_edit_text_field_name}
+    private val birthdayTextFieldDropdown by lazy {layout.fragment_profile_info_edit_text_field_dropdown_birthday}
+    private val countryTextField by lazy {layout.fragment_profile_info_edit_text_field_country}
+    private val regionTextField by lazy {layout.fragment_profile_info_edit_text_field_region}
+    private val townTextField by lazy {layout.fragment_profile_info_edit_text_field_town}
+    private val descriptionTextField by lazy {layout.fragment_profile_info_edit_text_field_description}
 
     /**********************************Pictures support******************************************/
 

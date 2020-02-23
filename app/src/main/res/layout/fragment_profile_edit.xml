@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".hiker.profileEdit.ProfileEditFragment">
+    tools:context=".hiker.profileEdit.ProfileInfoEditFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,7 +35,7 @@
                 android:gravity="center_vertical">
 
                 <ImageButton
-                    android:id="@+id/fragment_profile_edit_button_add_photo"
+                    android:id="@+id/fragment_profile_info_edit_button_add_photo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/components_margin_medium"
@@ -43,7 +43,7 @@
                     app:srcCompat="@drawable/ic_add_black" />
 
                 <ImageView
-                    android:id="@+id/fragment_profile_edit_image_view_photo"
+                    android:id="@+id/fragment_profile_info_edit_image_view_photo"
                     android:layout_width="@dimen/image_size_medium"
                     android:layout_height="@dimen/image_size_medium"
                     android:layout_margin="@dimen/components_margin_medium"
@@ -51,7 +51,7 @@
                     app:srcCompat="@drawable/ic_user_black" />
 
                 <ImageButton
-                    android:id="@+id/fragment_profile_edit_button_take_photo"
+                    android:id="@+id/fragment_profile_info_edit_button_take_photo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/components_margin_medium"
@@ -77,7 +77,7 @@
                 android:hint="@string/label_hiker_name">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/fragment_profile_edit_text_field_name"
+                    android:id="@+id/fragment_profile_info_edit_text_field_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textCapSentences"
@@ -94,7 +94,7 @@
                 android:hint="@string/label_hiker_birthday">
 
                 <AutoCompleteTextView
-                    android:id="@+id/fragment_profile_edit_text_field_dropdown_birthday"
+                    android:id="@+id/fragment_profile_info_edit_text_field_dropdown_birthday"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="date"
@@ -131,7 +131,7 @@
                 android:hint="@string/label_location_country">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/fragment_profile_edit_text_field_country"
+                    android:id="@+id/fragment_profile_info_edit_text_field_country"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textCapSentences"
@@ -148,7 +148,7 @@
                 android:hint="@string/label_location_region">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/fragment_profile_edit_text_field_region"
+                    android:id="@+id/fragment_profile_info_edit_text_field_region"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textCapSentences"
@@ -166,7 +166,7 @@
             android:hint="@string/label_location_town">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/fragment_profile_edit_text_field_town"
+                android:id="@+id/fragment_profile_info_edit_text_field_town"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapSentences"
@@ -194,7 +194,7 @@
             android:hint="@string/label_hiker_description2">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/fragment_profile_edit_text_field_description"
+                android:id="@+id/fragment_profile_info_edit_text_field_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapSentences"

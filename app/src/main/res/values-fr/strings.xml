@@ -26,12 +26,16 @@
     <string name="navigation_drawer_close">Fermeture du navigation drawer</string>
 
     <!-- Buttons -->
+    <!-- Common -->
+    <string name="button_common_yes">Oui</string>
+    <string name="button_common_no">Non</string>
     <!-- Trail -->
     <string name="button_trail_point_remove">Retirer dernier point</string>
     <string name="button_trail_poi_add">Ajouter point d\'intérêt</string>
     <string name="button_trail_poi_remove">Retirer</string>
     <!-- Hiker -->
-    <string name="button_hiker_profile_photo_change">Changer ma photo</string>
+    <string name="button_hiker_password_change">Valider mot de passe</string>
+    <string name="button_hiker_account_delete">Supprimer mon compte</string>
 
     <!-- Labels -->
     <!-- Location -->
@@ -65,13 +69,19 @@
     <string name="label_trail_poi_elevation">Altitude</string>
     <!-- Hiker -->
     <string name="label_hiker_info">Mes infos</string>
-    <string name="label_hiker_email">Mon email</string>
     <string name="label_hiker_name">Mon nom</string>
     <string name="label_hiker_birthday">Mon anniversaire</string>
     <string name="label_hiker_live_location">Ma maison</string>
     <string name="label_hiker_description">A propos de moi</string>
     <string name="label_hiker_description2">Quelques mots à propos de moi</string>
-    <string name="label_hiker_other_settings">Autres paramètres</string>
+    <string name="label_hiker_settings">Mes paramètres</string>
+    <string name="label_hiker_email">Mon email</string>
+    <string name="label_hiker_registration_date">Inscrit depuis</string>
+    <string name="label_hiker_password_change">Changer mon mot de passe</string>
+    <string name="label_hiker_password_current">Actuel</string>
+    <string name="label_hiker_password_new">Nouveau</string>
+    <string name="label_hiker_password_new_check">Vérification</string>
+    <string name="label_hiker_account">Mon compte</string>
 
     <!-- Examples for layout preview -->
     <string name="example_image_content_description">Image</string>
@@ -98,6 +108,12 @@
     <!-- Messages to the user -->
     <string name="message_unknown_short">\?</string>
     <string name="message_user_unknown">Utilisateur inconnu</string>
+    <string name="message_password_not_valid_short">Mot de passe non valide</string>
+    <string name="message_password_not_valid_long">Oups! Le même mot de passe doit être saisi deux fois.</string>
+    <string name="message_password_confirmation_title">Nouveau mot de passe</string>
+    <string name="message_password_confirmation_message">Vous voulez donc changer votre mot de passe?</string>
+    <string name="message_account_delete_confirmation_title">Suppression de compte</string>
+    <string name="message_account_delete_confirmation_message">Oula! Vous êtes sur le point de supprimer définitivement votre compte. Etes-vous bien sûr?</string>
     <string name="message_trail_name_unknown">Parcours inconnu</string>
     <string name="message_trail_poi_name_unknown">Point d\'intérêt inconnu</string>
     <string name="message_no_location_available">L\'emplacement n\'est pas disponible</string>
