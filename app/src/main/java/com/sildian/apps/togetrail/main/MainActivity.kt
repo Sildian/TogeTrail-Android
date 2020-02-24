@@ -20,8 +20,8 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.auth.FirebaseAuth
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.UserFirebaseHelper
 import com.sildian.apps.togetrail.hiker.profileEdit.ProfileEditActivity
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.support.HikerHelper
@@ -51,7 +51,7 @@ class MainActivity :
         /**Logs**/
         private const val TAG_ACTIVITY="TAG_ACTIVITY"
         private const val TAG_MENU="TAG_MENU"
-        private const val TAG_LOGIN="TAG_LOGIN"
+        private const val TAG_USER="TAG_USER"
         private const val TAG_STORAGE="TAG_STORAGE"
         private const val TAG_PERMISSION="TAG_PERMISSION"
 
@@ -146,7 +146,7 @@ class MainActivity :
                 //TODO handle clicks
                 when (item.itemId) {
                     R.id.menu_user_profile -> {
-                        if(FirebaseAuth.getInstance().currentUser!=null){
+                        if(UserFirebaseHelper.getCurrentUser()!=null){
                             startProfileActivity(ProfileEditActivity.ACTION_PROFILE_EDIT_INFO)
                         }else{
                             //TODO handle user not connected
@@ -230,7 +230,7 @@ class MainActivity :
 
         /*Checks if the user is connected*/
 
-        val user=FirebaseAuth.getInstance().currentUser
+        val user=UserFirebaseHelper.getCurrentUser()
         if(user!=null) {
 
             /*If the user is connected, gets its related hiker profile from the database*/
@@ -333,7 +333,7 @@ class MainActivity :
 
         /*If the user is null, then shows default info*/
 
-        val user=FirebaseAuth.getInstance().currentUser
+        val user=UserFirebaseHelper.getCurrentUser()
         if(user==null){
             this.navigationHeaderUserImage.setImageResource(R.drawable.ic_user_black)
             this.navigationHeaderUserNameText.setText(R.string.message_user_unknown)
@@ -355,11 +355,12 @@ class MainActivity :
 
     private fun login(){
         //TODO add a progress bar
-        val user=FirebaseAuth.getInstance().currentUser
+        val user=UserFirebaseHelper.getCurrentUser()
         if(user==null){
             startLoginActivity()
         }else{
-            FirebaseAuth.getInstance().signOut()
+            this.currentHiker=null
+            UserFirebaseHelper.signUserOut()
             updateNavigationViewUserItems()
         }
         this.drawerLayout.closeDrawers()
@@ -484,21 +485,21 @@ class MainActivity :
         val idpResponse=IdpResponse.fromResultIntent(data)
         when{
             resultCode== Activity.RESULT_OK -> {
-                Log.d(TAG_LOGIN, "Login successful")
+                Log.d(TAG_USER, "Login successful")
                 updateNavigationViewUserItems()
                 updateAndSaveCurrentHiker()
             }
             resultCode==Activity.RESULT_CANCELED -> {
                 //TODO handle
-                Log.d(TAG_LOGIN, "Login canceled")
+                Log.d(TAG_USER, "Login canceled")
             }
             idpResponse?.error!=null -> {
                 //TODO handle
-                Log.w(TAG_LOGIN, "Login failed : ${idpResponse.error?.message}")
+                Log.w(TAG_USER, "Login failed : ${idpResponse.error?.message}")
             }
             else -> {
                 //TODO handle
-                Log.w(TAG_LOGIN, "Login failed : unknown error")
+                Log.w(TAG_USER, "Login failed : unknown error")
             }
         }
     }
@@ -507,6 +508,7 @@ class MainActivity :
         if(resultCode== Activity.RESULT_OK){
             if(data!=null && data.hasExtra(KEY_BUNDLE_HIKER)){
                 this.currentHiker=data.getParcelableExtra(KEY_BUNDLE_HIKER)
+                updateNavigationViewUserItems()
             }
         }
     }

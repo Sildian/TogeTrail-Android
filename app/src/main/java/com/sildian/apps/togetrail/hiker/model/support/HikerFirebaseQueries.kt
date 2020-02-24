@@ -35,4 +35,13 @@ object HikerFirebaseQueries {
 
     fun createOrUpdateHiker(hiker: Hiker):Task<Void> =
         getCollection().document(hiker.id).set(hiker)
+
+    /**
+     * Deletes a hiker
+     * @param hiker : the hiker
+     * @return a task result
+     */
+
+    fun deleteHiker(hiker:Hiker) : Task<Void> =
+        getCollection().document(hiker.id).delete()
 }

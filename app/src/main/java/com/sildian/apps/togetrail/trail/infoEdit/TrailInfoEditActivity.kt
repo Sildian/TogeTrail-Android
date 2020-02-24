@@ -11,7 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.listeners.OnSaveDataListener
-import com.sildian.apps.togetrail.common.utils.storageHelpers.ImageFirebaseStorageHelper
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.ImageStorageFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.trail.map.TrailActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
@@ -164,7 +164,7 @@ class TrailInfoEditActivity : AppCompatActivity() {
 
         /*Uploads the image matching the path indicated within the image path to upload*/
 
-        ImageFirebaseStorageHelper.uploadImage(this.imagePathToUploadIntoDatabase.toString())
+        ImageStorageFirebaseHelper.uploadImage(this.imagePathToUploadIntoDatabase.toString())
             .addOnSuccessListener { uploadTask ->
                 Log.d(TAG_STORAGE, "Uploaded image to database with success")
 
@@ -197,7 +197,7 @@ class TrailInfoEditActivity : AppCompatActivity() {
 
         /*Deletes the image matching the url indicated within the image path to delete*/
 
-        ImageFirebaseStorageHelper.deleteImage(this.imagePathToDeleteFromDatabase.toString())
+        ImageStorageFirebaseHelper.deleteImage(this.imagePathToDeleteFromDatabase.toString())
             .addOnSuccessListener {
                 Log.d(TAG_STORAGE, "Deleted image from database with success")
             }

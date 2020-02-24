@@ -58,7 +58,7 @@ class ProfileSettingsEditFragment(val hiker: Hiker?=null) :
     /*****************************************Data***********************************************/
 
     override fun onSaveData() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //TODO implement
     }
 
     /***********************************UI monitoring********************************************/
@@ -105,7 +105,8 @@ class ProfileSettingsEditFragment(val hiker: Hiker?=null) :
                 R.string.message_password_confirmation_message,
                 DialogInterface.OnClickListener { dialog, which ->
                     if(which==DialogInterface.BUTTON_POSITIVE){
-                        //TODO save password
+                        val newPassword=this.newPasswordTextField.text.toString()
+                        (activity as ProfileEditActivity).updateUserPassword(newPassword)
                     }
                 })
             dialog.show()
@@ -155,7 +156,7 @@ class ProfileSettingsEditFragment(val hiker: Hiker?=null) :
             R.string.message_account_delete_confirmation_message,
             DialogInterface.OnClickListener { dialog, which ->
                 if(which==DialogInterface.BUTTON_POSITIVE){
-                    //TODO delete account
+                    (activity as ProfileEditActivity).deleteUser()
                 }
             })
         dialog.show()

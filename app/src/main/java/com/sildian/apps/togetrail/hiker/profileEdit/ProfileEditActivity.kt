@@ -11,7 +11,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.listeners.OnSaveDataListener
-import com.sildian.apps.togetrail.common.utils.storageHelpers.ImageFirebaseStorageHelper
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.ImageStorageFirebaseHelper
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.UserFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
@@ -31,6 +32,7 @@ class ProfileEditActivity : AppCompatActivity() {
         /**Logs**/
         private const val TAG_ACTIVITY = "TAG_ACTIVITY"
         private const val TAG_MENU="TAG_MENU"
+        private const val TAG_USER="TAG_USER"
         private const val TAG_STORAGE="TAG_STORAGE"
 
         /**Fragments ids**/
@@ -143,7 +145,7 @@ class ProfileEditActivity : AppCompatActivity() {
 
         /*Uploads the image matching the path indicated within the image path to upload*/
 
-        ImageFirebaseStorageHelper.uploadImage(this.imagePathToUploadIntoDatabase.toString())
+        ImageStorageFirebaseHelper.uploadImage(this.imagePathToUploadIntoDatabase.toString())
             .addOnSuccessListener { uploadTask ->
                 Log.d(TAG_STORAGE, "Uploaded image to database with success")
 
@@ -175,7 +177,7 @@ class ProfileEditActivity : AppCompatActivity() {
 
         /*Deletes the image matching the url indicated within the image path to delete*/
 
-        ImageFirebaseStorageHelper.deleteImage(this.imagePathToDeleteFromDatabase.toString())
+        ImageStorageFirebaseHelper.deleteImage(this.imagePathToDeleteFromDatabase.toString())
             .addOnSuccessListener {
                 Log.d(TAG_STORAGE, "Deleted image from database with success")
             }
@@ -191,7 +193,7 @@ class ProfileEditActivity : AppCompatActivity() {
                 Log.d(TAG_STORAGE, "Hiker updated in the database")
                 this.progressDialog.dismiss()
                 //TODO show a snackbar when finished
-                finishOk()
+                updateUserProfile()
             }
             .addOnFailureListener { e ->
                 Log.w(TAG_STORAGE, e.message.toString())
@@ -213,6 +215,64 @@ class ProfileEditActivity : AppCompatActivity() {
         if(imagePath.startsWith("https://")){
             this.imagePathToDeleteFromDatabase=imagePath
         }
+    }
+
+    /******************************User monitoring************************************************/
+
+    fun updateUserProfile(){
+        UserFirebaseHelper.updateUserProfile(this.hiker?.name!!, this.hiker?.photoUrl)
+            ?.addOnSuccessListener {
+                Log.d(TAG_USER, "User profile updated in the database")
+                this.progressDialog.dismiss()
+                //TODO show a snackbar when finished
+                finishOk()
+            }
+            ?.addOnFailureListener { e ->
+                Log.w(TAG_USER, e.message.toString())
+                this.progressDialog.dismiss()
+                //TODO handle
+                finishCancel()
+            }
+    }
+
+    fun updateUserPassword(password:String){
+        this.progressDialog= DialogHelper.createProgressDialog(this)
+        UserFirebaseHelper.updateUserPassword(password)
+            ?.addOnSuccessListener {
+                Log.d(TAG_USER, "User password updated in the database")
+                this.progressDialog.dismiss()
+                //TODO show a snackbar when finished
+            }
+            ?.addOnFailureListener { e ->
+                Log.w(TAG_USER, e.message.toString())
+                this.progressDialog.dismiss()
+                //TODO handle
+            }
+    }
+
+    fun deleteUser(){
+        this.progressDialog= DialogHelper.createProgressDialog(this)
+        HikerFirebaseQueries.deleteHiker(this.hiker!!)
+            .addOnSuccessListener {
+                Log.d(TAG_USER, "Hiker deleted from the database")
+                UserFirebaseHelper.deleteUser()
+                    ?.addOnSuccessListener {
+                        Log.d(TAG_USER, "User deleted from the database")
+                        this.progressDialog.dismiss()
+                        //TODO show a snackbar when finished
+                    }
+                    ?.addOnFailureListener { e ->
+                        Log.w(TAG_USER, e.message.toString())
+                        this.progressDialog.dismiss()
+                        //TODO handle
+                    }
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG_USER, e.message.toString())
+                this.progressDialog.dismiss()
+                //TODO handle
+            }
+
     }
 
     /******************************UI monitoring**************************************************/

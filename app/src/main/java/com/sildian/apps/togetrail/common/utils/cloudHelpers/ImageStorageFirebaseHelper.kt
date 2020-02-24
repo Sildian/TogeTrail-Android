@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.common.utils.storageHelpers
+package com.sildian.apps.togetrail.common.utils.cloudHelpers
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.storage.FirebaseStorage
@@ -11,7 +11,7 @@ import java.util.*
  * Provides with Firebase queries allowing to store images
  ************************************************************************************************/
 
-object ImageFirebaseStorageHelper {
+object ImageStorageFirebaseHelper {
 
     /**
      * Uploads an image into Firebase
