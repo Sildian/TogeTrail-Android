@@ -10,7 +10,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.listeners.OnSaveDataListener
+import com.sildian.apps.togetrail.common.flows.SaveDataFlow
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.ImageStorageFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.UserFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
@@ -47,7 +47,7 @@ class ProfileEditActivity : AppCompatActivity() {
     /****************************************Data************************************************/
 
     private var currentAction= ACTION_PROFILE_EDIT_INFO         //Action defining what the user is performing
-    private var hiker: Hiker?=null
+    private var hiker: Hiker?=null                              //The hiker
 
     /**********************************UI component**********************************************/
 
@@ -55,9 +55,9 @@ class ProfileEditActivity : AppCompatActivity() {
     private lateinit var fragment: Fragment
     private lateinit var progressDialog: AlertDialog
 
-    /*************************************Listeners**********************************************/
+    /********************************Attached flows**********************************************/
 
-    private lateinit var onSaveDataListener:OnSaveDataListener      //Listener called when the user clicks on save menu
+    private lateinit var saveDataFlow:SaveDataFlow      //Flow used when the user clicks on save menu
 
     /**********************************Pictures support******************************************/
 
@@ -103,7 +103,7 @@ class ProfileEditActivity : AppCompatActivity() {
         Log.d(TAG_MENU, "Menu '${item.title}' clicked")
         if(item.groupId==R.id.menu_edit){
             if(item.itemId==R.id.menu_edit_save){
-                this.onSaveDataListener.onSaveData()
+                this.saveDataFlow.saveData()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -219,6 +219,8 @@ class ProfileEditActivity : AppCompatActivity() {
 
     /******************************User monitoring************************************************/
 
+    /**Updates the user's profile in the backend**/
+
     fun updateUserProfile(){
         UserFirebaseHelper.updateUserProfile(this.hiker?.name!!, this.hiker?.photoUrl)
             ?.addOnSuccessListener {
@@ -235,11 +237,13 @@ class ProfileEditActivity : AppCompatActivity() {
             }
     }
 
-    fun updateUserPassword(password:String){
+    /**Resets the user's password in the backend**/
+
+    fun resetUserPassword(){
         this.progressDialog= DialogHelper.createProgressDialog(this)
-        UserFirebaseHelper.updateUserPassword(password)
+        UserFirebaseHelper.resetUserPassword()
             ?.addOnSuccessListener {
-                Log.d(TAG_USER, "User password updated in the database")
+                Log.d(TAG_USER, "Email sent to the user to let him reset his password")
                 this.progressDialog.dismiss()
                 //TODO show a snackbar when finished
             }
@@ -250,15 +254,30 @@ class ProfileEditActivity : AppCompatActivity() {
             }
     }
 
-    fun deleteUser(){
+    /**Definitely deletes the user's account from the backend**/
+
+    fun deleteUserAccount(){
+
         this.progressDialog= DialogHelper.createProgressDialog(this)
+
+        /*Deletes the hiker's data related to the user*/
+
         HikerFirebaseQueries.deleteHiker(this.hiker!!)
             .addOnSuccessListener {
                 Log.d(TAG_USER, "Hiker deleted from the database")
-                UserFirebaseHelper.deleteUser()
+
+                /*Delete the user's account*/
+
+                UserFirebaseHelper.deleteUserAccount()
                     ?.addOnSuccessListener {
                         Log.d(TAG_USER, "User deleted from the database")
                         this.progressDialog.dismiss()
+
+                        /*Deletes the user's photo*/
+
+                        if(this.hiker?.photoUrl!=null) {
+                            ImageStorageFirebaseHelper.deleteImage(this.hiker?.photoUrl.toString())
+                        }
                         //TODO show a snackbar when finished
                     }
                     ?.addOnFailureListener { e ->
@@ -272,7 +291,6 @@ class ProfileEditActivity : AppCompatActivity() {
                 this.progressDialog.dismiss()
                 //TODO handle
             }
-
     }
 
     /******************************UI monitoring**************************************************/
@@ -280,7 +298,12 @@ class ProfileEditActivity : AppCompatActivity() {
     private fun initializeToolbar(){
         setSupportActionBar(this.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setTitle(R.string.toolbar_profile)
+        when(this.currentAction){
+            ACTION_PROFILE_EDIT_INFO ->
+                supportActionBar?.setTitle(R.string.toolbar_hiker_profile)
+            ACTION_PROFILE_EDIT_SETTINGS ->
+                supportActionBar?.setTitle(R.string.toolbar_hikder_settings)
+        }
     }
 
     /*********************************Starts profile action**************************************/
@@ -306,7 +329,7 @@ class ProfileEditActivity : AppCompatActivity() {
             ID_FRAGMENT_SETTINGS ->
                 this.fragment=ProfileSettingsEditFragment(this.hiker)
         }
-        this.onSaveDataListener=this.fragment as OnSaveDataListener
+        this.saveDataFlow=this.fragment as SaveDataFlow
         supportFragmentManager.beginTransaction()
             .replace(R.id.activity_profile_edit_fragment, this.fragment).commit()
     }

@@ -10,7 +10,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.listeners.OnSaveDataListener
+import com.sildian.apps.togetrail.common.flows.SaveDataFlow
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.ImageStorageFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.trail.map.TrailActivity
@@ -56,9 +56,9 @@ class TrailInfoEditActivity : AppCompatActivity() {
     private lateinit var fragment: Fragment
     private lateinit var progressDialog:AlertDialog
 
-    /**************************************Listeners*********************************************/
+    /**************************************Flows*************************************************/
 
-    private lateinit var onSaveDataListener:OnSaveDataListener      //Listener called when the user clicks on save menu
+    private lateinit var saveDataFlow:SaveDataFlow      //Flow used when the user clicks on save menu
 
     /**********************************Pictures support******************************************/
 
@@ -104,7 +104,7 @@ class TrailInfoEditActivity : AppCompatActivity() {
         Log.d(TAG_MENU, "Menu '${item.title}' clicked")
         if(item.groupId==R.id.menu_edit){
             if(item.itemId==R.id.menu_edit_save){
-                this.onSaveDataListener.onSaveData()
+                this.saveDataFlow.saveData()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -296,7 +296,7 @@ class TrailInfoEditActivity : AppCompatActivity() {
                         this.trailPointOfInterest
                     )
         }
-        this.onSaveDataListener=this.fragment as OnSaveDataListener
+        this.saveDataFlow=this.fragment as SaveDataFlow
         supportFragmentManager.beginTransaction()
             .replace(R.id.activity_trail_info_edit_fragment, this.fragment).commit()
     }

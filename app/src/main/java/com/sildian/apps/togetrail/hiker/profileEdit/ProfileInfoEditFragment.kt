@@ -14,12 +14,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.listeners.OnSaveDataListener
+import com.sildian.apps.togetrail.common.flows.SaveDataFlow
 import com.sildian.apps.togetrail.common.model.Location
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DropdownMenuHelper
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
-import kotlinx.android.synthetic.main.fragment_profile_edit.view.*
+import kotlinx.android.synthetic.main.fragment_profile_info_edit.view.*
 import pl.aprilapps.easyphotopicker.*
 
 /*************************************************************************************************
@@ -29,7 +29,7 @@ import pl.aprilapps.easyphotopicker.*
 
 class ProfileInfoEditFragment(val hiker: Hiker?=null) :
     Fragment(),
-    OnSaveDataListener
+    SaveDataFlow
 {
 
     /**********************************Static items**********************************************/
@@ -72,7 +72,7 @@ class ProfileInfoEditFragment(val hiker: Hiker?=null) :
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Log.d(TAG_FRAGMENT, "Fragment '${javaClass.simpleName}' created")
-        this.layout=inflater.inflate(R.layout.fragment_profile_edit, container, false)
+        this.layout=inflater.inflate(R.layout.fragment_profile_info_edit, container, false)
         initializeEasyImage()
         initializeAllUIComponents()
         return this.layout
@@ -80,7 +80,7 @@ class ProfileInfoEditFragment(val hiker: Hiker?=null) :
 
     /*****************************************Data***********************************************/
 
-    override fun onSaveData() {
+    override fun saveData() {
         this.hiker?.name=this.nameTextField.text.toString()
         this.hiker?.birthday=
             if(!this.birthdayTextFieldDropdown.text.isNullOrEmpty())

@@ -38,25 +38,30 @@ object UserFirebaseHelper {
         val user = getCurrentUser()
         val profileUpdates = UserProfileChangeRequest.Builder()
             .setDisplayName(displayName)
-            .setPhotoUri(Uri.parse(photoUri))
+            .setPhotoUri(if(photoUri!=null) Uri.parse(photoUri) else null)
             .build()
         return user?.updateProfile(profileUpdates)
     }
 
     /**
-     * Updates a user's password in Firebase
-     * @param password : the new password
+     * Sends an email to the user to let you reset his password
      * @return a task result
      */
 
-    fun updateUserPassword(password:String):Task<Void>? =
-        getCurrentUser()?.updatePassword(password)
+    fun resetUserPassword():Task<Void>?{
+        val userEmail= getCurrentUser()?.email
+        return if(userEmail!=null) {
+            FirebaseAuth.getInstance().sendPasswordResetEmail(userEmail)
+        }else{
+            null
+        }
+    }
 
     /**
      * Definitely deletes a user from Firebase
      * @return a task result
      */
 
-    fun deleteUser():Task<Void>? =
+    fun deleteUserAccount():Task<Void>? =
         getCurrentUser()?.delete()
 }

@@ -8,6 +8,7 @@
     <string name="menu_events">Events</string>
     <string name="menu_user_profile">My profile</string>
     <string name="menu_user_trails">My trails</string>
+    <string name="menu_user_events">My events</string>
     <string name="menu_user_settings">My settings</string>
     <string name="menu_user_login">Log in / off</string>
     <string name="menu_new_trail">New trail</string>
@@ -18,7 +19,8 @@
     <string name="menu_edit_save">Save</string>
 
     <!-- Toolbar Names -->
-    <string name="toolbar_profile">My profile</string>
+    <string name="toolbar_hiker_profile">My profile</string>
+    <string name="toolbar_hikder_settings">My settings</string>
     <string name="toolbar_trail">Trail</string>
     <string name="toolbar_trail_info">Trail info</string>
 
@@ -35,7 +37,7 @@
     <string name="button_trail_poi_add">Add point of interest</string>
     <string name="button_trail_poi_remove">Remove</string>
     <!-- Hiker -->
-    <string name="button_hiker_password_change">Validate password</string>
+    <string name="button_hiker_password_reset">Reset my password</string>
     <string name="button_hiker_account_delete">Delete my account</string>
 
     <!-- Labels -->
@@ -75,13 +77,8 @@
     <string name="label_hiker_live_location">My home</string>
     <string name="label_hiker_description">About me</string>
     <string name="label_hiker_description2">Some words about me</string>
-    <string name="label_hiker_settings">My settings</string>
     <string name="label_hiker_email">My email</string>
-    <string name="label_hiker_registration_date">Registered since</string>
-    <string name="label_hiker_password_change">Change my password</string>
-    <string name="label_hiker_password_current">Current</string>
-    <string name="label_hiker_password_new">New</string>
-    <string name="label_hiker_password_new_check">Check</string>
+    <string name="label_hiker_registration_date">Member since</string>
     <string name="label_hiker_account">My account</string>
 
     <!-- Examples for layout preview -->
@@ -111,10 +108,10 @@
     <string name="message_user_unknown">Unknown user</string>
     <string name="message_password_not_valid_short">Password not valid</string>
     <string name="message_password_not_valid_long">Oops! The same password should be filled twice.</string>
-    <string name="message_password_confirmation_title">New password</string>
-    <string name="message_password_confirmation_message">So you want to change your password?</string>
+    <string name="message_password_reset_confirmation_title">Password reset</string>
+    <string name="message_password_reset_confirmation_message">So you want to reset your password?</string>
     <string name="message_account_delete_confirmation_title">Account deletion</string>
-    <string name="message_account_delete_confirmation_message">Wooh! You\'re about to definitely delete your account. Are you sure?</string>
+    <string name="message_account_delete_confirmation_message">Wooh! You\'re about to definitely delete your account. Are you sure you want to do that?</string>
     <string name="message_trail_name_unknown">Unknown trail</string>
     <string name="message_trail_poi_name_unknown">Unknown point of interest</string>
     <string name="message_no_location_available">The location is unknown</string>

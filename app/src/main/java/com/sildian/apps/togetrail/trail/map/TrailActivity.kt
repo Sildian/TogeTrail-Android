@@ -11,6 +11,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.common.flows.SaveDataFlow
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.main.MainActivity
 import com.sildian.apps.togetrail.trail.infoEdit.TrailInfoEditActivity
@@ -71,6 +72,10 @@ class TrailActivity : AppCompatActivity() {
     private lateinit var fragment: BaseTrailMapFragment
     private lateinit var progressDialog:AlertDialog
 
+    /********************************Attached flows**********************************************/
+
+    private lateinit var saveDataFlow: SaveDataFlow      //Flow used when the user clicks on save menu
+
     /************************************Life cycle**********************************************/
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,7 +99,7 @@ class TrailActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        //TODO ask the user if he wants to sabe
+        //TODO ask the user if he wants to save
         finishCancel()
         return true
     }
@@ -114,7 +119,7 @@ class TrailActivity : AppCompatActivity() {
         Log.d(TAG_MENU, "Menu '${item.title}' clicked")
         if(item.groupId==R.id.menu_edit){
             if(item.itemId==R.id.menu_edit_save){
-                this.fragment.saveData()
+                this.saveDataFlow.saveData()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -251,6 +256,7 @@ class TrailActivity : AppCompatActivity() {
             ID_FRAGMENT_TRAIL_RECORD ->
                 this.fragment = TrailMapRecordFragment()
         }
+        this.saveDataFlow=this.fragment
         supportFragmentManager.beginTransaction()
             .replace(R.id.activity_trail_fragment, this.fragment).commit()
     }

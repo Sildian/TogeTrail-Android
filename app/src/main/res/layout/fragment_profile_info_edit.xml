@@ -38,7 +38,10 @@
                     android:id="@+id/fragment_profile_info_edit_button_add_photo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/components_margin_medium"
+                    android:layout_marginTop="@dimen/components_margin_small"
+                    android:layout_marginBottom="@dimen/components_margin_small"
+                    android:layout_marginStart="@dimen/components_margin_medium"
+                    android:layout_marginEnd="@dimen/components_margin_medium"
                     android:contentDescription="@string/example_image_content_description"
                     app:srcCompat="@drawable/ic_add_black" />
 
@@ -46,7 +49,10 @@
                     android:id="@+id/fragment_profile_info_edit_image_view_photo"
                     android:layout_width="@dimen/image_size_medium"
                     android:layout_height="@dimen/image_size_medium"
-                    android:layout_margin="@dimen/components_margin_medium"
+                    android:layout_marginTop="@dimen/components_margin_small"
+                    android:layout_marginBottom="@dimen/components_margin_small"
+                    android:layout_marginStart="@dimen/components_margin_medium"
+                    android:layout_marginEnd="@dimen/components_margin_medium"
                     android:contentDescription="@string/example_image_content_description"
                     app:srcCompat="@drawable/ic_user_black" />
 
@@ -54,7 +60,10 @@
                     android:id="@+id/fragment_profile_info_edit_button_take_photo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/components_margin_medium"
+                    android:layout_marginTop="@dimen/components_margin_small"
+                    android:layout_marginBottom="@dimen/components_margin_small"
+                    android:layout_marginStart="@dimen/components_margin_medium"
+                    android:layout_marginEnd="@dimen/components_margin_medium"
                     android:contentDescription="@string/example_image_content_description"
                     app:srcCompat="@drawable/ic_add_photo_black"/>
 
@@ -73,7 +82,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_margin="@dimen/components_margin_small"
+                android:layout_marginTop="@dimen/components_margin_small"
+                android:layout_marginBottom="@dimen/components_margin_small"
+                android:layout_marginStart="@dimen/components_margin_medium"
+                android:layout_marginEnd="@dimen/components_margin_small"
                 android:hint="@string/label_hiker_name">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -90,7 +102,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_margin="@dimen/components_margin_small"
+                android:layout_marginTop="@dimen/components_margin_small"
+                android:layout_marginBottom="@dimen/components_margin_small"
+                android:layout_marginStart="@dimen/components_margin_small"
+                android:layout_marginEnd="@dimen/components_margin_medium"
                 android:hint="@string/label_hiker_birthday">
 
                 <AutoCompleteTextView
@@ -127,7 +142,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_margin="@dimen/components_margin_small"
+                android:layout_marginTop="@dimen/components_margin_small"
+                android:layout_marginBottom="@dimen/components_margin_small"
+                android:layout_marginStart="@dimen/components_margin_medium"
+                android:layout_marginEnd="@dimen/components_margin_small"
                 android:hint="@string/label_location_country">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -144,7 +162,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_margin="@dimen/components_margin_small"
+                android:layout_marginTop="@dimen/components_margin_small"
+                android:layout_marginBottom="@dimen/components_margin_small"
+                android:layout_marginStart="@dimen/components_margin_small"
+                android:layout_marginEnd="@dimen/components_margin_medium"
                 android:hint="@string/label_location_region">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -162,7 +183,10 @@
             style="@style/TextInputFieldStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/components_margin_small"
+            android:layout_marginTop="@dimen/components_margin_small"
+            android:layout_marginBottom="@dimen/components_margin_small"
+            android:layout_marginStart="@dimen/components_margin_medium"
+            android:layout_marginEnd="@dimen/components_margin_medium"
             android:hint="@string/label_location_town">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -190,7 +214,10 @@
             style="@style/TextInputFieldStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/components_margin_small"
+            android:layout_marginTop="@dimen/components_margin_small"
+            android:layout_marginBottom="@dimen/components_margin_small"
+            android:layout_marginStart="@dimen/components_margin_medium"
+            android:layout_marginEnd="@dimen/components_margin_medium"
             android:hint="@string/label_hiker_description2">
 
             <com.google.android.material.textfield.TextInputEditText

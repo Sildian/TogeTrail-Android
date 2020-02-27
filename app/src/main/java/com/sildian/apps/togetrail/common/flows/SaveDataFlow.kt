@@ -1,14 +1,14 @@
-package com.sildian.apps.togetrail.common.listeners
+package com.sildian.apps.togetrail.common.flows
 
 /*************************************************************************************************
  * Any controller with a purpose to save data must inherit from this interface
  ************************************************************************************************/
 
-interface OnSaveDataListener {
+interface SaveDataFlow {
 
     /**
-     * Event triggered when data need to be saved
+     * Triggered when data need to be saved
      */
 
-    fun onSaveData()
+    fun saveData()
 }

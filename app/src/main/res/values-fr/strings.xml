@@ -7,6 +7,7 @@
     <string name="menu_events">Evènements</string>
     <string name="menu_user_profile">Mon profil</string>
     <string name="menu_user_trails">Mes randos</string>
+    <string name="menu_user_events">Mes évènements</string>
     <string name="menu_user_settings">Mes paramètres</string>
     <string name="menu_user_login">Connexion / Déconnexion</string>
     <string name="menu_new_trail">Nouvelle rando</string>
@@ -17,7 +18,8 @@
     <string name="menu_edit_save">Enregistrer</string>
 
     <!-- Toolbar Names -->
-    <string name="toolbar_profile">Mon profil</string>
+    <string name="toolbar_hiker_profile">Mon profil</string>
+    <string name="toolbar_hikder_settings">Mes paramètres</string>
     <string name="toolbar_trail">Rando</string>
     <string name="toolbar_trail_info">Infos rando</string>
 
@@ -34,7 +36,7 @@
     <string name="button_trail_poi_add">Ajouter point d\'intérêt</string>
     <string name="button_trail_poi_remove">Retirer</string>
     <!-- Hiker -->
-    <string name="button_hiker_password_change">Valider mot de passe</string>
+    <string name="button_hiker_password_reset">Réinitialiser mon mot de passe</string>
     <string name="button_hiker_account_delete">Supprimer mon compte</string>
 
     <!-- Labels -->
@@ -74,13 +76,8 @@
     <string name="label_hiker_live_location">Ma maison</string>
     <string name="label_hiker_description">A propos de moi</string>
     <string name="label_hiker_description2">Quelques mots à propos de moi</string>
-    <string name="label_hiker_settings">Mes paramètres</string>
     <string name="label_hiker_email">Mon email</string>
-    <string name="label_hiker_registration_date">Inscrit depuis</string>
-    <string name="label_hiker_password_change">Changer mon mot de passe</string>
-    <string name="label_hiker_password_current">Actuel</string>
-    <string name="label_hiker_password_new">Nouveau</string>
-    <string name="label_hiker_password_new_check">Vérification</string>
+    <string name="label_hiker_registration_date">Membre depuis</string>
     <string name="label_hiker_account">Mon compte</string>
 
     <!-- Examples for layout preview -->
@@ -110,10 +107,10 @@
     <string name="message_user_unknown">Utilisateur inconnu</string>
     <string name="message_password_not_valid_short">Mot de passe non valide</string>
     <string name="message_password_not_valid_long">Oups! Le même mot de passe doit être saisi deux fois.</string>
-    <string name="message_password_confirmation_title">Nouveau mot de passe</string>
-    <string name="message_password_confirmation_message">Vous voulez donc changer votre mot de passe?</string>
+    <string name="message_password_reset_confirmation_title">Réinitialization du mot de passe</string>
+    <string name="message_password_reset_confirmation_message">Vous voulez donc réinitialiser votre mot de passe?</string>
     <string name="message_account_delete_confirmation_title">Suppression de compte</string>
-    <string name="message_account_delete_confirmation_message">Oula! Vous êtes sur le point de supprimer définitivement votre compte. Etes-vous bien sûr?</string>
+    <string name="message_account_delete_confirmation_message">Oula! Vous êtes sur le point de supprimer définitivement votre compte. Etes-vous bien sûr de vouloir faire cela?</string>
     <string name="message_trail_name_unknown">Parcours inconnu</string>
     <string name="message_trail_poi_name_unknown">Point d\'intérêt inconnu</string>
     <string name="message_no_location_available">L\'emplacement n\'est pas disponible</string>
