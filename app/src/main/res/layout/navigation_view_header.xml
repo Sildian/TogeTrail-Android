@@ -10,8 +10,8 @@
     <!--TODO replace image by the logo-->
     <ImageView
         android:id="@+id/navigation_view_header_image"
-        android:layout_width="@dimen/image_size_medium"
-        android:layout_height="@dimen/image_size_medium"
+        android:layout_width="@dimen/image_size_small"
+        android:layout_height="@dimen/image_size_small"
         android:layout_margin="@dimen/components_margin_large"
         android:layout_gravity="center_horizontal"
         android:contentDescription="@string/example_image_content_description"
@@ -26,8 +26,8 @@
 
         <ImageView
             android:id="@+id/navigation_view_header_user_image"
-            android:layout_width="@dimen/image_size_medium"
-            android:layout_height="@dimen/image_size_medium"
+            android:layout_width="@dimen/image_size_small"
+            android:layout_height="@dimen/image_size_small"
             android:layout_margin="@dimen/components_margin_medium"
             android:contentDescription="@string/example_image_content_description"
             app:srcCompat="@drawable/ic_user_black"

@@ -1,6 +1,7 @@
 package com.sildian.apps.togetrail.main
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -26,6 +27,7 @@ import com.sildian.apps.togetrail.hiker.profileEdit.ProfileEditActivity
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.support.HikerHelper
 import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
+import com.sildian.apps.togetrail.hiker.profile.ProfileActivity
 import com.sildian.apps.togetrail.trail.map.TrailActivity
 import com.sildian.apps.togetrail.trail.map.TrailMapFragment
 import com.sildian.apps.togetrail.trail.model.core.Trail
@@ -147,13 +149,17 @@ class MainActivity :
                 when (item.itemId) {
                     R.id.menu_user_profile -> {
                         if(UserFirebaseHelper.getCurrentUser()!=null){
-                            startProfileActivity(ProfileEditActivity.ACTION_PROFILE_EDIT_INFO)
+                            startProfileActivity(ProfileActivity.ACTION_PROFILE_SEE_PROFILE)
                         }else{
                             //TODO handle user not connected
                         }
                     }
                     R.id.menu_user_settings ->
-                        startProfileActivity(ProfileEditActivity.ACTION_PROFILE_EDIT_SETTINGS)
+                        if(UserFirebaseHelper.getCurrentUser()!=null){
+                            startProfileEditActivity(ProfileEditActivity.ACTION_PROFILE_EDIT_SETTINGS)
+                        }else{
+                            //TODO handle user not connected
+                        }
                     R.id.menu_user_login ->
                         login()
                 }
@@ -196,6 +202,7 @@ class MainActivity :
 
     /**Shows the add menu options within a PopupMenu**/
 
+    @SuppressLint("RestrictedApi")
     private fun showAddMenuOptions(){
 
         /*Inflates the menu and sets the callback*/
@@ -444,14 +451,26 @@ class MainActivity :
 
     /**
      * Starts profile activity
-     * @param profileActionId : defines which action should be performed (choice within ProfileEditActivity.ACTION_PROFILE_xxx
+     * @param profileActionId : defines which action should be performed (choice within ProfileActivity.ACTION_PROFILE_xxx
      */
 
     private fun startProfileActivity(profileActionId:Int){
-        val profileActivityIntent=Intent(this, ProfileEditActivity::class.java)
+        val profileActivityIntent=Intent(this, ProfileActivity::class.java)
         profileActivityIntent.putExtra(KEY_BUNDLE_PROFILE_ACTION, profileActionId)
         profileActivityIntent.putExtra(KEY_BUNDLE_HIKER, this.currentHiker)
         startActivityForResult(profileActivityIntent, KEY_REQUEST_PROFILE)
+    }
+
+    /**
+     * Starts profile Edit activity
+     * @param profileActionId : defines which action should be performed (choice within ProfileEditActivity.ACTION_PROFILE_xxx
+     */
+
+    private fun startProfileEditActivity(profileActionId:Int){
+        val profileEditActivityIntent=Intent(this, ProfileEditActivity::class.java)
+        profileEditActivityIntent.putExtra(KEY_BUNDLE_PROFILE_ACTION, profileActionId)
+        profileEditActivityIntent.putExtra(KEY_BUNDLE_HIKER, this.currentHiker)
+        startActivityForResult(profileEditActivityIntent, KEY_REQUEST_PROFILE)
     }
 
     /**
@@ -503,6 +522,8 @@ class MainActivity :
             }
         }
     }
+
+    /**Handles profile result**/
 
     private fun handleProfileResult(resultCode: Int, data: Intent?){
         if(resultCode== Activity.RESULT_OK){

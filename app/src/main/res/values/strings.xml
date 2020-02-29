@@ -19,8 +19,11 @@
     <string name="menu_edit_save">Save</string>
 
     <!-- Toolbar Names -->
-    <string name="toolbar_hiker_profile">My profile</string>
-    <string name="toolbar_hikder_settings">My settings</string>
+    <string name="toolbar_hiker_profile">Hiker</string>
+    <string name="toolbar_hiker_my_profile">My profile</string>
+    <string name="toolbar_hiker_my_trails">My trails</string>
+    <string name="toolbar_hiker_my_events">My events</string>
+    <string name="toolbar_hiker_my_settings">My settings</string>
     <string name="toolbar_trail">Trail</string>
     <string name="toolbar_trail_info">Trail info</string>
 
@@ -74,6 +77,7 @@
     <string name="label_hiker_info">My info</string>
     <string name="label_hiker_name">My name</string>
     <string name="label_hiker_birthday">My birthday</string>
+    <string name="label_hiker_age">years old</string>
     <string name="label_hiker_live_location">My home</string>
     <string name="label_hiker_description">About me</string>
     <string name="label_hiker_description2">Some words about me</string>
@@ -102,6 +106,9 @@
     <string name="example_hiker_name">Toto</string>
     <string name="example_hiker_email">toto@toto.com</string>
     <string name="example_hiker_registration_date">2020/02/18</string>
+    <string name="example_hiker_live_location">Toto city</string>
+    <string name="example_hiker_age">5 years old</string>
+    <string name="example_hiker_description">My name is Toto. I really like Hiking.</string>
 
     <!-- Messages to the user -->
     <string name="message_unknown_short">\?</string>
@@ -138,5 +145,8 @@
         <item>Biking</item>
         <item>Other</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

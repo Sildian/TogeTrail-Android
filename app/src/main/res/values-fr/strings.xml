@@ -18,8 +18,11 @@
     <string name="menu_edit_save">Enregistrer</string>
 
     <!-- Toolbar Names -->
-    <string name="toolbar_hiker_profile">Mon profil</string>
-    <string name="toolbar_hikder_settings">Mes paramètres</string>
+    <string name="toolbar_hiker_profile">Randonneur</string>
+    <string name="toolbar_hiker_my_profile">Mon profil</string>
+    <string name="toolbar_hiker_my_trails">Mes randos</string>
+    <string name="toolbar_hiker_my_events">Mes évènements</string>
+    <string name="toolbar_hiker_my_settings">Mes paramètres</string>
     <string name="toolbar_trail">Rando</string>
     <string name="toolbar_trail_info">Infos rando</string>
 
@@ -73,6 +76,7 @@
     <string name="label_hiker_info">Mes infos</string>
     <string name="label_hiker_name">Mon nom</string>
     <string name="label_hiker_birthday">Mon anniversaire</string>
+    <string name="label_hiker_age">ans</string>
     <string name="label_hiker_live_location">Ma maison</string>
     <string name="label_hiker_description">A propos de moi</string>
     <string name="label_hiker_description2">Quelques mots à propos de moi</string>
@@ -101,6 +105,9 @@
     <string name="example_hiker_name">Toto</string>
     <string name="example_hiker_email">toto@toto.com</string>
     <string name="example_hiker_registration_date">18/02/2020</string>
+    <string name="example_hiker_live_location">Toto city</string>
+    <string name="example_hiker_age">5 ans</string>
+    <string name="example_hiker_description">Je m\'appelle Toto. J\'adore la randonnée.</string>
 
     <!-- Messages to the user -->
     <string name="message_unknown_short">\?</string>

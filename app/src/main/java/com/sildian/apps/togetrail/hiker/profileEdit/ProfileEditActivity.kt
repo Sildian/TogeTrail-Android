@@ -16,6 +16,7 @@ import com.sildian.apps.togetrail.common.utils.cloudHelpers.UserFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
+import com.sildian.apps.togetrail.hiker.profile.ProfileActivity
 import com.sildian.apps.togetrail.main.MainActivity
 import kotlinx.android.synthetic.main.activity_profile_edit.*
 
@@ -300,9 +301,9 @@ class ProfileEditActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         when(this.currentAction){
             ACTION_PROFILE_EDIT_INFO ->
-                supportActionBar?.setTitle(R.string.toolbar_hiker_profile)
+                supportActionBar?.setTitle(R.string.toolbar_hiker_my_profile)
             ACTION_PROFILE_EDIT_SETTINGS ->
-                supportActionBar?.setTitle(R.string.toolbar_hikder_settings)
+                supportActionBar?.setTitle(R.string.toolbar_hiker_my_settings)
         }
     }
 
@@ -338,7 +339,7 @@ class ProfileEditActivity : AppCompatActivity() {
 
     private fun finishOk(){
         val resultIntent=Intent()
-        resultIntent.putExtra(MainActivity.KEY_BUNDLE_HIKER, this.hiker)
+        resultIntent.putExtra(ProfileActivity.KEY_BUNDLE_HIKER, this.hiker)
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
     }
