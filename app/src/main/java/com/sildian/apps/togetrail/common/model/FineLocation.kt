@@ -26,12 +26,12 @@ class FineLocation(
 
     override fun getFullLocation(): String? {
         val fullLocation=StringBuilder()
-        if(country==null){
+        if(country.isNullOrEmpty()){
             return null
         }
-        fullLocation.append(if(address!=null)"$address, " else "")
-        fullLocation.append(if(town!=null)"$town, " else "")
-        fullLocation.append(if(region!=null)"$region, " else "")
+        fullLocation.append(if(!address.isNullOrEmpty())"$address\n" else "")
+        fullLocation.append(if(!town.isNullOrEmpty())"$town\n" else "")
+        fullLocation.append(if(!region.isNullOrEmpty())"$region\n" else "")
         fullLocation.append(country)
 
         return fullLocation.toString()

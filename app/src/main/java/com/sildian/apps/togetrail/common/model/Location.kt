@@ -24,11 +24,11 @@ open class Location (
 
     open fun getFullLocation():String?{
         val fullLocation=StringBuilder()
-        if(country==null){
+        if(country.isNullOrEmpty()){
             return null
         }
-        fullLocation.append(if(town!=null)"$town, " else "")
-        fullLocation.append(if(region!=null)"$region, " else "")
+        fullLocation.append(if(!town.isNullOrEmpty())"$town, " else "")
+        fullLocation.append(if(!region.isNullOrEmpty())"$region, " else "")
         fullLocation.append(country)
 
         return fullLocation.toString()

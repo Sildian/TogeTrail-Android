@@ -25,7 +25,10 @@
     <string name="toolbar_hiker_my_events">My events</string>
     <string name="toolbar_hiker_my_settings">My settings</string>
     <string name="toolbar_trail">Trail</string>
+    <string name="toolbar_trail_draw">Draw a track</string>
+    <string name="toolbar_trail_record">Record a track</string>
     <string name="toolbar_trail_info">Trail info</string>
+    <string name="toolbar_trail_poi_info">Point of interest info</string>
 
     <!-- Navigation drawer events -->
     <string name="navigation_drawer_open">Opening navigation drawer</string>

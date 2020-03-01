@@ -19,7 +19,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="7"
             android:layout_margin="@dimen/components_margin_medium"
-            android:textSize="@dimen/text_size_title"
             android:textColor="@color/colorSecondary"
             android:textAllCaps="true"
             android:textStyle="bold"
@@ -43,7 +42,6 @@
         android:layout_margin="@dimen/components_margin_medium"
         android:gravity="center_vertical"
         android:textColor="@color/colorWhite"
-        android:textSize="@dimen/text_size_body"
         android:text="@string/example_trail_poi_elevation"
         android:drawableStart="@drawable/ic_trail_white"
         android:drawablePadding="@dimen/components_margin_small"/>
@@ -70,7 +68,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:textSize="@dimen/text_size_body"
                     android:text="@string/message_no_photo_available"
                     android:drawableStart="@drawable/ic_trail_black"
                     android:drawablePadding="@dimen/components_margin_small"
@@ -111,7 +108,6 @@
                     android:layout_marginBottom="@dimen/components_margin_medium"
                     android:layout_marginStart="@dimen/components_margin_medium"
                     android:layout_marginEnd="@dimen/components_margin_medium"
-                    android:textSize="@dimen/text_size_body"
                     android:text="@string/example_trail_poi_description"/>
 
             </LinearLayout>

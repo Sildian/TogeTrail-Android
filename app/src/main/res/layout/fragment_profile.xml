@@ -38,7 +38,7 @@
                 android:layout_margin="@dimen/components_margin_small"
                 android:alpha="0.87"
                 android:textStyle="bold"
-                android:textSize="@dimen/text_size_title"
+                android:textSize="@dimen/text_size_important"
                 android:textColor="@color/colorBlack"
                 android:text="@string/example_hiker_name"/>
 
@@ -48,7 +48,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/components_margin_small"
                 android:alpha="0.87"
-                android:textSize="@dimen/text_size_body"
                 android:textColor="@color/colorBlack"
                 android:text="@string/example_hiker_live_location"/>
 
@@ -58,7 +57,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/components_margin_small"
                 android:alpha="0.87"
-                android:textSize="@dimen/text_size_body"
                 android:textColor="@color/colorBlack"
                 android:text="@string/example_hiker_age"/>
 
@@ -95,7 +93,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/components_margin_medium"
                 android:alpha="0.87"
-                android:textSize="@dimen/text_size_body"
                 android:textColor="@color/colorBlack"
                 android:text="@string/example_hiker_description"/>
 

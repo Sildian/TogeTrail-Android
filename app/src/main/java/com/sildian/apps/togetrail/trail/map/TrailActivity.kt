@@ -237,7 +237,12 @@ class TrailActivity : AppCompatActivity() {
     private fun initializeToolbar(){
         setSupportActionBar(this.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setTitle(R.string.toolbar_trail)
+        when(this.currentAction){
+            ACTION_TRAIL_SEE -> supportActionBar?.setTitle(R.string.toolbar_trail)
+            ACTION_TRAIL_CREATE_FROM_GPX -> supportActionBar?.setTitle(R.string.toolbar_trail)
+            ACTION_TRAIL_DRAW -> supportActionBar?.setTitle(R.string.toolbar_trail_draw)
+            ACTION_TRAIL_RECORD -> supportActionBar?.setTitle(R.string.toolbar_trail_record)
+        }
     }
 
     /******************************Fragments monitoring******************************************/

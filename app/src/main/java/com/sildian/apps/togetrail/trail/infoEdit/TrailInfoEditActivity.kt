@@ -264,7 +264,10 @@ class TrailInfoEditActivity : AppCompatActivity() {
     private fun initializeToolbar(){
         setSupportActionBar(this.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setTitle(R.string.toolbar_trail_info)
+        when(this.currentAction){
+            ACTION_TRAIL_EDIT_INFO -> supportActionBar?.setTitle(R.string.toolbar_trail_info)
+            ACTION_TRAIL_EDIT_POI_INFO -> supportActionBar?.setTitle(R.string.toolbar_trail_poi_info)
+        }
     }
 
     /***********************************Trail edit actions***************************************/

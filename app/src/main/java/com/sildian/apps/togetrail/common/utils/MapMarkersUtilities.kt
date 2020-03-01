@@ -55,7 +55,7 @@ object MapMarkersUtilities {
     private fun drawTextOnMarker(context:Context, canvas:Canvas, text:String){
         val textPaint = Paint(ANTI_ALIAS_FLAG).apply {
             color = Color.BLACK
-            textSize = context.resources.getDimension(R.dimen.text_size_body)
+            textSize = context.resources.getDimension(R.dimen.text_size_small)
             style = Paint.Style.FILL_AND_STROKE
             strokeWidth=2f
         }

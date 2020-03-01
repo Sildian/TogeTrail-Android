@@ -17,9 +17,10 @@
     <dimen name="components_stroke_large">4dp</dimen>
 
     <!-- Text -->
-    <dimen name="text_size_body">12sp</dimen>
-    <dimen name="text_size_title">15sp</dimen>
-    <dimen name="text_size_important">18sp</dimen>
+    <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_body">15sp</dimen>
+    <dimen name="text_size_title">18sp</dimen>
+    <dimen name="text_size_important">22sp</dimen>
 
     <!-- Images -->
     <dimen name="image_size_small">48dp</dimen>

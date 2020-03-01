@@ -24,7 +24,10 @@
     <string name="toolbar_hiker_my_events">Mes évènements</string>
     <string name="toolbar_hiker_my_settings">Mes paramètres</string>
     <string name="toolbar_trail">Rando</string>
+    <string name="toolbar_trail_draw">Dessiner un parcours</string>
+    <string name="toolbar_trail_record">Enregistrer un parcours</string>
     <string name="toolbar_trail_info">Infos rando</string>
+    <string name="toolbar_trail_poi_info">Infos point d\'intérêt</string>
 
     <!-- Navigation drawer events -->
     <string name="navigation_drawer_open">Ouverture du navigation drawer</string>

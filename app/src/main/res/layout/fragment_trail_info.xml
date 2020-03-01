@@ -19,7 +19,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="7"
             android:layout_margin="@dimen/components_margin_medium"
-            android:textSize="@dimen/text_size_title"
             android:textColor="@color/colorSecondary"
             android:textAllCaps="true"
             android:textStyle="bold"
@@ -59,7 +58,6 @@
             android:layout_margin="@dimen/components_margin_medium"
             android:gravity="center"
             android:textColor="@color/colorWhite"
-            android:textSize="@dimen/text_size_body"
             android:text="@string/label_trail_level_medium"
             android:drawableStart="@drawable/ic_level_medium"
             android:drawablePadding="@dimen/components_margin_small"/>
@@ -72,7 +70,6 @@
             android:layout_margin="@dimen/components_margin_medium"
             android:gravity="center"
             android:textColor="@color/colorWhite"
-            android:textSize="@dimen/text_size_body"
             android:text="@string/label_trail_type_hiking"
             android:drawableStart="@drawable/ic_hiking_white"
             android:drawablePadding="@dimen/components_margin_small"/>
@@ -85,7 +82,6 @@
             android:layout_margin="@dimen/components_margin_medium"
             android:gravity="center"
             android:textColor="@color/colorWhite"
-            android:textSize="@dimen/text_size_body"
             android:text="@string/example_trail_duration"
             android:drawableStart="@drawable/ic_watch_white"
             android:drawablePadding="@dimen/components_margin_small"/>
@@ -114,7 +110,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:textSize="@dimen/text_size_body"
                     android:text="@string/message_no_photo_available"
                     android:drawableStart="@drawable/ic_trail_black"
                     android:drawablePadding="@dimen/components_margin_small"
@@ -144,7 +139,7 @@
                     android:layout_weight="1"
                     android:layout_margin="@dimen/components_margin_small"
                     android:gravity="center"
-                    android:textSize="@dimen/text_size_body"
+                    android:textSize="@dimen/text_size_small"
                     android:text="@string/example_trail_ascent"
                     android:drawableTop="@drawable/ic_ascent"
                     android:drawablePadding="@dimen/components_margin_small"/>
@@ -156,7 +151,7 @@
                     android:layout_weight="1"
                     android:layout_margin="@dimen/components_margin_small"
                     android:gravity="center"
-                    android:textSize="@dimen/text_size_body"
+                    android:textSize="@dimen/text_size_small"
                     android:text="@string/example_trail_descent"
                     android:drawableTop="@drawable/ic_descent"
                     android:drawablePadding="@dimen/components_margin_small"/>
@@ -168,7 +163,7 @@
                     android:layout_weight="1"
                     android:layout_margin="@dimen/components_margin_small"
                     android:gravity="center"
-                    android:textSize="@dimen/text_size_body"
+                    android:textSize="@dimen/text_size_small"
                     android:text="@string/example_trail_distance"
                     android:drawableTop="@drawable/ic_distance"
                     android:drawablePadding="@dimen/components_margin_small"/>
@@ -180,7 +175,7 @@
                     android:layout_weight="1"
                     android:layout_margin="@dimen/components_margin_small"
                     android:gravity="center"
-                    android:textSize="@dimen/text_size_body"
+                    android:textSize="@dimen/text_size_small"
                     android:text="@string/example_trail_max_elevation"
                     android:drawableTop="@drawable/ic_max_elevation"
                     android:drawablePadding="@dimen/components_margin_small"/>
@@ -192,7 +187,7 @@
                     android:layout_weight="1"
                     android:layout_margin="@dimen/components_margin_small"
                     android:gravity="center"
-                    android:textSize="@dimen/text_size_body"
+                    android:textSize="@dimen/text_size_small"
                     android:text="@string/example_trail_min_elevation"
                     android:drawableTop="@drawable/ic_min_elevation"
                     android:drawablePadding="@dimen/components_margin_small"/>
@@ -229,10 +224,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/components_margin_medium"
-                    android:layout_marginBottom="@dimen/components_margin_small"
-                    android:layout_marginStart="@dimen/components_margin_medium"
-                    android:layout_marginEnd="@dimen/components_margin_medium"
+                    android:layout_margin="@dimen/components_margin_medium"
+                    android:textStyle="bold"
                     android:textSize="@dimen/text_size_title"
                     android:textColor="@color/colorSecondaryDark"
                     android:text="@string/label_trail_description"/>
@@ -245,7 +238,6 @@
                     android:layout_marginBottom="@dimen/components_margin_medium"
                     android:layout_marginStart="@dimen/components_margin_medium"
                     android:layout_marginEnd="@dimen/components_margin_medium"
-                    android:textSize="@dimen/text_size_body"
                     android:text="@string/example_trail_description"/>
 
             </LinearLayout>
