@@ -4,16 +4,18 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 /*************************************************************************************************
- * Location
+ * FineLocation inherits from Location and adds more details
  ************************************************************************************************/
 
 @Parcelize
-open class Location (
-    open val country:String?=null,
-    open val region:String?=null,
-    open val town:String?=null
+class FineLocation(
+    override val country:String?=null,
+    override val region:String?=null,
+    override val town:String?=null,
+    val address:String?=null
 )
-    :Parcelable
+    : Location(country, region, town),
+    Parcelable
 {
 
     /**
@@ -22,11 +24,12 @@ open class Location (
      * @return the full location to display, null if the country is unknown
      */
 
-    open fun getFullLocation():String?{
+    override fun getFullLocation(): String? {
         val fullLocation=StringBuilder()
         if(country==null){
             return null
         }
+        fullLocation.append(if(address!=null)"$address, " else "")
         fullLocation.append(if(town!=null)"$town, " else "")
         fullLocation.append(if(region!=null)"$region, " else "")
         fullLocation.append(country)
