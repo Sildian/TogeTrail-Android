@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.views.DatePickerDialogFragment
+import com.sildian.apps.togetrail.common.views.TimePickerDialogFragment
 import java.util.*
 
 /*************************************************************************************************
@@ -49,6 +50,26 @@ object DropdownMenuHelper {
             if(hasFocus) {
                 DatePickerDialogFragment(autoCompleteTextView)
                     .show(activity.supportFragmentManager, "datePicker")
+            }
+        }
+    }
+
+    /**
+     * Populates a dropdown menu with a TimePicker allowing to fetch a time
+     * @param autoCompleteTextView : the view holding the menu
+     * @param activity : the activity holding the view
+     * @param initialValue : the initial time in the view
+     */
+
+    fun populateDropdownMenuWithTimePicker(autoCompleteTextView: AutoCompleteTextView,
+                                           activity:AppCompatActivity, initialValue: Date?){
+        if(initialValue!=null) {
+            autoCompleteTextView.setText(DateUtilities.displayTime(initialValue))
+        }
+        autoCompleteTextView.setOnFocusChangeListener { v, hasFocus ->
+            if(hasFocus) {
+                TimePickerDialogFragment(autoCompleteTextView)
+                    .show(activity.supportFragmentManager, "timePicker")
             }
         }
     }

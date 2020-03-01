@@ -20,7 +20,7 @@ data class Event(
     var endDate:Date?=null,
     var description:String="",
     var isCanceled:Boolean=false,
-    var authorId:String?=null,
+    val authorId:String?=null,
     val trailsIds: ArrayList<String> = arrayListOf(),
     val registeredHikersIds: ArrayList<String> = arrayListOf()
 )

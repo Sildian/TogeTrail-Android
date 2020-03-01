@@ -67,11 +67,35 @@ class DateUtilitiesTest {
     }
 
     @Test
+    fun given_18nov2019at15h30_when_displayDateAndTimeShort_then_checkResultIs18nov2019at15h30() {
+        Locale.setDefault(Locale.US)
+        val date=DateUtilities.getDateAndTime(2019, 10, 18, 15, 30)
+        val expectedResult="11/18/19 3:30 PM"
+        assertEquals(expectedResult, DateUtilities.displayDateAndTimeShort(date))
+    }
+
+    @Test
+    fun given_18nov2019at15h30_when_displayDateAndTimeFull_then_checkResultIs18nov2019at15h30() {
+        Locale.setDefault(Locale.US)
+        val date=DateUtilities.getDateAndTime(2019, 10, 18, 15, 30)
+        val expectedResult="Monday, November 18, 2019 3:30 PM"
+        assertEquals(expectedResult, DateUtilities.displayDateAndTimeFull(date))
+    }
+
+    @Test
     fun given_18nov2019_when_getDateFromString_then_checkResultIs18nov2019() {
         Locale.setDefault(Locale.US)
         val displayedDate="11/18/19"
         val expectedResult=DateUtilities.getDate(2019, 10, 18)
         assertEquals(expectedResult, DateUtilities.getDateFromString(displayedDate))
+    }
+
+    @Test
+    fun given_15h30_when_getTimeFromString_then_checkResultIs15h30() {
+        Locale.setDefault(Locale.US)
+        val displayedTime="3:30 PM"
+        val expectedResult=DateUtilities.getDateAndTime(1970, 0, 1, 15, 30)
+        assertEquals(expectedResult, DateUtilities.getTimeFromString(displayedTime))
     }
 
     @Test

@@ -29,6 +29,7 @@
     <string name="toolbar_trail_record">Record a track</string>
     <string name="toolbar_trail_info">Trail info</string>
     <string name="toolbar_trail_poi_info">Point of interest info</string>
+    <string name="toolbar_event">Event</string>
 
     <!-- Navigation drawer events -->
     <string name="navigation_drawer_open">Opening navigation drawer</string>
@@ -52,6 +53,7 @@
     <string name="label_location_country">Country</string>
     <string name="label_location_region">State / Region</string>
     <string name="label_location_town">City / Town</string>
+    <string name="label_location_address">Place / Address</string>
     <!-- Trail -->
     <string name="label_trail_main_info">Main info</string>
     <string name="label_trail_name">Name</string>
@@ -87,6 +89,16 @@
     <string name="label_hiker_email">My email</string>
     <string name="label_hiker_registration_date">Member since</string>
     <string name="label_hiker_account">My account</string>
+    <!-- Event -->
+    <string name="label_event_main_info">Main info</string>
+    <string name="label_event_name">Name</string>
+    <string name="label_event_begin_date">Begin</string>
+    <string name="label_event_end_date">End</string>
+    <string name="label_event_date">Date</string>
+    <string name="label_event_time">Time</string>
+    <string name="label_event_meeting_point">Meeting point</string>
+    <string name="label_event_description">Description</string>
+    <string name="label_event_description2">Some information for the attendees</string>
 
     <!-- Examples for layout preview -->
     <string name="example_image_content_description">Image</string>
@@ -124,6 +136,7 @@
     <string name="message_account_delete_confirmation_message">Wooh! You\'re about to definitely delete your account. Are you sure you want to do that?</string>
     <string name="message_trail_name_unknown">Unknown trail</string>
     <string name="message_trail_poi_name_unknown">Unknown point of interest</string>
+    <string name="message_event_name_unknown">Unknown event</string>
     <string name="message_no_location_available">The location is unknown</string>
     <string name="message_no_description_available">No description is available</string>
     <string name="message_no_photo_available">No photo is available</string>
@@ -148,8 +161,5 @@
         <item>Biking</item>
         <item>Other</item>
     </string-array>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

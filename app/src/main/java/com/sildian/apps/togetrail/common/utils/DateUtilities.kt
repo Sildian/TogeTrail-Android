@@ -99,6 +99,28 @@ object DateUtilities {
     }
 
     /**
+     * Displays a date and time (short format)
+     * @param date : the date
+     * @return a string
+     */
+
+    fun displayDateAndTimeShort(date:Date):String{
+        val format=SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.SHORT, SimpleDateFormat.SHORT)
+        return format.format(date)
+    }
+
+    /**
+     * Displays a date and time (full format)
+     * @param date : the date
+     * @return a string
+     */
+
+    fun displayDateAndTimeFull(date:Date):String{
+        val format=SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.FULL, SimpleDateFormat.SHORT)
+        return format.format(date)
+    }
+
+    /**
      * Gets a date from a string (short format)
      * @param displayedDate : the string
      * @return the date, or null if the string is not recognized
@@ -109,6 +131,24 @@ object DateUtilities {
         return try {
             val format = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT)
             format.parse(displayedDate)
+        }
+        catch(e:ParseException){
+            e.printStackTrace()
+            null
+        }
+    }
+
+    /**
+     * Gets a time from a string (short format)
+     * @param displayedTime : the string
+     * @return the time, or null if the string is not recognized
+     */
+
+    @Throws(ParseException::class)
+    fun getTimeFromString(displayedTime:String):Date?{
+        return try {
+            val format = SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT)
+            format.parse(displayedTime)
         }
         catch(e:ParseException){
             e.printStackTrace()

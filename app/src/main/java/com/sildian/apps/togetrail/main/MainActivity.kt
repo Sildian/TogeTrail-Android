@@ -23,6 +23,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.UserFirebaseHelper
+import com.sildian.apps.togetrail.event.edit.EventEditActivity
 import com.sildian.apps.togetrail.hiker.profileEdit.ProfileEditActivity
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.support.HikerHelper
@@ -74,6 +75,7 @@ class MainActivity :
         const val KEY_BUNDLE_HIKER="KEY_BUNDLE_HIKER"
         const val KEY_BUNDLE_TRAIL_ACTION="KEY_BUNDLE_TRAIL_ACTION"
         const val KEY_BUNDLE_TRAIL="KEY_BUNDLE_TRAIL"
+        const val KEY_BUNDLE_EVENT="KEY_BUNDLE_EVENT"
 
         /**Bundle keys for permissions**/
         private const val KEY_BUNDLE_PERMISSION_LOCATION=Manifest.permission.ACCESS_FINE_LOCATION
@@ -172,28 +174,24 @@ class MainActivity :
     /**Click on menu item from PopupMenu**/
 
     private fun onPopupMenuItemClick(item: MenuItem?): Boolean {
+
+        Log.d(TAG_MENU, "Menu '${item?.title}' clicked")
+
         when(item?.groupId) {
             R.id.menu_add -> {
-                //TODO handle clicks
                 when (item.itemId) {
                     R.id.menu_add_event ->
-                        Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+                        startEventEditActivity()
                 }
             }
             R.id.menu_add_new_trail-> {
                 when (item.itemId) {
-                    R.id.menu_add_trail_load_gpx -> {
-                        Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+                    R.id.menu_add_trail_load_gpx ->
                         startTrailActivity(TrailActivity.ACTION_TRAIL_CREATE_FROM_GPX)
-                    }
-                    R.id.menu_add_trail_draw -> {
-                        Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+                    R.id.menu_add_trail_draw ->
                         startTrailActivity(TrailActivity.ACTION_TRAIL_DRAW)
-                    }
-                    R.id.menu_add_trail_record -> {
-                        Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+                    R.id.menu_add_trail_record ->
                         startTrailActivity(TrailActivity.ACTION_TRAIL_RECORD)
-                    }
                 }
             }
         }
@@ -486,6 +484,15 @@ class MainActivity :
             trailActivityIntent.putExtra(KEY_BUNDLE_TRAIL, trail)
         }
         startActivity(trailActivityIntent)
+    }
+
+    /**
+     * Starts the EventEditActivity
+     */
+
+    fun startEventEditActivity(){
+        val eventEditActivityIntent= Intent(this, EventEditActivity::class.java)
+        startActivity(eventEditActivityIntent)
     }
 
     /**Activity result**/

@@ -28,6 +28,7 @@
     <string name="toolbar_trail_record">Enregistrer un parcours</string>
     <string name="toolbar_trail_info">Infos rando</string>
     <string name="toolbar_trail_poi_info">Infos point d\'intérêt</string>
+    <string name="toolbar_event">Evènement</string>
 
     <!-- Navigation drawer events -->
     <string name="navigation_drawer_open">Ouverture du navigation drawer</string>
@@ -51,6 +52,7 @@
     <string name="label_location_country">Pays</string>
     <string name="label_location_region">Etat / Région</string>
     <string name="label_location_town">Ville / Village</string>
+    <string name="label_location_address">Lieu / Adresse</string>
     <!-- Trail -->
     <string name="label_trail_main_info">Infos principales</string>
     <string name="label_trail_name">Nom</string>
@@ -86,6 +88,16 @@
     <string name="label_hiker_email">Mon email</string>
     <string name="label_hiker_registration_date">Membre depuis</string>
     <string name="label_hiker_account">Mon compte</string>
+    <!-- Event -->
+    <string name="label_event_main_info">Infos principales</string>
+    <string name="label_event_name">Nom</string>
+    <string name="label_event_begin_date">Départ</string>
+    <string name="label_event_end_date">Fin</string>
+    <string name="label_event_date">Date</string>
+    <string name="label_event_time">Heure</string>
+    <string name="label_event_meeting_point">Point de rendez-vous</string>
+    <string name="label_event_description">Description</string>
+    <string name="label_event_description2">Quelques infos pour les participants</string>
 
     <!-- Examples for layout preview -->
     <string name="example_image_content_description">Image</string>
@@ -117,12 +129,13 @@
     <string name="message_user_unknown">Utilisateur inconnu</string>
     <string name="message_password_not_valid_short">Mot de passe non valide</string>
     <string name="message_password_not_valid_long">Oups! Le même mot de passe doit être saisi deux fois.</string>
-    <string name="message_password_reset_confirmation_title">Réinitialization du mot de passe</string>
+    <string name="message_password_reset_confirmation_title">Réinitialisation du mot de passe</string>
     <string name="message_password_reset_confirmation_message">Vous voulez donc réinitialiser votre mot de passe?</string>
     <string name="message_account_delete_confirmation_title">Suppression de compte</string>
     <string name="message_account_delete_confirmation_message">Oula! Vous êtes sur le point de supprimer définitivement votre compte. Etes-vous bien sûr de vouloir faire cela?</string>
     <string name="message_trail_name_unknown">Parcours inconnu</string>
     <string name="message_trail_poi_name_unknown">Point d\'intérêt inconnu</string>
+    <string name="message_event_name_unknown">Evènement inconnu</string>
     <string name="message_no_location_available">L\'emplacement n\'est pas disponible</string>
     <string name="message_no_description_available">Aucune description n\'est disponible</string>
     <string name="message_no_photo_available">Aucune photo n\'est disponible</string>
