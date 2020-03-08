@@ -94,8 +94,8 @@ class EventTest {
             endDate = DateUtilities.getDateAndTime(2020, 2, 8, 16, 0))
         event.refreshTrailsIdsKeys()
         assertEquals(2, event.trailsIds.size)
-        assertTrue(event.trailsIds.containsKey(1))
-        assertTrue(event.trailsIds.containsKey(2))
+        assertTrue(event.trailsIds.containsKey("1"))
+        assertTrue(event.trailsIds.containsKey("2"))
     }
 
     @Test
@@ -108,8 +108,8 @@ class EventTest {
         event.endDate=DateUtilities.getDateAndTime(2020, 2, 8, 16, 0)
         event.refreshTrailsIdsKeys()
         assertEquals(2, event.trailsIds.size)
-        assertTrue(event.trailsIds.containsKey(1))
-        assertTrue(event.trailsIds.containsKey(2))
+        assertTrue(event.trailsIds.containsKey("1"))
+        assertTrue(event.trailsIds.containsKey("2"))
     }
 
     @Test

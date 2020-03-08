@@ -11,7 +11,7 @@ import com.sildian.apps.togetrail.R
  ************************************************************************************************/
 
 class EventDayAdapter(
-    private val trailsIds:HashMap<Int, String?>,
+    private val trailsIds:HashMap<String, String?>,
     private val listener: EventDayViewHolder.OnEventDayTrailChanged?=null
 )
     :RecyclerView.Adapter<EventDayViewHolder>() {
@@ -27,6 +27,6 @@ class EventDayAdapter(
     }
 
     override fun onBindViewHolder(holder: EventDayViewHolder, position: Int) {
-        holder.updateUI(position+1, this.trailsIds[position+1])
+        holder.updateUI(position+1, this.trailsIds[(position+1).toString()])
     }
 }

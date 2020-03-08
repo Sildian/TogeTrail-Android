@@ -10,6 +10,8 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.SaveDataFlow
+import com.sildian.apps.togetrail.common.model.FineLocation
+import com.sildian.apps.togetrail.common.model.Location
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DropdownMenuHelper
@@ -65,7 +67,20 @@ class EventEditFragment(val event: Event?=null) :
     /*********************************Data monitoring********************************************/
 
     override fun saveData() {
-
+        this.event?.name=this.nameTextField.text.toString()
+        this.event?.location= Location(
+            this.countryTextField.text.toString(),
+            this.regionTextField.text.toString(),
+            this.townTextField.text.toString()
+        )
+        this.event?.meetingPoint= FineLocation(
+            this.countryTextField.text.toString(),
+            this.regionTextField.text.toString(),
+            this.townTextField.text.toString(),
+            this.addressTextField.text.toString()
+        )
+        this.event?.description=this.descriptionTextField.text.toString()
+        (activity as EventEditActivity).updateEventAndSave(this.event!!)
     }
 
     /***********************************UI monitoring********************************************/
@@ -200,7 +215,7 @@ class EventEditFragment(val event: Event?=null) :
     override fun onTrailRemove(day: Int, trailId: String?) {
         Log.d(TAG_DATA, "Day $day : removed trail")
         if(this.event!=null) {
-            this.event.trailsIds[day] = null
+            this.event.trailsIds[day.toString()] = null
             this.daysRecyclerViewAdapter.notifyDataSetChanged()
         }
     }
@@ -210,7 +225,7 @@ class EventEditFragment(val event: Event?=null) :
     private fun addTrail(day:Int, trailId:String?){
         Log.d(TAG_DATA, "Day $day : added trail '$trailId'")
         if(this.event!=null){
-            this.event.trailsIds[day]=trailId
+            this.event.trailsIds[day.toString()]=trailId
             this.daysRecyclerViewAdapter.notifyDataSetChanged()
         }
     }

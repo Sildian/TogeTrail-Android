@@ -22,7 +22,7 @@ data class Event(
     var description:String="",
     var isCanceled:Boolean=false,
     var authorId:String?=null,
-    val trailsIds: HashMap<Int, String?> = hashMapOf(),
+    val trailsIds: HashMap<String, String?> = hashMapOf(),
     val registeredHikersIds: ArrayList<String> = arrayListOf()
 )
     :Parcelable
@@ -73,15 +73,15 @@ data class Event(
             /*For each day, adds a key if it doesn't exist yet and sets the entry to null*/
 
             for (i in 1..getNbDays()!!){
-                if(!this.trailsIds.containsKey(i)) {
-                    this.trailsIds[i] = null
+                if(!this.trailsIds.containsKey(i.toString())) {
+                    this.trailsIds[i.toString()] = null
                 }
             }
 
             /*Deletes the keys beyond the number of days*/
 
             this.trailsIds.keys.forEach { key ->
-                if(key > getNbDays()!!){
+                if(key.toInt() > getNbDays()!!){
                     this.trailsIds.remove(key)
                 }
             }

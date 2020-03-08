@@ -12,7 +12,9 @@ import androidx.fragment.app.Fragment
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.SaveDataFlow
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.UserFirebaseHelper
+import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.event.model.core.Event
+import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
 import com.sildian.apps.togetrail.event.model.support.EventHelper
 import com.sildian.apps.togetrail.main.MainActivity
 import kotlinx.android.synthetic.main.activity_event_edit.*
@@ -102,6 +104,63 @@ class EventEditActivity : AppCompatActivity() {
                 val name=resources.getString(R.string.message_event_name_unknown)
                 this.event=EventHelper.buildFromNothing(name)
             }
+        }
+    }
+
+    fun updateEvent(event:Event){
+        this.event=event
+    }
+
+    fun updateEventAndSave(event: Event){
+        updateEvent(event)
+        this.progressDialog= DialogHelper.createProgressDialog(this)
+        this.progressDialog.show()
+        saveEvent()
+    }
+
+    private fun saveEvent(){
+
+        /*If the event has no id, it means it was not created in the database yet. Then creates it.*/
+
+        if(this.event?.id==null){
+            EventFirebaseQueries.createEvent(this.event!!)
+                .addOnSuccessListener { documentReference->
+
+                    /*Once created, updates it with the created id*/
+
+                    Log.d(TAG_STORAGE, "Event created in the database")
+                    this.event?.id=documentReference.id
+                    EventFirebaseQueries.updateEvent(this.event!!)
+                        .addOnSuccessListener {
+                            Log.d(TAG_STORAGE, "Event updated in the database")
+                            progressDialog.dismiss()
+                            //TODO show a snackbar when finished
+                            finishOk()
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w(TAG_STORAGE, e.message.toString())
+                            progressDialog.dismiss()
+                            //TODO handle
+                            finishOk()
+                        }
+                }
+
+            /*Else updates it*/
+
+        }else{
+            EventFirebaseQueries.updateEvent(this.event!!)
+                .addOnSuccessListener {
+                    Log.d(TAG_STORAGE, "Event updated in the database")
+                    this.progressDialog.dismiss()
+                    //TODO show a snackbar when finished
+                    finishOk()
+                }
+                .addOnFailureListener { e ->
+                    Log.w(TAG_STORAGE, e.message.toString())
+                    this.progressDialog.dismiss()
+                    //TODO handle
+                    finishCancel()
+                }
         }
     }
 
