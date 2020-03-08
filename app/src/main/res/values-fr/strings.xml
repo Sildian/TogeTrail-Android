@@ -50,7 +50,8 @@
     <string name="button_event_add_trail">Ajouter une rando</string>
 
     <!-- Labels -->
-    <string name="label_text_separator"> - </string>
+    <!-- Common -->
+    <string name="label_common_text_separator"> - </string>
     <!-- Location -->
     <string name="label_location">Emplacement</string>
     <string name="label_location_country">Pays</string>
@@ -75,6 +76,7 @@
     <string name="label_trail_distance_short">Dist</string>
     <string name="label_trail_max_elevation_short">Alt max</string>
     <string name="label_trail_min_elevation_short">Alt min</string>
+    <string name="label_trail_list_last_created">Dernières randos créées</string>
     <!-- TrailPointOfInterest -->
     <string name="label_trail_poi_main_info">Infos principales</string>
     <string name="label_trail_poi_name">Nom</string>

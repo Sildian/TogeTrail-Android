@@ -29,6 +29,7 @@ import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.support.HikerHelper
 import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
 import com.sildian.apps.togetrail.hiker.profile.ProfileActivity
+import com.sildian.apps.togetrail.trail.list.TrailsListFragment
 import com.sildian.apps.togetrail.trail.map.TrailActivity
 import com.sildian.apps.togetrail.trail.map.TrailMapFragment
 import com.sildian.apps.togetrail.trail.model.core.Trail
@@ -132,14 +133,13 @@ class MainActivity :
             /*Bottom Navigation View*/
 
             R.id.menu_main -> {
-                //TODO handle clicks
                 when (item.itemId) {
                     R.id.menu_main_map ->
                         showFragment(ID_FRAGMENT_MAP)
                     R.id.menu_main_trails ->
-                        Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+                        showFragment(ID_FRAGMENT_TRAILS)
                     R.id.menu_main_events ->
-                        Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+                        showFragment(ID_FRAGMENT_EVENTS)
                 }
                 true
             }
@@ -380,9 +380,12 @@ class MainActivity :
 
     private fun showFragment(fragmentId:Int){
         when(fragmentId){
-            ID_FRAGMENT_MAP->this.fragment=
-                TrailMapFragment(this.trails)
-            //TODO handle other fragments
+            ID_FRAGMENT_MAP->
+                this.fragment= TrailMapFragment(this.trails)
+            ID_FRAGMENT_TRAILS->
+                this.fragment=TrailsListFragment()
+            ID_FRAGMENT_EVENTS->
+                this.fragment=TrailsListFragment() //TODO change this with events fragment
         }
         supportFragmentManager.beginTransaction()
             .replace(R.id.activity_main_fragment, this.fragment).commitAllowingStateLoss()

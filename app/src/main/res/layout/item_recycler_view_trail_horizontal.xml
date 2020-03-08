@@ -5,7 +5,8 @@
     android:layout_width="@dimen/image_size_large"
     android:layout_height="@dimen/image_size_large"
     android:layout_margin="@dimen/components_margin_small"
-    app:cardCornerRadius="@dimen/components_corner_medium">
+    app:cardCornerRadius="@dimen/components_corner_medium"
+    app:rippleColor="@color/colorSecondaryLight">
 
     <ImageView
         android:id="@+id/item_recycler_view_trail_horizontal_image_view_photo"
@@ -57,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_size_small"
                 android:textColor="@color/colorWhite"
-                android:text="@string/label_text_separator" />
+                android:text="@string/label_common_text_separator" />
 
             <TextView
                 android:id="@+id/item_recycler_view_trail_horizontal_text_duration"
@@ -75,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_size_small"
                 android:textColor="@color/colorWhite"
-                android:text="@string/label_text_separator" />
+                android:text="@string/label_common_text_separator" />
 
             <TextView
                 android:id="@+id/item_recycler_view_trail_horizontal_text_ascent"

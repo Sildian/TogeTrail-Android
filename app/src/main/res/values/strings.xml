@@ -51,7 +51,8 @@
     <string name="button_event_add_trail">Add a trail</string>
 
     <!-- Labels -->
-    <string name="label_text_separator"> - </string>
+    <!-- Common -->
+    <string name="label_common_text_separator"> - </string>
     <!-- Location -->
     <string name="label_location">Location</string>
     <string name="label_location_country">Country</string>
@@ -76,6 +77,7 @@
     <string name="label_trail_distance_short">Dist</string>
     <string name="label_trail_max_elevation_short">Max elv</string>
     <string name="label_trail_min_elevation_short">Min elv</string>
+    <string name="label_trail_list_last_created">Last created trails</string>
     <!-- TrailPointOfInterest -->
     <string name="label_trail_poi_main_info">Main info</string>
     <string name="label_trail_poi_name">Name</string>
@@ -169,5 +171,8 @@
         <item>Biking</item>
         <item>Other</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
