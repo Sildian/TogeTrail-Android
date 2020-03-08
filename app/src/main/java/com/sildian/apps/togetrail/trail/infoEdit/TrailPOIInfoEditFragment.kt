@@ -142,7 +142,7 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
     private fun updatePhoto(){
         Glide.with(context!!)
             .load(this.trailPointOfInterest?.photoUrl)
-            .apply(RequestOptions.fitCenterTransform())
+            .apply(RequestOptions.centerCropTransform())
             .placeholder(R.drawable.ic_trail_black)
             .into(this.photoImageView)
         updatePhotoVisibility()

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/colorPrimary">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="@dimen/image_size_medium"
+            android:layout_height="@dimen/image_size_medium"
+            android:layout_marginTop="@dimen/components_margin_small"
+            android:layout_marginBottom="@dimen/components_margin_small"
+            android:layout_marginStart="@dimen/components_margin_medium"
+            android:layout_marginEnd="@dimen/components_margin_medium"
+            app:cardCornerRadius="@dimen/components_corner_small">
+
+            <ImageView
+                android:id="@+id/item_recycler_view_trail_vertical_image_view_photo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/ic_trail_black"
+                android:contentDescription="@string/example_image_content_description"/>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/item_recycler_view_trail_vertical_text_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/components_margin_small"
+                android:textAllCaps="true"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/colorSecondary"
+                android:text="@string/example_trail_name"/>
+
+            <TextView
+                android:id="@+id/item_recycler_view_trail_vertical_text_level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/components_margin_small"
+                android:gravity="center_horizontal"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/colorWhite"
+                android:text="@string/label_trail_level_medium" />
+
+            <TextView
+                android:id="@+id/item_recycler_view_trail_vertical_text_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/components_margin_small"
+                android:gravity="center_horizontal"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/colorWhite"
+                android:text="@string/example_trail_duration" />
+
+            <TextView
+                android:id="@+id/item_recycler_view_trail_vertical_text_ascent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/components_margin_small"
+                android:gravity="center_horizontal"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/colorWhite"
+                android:text="@string/example_trail_ascent" />
+
+            <TextView
+                android:id="@+id/item_recycler_view_trail_vertical_text_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/components_margin_small"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/colorWhite"
+                android:text="@string/example_location" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/components_margin_small"
+        android:layout_marginEnd="@dimen/components_margin_small"
+        android:background="@color/colorWhite" />
+
+</LinearLayout>

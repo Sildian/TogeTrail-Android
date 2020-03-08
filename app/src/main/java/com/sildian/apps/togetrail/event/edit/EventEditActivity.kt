@@ -100,8 +100,7 @@ class EventEditActivity : AppCompatActivity() {
                 this.event= intent.getParcelableExtra(MainActivity.KEY_BUNDLE_EVENT)
             }else{
                 val name=resources.getString(R.string.message_event_name_unknown)
-                val authorId=UserFirebaseHelper.getCurrentUser()?.uid.toString()
-                this.event=EventHelper.buildFromNothing(name, authorId)
+                this.event=EventHelper.buildFromNothing(name)
             }
         }
     }

@@ -55,6 +55,27 @@ object DateUtilities {
     }
 
     /**
+     * Merges separated date and time to a single one
+     * @param date : the date
+     * @param time : the time
+     * @return a single date and time
+     */
+
+    fun mergeDateAndTime(date:Date, time:Date):Date{
+        val dateCalendar= Calendar.getInstance()
+        dateCalendar.time=date
+        val timeCalendar=Calendar.getInstance()
+        timeCalendar.time=time
+        return getDateAndTime(
+            dateCalendar.get(Calendar.YEAR),
+            dateCalendar.get(Calendar.MONTH),
+            dateCalendar.get(Calendar.DAY_OF_MONTH),
+            timeCalendar.get(Calendar.HOUR_OF_DAY),
+            timeCalendar.get(Calendar.MINUTE)
+        )
+    }
+
+    /**
      * Displays a date (short format)
      * @param date : the date
      * @return a string

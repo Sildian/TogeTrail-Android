@@ -78,7 +78,7 @@ class TrailPOIInfoFragment (
 
     private fun initializeElevationText(){
         val elevationToDisplay=MetricsHelper.displayElevation(
-            context!!, this.trailPointOfInterest?.elevation, true, true)
+            context!!, this.trailPointOfInterest?.elevation, true, false)
         this.elevationText.text=elevationToDisplay
     }
 

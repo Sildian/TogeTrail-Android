@@ -39,6 +39,7 @@
     <!-- Common -->
     <string name="button_common_yes">Yes</string>
     <string name="button_common_no">No</string>
+    <string name="button_common_cancel">Cancel</string>
     <!-- Trail -->
     <string name="button_trail_point_remove">Remove last point</string>
     <string name="button_trail_poi_add">Add point of interest</string>
@@ -46,8 +47,11 @@
     <!-- Hiker -->
     <string name="button_hiker_password_reset">Reset my password</string>
     <string name="button_hiker_account_delete">Delete my account</string>
+    <!-- Event -->
+    <string name="button_event_add_trail">Add a trail</string>
 
     <!-- Labels -->
+    <string name="label_text_separator"> - </string>
     <!-- Location -->
     <string name="label_location">Location</string>
     <string name="label_location_country">Country</string>
@@ -99,6 +103,9 @@
     <string name="label_event_meeting_point">Meeting point</string>
     <string name="label_event_description">Description</string>
     <string name="label_event_description2">Some information for the attendees</string>
+    <string name="label_event_attached_trails">Trails on schedule</string>
+    <string name="label_event_available_trails">Add the trails you like</string>
+    <string name="label_event_day">Day</string>
 
     <!-- Examples for layout preview -->
     <string name="example_image_content_description">Image</string>
@@ -137,6 +144,7 @@
     <string name="message_trail_name_unknown">Unknown trail</string>
     <string name="message_trail_poi_name_unknown">Unknown point of interest</string>
     <string name="message_event_name_unknown">Unknown event</string>
+    <string name="message_event_fill_dates">Fill the dates to enable schedule</string>
     <string name="message_no_location_available">The location is unknown</string>
     <string name="message_no_description_available">No description is available</string>
     <string name="message_no_photo_available">No photo is available</string>

@@ -200,11 +200,25 @@ class TrailActivity : AppCompatActivity() {
 
         if(this.trail?.id==null){
             TrailFirebaseQueries.createTrail(this.trail!!)
-                .addOnSuccessListener {
+                .addOnSuccessListener { documentReference->
+
+                    /*Once created, updates it with the created id*/
+
                     Log.d(TAG_STORAGE, "Trail created in the database")
-                    progressDialog.dismiss()
-                    //TODO show a snackbar when finished
-                    finishOk()
+                    this.trail?.id=documentReference.id
+                    TrailFirebaseQueries.updateTrail(this.trail!!)
+                        .addOnSuccessListener {
+                            Log.d(TAG_STORAGE, "Trail updated in the database")
+                            progressDialog.dismiss()
+                            //TODO show a snackbar when finished
+                            finishOk()
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w(TAG_STORAGE, e.message.toString())
+                            progressDialog.dismiss()
+                            //TODO handle
+                            finishOk()
+                        }
                 }
                 .addOnFailureListener { e ->
                     Log.w(TAG_STORAGE, e.message.toString())

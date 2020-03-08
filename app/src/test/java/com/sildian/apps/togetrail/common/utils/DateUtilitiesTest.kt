@@ -35,6 +35,13 @@ class DateUtilitiesTest {
     }
 
     @Test
+    fun given_18nov2019at9h30_when_mergeDateAndTime_then_checkResultIs18nov2019at9h30() {
+        val date=DateUtilities.getDate(2019, 10, 18)
+        val time=DateUtilities.getDateAndTime(2019, 10, 18, 0, 30)
+        assertEquals(time, DateUtilities.mergeDateAndTime(date, time))
+    }
+
+    @Test
     fun given_18nov2019_when_displayDateShort_then_checkResultIs18nov2019() {
         Locale.setDefault(Locale.US)
         val date=DateUtilities.getDate(2019, 10, 18)

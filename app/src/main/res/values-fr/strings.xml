@@ -38,6 +38,7 @@
     <!-- Common -->
     <string name="button_common_yes">Oui</string>
     <string name="button_common_no">Non</string>
+    <string name="button_common_cancel">Annuler</string>
     <!-- Trail -->
     <string name="button_trail_point_remove">Retirer dernier point</string>
     <string name="button_trail_poi_add">Ajouter point d\'intérêt</string>
@@ -45,8 +46,11 @@
     <!-- Hiker -->
     <string name="button_hiker_password_reset">Réinitialiser mon mot de passe</string>
     <string name="button_hiker_account_delete">Supprimer mon compte</string>
+    <!-- Event -->
+    <string name="button_event_add_trail">Ajouter une rando</string>
 
     <!-- Labels -->
+    <string name="label_text_separator"> - </string>
     <!-- Location -->
     <string name="label_location">Emplacement</string>
     <string name="label_location_country">Pays</string>
@@ -98,6 +102,9 @@
     <string name="label_event_meeting_point">Point de rendez-vous</string>
     <string name="label_event_description">Description</string>
     <string name="label_event_description2">Quelques infos pour les participants</string>
+    <string name="label_event_attached_trails">Randos au programme</string>
+    <string name="label_event_available_trails">Ajoutez les randos que vous aimez</string>
+    <string name="label_event_day">Jour</string>
 
     <!-- Examples for layout preview -->
     <string name="example_image_content_description">Image</string>
@@ -136,6 +143,7 @@
     <string name="message_trail_name_unknown">Parcours inconnu</string>
     <string name="message_trail_poi_name_unknown">Point d\'intérêt inconnu</string>
     <string name="message_event_name_unknown">Evènement inconnu</string>
+    <string name="message_event_fill_dates">Indiquez les dates pour accéder au programme</string>
     <string name="message_no_location_available">L\'emplacement n\'est pas disponible</string>
     <string name="message_no_description_available">Aucune description n\'est disponible</string>
     <string name="message_no_photo_available">Aucune photo n\'est disponible</string>

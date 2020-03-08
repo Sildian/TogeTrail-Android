@@ -11,14 +11,12 @@ object EventHelper {
     /**
      * Builds a new event from nothing but a name.
      * @param name : the name of the event
-     * @param authorId : the author's id
      * @return the resulted event
      */
 
-    fun buildFromNothing(name:String, authorId:String): Event {
+    fun buildFromNothing(name:String): Event {
         return Event(
-            name = name,
-            authorId = authorId
+            name = name
         )
     }
 }

@@ -27,7 +27,7 @@ class PhotoViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun updateUI(photoUrl:String){
         Glide.with(this.itemView)
             .load(photoUrl)
-            .apply(RequestOptions.fitCenterTransform())
+            .apply(RequestOptions.centerCropTransform())
             .placeholder(R.drawable.ic_trail_black)
             .into(this.photoImageView)
     }
