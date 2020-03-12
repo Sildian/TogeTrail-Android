@@ -24,6 +24,7 @@ import com.google.android.material.navigation.NavigationView
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.UserFirebaseHelper
 import com.sildian.apps.togetrail.event.edit.EventEditActivity
+import com.sildian.apps.togetrail.event.list.EventsListFragment
 import com.sildian.apps.togetrail.hiker.profileEdit.ProfileEditActivity
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.support.HikerHelper
@@ -385,7 +386,7 @@ class MainActivity :
             ID_FRAGMENT_TRAILS->
                 this.fragment=TrailsListFragment()
             ID_FRAGMENT_EVENTS->
-                this.fragment=TrailsListFragment() //TODO change this with events fragment
+                this.fragment= EventsListFragment()
         }
         supportFragmentManager.beginTransaction()
             .replace(R.id.activity_main_fragment, this.fragment).commitAllowingStateLoss()

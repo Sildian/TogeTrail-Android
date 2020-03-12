@@ -76,7 +76,7 @@
     <string name="label_trail_distance_short">Dist</string>
     <string name="label_trail_max_elevation_short">Alt max</string>
     <string name="label_trail_min_elevation_short">Alt min</string>
-    <string name="label_trail_list_last_created">Dernières randos créées</string>
+    <string name="label_trail_list_last_created">Dernières randos ajoutées</string>
     <!-- TrailPointOfInterest -->
     <string name="label_trail_poi_main_info">Infos principales</string>
     <string name="label_trail_poi_name">Nom</string>
@@ -107,6 +107,8 @@
     <string name="label_event_attached_trails">Randos au programme</string>
     <string name="label_event_available_trails">Ajoutez les randos que vous aimez</string>
     <string name="label_event_day">Jour</string>
+    <string name="label_event_days">Jours</string>
+    <string name="label_event_list_next">Prochainement</string>
 
     <!-- Examples for layout preview -->
     <string name="example_image_content_description">Image</string>
@@ -132,6 +134,12 @@
     <string name="example_hiker_live_location">Toto city</string>
     <string name="example_hiker_age">5 ans</string>
     <string name="example_hiker_description">Je m\'appelle Toto. J\'adore la randonnée.</string>
+    <!-- Event -->
+    <string name="example_event_name">Evènement génial</string>
+    <string name="example_event_description">Ce sera un évènement génial, venez nombreux!</string>
+    <string name="example_event_begin_date">14/03/2020</string>
+    <string name="example_event_end_date">15/03/2020</string>
+    <string name="example_event_nb_days">2 jours</string>
 
     <!-- Messages to the user -->
     <string name="message_unknown_short">\?</string>
