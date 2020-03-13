@@ -4,8 +4,8 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.widget.AutoCompleteTextView
 import android.widget.DatePicker
+import android.widget.EditText
 import androidx.fragment.app.DialogFragment
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.DateUtilities
@@ -16,7 +16,7 @@ import java.util.*
  * @Param callView : the view calling the datePickerDialogFragment
  *************************************************************************************************/
 
-class DatePickerDialogFragment(val callView: AutoCompleteTextView)
+class DatePickerDialogFragment(private val callView: EditText)
     : DialogFragment(),
     DatePickerDialog.OnDateSetListener
 {

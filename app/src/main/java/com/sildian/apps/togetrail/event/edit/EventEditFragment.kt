@@ -14,7 +14,7 @@ import com.sildian.apps.togetrail.common.model.FineLocation
 import com.sildian.apps.togetrail.common.model.Location
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
-import com.sildian.apps.togetrail.common.utils.uiHelpers.DropdownMenuHelper
+import com.sildian.apps.togetrail.common.utils.uiHelpers.PickerHelper
 import com.sildian.apps.togetrail.event.model.core.Event
 import kotlinx.android.synthetic.main.fragment_event_edit.view.*
 
@@ -104,7 +104,7 @@ class EventEditFragment(val event: Event?=null) :
     }
 
     private fun initializeBeginDateTextFieldDropdown(){
-        DropdownMenuHelper.populateDropdownMenuWithDatePicker(
+        PickerHelper.populateEditTextWithDatePicker(
             this.beginDateTextFieldDropdown, activity as AppCompatActivity, this.event?.beginDate
         )
         this.beginDateTextFieldDropdown.addTextChangedListener {
@@ -113,7 +113,7 @@ class EventEditFragment(val event: Event?=null) :
     }
 
     private fun initializeBeginTimeTextFieldDropdown(){
-        DropdownMenuHelper.populateDropdownMenuWithTimePicker(
+        PickerHelper.populateEditTextWithTimePicker(
             this.beginTimeTextFieldDropdown, activity as AppCompatActivity, this.event?.beginDate
         )
         this.beginTimeTextFieldDropdown.addTextChangedListener {
@@ -122,7 +122,7 @@ class EventEditFragment(val event: Event?=null) :
     }
 
     private fun initializeEndDateTextFieldDropdown(){
-        DropdownMenuHelper.populateDropdownMenuWithDatePicker(
+        PickerHelper.populateEditTextWithDatePicker(
             this.endDateTextFieldDropdown, activity as AppCompatActivity, this.event?.endDate
         )
         this.endDateTextFieldDropdown.addTextChangedListener {
@@ -131,7 +131,7 @@ class EventEditFragment(val event: Event?=null) :
     }
 
     private fun initializeEndTimeTextFieldDropdown(){
-        DropdownMenuHelper.populateDropdownMenuWithTimePicker(
+        PickerHelper.populateEditTextWithTimePicker(
             this.endTimeTextFieldDropdown, activity as AppCompatActivity, this.event?.endDate
         )
         this.endTimeTextFieldDropdown.addTextChangedListener {

@@ -58,10 +58,10 @@
             android:baselineAligned="false">
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/TextInputFieldDropDownMenuStyle"
+                style="@style/TextInputFieldStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="6"
+                android:layout_weight="1"
                 android:layout_marginTop="@dimen/components_margin_small"
                 android:layout_marginBottom="@dimen/components_margin_small"
                 android:layout_marginStart="@dimen/components_margin_medium"
@@ -69,20 +69,21 @@
                 android:hint="@string/label_event_date"
                 app:startIconDrawable="@drawable/ic_date_black">
 
-                <AutoCompleteTextView
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/fragment_event_edit_text_field_dropdown_begin_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="date"
-                    android:textSize="@dimen/text_size_small"/>
+                    android:textSize="@dimen/text_size_small"
+                    android:focusable="false"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/TextInputFieldDropDownMenuStyle"
+                style="@style/TextInputFieldStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="5"
+                android:layout_weight="1"
                 android:layout_marginTop="@dimen/components_margin_small"
                 android:layout_marginBottom="@dimen/components_margin_small"
                 android:layout_marginStart="@dimen/components_margin_small"
@@ -90,12 +91,13 @@
                 android:hint="@string/label_event_time"
                 app:startIconDrawable="@drawable/ic_time_black">
 
-                <AutoCompleteTextView
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/fragment_event_edit_text_field_dropdown_begin_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="time"
-                    android:textSize="@dimen/text_size_small"/>
+                    android:textSize="@dimen/text_size_small"
+                    android:focusable="false"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -118,10 +120,10 @@
             android:baselineAligned="false">
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/TextInputFieldDropDownMenuStyle"
+                style="@style/TextInputFieldStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="5"
+                android:layout_weight="1"
                 android:layout_marginTop="@dimen/components_margin_small"
                 android:layout_marginBottom="@dimen/components_margin_small"
                 android:layout_marginStart="@dimen/components_margin_medium"
@@ -129,20 +131,21 @@
                 android:hint="@string/label_event_date"
                 app:startIconDrawable="@drawable/ic_date_black">
 
-                <AutoCompleteTextView
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/fragment_event_edit_text_field_dropdown_end_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="date"
-                    android:textSize="@dimen/text_size_small"/>
+                    android:textSize="@dimen/text_size_small"
+                    android:focusable="false"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/TextInputFieldDropDownMenuStyle"
+                style="@style/TextInputFieldStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
+                android:layout_weight="1"
                 android:layout_marginTop="@dimen/components_margin_small"
                 android:layout_marginBottom="@dimen/components_margin_small"
                 android:layout_marginStart="@dimen/components_margin_small"
@@ -150,12 +153,13 @@
                 android:hint="@string/label_event_time"
                 app:startIconDrawable="@drawable/ic_time_black">
 
-                <AutoCompleteTextView
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/fragment_event_edit_text_field_dropdown_end_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="time"
-                    android:textSize="@dimen/text_size_small"/>
+                    android:textSize="@dimen/text_size_small"
+                    android:focusable="false"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 

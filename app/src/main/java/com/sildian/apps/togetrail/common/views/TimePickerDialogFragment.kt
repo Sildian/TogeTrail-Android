@@ -4,7 +4,7 @@ import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.widget.AutoCompleteTextView
+import android.widget.EditText
 import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
 import com.sildian.apps.togetrail.R
@@ -16,7 +16,7 @@ import java.util.*
  * @Param callView : the view calling the timePickerDialogFragment
  *************************************************************************************************/
 
-class TimePickerDialogFragment(val callView: AutoCompleteTextView)
+class TimePickerDialogFragment(private val callView: EditText)
     : DialogFragment(),
     TimePickerDialog.OnTimeSetListener
 {

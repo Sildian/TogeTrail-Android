@@ -17,7 +17,7 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.SaveDataFlow
 import com.sildian.apps.togetrail.common.model.Location
 import com.sildian.apps.togetrail.common.utils.DateUtilities
-import com.sildian.apps.togetrail.common.utils.uiHelpers.DropdownMenuHelper
+import com.sildian.apps.togetrail.common.utils.uiHelpers.PickerHelper
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import kotlinx.android.synthetic.main.fragment_profile_info_edit.view.*
 import pl.aprilapps.easyphotopicker.*
@@ -126,7 +126,7 @@ class ProfileInfoEditFragment(val hiker: Hiker?=null) :
     }
 
     private fun initializeBirthdayTextFieldDropdown(){
-        DropdownMenuHelper.populateDropdownMenuWithDatePicker(
+        PickerHelper.populateEditTextWithDatePicker(
             this.birthdayTextFieldDropdown, activity as AppCompatActivity, this.hiker?.birthday)
     }
 

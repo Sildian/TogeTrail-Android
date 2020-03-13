@@ -144,6 +144,12 @@ class EventEditActivity : AppCompatActivity() {
                             finishOk()
                         }
                 }
+                .addOnFailureListener { e ->
+                    Log.w(TAG_STORAGE, e.message.toString())
+                    this.progressDialog.dismiss()
+                    //TODO handle
+                    finishCancel()
+                }
 
             /*Else updates it*/
 
