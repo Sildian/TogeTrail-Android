@@ -47,7 +47,7 @@
     <string name="button_hiker_password_reset">Réinitialiser mon mot de passe</string>
     <string name="button_hiker_account_delete">Supprimer mon compte</string>
     <!-- Event -->
-    <string name="button_event_add_trail">Ajouter une rando</string>
+    <string name="button_event_add_trails">Ajouter des randos</string>
 
     <!-- Labels -->
     <!-- Common -->
@@ -153,7 +153,6 @@
     <string name="message_trail_name_unknown">Parcours inconnu</string>
     <string name="message_trail_poi_name_unknown">Point d\'intérêt inconnu</string>
     <string name="message_event_name_unknown">Evènement inconnu</string>
-    <string name="message_event_fill_dates">Indiquez les dates pour accéder au programme</string>
     <string name="message_no_location_available">L\'emplacement n\'est pas disponible</string>
     <string name="message_no_description_available">Aucune description n\'est disponible</string>
     <string name="message_no_photo_available">Aucune photo n\'est disponible</string>

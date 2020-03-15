@@ -14,6 +14,7 @@ import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
 import com.sildian.apps.togetrail.event.model.support.EventHelper
+import com.sildian.apps.togetrail.trail.model.core.Trail
 import kotlinx.android.synthetic.main.activity_event_edit.*
 
 /*************************************************************************************************
@@ -38,6 +39,7 @@ class EventEditActivity : BaseDataFlowActivity() {
     /****************************************Data************************************************/
 
     private var event: Event?=null                          //The event
+    private val attachedTrails= arrayListOf<Trail>()        //The list of attached trails (useful only when the event has no id yet)
 
     /**********************************UI component**********************************************/
 
@@ -111,6 +113,11 @@ class EventEditActivity : BaseDataFlowActivity() {
         }
     }
 
+    fun updateAttachedTrailsToUpdate(attachedTrails:List<Trail>){
+        this.attachedTrails.clear()
+        this.attachedTrails.addAll(attachedTrails)
+    }
+
     fun saveEvent(){
 
         /*Shows a progress dialog*/
@@ -124,10 +131,19 @@ class EventEditActivity : BaseDataFlowActivity() {
             EventFirebaseQueries.createEvent(this.event!!)
                 .addOnSuccessListener { documentReference->
 
-                    /*Once created, updates it with the created id*/
+                    /*Once created...*/
 
                     Log.d(TAG_STORAGE, "Event created in the database")
                     this.event?.id=documentReference.id
+
+                    /*Updates the attached trails*/
+
+                    this.attachedTrails.forEach { trail ->
+                        updateAttachedTrail(trail)
+                    }
+
+                    /*And updates the event with the created id*/
+
                     EventFirebaseQueries.updateEvent(this.event!!)
                         .addOnSuccessListener {
                             Log.d(TAG_STORAGE, "Event updated in the database")
@@ -166,6 +182,26 @@ class EventEditActivity : BaseDataFlowActivity() {
                     finishCancel()
                 }
         }
+    }
+
+    fun updateAttachedTrail(trail: Trail){
+        EventFirebaseQueries.updateAttachedTrail(this.event?.id!!, trail)
+            .addOnSuccessListener {
+                Log.d(TAG_STORAGE, "Attached trail '${trail.id}' updated in the database")
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG_STORAGE, e.message.toString())
+            }
+    }
+
+    fun deleteAttachedTrail(trail: Trail){
+        EventFirebaseQueries.deleteAttachedTrail(this.event?.id!!, trail.id!!)
+            .addOnSuccessListener {
+                Log.d(TAG_STORAGE, "Attached trail '${trail.id}' deleted from the database")
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG_STORAGE, e.message.toString())
+            }
     }
 
     /******************************UI monitoring**************************************************/

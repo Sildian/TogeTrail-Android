@@ -6,6 +6,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.sildian.apps.togetrail.event.model.core.Event
+import com.sildian.apps.togetrail.trail.model.core.Trail
 
 /*************************************************************************************************
  * Provides with Firebase queries on Event
@@ -28,7 +29,11 @@ object EventFirebaseQueries {
     /*********************************Collection references**************************************/
 
     private const val COLLECTION_NAME="event"
-    private fun getCollection() = FirebaseFirestore.getInstance().collection(COLLECTION_NAME)
+    private const val SUB_COLLECTION_ATTACHED_TRAIL_NAME="attachedTrail"
+    private fun getCollection() =
+        FirebaseFirestore.getInstance().collection(COLLECTION_NAME)
+    private fun getAttachedTrailSubCollection(eventId:String) =
+        getCollection().document(eventId).collection(SUB_COLLECTION_ATTACHED_TRAIL_NAME)
 
     /*************************************Queries************************************************/
 
@@ -66,4 +71,41 @@ object EventFirebaseQueries {
 
     fun updateEvent(event:Event):Task<Void> =
         getCollection().document(event.id!!).set(event)
+
+    /**
+     * Gets all trails attached to an event
+     * @param eventId : the id of the event
+     * @return a task result
+     */
+
+    fun getAttachedTrails(eventId: String):Query =
+        getAttachedTrailSubCollection(eventId)
+
+    /**
+     * Updates a trail attached to an event
+     * @param eventId : the id of the event
+     * @param trail : the trail to update
+     * @return a task result
+     */
+
+    fun updateAttachedTrail(eventId:String, trail: Trail):Task<Void>{
+
+        /*Simplifies the trail stored into an event : clears all the points and poi*/
+
+        trail.trailTrack.trailPoints.clear()
+        trail.trailTrack.trailPointsOfInterest.clear()
+
+        /*Then updates the trail*/
+
+        return getAttachedTrailSubCollection(eventId).document(trail.id.toString()).set(trail)
+    }
+
+    /**
+     * Deletes a trail attached to an event
+     * @param eventId : the id of the event
+     * @return a task result
+     */
+
+    fun deleteAttachedTrail(eventId:String, trailId:String) : Task<Void> =
+        getAttachedTrailSubCollection(eventId).document(trailId).delete()
 }

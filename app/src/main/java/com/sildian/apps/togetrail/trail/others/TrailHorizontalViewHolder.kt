@@ -16,7 +16,9 @@ import kotlinx.android.synthetic.main.item_recycler_view_trail_horizontal.view.*
 
 class TrailHorizontalViewHolder (
     itemView: View,
-    private val listener: OnTrailClickListener?=null
+    private val onTrailClickListener: OnTrailClickListener?=null,
+    private val isEditable:Boolean=false,
+    private val onTrailRemovedListener: OnTrailRemovedListener?=null
 ) :
     RecyclerView.ViewHolder(itemView)
 {
@@ -25,6 +27,10 @@ class TrailHorizontalViewHolder (
 
     interface OnTrailClickListener{
         fun onTrailClick(trail:Trail)
+    }
+
+    interface OnTrailRemovedListener{
+        fun onTrailRemoved(trail:Trail)
     }
 
     /**************************************Data**************************************************/
@@ -39,11 +45,13 @@ class TrailHorizontalViewHolder (
     private val durationText by lazy {itemView.item_recycler_view_trail_horizontal_text_duration}
     private val ascentText by lazy {itemView.item_recycler_view_trail_horizontal_text_ascent}
     private val locationText by lazy {itemView.item_recycler_view_trail_horizontal_text_location}
+    private val removeButton by lazy {itemView.item_recycler_view_trail_horizontal_button_remove}
 
     /**************************************Init**************************************************/
 
     init{
-        this.itemView.setOnClickListener { this.listener?.onTrailClick(this.trail) }
+        this.itemView.setOnClickListener { this.onTrailClickListener?.onTrailClick(this.trail) }
+        this.removeButton.setOnClickListener { this.onTrailRemovedListener?.onTrailRemoved(this.trail) }
     }
 
     /************************************UI update***********************************************/
@@ -51,6 +59,7 @@ class TrailHorizontalViewHolder (
     fun updateUI(trail:Trail){
         this.trail=trail
         updatePhotoImageView()
+        updateRemoveButton()
         updateNameText()
         updateLevelText()
         updateDurationText()
@@ -104,5 +113,13 @@ class TrailHorizontalViewHolder (
 
     private fun updateLocationText(){
         this.locationText.text=this.trail.location.getFullLocation()
+    }
+
+    private fun updateRemoveButton(){
+        if(this.isEditable){
+            this.removeButton.visibility=View.VISIBLE
+        }else{
+            this.removeButton.visibility=View.GONE
+        }
     }
 }

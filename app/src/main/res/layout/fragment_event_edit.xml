@@ -177,26 +177,24 @@
             android:textColor="@color/colorSecondaryDark"
             android:text="@string/label_event_attached_trails"/>
 
-        <TextView
-            android:id="@+id/fragment_event_edit_text_message_fill_dates"
-            android:layout_width="wrap_content"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragment_event_edit_recycler_view_attached_trails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:reverseLayout="false" />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/ClassicButtonStyle"
+            android:id="@+id/fragment_event_edit_button_add_trails"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/components_margin_small"
             android:layout_marginBottom="@dimen/components_margin_small"
             android:layout_marginStart="@dimen/components_margin_medium"
             android:layout_marginEnd="@dimen/components_margin_medium"
-            android:gravity="center_vertical"
-            android:text="@string/message_event_fill_dates"
-            android:drawableStart="@drawable/ic_info_black"
-            android:drawablePadding="@dimen/components_margin_small"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/fragment_event_edit_recycler_view_days"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:reverseLayout="false" />
+            android:text="@string/button_event_add_trails"/>
 
         <TextView
             android:layout_width="wrap_content"

@@ -21,9 +21,7 @@ data class Event(
     var endDate:Date?=null,
     var description:String="",
     var isCanceled:Boolean=false,
-    var authorId:String?=null,
-    val trailsIds: HashMap<String, String?> = hashMapOf(),
-    val registeredHikersIds: ArrayList<String> = arrayListOf()
+    var authorId:String?=null
 )
     :Parcelable
 {
@@ -58,39 +56,6 @@ data class Event(
                 val period=duration.toPeriod()
                 period.plusDays(1).toStandardDays().days
             }
-        }
-    }
-
-    /**
-     * Populates the trailsIds hashMap with a key for each day
-     * Each entry is initialized null if it doesn't exist yet
-     */
-
-    fun refreshTrailsIdsKeys(){
-
-        if(getNbDays()!=null) {
-
-            /*For each day, adds a key if it doesn't exist yet and sets the entry to null*/
-
-            for (i in 1..getNbDays()!!){
-                if(!this.trailsIds.containsKey(i.toString())) {
-                    this.trailsIds[i.toString()] = null
-                }
-            }
-
-            /*Deletes the keys beyond the number of days*/
-
-            this.trailsIds.keys.forEach { key ->
-                if(key.toInt() > getNbDays()!!){
-                    this.trailsIds.remove(key)
-                }
-            }
-        }
-
-        /*If the begin and end date are not set, clears the trailsIds*/
-
-        else{
-            this.trailsIds.clear()
         }
     }
 }

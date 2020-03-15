@@ -103,4 +103,13 @@
 
     </LinearLayout>
 
+    <ImageButton
+        android:id="@+id/item_recycler_view_trail_horizontal_button_remove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/components_margin_small"
+        android:layout_gravity="top|end"
+        app:srcCompat="@drawable/ic_delete_black"
+        android:contentDescription="@string/example_image_content_description"/>
+
 </com.google.android.material.card.MaterialCardView>

@@ -12,9 +12,15 @@ import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.model.FineLocation
 import com.sildian.apps.togetrail.common.model.Location
 import com.sildian.apps.togetrail.common.utils.DateUtilities
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.RecyclerViewFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.PickerHelper
 import com.sildian.apps.togetrail.event.model.core.Event
+import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
+import com.sildian.apps.togetrail.trail.model.core.Trail
+import com.sildian.apps.togetrail.trail.others.TrailHorizontalAdapter
+import com.sildian.apps.togetrail.trail.others.TrailHorizontalAdapterOffline
+import com.sildian.apps.togetrail.trail.others.TrailHorizontalViewHolder
 import kotlinx.android.synthetic.main.fragment_event_edit.view.*
 
 /*************************************************************************************************
@@ -24,7 +30,8 @@ import kotlinx.android.synthetic.main.fragment_event_edit.view.*
 
 class EventEditFragment(val event: Event?=null) :
     BaseDataFlowFragment(),
-    EventDayViewHolder.OnEventDayTrailChanged
+    TrailHorizontalViewHolder.OnTrailClickListener,
+    TrailHorizontalViewHolder.OnTrailRemovedListener
 {
 
     /**********************************Static items**********************************************/
@@ -36,17 +43,22 @@ class EventEditFragment(val event: Event?=null) :
         private const val TAG_DATA="TAG_DATA"
     }
 
+    /**************************************Data**************************************************/
+
+    private val attachedTrails= arrayListOf<Trail>()    //The list of attached trails (useful only when the event has no id yet)
+
     /**********************************UI component**********************************************/
 
     private lateinit var layout:View
     private val nameTextField by lazy {layout.fragment_event_edit_text_field_name}
-    private val beginDateTextFieldDropdown by lazy {layout.fragment_event_edit_text_field_dropdown_begin_date}
-    private val beginTimeTextFieldDropdown by lazy {layout.fragment_event_edit_text_field_dropdown_begin_time}
-    private val endDateTextFieldDropdown by lazy {layout.fragment_event_edit_text_field_dropdown_end_date}
-    private val endTimeTextFieldDropdown by lazy {layout.fragment_event_edit_text_field_dropdown_end_time}
-    private val fillDateMessageText by lazy {layout.fragment_event_edit_text_message_fill_dates}
-    private val daysRecyclerView by lazy {layout.fragment_event_edit_recycler_view_days}
-    private lateinit var daysRecyclerViewAdapter:EventDayAdapter
+    private val beginDateTextField by lazy {layout.fragment_event_edit_text_field_dropdown_begin_date}
+    private val beginTimeTextField by lazy {layout.fragment_event_edit_text_field_dropdown_begin_time}
+    private val endDateTextField by lazy {layout.fragment_event_edit_text_field_dropdown_end_date}
+    private val endTimeTextField by lazy {layout.fragment_event_edit_text_field_dropdown_end_time}
+    private val attachedTrailsRecyclerView by lazy {layout.fragment_event_edit_recycler_view_attached_trails}
+    private lateinit var attachedTrailsAdapter:TrailHorizontalAdapter
+    private lateinit var attachedTrailsAdapterOffline:TrailHorizontalAdapterOffline
+    private val addTrailsButton by lazy {layout.fragment_event_edit_button_add_trails}
     private val countryTextField by lazy {layout.fragment_event_edit_text_field_country}
     private val regionTextField by lazy {layout.fragment_event_edit_text_field_region}
     private val townTextField by lazy {layout.fragment_event_edit_text_field_town}
@@ -66,6 +78,7 @@ class EventEditFragment(val event: Event?=null) :
 
     override fun saveData() {
         this.event?.name=this.nameTextField.text.toString()
+        updateDates()
         this.event?.location= Location(
             this.countryTextField.text.toString(),
             this.regionTextField.text.toString(),
@@ -78,6 +91,9 @@ class EventEditFragment(val event: Event?=null) :
             this.addressTextField.text.toString()
         )
         this.event?.description=this.descriptionTextField.text.toString()
+        if(this.event?.id==null){
+            (activity as EventEditActivity).updateAttachedTrailsToUpdate(this.attachedTrails)
+        }
         (activity as EventEditActivity).saveEvent()
     }
 
@@ -85,11 +101,12 @@ class EventEditFragment(val event: Event?=null) :
 
     private fun initializeAllUIComponents(){
         initializeNameTextField()
-        initializeBeginDateTextFieldDropdown()
-        initializeBeginTimeTextFieldDropdown()
-        initializeEndDateTextFieldDropdown()
-        initializeEndTimeTextFieldDropdown()
-        initializeDaysRecyclerView()
+        initializeBeginDateTextField()
+        initializeBeginTimeTextField()
+        initializeEndDateTextField()
+        initializeEndTimeTextField()
+        initializeAttachedTrailsRecyclerView()
+        initializeAddTrailsButton()
         initializeCountryTextField()
         initializeRegionTextField()
         initializeTownTextField()
@@ -101,46 +118,57 @@ class EventEditFragment(val event: Event?=null) :
         this.nameTextField.setText(this.event?.name)
     }
 
-    private fun initializeBeginDateTextFieldDropdown(){
+    private fun initializeBeginDateTextField(){
         PickerHelper.populateEditTextWithDatePicker(
-            this.beginDateTextFieldDropdown, activity as AppCompatActivity, this.event?.beginDate
+            this.beginDateTextField, activity as AppCompatActivity, this.event?.beginDate
         )
-        this.beginDateTextFieldDropdown.addTextChangedListener {
-            updateNbDays()
-        }
     }
 
-    private fun initializeBeginTimeTextFieldDropdown(){
+    private fun initializeBeginTimeTextField(){
         PickerHelper.populateEditTextWithTimePicker(
-            this.beginTimeTextFieldDropdown, activity as AppCompatActivity, this.event?.beginDate
+            this.beginTimeTextField, activity as AppCompatActivity, this.event?.beginDate
         )
-        this.beginTimeTextFieldDropdown.addTextChangedListener {
-            updateNbDays()
-        }
     }
 
-    private fun initializeEndDateTextFieldDropdown(){
+    private fun initializeEndDateTextField(){
         PickerHelper.populateEditTextWithDatePicker(
-            this.endDateTextFieldDropdown, activity as AppCompatActivity, this.event?.endDate
+            this.endDateTextField, activity as AppCompatActivity, this.event?.endDate
         )
-        this.endDateTextFieldDropdown.addTextChangedListener {
-            updateNbDays()
-        }
     }
 
-    private fun initializeEndTimeTextFieldDropdown(){
+    private fun initializeEndTimeTextField(){
         PickerHelper.populateEditTextWithTimePicker(
-            this.endTimeTextFieldDropdown, activity as AppCompatActivity, this.event?.endDate
+            this.endTimeTextField, activity as AppCompatActivity, this.event?.endDate
         )
-        this.endTimeTextFieldDropdown.addTextChangedListener {
-            updateNbDays()
+    }
+
+    private fun initializeAttachedTrailsRecyclerView(){
+
+        /*If the event is not created in the database yet, then sets an offline adapter*/
+
+        if(this.event?.id==null){
+            this.attachedTrailsAdapterOffline=
+                TrailHorizontalAdapterOffline(this.attachedTrails, this, true, this)
+            this.attachedTrailsRecyclerView.adapter=this.attachedTrailsAdapterOffline
+
+            /*Else sets an online adapter*/
+
+        }else {
+            this.attachedTrailsAdapter=
+                TrailHorizontalAdapter(
+                    RecyclerViewFirebaseHelper.generateOptionsForAdapter(
+                        Trail::class.java,
+                        EventFirebaseQueries.getAttachedTrails(this.event.id!!),
+                        activity as AppCompatActivity
+                ), this, true, this
+            )
+            this.attachedTrailsRecyclerView.adapter=this.attachedTrailsAdapter
         }
     }
 
-    private fun initializeDaysRecyclerView(){
-        if(this.event?.trailsIds!=null) {
-            this.daysRecyclerViewAdapter = EventDayAdapter(this.event.trailsIds, this)
-            this.daysRecyclerView.adapter=this.daysRecyclerViewAdapter
+    private fun initializeAddTrailsButton(){
+        this.addTrailsButton.setOnClickListener {
+            showTrailsList()
         }
     }
 
@@ -166,65 +194,72 @@ class EventEditFragment(val event: Event?=null) :
 
     /*********************************Data monitoring********************************************/
 
-    /**Updates the number of days related to the begin dates and times set**/
+    /**Updates the begin and end dates**/
 
-    private fun updateNbDays(){
+    private fun updateDates(){
 
-        /*If the dates and times fields are empty, clears the event's trailsIds*/
+        /*If the dates and times fields are not empty, refreshes the event's dates*/
 
-        if(this.beginDateTextFieldDropdown.text.isNullOrEmpty()
-            ||this.beginTimeTextFieldDropdown.text.isNullOrEmpty()
-            ||this.endDateTextFieldDropdown.text.isNullOrEmpty()
-            ||this.endTimeTextFieldDropdown.text.isNullOrEmpty())
+        if(!(this.beginDateTextField.text.isNullOrEmpty()
+            ||this.beginTimeTextField.text.isNullOrEmpty()
+            ||this.endDateTextField.text.isNullOrEmpty()
+            ||this.endTimeTextField.text.isNullOrEmpty()))
         {
-            this.event?.trailsIds?.clear()
-            this.fillDateMessageText.visibility=View.VISIBLE
-        }
-
-        /*Else updates the dates and refreshes the trailsIdsKeys*/
-
-        else{
-            val beginDate=DateUtilities.getDateFromString(this.beginDateTextFieldDropdown.text.toString())
-            val beginTime=DateUtilities.getTimeFromString(this.beginTimeTextFieldDropdown.text.toString())
-            val endDate=DateUtilities.getDateFromString(this.endDateTextFieldDropdown.text.toString())
-            val endTime=DateUtilities.getTimeFromString(this.endTimeTextFieldDropdown.text.toString())
+            val beginDate=DateUtilities.getDateFromString(this.beginDateTextField.text.toString())
+            val beginTime=DateUtilities.getTimeFromString(this.beginTimeTextField.text.toString())
+            val endDate=DateUtilities.getDateFromString(this.endDateTextField.text.toString())
+            val endTime=DateUtilities.getTimeFromString(this.endTimeTextField.text.toString())
             this.event?.beginDate=DateUtilities.mergeDateAndTime(beginDate!!, beginTime!!)
             this.event?.endDate=DateUtilities.mergeDateAndTime(endDate!!, endTime!!)
-            this.event?.refreshTrailsIdsKeys()
-            this.daysRecyclerViewAdapter.notifyDataSetChanged()
-            this.fillDateMessageText.visibility=View.GONE
         }
     }
 
     /**Runs a dialog allowing to add a trail to the event**/
 
-    override fun onTrailAdd(day: Int, trailId: String?) {
-        Log.d(TAG_DATA, "Day $day : adding trail")
+    private fun showTrailsList() {
         DialogHelper
             .createTrailSelectionDialog(
                 activity as AppCompatActivity,
-                day,
                 this::addTrail)
             .show()
     }
 
-    /**Removes a trail from the event**/
+    /**Adds a trail to the event**/
 
-    override fun onTrailRemove(day: Int, trailId: String?) {
-        Log.d(TAG_DATA, "Day $day : removed trail")
-        if(this.event!=null) {
-            this.event.trailsIds[day.toString()] = null
-            this.daysRecyclerViewAdapter.notifyDataSetChanged()
+    private fun addTrail(trail:Trail){
+        Log.d(TAG_DATA, "Added trail '${trail.id} : ${trail.name}'")
+
+        /*If the event has no id yet, updates the offline adapter. Else updates the attached trail in the database*/
+
+        if(this.event?.id==null){
+            this.attachedTrails.add(trail)
+            this.attachedTrailsAdapterOffline.notifyDataSetChanged()
+        }
+        else{
+            (activity as EventEditActivity).updateAttachedTrail(trail)
         }
     }
 
-    /**Adds a trail to the event**/
+    /**On trail click**/
 
-    private fun addTrail(day:Int, trailId:String?){
-        Log.d(TAG_DATA, "Day $day : added trail '$trailId'")
-        if(this.event!=null){
-            this.event.trailsIds[day.toString()]=trailId
-            this.daysRecyclerViewAdapter.notifyDataSetChanged()
+    override fun onTrailClick(trail: Trail) {
+        Log.d(TAG_DATA, "Click on trail '${trail.id} : ${trail.name}'")
+        //TODO show the trail's detail?
+    }
+
+    /**Removes a trail from the event**/
+
+    override fun onTrailRemoved(trail: Trail) {
+        Log.d(TAG_DATA, "Removed trail '${trail.id} : ${trail.name}'")
+
+        /*If the event has no id yet, updates the offline adapter. Else updates the attached trail in the database*/
+
+        if(this.event?.id==null){
+            this.attachedTrails.removeAll { it.id==trail.id }
+            this.attachedTrailsAdapterOffline.notifyDataSetChanged()
+        }
+        else{
+            (activity as EventEditActivity).deleteAttachedTrail(trail)
         }
     }
 }

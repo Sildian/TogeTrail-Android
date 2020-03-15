@@ -87,12 +87,11 @@ object DialogHelper {
     /**
      * Creates a dialog allowing to select a trail in order to add it to an event
      * @param activity : the activity consuming the dialog
-     * @param day : the related day of the event where the trail must be attached
      * @param callback : the callback allowing to consume the result of the dialog
      */
 
     fun createTrailSelectionDialog(
-        activity: AppCompatActivity, day:Int, callback:(day:Int, trailId:String?)->Unit):AlertDialog{
+        activity: AppCompatActivity, callback:(trail:Trail)->Unit):AlertDialog{
 
         /*Inflates the view*/
 
@@ -118,11 +117,11 @@ object DialogHelper {
                 Trail::class.java, TrailFirebaseQueries.getTrails(), activity),
             object:TrailVerticalViewHolder.OnTrailClickListener{
 
-                /*On trail click, invokes the callback with the day and the trailId*/
+                /*On trail click, invokes the callback*/
 
                 override fun onTrailClick(trail: Trail) {
                     dialog.dismiss()
-                    callback.invoke(day, trail.id)
+                    callback.invoke(trail)
                 }
         })
         trailsRecyclerView.adapter=trailsAdapter

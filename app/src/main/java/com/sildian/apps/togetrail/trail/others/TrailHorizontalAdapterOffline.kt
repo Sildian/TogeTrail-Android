@@ -2,31 +2,32 @@ package com.sildian.apps.togetrail.trail.others
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import androidx.recyclerview.widget.RecyclerView
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.trail.model.core.Trail
 
 /*************************************************************************************************
- * Displays a list of trails within an horizontal RecyclerView
+ * Displays a list of trails within an horizontal RecyclerView (with offline data)
  ************************************************************************************************/
 
-class TrailHorizontalAdapter(
-    options:FirestoreRecyclerOptions<Trail>,
+class TrailHorizontalAdapterOffline (
+    private val trails:List<Trail>,
     private val onTrailClickListener: TrailHorizontalViewHolder.OnTrailClickListener?=null,
     private val isEditable:Boolean=false,
     private val onTrailRemovedListener: TrailHorizontalViewHolder.OnTrailRemovedListener?=null
-):
-    FirestoreRecyclerAdapter<Trail, TrailHorizontalViewHolder> (options)
+)
+    : RecyclerView.Adapter<TrailHorizontalViewHolder>()
 {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrailHorizontalViewHolder {
-        val inflater=LayoutInflater.from(parent.context)
+        val inflater= LayoutInflater.from(parent.context)
         val view=inflater.inflate(R.layout.item_recycler_view_trail_horizontal, parent, false)
         return TrailHorizontalViewHolder(view, this.onTrailClickListener, this.isEditable, this.onTrailRemovedListener)
     }
 
-    override fun onBindViewHolder(holder: TrailHorizontalViewHolder, position: Int, trail: Trail) {
-        holder.updateUI(trail)
+    override fun getItemCount(): Int = this.trails.size
+
+    override fun onBindViewHolder(holder: TrailHorizontalViewHolder, position: Int) {
+        holder.updateUI(this.trails[position])
     }
 }
