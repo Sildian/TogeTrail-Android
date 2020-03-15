@@ -6,10 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import com.sdsmdg.harjot.crollerTest.Croller
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.flows.SaveDataFlow
+import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.model.Location
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DropdownMenuHelper
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
@@ -24,8 +23,7 @@ import kotlinx.android.synthetic.main.fragment_trail_info_edit.view.*
  ************************************************************************************************/
 
 class TrailInfoEditFragment(val trail: Trail?=null) :
-    Fragment(),
-    SaveDataFlow,
+    BaseDataFlowFragment(),
     Croller.onProgressChangedListener
 {
 
@@ -106,7 +104,7 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
             this.townTextField.text.toString()
         )
         this.trail?.description=this.descriptionTextField.text.toString()
-        (activity as TrailInfoEditActivity).updateTrailAndSave(this.trail!!)
+        (activity as TrailInfoEditActivity).saveTrail()
     }
 
     /***********************************UI monitoring********************************************/

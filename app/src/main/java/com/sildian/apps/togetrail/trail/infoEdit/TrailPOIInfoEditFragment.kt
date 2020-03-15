@@ -9,13 +9,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.sdsmdg.harjot.crollerTest.Croller
 
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.flows.SaveDataFlow
+import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 import kotlinx.android.synthetic.main.fragment_trail_poi_info_edit.view.*
@@ -27,8 +26,7 @@ import pl.aprilapps.easyphotopicker.*
  ************************************************************************************************/
 
 class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=null) :
-    Fragment(),
-    SaveDataFlow,
+    BaseDataFlowFragment(),
     Croller.onProgressChangedListener
 {
 
@@ -86,7 +84,7 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
     override fun saveData() {
         this.trailPointOfInterest?.name=this.nameTextField.text.toString()
         this.trailPointOfInterest?.description=this.descriptionTextField.text.toString()
-        (activity as TrailInfoEditActivity).updateTrailPoiAndSave(this.trailPointOfInterest!!)
+        (activity as TrailInfoEditActivity).saveTrailPoi(this.trailPointOfInterest!!)
     }
 
     /***********************************UI monitoring********************************************/

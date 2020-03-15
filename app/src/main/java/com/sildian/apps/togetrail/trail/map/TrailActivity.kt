@@ -3,7 +3,6 @@ package com.sildian.apps.togetrail.trail.map
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -11,7 +10,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.flows.SaveDataFlow
+import com.sildian.apps.togetrail.common.flows.BaseDataFlowActivity
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.main.MainActivity
 import com.sildian.apps.togetrail.trail.infoEdit.TrailInfoEditActivity
@@ -28,7 +27,7 @@ import java.util.*
  * This activity monitors the trails and lets the user see or edit a trail
  ************************************************************************************************/
 
-class TrailActivity : AppCompatActivity() {
+class TrailActivity : BaseDataFlowActivity() {
 
     /**********************************Static items**********************************************/
 
@@ -56,9 +55,8 @@ class TrailActivity : AppCompatActivity() {
         private const val KEY_REQUEST_EDIT_TRAIL_INFO=1002
 
         /**Bundle keys for intent**/
-        const val KEY_BUNDLE_TRAIL_EDIT_ACTION="KEY_BUNDLE_TRAIL_EDIT_ACTION"
+        const val KEY_BUNDLE_TRAIL_ACTION="KEY_BUNDLE_TRAIL_ACTION"
         const val KEY_BUNDLE_TRAIL="KEY_BUNDLE_TRAIL"
-        const val KEY_BUNDLE_TRAIL_POI_POSITION="KEY_BUNDLE_TRAIL_POI_POSITION"
     }
 
     /**************************************Data**************************************************/
@@ -72,17 +70,13 @@ class TrailActivity : AppCompatActivity() {
     private lateinit var fragment: BaseTrailMapFragment
     private lateinit var progressDialog:AlertDialog
 
-    /********************************Attached flows**********************************************/
-
-    private lateinit var saveDataFlow: SaveDataFlow      //Flow used when the user clicks on save menu
-
     /************************************Life cycle**********************************************/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG_ACTIVITY, "Activity '${javaClass.simpleName}' created")
         setContentView(R.layout.activity_trail)
-        readDataFromIntent(intent)
+        loadData()
         initializeToolbar()
         startTrailAction()
     }
@@ -119,7 +113,7 @@ class TrailActivity : AppCompatActivity() {
         Log.d(TAG_MENU, "Menu '${item.title}' clicked")
         if(item.groupId==R.id.menu_edit){
             if(item.itemId==R.id.menu_edit_save){
-                this.saveDataFlow.saveData()
+                saveData()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -127,15 +121,23 @@ class TrailActivity : AppCompatActivity() {
 
     /***********************************Data monitoring******************************************/
 
-    private fun readDataFromIntent(intent: Intent?){
+    override fun loadData() {
+        readDataFromIntent()
+    }
+
+    override fun saveData() {
+        this.fragment.saveData()
+    }
+
+    private fun readDataFromIntent(){
         if(intent!=null){
-            if(intent.hasExtra(MainActivity.KEY_BUNDLE_TRAIL_ACTION)){
+            if(intent.hasExtra(KEY_BUNDLE_TRAIL_ACTION)){
                 this.currentAction=
-                    intent.getIntExtra(MainActivity.KEY_BUNDLE_TRAIL_ACTION, ACTION_TRAIL_SEE)
+                    intent.getIntExtra(KEY_BUNDLE_TRAIL_ACTION, ACTION_TRAIL_SEE)
             }
-            if(intent.hasExtra(MainActivity.KEY_BUNDLE_TRAIL)){
+            if(intent.hasExtra(KEY_BUNDLE_TRAIL)){
                 this.trail=
-                    intent.getParcelableExtra(MainActivity.KEY_BUNDLE_TRAIL)
+                    intent.getParcelableExtra(KEY_BUNDLE_TRAIL)
             }
         }
     }
@@ -179,16 +181,16 @@ class TrailActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateTrail(trail: Trail){
+    private fun updateTrail(trail: Trail?){
         this.trail=trail
         this.fragment.updateTrailAndShowTrack(this.trail)
     }
 
-    fun updateTrailAndSave(trail:Trail){
+    fun saveTrail(trail: Trail?){
 
         /*Updates the trail*/
 
-        this.trail=trail
+        updateTrail(trail)
         this.trail?.lastUpdate= Date()
 
         /*Shows a progress dialog*/
@@ -275,7 +277,6 @@ class TrailActivity : AppCompatActivity() {
             ID_FRAGMENT_TRAIL_RECORD ->
                 this.fragment = TrailMapRecordFragment()
         }
-        this.saveDataFlow=this.fragment
         supportFragmentManager.beginTransaction()
             .replace(R.id.activity_trail_fragment, this.fragment).commit()
     }
@@ -330,11 +331,11 @@ class TrailActivity : AppCompatActivity() {
 
     private fun startTrailInfoEditActivity(trailEditActionId:Int, trailPointOfInterestPosition:Int?){
         val trailInfoEditActivityIntent=Intent(this, TrailInfoEditActivity::class.java)
-        trailInfoEditActivityIntent.putExtra(KEY_BUNDLE_TRAIL_EDIT_ACTION, trailEditActionId)
-        trailInfoEditActivityIntent.putExtra(KEY_BUNDLE_TRAIL, this.trail)
+        trailInfoEditActivityIntent.putExtra(TrailInfoEditActivity.KEY_BUNDLE_TRAIL_ACTION, trailEditActionId)
+        trailInfoEditActivityIntent.putExtra(TrailInfoEditActivity.KEY_BUNDLE_TRAIL, this.trail)
         if(trailPointOfInterestPosition!=null) {
             trailInfoEditActivityIntent
-                .putExtra(KEY_BUNDLE_TRAIL_POI_POSITION, trailPointOfInterestPosition)
+                .putExtra(TrailInfoEditActivity.KEY_BUNDLE_TRAIL_POI_POSITION, trailPointOfInterestPosition)
         }
         startActivityForResult(trailInfoEditActivityIntent, KEY_REQUEST_EDIT_TRAIL_INFO)
     }
@@ -368,8 +369,8 @@ class TrailActivity : AppCompatActivity() {
     private fun handleTrailInfoEditResult(resultCode: Int, data: Intent?){
         if(resultCode== Activity.RESULT_OK){
             if(data!=null){
-                if(data.hasExtra(KEY_BUNDLE_TRAIL)) {
-                    val updatedTrail = data.getParcelableExtra<Trail>(KEY_BUNDLE_TRAIL)!!
+                if(data.hasExtra(TrailInfoEditActivity.KEY_BUNDLE_TRAIL)) {
+                    val updatedTrail = data.getParcelableExtra<Trail>(TrailInfoEditActivity.KEY_BUNDLE_TRAIL)!!
                     updateTrail(updatedTrail)
                 }
             }

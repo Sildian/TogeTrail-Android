@@ -72,13 +72,6 @@ class MainActivity :
         /**Request keys for permissions**/
         private const val KEY_REQUEST_PERMISSION_LOCATION=2001
 
-        /**Bundle keys for intents**/
-        const val KEY_BUNDLE_PROFILE_ACTION="KEY_BUNDLE_PROFILE_ACTION"
-        const val KEY_BUNDLE_HIKER="KEY_BUNDLE_HIKER"
-        const val KEY_BUNDLE_TRAIL_ACTION="KEY_BUNDLE_TRAIL_ACTION"
-        const val KEY_BUNDLE_TRAIL="KEY_BUNDLE_TRAIL"
-        const val KEY_BUNDLE_EVENT="KEY_BUNDLE_EVENT"
-
         /**Bundle keys for permissions**/
         private const val KEY_BUNDLE_PERMISSION_LOCATION=Manifest.permission.ACCESS_FINE_LOCATION
     }
@@ -309,6 +302,12 @@ class MainActivity :
             }
     }
 
+    /***********************************Trails monitoring****************************************/
+
+    fun seeTrail(trail:Trail?){
+        startTrailActivity(TrailActivity.ACTION_TRAIL_SEE, trail)
+    }
+
     /******************************UI monitoring**************************************************/
 
     private fun initializeToolbar(){
@@ -458,8 +457,8 @@ class MainActivity :
 
     private fun startProfileActivity(profileActionId:Int){
         val profileActivityIntent=Intent(this, ProfileActivity::class.java)
-        profileActivityIntent.putExtra(KEY_BUNDLE_PROFILE_ACTION, profileActionId)
-        profileActivityIntent.putExtra(KEY_BUNDLE_HIKER, this.currentHiker)
+        profileActivityIntent.putExtra(ProfileActivity.KEY_BUNDLE_PROFILE_ACTION, profileActionId)
+        profileActivityIntent.putExtra(ProfileActivity.KEY_BUNDLE_HIKER, this.currentHiker)
         startActivityForResult(profileActivityIntent, KEY_REQUEST_PROFILE)
     }
 
@@ -470,8 +469,8 @@ class MainActivity :
 
     private fun startProfileEditActivity(profileActionId:Int){
         val profileEditActivityIntent=Intent(this, ProfileEditActivity::class.java)
-        profileEditActivityIntent.putExtra(KEY_BUNDLE_PROFILE_ACTION, profileActionId)
-        profileEditActivityIntent.putExtra(KEY_BUNDLE_HIKER, this.currentHiker)
+        profileEditActivityIntent.putExtra(ProfileEditActivity.KEY_BUNDLE_PROFILE_ACTION, profileActionId)
+        profileEditActivityIntent.putExtra(ProfileEditActivity.KEY_BUNDLE_HIKER, this.currentHiker)
         startActivityForResult(profileEditActivityIntent, KEY_REQUEST_PROFILE)
     }
 
@@ -481,11 +480,11 @@ class MainActivity :
      * @param trail (optionnal) : the trail to see
      */
 
-    fun startTrailActivity(trailActionId: Int, trail:Trail?=null){
+    private fun startTrailActivity(trailActionId: Int, trail:Trail?=null){
         val trailActivityIntent= Intent(this, TrailActivity::class.java)
-        trailActivityIntent.putExtra(KEY_BUNDLE_TRAIL_ACTION, trailActionId)
+        trailActivityIntent.putExtra(TrailActivity.KEY_BUNDLE_TRAIL_ACTION, trailActionId)
         if(trailActionId==TrailActivity.ACTION_TRAIL_SEE){
-            trailActivityIntent.putExtra(KEY_BUNDLE_TRAIL, trail)
+            trailActivityIntent.putExtra(TrailActivity.KEY_BUNDLE_TRAIL, trail)
         }
         startActivity(trailActivityIntent)
     }
@@ -494,7 +493,7 @@ class MainActivity :
      * Starts the EventEditActivity
      */
 
-    fun startEventEditActivity(){
+    private fun startEventEditActivity(){
         val eventEditActivityIntent= Intent(this, EventEditActivity::class.java)
         startActivity(eventEditActivityIntent)
     }
@@ -538,8 +537,8 @@ class MainActivity :
 
     private fun handleProfileResult(resultCode: Int, data: Intent?){
         if(resultCode== Activity.RESULT_OK){
-            if(data!=null && data.hasExtra(KEY_BUNDLE_HIKER)){
-                this.currentHiker=data.getParcelableExtra(KEY_BUNDLE_HIKER)
+            if(data!=null && data.hasExtra(ProfileActivity.KEY_BUNDLE_HIKER)){
+                this.currentHiker=data.getParcelableExtra(ProfileActivity.KEY_BUNDLE_HIKER)
                 updateNavigationViewUserItems()
             }
         }

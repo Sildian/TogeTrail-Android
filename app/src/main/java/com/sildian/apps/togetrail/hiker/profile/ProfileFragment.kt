@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.UserFirebaseHelper
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import kotlinx.android.synthetic.main.fragment_profile.view.*
@@ -20,7 +21,7 @@ import java.util.*
  * @param hiker : the hiker
  ************************************************************************************************/
 
-class ProfileFragment (var hiker: Hiker?) : Fragment() {
+class ProfileFragment (var hiker: Hiker?) : BaseDataFlowFragment() {
 
     /**********************************Static items**********************************************/
 

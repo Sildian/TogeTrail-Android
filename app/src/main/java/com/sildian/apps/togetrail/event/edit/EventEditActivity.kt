@@ -2,28 +2,25 @@ package com.sildian.apps.togetrail.event.edit
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.Fragment
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.flows.SaveDataFlow
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.UserFirebaseHelper
+import com.sildian.apps.togetrail.common.flows.BaseDataFlowActivity
+import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
 import com.sildian.apps.togetrail.event.model.support.EventHelper
-import com.sildian.apps.togetrail.main.MainActivity
 import kotlinx.android.synthetic.main.activity_event_edit.*
 
 /*************************************************************************************************
  * Allows a user to create or edit an event
  ************************************************************************************************/
 
-class EventEditActivity : AppCompatActivity() {
+class EventEditActivity : BaseDataFlowActivity() {
 
     /**********************************Static items**********************************************/
 
@@ -33,6 +30,9 @@ class EventEditActivity : AppCompatActivity() {
         private const val TAG_ACTIVITY = "TAG_ACTIVITY"
         private const val TAG_MENU = "TAG_MENU"
         private const val TAG_STORAGE = "TAG_STORAGE"
+
+        /**Bundle keys for intents**/
+        const val KEY_BUNDLE_EVENT="KEY_BUNDLE_EVENT"
     }
 
     /****************************************Data************************************************/
@@ -42,12 +42,8 @@ class EventEditActivity : AppCompatActivity() {
     /**********************************UI component**********************************************/
 
     private val toolbar by lazy {activity_event_edit_toolbar}
-    private lateinit var fragment: Fragment
+    private lateinit var fragment: BaseDataFlowFragment
     private lateinit var progressDialog: AlertDialog
-
-    /********************************Attached flows**********************************************/
-
-    private lateinit var saveDataFlow: SaveDataFlow      //Flow used when the user clicks on save menu
 
     /************************************Life cycle**********************************************/
 
@@ -55,7 +51,7 @@ class EventEditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.d(TAG_ACTIVITY, "Activity '${javaClass.simpleName}' created")
         setContentView(R.layout.activity_event_edit)
-        readDataFromIntent(intent)
+        loadData()
         initializeToolbar()
         showFragment()
     }
@@ -88,7 +84,7 @@ class EventEditActivity : AppCompatActivity() {
         Log.d(TAG_MENU, "Menu '${item.title}' clicked")
         if(item.groupId==R.id.menu_edit){
             if(item.itemId==R.id.menu_edit_save){
-                this.saveDataFlow.saveData()
+                saveData()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -96,10 +92,18 @@ class EventEditActivity : AppCompatActivity() {
 
     /******************************Data monitoring************************************************/
 
-    private fun readDataFromIntent(intent: Intent?){
+    override fun loadData() {
+        readDataFromIntent()
+    }
+
+    override fun saveData() {
+        this.fragment.saveData()
+    }
+
+    private fun readDataFromIntent(){
         if(intent!=null){
-            if(intent.hasExtra(MainActivity.KEY_BUNDLE_EVENT)){
-                this.event= intent.getParcelableExtra(MainActivity.KEY_BUNDLE_EVENT)
+            if(intent.hasExtra(KEY_BUNDLE_EVENT)){
+                this.event= intent.getParcelableExtra(KEY_BUNDLE_EVENT)
             }else{
                 val name=resources.getString(R.string.message_event_name_unknown)
                 this.event=EventHelper.buildFromNothing(name)
@@ -107,18 +111,12 @@ class EventEditActivity : AppCompatActivity() {
         }
     }
 
-    fun updateEvent(event:Event){
-        this.event=event
-    }
+    fun saveEvent(){
 
-    fun updateEventAndSave(event: Event){
-        updateEvent(event)
+        /*Shows a progress dialog*/
+
         this.progressDialog= DialogHelper.createProgressDialog(this)
         this.progressDialog.show()
-        saveEvent()
-    }
-
-    private fun saveEvent(){
 
         /*If the event has no id, it means it was not created in the database yet. Then creates it.*/
 
@@ -186,7 +184,6 @@ class EventEditActivity : AppCompatActivity() {
 
     private fun showFragment(){
         this.fragment= EventEditFragment(this.event)
-        this.saveDataFlow=this.fragment as SaveDataFlow
         supportFragmentManager.beginTransaction()
             .replace(R.id.activity_event_edit_fragment, this.fragment).commit()
     }
@@ -195,7 +192,7 @@ class EventEditActivity : AppCompatActivity() {
 
     private fun finishOk(){
         val resultIntent=Intent()
-        resultIntent.putExtra(MainActivity.KEY_BUNDLE_EVENT, this.event)
+        resultIntent.putExtra(KEY_BUNDLE_EVENT, this.event)
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
     }

@@ -2,15 +2,14 @@ package com.sildian.apps.togetrail.trail.infoEdit
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.Fragment
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.flows.SaveDataFlow
+import com.sildian.apps.togetrail.common.flows.BaseDataFlowActivity
+import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.ImageStorageFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.trail.map.TrailActivity
@@ -23,7 +22,7 @@ import kotlinx.android.synthetic.main.activity_trail_info_edit.*
  * This activity allows the user to edit information about a trail or a trailPointOfInterest
  ************************************************************************************************/
 
-class TrailInfoEditActivity : AppCompatActivity() {
+class TrailInfoEditActivity : BaseDataFlowActivity() {
 
     /**********************************Static items**********************************************/
 
@@ -41,6 +40,11 @@ class TrailInfoEditActivity : AppCompatActivity() {
         /**Trail actions defining what the user is performing**/
         const val ACTION_TRAIL_EDIT_INFO=1
         const val ACTION_TRAIL_EDIT_POI_INFO=2
+
+        /**Bundle keys for intent**/
+        const val KEY_BUNDLE_TRAIL_ACTION="KEY_BUNDLE_TRAIL_ACTION"
+        const val KEY_BUNDLE_TRAIL="KEY_BUNDLE_TRAIL"
+        const val KEY_BUNDLE_TRAIL_POI_POSITION="KEY_BUNDLE_TRAIL_POI_POSITION"
     }
 
     /**************************************Data**************************************************/
@@ -53,12 +57,8 @@ class TrailInfoEditActivity : AppCompatActivity() {
     /**********************************UI component**********************************************/
 
     private val toolbar by lazy {activity_trail_info_edit_toolbar}
-    private lateinit var fragment: Fragment
+    private lateinit var fragment: BaseDataFlowFragment
     private lateinit var progressDialog:AlertDialog
-
-    /**************************************Flows*************************************************/
-
-    private lateinit var saveDataFlow:SaveDataFlow      //Flow used when the user clicks on save menu
 
     /**********************************Pictures support******************************************/
 
@@ -71,7 +71,7 @@ class TrailInfoEditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.d(TAG_ACTIVITY, "Activity '${javaClass.simpleName}' created")
         setContentView(R.layout.activity_trail_info_edit)
-        readDataFromIntent(intent)
+        loadData()
         initializeToolbar()
         startTrailEditAction()
     }
@@ -104,7 +104,7 @@ class TrailInfoEditActivity : AppCompatActivity() {
         Log.d(TAG_MENU, "Menu '${item.title}' clicked")
         if(item.groupId==R.id.menu_edit){
             if(item.itemId==R.id.menu_edit_save){
-                this.saveDataFlow.saveData()
+                saveData()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -112,25 +112,29 @@ class TrailInfoEditActivity : AppCompatActivity() {
 
     /***********************************Data monitoring******************************************/
 
-    private fun readDataFromIntent(intent: Intent?){
+    override fun loadData() {
+        readDataFromIntent()
+    }
+
+    override fun saveData() {
+        this.fragment.saveData()
+    }
+
+    private fun readDataFromIntent(){
         if(intent!=null){
-            if(intent.hasExtra(TrailActivity.KEY_BUNDLE_TRAIL_EDIT_ACTION)){
+            if(intent.hasExtra(KEY_BUNDLE_TRAIL_ACTION)){
                 this.currentAction=intent.getIntExtra(
-                    TrailActivity.KEY_BUNDLE_TRAIL_EDIT_ACTION, ACTION_TRAIL_EDIT_INFO)
+                    KEY_BUNDLE_TRAIL_ACTION, ACTION_TRAIL_EDIT_INFO)
             }
-            if(intent.hasExtra(TrailActivity.KEY_BUNDLE_TRAIL)){
-                this.trail=intent.getParcelableExtra(TrailActivity.KEY_BUNDLE_TRAIL)
+            if(intent.hasExtra(KEY_BUNDLE_TRAIL)){
+                this.trail=intent.getParcelableExtra(KEY_BUNDLE_TRAIL)
             }
-            if(intent.hasExtra(TrailActivity.KEY_BUNDLE_TRAIL_POI_POSITION)){
-                val position=intent.getIntExtra(TrailActivity.KEY_BUNDLE_TRAIL_POI_POSITION, 0)
+            if(intent.hasExtra(KEY_BUNDLE_TRAIL_POI_POSITION)){
+                val position=intent.getIntExtra(KEY_BUNDLE_TRAIL_POI_POSITION, 0)
                 this.trailPointOfInterestPosition=position
                 this.trailPointOfInterest=this.trail!!.trailTrack.trailPointsOfInterest[position]
             }
         }
-    }
-
-    private fun updateTrail(trail: Trail){
-        this.trail=trail
     }
 
     private fun updateTrailPointOfInterest(trailPointOfInterest: TrailPointOfInterest){
@@ -138,14 +142,13 @@ class TrailInfoEditActivity : AppCompatActivity() {
         this.trail!!.trailTrack.trailPointsOfInterest[this.trailPointOfInterestPosition!!]=trailPointOfInterest
     }
 
-    fun updateTrailAndSave(trail: Trail){
-        updateTrail(trail)
+    fun saveTrail(){
         this.progressDialog=DialogHelper.createProgressDialog(this)
         this.progressDialog.show()
-        saveTrail()
+        saveTrailOnline()
     }
 
-    fun updateTrailPoiAndSave(trailPointOfInterest: TrailPointOfInterest){
+    fun saveTrailPoi(trailPointOfInterest: TrailPointOfInterest){
         updateTrailPointOfInterest(trailPointOfInterest)
         this.progressDialog=DialogHelper.createProgressDialog(this)
         this.progressDialog.show()
@@ -153,7 +156,7 @@ class TrailInfoEditActivity : AppCompatActivity() {
             saveImage()
         }
         else{
-            saveTrail()
+            saveTrailOnline()
         }
         if(this.imagePathToDeleteFromDatabase!=null) {
             deleteImage()
@@ -178,18 +181,18 @@ class TrailInfoEditActivity : AppCompatActivity() {
 
                         this.trailPointOfInterest?.photoUrl=url.toString()
                         updateTrailPointOfInterest(this.trailPointOfInterest!!)
-                        saveTrail()
+                        saveTrailOnline()
                     }
                     ?.addOnFailureListener { e ->
                         //TODO handle
                         Log.w(TAG_STORAGE, e.message.toString())
-                        saveTrail()
+                        saveTrailOnline()
                     }
             }
             .addOnFailureListener { e ->
                 //TODO handle
                 Log.w(TAG_STORAGE, e.message.toString())
-                saveTrail()
+                saveTrailOnline()
             }
     }
 
@@ -207,7 +210,7 @@ class TrailInfoEditActivity : AppCompatActivity() {
             }
     }
 
-    private fun saveTrail(){
+    private fun saveTrailOnline(){
 
         /*If the trail has no id, it means it was not created in the database yet. Then creates it.*/
 
@@ -313,7 +316,6 @@ class TrailInfoEditActivity : AppCompatActivity() {
                         this.trailPointOfInterest
                     )
         }
-        this.saveDataFlow=this.fragment as SaveDataFlow
         supportFragmentManager.beginTransaction()
             .replace(R.id.activity_trail_info_edit_fragment, this.fragment).commit()
     }
@@ -322,7 +324,7 @@ class TrailInfoEditActivity : AppCompatActivity() {
 
     private fun finishOk(){
         val resultIntent=Intent()
-        resultIntent.putExtra(TrailActivity.KEY_BUNDLE_TRAIL, this.trail)
+        resultIntent.putExtra(KEY_BUNDLE_TRAIL, this.trail)
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
     }

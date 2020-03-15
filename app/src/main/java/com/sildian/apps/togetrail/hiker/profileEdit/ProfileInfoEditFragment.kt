@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.flows.SaveDataFlow
+import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.model.Location
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.utils.uiHelpers.PickerHelper
@@ -27,9 +26,7 @@ import pl.aprilapps.easyphotopicker.*
  * @param hiker : the current user
  ************************************************************************************************/
 
-class ProfileInfoEditFragment(val hiker: Hiker?=null) :
-    Fragment(),
-    SaveDataFlow
+class ProfileInfoEditFragment(val hiker: Hiker?=null) : BaseDataFlowFragment()
 {
 
     /**********************************Static items**********************************************/
@@ -92,7 +89,7 @@ class ProfileInfoEditFragment(val hiker: Hiker?=null) :
                 this.regionTextField.text.toString(),
                 this.townTextField.text.toString())
         this.hiker?.description=this.descriptionTextField.text.toString()
-        (activity as ProfileEditActivity).updateHikerAndSave(this.hiker!!)
+        (activity as ProfileEditActivity).saveHiker()
     }
 
     /***********************************UI monitoring********************************************/

@@ -15,7 +15,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.flows.SaveDataFlow
+import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.MapMarkersUtilities
 import com.sildian.apps.togetrail.trail.info.TrailInfoFragment
 import com.sildian.apps.togetrail.trail.info.TrailPOIInfoFragment
@@ -27,12 +27,11 @@ import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
  ************************************************************************************************/
 
 abstract class BaseTrailMapFragment :
-    Fragment(),
+    BaseDataFlowFragment(),
     OnMapReadyCallback,
     GoogleMap.OnMapClickListener,
     GoogleMap.OnMarkerClickListener,
-    GoogleMap.OnPolylineClickListener,
-    SaveDataFlow
+    GoogleMap.OnPolylineClickListener
 {
 
     /**********************************Static items**********************************************/
@@ -209,7 +208,7 @@ abstract class BaseTrailMapFragment :
     /*********************************Data monitoring********************************************/
 
     override fun saveData(){
-        (activity as TrailActivity).updateTrailAndSave(this.trail!!)
+        (activity as TrailActivity).saveTrail(this.trail)
     }
 
     /********************************Location monitoring*****************************************/

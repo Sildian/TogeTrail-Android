@@ -7,9 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.Fragment
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.flows.SaveDataFlow
+import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.model.FineLocation
 import com.sildian.apps.togetrail.common.model.Location
 import com.sildian.apps.togetrail.common.utils.DateUtilities
@@ -24,8 +23,7 @@ import kotlinx.android.synthetic.main.fragment_event_edit.view.*
  ************************************************************************************************/
 
 class EventEditFragment(val event: Event?=null) :
-    Fragment(),
-    SaveDataFlow,
+    BaseDataFlowFragment(),
     EventDayViewHolder.OnEventDayTrailChanged
 {
 
@@ -80,7 +78,7 @@ class EventEditFragment(val event: Event?=null) :
             this.addressTextField.text.toString()
         )
         this.event?.description=this.descriptionTextField.text.toString()
-        (activity as EventEditActivity).updateEventAndSave(this.event!!)
+        (activity as EventEditActivity).saveEvent()
     }
 
     /***********************************UI monitoring********************************************/

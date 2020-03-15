@@ -36,10 +36,6 @@ class TrailsListFragment :
         private const val TAG_UI="TAG_UI"
     }
 
-    /**************************************Data**************************************************/
-
-    private val trails:List<Trail> = listOf()               //The list of trails to display
-
     /**********************************UI component**********************************************/
 
     private lateinit var layout:View
@@ -67,8 +63,10 @@ class TrailsListFragment :
         this.trailsRecyclerView.adapter=this.trailsAdapter
     }
 
+    /***********************************Trails monitoring****************************************/
+
     override fun onTrailClick(trail: Trail) {
         Log.d(TAG_UI, "Click on trail '${trail.id}")
-        (activity as MainActivity).startTrailActivity(TrailActivity.ACTION_TRAIL_SEE, trail)
+        (activity as MainActivity).seeTrail(trail)
     }
 }

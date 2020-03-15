@@ -2,29 +2,26 @@ package com.sildian.apps.togetrail.hiker.profileEdit
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.Fragment
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.flows.SaveDataFlow
+import com.sildian.apps.togetrail.common.flows.BaseDataFlowActivity
+import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.ImageStorageFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.UserFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
-import com.sildian.apps.togetrail.hiker.profile.ProfileActivity
-import com.sildian.apps.togetrail.main.MainActivity
 import kotlinx.android.synthetic.main.activity_profile_edit.*
 
 /*************************************************************************************************
  * Lets a user see and edit his own profile
  ************************************************************************************************/
 
-class ProfileEditActivity : AppCompatActivity() {
+class ProfileEditActivity : BaseDataFlowActivity() {
 
     /**********************************Static items**********************************************/
 
@@ -43,6 +40,10 @@ class ProfileEditActivity : AppCompatActivity() {
         /**Actions to perform**/
         const val ACTION_PROFILE_EDIT_INFO=1
         const val ACTION_PROFILE_EDIT_SETTINGS=2
+
+        /**Bundle keys for intents**/
+        const val KEY_BUNDLE_PROFILE_ACTION="KEY_BUNDLE_PROFILE_ACTION"
+        const val KEY_BUNDLE_HIKER="KEY_BUNDLE_HIKER"
     }
 
     /****************************************Data************************************************/
@@ -53,12 +54,8 @@ class ProfileEditActivity : AppCompatActivity() {
     /**********************************UI component**********************************************/
 
     private val toolbar by lazy {activity_profile_edit_toolbar}
-    private lateinit var fragment: Fragment
+    private lateinit var fragment: BaseDataFlowFragment
     private lateinit var progressDialog: AlertDialog
-
-    /********************************Attached flows**********************************************/
-
-    private lateinit var saveDataFlow:SaveDataFlow      //Flow used when the user clicks on save menu
 
     /**********************************Pictures support******************************************/
 
@@ -71,7 +68,7 @@ class ProfileEditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.d(TAG_ACTIVITY, "Activity '${javaClass.simpleName}' created")
         setContentView(R.layout.activity_profile_edit)
-        readDataFromIntent(intent)
+        loadData()
         initializeToolbar()
         startProfileAction()
     }
@@ -104,7 +101,7 @@ class ProfileEditActivity : AppCompatActivity() {
         Log.d(TAG_MENU, "Menu '${item.title}' clicked")
         if(item.groupId==R.id.menu_edit){
             if(item.itemId==R.id.menu_edit_save){
-                this.saveDataFlow.saveData()
+                saveData()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -112,30 +109,33 @@ class ProfileEditActivity : AppCompatActivity() {
 
     /******************************Data monitoring************************************************/
 
-    private fun readDataFromIntent(intent: Intent?){
+    override fun loadData() {
+        readDataFromIntent()
+    }
+
+    override fun saveData() {
+        this.fragment.saveData()
+    }
+
+    private fun readDataFromIntent(){
         if(intent!=null){
-            if(intent.hasExtra(MainActivity.KEY_BUNDLE_PROFILE_ACTION)){
-                this.currentAction=intent.getIntExtra(MainActivity.KEY_BUNDLE_PROFILE_ACTION, ACTION_PROFILE_EDIT_INFO)
+            if(intent.hasExtra(KEY_BUNDLE_PROFILE_ACTION)){
+                this.currentAction=intent.getIntExtra(KEY_BUNDLE_PROFILE_ACTION, ACTION_PROFILE_EDIT_INFO)
             }
-            if(intent.hasExtra(MainActivity.KEY_BUNDLE_HIKER)){
-                this.hiker= intent.getParcelableExtra(MainActivity.KEY_BUNDLE_HIKER)
+            if(intent.hasExtra(KEY_BUNDLE_HIKER)){
+                this.hiker= intent.getParcelableExtra(KEY_BUNDLE_HIKER)
             }
         }
     }
 
-    private fun updateHiker(hiker:Hiker){
-        this.hiker=hiker
-    }
-
-    fun updateHikerAndSave(hiker: Hiker){
-        updateHiker(hiker)
+    fun saveHiker(){
         this.progressDialog= DialogHelper.createProgressDialog(this)
         this.progressDialog.show()
         if(this.imagePathToUploadIntoDatabase!=null) {
             saveImage()
         }
         else{
-            saveHiker()
+            saveHikerOnline()
         }
         if(this.imagePathToDeleteFromDatabase!=null) {
             deleteImage()
@@ -159,18 +159,18 @@ class ProfileEditActivity : AppCompatActivity() {
                         /*Then updates the hiker with this url*/
 
                         this.hiker?.photoUrl=url.toString()
-                        saveHiker()
+                        saveHikerOnline()
                     }
                     ?.addOnFailureListener { e ->
                         //TODO handle
                         Log.w(TAG_STORAGE, e.message.toString())
-                        saveHiker()
+                        saveHikerOnline()
                     }
             }
             .addOnFailureListener { e ->
                 //TODO handle
                 Log.w(TAG_STORAGE, e.message.toString())
-                saveHiker()
+                saveHikerOnline()
             }
     }
 
@@ -188,7 +188,7 @@ class ProfileEditActivity : AppCompatActivity() {
             }
     }
 
-    private fun saveHiker(){
+    private fun saveHikerOnline(){
         HikerFirebaseQueries.createOrUpdateHiker(this.hiker!!)
             .addOnSuccessListener {
                 Log.d(TAG_STORAGE, "Hiker updated in the database")
@@ -330,7 +330,6 @@ class ProfileEditActivity : AppCompatActivity() {
             ID_FRAGMENT_SETTINGS ->
                 this.fragment=ProfileSettingsEditFragment(this.hiker)
         }
-        this.saveDataFlow=this.fragment as SaveDataFlow
         supportFragmentManager.beginTransaction()
             .replace(R.id.activity_profile_edit_fragment, this.fragment).commit()
     }
@@ -339,7 +338,7 @@ class ProfileEditActivity : AppCompatActivity() {
 
     private fun finishOk(){
         val resultIntent=Intent()
-        resultIntent.putExtra(ProfileActivity.KEY_BUNDLE_HIKER, this.hiker)
+        resultIntent.putExtra(KEY_BUNDLE_HIKER, this.hiker)
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
     }

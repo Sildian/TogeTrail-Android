@@ -3,12 +3,11 @@ package com.sildian.apps.togetrail.hiker.profileEdit
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.flows.SaveDataFlow
+import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
@@ -19,9 +18,7 @@ import kotlinx.android.synthetic.main.fragment_profile_settings_edit.view.*
  * @param hiker : the current user
  ************************************************************************************************/
 
-class ProfileSettingsEditFragment(val hiker: Hiker?=null) :
-    Fragment(),
-    SaveDataFlow
+class ProfileSettingsEditFragment(val hiker: Hiker?=null) : BaseDataFlowFragment()
 {
 
     /**********************************Static items**********************************************/

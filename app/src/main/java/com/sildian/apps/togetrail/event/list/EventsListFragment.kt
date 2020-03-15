@@ -34,10 +34,6 @@ class EventsListFragment :
         private const val TAG_UI="TAG_UI"
     }
 
-    /**************************************Data**************************************************/
-
-    private val events:List<Event> = listOf()           //The list of events to display
-
     /**********************************UI component**********************************************/
 
     private lateinit var layout:View

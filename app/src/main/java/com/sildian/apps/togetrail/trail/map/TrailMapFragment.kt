@@ -119,6 +119,6 @@ class TrailMapFragment (
     /**Shows the current trail's detail**/
 
     fun showTrailDetail(){
-        (activity as MainActivity).startTrailActivity(TrailActivity.ACTION_TRAIL_SEE, this.trail)
+        (activity as MainActivity).seeTrail(this.trail)
     }
 }
