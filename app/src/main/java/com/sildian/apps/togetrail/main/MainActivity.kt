@@ -23,8 +23,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.UserFirebaseHelper
+import com.sildian.apps.togetrail.event.detail.EventActivity
 import com.sildian.apps.togetrail.event.edit.EventEditActivity
 import com.sildian.apps.togetrail.event.list.EventsListFragment
+import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.hiker.profileEdit.ProfileEditActivity
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.support.HikerHelper
@@ -308,6 +310,12 @@ class MainActivity :
         startTrailActivity(TrailActivity.ACTION_TRAIL_SEE, trail)
     }
 
+    /***********************************Events monitoring****************************************/
+
+    fun seeEvent(event:Event?){
+        startEventActivity(event)
+    }
+
     /******************************UI monitoring**************************************************/
 
     private fun initializeToolbar(){
@@ -340,7 +348,7 @@ class MainActivity :
 
         val user=UserFirebaseHelper.getCurrentUser()
         if(user==null){
-            this.navigationHeaderUserImage.setImageResource(R.drawable.ic_user_black)
+            this.navigationHeaderUserImage.setImageResource(R.drawable.ic_person_black)
             this.navigationHeaderUserNameText.setText(R.string.message_user_unknown)
         }
 
@@ -350,7 +358,7 @@ class MainActivity :
             Glide.with(this)
                 .load(user.photoUrl)
                 .apply(RequestOptions.circleCropTransform())
-                .placeholder(R.drawable.ic_user_black)
+                .placeholder(R.drawable.ic_person_black)
                 .into(this.navigationHeaderUserImage)
             this.navigationHeaderUserNameText.text=user.displayName
         }
@@ -487,6 +495,19 @@ class MainActivity :
             trailActivityIntent.putExtra(TrailActivity.KEY_BUNDLE_TRAIL, trail)
         }
         startActivity(trailActivityIntent)
+    }
+
+    /**
+     * Starts the EventActivity
+     */
+
+    private fun startEventActivity(event: Event?){
+        val eventActivityIntent=Intent(this, EventActivity::class.java)
+        eventActivityIntent.putExtra(EventActivity.KEY_BUNDLE_EVENT, event)
+        if(this.currentHiker!=null){
+            eventActivityIntent.putExtra(EventActivity.KEY_BUNDLE_HIKER, this.currentHiker)
+        }
+        startActivity(eventActivityIntent)
     }
 
     /**

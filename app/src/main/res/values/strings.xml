@@ -49,6 +49,7 @@
     <string name="button_hiker_account_delete">Delete my account</string>
     <!-- Event -->
     <string name="button_event_add_trails">Add trails</string>
+    <string name="button_event_unregister_user">Unregister</string>
 
     <!-- Labels -->
     <!-- Common -->
@@ -102,19 +103,24 @@
     <string name="label_event_end_date">End</string>
     <string name="label_event_date">Date</string>
     <string name="label_event_time">Time</string>
+    <string name="label_event_meeting">Let\s meet on</string>
     <string name="label_event_meeting_point">Meeting point</string>
     <string name="label_event_description">Description</string>
     <string name="label_event_description2">Some information for the attendees</string>
     <string name="label_event_attached_trails">Trails on schedule</string>
     <string name="label_event_available_trails">Add the trails you like</string>
-    <string name="label_event_day">Day</string>
-    <string name="label_event_days">Days</string>
+    <string name="label_event_user_registered">I attend</string>
+    <string name="label_event_registered_hikers_sing">person attend</string>
+    <string name="label_event_registered_hikers_plur">persons attend</string>
+    <string name="label_event_day">day</string>
+    <string name="label_event_days">days</string>
     <string name="label_event_list_next">Next</string>
 
     <!-- Examples for layout preview -->
     <string name="example_image_content_description">Image</string>
     <!-- Location -->
     <string name="example_location">Chamonix, Savoie, France</string>
+    <string name="example_location_fine">1 rue de la Montagne\nChamonix\nSavoie\nFrance</string>
     <!-- Trail -->
     <string name="example_trail_name">The super century\s trail</string>
     <string name="example_trail_description">A really wonderful trail.</string>
@@ -140,7 +146,10 @@
     <string name="example_event_description">This will be a awesome event! Come on everybody!</string>
     <string name="example_event_begin_date">2020/03/14</string>
     <string name="example_event_end_date">2020/03/15</string>
+    <string name="example_event_begin_date_full">Saturday March 14th 9:00 AM</string>
+    <string name="example_event_end_date_full">Sunday March 15th 6:00 PM</string>
     <string name="example_event_nb_days">2 days</string>
+    <string name="example_event_registered_hikers">5 persons attend</string>
 
     <!-- Messages to the user -->
     <string name="message_unknown_short">\?</string>

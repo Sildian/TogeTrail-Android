@@ -147,7 +147,7 @@ class ProfileInfoEditFragment(val hiker: Hiker?=null) : BaseDataFlowFragment()
         Glide.with(this)
             .load(this.hiker?.photoUrl)
             .apply(RequestOptions.circleCropTransform())
-            .placeholder(R.drawable.ic_user_black)
+            .placeholder(R.drawable.ic_person_black)
             .into(this.photoImageView)
     }
 

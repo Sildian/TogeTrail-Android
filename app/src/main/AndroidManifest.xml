@@ -19,8 +19,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.sildian.apps.togetrail.event.edit.EventEditActivity"
+            android:name=".event.detail.EventActivity"
             android:configChanges="orientation|screenSize"/>
+        <activity
+            android:name=".event.edit.EventEditActivity"
+            android:configChanges="orientation|screenSize" />
         <activity
             android:name=".hiker.profile.ProfileActivity"
             android:configChanges="orientation|screenSize" />

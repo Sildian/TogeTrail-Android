@@ -21,7 +21,9 @@ data class Event(
     var endDate:Date?=null,
     var description:String="",
     var isCanceled:Boolean=false,
-    var authorId:String?=null
+    var authorId:String?=null,
+    /*Extra info*/
+    var nbHikersRegistered:Int=0
 )
     :Parcelable
 {

@@ -14,6 +14,7 @@ import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
 import com.sildian.apps.togetrail.event.others.EventHorizontalAdapter
 import com.sildian.apps.togetrail.event.others.EventHorizontalViewHolder
+import com.sildian.apps.togetrail.main.MainActivity
 import kotlinx.android.synthetic.main.fragment_events_list.view.*
 
 /*************************************************************************************************
@@ -64,6 +65,6 @@ class EventsListFragment :
 
     override fun onEventClick(event: Event) {
         Log.d(TAG_UI, "Click on event '${event.id}")
-        //TODO implement
+        (activity as MainActivity).seeEvent(event)
     }
 }

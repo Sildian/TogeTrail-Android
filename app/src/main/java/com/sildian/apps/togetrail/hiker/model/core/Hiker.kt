@@ -19,7 +19,11 @@ data class Hiker (
     var birthday: Date?=null,
     var liveLocation:Location=Location(),
     var description:String="",
-    val registrationDate:Date=Date()
+    val registrationDate:Date=Date(),
+    /*Extra info*/
+    var nbTrailsCreated:Int=0,
+    var nbEventsCreated:Int=0,
+    var nbEventsAttended:Int=0
 )
     :Parcelable
 {

@@ -28,7 +28,7 @@ import kotlinx.android.synthetic.main.fragment_event_edit.view.*
  * @param event : the related event
  ************************************************************************************************/
 
-class EventEditFragment(val event: Event?=null) :
+class EventEditFragment(private val event: Event?=null) :
     BaseDataFlowFragment(),
     TrailHorizontalViewHolder.OnTrailClickListener,
     TrailHorizontalViewHolder.OnTrailRemovedListener

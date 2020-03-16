@@ -54,7 +54,7 @@
                     android:layout_marginStart="@dimen/components_margin_medium"
                     android:layout_marginEnd="@dimen/components_margin_medium"
                     android:contentDescription="@string/example_image_content_description"
-                    app:srcCompat="@drawable/ic_user_black" />
+                    app:srcCompat="@drawable/ic_person_black" />
 
                 <ImageButton
                     android:id="@+id/fragment_profile_info_edit_button_take_photo"

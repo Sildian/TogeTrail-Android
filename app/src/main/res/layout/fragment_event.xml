@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".event.detail.EventFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/fragment_event_image_view_photo"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/image_size_large"
+            android:layout_marginBottom="@dimen/components_margin_medium"
+            app:srcCompat="@drawable/ic_trail_black"
+            android:contentDescription="@string/example_image_content_description"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fragment_event_button_register_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/components_margin_medium"
+            app:srcCompat="@drawable/ic_person_add_black"
+            app:layout_constraintTop_toBottomOf="@id/fragment_event_image_view_photo"
+            app:layout_constraintBottom_toBottomOf="@id/fragment_event_image_view_photo"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/fragment_event_image_view_photo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:id="@+id/fragment_event_text_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/components_margin_medium"
+                android:layout_marginBottom="@dimen/components_margin_small"
+                android:layout_marginStart="@dimen/components_margin_medium"
+                android:layout_marginEnd="@dimen/components_margin_medium"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_important"
+                android:textColor="@color/colorBlack"
+                android:text="@string/example_event_name"/>
+
+            <TextView
+                android:id="@+id/fragment_event_text_nb_days"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/components_margin_small"
+                android:layout_marginStart="@dimen/components_margin_medium"
+                android:layout_marginEnd="@dimen/components_margin_medium"
+                android:textSize="@dimen/text_size_body"
+                android:textColor="@color/colorBlack"
+                android:text="@string/example_event_nb_days"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/components_margin_medium"
+                android:layout_marginBottom="@dimen/components_margin_small"
+                android:layout_marginStart="@dimen/components_margin_medium"
+                android:layout_marginEnd="@dimen/components_margin_medium"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_title"
+                android:textColor="@color/colorSecondaryDark"
+                android:text="@string/label_event_meeting"/>
+
+            <TextView
+                android:id="@+id/fragment_event_text_begin_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/components_margin_medium"
+                android:layout_marginBottom="@dimen/components_margin_small"
+                android:layout_marginStart="@dimen/components_margin_medium"
+                android:layout_marginEnd="@dimen/components_margin_medium"
+                android:gravity="center_vertical"
+                android:drawableStart="@drawable/ic_date_black"
+                android:drawablePadding="@dimen/components_margin_small"
+                android:text="@string/example_event_begin_date_full"/>
+
+            <TextView
+                android:id="@+id/fragment_event_text_meeting_point"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/components_margin_medium"
+                android:layout_marginBottom="@dimen/components_margin_small"
+                android:layout_marginStart="@dimen/components_margin_medium"
+                android:layout_marginEnd="@dimen/components_margin_medium"
+                android:drawableStart="@drawable/ic_location_trail"
+                android:drawablePadding="@dimen/components_margin_small"
+                android:text="@string/example_location_fine"/>
+
+            <TextView
+                android:id="@+id/fragment_event_text_registered_hikers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/components_margin_medium"
+                android:layout_marginBottom="@dimen/components_margin_small"
+                android:layout_marginStart="@dimen/components_margin_medium"
+                android:layout_marginEnd="@dimen/components_margin_medium"
+                android:gravity="center_vertical"
+                android:drawableStart="@drawable/ic_people_black"
+                android:drawablePadding="@dimen/components_margin_small"
+                android:textSize="@dimen/text_size_title"
+                android:textColor="@color/colorBlack"
+                android:text="@string/example_event_registered_hikers"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fragment_event_recycler_view_registered_hikers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:reverseLayout="false"/>
+
+            <LinearLayout
+                android:id="@+id/fragment_event_layout_user_registered"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/components_margin_small"
+                    android:layout_marginBottom="@dimen/components_margin_small"
+                    android:layout_marginStart="@dimen/components_margin_medium"
+                    android:layout_marginEnd="@dimen/components_margin_medium"
+                    android:gravity="center_vertical"
+                    android:drawableStart="@drawable/ic_check"
+                    android:drawablePadding="@dimen/components_margin_small"
+                    android:textColor="@color/colorBlack"
+                    android:text="@string/label_event_user_registered"/>
+
+                <com.google.android.material.button.MaterialButton
+                    style="@style/ClassicButtonStyle"
+                    android:id="@+id/fragment_event_button_unregister_user"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/components_margin_small"
+                    android:layout_marginBottom="@dimen/components_margin_small"
+                    android:layout_marginStart="@dimen/components_margin_medium"
+                    android:layout_marginEnd="@dimen/components_margin_medium"
+                    android:text="@string/button_event_unregister_user"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/components_margin_medium"
+                android:layout_marginBottom="@dimen/components_margin_small"
+                android:layout_marginStart="@dimen/components_margin_medium"
+                android:layout_marginEnd="@dimen/components_margin_medium"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_title"
+                android:textColor="@color/colorSecondaryDark"
+                android:text="@string/label_event_attached_trails"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fragment_event_recycler_view_attached_trails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:reverseLayout="false"/>
+
+            <TextView
+                android:id="@+id/fragment_event_text_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/components_margin_medium"
+                android:layout_marginBottom="@dimen/components_margin_small"
+                android:layout_marginStart="@dimen/components_margin_medium"
+                android:layout_marginEnd="@dimen/components_margin_medium"
+                android:text="@string/example_event_description"/>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

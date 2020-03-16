@@ -48,6 +48,7 @@
     <string name="button_hiker_account_delete">Supprimer mon compte</string>
     <!-- Event -->
     <string name="button_event_add_trails">Ajouter des randos</string>
+    <string name="button_event_unregister_user">Me désinscrire</string>
 
     <!-- Labels -->
     <!-- Common -->
@@ -101,19 +102,24 @@
     <string name="label_event_end_date">Fin</string>
     <string name="label_event_date">Date</string>
     <string name="label_event_time">Heure</string>
+    <string name="label_event_meeting">Rendez-vous le</string>
     <string name="label_event_meeting_point">Point de rendez-vous</string>
     <string name="label_event_description">Description</string>
     <string name="label_event_description2">Quelques infos pour les participants</string>
     <string name="label_event_attached_trails">Randos au programme</string>
     <string name="label_event_available_trails">Ajoutez les randos que vous aimez</string>
-    <string name="label_event_day">Jour</string>
-    <string name="label_event_days">Jours</string>
+    <string name="label_event_user_registered">Je participe</string>
+    <string name="label_event_registered_hikers_sing">personne participe</string>
+    <string name="label_event_registered_hikers_plur">personnes participent</string>
+    <string name="label_event_day">jour</string>
+    <string name="label_event_days">jours</string>
     <string name="label_event_list_next">Prochainement</string>
 
     <!-- Examples for layout preview -->
     <string name="example_image_content_description">Image</string>
     <!-- Location -->
     <string name="example_location">Chamonix, Savoie, France</string>
+    <string name="example_location_fine">1 rue de la Montagne\nChamonix\nSavoie\nFrance</string>
     <!-- Trail -->
     <string name="example_trail_name">La super rando du siècle</string>
     <string name="example_trail_description">Une rando vraiment géniale.</string>
@@ -139,7 +145,10 @@
     <string name="example_event_description">Ce sera un évènement génial, venez nombreux!</string>
     <string name="example_event_begin_date">14/03/2020</string>
     <string name="example_event_end_date">15/03/2020</string>
+    <string name="example_event_begin_date_full">Samedi 14 mars 2020 9:00</string>
+    <string name="example_event_end_date_full">Dimanche 15 mars 2020 18:00</string>
     <string name="example_event_nb_days">2 jours</string>
+    <string name="example_event_registered_hikers">5 personnes participent</string>
 
     <!-- Messages to the user -->
     <string name="message_unknown_short">\?</string>
