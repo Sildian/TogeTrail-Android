@@ -53,6 +53,8 @@ class HikerPhotoViewHolder(
                 .apply(RequestOptions.circleCropTransform())
                 .placeholder(R.drawable.ic_person_black)
                 .into(this.photoImageView)
+        }else{
+            this.photoImageView.setImageResource(R.drawable.ic_person_black)
         }
     }
 }

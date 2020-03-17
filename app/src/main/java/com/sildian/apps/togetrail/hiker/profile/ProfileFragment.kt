@@ -38,7 +38,6 @@ class ProfileFragment (var hiker: Hiker?) : BaseDataFlowFragment() {
     private val liveLocationText by lazy {layout.fragment_profile_text_live_location}
     private val ageText by lazy {layout.fragment_profile_text_age}
     private val descriptionText by lazy {layout.fragment_profile_text_description}
-    private val editButton by lazy {layout.fragment_profile_button_edit}
 
     /************************************Life cycle**********************************************/
 
@@ -64,7 +63,6 @@ class ProfileFragment (var hiker: Hiker?) : BaseDataFlowFragment() {
         updateLiveLocationText()
         updateAgeText()
         updateDescriptionText()
-        updateEditButton()
     }
 
     private fun updatePhotoImageView(){
@@ -107,18 +105,6 @@ class ProfileFragment (var hiker: Hiker?) : BaseDataFlowFragment() {
         }
         else{
             this.descriptionText.visibility=View.GONE
-        }
-    }
-
-    private fun updateEditButton(){
-        if(this.hiker?.id==UserFirebaseHelper.getCurrentUser()?.uid){
-            this.editButton.visibility=View.VISIBLE
-            this.editButton.setOnClickListener {
-                (activity as ProfileActivity).editProfile()
-            }
-        }
-        else{
-            this.editButton.visibility=View.GONE
         }
     }
 }

@@ -91,7 +91,7 @@ class ProfileEditActivity : BaseDataFlowActivity() {
     /**Generates the menu within the toolbar**/
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_edit, menu)
+        menuInflater.inflate(R.menu.menu_save, menu)
         return true
     }
 
@@ -99,8 +99,8 @@ class ProfileEditActivity : BaseDataFlowActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         Log.d(TAG_MENU, "Menu '${item.title}' clicked")
-        if(item.groupId==R.id.menu_edit){
-            if(item.itemId==R.id.menu_edit_save){
+        if(item.groupId==R.id.menu_save){
+            if(item.itemId==R.id.menu_save_save){
                 saveData()
             }
         }

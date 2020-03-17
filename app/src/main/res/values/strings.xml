@@ -16,7 +16,8 @@
     <string name="menu_new_trail_load_gpx">Load GPX</string>
     <string name="menu_new_trail_draw">Draw on map</string>
     <string name="menu_new_trail_record">Realtime record</string>
-    <string name="menu_edit_save">Save</string>
+    <string name="menu_edit_edit">Edit</string>
+    <string name="menu_save_save">Save</string>
 
     <!-- Toolbar Names -->
     <string name="toolbar_hiker_profile">Hiker</string>

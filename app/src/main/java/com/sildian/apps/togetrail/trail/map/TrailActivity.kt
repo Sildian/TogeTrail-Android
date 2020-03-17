@@ -12,7 +12,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowActivity
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
-import com.sildian.apps.togetrail.main.MainActivity
 import com.sildian.apps.togetrail.trail.infoEdit.TrailInfoEditActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.support.TrailHelper
@@ -103,7 +102,7 @@ class TrailActivity : BaseDataFlowActivity() {
     /**Generates the menu within the toolbar**/
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_edit, menu)
+        menuInflater.inflate(R.menu.menu_save, menu)
         return true
     }
 
@@ -111,8 +110,8 @@ class TrailActivity : BaseDataFlowActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         Log.d(TAG_MENU, "Menu '${item.title}' clicked")
-        if(item.groupId==R.id.menu_edit){
-            if(item.itemId==R.id.menu_edit_save){
+        if(item.groupId==R.id.menu_save){
+            if(item.itemId==R.id.menu_save_save){
                 saveData()
             }
         }

@@ -177,6 +177,18 @@
                 app:reverseLayout="false"/>
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/components_margin_medium"
+                android:layout_marginBottom="@dimen/components_margin_small"
+                android:layout_marginStart="@dimen/components_margin_medium"
+                android:layout_marginEnd="@dimen/components_margin_medium"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_title"
+                android:textColor="@color/colorSecondaryDark"
+                android:text="@string/label_event_description"/>
+
+            <TextView
                 android:id="@+id/fragment_event_text_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

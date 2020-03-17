@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowActivity
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
@@ -24,6 +26,7 @@ class ProfileActivity : BaseDataFlowActivity() {
 
         /**Logs**/
         private const val TAG_ACTIVITY = "TAG_ACTIVITY"
+        private const val TAG_MENU="TAG_MENU"
         private const val TAG_STORAGE="TAG_STORAGE"
 
         /**Fragments ids**/
@@ -63,6 +66,27 @@ class ProfileActivity : BaseDataFlowActivity() {
         loadData()
         initializeToolbar()
         startProfileAction()
+    }
+
+    /********************************Menu monitoring*********************************************/
+
+    /**Generates the menu within the toolbar**/
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_edit, menu)
+        return true
+    }
+
+    /**Click on menu item from toolbar**/
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+        if(item.groupId==R.id.menu_edit){
+            if(item.itemId==R.id.menu_edit_edit){
+                editProfile()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     /********************************Navigation control******************************************/

@@ -96,6 +96,7 @@
                     android:layout_marginBottom="@dimen/components_margin_small"
                     android:layout_marginStart="@dimen/components_margin_medium"
                     android:layout_marginEnd="@dimen/components_margin_medium"
+                    android:textStyle="bold"
                     android:textSize="@dimen/text_size_title"
                     android:textColor="@color/colorSecondaryDark"
                     android:text="@string/label_trail_poi_description"/>

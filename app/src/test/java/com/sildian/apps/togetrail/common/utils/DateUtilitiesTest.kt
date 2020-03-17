@@ -106,10 +106,18 @@ class DateUtilitiesTest {
     }
 
     @Test
-    fun given_150min_when_displayDuration_then_checkResultIs2h30m(){
+    fun given_150min_when_displayDuration_then_checkResultIs2h30(){
         Locale.setDefault(Locale.US)
         val hourMetric="h"
         val minuteMetric="min"
-        assertEquals("2 h 30 min", DateUtilities.displayDuration(150, hourMetric, minuteMetric))
+        assertEquals("2h30", DateUtilities.displayDuration(150, hourMetric, minuteMetric))
+    }
+
+    @Test
+    fun given_10min_when_displayDuration_then_checkResultIs50min(){
+        Locale.setDefault(Locale.US)
+        val hourMetric="h"
+        val minuteMetric="min"
+        assertEquals("50min", DateUtilities.displayDuration(50, hourMetric, minuteMetric))
     }
 }

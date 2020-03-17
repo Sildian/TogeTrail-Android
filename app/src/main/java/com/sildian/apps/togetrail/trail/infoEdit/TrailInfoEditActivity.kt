@@ -12,7 +12,6 @@ import com.sildian.apps.togetrail.common.flows.BaseDataFlowActivity
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.ImageStorageFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
-import com.sildian.apps.togetrail.trail.map.TrailActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 import com.sildian.apps.togetrail.trail.model.support.TrailFirebaseQueries
@@ -94,7 +93,7 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
     /**Generates the menu within the toolbar**/
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_edit, menu)
+        menuInflater.inflate(R.menu.menu_save, menu)
         return true
     }
 
@@ -102,8 +101,8 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         Log.d(TAG_MENU, "Menu '${item.title}' clicked")
-        if(item.groupId==R.id.menu_edit){
-            if(item.itemId==R.id.menu_edit_save){
+        if(item.groupId==R.id.menu_save){
+            if(item.itemId==R.id.menu_save_save){
                 saveData()
             }
         }

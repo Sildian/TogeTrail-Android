@@ -188,12 +188,18 @@ object DateUtilities {
     fun displayDuration(minutes:Long, hourMetric:String, minuteMetric:String):String{
         val duration = Duration.standardMinutes(minutes)
         val period = duration.toPeriod()
-        val periodFormat = PeriodFormatterBuilder()
-            .appendHours()
-            .appendSuffix(" $hourMetric")
-            .appendPrefix(" ")
-            .appendMinutes()
-            .appendSuffix(" $minuteMetric")
+        val periodFormat =
+            if(minutes>60) {
+                PeriodFormatterBuilder()
+                    .appendHours()
+                    .appendSuffix(hourMetric)
+                    .appendMinutes()
+            }
+            else{
+                PeriodFormatterBuilder()
+                    .appendMinutes()
+                    .appendSuffix(minuteMetric)
+            }
         return periodFormat.toFormatter().print(period)
     }
 }

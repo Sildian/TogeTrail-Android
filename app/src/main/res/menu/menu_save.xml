@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <group
-        android:id="@+id/menu_edit">
+        android:id="@+id/menu_save">
         <item
-            android:id="@+id/menu_edit_edit"
-            android:title="@string/menu_edit_edit"
-            android:icon="@drawable/ic_edit_white"
+            android:id="@+id/menu_save_save"
+            android:title="@string/menu_save_save"
+            android:icon="@drawable/ic_save_white"
             app:showAsAction="ifRoom"/>
     </group>
 </menu>

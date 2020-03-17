@@ -75,6 +75,8 @@ class TrailVerticalViewHolder (
                 .apply(RequestOptions.centerCropTransform())
                 .placeholder(R.drawable.ic_trail_black)
                 .into(this.photoImageView)
+        }else{
+            this.photoImageView.setImageResource(R.drawable.ic_trail_black)
         }
     }
 
