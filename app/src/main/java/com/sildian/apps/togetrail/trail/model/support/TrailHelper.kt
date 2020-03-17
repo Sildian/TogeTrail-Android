@@ -35,15 +35,13 @@ object TrailHelper {
     class TrailBuildTooManyTracksException(message:String):Exception(message)
 
     /**
-     * Builds a new Trail from nothing but a name. Sets the source as TogeTrail and the date as today.
-     * @param name : the name of the trail
+     * Builds a new Trail from nothing but a name. Sets the source as TogeTrail.
      * @return the resulted trail
      */
 
-    fun buildFromNothing(name:String): Trail {
+    fun buildFromNothing(): Trail {
         val source="TogeTrail"
         return Trail(
-            name = name,
             source = source
         )
     }

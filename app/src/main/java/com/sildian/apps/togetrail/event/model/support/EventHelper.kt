@@ -9,14 +9,11 @@ import com.sildian.apps.togetrail.event.model.core.Event
 object EventHelper {
 
     /**
-     * Builds a new event from nothing but a name.
-     * @param name : the name of the event
+     * Builds a new event from nothing but a name
      * @return the resulted event
      */
 
-    fun buildFromNothing(name:String): Event {
-        return Event(
-            name = name
-        )
+    fun buildFromNothing(): Event {
+        return Event()
     }
 }

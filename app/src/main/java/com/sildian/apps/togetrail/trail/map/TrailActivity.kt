@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowActivity
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.UserFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.trail.infoEdit.TrailInfoEditActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
@@ -200,6 +201,9 @@ class TrailActivity : BaseDataFlowActivity() {
         /*If the trail has no id, it means it was not created in the database yet. Then creates it.*/
 
         if(this.trail?.id==null){
+
+            this.trail?.authorId=UserFirebaseHelper.getCurrentUser()?.uid
+
             TrailFirebaseQueries.createTrail(this.trail!!)
                 .addOnSuccessListener { documentReference->
 

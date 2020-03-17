@@ -12,10 +12,10 @@ import java.util.*
 @Parcelize
 data class Trail (
     var id:String?=null,
-    var name:String="",
+    var name:String?=null,
     val source:String="",
     var location: Location = Location(),
-    var description:String="",
+    var description:String?=null,
     val creationDate:Date=Date(),
     var lastUpdate:Date=Date(),
     var type: TrailType = TrailType.HIKING,
@@ -24,7 +24,7 @@ data class Trail (
     var loop:Boolean=true,
     val trailTrack: TrailTrack = TrailTrack(),
     var duration:Int?=null,
-    var distance:Int=0,
+    var distance:Int?=null,
     var ascent:Int?=null,
     var descent:Int?=null,
     var maxElevation:Int?=null,

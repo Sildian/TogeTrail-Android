@@ -279,7 +279,7 @@ class MainActivity :
 
         //TODO add a progress bar
         
-        TrailFirebaseQueries.getTrails()
+        TrailFirebaseQueries.getLastTrails()
             .addSnapshotListener { querySnapshot, e ->
 
                 /*If the query is a success, displays the results*/
@@ -391,9 +391,9 @@ class MainActivity :
             ID_FRAGMENT_MAP->
                 this.fragment= TrailMapFragment(this.trails)
             ID_FRAGMENT_TRAILS->
-                this.fragment=TrailsListFragment()
+                this.fragment=TrailsListFragment(this.currentHiker)
             ID_FRAGMENT_EVENTS->
-                this.fragment= EventsListFragment()
+                this.fragment= EventsListFragment(this.currentHiker)
         }
         supportFragmentManager.beginTransaction()
             .replace(R.id.activity_main_fragment, this.fragment).commitAllowingStateLoss()

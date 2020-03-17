@@ -21,10 +21,50 @@
             android:textStyle="bold"
             android:textSize="@dimen/text_size_title"
             android:textColor="@color/colorSecondaryDark"
-            android:text="@string/label_event_list_next"/>
+            android:text="@string/label_event_list_next_events"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/fragment_events_list_recycler_view_events"
+            android:id="@+id/fragment_events_list_recycler_view_next_events"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:reverseLayout="false"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/components_margin_medium"
+            android:layout_marginBottom="@dimen/components_margin_small"
+            android:layout_marginStart="@dimen/components_margin_medium"
+            android:layout_marginEnd="@dimen/components_margin_medium"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_size_title"
+            android:textColor="@color/colorSecondaryDark"
+            android:text="@string/label_event_list_my_events"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragment_events_list_recycler_view_my_events"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:reverseLayout="false"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/components_margin_medium"
+            android:layout_marginBottom="@dimen/components_margin_small"
+            android:layout_marginStart="@dimen/components_margin_medium"
+            android:layout_marginEnd="@dimen/components_margin_medium"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_size_title"
+            android:textColor="@color/colorSecondaryDark"
+            android:text="@string/label_event_list_nearby_events"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragment_events_list_recycler_view_nearby_events"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"

@@ -11,6 +11,7 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowActivity
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.ImageStorageFirebaseHelper
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.UserFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
@@ -214,6 +215,9 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
         /*If the trail has no id, it means it was not created in the database yet. Then creates it.*/
 
         if(this.trail?.id==null){
+
+            this.trail?.authorId=UserFirebaseHelper.getCurrentUser()?.uid
+
             TrailFirebaseQueries.createTrail(this.trail!!)
                 .addOnSuccessListener { documentReference->
 

@@ -14,12 +14,12 @@ import java.util.*
 @Parcelize
 data class Event(
     var id:String?=null,
-    var name:String="",
+    var name:String?=null,
     var location: Location =Location(),
     var meetingPoint:FineLocation= FineLocation(),
     var beginDate:Date?=null,
     var endDate:Date?=null,
-    var description:String="",
+    var description:String?=null,
     var isCanceled:Boolean=false,
     var authorId:String?=null,
     /*Extra info*/

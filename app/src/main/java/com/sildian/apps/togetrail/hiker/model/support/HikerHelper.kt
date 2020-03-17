@@ -18,8 +18,8 @@ object HikerHelper {
     fun buildFromFirebaseUser(user:FirebaseUser): Hiker {
         return Hiker(
             id = user.uid,
-            email = user.email?:"",
-            name = user.displayName?:"",
+            email = user.email,
+            name = user.displayName,
             photoUrl = user.photoUrl?.path
             )
     }

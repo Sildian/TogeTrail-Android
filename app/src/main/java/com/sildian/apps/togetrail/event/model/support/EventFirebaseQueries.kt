@@ -1,13 +1,12 @@
 package com.sildian.apps.togetrail.event.model.support
 
 import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.*
+import com.sildian.apps.togetrail.common.model.Location
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.trail.model.core.Trail
+import java.util.*
 
 /*************************************************************************************************
  * Provides with Firebase queries on Event
@@ -42,12 +41,52 @@ object EventFirebaseQueries {
     /*************************************Queries************************************************/
 
     /**
-     * Gets the events from the database
-     * @return a task result
+     * Gets the future events from the database
+     * @return a query
      */
 
-    fun getEvents(): Query =
-        getCollection().orderBy("beginDate", Query.Direction.ASCENDING)
+    fun getNextEvents(): Query =
+        getCollection()
+            .whereGreaterThan("beginDate", Date())
+            .orderBy("beginDate", Query.Direction.ASCENDING)
+
+    /**
+     * Gets the future events created by a specific user
+     * @param authorId : the id of the author
+     * @return a query
+     */
+
+    fun getMyEvents(authorId:String): Query =
+        getCollection()
+            .whereEqualTo("authorId", authorId)
+            .whereGreaterThan("beginDate", Date())
+            .orderBy("beginDate", Query.Direction.ASCENDING)
+
+    /**
+     * Gets the future events nearby a location
+     * If the region is not null, gets the events within the region
+     * Else if the country is not null, gets the events within the country
+     * @param location : the location
+     * @return a query or null if the location is empty
+     */
+
+    fun getEventsNearbyLocation(location: Location):Query? =
+        when {
+            !location.region.isNullOrEmpty() -> {
+                getCollection()
+                    .whereEqualTo(FieldPath.of("location", "country"), location.country)
+                    .whereEqualTo(FieldPath.of("location", "region"), location.region)
+                    .whereGreaterThan("beginDate", Date())
+                    .orderBy("beginDate", Query.Direction.DESCENDING)
+            }
+            !location.country.isNullOrEmpty() -> {
+                getCollection()
+                    .whereEqualTo(FieldPath.of("location", "country"), location.country)
+                    .whereGreaterThan("beginDate", Date())
+                    .orderBy("beginDate", Query.Direction.DESCENDING)
+            }
+            else -> null
+        }
 
     /**
      * Gets a given event
@@ -79,7 +118,7 @@ object EventFirebaseQueries {
     /**
      * Gets all trails attached to an event
      * @param eventId : the id of the event
-     * @return a task result
+     * @return a query
      */
 
     fun getAttachedTrails(eventId: String):Query =
@@ -117,7 +156,7 @@ object EventFirebaseQueries {
     /**
      * Gets all hikers registered to an event
      * @param eventId : the id of the event
-     * @return a task result
+     * @return a query
      */
 
     fun getRegisteredHikers(eventId:String):Query =

@@ -22,10 +22,50 @@
             android:textStyle="bold"
             android:textSize="@dimen/text_size_title"
             android:textColor="@color/colorSecondaryDark"
-            android:text="@string/label_trail_list_last_created"/>
+            android:text="@string/label_trail_list_last_added"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/fragment_trails_list_recycler_view_trails"
+            android:id="@+id/fragment_trails_list_recycler_view_last_added_trails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:reverseLayout="false"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/components_margin_medium"
+            android:layout_marginBottom="@dimen/components_margin_small"
+            android:layout_marginStart="@dimen/components_margin_medium"
+            android:layout_marginEnd="@dimen/components_margin_medium"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_size_title"
+            android:textColor="@color/colorSecondaryDark"
+            android:text="@string/label_trail_list_my_trails"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragment_trails_list_recycler_view_my_trails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:reverseLayout="false"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/components_margin_medium"
+            android:layout_marginBottom="@dimen/components_margin_small"
+            android:layout_marginStart="@dimen/components_margin_medium"
+            android:layout_marginEnd="@dimen/components_margin_medium"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_size_title"
+            android:textColor="@color/colorSecondaryDark"
+            android:text="@string/label_trail_list_nearby_trails"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragment_trails_list_recycler_view_nearby_trails"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"

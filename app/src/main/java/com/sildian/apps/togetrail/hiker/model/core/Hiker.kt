@@ -13,16 +13,16 @@ import kotlin.math.floor
 @Parcelize
 data class Hiker (
     val id:String="",
-    val email:String="",
-    var name:String="",
+    val email:String?=null,
+    var name:String?=null,
     var photoUrl:String?=null,
     var birthday: Date?=null,
     var liveLocation:Location=Location(),
-    var description:String="",
+    var description:String?=null,
     val registrationDate:Date=Date(),
     /*Extra info*/
-    var nbTrailsCreated:Int=0,
-    var nbEventsCreated:Int=0,
+    var nbTrailsCreated:Int=0,  //TODO update this when creating a trail
+    var nbEventsCreated:Int=0,  //TODO update this when creating an event
     var nbEventsAttended:Int=0
 )
     :Parcelable

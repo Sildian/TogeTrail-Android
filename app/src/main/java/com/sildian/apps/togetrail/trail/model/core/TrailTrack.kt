@@ -40,25 +40,33 @@ class TrailTrack(
 
     /**
      * Gets the total distance of the trail (in meters)
-     * @return the total distance (in meters)
+     * @return the total distance (in meters), or null if no point exist
      */
 
-    fun getDistance():Int{
-        var distance=0
-        for(i in this.trailPoints.indices){
-            if(i>0){
-                val previousPointLatLng=LatLng(this.trailPoints[i-1].latitude, this.trailPoints[i-1].longitude)
-                val currentPointLatLng=LatLng(this.trailPoints[i].latitude, this.trailPoints[i].longitude)
-                val currentDistance=GeoUtilities.getDistance(previousPointLatLng, currentPointLatLng)
-                distance+=currentDistance
+    fun getDistance():Int?{
+        if(this.trailPoints.isNotEmpty()) {
+            var distance = 0
+            for (i in this.trailPoints.indices) {
+                if (i > 0) {
+                    val previousPointLatLng =
+                        LatLng(this.trailPoints[i - 1].latitude, this.trailPoints[i - 1].longitude)
+                    val currentPointLatLng =
+                        LatLng(this.trailPoints[i].latitude, this.trailPoints[i].longitude)
+                    val currentDistance =
+                        GeoUtilities.getDistance(previousPointLatLng, currentPointLatLng)
+                    distance += currentDistance
+                }
             }
+            return distance
         }
-        return distance
+        else{
+            return null
+        }
     }
 
     /**
      * Gets the ascent of the trail (in meters)
-     * @return the ascent (in meters), or null if one point at last has not elevation data
+     * @return the ascent (in meters), or null if one point at least has not elevation data
      */
 
     fun getAscent():Int?{
@@ -83,7 +91,7 @@ class TrailTrack(
 
     /**
      * Gets the descent of the trail (in meters)
-     * @return the descent (in meters), or null if one point at last has not elevation data
+     * @return the descent (in meters), or null if one point at least has not elevation data
      */
 
     fun getDescent():Int?{

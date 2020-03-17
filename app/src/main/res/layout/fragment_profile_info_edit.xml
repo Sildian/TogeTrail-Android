@@ -221,7 +221,7 @@
                 android:id="@+id/fragment_profile_info_edit_text_field_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textCapSentences" />
+                android:inputType="textCapSentences|textMultiLine" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

@@ -53,7 +53,7 @@ object HikerFirebaseQueries {
     /**
      * Gets all events for which the hiker attended
      * @param hikerId : the id of the hiker
-     * @return a task result
+     * @return a query
      */
 
     fun getAttendedEvents(hikerId:String): Query =

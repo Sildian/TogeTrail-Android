@@ -33,8 +33,7 @@ abstract class BaseTrailMapGenerateFragment :
     /**********************************Data monitoring*******************************************/
 
     private fun initializeTrail(){
-        val name=resources.getString(R.string.message_trail_name_unknown)
-        this.trail= TrailHelper.buildFromNothing(name)
+        this.trail= TrailHelper.buildFromNothing()
     }
 
     /************************************UI monitoring*******************************************/
@@ -142,8 +141,7 @@ abstract class BaseTrailMapGenerateFragment :
                     lastPoint.latitude,
                     lastPoint.longitude,
                     lastPoint.elevation,
-                    lastPoint.time,
-                    resources.getString(R.string.message_trail_poi_name_unknown)
+                    lastPoint.time
                 )
             this.trail?.trailTrack?.trailPointsOfInterest?.add(trailPointOfInterest)
 

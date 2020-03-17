@@ -79,7 +79,9 @@
     <string name="label_trail_distance_short">Dist</string>
     <string name="label_trail_max_elevation_short">Max elv</string>
     <string name="label_trail_min_elevation_short">Min elv</string>
-    <string name="label_trail_list_last_created">Last added trails</string>
+    <string name="label_trail_list_last_added">Last added trails</string>
+    <string name="label_trail_list_my_trails">My own trails</string>
+    <string name="label_trail_list_nearby_trails">Trails near my home</string>
     <!-- TrailPointOfInterest -->
     <string name="label_trail_poi_main_info">Main info</string>
     <string name="label_trail_poi_name">Name</string>
@@ -115,7 +117,9 @@
     <string name="label_event_registered_hikers_plur">persons attend</string>
     <string name="label_event_day">day</string>
     <string name="label_event_days">days</string>
-    <string name="label_event_list_next">Next</string>
+    <string name="label_event_list_next_events">Next events</string>
+    <string name="label_event_list_my_events">My own events</string>
+    <string name="label_event_list_nearby_events">Events near my home</string>
 
     <!-- Examples for layout preview -->
     <string name="example_image_content_description">Image</string>

@@ -106,8 +106,7 @@ class EventActivity : BaseDataFlowActivity() {
             if(intent.hasExtra(KEY_BUNDLE_EVENT)){
                 this.event= intent.getParcelableExtra(KEY_BUNDLE_EVENT)
             }else{
-                val name=resources.getString(R.string.message_event_name_unknown)
-                this.event= EventHelper.buildFromNothing(name)
+                this.event= EventHelper.buildFromNothing()
             }
             if(intent.hasExtra(KEY_BUNDLE_HIKER)){
                 this.hiker=intent.getParcelableExtra(KEY_BUNDLE_HIKER)

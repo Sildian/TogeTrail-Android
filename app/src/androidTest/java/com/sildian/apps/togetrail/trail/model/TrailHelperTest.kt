@@ -13,9 +13,7 @@ class TrailHelperTest {
     @Test
     fun given_name_when_buildFromNothing_then_checkResultIsOk(){
         val context = ApplicationProvider.getApplicationContext<Context>()
-        val name=context.resources.getString(R.string.message_trail_name_unknown)
-        val trail= TrailHelper.buildFromNothing(name)
-        assertEquals(name, trail.name)
+        val trail= TrailHelper.buildFromNothing()
         assertEquals("TogeTrail", trail.source)
     }
 

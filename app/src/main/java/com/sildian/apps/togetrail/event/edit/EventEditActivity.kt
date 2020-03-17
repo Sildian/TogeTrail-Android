@@ -10,6 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowActivity
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.UserFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
@@ -107,8 +108,7 @@ class EventEditActivity : BaseDataFlowActivity() {
             if(intent.hasExtra(KEY_BUNDLE_EVENT)){
                 this.event= intent.getParcelableExtra(KEY_BUNDLE_EVENT)
             }else{
-                val name=resources.getString(R.string.message_event_name_unknown)
-                this.event=EventHelper.buildFromNothing(name)
+                this.event=EventHelper.buildFromNothing()
             }
         }
     }
@@ -128,6 +128,9 @@ class EventEditActivity : BaseDataFlowActivity() {
         /*If the event has no id, it means it was not created in the database yet. Then creates it.*/
 
         if(this.event?.id==null){
+
+            this.event?.authorId=UserFirebaseHelper.getCurrentUser()?.uid
+
             EventFirebaseQueries.createEvent(this.event!!)
                 .addOnSuccessListener { documentReference->
 
