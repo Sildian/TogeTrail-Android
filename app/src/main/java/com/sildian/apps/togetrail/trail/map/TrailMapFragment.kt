@@ -11,20 +11,21 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.Polyline
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.MapMarkersUtilities
+import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.main.MainActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
-import com.sildian.apps.togetrail.trail.model.support.TrailFirebaseQueries
 
 /*************************************************************************************************
- * Shows the list of trails on a map
+ * Shows the list of trails on a map, and also the list of events
  * @param trails : the list of trails to be shown
+ * @param events : the list of events to be shown
  ************************************************************************************************/
 
 class TrailMapFragment (
-    private var trails: List<Trail> = emptyList()
+    private var trails: List<Trail> = emptyList(),
+    private var events: List<Event> = emptyList()
 ) :
-    BaseTrailMapFragment(),
-    TrailFirebaseQueries.OnTrailsQueryResultListener
+    BaseTrailMapFragment()
 {
 
     /**********************************Static items**********************************************/
@@ -47,9 +48,18 @@ class TrailMapFragment (
 
     /**********************************Data monitoring*******************************************/
 
-    override fun onTrailsQueryResult(trails: List<Trail>) {
+    private fun handleTrailsQueryResult(trails: List<Trail>) {
         this.trails=trails
+        this.map?.clear()
         showTrailsOnMap()
+        showEventsOnMap()
+    }
+
+    private fun handleEventsQueryResult(events: List<Event>) {
+        this.events=events
+        this.map?.clear()
+        showTrailsOnMap()
+        showEventsOnMap()
     }
 
     /************************************UI monitoring*******************************************/
@@ -74,9 +84,11 @@ class TrailMapFragment (
 
     override fun onMapReadyActionsFinished() {
         if(this.trails.isEmpty()){
-            (activity as MainActivity).loadTrails(this)
+            (activity as MainActivity).loadTrails(this::handleTrailsQueryResult)
+            (activity as MainActivity).loadEvents(this::handleEventsQueryResult)
         }else {
             showTrailsOnMap()
+            showEventsOnMap()
         }
     }
 
@@ -91,6 +103,10 @@ class TrailMapFragment (
                 Log.d(TAG, "Clicked on marker (Trail)")
                 this.trail=marker.tag as Trail
                 showTrailInfoFragment()
+                true
+            }
+            is Event -> {
+                Log.d(TAG, "Clicked on marker (Event)")
                 true
             }
             else -> {
@@ -110,8 +126,6 @@ class TrailMapFragment (
 
     private fun showTrailsOnMap(){
 
-        this.map?.clear()
-
         /*For each trail in the list, shows a marker at the first trailPoint's location*/
 
         this.trails.forEach { trail ->
@@ -128,5 +142,26 @@ class TrailMapFragment (
 
     fun showTrailDetail(){
         (activity as MainActivity).seeTrail(this.trail)
+    }
+
+    /***********************************Events monitoring****************************************/
+
+    /**Shows the list of events on the map**/
+
+    private fun showEventsOnMap(){
+
+        /*For each event in the list, shows a marker*/
+
+        this.events.forEach { event ->
+            if(event.latitude!=null&&event.longitude!=null) {
+                this.map?.addMarker(
+                    MarkerOptions()
+                        .position(LatLng(event.latitude!!, event.longitude!!))
+                        .icon(
+                            MapMarkersUtilities.createMapMarkerFromVector(
+                                context, R.drawable.ic_location_event_map)))
+                    ?.tag = event
+            }
+        }
     }
 }

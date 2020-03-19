@@ -49,6 +49,7 @@
     <string name="button_hiker_account_delete">Supprimer mon compte</string>
     <!-- Event -->
     <string name="button_event_add_trails">Ajouter des randos</string>
+    <string name="button_event_register_user">M\'inscrire</string>
     <string name="button_event_unregister_user">Me désinscrire</string>
 
     <!-- Labels -->

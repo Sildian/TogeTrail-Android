@@ -11,18 +11,6 @@ import com.sildian.apps.togetrail.trail.model.core.Trail
 
 object TrailFirebaseQueries {
 
-    /****************************************Callbacks*******************************************/
-
-    interface OnTrailsQueryResultListener{
-
-        /**
-         * This event is triggered when a list of trails is successfully returned from the query
-         * @param trails : the resulted list of trails
-         */
-
-        fun onTrailsQueryResult(trails:List<Trail>)
-    }
-
     /*********************************Collection references**************************************/
 
     private const val COLLECTION_NAME="trail"

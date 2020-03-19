@@ -49,19 +49,19 @@ class EventFragment(
 
     private lateinit var layout:View
     private val photoImageView by lazy {layout.fragment_event_image_view_photo}
-    private val registerUserButton by lazy {layout.fragment_event_button_register_user}
     private val nameText by lazy {layout.fragment_event_text_name}
     private val nbDaysText by lazy {layout.fragment_event_text_nb_days}
     private val beginDateText by lazy {layout.fragment_event_text_begin_date}
     private val meetingPointText by lazy {layout.fragment_event_text_meeting_point}
     private val registeredHikersText by lazy {layout.fragment_event_text_registered_hikers}
     private val registeredHikersRecyclerView by lazy {layout.fragment_event_recycler_view_registered_hikers}
-    private val userRegisterLayout by lazy {layout.fragment_event_layout_user_registered}
-    private val unregisterUserButton by lazy {layout.fragment_event_button_unregister_user}
     private lateinit var registeredHikersAdapter:HikerPhotoAdapter
     private val attachedTrailsRecyclerView by lazy {layout.fragment_event_recycler_view_attached_trails}
     private lateinit var attachedTrailsAdapter:TrailHorizontalAdapter
     private val descriptionText by lazy {layout.fragment_event_text_description}
+    private val registerUserButton by lazy {layout.fragment_event_button_register_user}
+    private val userRegisteredText by lazy {layout.fragment_event_text_user_registered}
+    private val unregisterUserButton by lazy {layout.fragment_event_button_unregister_user}
 
     /************************************Life cycle**********************************************/
 
@@ -83,26 +83,20 @@ class EventFragment(
 
     private fun updateUI(){
         updatePhotoImageView()
-        updateRegisterUserButton()
         updateNameText()
         updateNbDaysText()
         updateBeginDateText()
         updateMeetingPointText()
         updateRegisteredHikersText()
         updateRegisteredHikersRecyclerView()
-        updateUnregisterUserButton()
         updateAttachedTrailsRecyclerView()
         updateDescriptionText()
+        updateRegisterUserButton()
+        updateUnregisterUserButton()
     }
 
     private fun updatePhotoImageView(){
         //TODO implement
-    }
-
-    private fun updateRegisterUserButton(){
-        this.registerUserButton.setOnClickListener {
-            (activity as EventActivity).registerUserToEvent()
-        }
     }
 
     private fun updateNameText(){
@@ -155,6 +149,16 @@ class EventFragment(
         this.registeredHikersRecyclerView.adapter=this.registeredHikersAdapter
     }
 
+    private fun updateDescriptionText(){
+        this.descriptionText.text=this.event?.description
+    }
+
+    private fun updateRegisterUserButton(){
+        this.registerUserButton.setOnClickListener {
+            (activity as EventActivity).registerUserToEvent()
+        }
+    }
+
     private fun updateUnregisterUserButton(){
         this.unregisterUserButton.setOnClickListener {
             (activity as EventActivity).unregisterUserFromEvent()
@@ -173,19 +177,17 @@ class EventFragment(
         this.attachedTrailsRecyclerView.adapter=this.attachedTrailsAdapter
     }
 
-    private fun updateDescriptionText(){
-        this.descriptionText.text=this.event?.description
-    }
-
     private fun updateUserRegisterItemsVisibility(){
         val userIsRegistered=
             this.registeredHikersAdapter.snapshots.firstOrNull { it.id==this.hiker?.id } !=null
         if(userIsRegistered){
             this.registerUserButton.visibility=View.GONE
-            this.userRegisterLayout.visibility=View.VISIBLE
+            this.userRegisteredText.visibility=View.VISIBLE
+            this.unregisterUserButton.visibility=View.VISIBLE
         }else{
             this.registerUserButton.visibility=View.VISIBLE
-            this.userRegisterLayout.visibility=View.GONE
+            this.userRegisteredText.visibility=View.GONE
+            this.unregisterUserButton.visibility=View.GONE
         }
     }
 

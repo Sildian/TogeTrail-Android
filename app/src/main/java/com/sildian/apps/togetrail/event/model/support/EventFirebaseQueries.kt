@@ -14,18 +14,6 @@ import java.util.*
 
 object EventFirebaseQueries {
 
-    /****************************************Callbacks*******************************************/
-
-    interface OnEventsQueryResultListener{
-
-        /**
-         * This event is triggered when a list of events is successfully returned from the query
-         * @param events : the resulted list of events
-         */
-
-        fun onEventsQueryResult(events:List<Event>)
-    }
-
     /*********************************Collection references**************************************/
 
     private const val COLLECTION_NAME="event"

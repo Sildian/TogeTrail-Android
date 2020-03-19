@@ -27,6 +27,7 @@ import com.sildian.apps.togetrail.event.detail.EventActivity
 import com.sildian.apps.togetrail.event.edit.EventEditActivity
 import com.sildian.apps.togetrail.event.list.EventsListFragment
 import com.sildian.apps.togetrail.event.model.core.Event
+import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
 import com.sildian.apps.togetrail.hiker.profileEdit.ProfileEditActivity
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.support.HikerHelper
@@ -78,6 +79,7 @@ class MainActivity :
 
     private var currentHiker: Hiker?=null               //The current hiker connected to the app
     private val trails= arrayListOf<Trail>()            //The list of trails to display
+    private val events= arrayListOf<Event>()            //The list of events to display
 
     /**********************************UI component**********************************************/
 
@@ -268,10 +270,10 @@ class MainActivity :
 
     /**
      * Loads the trails from the database
-     * @param listener : the listener which handles the result
+     * @param callback : the callback to handle the result
      */
 
-    fun loadTrails(listener:TrailFirebaseQueries.OnTrailsQueryResultListener){
+    fun loadTrails(callback:(List<Trail>)->Unit){
 
         //TODO add a progress bar
         
@@ -287,7 +289,41 @@ class MainActivity :
                         val trail=documentSnapshot.toObject(Trail::class.java)
                         trail.id=documentSnapshot.id
                         this.trails.add(trail)
-                        listener.onTrailsQueryResult(this.trails)
+                        callback.invoke(this.trails)
+                    }
+                }
+
+                /*Else*/
+
+                else if(e!=null){
+                    //TODO handle
+                    Log.w(TAG, e.message.toString())
+                }
+            }
+    }
+
+    /**
+     * Loads the events from the database
+     * @param callback : the callback to handle the result
+     */
+
+    fun loadEvents(callback:(List<Event>)->Unit){
+
+        //TODO add a progress bar
+
+        EventFirebaseQueries.getNextEvents()
+            .addSnapshotListener { querySnapshot, e ->
+
+                /*If the query is a success, displays the results*/
+
+                if(querySnapshot!=null){
+                    Log.d(TAG, "Query finished with ${querySnapshot.size()} events")
+                    this.events.clear()
+                    querySnapshot.forEach { documentSnapshot ->
+                        val event=documentSnapshot.toObject(Event::class.java)
+                        event.id=documentSnapshot.id
+                        this.events.add(event)
+                        callback.invoke(this.events)
                     }
                 }
 

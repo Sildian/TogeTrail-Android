@@ -15,6 +15,8 @@ import java.util.*
 data class Event(
     var id:String?=null,
     var name:String?=null,
+    var latitude:Double?=null,
+    var longitude:Double?=null,
     var location: Location =Location(),
     var meetingPoint:FineLocation= FineLocation(),
     var beginDate:Date?=null,

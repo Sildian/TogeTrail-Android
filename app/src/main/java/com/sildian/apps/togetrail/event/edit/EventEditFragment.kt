@@ -190,7 +190,7 @@ class EventEditFragment(private val event: Event?=null) :
         this.descriptionTextField.setText(this.event?.description)
     }
 
-    /*********************************Data monitoring********************************************/
+    /*****************************Trails / Events monitoring************************************/
 
     /**Updates the begin and end dates**/
 
@@ -227,6 +227,10 @@ class EventEditFragment(private val event: Event?=null) :
     private fun addTrail(trail:Trail){
         Log.d(TAG, "Added trail '${trail.id}'")
 
+        /*Updates the event's latitude and longitude*/
+
+        updateEventLatLng(trail)
+
         /*If the event has no id yet, updates the offline adapter. Else updates the attached trail in the database*/
 
         if(this.event?.id==null){
@@ -259,5 +263,13 @@ class EventEditFragment(private val event: Event?=null) :
         else{
             (activity as EventEditActivity).deleteAttachedTrail(trail)
         }
+    }
+
+    /**Updates the event's latitude and longitude with the given trail**/
+
+    private fun updateEventLatLng(trail:Trail){
+        val trailFirstPoint =trail.trailTrack.trailPoints.first()
+        this.event?.latitude=trailFirstPoint.latitude
+        this.event?.longitude=trailFirstPoint.longitude
     }
 }

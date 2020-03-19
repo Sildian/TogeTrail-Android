@@ -50,6 +50,7 @@
     <string name="button_hiker_account_delete">Delete my account</string>
     <!-- Event -->
     <string name="button_event_add_trails">Add trails</string>
+    <string name="button_event_register_user">Register</string>
     <string name="button_event_unregister_user">Unregister</string>
 
     <!-- Labels -->
@@ -106,7 +107,7 @@
     <string name="label_event_end_date">End</string>
     <string name="label_event_date">Date</string>
     <string name="label_event_time">Time</string>
-    <string name="label_event_meeting">Let\s meet on</string>
+    <string name="label_event_meeting">Let\'s meet on</string>
     <string name="label_event_meeting_point">Meeting point</string>
     <string name="label_event_description">Description</string>
     <string name="label_event_description2">Some information for the attendees</string>
