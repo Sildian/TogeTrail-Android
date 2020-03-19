@@ -35,9 +35,7 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
     companion object{
 
         /**Logs**/
-        private const val TAG_FRAGMENT="TAG_FRAGMENT"
-        private const val TAG_PERMISSION="TAG_PERMISSION"
-        private const val TAG_PHOTO="TAG_PHOTO"
+        private const val TAG="TrailPOIInfoEditFrgmnt"
 
         /**Request keys for permissions**/
         private const val KEY_REQUEST_PERMISSION_WRITE=2001
@@ -72,7 +70,7 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
     /************************************Life cycle**********************************************/
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d(TAG_FRAGMENT, "Fragment '${javaClass.simpleName}' created")
+        Log.d(TAG, "Fragment '${javaClass.simpleName}' created")
         this.layout= inflater.inflate(R.layout.fragment_trail_poi_info_edit, container, false)
         initializeEasyImage()
         initializeAllUIComponents()
@@ -269,40 +267,26 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
             KEY_REQUEST_PERMISSION_WRITE->if(grantResults.isNotEmpty()){
                 when(grantResults[0]) {
                     PackageManager.PERMISSION_GRANTED -> {
-                        Log.d(
-                            TAG_PERMISSION,
-                            "Permission '${KEY_BUNDLE_PERMISSION_WRITE}' granted"
-                        )
+                        Log.d(TAG,"Permission '${KEY_BUNDLE_PERMISSION_WRITE}' granted")
                         startAddPhoto()
                     }
                     PackageManager.PERMISSION_DENIED -> {
                         //TODO handle
-                        Log.d(
-                            TAG_PERMISSION,
-                            "Permission '${KEY_BUNDLE_PERMISSION_WRITE}' denied"
-                        )
+                        Log.d(TAG, "Permission '${KEY_BUNDLE_PERMISSION_WRITE}' denied")
                     }
                 }
             }
             KEY_REQUEST_PERMISSION_WRITE_AND_CAMERA ->if(grantResults.isNotEmpty()){
                 when(grantResults[0]){
                     PackageManager.PERMISSION_GRANTED -> {
-                        Log.d(
-                            TAG_PERMISSION,
-                            "Permission '${KEY_BUNDLE_PERMISSION_WRITE}' granted")
-                        Log.d(
-                            TAG_PERMISSION,
-                            "Permission '${KEY_BUNDLE_PERMISSION_CAMERA}' granted")
+                        Log.d(TAG, "Permission '${KEY_BUNDLE_PERMISSION_WRITE}' granted")
+                        Log.d(TAG, "Permission '${KEY_BUNDLE_PERMISSION_CAMERA}' granted")
                         startTakePhoto()
                     }
                     PackageManager.PERMISSION_DENIED -> {
                         //TODO handle
-                        Log.d(
-                            TAG_PERMISSION,
-                            "Permission '${KEY_BUNDLE_PERMISSION_WRITE}' denied")
-                        Log.d(
-                            TAG_PERMISSION,
-                            "Permission '${KEY_BUNDLE_PERMISSION_CAMERA}' denied")
+                        Log.d(TAG, "Permission '${KEY_BUNDLE_PERMISSION_WRITE}' denied")
+                        Log.d(TAG, "Permission '${KEY_BUNDLE_PERMISSION_CAMERA}' denied")
                     }
                 }
             }
@@ -329,7 +313,7 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
         this.easyImage.handleActivityResult(requestCode, resultCode, data, activity!!, object: DefaultCallback(){
 
             override fun onMediaFilesPicked(imageFiles: Array<MediaFile>, source: MediaSource) {
-                Log.d(TAG_PHOTO, "Successfully added new photo")
+                Log.d(TAG, "Successfully added the new photo")
                 for(image in imageFiles){
                     addPhoto(image.file.toURI().path)
                 }
@@ -337,7 +321,7 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
 
             override fun onImagePickerError(error: Throwable, source: MediaSource) {
                 super.onImagePickerError(error, source)
-                Log.w(TAG_PHOTO, error.message.toString())
+                Log.w(TAG, error.message.toString())
                 //TODO handle
             }
         })

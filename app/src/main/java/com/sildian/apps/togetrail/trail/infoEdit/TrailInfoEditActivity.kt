@@ -29,9 +29,7 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
     companion object{
 
         /**Logs**/
-        private const val TAG_ACTIVITY="TAG_ACTIVITY"
-        private const val TAG_MENU="TAG_MENU"
-        private const val TAG_STORAGE="TAG_STORAGE"
+        private const val TAG="TrailInfoEditActivity"
 
         /**Fragments Ids***/
         private const val ID_FRAGMENT_TRAIL_INFO_EDIT=1
@@ -69,7 +67,7 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG_ACTIVITY, "Activity '${javaClass.simpleName}' created")
+        Log.d(TAG, "Activity '${javaClass.simpleName}' created")
         setContentView(R.layout.activity_trail_info_edit)
         loadData()
         initializeToolbar()
@@ -101,7 +99,7 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
     /**Click on menu item from toolbar**/
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+        Log.d(TAG, "Menu '${item.title}' clicked")
         if(item.groupId==R.id.menu_save){
             if(item.itemId==R.id.menu_save_save){
                 saveData()
@@ -169,13 +167,12 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
 
         ImageStorageFirebaseHelper.uploadImage(this.imagePathToUploadIntoDatabase.toString())
             .addOnSuccessListener { uploadTask ->
-                Log.d(TAG_STORAGE, "Uploaded image to database with success")
 
                 /*When success, fetches the url of the created image in the database*/
 
                 uploadTask?.storage?.downloadUrl
                     ?.addOnSuccessListener { url ->
-                        Log.d(TAG_STORAGE, "Image uploaded with url '${url}'")
+                        Log.d(TAG, "Image successfully uploaded with url '${url}'")
 
                         /*Then updates the trailPOI with this url*/
 
@@ -185,13 +182,13 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
                     }
                     ?.addOnFailureListener { e ->
                         //TODO handle
-                        Log.w(TAG_STORAGE, e.message.toString())
+                        Log.w(TAG, e.message.toString())
                         saveTrailOnline()
                     }
             }
             .addOnFailureListener { e ->
                 //TODO handle
-                Log.w(TAG_STORAGE, e.message.toString())
+                Log.w(TAG, e.message.toString())
                 saveTrailOnline()
             }
     }
@@ -202,11 +199,11 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
 
         ImageStorageFirebaseHelper.deleteImage(this.imagePathToDeleteFromDatabase.toString())
             .addOnSuccessListener {
-                Log.d(TAG_STORAGE, "Deleted image from database with success")
+                Log.d(TAG, "Deleted image from database with success")
             }
             .addOnFailureListener { e ->
                 //TODO handle
-                Log.w(TAG_STORAGE, e.message.toString())
+                Log.w(TAG, e.message.toString())
             }
     }
 
@@ -223,24 +220,24 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
 
                     /*Once created, updates it with the created id*/
 
-                    Log.d(TAG_STORAGE, "Trail created in the database")
                     this.trail?.id=documentReference.id
+                    Log.d(TAG, "Trail '${this.trail?.id}' successfully created in the database")
+
                     TrailFirebaseQueries.updateTrail(this.trail!!)
                         .addOnSuccessListener {
-                            Log.d(TAG_STORAGE, "Trail updated in the database")
                             progressDialog.dismiss()
                             //TODO show a snackbar when finished
                             finishOk()
                         }
                         .addOnFailureListener { e ->
-                            Log.w(TAG_STORAGE, e.message.toString())
+                            Log.w(TAG, e.message.toString())
                             progressDialog.dismiss()
                             //TODO handle
                             finishOk()
                         }
                 }
                 .addOnFailureListener { e ->
-                    Log.w(TAG_STORAGE, e.message.toString())
+                    Log.w(TAG, e.message.toString())
                     this.progressDialog.dismiss()
                     //TODO handle
                     finishCancel()
@@ -251,13 +248,13 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
         }else{
             TrailFirebaseQueries.updateTrail(this.trail!!)
                 .addOnSuccessListener {
-                    Log.d(TAG_STORAGE, "Trail updated in the database")
+                    Log.d(TAG, "Trail '${this.trail?.id}' updated in the database")
                     this.progressDialog.dismiss()
                     //TODO show a snackbar when finished
                     finishOk()
                 }
                 .addOnFailureListener { e ->
-                    Log.w(TAG_STORAGE, e.message.toString())
+                    Log.w(TAG, e.message.toString())
                     this.progressDialog.dismiss()
                     //TODO handle
                     finishCancel()

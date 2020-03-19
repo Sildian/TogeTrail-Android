@@ -30,7 +30,7 @@ data class Trail (
     var maxElevation:Int?=null,
     var minElevation:Int?=null,
     var authorId:String?=null,
-    val autoCalculateMetrics:Boolean=false
+    val autoCalculateMetrics:Boolean=false      //TODO reset it to false when stored into Firebase
 )
     :Parcelable
 {

@@ -33,7 +33,7 @@ class TrailPOIInfoFragment (
     companion object{
 
         /**Logs**/
-        private const val TAG_FRAGMENT="TAG_FRAGMENT"
+        private const val TAG="TrailPOIInfoFragment"
     }
 
     /**********************************UI component**********************************************/
@@ -49,7 +49,7 @@ class TrailPOIInfoFragment (
     /************************************Life cycle**********************************************/
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d(TAG_FRAGMENT, "Fragment '${javaClass.simpleName}' created")
+        Log.d(TAG, "Fragment '${javaClass.simpleName}' created")
         this.layout=inflater.inflate(R.layout.fragment_trail_poi_info, container, false)
         initializeAllUIComponents()
         return this.layout

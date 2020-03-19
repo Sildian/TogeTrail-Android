@@ -25,9 +25,7 @@ class ProfileActivity : BaseDataFlowActivity() {
     companion object {
 
         /**Logs**/
-        private const val TAG_ACTIVITY = "TAG_ACTIVITY"
-        private const val TAG_MENU="TAG_MENU"
-        private const val TAG_STORAGE="TAG_STORAGE"
+        private const val TAG="ProfileActivity"
 
         /**Fragments ids**/
         private const val ID_FRAGMENT_PROFILE=1
@@ -61,7 +59,7 @@ class ProfileActivity : BaseDataFlowActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG_ACTIVITY, "Activity '${javaClass.simpleName}' created")
+        Log.d(TAG, "Activity '${javaClass.simpleName}' created")
         setContentView(R.layout.activity_profile)
         loadData()
         initializeToolbar()
@@ -80,7 +78,7 @@ class ProfileActivity : BaseDataFlowActivity() {
     /**Click on menu item from toolbar**/
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+        Log.d(TAG, "Menu '${item.title}' clicked")
         if(item.groupId==R.id.menu_edit){
             if(item.itemId==R.id.menu_edit_edit){
                 editProfile()

@@ -56,11 +56,7 @@ class MainActivity :
     companion object{
 
         /**Logs**/
-        private const val TAG_ACTIVITY="TAG_ACTIVITY"
-        private const val TAG_MENU="TAG_MENU"
-        private const val TAG_USER="TAG_USER"
-        private const val TAG_STORAGE="TAG_STORAGE"
-        private const val TAG_PERMISSION="TAG_PERMISSION"
+        private const val TAG="MainActivity"
 
         /**Fragments Ids***/
         private const val ID_FRAGMENT_MAP=1
@@ -105,7 +101,7 @@ class MainActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG_ACTIVITY, "Activity '${javaClass.simpleName}' created")
+        Log.d(TAG, "Activity '${javaClass.simpleName}' created")
         setContentView(R.layout.activity_main)
         JodaTimeAndroid.init(this)
         initializeToolbar()
@@ -122,7 +118,7 @@ class MainActivity :
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 
-        Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+        Log.d(TAG, "Menu '${item.title}' clicked")
 
         return when(item.groupId) {
 
@@ -171,7 +167,7 @@ class MainActivity :
 
     private fun onPopupMenuItemClick(item: MenuItem?): Boolean {
 
-        Log.d(TAG_MENU, "Menu '${item?.title}' clicked")
+        Log.d(TAG, "Menu '${item?.title}' clicked")
 
         when(item?.groupId) {
             R.id.menu_add -> {
@@ -239,7 +235,7 @@ class MainActivity :
             HikerFirebaseQueries.getHiker(user.uid)
                 .addOnSuccessListener { documentSnapshot ->
 
-                    Log.d(TAG_STORAGE, "Hiker loaded from the database")
+                    Log.d(TAG, "Hiker '${user.uid}' loaded from the database")
                     val hiker=documentSnapshot.toObject(Hiker::class.java)
 
                     /*If the profile exists, then updates the currentHiker*/
@@ -255,17 +251,17 @@ class MainActivity :
                         HikerFirebaseQueries.createOrUpdateHiker(this.currentHiker!!)
                             .addOnSuccessListener {
                                 //TODO handle
-                                Log.d(TAG_STORAGE, "Hiker registered in the database")
+                                Log.d(TAG, "Hiker '${user.uid}' registered in the database")
                             }
                             .addOnFailureListener { e ->
                                 //TODO handle
-                                Log.w(TAG_STORAGE, e.message.toString())
+                                Log.w(TAG, e.message.toString())
                             }
                     }
                 }
                 .addOnFailureListener { e ->
                     //TODO handle
-                    Log.w(TAG_STORAGE, e.message.toString())
+                    Log.w(TAG, e.message.toString())
                 }
         }
     }
@@ -285,7 +281,7 @@ class MainActivity :
                 /*If the query is a success, displays the results*/
 
                 if(querySnapshot!=null){
-                    Log.d(TAG_STORAGE, "Query finished with ${querySnapshot.size()} trails")
+                    Log.d(TAG, "Query finished with ${querySnapshot.size()} trails")
                     this.trails.clear()
                     querySnapshot.forEach { documentSnapshot ->
                         val trail=documentSnapshot.toObject(Trail::class.java)
@@ -299,7 +295,7 @@ class MainActivity :
 
                 else if(e!=null){
                     //TODO handle
-                    Log.w(TAG_STORAGE, e.message.toString())
+                    Log.w(TAG, e.message.toString())
                 }
             }
     }
@@ -426,14 +422,12 @@ class MainActivity :
             KEY_REQUEST_PERMISSION_LOCATION->if(grantResults.isNotEmpty()){
                 when(grantResults[0]){
                     PackageManager.PERMISSION_GRANTED -> {
-                        Log.d(TAG_PERMISSION,
-                            "Permission '$KEY_BUNDLE_PERMISSION_LOCATION' granted")
+                        Log.d(TAG, "Permission '$KEY_BUNDLE_PERMISSION_LOCATION' granted")
                         showFragment(ID_FRAGMENT_MAP)
                     }
                     PackageManager.PERMISSION_DENIED -> {
                         //TODO handle
-                        Log.d(TAG_PERMISSION,
-                            "Permission '$KEY_BUNDLE_PERMISSION_LOCATION' denied")
+                        Log.d(TAG, "Permission '$KEY_BUNDLE_PERMISSION_LOCATION' denied")
                     }
                 }
             }
@@ -535,21 +529,21 @@ class MainActivity :
         val idpResponse=IdpResponse.fromResultIntent(data)
         when{
             resultCode== Activity.RESULT_OK -> {
-                Log.d(TAG_USER, "Login successful")
+                Log.d(TAG, "Login successful")
                 updateNavigationViewUserItems()
                 updateAndSaveCurrentHiker()
             }
             resultCode==Activity.RESULT_CANCELED -> {
                 //TODO handle
-                Log.d(TAG_USER, "Login canceled")
+                Log.d(TAG, "Login canceled")
             }
             idpResponse?.error!=null -> {
                 //TODO handle
-                Log.w(TAG_USER, "Login failed : ${idpResponse.error?.message}")
+                Log.w(TAG, "Login failed : ${idpResponse.error?.message}")
             }
             else -> {
                 //TODO handle
-                Log.w(TAG_USER, "Login failed : unknown error")
+                Log.w(TAG, "Login failed : unknown error")
             }
         }
     }

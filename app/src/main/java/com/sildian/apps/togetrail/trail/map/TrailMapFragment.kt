@@ -27,13 +27,21 @@ class TrailMapFragment (
     TrailFirebaseQueries.OnTrailsQueryResultListener
 {
 
+    /**********************************Static items**********************************************/
+
+    companion object {
+
+        /**Logs**/
+        private const val TAG = "TrailMapFragment"
+    }
+
     /**********************************UI component**********************************************/
 
     /************************************Life cycle**********************************************/
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
         super.onCreateView(inflater, container, savedInstanceState)
-        Log.d(TAG_FRAGMENT, "Fragment '${javaClass.simpleName}' created")
+        Log.d(TAG, "Fragment '${javaClass.simpleName}' created")
         return this.layout
     }
 
@@ -73,20 +81,20 @@ class TrailMapFragment (
     }
 
     override fun onMapClick(point: LatLng?) {
-        Log.d(TAG_MAP, "Click on map at point lat ${point?.latitude} lng ${point?.longitude}")
+        Log.d(TAG, "Clicked on map at point lat ${point?.latitude} lng ${point?.longitude}")
         hideInfoBottomSheet()
     }
 
     override fun onMarkerClick(marker: Marker?): Boolean {
         return when(marker?.tag){
             is Trail -> {
-                Log.d(TAG_MAP, "Click on marker (Trail)")
+                Log.d(TAG, "Clicked on marker (Trail)")
                 this.trail=marker.tag as Trail
                 showTrailInfoFragment()
                 true
             }
             else -> {
-                Log.w(TAG_MAP, "Click on marker (Unknown category)")
+                Log.w(TAG, "Clicked on marker (Unknown category)")
                 false
             }
         }

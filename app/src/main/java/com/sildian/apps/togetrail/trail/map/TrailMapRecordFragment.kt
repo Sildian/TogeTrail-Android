@@ -27,6 +27,9 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
 
     companion object{
 
+        /**Logs**/
+        private const val TAG = "TrailMapRecordFragment"
+
         /**Record data**/
 
         //The time interval between each point record (in milliseconds)
@@ -50,7 +53,7 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        Log.d(TAG_FRAGMENT, "Fragment '${javaClass.simpleName}' created")
+        Log.d(TAG, "Fragment '${javaClass.simpleName}' created")
         initializeAddPoiButton()
         initializePlayButton()
         return this.layout
@@ -117,7 +120,7 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
     }
 
     override fun onMapClick(point: LatLng?) {
-        Log.d(TAG_MAP, "Click on map at point lat ${point?.latitude} lng ${point?.longitude}")
+        Log.d(TAG, "Clicked on map at point lat ${point?.latitude} lng ${point?.longitude}")
         hideInfoBottomSheet()
     }
 
@@ -127,7 +130,7 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
 
         return when(marker?.tag){
             is TrailPointOfInterest ->{
-                Log.d(TAG_MAP, "Click on marker (TrailPointOfInterest)")
+                Log.d(TAG, "Clicked on marker (TrailPointOfInterest)")
                 val trailPointOfInterest=marker.tag as TrailPointOfInterest
                 val trailPoiPosition=marker.snippet.toInt()
                 showTrailPOIInfoFragment(trailPointOfInterest, trailPoiPosition)
@@ -135,19 +138,19 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
                 true
             }
             is TrailPoint ->{
-                Log.d(TAG_MAP, "Click on marker (TrailPoint)")
+                Log.d(TAG, "Clicked on marker (TrailPoint)")
                 showTrailInfoFragment()
                 true
             }
             else-> {
-                Log.w(TAG_MAP, "Click on marker (Unknown category)")
+                Log.w(TAG, "Clicked on marker (Unknown category)")
                 false
             }
         }
     }
 
     override fun onPolylineClick(polyline: Polyline?) {
-        Log.d(TAG_MAP, "Click on polyline")
+        Log.d(TAG, "Clicked on polyline")
         showTrailInfoFragment()
     }
 
@@ -161,12 +164,12 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
 
     override fun onInfoWindowClick(marker: Marker?) {
         if(marker?.tag is TrailPointOfInterest) {
-            Log.d(TAG_MAP, "Click on info window (TrailPointOfInterest)")
+            Log.d(TAG, "Clicked on info window (TrailPointOfInterest)")
             val trailPointOfInterest=marker.tag as TrailPointOfInterest
             removeTrailPointOfInterest(trailPointOfInterest)
         }
         else{
-            Log.w(TAG_MAP, "Click on info window (Unknown category)")
+            Log.w(TAG, "Clicked on info window (Unknown category)")
         }
     }
 
@@ -229,18 +232,16 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
                 /*If minimum distance to previous point is fulfilled, adds the new trailPoint*/
 
                 if(checkMinDistanceToPreviousPointIsFulfilled(trailPoint)) {
-                    Log.d(TAG_LOCATION,
-                        "Point registered at lat ${trailPoint.latitude} lng ${trailPoint.longitude}")
+                    Log.d(TAG, "Point registered at lat ${trailPoint.latitude} lng ${trailPoint.longitude}")
                     addTrailPoint(trailPoint)
                 }
                 else{
-                    Log.d(TAG_LOCATION,
-                        "Point not registered, too closed to the previous point")
+                    Log.d(TAG, "Point not registered, too closed to the previous point")
                 }
             }
             .addOnFailureListener { e->
                 //TODO handle
-                Log.w(TAG_LOCATION, e.message.toString())
+                Log.w(TAG, e.message.toString())
             }
     }
 

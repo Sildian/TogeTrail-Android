@@ -39,9 +39,7 @@ abstract class BaseTrailMapFragment :
     companion object{
 
         /**Logs**/
-        const val TAG_FRAGMENT="TAG_FRAGMENT"
-        const val TAG_MAP="TAG_MAP"
-        const val TAG_LOCATION="TAG_LOCATION"
+        private const val TAG="BaseTrailMapFragment"
 
         /**Bundles keys**/
         const val KEY_BUNDLE_MAP_VIEW="KEY_BUNDLE_MAP_VIEW"
@@ -188,7 +186,7 @@ abstract class BaseTrailMapFragment :
 
     override fun onMapReady(map: GoogleMap?) {
         if(map!=null) {
-            Log.d(TAG_MAP, "Map is ready in '${this.javaClass.simpleName}'")
+            Log.d(TAG, "Map is ready in '${this.javaClass.simpleName}'")
             this.map = map
             this.map?.mapType= GoogleMap.MAP_TYPE_TERRAIN
             this.map?.setOnMapClickListener(this)
@@ -199,7 +197,7 @@ abstract class BaseTrailMapFragment :
         }
         else{
             //TODO handle exception
-            Log.w(TAG_MAP, "Map couldn't be loaded in '${this.javaClass.simpleName}'")
+            Log.w(TAG, "Map couldn't be loaded in '${this.javaClass.simpleName}'")
         }
     }
 

@@ -34,8 +34,7 @@ class TrailsListFragment (private val currentHiker: Hiker?=null) :
     companion object{
 
         /**Logs**/
-        private const val TAG_FRAGMENT="TAG_FRAGMENT"
-        private const val TAG_UI="TAG_UI"
+        private const val TAG="TrailsListFragment"
     }
 
     /**********************************UI component**********************************************/
@@ -51,7 +50,7 @@ class TrailsListFragment (private val currentHiker: Hiker?=null) :
     /************************************Life cycle**********************************************/
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d(TAG_FRAGMENT, "Fragment '${javaClass.simpleName}' created")
+        Log.d(TAG, "Fragment '${javaClass.simpleName}' created")
         this.layout=inflater.inflate(R.layout.fragment_trails_list, container, false)
         initializeLastAddedTrailsRecyclerView()
         initializeMyTrailsRecyclerView()
@@ -106,7 +105,7 @@ class TrailsListFragment (private val currentHiker: Hiker?=null) :
     /***********************************Trails monitoring****************************************/
 
     override fun onTrailClick(trail: Trail) {
-        Log.d(TAG_UI, "Click on trail '${trail.id}")
+        Log.d(TAG, "Clicked on trail '${trail.id}")
         (activity as MainActivity).seeTrail(trail)
     }
 }

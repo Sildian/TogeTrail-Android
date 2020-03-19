@@ -28,10 +28,7 @@ class ProfileEditActivity : BaseDataFlowActivity() {
     companion object {
 
         /**Logs**/
-        private const val TAG_ACTIVITY = "TAG_ACTIVITY"
-        private const val TAG_MENU="TAG_MENU"
-        private const val TAG_USER="TAG_USER"
-        private const val TAG_STORAGE="TAG_STORAGE"
+        private const val TAG="ProfileEditFragment"
 
         /**Fragments ids**/
         private const val ID_FRAGMENT_INFO=1
@@ -66,7 +63,7 @@ class ProfileEditActivity : BaseDataFlowActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG_ACTIVITY, "Activity '${javaClass.simpleName}' created")
+        Log.d(TAG, "Activity '${javaClass.simpleName}' created")
         setContentView(R.layout.activity_profile_edit)
         loadData()
         initializeToolbar()
@@ -98,7 +95,7 @@ class ProfileEditActivity : BaseDataFlowActivity() {
     /**Click on menu item from toolbar**/
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+        Log.d(TAG, "Menu '${item.title}' clicked")
         if(item.groupId==R.id.menu_save){
             if(item.itemId==R.id.menu_save_save){
                 saveData()
@@ -148,13 +145,12 @@ class ProfileEditActivity : BaseDataFlowActivity() {
 
         ImageStorageFirebaseHelper.uploadImage(this.imagePathToUploadIntoDatabase.toString())
             .addOnSuccessListener { uploadTask ->
-                Log.d(TAG_STORAGE, "Uploaded image to database with success")
 
                 /*When success, fetches the url of the created image in the database*/
 
                 uploadTask?.storage?.downloadUrl
                     ?.addOnSuccessListener { url ->
-                        Log.d(TAG_STORAGE, "Image uploaded with url '$url'")
+                        Log.d(TAG, "Image successfully uploaded with url '$url'")
 
                         /*Then updates the hiker with this url*/
 
@@ -163,13 +159,13 @@ class ProfileEditActivity : BaseDataFlowActivity() {
                     }
                     ?.addOnFailureListener { e ->
                         //TODO handle
-                        Log.w(TAG_STORAGE, e.message.toString())
+                        Log.w(TAG, e.message.toString())
                         saveHikerOnline()
                     }
             }
             .addOnFailureListener { e ->
                 //TODO handle
-                Log.w(TAG_STORAGE, e.message.toString())
+                Log.w(TAG, e.message.toString())
                 saveHikerOnline()
             }
     }
@@ -180,24 +176,24 @@ class ProfileEditActivity : BaseDataFlowActivity() {
 
         ImageStorageFirebaseHelper.deleteImage(this.imagePathToDeleteFromDatabase.toString())
             .addOnSuccessListener {
-                Log.d(TAG_STORAGE, "Deleted image from database with success")
+                Log.d(TAG, "Deleted image from database with success")
             }
             .addOnFailureListener { e ->
                 //TODO handle
-                Log.w(TAG_STORAGE, e.message.toString())
+                Log.w(TAG, e.message.toString())
             }
     }
 
     private fun saveHikerOnline(){
         HikerFirebaseQueries.createOrUpdateHiker(this.hiker!!)
             .addOnSuccessListener {
-                Log.d(TAG_STORAGE, "Hiker updated in the database")
+                Log.d(TAG, "Hiker '${this.hiker?.id}' updated in the database")
                 this.progressDialog.dismiss()
                 //TODO show a snackbar when finished
                 updateUserProfile()
             }
             .addOnFailureListener { e ->
-                Log.w(TAG_STORAGE, e.message.toString())
+                Log.w(TAG, e.message.toString())
                 this.progressDialog.dismiss()
                 //TODO handle
                 finishCancel()
@@ -225,13 +221,13 @@ class ProfileEditActivity : BaseDataFlowActivity() {
     fun updateUserProfile(){
         UserFirebaseHelper.updateUserProfile(this.hiker?.name!!, this.hiker?.photoUrl)
             ?.addOnSuccessListener {
-                Log.d(TAG_USER, "User profile updated in the database")
+                Log.d(TAG, "User profile updated in the database")
                 this.progressDialog.dismiss()
                 //TODO show a snackbar when finished
                 finishOk()
             }
             ?.addOnFailureListener { e ->
-                Log.w(TAG_USER, e.message.toString())
+                Log.w(TAG, e.message.toString())
                 this.progressDialog.dismiss()
                 //TODO handle
                 finishCancel()
@@ -244,12 +240,12 @@ class ProfileEditActivity : BaseDataFlowActivity() {
         this.progressDialog= DialogHelper.createProgressDialog(this)
         UserFirebaseHelper.resetUserPassword()
             ?.addOnSuccessListener {
-                Log.d(TAG_USER, "Email sent to the user to let him reset his password")
+                Log.d(TAG, "Email sent to the user to let him reset his password")
                 this.progressDialog.dismiss()
                 //TODO show a snackbar when finished
             }
             ?.addOnFailureListener { e ->
-                Log.w(TAG_USER, e.message.toString())
+                Log.w(TAG, e.message.toString())
                 this.progressDialog.dismiss()
                 //TODO handle
             }
@@ -265,13 +261,13 @@ class ProfileEditActivity : BaseDataFlowActivity() {
 
         HikerFirebaseQueries.deleteHiker(this.hiker!!)
             .addOnSuccessListener {
-                Log.d(TAG_USER, "Hiker deleted from the database")
+                Log.d(TAG, "Hiker deleted from the database")
 
                 /*Delete the user's account*/
 
                 UserFirebaseHelper.deleteUserAccount()
                     ?.addOnSuccessListener {
-                        Log.d(TAG_USER, "User deleted from the database")
+                        Log.d(TAG, "User deleted from the database")
                         this.progressDialog.dismiss()
 
                         /*Deletes the user's photo*/
@@ -282,13 +278,13 @@ class ProfileEditActivity : BaseDataFlowActivity() {
                         //TODO show a snackbar when finished
                     }
                     ?.addOnFailureListener { e ->
-                        Log.w(TAG_USER, e.message.toString())
+                        Log.w(TAG, e.message.toString())
                         this.progressDialog.dismiss()
                         //TODO handle
                     }
             }
             .addOnFailureListener { e ->
-                Log.w(TAG_USER, e.message.toString())
+                Log.w(TAG, e.message.toString())
                 this.progressDialog.dismiss()
                 //TODO handle
             }

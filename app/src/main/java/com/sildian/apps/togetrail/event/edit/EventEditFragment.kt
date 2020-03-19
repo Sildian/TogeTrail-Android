@@ -38,8 +38,7 @@ class EventEditFragment(private val event: Event?=null) :
     companion object {
 
         /**Logs**/
-        private const val TAG_FRAGMENT = "TAG_FRAGMENT"
-        private const val TAG_DATA="TAG_DATA"
+        private const val TAG="EventEditFragment"
     }
 
     /**************************************Data**************************************************/
@@ -67,7 +66,7 @@ class EventEditFragment(private val event: Event?=null) :
     /************************************Life cycle**********************************************/
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d(TAG_FRAGMENT, "Fragment '${javaClass.simpleName}' created")
+        Log.d(TAG, "Fragment '${javaClass.simpleName}' created")
         this.layout=inflater.inflate(R.layout.fragment_event_edit, container, false)
         initializeAllUIComponents()
         return this.layout
@@ -226,7 +225,7 @@ class EventEditFragment(private val event: Event?=null) :
     /**Adds a trail to the event**/
 
     private fun addTrail(trail:Trail){
-        Log.d(TAG_DATA, "Added trail '${trail.id} : ${trail.name}'")
+        Log.d(TAG, "Added trail '${trail.id}'")
 
         /*If the event has no id yet, updates the offline adapter. Else updates the attached trail in the database*/
 
@@ -242,14 +241,14 @@ class EventEditFragment(private val event: Event?=null) :
     /**On trail click**/
 
     override fun onTrailClick(trail: Trail) {
-        Log.d(TAG_DATA, "Click on trail '${trail.id} : ${trail.name}'")
+        Log.d(TAG, "Click on trail '${trail.id}'")
         //TODO show the trail's detail?
     }
 
     /**Removes a trail from the event**/
 
     override fun onTrailRemoved(trail: Trail) {
-        Log.d(TAG_DATA, "Removed trail '${trail.id} : ${trail.name}'")
+        Log.d(TAG, "Removed trail '${trail.id}'")
 
         /*If the event has no id yet, updates the offline adapter. Else updates the attached trail in the database*/
 

@@ -29,9 +29,7 @@ class EventEditActivity : BaseDataFlowActivity() {
     companion object {
 
         /**Logs**/
-        private const val TAG_ACTIVITY = "TAG_ACTIVITY"
-        private const val TAG_MENU = "TAG_MENU"
-        private const val TAG_STORAGE = "TAG_STORAGE"
+        private const val TAG="EventEditActivity"
 
         /**Bundle keys for intents**/
         const val KEY_BUNDLE_EVENT="KEY_BUNDLE_EVENT"
@@ -52,7 +50,7 @@ class EventEditActivity : BaseDataFlowActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG_ACTIVITY, "Activity '${javaClass.simpleName}' created")
+        Log.d(TAG, "Activity '${javaClass.simpleName}' created")
         setContentView(R.layout.activity_event_edit)
         loadData()
         initializeToolbar()
@@ -84,7 +82,7 @@ class EventEditActivity : BaseDataFlowActivity() {
     /**Click on menu item from toolbar**/
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+        Log.d(TAG, "Menu '${item.title}' clicked")
         if(item.groupId==R.id.menu_save){
             if(item.itemId==R.id.menu_save_save){
                 saveData()
@@ -136,8 +134,8 @@ class EventEditActivity : BaseDataFlowActivity() {
 
                     /*Once created...*/
 
-                    Log.d(TAG_STORAGE, "Event created in the database")
                     this.event?.id=documentReference.id
+                    Log.d(TAG, "Event '${this.event?.id}' created in the database")
 
                     /*Updates the attached trails*/
 
@@ -149,20 +147,20 @@ class EventEditActivity : BaseDataFlowActivity() {
 
                     EventFirebaseQueries.updateEvent(this.event!!)
                         .addOnSuccessListener {
-                            Log.d(TAG_STORAGE, "Event updated in the database")
+                            Log.d(TAG, "Event '${this.event?.id}' updated in the database")
                             progressDialog.dismiss()
                             //TODO show a snackbar when finished
                             finishOk()
                         }
                         .addOnFailureListener { e ->
-                            Log.w(TAG_STORAGE, e.message.toString())
+                            Log.w(TAG, e.message.toString())
                             progressDialog.dismiss()
                             //TODO handle
                             finishOk()
                         }
                 }
                 .addOnFailureListener { e ->
-                    Log.w(TAG_STORAGE, e.message.toString())
+                    Log.w(TAG, e.message.toString())
                     this.progressDialog.dismiss()
                     //TODO handle
                     finishCancel()
@@ -173,13 +171,13 @@ class EventEditActivity : BaseDataFlowActivity() {
         }else{
             EventFirebaseQueries.updateEvent(this.event!!)
                 .addOnSuccessListener {
-                    Log.d(TAG_STORAGE, "Event updated in the database")
+                    Log.d(TAG, "Event '${this.event?.id}' updated in the database")
                     this.progressDialog.dismiss()
                     //TODO show a snackbar when finished
                     finishOk()
                 }
                 .addOnFailureListener { e ->
-                    Log.w(TAG_STORAGE, e.message.toString())
+                    Log.w(TAG, e.message.toString())
                     this.progressDialog.dismiss()
                     //TODO handle
                     finishCancel()
@@ -190,20 +188,20 @@ class EventEditActivity : BaseDataFlowActivity() {
     fun updateAttachedTrail(trail: Trail){
         EventFirebaseQueries.updateAttachedTrail(this.event?.id!!, trail)
             .addOnSuccessListener {
-                Log.d(TAG_STORAGE, "Attached trail '${trail.id}' updated in the database")
+                Log.d(TAG, "Attached trail '${trail.id}' updated in the database")
             }
             .addOnFailureListener { e ->
-                Log.w(TAG_STORAGE, e.message.toString())
+                Log.w(TAG, e.message.toString())
             }
     }
 
     fun deleteAttachedTrail(trail: Trail){
         EventFirebaseQueries.deleteAttachedTrail(this.event?.id!!, trail.id!!)
             .addOnSuccessListener {
-                Log.d(TAG_STORAGE, "Attached trail '${trail.id}' deleted from the database")
+                Log.d(TAG, "Attached trail '${trail.id}' deleted from the database")
             }
             .addOnFailureListener { e ->
-                Log.w(TAG_STORAGE, e.message.toString())
+                Log.w(TAG, e.message.toString())
             }
     }
 

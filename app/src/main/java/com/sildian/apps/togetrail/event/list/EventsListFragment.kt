@@ -33,8 +33,7 @@ class EventsListFragment (private val currentHiker:Hiker?=null) :
     companion object{
 
         /**Logs**/
-        private const val TAG_FRAGMENT="TAG_FRAGMENT"
-        private const val TAG_UI="TAG_UI"
+        private const val TAG="EventListFragment"
     }
 
     /**********************************UI component**********************************************/
@@ -50,7 +49,7 @@ class EventsListFragment (private val currentHiker:Hiker?=null) :
     /************************************Life cycle**********************************************/
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d(TAG_FRAGMENT, "Fragment '${javaClass.simpleName}' created")
+        Log.d(TAG, "Fragment '${javaClass.simpleName}' created")
         this.layout= inflater.inflate(R.layout.fragment_events_list, container, false)
         initializeNextEventsRecyclerView()
         initializeMyEventsRecyclerView()
@@ -106,7 +105,7 @@ class EventsListFragment (private val currentHiker:Hiker?=null) :
     /***********************************Events monitoring****************************************/
 
     override fun onEventClick(event: Event) {
-        Log.d(TAG_UI, "Click on event '${event.id}")
+        Log.d(TAG, "Clicked on event '${event.id}")
         (activity as MainActivity).seeEvent(event)
     }
 }

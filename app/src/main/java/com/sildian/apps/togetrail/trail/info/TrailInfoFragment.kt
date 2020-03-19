@@ -32,7 +32,7 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
     companion object{
 
         /**Logs**/
-        private const val TAG_FRAGMENT="TAG_FRAGMENT"
+        private const val TAG="TrailInfoFragment"
     }
 
     /**********************************UI component**********************************************/
@@ -62,7 +62,7 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
     /************************************Life cycle**********************************************/
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d(TAG_FRAGMENT, "Fragment '${javaClass.simpleName}' created")
+        Log.d(TAG, "Fragment '${javaClass.simpleName}' created")
         this.layout=inflater.inflate(R.layout.fragment_trail_info, container, false)
         initializeAllUIComponents()
         return this.layout

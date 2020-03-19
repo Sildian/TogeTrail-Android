@@ -42,8 +42,7 @@ class EventFragment(
     companion object {
 
         /**Logs**/
-        private const val TAG_FRAGMENT = "TAG_FRAGMENT"
-        private const val TAG_DATA="TAG_DATA"
+        private const val TAG="EventFragment"
     }
 
     /**********************************UI component**********************************************/
@@ -67,7 +66,7 @@ class EventFragment(
     /************************************Life cycle**********************************************/
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d(TAG_FRAGMENT, "Fragment '${javaClass.simpleName}' created")
+        Log.d(TAG, "Fragment '${javaClass.simpleName}' created")
         this.layout=inflater.inflate(R.layout.fragment_event, container, false)
         updateUI()
         return this.layout
@@ -197,7 +196,7 @@ class EventFragment(
     }
 
     override fun onHikersChanged() {
-        Log.d(TAG_DATA, "Registered hikers changed")
+        Log.d(TAG, "Registered hikers changed")
         updateRegisteredHikersText()
         updateUserRegisterItemsVisibility()
     }

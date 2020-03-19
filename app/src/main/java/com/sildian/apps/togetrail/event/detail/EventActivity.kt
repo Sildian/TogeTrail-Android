@@ -29,9 +29,7 @@ class EventActivity : BaseDataFlowActivity() {
     companion object {
 
         /**Logs**/
-        private const val TAG_ACTIVITY = "TAG_ACTIVITY"
-        private const val TAG_MENU = "TAG_MENU"
-        private const val TAG_STORAGE = "TAG_STORAGE"
+        private const val TAG="EventActivity"
 
         /**Request keys for activities**/
         private const val KEY_REQUEST_EVENT_EDIT=1001
@@ -56,7 +54,7 @@ class EventActivity : BaseDataFlowActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG_ACTIVITY, "Activity '${javaClass.simpleName}' created")
+        Log.d(TAG, "Activity '${javaClass.simpleName}' created")
         setContentView(R.layout.activity_event)
         loadData()
         initializeToolbar()
@@ -75,7 +73,7 @@ class EventActivity : BaseDataFlowActivity() {
     /**Click on menu item from toolbar**/
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+        Log.d(TAG, "Menu '${item.title}' clicked")
         if(item.groupId==R.id.menu_edit){
             if(item.itemId==R.id.menu_edit_edit){
                 editEvent()
@@ -126,42 +124,35 @@ class EventActivity : BaseDataFlowActivity() {
 
             EventFirebaseQueries.updateRegisteredHiker(this.event?.id!!, this.hiker!!)
                 .addOnSuccessListener {
-                    Log.d(TAG_STORAGE, "Hiker registered to event")
 
                     /*Then updates the event for which the hiker attended*/
 
                     HikerFirebaseQueries.updateAttendedEvent(this.hiker?.id!!, this.event!!)
                         .addOnSuccessListener {
-                            Log.d(TAG_STORAGE, "Event registered within hiker's info")
+                            Log.d(TAG, "Hiker registered successfully")
                         }
                         .addOnFailureListener { e ->
-                            Log.w(TAG_STORAGE, e.message.toString())
+                            Log.w(TAG, e.message.toString())
                             //TODO handle
                         }
                 }
                 .addOnFailureListener { e ->
-                    Log.w(TAG_STORAGE, e.message.toString())
+                    Log.w(TAG, e.message.toString())
                     //TODO handle
                 }
 
             /*Also updates the event within the original tree*/
 
             EventFirebaseQueries.updateEvent(this.event!!)
-                .addOnSuccessListener {
-                    Log.d(TAG_STORAGE, "Event updated")
-                }
                 .addOnFailureListener { e ->
-                    Log.w(TAG_STORAGE, e.message.toString())
+                    Log.w(TAG, e.message.toString())
                 }
 
             /*And updates the hiker within the original tree*/
 
             HikerFirebaseQueries.createOrUpdateHiker(this.hiker!!)
-                .addOnSuccessListener {
-                    Log.d(TAG_STORAGE, "Hiker updated")
-                }
                 .addOnFailureListener { e ->
-                    Log.w(TAG_STORAGE, e.message.toString())
+                    Log.w(TAG, e.message.toString())
                 }
         }
     }
@@ -178,42 +169,35 @@ class EventActivity : BaseDataFlowActivity() {
 
             EventFirebaseQueries.deleteRegisteredHiker(this.event?.id!!, this.hiker?.id!!)
                 .addOnSuccessListener {
-                    Log.d(TAG_STORAGE, "Hiker deleted from event")
 
                     /*Then deletes the event for which the hiker attended*/
 
                     HikerFirebaseQueries.deleteAttendedEvent(this.hiker?.id!!, this.event?.id!!)
                         .addOnSuccessListener {
-                            Log.d(TAG_STORAGE, "Event deleted from hiker's info")
+                            Log.d(TAG, "Hiker unregistered successfully")
                         }
                         .addOnFailureListener { e ->
-                            Log.w(TAG_STORAGE, e.message.toString())
+                            Log.w(TAG, e.message.toString())
                             //TODO handle
                         }
                 }
                 .addOnFailureListener { e ->
-                    Log.w(TAG_STORAGE, e.message.toString())
+                    Log.w(TAG, e.message.toString())
                     //TODO handle
                 }
 
             /*Also updates the event within the original tree*/
 
             EventFirebaseQueries.updateEvent(this.event!!)
-                .addOnSuccessListener {
-                    Log.d(TAG_STORAGE, "Event updated")
-                }
                 .addOnFailureListener { e ->
-                    Log.w(TAG_STORAGE, e.message.toString())
+                    Log.w(TAG, e.message.toString())
                 }
 
             /*And updates the hiker within the original tree*/
 
             HikerFirebaseQueries.createOrUpdateHiker(this.hiker!!)
-                .addOnSuccessListener {
-                    Log.d(TAG_STORAGE, "Hiker updated")
-                }
                 .addOnFailureListener { e ->
-                    Log.w(TAG_STORAGE, e.message.toString())
+                    Log.w(TAG, e.message.toString())
                 }
         }
     }

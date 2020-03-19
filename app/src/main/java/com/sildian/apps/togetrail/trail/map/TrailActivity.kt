@@ -34,10 +34,7 @@ class TrailActivity : BaseDataFlowActivity() {
     companion object{
 
         /**Logs**/
-        private const val TAG_ACTIVITY="TAG_ACTIVITY"
-        private const val TAG_MENU="TAG_MENU"
-        private const val TAG_FILE="TAG_FILE"
-        private const val TAG_STORAGE="TAG_STORAGE"
+        private const val TAG="TrailActivity"
 
         /**Fragments Ids***/
         private const val ID_FRAGMENT_TRAIL_DETAIL=1
@@ -74,7 +71,7 @@ class TrailActivity : BaseDataFlowActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG_ACTIVITY, "Activity '${javaClass.simpleName}' created")
+        Log.d(TAG, "Activity '${javaClass.simpleName}' created")
         setContentView(R.layout.activity_trail)
         loadData()
         initializeToolbar()
@@ -110,7 +107,7 @@ class TrailActivity : BaseDataFlowActivity() {
     /**Click on menu item from toolbar**/
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.d(TAG_MENU, "Menu '${item.title}' clicked")
+        Log.d(TAG, "Menu '${item.title}' clicked")
         if(item.groupId==R.id.menu_save){
             if(item.itemId==R.id.menu_save_save){
                 saveData()
@@ -160,19 +157,19 @@ class TrailActivity : BaseDataFlowActivity() {
             /*Handles exceptions*/
 
             catch(e:IOException){
-                Log.w(TAG_FILE, e.message.toString())
+                e.printStackTrace()
                 //TODO handle
             }
             catch(e:XmlPullParserException){
-                Log.w(TAG_FILE, e.message.toString())
+                e.printStackTrace()
                 //TODO handle
             }
             catch(e: TrailHelper.TrailBuildNoTrackException){
-                Log.w(TAG_FILE, e.message.toString())
+                e.printStackTrace()
                 //TODO handle
             }
             catch(e: TrailHelper.TrailBuildTooManyTracksException){
-                Log.w(TAG_FILE, e.message.toString())
+                e.printStackTrace()
                 //TODO handle
             }
         }
@@ -209,24 +206,24 @@ class TrailActivity : BaseDataFlowActivity() {
 
                     /*Once created, updates it with the created id*/
 
-                    Log.d(TAG_STORAGE, "Trail created in the database")
                     this.trail?.id=documentReference.id
+                    Log.d(TAG, "Trail '${this.trail?.id}' created in the database")
+
                     TrailFirebaseQueries.updateTrail(this.trail!!)
                         .addOnSuccessListener {
-                            Log.d(TAG_STORAGE, "Trail updated in the database")
                             progressDialog.dismiss()
                             //TODO show a snackbar when finished
                             finishOk()
                         }
                         .addOnFailureListener { e ->
-                            Log.w(TAG_STORAGE, e.message.toString())
+                            Log.w(TAG, e.message.toString())
                             progressDialog.dismiss()
                             //TODO handle
                             finishOk()
                         }
                 }
                 .addOnFailureListener { e ->
-                    Log.w(TAG_STORAGE, e.message.toString())
+                    Log.w(TAG, e.message.toString())
                     progressDialog.dismiss()
                     //TODO handle
                     finishCancel()
@@ -237,13 +234,13 @@ class TrailActivity : BaseDataFlowActivity() {
         }else{
             TrailFirebaseQueries.updateTrail(this.trail!!)
                 .addOnSuccessListener {
-                    Log.d(TAG_STORAGE, "Trail updated in the database")
+                    Log.d(TAG, "Trail '${this.trail?.id}' updated in the database")
                     progressDialog.dismiss()
                     //TODO show a snackbar when finished
                     finishOk()
                 }
                 .addOnFailureListener { e ->
-                    Log.w(TAG_STORAGE, e.message.toString())
+                    Log.w(TAG, e.message.toString())
                     progressDialog.dismiss()
                     //TODO handle
                     finishCancel()
@@ -347,7 +344,6 @@ class TrailActivity : BaseDataFlowActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.d(TAG_ACTIVITY, "Activity '$requestCode' resulted with $resultCode")
         when(requestCode) {
             KEY_REQUEST_LOAD_GPX -> handleLoadGpxResult(resultCode, data)
             KEY_REQUEST_EDIT_TRAIL_INFO -> handleTrailInfoEditResult(resultCode, data)

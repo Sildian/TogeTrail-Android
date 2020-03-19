@@ -26,7 +26,7 @@ class ProfileSettingsEditFragment(val hiker: Hiker?=null) : BaseDataFlowFragment
     companion object {
 
         /**Logs**/
-        private const val TAG_FRAGMENT = "TAG_FRAGMENT"
+        private const val TAG="ProfileSettingsEditFragment"
     }
 
     /**********************************UI component**********************************************/
@@ -40,7 +40,7 @@ class ProfileSettingsEditFragment(val hiker: Hiker?=null) : BaseDataFlowFragment
     /************************************Life cycle**********************************************/
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d(TAG_FRAGMENT, "Fragment '${javaClass.simpleName}' created")
+        Log.d(TAG, "Fragment '${javaClass.simpleName}' created")
         this.layout=inflater.inflate(R.layout.fragment_profile_settings_edit, container, false)
         initializeAllUIComponents()
         return this.layout

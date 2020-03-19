@@ -20,13 +20,21 @@ import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 
 class TrailMapDetailFragment : BaseTrailMapFragment() {
 
+    /**********************************Static items**********************************************/
+
+    companion object {
+
+        /**Logs**/
+        private const val TAG = "TrailMapDetailFragment"
+    }
+
     /**********************************UI component**********************************************/
 
     /************************************Life cycle**********************************************/
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
         super.onCreateView(inflater, container, savedInstanceState)
-        Log.d(TAG_FRAGMENT, "Fragment '${javaClass.simpleName}' created")
+        Log.d(TAG, "Fragment '${javaClass.simpleName}' created")
         return this.layout
     }
 
@@ -55,7 +63,7 @@ class TrailMapDetailFragment : BaseTrailMapFragment() {
     }
 
     override fun onMapClick(point: LatLng?) {
-        Log.d(TAG_MAP, "Click on map at point lat ${point?.latitude} lng ${point?.longitude}")
+        Log.d(TAG, "Clicked on map at point lat ${point?.latitude} lng ${point?.longitude}")
         hideInfoBottomSheet()
     }
 
@@ -65,26 +73,26 @@ class TrailMapDetailFragment : BaseTrailMapFragment() {
 
         return when(marker?.tag){
             is TrailPointOfInterest ->{
-                Log.d(TAG_MAP, "Click on marker (TrailPointOfInterest)")
+                Log.d(TAG, "Clicked on marker (TrailPointOfInterest)")
                 val trailPointOfInterest=marker.tag as TrailPointOfInterest
                 val trailPoiPosition=marker.snippet.toInt()
                 showTrailPOIInfoFragment(trailPointOfInterest, trailPoiPosition)
                 true
             }
             is TrailPoint ->{
-                Log.d(TAG_MAP, "Click on marker (TrailPoint)")
+                Log.d(TAG, "Clicked on marker (TrailPoint)")
                 showTrailInfoFragment()
                 true
             }
             else-> {
-                Log.w(TAG_MAP, "Click on marker (Unknown category)")
+                Log.w(TAG, "Clicked on marker (Unknown category)")
                 false
             }
         }
     }
 
     override fun onPolylineClick(polyline: Polyline?) {
-        Log.d(TAG_MAP, "Click on polyline")
+        Log.d(TAG, "Clicked on polyline")
         showTrailInfoFragment()
     }
 
