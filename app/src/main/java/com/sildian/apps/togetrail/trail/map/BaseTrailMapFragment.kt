@@ -118,6 +118,13 @@ abstract class BaseTrailMapFragment :
 
     /**********************************Data monitoring*******************************************/
 
+    /**Save data**/
+
+    override fun saveData(){
+        this.trail?.autoPopulateLatLng()
+        (activity as TrailActivity).saveTrail(this.trail)
+    }
+
     /**
      * Updates the current trail
      * @param trail : the trail
@@ -203,12 +210,6 @@ abstract class BaseTrailMapFragment :
 
     abstract fun onMapReadyActionsFinished()
 
-    /*********************************Data monitoring********************************************/
-
-    override fun saveData(){
-        (activity as TrailActivity).saveTrail(this.trail)
-    }
-
     /********************************Location monitoring*****************************************/
 
     private fun initializeUserLocation(){
@@ -236,22 +237,30 @@ abstract class BaseTrailMapFragment :
 
             /*Gets the first and the last trailPoints*/
 
-            val firstPoint=this.trail?.trailTrack!!.trailPoints.first()
-            val lastPoint=this.trail?.trailTrack!!.trailPoints.last()
+            val firstPoint=this.trail?.trailTrack?.getFirstTrailPoint()
+            val lastPoint=this.trail?.trailTrack?.getLastTrailPoint()
 
             /*Adds markers on the first and the last trailPoints*/
 
-            this.map?.addMarker(MarkerOptions()
-                .position(LatLng(firstPoint.latitude, firstPoint.longitude))
-                .icon(MapMarkersUtilities.createMapMarkerFromVector(
-                    context, R.drawable.ic_location_trail_map)))
-                ?.tag=firstPoint
+            if(firstPoint!=null) {
+                this.map?.addMarker(
+                    MarkerOptions()
+                        .position(LatLng(firstPoint.latitude, firstPoint.longitude))
+                        .icon(
+                            MapMarkersUtilities.createMapMarkerFromVector(
+                                context, R.drawable.ic_location_trail_map)))
+                    ?.tag = firstPoint
+            }
 
-            this.map?.addMarker(MarkerOptions()
-                .position(LatLng(lastPoint.latitude, lastPoint.longitude))
-                .icon(MapMarkersUtilities.createMapMarkerFromVector(
-                    context, R.drawable.ic_flag_map)))
-                ?.tag=lastPoint
+            if(lastPoint!=null) {
+                this.map?.addMarker(
+                    MarkerOptions()
+                        .position(LatLng(lastPoint.latitude, lastPoint.longitude))
+                        .icon(
+                            MapMarkersUtilities.createMapMarkerFromVector(
+                                context, R.drawable.ic_flag_map)))
+                    ?.tag = lastPoint
+            }
 
             /*Adds a marker for each trailPointOfInterest including its number*/
 

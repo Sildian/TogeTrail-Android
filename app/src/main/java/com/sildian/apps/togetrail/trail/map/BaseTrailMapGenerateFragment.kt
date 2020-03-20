@@ -56,15 +56,17 @@ abstract class BaseTrailMapGenerateFragment :
 
             /*Gets the last trailPoint*/
 
-            val lastPoint = this.trail?.trailTrack!!.trailPoints.last()
+            val lastPoint = this.trail?.trailTrack?.getLastTrailPoint()
 
             /*Moves the camera to the last point*/
 
-            this.map?.animateCamera(
-                CameraUpdateFactory.newLatLng(
-                    LatLng(lastPoint.latitude, lastPoint.longitude)
+            if(lastPoint!=null) {
+                this.map?.animateCamera(
+                    CameraUpdateFactory.newLatLng(
+                        LatLng(lastPoint.latitude, lastPoint.longitude)
+                    )
                 )
-            )
+            }
         }
     }
 
@@ -99,7 +101,7 @@ abstract class BaseTrailMapGenerateFragment :
 
             /*Removes the last trailPoint*/
 
-            val lastPoint = this.trail?.trailTrack?.trailPoints?.last()
+            val lastPoint = this.trail?.trailTrack?.getLastTrailPoint()
             this.trail?.trailTrack?.trailPoints?.remove(lastPoint)
 
             /*Checks if a trailPointOfInterest is attached and eventually removes it*/
@@ -135,26 +137,30 @@ abstract class BaseTrailMapGenerateFragment :
 
             /*Uses the last trailPoint to create a trailPointOfInterest*/
 
-            val lastPoint = this.trail?.trailTrack?.trailPoints?.last()!!
-            val trailPointOfInterest=
-                TrailPointOfInterest(
-                    lastPoint.latitude,
-                    lastPoint.longitude,
-                    lastPoint.elevation,
-                    lastPoint.time
-                )
-            this.trail?.trailTrack?.trailPointsOfInterest?.add(trailPointOfInterest)
+            val lastPoint = this.trail?.trailTrack?.getLastTrailPoint()
 
-            /*Then updates the track on the map*/
+            if(lastPoint!=null) {
 
-            this.map?.clear()
-            showTrailTrackOnMap()
+                val trailPointOfInterest =
+                    TrailPointOfInterest(
+                        lastPoint.latitude,
+                        lastPoint.longitude,
+                        lastPoint.elevation,
+                        lastPoint.time
+                    )
+                this.trail?.trailTrack?.trailPointsOfInterest?.add(trailPointOfInterest)
 
-            /*And shows the info fragment related to the trailPointOfInterest*/
+                /*Then updates the track on the map*/
 
-            val lastPoi=this.trail?.trailTrack?.trailPointsOfInterest?.last()!!
-            val lastPoiIndex=this.trail?.trailTrack?.trailPointsOfInterest?.indexOf(lastPoi)!!
-            showTrailPOIInfoFragment(lastPoi, lastPoiIndex)
+                this.map?.clear()
+                showTrailTrackOnMap()
+
+                /*And shows the info fragment related to the trailPointOfInterest*/
+
+                val lastPoi = this.trail?.trailTrack?.trailPointsOfInterest?.last()!!
+                val lastPoiIndex = this.trail?.trailTrack?.trailPointsOfInterest?.indexOf(lastPoi)!!
+                showTrailPOIInfoFragment(lastPoi, lastPoiIndex)
+            }
         }
     }
 

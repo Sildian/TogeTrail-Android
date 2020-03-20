@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.trail.model
+package com.sildian.apps.togetrail.trail.model.support
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
@@ -29,6 +29,8 @@ class TrailHelperTest {
         assertEquals("Test", trail.name)
         assertEquals("Sildian apps", trail.source)
         assertTrue(trail.trailTrack.trailPoints.size>0)
+        assertEquals(44.713993, trail.latitude)
+        assertEquals(4.330099, trail.longitude)
         assertEquals(642, trail.trailTrack.trailPoints[0].elevation)
         assertEquals(9, trail.trailTrack.trailPointsOfInterest.size)
         assertEquals("Point 1", trail.trailTrack.trailPointsOfInterest[0].name)

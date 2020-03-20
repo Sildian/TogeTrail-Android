@@ -104,6 +104,7 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
             this.townTextField.text.toString()
         )
         this.trail?.description=this.descriptionTextField.text.toString()
+        this.trail?.autoPopulateLatLng()
         (activity as TrailInfoEditActivity).saveTrail()
     }
 

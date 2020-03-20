@@ -268,8 +268,7 @@ class EventEditFragment(private val event: Event?=null) :
     /**Updates the event's latitude and longitude with the given trail**/
 
     private fun updateEventLatLng(trail:Trail){
-        val trailFirstPoint =trail.trailTrack.trailPoints.first()
-        this.event?.latitude=trailFirstPoint.latitude
-        this.event?.longitude=trailFirstPoint.longitude
+        this.event?.latitude=trail.latitude
+        this.event?.longitude=trail.longitude
     }
 }

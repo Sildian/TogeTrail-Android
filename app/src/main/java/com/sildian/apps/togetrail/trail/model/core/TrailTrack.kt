@@ -141,6 +141,24 @@ class TrailTrack(
     }
 
     /**
+     * Gets the first trailPoint, or null if the list is empty
+     * @return the trailPoint
+     */
+
+    fun getFirstTrailPoint():TrailPoint?{
+        return this.trailPoints.firstOrNull()
+    }
+
+    /**
+     * Gets the last trailPoint, or null if the list is empty
+     * @return the trailPoint
+     */
+
+    fun getLastTrailPoint():TrailPoint?{
+        return this.trailPoints.lastOrNull()
+    }
+
+    /**
      * Finds a trailPointOfInterest matching the latitude and longitude of the given trailPoint
      * @param trailPoint : the given trailPoint
      * @return the index of the resulted trailPointOfInterest, or null if no one matches

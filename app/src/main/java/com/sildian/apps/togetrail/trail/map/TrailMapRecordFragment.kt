@@ -254,7 +254,7 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
 
     private fun checkMinDistanceToPreviousPointIsFulfilled(trailPoint: TrailPoint):Boolean{
         return if(!this.trail?.trailTrack?.trailPoints.isNullOrEmpty()) {
-            val previousPoint = this.trail?.trailTrack?.trailPoints?.last()
+            val previousPoint = this.trail?.trailTrack?.getLastTrailPoint()
             if (previousPoint != null) {
                 val pointA = LatLng(trailPoint.latitude, trailPoint.longitude)
                 val pointB = LatLng(previousPoint.latitude, previousPoint.longitude)

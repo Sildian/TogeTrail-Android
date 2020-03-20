@@ -1,9 +1,6 @@
-package com.sildian.apps.togetrail.trail.model
+package com.sildian.apps.togetrail.trail.model.core
 
 import com.sildian.apps.togetrail.common.utils.DateUtilities
-import com.sildian.apps.togetrail.trail.model.core.TrailPoint
-import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
-import com.sildian.apps.togetrail.trail.model.core.TrailTrack
 import org.junit.Test
 import org.junit.Assert.*
 import org.junit.Before
@@ -77,6 +74,22 @@ class TrailTrackTest {
     @Test
     fun given_trailPoint1_when_findTrailPointOfInterest_then_checkResultIsNull(){
         assertNull(this.trailTrack.findTrailPointOfInterest(this.trailTrack.trailPoints[0]))
+    }
+
+    @Test
+    fun given_nothing_when_getFirstPoint_then_checkLatLng(){
+        val firstPoint=this.trailTrack.getFirstTrailPoint()
+        assertNotNull(firstPoint)
+        assertEquals(44.713398, firstPoint?.latitude)
+        assertEquals(4.331021, firstPoint?.longitude)
+    }
+
+    @Test
+    fun given_nothing_when_getLastPoint_then_checkLatLng(){
+        val lastPoint=this.trailTrack.getLastTrailPoint()
+        assertNotNull(lastPoint)
+        assertEquals(44.708152, lastPoint?.latitude)
+        assertEquals(4.338279, lastPoint?.longitude)
     }
 
     @Test

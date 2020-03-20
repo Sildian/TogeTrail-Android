@@ -14,6 +14,8 @@ data class Trail (
     var id:String?=null,
     var name:String?=null,
     val source:String="",
+    var latitude:Double?=null,
+    var longitude:Double?=null,
     var location: Location = Location(),
     var description:String?=null,
     val creationDate:Date=Date(),
@@ -29,20 +31,17 @@ data class Trail (
     var descent:Int?=null,
     var maxElevation:Int?=null,
     var minElevation:Int?=null,
-    var authorId:String?=null,
-    val autoCalculateMetrics:Boolean=false      //TODO reset it to false when stored into Firebase
+    var authorId:String?=null
 )
     :Parcelable
 {
-    /**Init**/
 
-    init{
+    /**Populates the latitude and longitude with the first trailPoint's coordinates**/
 
-        /*Auto-calculates metrics only if it is asked in the constructor*/
-
-        if(this.autoCalculateMetrics) {
-            autoCalculateMetrics()
-        }
+    fun autoPopulateLatLng(){
+        val firstPoint=this.trailTrack.getFirstTrailPoint()
+        this.latitude=firstPoint?.latitude
+        this.longitude=firstPoint?.longitude
     }
 
     /**Calculates all metrics from the trailTrack info**/

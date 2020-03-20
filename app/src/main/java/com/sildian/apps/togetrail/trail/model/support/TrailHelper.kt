@@ -115,14 +115,17 @@ object TrailHelper {
             )
         }
 
-        /*Then return the Trail*/
+        /*Creates the trail and auto-calculates the metrics*/
 
-        return Trail(
+        val trail= Trail(
             name = name,
             source = source,
             description = description,
-            trailTrack = trailTrack,
-            autoCalculateMetrics = true
+            trailTrack = trailTrack
         )
+        trail.autoPopulateLatLng()
+        trail.autoCalculateMetrics()
+
+        return trail
     }
 }

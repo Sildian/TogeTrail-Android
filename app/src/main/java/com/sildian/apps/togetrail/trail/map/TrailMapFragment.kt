@@ -126,15 +126,18 @@ class TrailMapFragment (
 
     private fun showTrailsOnMap(){
 
-        /*For each trail in the list, shows a marker at the first trailPoint's location*/
+        /*For each trail in the list, shows a marker*/
 
         this.trails.forEach { trail ->
-            val firstPoint=trail.trailTrack.trailPoints.first()
-            this.map?.addMarker(MarkerOptions()
-                .position(LatLng(firstPoint.latitude, firstPoint.longitude))
-                .icon(MapMarkersUtilities.createMapMarkerFromVector(
-                    context, R.drawable.ic_location_trail_map)))
-                ?.tag=trail
+            if(trail.latitude!=null && trail.longitude!=null) {
+                this.map?.addMarker(
+                    MarkerOptions()
+                        .position(LatLng(trail.latitude!!, trail.longitude!!))
+                        .icon(
+                            MapMarkersUtilities.createMapMarkerFromVector(
+                                context, R.drawable.ic_location_trail_map)))
+                    ?.tag = trail
+            }
         }
     }
 
@@ -153,14 +156,16 @@ class TrailMapFragment (
         /*For each event in the list, shows a marker*/
 
         this.events.forEach { event ->
-            if(event.latitude!=null&&event.longitude!=null) {
-                this.map?.addMarker(
-                    MarkerOptions()
-                        .position(LatLng(event.latitude!!, event.longitude!!))
-                        .icon(
-                            MapMarkersUtilities.createMapMarkerFromVector(
-                                context, R.drawable.ic_location_event_map)))
-                    ?.tag = event
+            if(event.latitude!=null && event.longitude!=null) {
+                if (event.latitude != null && event.longitude != null) {
+                    this.map?.addMarker(
+                        MarkerOptions()
+                            .position(LatLng(event.latitude!!, event.longitude!!))
+                            .icon(
+                                MapMarkersUtilities.createMapMarkerFromVector(
+                                    context, R.drawable.ic_location_event_map)))
+                        ?.tag = event
+                }
             }
         }
     }
