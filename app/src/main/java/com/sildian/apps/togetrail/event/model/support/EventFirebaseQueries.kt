@@ -1,8 +1,10 @@
 package com.sildian.apps.togetrail.event.model.support
 
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
 import com.sildian.apps.togetrail.common.model.Location
+import com.sildian.apps.togetrail.common.utils.GeoUtilities
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.trail.model.core.Trail
@@ -65,16 +67,33 @@ object EventFirebaseQueries {
                     .whereEqualTo(FieldPath.of("location", "country"), location.country)
                     .whereEqualTo(FieldPath.of("location", "region"), location.region)
                     .whereGreaterThan("beginDate", Date())
-                    .orderBy("beginDate", Query.Direction.DESCENDING)
+                    .orderBy("beginDate", Query.Direction.ASCENDING)
             }
             !location.country.isNullOrEmpty() -> {
                 getCollection()
                     .whereEqualTo(FieldPath.of("location", "country"), location.country)
                     .whereGreaterThan("beginDate", Date())
-                    .orderBy("beginDate", Query.Direction.DESCENDING)
+                    .orderBy("beginDate", Query.Direction.ASCENDING)
             }
             else -> null
         }
+
+    /**
+     * Gets the future events around a point, using bounds to calculate the area limitations
+     * @param point : the origin point
+     * @return a query
+     */
+
+    fun getEventsAroundPoint(point: LatLng):Query{
+        val bounds= GeoUtilities.getBoundsAroundOriginPoint(point)
+        val minGeoPoint=GeoPoint(bounds.southwest.latitude, bounds.southwest.longitude)
+        val maxGeoPoint=GeoPoint(bounds.northeast.latitude, bounds.northeast.longitude)
+        return getCollection()
+            .whereGreaterThanOrEqualTo("position", minGeoPoint)
+            .whereLessThanOrEqualTo("position", maxGeoPoint)
+            .orderBy("position")
+            .orderBy("beginDate", Query.Direction.ASCENDING)
+    }
 
     /**
      * Gets a given event

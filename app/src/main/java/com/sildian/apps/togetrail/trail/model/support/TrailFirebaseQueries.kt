@@ -1,8 +1,10 @@
 package com.sildian.apps.togetrail.trail.model.support
 
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
 import com.sildian.apps.togetrail.common.model.Location
+import com.sildian.apps.togetrail.common.utils.GeoUtilities
 import com.sildian.apps.togetrail.trail.model.core.Trail
 
 /*************************************************************************************************
@@ -70,6 +72,23 @@ object TrailFirebaseQueries {
             }
             else -> null
         }
+
+    /**
+     * Gets the trails around a point, using bounds to calculate the area limitations
+     * @param point : the origin point
+     * @return a query
+     */
+
+    fun getTrailsAroundPoint(point: LatLng):Query{
+        val bounds=GeoUtilities.getBoundsAroundOriginPoint(point)
+        val minGeoPoint=GeoPoint(bounds.southwest.latitude, bounds.southwest.longitude)
+        val maxGeoPoint=GeoPoint(bounds.northeast.latitude, bounds.northeast.longitude)
+        return getCollection()
+            .whereGreaterThanOrEqualTo("position", minGeoPoint)
+            .whereLessThanOrEqualTo("position", maxGeoPoint)
+            .orderBy("position")
+            .orderBy("creationDate", Query.Direction.DESCENDING)
+    }
 
     /**
      * Gets a given trail

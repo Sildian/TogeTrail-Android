@@ -51,6 +51,8 @@
     <string name="button_event_add_trails">Ajouter des randos</string>
     <string name="button_event_register_user">M\'inscrire</string>
     <string name="button_event_unregister_user">Me désinscrire</string>
+    <!-- Search -->
+    <string name="button_search_in_area">Rechercher dans cette zone</string>
 
     <!-- Labels -->
     <!-- Common -->

@@ -14,6 +14,7 @@ import com.sildian.apps.togetrail.common.utils.MapMarkersUtilities
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.main.MainActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
+import kotlinx.android.synthetic.main.fragment_trail_map.view.*
 
 /*************************************************************************************************
  * Shows the list of trails on a map, and also the list of events
@@ -38,11 +39,14 @@ class TrailMapFragment (
 
     /**********************************UI component**********************************************/
 
+    private val searchButton by lazy {layout.fragment_trail_map_button_search}
+
     /************************************Life cycle**********************************************/
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
         super.onCreateView(inflater, container, savedInstanceState)
         Log.d(TAG, "Fragment '${javaClass.simpleName}' created")
+        initializeSearchButton()
         return this.layout
     }
 
@@ -78,6 +82,17 @@ class TrailMapFragment (
 
     override fun disableUI() {
         this.map?.uiSettings?.setAllGesturesEnabled(false)
+    }
+
+    private fun initializeSearchButton(){
+        this.searchButton.setOnClickListener {
+            val point=this.map?.cameraPosition?.target
+            if(point!=null) {
+                (activity as MainActivity).setQueriesToSearchAroundPoint(point)
+                (activity as MainActivity).loadTrails(this::handleTrailsQueryResult)
+                (activity as MainActivity).loadEvents(this::handleEventsQueryResult)
+            }
+        }
     }
 
     /***********************************Map monitoring*******************************************/
@@ -129,10 +144,10 @@ class TrailMapFragment (
         /*For each trail in the list, shows a marker*/
 
         this.trails.forEach { trail ->
-            if(trail.latitude!=null && trail.longitude!=null) {
+            if(trail.position!=null) {
                 this.map?.addMarker(
                     MarkerOptions()
-                        .position(LatLng(trail.latitude!!, trail.longitude!!))
+                        .position(LatLng(trail.position!!.latitude, trail.position!!.longitude))
                         .icon(
                             MapMarkersUtilities.createMapMarkerFromVector(
                                 context, R.drawable.ic_location_trail_map)))
@@ -156,16 +171,14 @@ class TrailMapFragment (
         /*For each event in the list, shows a marker*/
 
         this.events.forEach { event ->
-            if(event.latitude!=null && event.longitude!=null) {
-                if (event.latitude != null && event.longitude != null) {
-                    this.map?.addMarker(
-                        MarkerOptions()
-                            .position(LatLng(event.latitude!!, event.longitude!!))
-                            .icon(
-                                MapMarkersUtilities.createMapMarkerFromVector(
-                                    context, R.drawable.ic_location_event_map)))
-                        ?.tag = event
-                }
+            if(event.position!=null) {
+                this.map?.addMarker(
+                    MarkerOptions()
+                        .position(LatLng(event.position!!.latitude, event.position!!.longitude))
+                        .icon(
+                            MapMarkersUtilities.createMapMarkerFromVector(
+                                context, R.drawable.ic_location_event_map)))
+                    ?.tag = event
             }
         }
     }

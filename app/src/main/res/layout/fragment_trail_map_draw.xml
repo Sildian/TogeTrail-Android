@@ -22,7 +22,7 @@
         android:visibility="gone">
 
         <com.google.android.material.button.MaterialButton
-            style="@style/MapButtonStyle"
+            style="@style/MapButtonLeftStyle"
             android:id="@+id/fragment_trail_map_draw_button_point_remove"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
             android:text="@string/button_trail_point_remove" />
 
         <com.google.android.material.button.MaterialButton
-            style="@style/MapButtonStyle"
+            style="@style/MapButtonLeftStyle"
             android:id="@+id/fragment_trail_map_draw_button_poi_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

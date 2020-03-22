@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.sildian.apps.togetrail.R
@@ -80,6 +81,11 @@ class MainActivity :
     private var currentHiker: Hiker?=null               //The current hiker connected to the app
     private val trails= arrayListOf<Trail>()            //The list of trails to display
     private val events= arrayListOf<Event>()            //The list of events to display
+
+    /*************************************Queries************************************************/
+
+    private var trailsQuery=TrailFirebaseQueries.getLastTrails()    //The current query used to fetch trails
+    private var eventsQuery=EventFirebaseQueries.getNextEvents()    //The current query used to fetch events
 
     /**********************************UI component**********************************************/
 
@@ -277,7 +283,7 @@ class MainActivity :
 
         //TODO add a progress bar
         
-        TrailFirebaseQueries.getLastTrails()
+        this.trailsQuery
             .addSnapshotListener { querySnapshot, e ->
 
                 /*If the query is a success, displays the results*/
@@ -311,7 +317,7 @@ class MainActivity :
 
         //TODO add a progress bar
 
-        EventFirebaseQueries.getNextEvents()
+        this.eventsQuery
             .addSnapshotListener { querySnapshot, e ->
 
                 /*If the query is a success, displays the results*/
@@ -334,6 +340,16 @@ class MainActivity :
                     Log.w(TAG, e.message.toString())
                 }
             }
+    }
+
+    /**
+     * Sets the queries to search results around the given point
+     * @param point : the origin point
+     */
+
+    fun setQueriesToSearchAroundPoint(point: LatLng){
+        this.trailsQuery=TrailFirebaseQueries.getTrailsAroundPoint(point)
+        this.eventsQuery=EventFirebaseQueries.getEventsAroundPoint(point)
     }
 
     /***********************************Trails monitoring****************************************/

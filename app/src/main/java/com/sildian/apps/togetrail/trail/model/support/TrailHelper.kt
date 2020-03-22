@@ -5,7 +5,6 @@ import com.sildian.apps.togetrail.trail.model.core.TrailPoint
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 import com.sildian.apps.togetrail.trail.model.core.TrailTrack
 import io.ticofab.androidgpxparser.parser.domain.Gpx
-import java.util.*
 
 /*************************************************************************************************
  * Provides with functions allowing to build a Trail
@@ -123,7 +122,7 @@ object TrailHelper {
             description = description,
             trailTrack = trailTrack
         )
-        trail.autoPopulateLatLng()
+        trail.autoPopulatePosition()
         trail.autoCalculateMetrics()
 
         return trail

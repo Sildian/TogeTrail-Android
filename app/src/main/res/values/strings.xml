@@ -52,6 +52,8 @@
     <string name="button_event_add_trails">Add trails</string>
     <string name="button_event_register_user">Register</string>
     <string name="button_event_unregister_user">Unregister</string>
+    <!-- Search -->
+    <string name="button_search_in_area">Search within this area</string>
 
     <!-- Labels -->
     <!-- Common -->

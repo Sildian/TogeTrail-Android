@@ -12,7 +12,7 @@ import kotlinx.android.parcel.Parcelize
  ************************************************************************************************/
 
 @Parcelize
-class TrailTrack(
+data class TrailTrack(
     val trailPoints:ArrayList<TrailPoint> = arrayListOf(),
     val trailPointsOfInterest:ArrayList<TrailPointOfInterest> = arrayListOf()
 )

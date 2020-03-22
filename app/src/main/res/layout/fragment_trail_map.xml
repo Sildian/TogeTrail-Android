@@ -11,6 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <com.google.android.material.button.MaterialButton
+        style="@style/MapButtonStyle"
+        android:id="@+id/fragment_trail_map_button_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/components_margin_medium"
+        android:layout_gravity="top|center_horizontal"
+        android:text="@string/button_search_in_area"
+        app:icon="@drawable/ic_search_white" />
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

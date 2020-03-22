@@ -121,7 +121,7 @@ abstract class BaseTrailMapFragment :
     /**Save data**/
 
     override fun saveData(){
-        this.trail?.autoPopulateLatLng()
+        this.trail?.autoPopulatePosition()
         (activity as TrailActivity).saveTrail(this.trail)
     }
 

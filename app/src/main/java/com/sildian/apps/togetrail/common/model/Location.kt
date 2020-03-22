@@ -33,4 +33,24 @@ open class Location (
 
         return fullLocation.toString()
     }
+
+    /**Data override**/
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Location) return false
+
+        if (country != other.country) return false
+        if (region != other.region) return false
+        if (town != other.town) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = country?.hashCode() ?: 0
+        result = 31 * result + (region?.hashCode() ?: 0)
+        result = 31 * result + (town?.hashCode() ?: 0)
+        return result
+    }
 }

@@ -229,7 +229,7 @@ class EventEditFragment(private val event: Event?=null) :
 
         /*Updates the event's latitude and longitude*/
 
-        updateEventLatLng(trail)
+        updateEventPosition(trail)
 
         /*If the event has no id yet, updates the offline adapter. Else updates the attached trail in the database*/
 
@@ -265,10 +265,9 @@ class EventEditFragment(private val event: Event?=null) :
         }
     }
 
-    /**Updates the event's latitude and longitude with the given trail**/
+    /**Updates the event's position with the given trail**/
 
-    private fun updateEventLatLng(trail:Trail){
-        this.event?.latitude=trail.latitude
-        this.event?.longitude=trail.longitude
+    private fun updateEventPosition(trail:Trail){
+        this.event?.position=trail.position
     }
 }

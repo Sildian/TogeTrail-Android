@@ -36,4 +36,28 @@ class FineLocation(
 
         return fullLocation.toString()
     }
+
+    /**Data override**/
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is FineLocation) return false
+        if (!super.equals(other)) return false
+
+        if (country != other.country) return false
+        if (region != other.region) return false
+        if (town != other.town) return false
+        if (address != other.address) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + (country?.hashCode() ?: 0)
+        result = 31 * result + (region?.hashCode() ?: 0)
+        result = 31 * result + (town?.hashCode() ?: 0)
+        result = 31 * result + (address?.hashCode() ?: 0)
+        return result
+    }
 }
