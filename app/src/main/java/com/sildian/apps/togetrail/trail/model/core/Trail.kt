@@ -3,7 +3,7 @@ package com.sildian.apps.togetrail.trail.model.core
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.firebase.firestore.GeoPoint
-import com.sildian.apps.togetrail.common.model.Location
+import com.sildian.apps.togetrail.location.model.core.Location
 import kotlinx.android.parcel.Parceler
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.parcel.RawValue

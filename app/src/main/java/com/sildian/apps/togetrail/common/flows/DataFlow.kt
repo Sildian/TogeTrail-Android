@@ -10,6 +10,10 @@ interface DataFlow {
 
     fun loadData()
 
+    /**Triggered when data need to be updated**/
+
+    fun updateData()
+
     /**Triggered when data need to be saved**/
 
     fun saveData()

@@ -195,7 +195,7 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
     }
 
     private fun initializeLocationText(){
-        val location=this.trail?.location?.getFullLocation()
+        val location=this.trail?.location?.fullAddress
         if(!location.isNullOrEmpty()){
             this.locationText.text=location
         }else{

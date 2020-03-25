@@ -123,7 +123,7 @@ class EventFragment(
     }
 
     private fun updateMeetingPointText(){
-        this.meetingPointText.text=this.event?.meetingPoint?.getFullLocation()
+        this.meetingPointText.text=this.event?.meetingPoint?.fullAddress
     }
 
     private fun updateRegisteredHikersText(){

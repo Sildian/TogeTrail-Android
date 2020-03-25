@@ -1,7 +1,7 @@
 package com.sildian.apps.togetrail.hiker.model.core
 
 import android.os.Parcelable
-import com.sildian.apps.togetrail.common.model.Location
+import com.sildian.apps.togetrail.location.model.core.Location
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 import kotlin.math.floor
@@ -17,7 +17,7 @@ data class Hiker (
     var name:String?=null,
     var photoUrl:String?=null,
     var birthday: Date?=null,
-    var liveLocation:Location=Location(),
+    var liveLocation: Location = Location(),
     var description:String?=null,
     val registrationDate:Date=Date(),
     /*Extra info*/

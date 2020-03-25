@@ -15,6 +15,8 @@ import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
 import com.sildian.apps.togetrail.event.model.support.EventHelper
+import com.sildian.apps.togetrail.location.model.core.Location
+import com.sildian.apps.togetrail.location.search.LocationSearchActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import kotlinx.android.synthetic.main.activity_event_edit.*
 
@@ -33,6 +35,9 @@ class EventEditActivity : BaseDataFlowActivity() {
 
         /**Bundle keys for intents**/
         const val KEY_BUNDLE_EVENT="KEY_BUNDLE_EVENT"
+
+        /**Request keys for intents**/
+        private const val KEY_REQUEST_LOCATION_SEARCH=1001
     }
 
     /****************************************Data************************************************/
@@ -213,6 +218,17 @@ class EventEditActivity : BaseDataFlowActivity() {
         supportActionBar?.setTitle(R.string.toolbar_event)
     }
 
+    /*******************************Location monitoring******************************************/
+
+    fun searchLocation(){
+        startLocationSearchActivity()
+    }
+
+    private fun updateMeetingPoint(location: Location){
+        this.event?.meetingPoint=location
+        this.fragment.updateData()
+    }
+
     /******************************Fragments monitoring******************************************/
 
     /**
@@ -226,6 +242,22 @@ class EventEditActivity : BaseDataFlowActivity() {
     }
 
     /*************************************Navigation*********************************************/
+
+    private fun startLocationSearchActivity(){
+        val locationSearchActivityIntent=Intent(this, LocationSearchActivity::class.java)
+        locationSearchActivityIntent.putExtra(LocationSearchActivity.KEY_BUNDLE_FINE_RESEARCH, true)
+        startActivityForResult(locationSearchActivityIntent, KEY_REQUEST_LOCATION_SEARCH)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode== KEY_REQUEST_LOCATION_SEARCH){
+            if(data!=null&&data.hasExtra(LocationSearchActivity.KEY_BUNDLE_LOCATION)){
+                val location=data.getParcelableExtra<Location>(LocationSearchActivity.KEY_BUNDLE_LOCATION)
+                updateMeetingPoint(location)
+            }
+        }
+    }
 
     private fun finishOk(){
         val resultIntent=Intent()

@@ -8,8 +8,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
-import com.sildian.apps.togetrail.common.model.FineLocation
-import com.sildian.apps.togetrail.common.model.Location
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.RecyclerViewFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
@@ -57,10 +55,7 @@ class EventEditFragment(private val event: Event?=null) :
     private lateinit var attachedTrailsAdapter:TrailHorizontalAdapter
     private lateinit var attachedTrailsAdapterOffline:TrailHorizontalAdapterOffline
     private val addTrailsButton by lazy {layout.fragment_event_edit_button_add_trails}
-    private val countryTextField by lazy {layout.fragment_event_edit_text_field_country}
-    private val regionTextField by lazy {layout.fragment_event_edit_text_field_region}
-    private val townTextField by lazy {layout.fragment_event_edit_text_field_town}
-    private val addressTextField by lazy {layout.fragment_event_edit_text_field_address}
+    private val meetingPointTextField by lazy {layout.fragment_event_edit_text_field_meeting_point}
     private val descriptionTextField by lazy {layout.fragment_event_edit_text_field_description}
 
     /************************************Life cycle**********************************************/
@@ -74,20 +69,13 @@ class EventEditFragment(private val event: Event?=null) :
 
     /*********************************Data monitoring********************************************/
 
+    override fun updateData() {
+        initializeAllUIComponents()
+    }
+
     override fun saveData() {
         this.event?.name=this.nameTextField.text.toString()
         updateDates()
-        this.event?.location= Location(
-            this.countryTextField.text.toString(),
-            this.regionTextField.text.toString(),
-            this.townTextField.text.toString()
-        )
-        this.event?.meetingPoint= FineLocation(
-            this.countryTextField.text.toString(),
-            this.regionTextField.text.toString(),
-            this.townTextField.text.toString(),
-            this.addressTextField.text.toString()
-        )
         this.event?.description=this.descriptionTextField.text.toString()
         if(this.event?.id==null){
             (activity as EventEditActivity).updateAttachedTrailsToUpdate(this.attachedTrails)
@@ -105,10 +93,7 @@ class EventEditFragment(private val event: Event?=null) :
         initializeEndTimeTextField()
         initializeAttachedTrailsRecyclerView()
         initializeAddTrailsButton()
-        initializeCountryTextField()
-        initializeRegionTextField()
-        initializeTownTextField()
-        initializeAddressTextField()
+        initializeMeetingPointTextField()
         initializeDescriptionTextField()
     }
 
@@ -170,20 +155,11 @@ class EventEditFragment(private val event: Event?=null) :
         }
     }
 
-    private fun initializeCountryTextField(){
-        this.countryTextField.setText(this.event?.meetingPoint?.country)
-    }
-
-    private fun initializeRegionTextField(){
-        this.regionTextField.setText(this.event?.meetingPoint?.region)
-    }
-
-    private fun initializeTownTextField(){
-        this.townTextField.setText(this.event?.meetingPoint?.town)
-    }
-
-    private fun initializeAddressTextField(){
-        this.addressTextField.setText(this.event?.meetingPoint?.address)
+    private fun initializeMeetingPointTextField(){
+        this.meetingPointTextField.setText(this.event?.meetingPoint?.fullAddress)
+        this.meetingPointTextField.setOnClickListener {
+            (activity as EventEditActivity).searchLocation()
+        }
     }
 
     private fun initializeDescriptionTextField(){

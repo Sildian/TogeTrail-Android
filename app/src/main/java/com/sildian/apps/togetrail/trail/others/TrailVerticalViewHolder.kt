@@ -105,6 +105,6 @@ class TrailVerticalViewHolder (
     }
 
     private fun updateLocationText(){
-        this.locationText.text=this.trail.location.getFullLocation()
+        this.locationText.text=this.trail.location.fullAddress
     }
 }

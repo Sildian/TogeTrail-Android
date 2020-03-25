@@ -12,6 +12,10 @@ abstract class BaseDataFlowActivity : AppCompatActivity(), DataFlow {
         //Nothing here, override in children
     }
 
+    override fun updateData() {
+        //Nothing here, override in children
+    }
+
     override fun saveData() {
         //Nothing here, override in children
     }

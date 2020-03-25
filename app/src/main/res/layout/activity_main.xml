@@ -20,12 +20,42 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/activity_main_toolbar"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:theme="@style/ToolbarTheme"
-                android:minHeight="?attr/actionBarSize" />
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/activity_main_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/ToolbarTheme"
+                    android:minHeight="?attr/actionBarSize" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/components_margin_small"
+                    android:layout_marginBottom="@dimen/components_margin_small"
+                    android:layout_marginStart="@dimen/components_margin_enormous"
+                    android:layout_marginEnd="@dimen/components_margin_enormous"
+                    android:layout_gravity="center"
+                    app:cardCornerRadius="@dimen/components_corner_small">
+
+                    <EditText
+                        android:id="@+id/activity_main_text_field_research"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/components_margin_small"
+                        android:layout_marginEnd="@dimen/components_margin_small"
+                        android:hint="@string/label_location_search"
+                        android:inputType="textCapSentences"
+                        android:drawableStart="@drawable/ic_search_black"
+                        android:drawablePadding="@dimen/components_margin_small"
+                        android:focusable="false"/>
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </FrameLayout>
 
         </com.google.android.material.appbar.AppBarLayout>
 

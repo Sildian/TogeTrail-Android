@@ -10,11 +10,13 @@ import androidx.appcompat.app.AlertDialog
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowActivity
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
+import com.sildian.apps.togetrail.location.search.LocationSearchActivity
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.ImageStorageFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.UserFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
+import com.sildian.apps.togetrail.location.model.core.Location
 import kotlinx.android.synthetic.main.activity_profile_edit.*
 
 /*************************************************************************************************
@@ -41,6 +43,9 @@ class ProfileEditActivity : BaseDataFlowActivity() {
         /**Bundle keys for intents**/
         const val KEY_BUNDLE_PROFILE_ACTION="KEY_BUNDLE_PROFILE_ACTION"
         const val KEY_BUNDLE_HIKER="KEY_BUNDLE_HIKER"
+
+        /**Request keys for intents**/
+        private const val KEY_REQUEST_LOCATION_SEARCH=1001
     }
 
     /****************************************Data************************************************/
@@ -312,6 +317,17 @@ class ProfileEditActivity : BaseDataFlowActivity() {
         }
     }
 
+    /*******************************Location monitoring******************************************/
+
+    fun searchLocation(){
+        startLocationSearchActivity()
+    }
+
+    private fun updateLiveLocation(location: Location){
+        this.hiker?.liveLocation=location
+        this.fragment.updateData()
+    }
+
     /******************************Fragments monitoring******************************************/
 
     /**
@@ -331,6 +347,21 @@ class ProfileEditActivity : BaseDataFlowActivity() {
     }
 
     /*************************************Navigation*********************************************/
+
+    private fun startLocationSearchActivity(){
+        val locationSearchActivityIntent=Intent(this, LocationSearchActivity::class.java)
+        startActivityForResult(locationSearchActivityIntent, KEY_REQUEST_LOCATION_SEARCH)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode== KEY_REQUEST_LOCATION_SEARCH){
+            if(data!=null&&data.hasExtra(LocationSearchActivity.KEY_BUNDLE_LOCATION)){
+                val location=data.getParcelableExtra<Location>(LocationSearchActivity.KEY_BUNDLE_LOCATION)
+                updateLiveLocation(location)
+            }
+        }
+    }
 
     private fun finishOk(){
         val resultIntent=Intent()

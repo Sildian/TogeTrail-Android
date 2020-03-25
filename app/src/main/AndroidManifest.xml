@@ -19,8 +19,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".event.detail.EventActivity"
+            android:name="com.sildian.apps.togetrail.location.search.LocationSearchActivity"
             android:configChanges="orientation|screenSize"/>
+        <activity
+            android:name=".event.detail.EventActivity"
+            android:configChanges="orientation|screenSize" />
         <activity
             android:name=".event.edit.EventEditActivity"
             android:configChanges="orientation|screenSize" />

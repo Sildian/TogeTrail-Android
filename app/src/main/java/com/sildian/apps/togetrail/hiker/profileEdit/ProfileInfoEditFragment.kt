@@ -14,7 +14,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
-import com.sildian.apps.togetrail.common.model.Location
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.utils.uiHelpers.PickerHelper
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
@@ -53,9 +52,7 @@ class ProfileInfoEditFragment(val hiker: Hiker?=null) : BaseDataFlowFragment()
     private val takePhotoButton by lazy {layout.fragment_profile_info_edit_button_take_photo}
     private val nameTextField by lazy {layout.fragment_profile_info_edit_text_field_name}
     private val birthdayTextFieldDropdown by lazy {layout.fragment_profile_info_edit_text_field_dropdown_birthday}
-    private val countryTextField by lazy {layout.fragment_profile_info_edit_text_field_country}
-    private val regionTextField by lazy {layout.fragment_profile_info_edit_text_field_region}
-    private val townTextField by lazy {layout.fragment_profile_info_edit_text_field_town}
+    private val liveLocationTextField by lazy {layout.fragment_profile_info_edit_text_field_live_location}
     private val descriptionTextField by lazy {layout.fragment_profile_info_edit_text_field_description}
 
     /**********************************Pictures support******************************************/
@@ -75,17 +72,16 @@ class ProfileInfoEditFragment(val hiker: Hiker?=null) : BaseDataFlowFragment()
 
     /*****************************************Data***********************************************/
 
+    override fun updateData() {
+        initializeAllUIComponents()
+    }
+
     override fun saveData() {
         this.hiker?.name=this.nameTextField.text.toString()
         this.hiker?.birthday=
             if(!this.birthdayTextFieldDropdown.text.isNullOrEmpty())
                 DateUtilities.getDateFromString(this.birthdayTextFieldDropdown.text.toString())
             else null
-        this.hiker?.liveLocation=
-            Location(
-                this.countryTextField.text.toString(),
-                this.regionTextField.text.toString(),
-                this.townTextField.text.toString())
         this.hiker?.description=this.descriptionTextField.text.toString()
         (activity as ProfileEditActivity).saveHiker()
     }
@@ -97,9 +93,7 @@ class ProfileInfoEditFragment(val hiker: Hiker?=null) : BaseDataFlowFragment()
         initializeTakePhotoButton()
         initializeNameTextField()
         initializeBirthdayTextFieldDropdown()
-        initializeCountryTextField()
-        initializeRegionTextField()
-        initializeTownTextField()
+        initializeLiveLocationTextField()
         initializeDescriptionTextField()
         updatePhoto()
     }
@@ -125,16 +119,11 @@ class ProfileInfoEditFragment(val hiker: Hiker?=null) : BaseDataFlowFragment()
             this.birthdayTextFieldDropdown, activity as AppCompatActivity, this.hiker?.birthday)
     }
 
-    private fun initializeCountryTextField(){
-        this.countryTextField.setText(this.hiker?.liveLocation?.country)
-    }
-
-    private fun initializeRegionTextField(){
-        this.regionTextField.setText(this.hiker?.liveLocation?.region)
-    }
-
-    private fun initializeTownTextField(){
-        this.townTextField.setText(this.hiker?.liveLocation?.town)
+    private fun initializeLiveLocationTextField(){
+        this.liveLocationTextField.setText(this.hiker?.liveLocation?.fullAddress)
+        this.liveLocationTextField.setOnClickListener {
+            (activity as ProfileEditActivity).searchLocation()
+        }
     }
 
     private fun initializeDescriptionTextField(){

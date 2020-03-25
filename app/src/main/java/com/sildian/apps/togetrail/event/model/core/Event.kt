@@ -3,8 +3,7 @@ package com.sildian.apps.togetrail.event.model.core
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.firebase.firestore.GeoPoint
-import com.sildian.apps.togetrail.common.model.FineLocation
-import com.sildian.apps.togetrail.common.model.Location
+import com.sildian.apps.togetrail.location.model.core.Location
 import kotlinx.android.parcel.Parceler
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.parcel.RawValue
@@ -20,8 +19,7 @@ data class Event(
     var id:String?=null,
     var name:String?=null,
     var position:@RawValue GeoPoint?=null,
-    var location: Location =Location(),
-    var meetingPoint:FineLocation= FineLocation(),
+    var meetingPoint: Location = Location(),
     var beginDate:Date?=null,
     var endDate:Date?=null,
     var description:String?=null,
@@ -74,7 +72,6 @@ data class Event(
             parcel.writeString(this.name)
             parcel.writeDouble(this.position?.latitude?:0.0)
             parcel.writeDouble(this.position?.longitude?:0.0)
-            parcel.writeParcelable(this.location, Parcelable.CONTENTS_FILE_DESCRIPTOR)
             parcel.writeParcelable(this.meetingPoint, Parcelable.CONTENTS_FILE_DESCRIPTOR)
             parcel.writeLong(this.beginDate?.time?:0)
             parcel.writeLong(this.endDate?.time?:0)
@@ -90,7 +87,6 @@ data class Event(
                 parcel.readString(),
                 GeoPoint(parcel.readDouble(), parcel.readDouble()),
                 parcel.readParcelable(Location::class.java.classLoader)!!,
-                parcel.readParcelable(FineLocation::class.java.classLoader)!!,
                 Date(parcel.readLong()),
                 Date(parcel.readLong()),
                 parcel.readString(),

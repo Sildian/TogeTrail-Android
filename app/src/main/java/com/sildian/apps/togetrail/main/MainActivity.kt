@@ -14,15 +14,16 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.view.menu.MenuPopupHelper
-import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.libraries.places.api.Places
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.UserFirebaseHelper
 import com.sildian.apps.togetrail.event.detail.EventActivity
 import com.sildian.apps.togetrail.event.edit.EventEditActivity
@@ -34,6 +35,8 @@ import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.support.HikerHelper
 import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
 import com.sildian.apps.togetrail.hiker.profile.ProfileActivity
+import com.sildian.apps.togetrail.location.model.core.Location
+import com.sildian.apps.togetrail.location.search.LocationSearchActivity
 import com.sildian.apps.togetrail.trail.list.TrailsListFragment
 import com.sildian.apps.togetrail.trail.map.TrailActivity
 import com.sildian.apps.togetrail.trail.map.TrailMapFragment
@@ -68,6 +71,7 @@ class MainActivity :
         /**Request keys for activities**/
         private const val KEY_REQUEST_LOGIN=1001
         private const val KEY_REQUEST_PROFILE=1002
+        private const val KEY_REQUEST_LOCATION_SEARCH=1003
 
         /**Request keys for permissions**/
         private const val KEY_REQUEST_PERMISSION_LOCATION=2001
@@ -89,8 +93,9 @@ class MainActivity :
 
     /**********************************UI component**********************************************/
 
-    private lateinit var fragment:Fragment
+    private lateinit var fragment:BaseDataFlowFragment
     private val toolbar by lazy {activity_main_toolbar}
+    private val searchTextField by lazy {activity_main_text_field_research}
     private val drawerLayout by lazy {activity_main_drawer_layout}
     private val navigationView by lazy {activity_main_navigation_view}
     private val navigationViewHeader by lazy {
@@ -112,7 +117,9 @@ class MainActivity :
         Log.d(TAG, "Activity '${javaClass.simpleName}' created")
         setContentView(R.layout.activity_main)
         JodaTimeAndroid.init(this)
+        Places.initialize(applicationContext, resources.getString(R.string.google_maps_key))
         initializeToolbar()
+        initializeSearchTextField()
         initializeNavigationView()
         initializeBottomNavigationView()
         initializeAddButton()
@@ -352,6 +359,19 @@ class MainActivity :
         this.eventsQuery=EventFirebaseQueries.getEventsAroundPoint(point)
     }
 
+    /**
+     * Sets the queries to search results around the given location
+     * @param location : the location
+     */
+
+    fun setQueriesToSearchAroundLocation(location:Location){
+        if(location.country!=null) {
+            this.trailsQuery = TrailFirebaseQueries.getTrailsNearbyLocation(location)!!
+            this.eventsQuery = EventFirebaseQueries.getEventsNearbyLocation(location)!!
+            this.fragment.updateData()
+        }
+    }
+
     /***********************************Trails monitoring****************************************/
 
     fun seeTrail(trail:Trail?){
@@ -368,6 +388,13 @@ class MainActivity :
 
     private fun initializeToolbar(){
         setSupportActionBar(this.toolbar)
+        supportActionBar?.title=""
+    }
+
+    private fun initializeSearchTextField(){
+        this.searchTextField.setOnClickListener {
+            startLocationSearchActivity()
+        }
     }
 
     private fun initializeNavigationView(){
@@ -565,6 +592,15 @@ class MainActivity :
         startActivity(eventEditActivityIntent)
     }
 
+    /**
+     * Starts the LocationSearchActivity
+     */
+
+    private fun startLocationSearchActivity(){
+        val locationSearchActivity=Intent(this, LocationSearchActivity::class.java)
+        startActivityForResult(locationSearchActivity, KEY_REQUEST_LOCATION_SEARCH)
+    }
+
     /**Activity result**/
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -572,6 +608,7 @@ class MainActivity :
         when(requestCode){
             KEY_REQUEST_LOGIN -> handleLoginResult(resultCode, data)
             KEY_REQUEST_PROFILE -> handleProfileResult(resultCode, data)
+            KEY_REQUEST_LOCATION_SEARCH -> handleLocationSearchResult(resultCode, data)
         }
     }
 
@@ -607,6 +644,19 @@ class MainActivity :
             if(data!=null && data.hasExtra(ProfileActivity.KEY_BUNDLE_HIKER)){
                 this.currentHiker=data.getParcelableExtra(ProfileActivity.KEY_BUNDLE_HIKER)
                 updateNavigationViewUserItems()
+            }
+        }
+    }
+
+    /**Handles location search result**/
+
+    private fun handleLocationSearchResult(resultCode: Int, data: Intent?){
+        if(resultCode== Activity.RESULT_OK){
+            if(data!=null && data.hasExtra(LocationSearchActivity.KEY_BUNDLE_LOCATION)){
+                val location=data.getParcelableExtra<Location>(LocationSearchActivity.KEY_BUNDLE_LOCATION)
+                if(location != null) {
+                    setQueriesToSearchAroundLocation(location)
+                }
             }
         }
     }

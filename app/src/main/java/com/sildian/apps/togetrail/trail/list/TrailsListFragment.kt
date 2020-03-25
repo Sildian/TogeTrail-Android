@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.RecyclerViewFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.UserFirebaseHelper
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
@@ -25,7 +26,7 @@ import kotlinx.android.synthetic.main.fragment_trails_list.view.*
  ************************************************************************************************/
 
 class TrailsListFragment (private val currentHiker: Hiker?=null) :
-    Fragment(),
+    BaseDataFlowFragment(),
     TrailHorizontalViewHolder.OnTrailClickListener
 {
 

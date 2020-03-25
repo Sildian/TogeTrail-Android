@@ -41,6 +41,8 @@
     <string name="button_common_yes">Yes</string>
     <string name="button_common_no">No</string>
     <string name="button_common_cancel">Cancel</string>
+    <!-- Location -->
+    <string name="button_location_search_in_area">Search within this area</string>
     <!-- Trail -->
     <string name="button_trail_point_remove">Remove last point</string>
     <string name="button_trail_poi_add">Add point of interest</string>
@@ -52,8 +54,6 @@
     <string name="button_event_add_trails">Add trails</string>
     <string name="button_event_register_user">Register</string>
     <string name="button_event_unregister_user">Unregister</string>
-    <!-- Search -->
-    <string name="button_search_in_area">Search within this area</string>
 
     <!-- Labels -->
     <!-- Common -->
@@ -64,6 +64,7 @@
     <string name="label_location_region">State / Region</string>
     <string name="label_location_town">City / Town</string>
     <string name="label_location_address">Place / Address</string>
+    <string name="label_location_search">Search a place</string>
     <!-- Trail -->
     <string name="label_trail_main_info">Main info</string>
     <string name="label_trail_name">Name</string>
@@ -129,6 +130,8 @@
     <!-- Location -->
     <string name="example_location">Chamonix, Savoie, France</string>
     <string name="example_location_fine">1 rue de la Montagne\nChamonix\nSavoie\nFrance</string>
+    <string name="example_location_country">France</string>
+    <string name="example_location_region">Savoie</string>
     <!-- Trail -->
     <string name="example_trail_name">The super century\s trail</string>
     <string name="example_trail_description">A really wonderful trail.</string>

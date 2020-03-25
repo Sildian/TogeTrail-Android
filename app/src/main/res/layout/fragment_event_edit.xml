@@ -208,52 +208,6 @@
             android:textColor="@color/colorSecondaryDark"
             android:text="@string/label_event_meeting_point"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:baselineAligned="false">
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/TextInputFieldStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginTop="@dimen/components_margin_small"
-                android:layout_marginBottom="@dimen/components_margin_small"
-                android:layout_marginStart="@dimen/components_margin_medium"
-                android:layout_marginEnd="@dimen/components_margin_small"
-                android:hint="@string/label_location_country">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/fragment_event_edit_text_field_country"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textCapSentences" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/TextInputFieldStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginTop="@dimen/components_margin_small"
-                android:layout_marginBottom="@dimen/components_margin_small"
-                android:layout_marginStart="@dimen/components_margin_small"
-                android:layout_marginEnd="@dimen/components_margin_medium"
-                android:hint="@string/label_location_region">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/fragment_event_edit_text_field_region"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textCapSentences" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </LinearLayout>
-
         <com.google.android.material.textfield.TextInputLayout
             style="@style/TextInputFieldStyle"
             android:layout_width="match_parent"
@@ -261,32 +215,15 @@
             android:layout_marginTop="@dimen/components_margin_small"
             android:layout_marginBottom="@dimen/components_margin_small"
             android:layout_marginStart="@dimen/components_margin_medium"
-            android:layout_marginEnd="@dimen/components_margin_medium"
-            android:hint="@string/label_location_town">
+            android:layout_marginEnd="@dimen/components_margin_small"
+            android:hint="@string/label_event_meeting_point">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/fragment_event_edit_text_field_town"
+                android:id="@+id/fragment_event_edit_text_field_meeting_point"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textCapSentences" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/TextInputFieldStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/components_margin_small"
-            android:layout_marginBottom="@dimen/components_margin_small"
-            android:layout_marginStart="@dimen/components_margin_medium"
-            android:layout_marginEnd="@dimen/components_margin_medium"
-            android:hint="@string/label_location_address">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/fragment_event_edit_text_field_address"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textCapSentences" />
+                android:inputType="textCapSentences|textMultiLine"
+                android:focusable="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 

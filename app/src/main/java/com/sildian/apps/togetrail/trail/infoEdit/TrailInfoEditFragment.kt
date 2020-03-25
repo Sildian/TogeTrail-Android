@@ -9,7 +9,6 @@ import androidx.core.content.ContextCompat
 import com.sdsmdg.harjot.crollerTest.Croller
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
-import com.sildian.apps.togetrail.common.model.Location
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DropdownMenuHelper
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
 import com.sildian.apps.togetrail.trail.model.core.Trail
@@ -65,9 +64,7 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
     private val distanceText by lazy {layout.fragment_trail_info_edit_text_distance}
     private val maxElevationText by lazy {layout.fragment_trail_info_edit_text_max_elevation}
     private val minElevationText by lazy {layout.fragment_trail_info_edit_text_min_elevation}
-    private val countryTextField by lazy {layout.fragment_trail_info_edit_text_field_country}
-    private val regionTextField by lazy {layout.fragment_trail_info_edit_text_field_region}
-    private val townTextField by lazy {layout.fragment_trail_info_edit_text_field_town}
+    private val locationTextField by lazy {layout.fragment_trail_info_edit_text_field_location}
     private val descriptionTextField by lazy {layout.fragment_trail_info_edit_text_field_description}
 
     private val metricsTexts by lazy {
@@ -92,17 +89,16 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
 
     /*********************************Data monitoring********************************************/
 
+    override fun updateData() {
+        initializeAllUIComponents()
+    }
+
     override fun saveData() {
         this.trail?.name=this.nameTextField.text.toString()
         this.trail?.level=
             TrailLevel.fromValue(this.levelTextFieldDropDown.tag.toString().toInt()+1)
         this.trail?.type=
             TrailType.fromValue(this.typeTextFieldDropDown.tag.toString().toInt()+1)
-        this.trail?.location = Location(
-            this.countryTextField.text.toString(),
-            this.regionTextField.text.toString(),
-            this.townTextField.text.toString()
-        )
         this.trail?.description=this.descriptionTextField.text.toString()
         this.trail?.autoPopulatePosition()
         (activity as TrailInfoEditActivity).saveTrail()
@@ -121,9 +117,7 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
         initializeDistanceText()
         initializeMaxElevationText()
         initializeMinElevationText()
-        initializeCountryTextField()
-        initializeRegionTextField()
-        initializeTownTextField()
+        initializeLocationTextField()
         initializeDescriptionTextField()
         updateCurrentMetricToSet(METRIC_DURATION)
     }
@@ -215,16 +209,11 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
         }
     }
 
-    private fun initializeCountryTextField(){
-        this.countryTextField.setText(this.trail?.location?.country)
-    }
-
-    private fun initializeRegionTextField(){
-        this.regionTextField.setText(this.trail?.location?.region)
-    }
-
-    private fun initializeTownTextField(){
-        this.townTextField.setText(this.trail?.location?.town)
+    private fun initializeLocationTextField(){
+        this.locationTextField.setText(this.trail?.location?.fullAddress)
+        this.locationTextField.setOnClickListener {
+            (activity as TrailInfoEditActivity).searchLocation()
+        }
     }
 
     private fun initializeDescriptionTextField(){

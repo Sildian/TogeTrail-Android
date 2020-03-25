@@ -40,6 +40,8 @@
     <string name="button_common_yes">Oui</string>
     <string name="button_common_no">Non</string>
     <string name="button_common_cancel">Annuler</string>
+    <!-- Location -->
+    <string name="button_location_search_in_area">Rechercher dans cette zone</string>
     <!-- Trail -->
     <string name="button_trail_point_remove">Retirer dernier point</string>
     <string name="button_trail_poi_add">Ajouter point d\'intérêt</string>
@@ -51,8 +53,6 @@
     <string name="button_event_add_trails">Ajouter des randos</string>
     <string name="button_event_register_user">M\'inscrire</string>
     <string name="button_event_unregister_user">Me désinscrire</string>
-    <!-- Search -->
-    <string name="button_search_in_area">Rechercher dans cette zone</string>
 
     <!-- Labels -->
     <!-- Common -->
@@ -63,6 +63,7 @@
     <string name="label_location_region">Etat / Région</string>
     <string name="label_location_town">Ville / Village</string>
     <string name="label_location_address">Lieu / Adresse</string>
+    <string name="label_location_search">Rechercher un lieu</string>
     <!-- Trail -->
     <string name="label_trail_main_info">Infos principales</string>
     <string name="label_trail_name">Nom</string>
@@ -128,6 +129,8 @@
     <!-- Location -->
     <string name="example_location">Chamonix, Savoie, France</string>
     <string name="example_location_fine">1 rue de la Montagne\nChamonix\nSavoie\nFrance</string>
+    <string name="example_location_country">France</string>
+    <string name="example_location_region">Savoie</string>
     <!-- Trail -->
     <string name="example_trail_name">La super rando du siècle</string>
     <string name="example_trail_description">Une rando vraiment géniale.</string>

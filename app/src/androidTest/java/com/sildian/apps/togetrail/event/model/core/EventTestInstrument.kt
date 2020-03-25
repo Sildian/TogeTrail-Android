@@ -2,8 +2,7 @@ package com.sildian.apps.togetrail.event.model.core
 
 import android.os.Parcel
 import com.google.firebase.firestore.GeoPoint
-import com.sildian.apps.togetrail.common.model.FineLocation
-import com.sildian.apps.togetrail.common.model.Location
+import com.sildian.apps.togetrail.location.model.core.Location
 import org.junit.Assert.*
 import org.junit.Test
 import java.util.*
@@ -17,8 +16,16 @@ class EventTestInstrument{
             id="Event1",
             name="Super event",
             position=GeoPoint(50.0, 50.0),
-            location=Location("TotoLand", "TotoRegion"),
-            meetingPoint=FineLocation("TotoLand", "TotoRegion", "TotoCity", "TotoCastle"),
+            location= Location(
+                "TotoLand",
+                "TotoRegion"
+            ),
+            meetingPoint= FineLocation(
+                "TotoLand",
+                "TotoRegion",
+                "TotoCity",
+                "TotoCastle"
+            ),
             beginDate = Date(),
             endDate = Date(),
             authorId = "Hiker1"

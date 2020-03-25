@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.RecyclerViewFirebaseHelper
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
@@ -24,7 +25,7 @@ import kotlinx.android.synthetic.main.fragment_events_list.view.*
  ************************************************************************************************/
 
 class EventsListFragment (private val currentHiker:Hiker?=null) :
-    Fragment(),
+    BaseDataFlowFragment(),
     EventHorizontalViewHolder.OnEventClickListener
 {
 

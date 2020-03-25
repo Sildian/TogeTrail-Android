@@ -52,6 +52,11 @@ class TrailMapFragment (
 
     /**********************************Data monitoring*******************************************/
 
+    override fun updateData() {
+        (activity as MainActivity).loadTrails(this::handleTrailsQueryResult)
+        (activity as MainActivity).loadEvents(this::handleEventsQueryResult)
+    }
+
     private fun handleTrailsQueryResult(trails: List<Trail>) {
         this.trails=trails
         this.map?.clear()

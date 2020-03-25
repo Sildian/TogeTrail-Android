@@ -78,8 +78,9 @@ class ProfileFragment (var hiker: Hiker?) : BaseDataFlowFragment() {
     }
 
     private fun updateLiveLocationText(){
-        val location=this.hiker?.liveLocation?.getFullLocation()
+        val location=this.hiker?.liveLocation?.fullAddress
         if(location!=null) {
+            this.liveLocationText.visibility=View.VISIBLE
             this.liveLocationText.text = location
         }
         else{
@@ -90,6 +91,7 @@ class ProfileFragment (var hiker: Hiker?) : BaseDataFlowFragment() {
     private fun updateAgeText(){
         val age=this.hiker?.getAge(Date())
         if(age!=null) {
+            this.ageText.visibility=View.VISIBLE
             val ageToDisplay="$age "+resources.getString(R.string.label_hiker_age)
             this.ageText.text = ageToDisplay
         }
@@ -101,6 +103,7 @@ class ProfileFragment (var hiker: Hiker?) : BaseDataFlowFragment() {
     private fun updateDescriptionText(){
         val description=this.hiker?.description
         if(description!=null) {
+            this.descriptionText.visibility=View.VISIBLE
             this.descriptionText.text=description
         }
         else{

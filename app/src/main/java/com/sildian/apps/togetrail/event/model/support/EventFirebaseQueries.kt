@@ -3,7 +3,7 @@ package com.sildian.apps.togetrail.event.model.support
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
-import com.sildian.apps.togetrail.common.model.Location
+import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.common.utils.GeoUtilities
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
@@ -62,16 +62,16 @@ object EventFirebaseQueries {
 
     fun getEventsNearbyLocation(location: Location):Query? =
         when {
-            !location.region.isNullOrEmpty() -> {
+            location.region!=null -> {
                 getCollection()
-                    .whereEqualTo(FieldPath.of("location", "country"), location.country)
-                    .whereEqualTo(FieldPath.of("location", "region"), location.region)
+                    .whereEqualTo(FieldPath.of("location", "country", "code"), location.country?.code)
+                    .whereEqualTo(FieldPath.of("location", "region", "code"), location.region.code)
                     .whereGreaterThan("beginDate", Date())
                     .orderBy("beginDate", Query.Direction.ASCENDING)
             }
-            !location.country.isNullOrEmpty() -> {
+            location.country!=null -> {
                 getCollection()
-                    .whereEqualTo(FieldPath.of("location", "country"), location.country)
+                    .whereEqualTo(FieldPath.of("location", "country", "code"), location.country.code)
                     .whereGreaterThan("beginDate", Date())
                     .orderBy("beginDate", Query.Direction.ASCENDING)
             }

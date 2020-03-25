@@ -114,7 +114,7 @@ class TrailHorizontalViewHolder (
     }
 
     private fun updateLocationText(){
-        this.locationText.text=this.trail.location.getFullLocation()
+        this.locationText.text=this.trail.location.fullAddress
     }
 
     private fun updateRemoveButton(){
