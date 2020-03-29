@@ -15,6 +15,10 @@ import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
 import com.sildian.apps.togetrail.event.model.support.EventHelper
+import com.sildian.apps.togetrail.hiker.model.core.Hiker
+import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
+import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
+import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
 import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.location.search.LocationSearchActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
@@ -35,6 +39,7 @@ class EventEditActivity : BaseDataFlowActivity() {
 
         /**Bundle keys for intents**/
         const val KEY_BUNDLE_EVENT="KEY_BUNDLE_EVENT"
+        const val KEY_BUNDLE_HIKER="KEY_BUNDLE_HIKER"
 
         /**Request keys for intents**/
         private const val KEY_REQUEST_LOCATION_SEARCH=1001
@@ -43,6 +48,7 @@ class EventEditActivity : BaseDataFlowActivity() {
     /****************************************Data************************************************/
 
     private var event: Event?=null                          //The event
+    private var hiker: Hiker?=null                          //The current hiker
     private val attachedTrails= arrayListOf<Trail>()        //The list of attached trails (useful only when the event has no id yet)
 
     /**********************************UI component**********************************************/
@@ -113,6 +119,9 @@ class EventEditActivity : BaseDataFlowActivity() {
             }else{
                 this.event=EventHelper.buildFromNothing()
             }
+            if(intent.hasExtra(KEY_BUNDLE_HIKER)){
+                this.hiker=intent.getParcelableExtra(KEY_BUNDLE_HIKER)
+            }
         }
     }
 
@@ -155,6 +164,20 @@ class EventEditActivity : BaseDataFlowActivity() {
                             Log.d(TAG, "Event '${this.event?.id}' updated in the database")
                             progressDialog.dismiss()
                             //TODO show a snackbar when finished
+
+                            /*Also updates the hiker and the history*/
+
+                            this.hiker!!.nbEventsCreated++
+                            val historyItem=HikerHistoryItem(
+                                HikerHistoryType.EVENT_CREATED,
+                                this.event?.creationDate!!,
+                                this.event?.id!!,
+                                this.event?.name!!,
+                                this.event?.meetingPoint?.toString()
+                            )
+                            HikerFirebaseQueries.createOrUpdateHiker(this.hiker!!)
+                            HikerFirebaseQueries.addHistoryItem(this.hiker!!.id, historyItem)
+
                             finishOk()
                         }
                         .addOnFailureListener { e ->

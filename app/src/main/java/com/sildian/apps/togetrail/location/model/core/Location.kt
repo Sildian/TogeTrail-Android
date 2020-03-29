@@ -17,6 +17,10 @@ data class Location (
 {
 
     override fun toString(): String {
-        return this.fullAddress.toString()
+        return when {
+            country != null && region != null -> "$region, $country"
+            country != null -> "$country"
+            else -> ""
+        }
     }
 }

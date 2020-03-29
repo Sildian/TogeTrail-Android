@@ -102,6 +102,17 @@
     <string name="label_hiker_email">Mon email</string>
     <string name="label_hiker_registration_date">Membre depuis</string>
     <string name="label_hiker_account">Mon compte</string>
+    <string name="label_hiker_trails_created_sing">rando\ncréée</string>
+    <string name="label_hiker_trails_created_plur">randos\ncréées</string>
+    <string name="label_hiker_events_created_sing">évènement\ncréé</string>
+    <string name="label_hiker_events_created_plur">évènements\ncréés</string>
+    <string name="label_hiker_events_registered_sing">inscription aux\névènements</string>
+    <string name="label_hiker_events_registered_plur">inscriptions aux\névènements</string>
+    <string name="label_hiker_history">Mon historique</string>
+    <string name="label_hiker_history_hiker_registered">a créé son profil TogeTrail</string>
+    <string name="label_hiker_history_trail_created">a créé une nouvelle rando en</string>
+    <string name="label_hiker_history_event_created">a créé un nouvel évènement en</string>
+    <string name="label_hiker_history_event_attended">a décidé de participer à un évènement en</string>
     <!-- Event -->
     <string name="label_event_main_info">Infos principales</string>
     <string name="label_event_name">Nom</string>
@@ -125,7 +136,10 @@
     <string name="label_event_list_nearby_events">Les évènements proches de chez moi</string>
 
     <!-- Examples for layout preview -->
+    <!-- Common -->
     <string name="example_image_content_description">Image</string>
+    <string name="example_number">10</string>
+    <string name="example_date">30/06/2020</string>
     <!-- Location -->
     <string name="example_location">Chamonix, Savoie, France</string>
     <string name="example_location_fine">1 rue de la Montagne\nChamonix\nSavoie\nFrance</string>
@@ -151,6 +165,7 @@
     <string name="example_hiker_live_location">Toto city</string>
     <string name="example_hiker_age">5 ans</string>
     <string name="example_hiker_description">Je m\'appelle Toto. J\'adore la randonnée.</string>
+    <string name="example_hiker_history">Toto a créé une nouvelle rando en Alberta, Canada.</string>
     <!-- Event -->
     <string name="example_event_name">Evènement génial</string>
     <string name="example_event_description">Ce sera un évènement génial, venez nombreux!</string>

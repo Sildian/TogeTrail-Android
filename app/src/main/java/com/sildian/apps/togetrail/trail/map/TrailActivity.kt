@@ -13,6 +13,10 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowActivity
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.UserFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
+import com.sildian.apps.togetrail.hiker.model.core.Hiker
+import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
+import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
+import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
 import com.sildian.apps.togetrail.trail.infoEdit.TrailInfoEditActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.support.TrailHelper
@@ -54,12 +58,14 @@ class TrailActivity : BaseDataFlowActivity() {
         /**Bundle keys for intent**/
         const val KEY_BUNDLE_TRAIL_ACTION="KEY_BUNDLE_TRAIL_ACTION"
         const val KEY_BUNDLE_TRAIL="KEY_BUNDLE_TRAIL"
+        const val KEY_BUNDLE_HIKER="KEY_BUNDLE_HIKER"
     }
 
     /**************************************Data**************************************************/
 
     private var currentAction= ACTION_TRAIL_SEE                 //Action defining what the user is performing
     private var trail: Trail?=null                              //Current trail shown
+    private var hiker: Hiker?=null                              //The current hiker
 
     /**********************************UI component**********************************************/
 
@@ -135,6 +141,9 @@ class TrailActivity : BaseDataFlowActivity() {
             if(intent.hasExtra(KEY_BUNDLE_TRAIL)){
                 this.trail=
                     intent.getParcelableExtra(KEY_BUNDLE_TRAIL)
+            }
+            if(intent.hasExtra(KEY_BUNDLE_HIKER)){
+                this.hiker=intent.getParcelableExtra(KEY_BUNDLE_HIKER)
             }
         }
     }
@@ -213,6 +222,20 @@ class TrailActivity : BaseDataFlowActivity() {
                         .addOnSuccessListener {
                             progressDialog.dismiss()
                             //TODO show a snackbar when finished
+
+                            /*Also updates the hiker and the history*/
+
+                            this.hiker!!.nbTrailsCreated++
+                            val historyItem= HikerHistoryItem(
+                                HikerHistoryType.TRAIL_CREATED,
+                                this.trail?.creationDate!!,
+                                this.trail?.id!!,
+                                this.trail?.name!!,
+                                this.trail?.location?.toString()
+                            )
+                            HikerFirebaseQueries.createOrUpdateHiker(this.hiker!!)
+                            HikerFirebaseQueries.addHistoryItem(this.hiker!!.id, historyItem)
+
                             finishOk()
                         }
                         .addOnFailureListener { e ->
@@ -337,6 +360,7 @@ class TrailActivity : BaseDataFlowActivity() {
             trailInfoEditActivityIntent
                 .putExtra(TrailInfoEditActivity.KEY_BUNDLE_TRAIL_POI_POSITION, trailPointOfInterestPosition)
         }
+        trailInfoEditActivityIntent.putExtra(TrailInfoEditActivity.KEY_BUNDLE_HIKER, this.hiker)
         startActivityForResult(trailInfoEditActivityIntent, KEY_REQUEST_EDIT_TRAIL_INFO)
     }
 

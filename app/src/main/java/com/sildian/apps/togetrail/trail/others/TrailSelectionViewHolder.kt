@@ -8,13 +8,13 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailLevel
-import kotlinx.android.synthetic.main.item_recycler_view_trail_vertical.view.*
+import kotlinx.android.synthetic.main.item_recycler_view_trail_selection.view.*
 
 /*************************************************************************************************
- * Displays a trail's main info within a vertical RecyclerView
+ * Displays a trail's main info with a purpose to select it
  ************************************************************************************************/
 
-class TrailVerticalViewHolder (
+class TrailSelectionViewHolder (
     itemView:View,
     private val listener: OnTrailClickListener?=null
 )
@@ -33,12 +33,12 @@ class TrailVerticalViewHolder (
 
     /**********************************UI components*********************************************/
 
-    private val photoImageView by lazy {itemView.item_recycler_view_trail_vertical_image_view_photo}
-    private val nameText by lazy {itemView.item_recycler_view_trail_vertical_text_name}
-    private val levelText by lazy {itemView.item_recycler_view_trail_vertical_text_level}
-    private val durationText by lazy {itemView.item_recycler_view_trail_vertical_text_duration}
-    private val ascentText by lazy {itemView.item_recycler_view_trail_vertical_text_ascent}
-    private val locationText by lazy {itemView.item_recycler_view_trail_vertical_text_location}
+    private val photoImageView by lazy {itemView.item_recycler_view_trail_selection_image_view_photo}
+    private val nameText by lazy {itemView.item_recycler_view_trail_selection_text_name}
+    private val levelText by lazy {itemView.item_recycler_view_trail_selection_text_level}
+    private val durationText by lazy {itemView.item_recycler_view_trail_selection_text_duration}
+    private val ascentText by lazy {itemView.item_recycler_view_trail_selection_text_ascent}
+    private val locationText by lazy {itemView.item_recycler_view_trail_selection_text_location}
 
     /**************************************Init**************************************************/
 

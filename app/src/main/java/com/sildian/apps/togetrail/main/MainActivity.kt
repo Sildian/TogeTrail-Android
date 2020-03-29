@@ -32,6 +32,8 @@ import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
 import com.sildian.apps.togetrail.hiker.profileEdit.ProfileEditActivity
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
+import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
+import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.support.HikerHelper
 import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
 import com.sildian.apps.togetrail.hiker.profile.ProfileActivity
@@ -267,6 +269,14 @@ class MainActivity :
                             .addOnSuccessListener {
                                 //TODO handle
                                 Log.d(TAG, "Hiker '${user.uid}' registered in the database")
+
+                                /*And updates the hiker's history*/
+
+                                val historyItem= HikerHistoryItem(
+                                    HikerHistoryType.HIKER_REGISTERED,
+                                    this.currentHiker?.registrationDate!!
+                                )
+                                HikerFirebaseQueries.addHistoryItem(this.currentHiker?.id!!, historyItem)
                             }
                             .addOnFailureListener { e ->
                                 //TODO handle
@@ -567,6 +577,7 @@ class MainActivity :
         if(trailActionId==TrailActivity.ACTION_TRAIL_SEE){
             trailActivityIntent.putExtra(TrailActivity.KEY_BUNDLE_TRAIL, trail)
         }
+        trailActivityIntent.putExtra(TrailActivity.KEY_BUNDLE_HIKER, this.currentHiker)
         startActivity(trailActivityIntent)
     }
 
@@ -589,6 +600,7 @@ class MainActivity :
 
     private fun startEventEditActivity(){
         val eventEditActivityIntent= Intent(this, EventEditActivity::class.java)
+        eventEditActivityIntent.putExtra(EventEditActivity.KEY_BUNDLE_HIKER, this.currentHiker)
         startActivity(eventEditActivityIntent)
     }
 

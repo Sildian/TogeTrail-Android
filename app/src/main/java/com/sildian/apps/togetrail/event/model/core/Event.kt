@@ -24,6 +24,7 @@ data class Event(
     var endDate:Date?=null,
     var description:String?=null,
     var isCanceled:Boolean=false,
+    val creationDate:Date=Date(),
     var authorId:String?=null,
     /*Extra info*/
     var nbHikersRegistered:Int=0
@@ -77,6 +78,7 @@ data class Event(
             parcel.writeLong(this.endDate?.time?:0)
             parcel.writeString(this.description)
             parcel.writeInt(if(this.isCanceled) 1 else 0)
+            parcel.writeLong(this.creationDate.time)
             parcel.writeString(this.authorId)
             parcel.writeInt(this.nbHikersRegistered)
         }
@@ -91,6 +93,7 @@ data class Event(
                 Date(parcel.readLong()),
                 parcel.readString(),
                 parcel.readInt()==1,
+                Date(parcel.readLong()),
                 parcel.readString(),
                 parcel.readInt()
             )

@@ -23,7 +23,7 @@
             app:cardCornerRadius="@dimen/components_corner_small">
 
             <ImageView
-                android:id="@+id/item_recycler_view_trail_vertical_image_view_photo"
+                android:id="@+id/item_recycler_view_trail_selection_image_view_photo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:srcCompat="@drawable/ic_trail_black"
@@ -37,7 +37,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/item_recycler_view_trail_vertical_text_name"
+                android:id="@+id/item_recycler_view_trail_selection_text_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/components_margin_small"
@@ -47,7 +47,7 @@
                 android:text="@string/example_trail_name"/>
 
             <TextView
-                android:id="@+id/item_recycler_view_trail_vertical_text_level"
+                android:id="@+id/item_recycler_view_trail_selection_text_level"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/components_margin_small"
@@ -57,7 +57,7 @@
                 android:text="@string/label_trail_level_medium" />
 
             <TextView
-                android:id="@+id/item_recycler_view_trail_vertical_text_duration"
+                android:id="@+id/item_recycler_view_trail_selection_text_duration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/components_margin_small"
@@ -67,7 +67,7 @@
                 android:text="@string/example_trail_duration" />
 
             <TextView
-                android:id="@+id/item_recycler_view_trail_vertical_text_ascent"
+                android:id="@+id/item_recycler_view_trail_selection_text_ascent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/components_margin_small"
@@ -77,7 +77,7 @@
                 android:text="@string/example_trail_ascent" />
 
             <TextView
-                android:id="@+id/item_recycler_view_trail_vertical_text_location"
+                android:id="@+id/item_recycler_view_trail_selection_text_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/components_margin_small"

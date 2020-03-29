@@ -13,6 +13,10 @@ import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.ImageStorageFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.UserFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
+import com.sildian.apps.togetrail.hiker.model.core.Hiker
+import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
+import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
+import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
 import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.location.search.LocationSearchActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
@@ -45,6 +49,7 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
         const val KEY_BUNDLE_TRAIL_ACTION="KEY_BUNDLE_TRAIL_ACTION"
         const val KEY_BUNDLE_TRAIL="KEY_BUNDLE_TRAIL"
         const val KEY_BUNDLE_TRAIL_POI_POSITION="KEY_BUNDLE_TRAIL_POI_POSITION"
+        const val KEY_BUNDLE_HIKER="KEY_BUNDLE_HIKER"
 
         /**Request keys for intent**/
         private const val KEY_REQUEST_LOCATION_SEARCH=1001
@@ -56,6 +61,7 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
     private var trail: Trail?=null                                  //Current trail to be edited
     private var trailPointOfInterest: TrailPointOfInterest?=null    //Current trailPointOfInterest to be edited
     private var trailPointOfInterestPosition:Int?=null              //The trailPoi's position within the trailTrack
+    private var hiker: Hiker?=null                                  //The current hiker
 
     /**********************************UI component**********************************************/
 
@@ -136,6 +142,9 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
                 val position=intent.getIntExtra(KEY_BUNDLE_TRAIL_POI_POSITION, 0)
                 this.trailPointOfInterestPosition=position
                 this.trailPointOfInterest=this.trail!!.trailTrack.trailPointsOfInterest[position]
+            }
+            if(intent.hasExtra(KEY_BUNDLE_HIKER)){
+                this.hiker=intent.getParcelableExtra(KEY_BUNDLE_HIKER)
             }
         }
     }
@@ -232,6 +241,20 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
                         .addOnSuccessListener {
                             progressDialog.dismiss()
                             //TODO show a snackbar when finished
+
+                            /*Also updates the hiker and the history*/
+
+                            this.hiker!!.nbTrailsCreated++
+                            val historyItem= HikerHistoryItem(
+                                HikerHistoryType.TRAIL_CREATED,
+                                this.trail?.creationDate!!,
+                                this.trail?.id!!,
+                                this.trail?.name!!,
+                                this.trail?.location?.toString()
+                            )
+                            HikerFirebaseQueries.createOrUpdateHiker(this.hiker!!)
+                            HikerFirebaseQueries.addHistoryItem(this.hiker!!.id, historyItem)
+
                             finishOk()
                         }
                         .addOnFailureListener { e ->

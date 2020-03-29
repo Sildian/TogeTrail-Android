@@ -2,7 +2,9 @@ package com.sildian.apps.togetrail.trail.model.core
 
 import android.os.Parcel
 import com.google.firebase.firestore.GeoPoint
+import com.sildian.apps.togetrail.location.model.core.Country
 import com.sildian.apps.togetrail.location.model.core.Location
+import com.sildian.apps.togetrail.location.model.core.Region
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -17,8 +19,9 @@ class TrailTestInstrument{
             source="TogeTrail",
             position=GeoPoint(50.0, 50.0),
             location= Location(
-                "TotoLand",
-                "TotoRegion"
+                Country("TOL", "Totoland"),
+                Region("TOR", "Totoregion"),
+                "Toto City"
             ),
             duration=60,
             distance=1000,

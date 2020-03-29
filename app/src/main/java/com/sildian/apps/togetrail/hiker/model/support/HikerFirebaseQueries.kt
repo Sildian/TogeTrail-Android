@@ -1,11 +1,13 @@
 package com.sildian.apps.togetrail.hiker.model.support
 
 import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
+import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 
 /*************************************************************************************************
  * Provides with Firebase queries on Hiker
@@ -16,8 +18,11 @@ object HikerFirebaseQueries {
     /*********************************Collection references**************************************/
 
     private const val COLLECTION_NAME="hiker"
+    private const val SUB_COLLECTION_HISTORY_ITEM="hikerHistoryItem"
     private const val SUB_COLLECTION_ATTENDED_EVENT_NAME="attendedEvent"
     private fun getCollection() = FirebaseFirestore.getInstance().collection(COLLECTION_NAME)
+    private fun getHistoryItemSubCollection(hikerId:String) =
+        getCollection().document(hikerId).collection(SUB_COLLECTION_HISTORY_ITEM)
     private fun getAttendedEventSubCollection(hikerId:String) =
         getCollection().document(hikerId).collection(SUB_COLLECTION_ATTENDED_EVENT_NAME)
 
@@ -49,6 +54,26 @@ object HikerFirebaseQueries {
 
     fun deleteHiker(hiker:Hiker) : Task<Void> =
         getCollection().document(hiker.id).delete()
+
+    /**
+     * Gets the last history items
+     * @param hikerId : the id of the hiker
+     * @return a query
+     */
+
+    fun getLastHistoryItems(hikerId: String) : Query =
+        getHistoryItemSubCollection(hikerId)
+            .orderBy("date", Query.Direction.DESCENDING)
+            .limit(20)
+
+    /**
+     * Adds an item to the hiker's history
+     * @param hikerId : the id of the hiker
+     * @param historyItem : the history item
+     */
+
+    fun addHistoryItem(hikerId: String, historyItem: HikerHistoryItem) : Task<DocumentReference> =
+        getHistoryItemSubCollection(hikerId).add(historyItem)
 
     /**
      * Gets all events for which the hiker attended

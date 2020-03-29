@@ -15,6 +15,8 @@ import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
 import com.sildian.apps.togetrail.event.model.support.EventHelper
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
+import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
+import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
 import kotlinx.android.synthetic.main.activity_event.*
 
@@ -130,6 +132,19 @@ class EventActivity : BaseDataFlowActivity() {
                     HikerFirebaseQueries.updateAttendedEvent(this.hiker?.id!!, this.event!!)
                         .addOnSuccessListener {
                             Log.d(TAG, "Hiker registered successfully")
+
+                            /*And updates the hiker's history*/
+
+                            val historyItem=HikerHistoryItem(
+                                HikerHistoryType.EVENT_ATTENDED,
+                                this.event?.creationDate!!,
+                                this.event?.id!!,
+                                this.event?.name,
+                                this.event?.meetingPoint.toString()
+                            )
+
+                            HikerFirebaseQueries.addHistoryItem(this.hiker?.id!!, historyItem)
+
                         }
                         .addOnFailureListener { e ->
                             Log.w(TAG, e.message.toString())
@@ -233,6 +248,7 @@ class EventActivity : BaseDataFlowActivity() {
     private fun startEventEditActivity(){
         val eventEditActivityIntent= Intent(this, EventEditActivity::class.java)
         eventEditActivityIntent.putExtra(EventEditActivity.KEY_BUNDLE_EVENT,this.event)
+        eventEditActivityIntent.putExtra(EventEditActivity.KEY_BUNDLE_HIKER, this.hiker)
         startActivityForResult(eventEditActivityIntent, KEY_REQUEST_EVENT_EDIT)
     }
 

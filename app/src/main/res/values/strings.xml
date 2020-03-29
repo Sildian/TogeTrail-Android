@@ -103,6 +103,17 @@
     <string name="label_hiker_email">My email</string>
     <string name="label_hiker_registration_date">Member since</string>
     <string name="label_hiker_account">My account</string>
+    <string name="label_hiker_trails_created_sing">created\ntrail</string>
+    <string name="label_hiker_trails_created_plur">created\ntrails</string>
+    <string name="label_hiker_events_created_sing">created\nevent</string>
+    <string name="label_hiker_events_created_plur">created\nevents</string>
+    <string name="label_hiker_events_registered_sing">event\nregistration</string>
+    <string name="label_hiker_events_registered_plur">events\nregistrations</string>
+    <string name="label_hiker_history">My history</string>
+    <string name="label_hiker_history_hiker_registered">registered on TogeTrail</string>
+    <string name="label_hiker_history_trail_created">created a new trail in</string>
+    <string name="label_hiker_history_event_created">created a new event in</string>
+    <string name="label_hiker_history_event_attended">decided to attend an event in</string>
     <!-- Event -->
     <string name="label_event_main_info">Main info</string>
     <string name="label_event_name">Name</string>
@@ -126,7 +137,10 @@
     <string name="label_event_list_nearby_events">Events near my home</string>
 
     <!-- Examples for layout preview -->
+    <!-- Common -->
     <string name="example_image_content_description">Image</string>
+    <string name="example_number">10</string>
+    <string name="example_date">06/30/2020</string>
     <!-- Location -->
     <string name="example_location">Chamonix, Savoie, France</string>
     <string name="example_location_fine">1 rue de la Montagne\nChamonix\nSavoie\nFrance</string>
@@ -152,6 +166,7 @@
     <string name="example_hiker_live_location">Toto city</string>
     <string name="example_hiker_age">5 years old</string>
     <string name="example_hiker_description">My name is Toto. I really like Hiking.</string>
+    <string name="example_hiker_history">Toto created a new trail in Alberta, Canada.</string>
     <!-- Event -->
     <string name="example_event_name">Awesome event</string>
     <string name="example_event_description">This will be a awesome event! Come on everybody!</string>

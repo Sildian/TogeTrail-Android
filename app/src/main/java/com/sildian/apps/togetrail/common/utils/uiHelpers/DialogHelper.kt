@@ -6,16 +6,13 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleOwner
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.firestore.Query
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.RecyclerViewFirebaseHelper
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.support.TrailFirebaseQueries
-import com.sildian.apps.togetrail.trail.others.TrailVerticalAdapter
-import com.sildian.apps.togetrail.trail.others.TrailVerticalViewHolder
+import com.sildian.apps.togetrail.trail.others.TrailSelectionAdapter
+import com.sildian.apps.togetrail.trail.others.TrailSelectionViewHolder
 import kotlinx.android.synthetic.main.dialog_trail_selection.view.*
 
 /*************************************************************************************************
@@ -112,10 +109,10 @@ object DialogHelper {
         /*Sets the trailsRecyclerView*/
 
         val trailsRecyclerView=view.dialog_trail_selection_recycler_view_trails
-        val trailsAdapter=TrailVerticalAdapter(
+        val trailsAdapter=TrailSelectionAdapter(
             RecyclerViewFirebaseHelper.generateOptionsForAdapter(
                 Trail::class.java, TrailFirebaseQueries.getTrails(), activity),
-            object:TrailVerticalViewHolder.OnTrailClickListener{
+            object:TrailSelectionViewHolder.OnTrailClickListener{
 
                 /*On trail click, invokes the callback*/
 
