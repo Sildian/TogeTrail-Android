@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="@dimen/components_corner_medium"
+    app:cardBackgroundColor="@color/colorPrimary">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="@dimen/image_size_small"
+            android:layout_height="@dimen/image_size_small"
+            android:layout_margin="@dimen/components_margin_small"
+            app:cardCornerRadius="@dimen/components_corner_small">
+
+            <ImageView
+                android:id="@+id/map_info_window_trail_image_view_photo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/ic_trail_black"
+                android:contentDescription="@string/example_image_content_description"/>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/map_info_window_trail_text_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/components_margin_small"
+                android:textAllCaps="true"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/colorSecondary"
+                android:text="@string/example_trail_name"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/map_info_window_trail_text_level"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/components_margin_small"
+                    android:layout_marginEnd="@dimen/components_margin_small"
+                    android:gravity="center_horizontal"
+                    android:textSize="@dimen/text_size_small"
+                    android:textColor="@color/colorWhite"
+                    android:text="@string/label_trail_level_medium" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:textSize="@dimen/text_size_small"
+                    android:textColor="@color/colorWhite"
+                    android:text="@string/label_common_text_separator" />
+
+                <TextView
+                    android:id="@+id/map_info_window_trail_text_duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/components_margin_small"
+                    android:layout_marginEnd="@dimen/components_margin_small"
+                    android:gravity="center_horizontal"
+                    android:textSize="@dimen/text_size_small"
+                    android:textColor="@color/colorWhite"
+                    android:text="@string/example_trail_duration" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:textSize="@dimen/text_size_small"
+                    android:textColor="@color/colorWhite"
+                    android:text="@string/label_common_text_separator" />
+
+                <TextView
+                    android:id="@+id/map_info_window_trail_text_ascent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/components_margin_small"
+                    android:layout_marginEnd="@dimen/components_margin_small"
+                    android:gravity="center_horizontal"
+                    android:textSize="@dimen/text_size_small"
+                    android:textColor="@color/colorWhite"
+                    android:text="@string/example_trail_ascent" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/map_info_window_trail_text_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/components_margin_small"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/colorWhite"
+                android:text="@string/example_location" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

@@ -157,11 +157,6 @@ class TrailMapDrawFragment : BaseTrailMapGenerateFragment(){
         }
     }
 
-    override fun onPolylineClick(polyline: Polyline?) {
-        Log.d(TAG, "Clicked on polyline")
-        showTrailInfoFragment()
-    }
-
     override fun getInfoWindow(marker: Marker?): View? {
         return layoutInflater.inflate(R.layout.map_info_window_poi_remove, this.layout as ViewGroup, false)
     }

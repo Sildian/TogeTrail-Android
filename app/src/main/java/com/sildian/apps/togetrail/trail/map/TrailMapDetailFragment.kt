@@ -91,11 +91,6 @@ class TrailMapDetailFragment : BaseTrailMapFragment() {
         }
     }
 
-    override fun onPolylineClick(polyline: Polyline?) {
-        Log.d(TAG, "Clicked on polyline")
-        showTrailInfoFragment()
-    }
-
     /***********************************Trail monitoring*****************************************/
 
     /**

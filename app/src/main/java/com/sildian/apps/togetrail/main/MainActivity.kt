@@ -14,6 +14,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.view.menu.MenuPopupHelper
+import androidx.core.view.GravityCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.firebase.ui.auth.AuthUI
@@ -129,6 +130,16 @@ class MainActivity :
         updateAndSaveCurrentHiker()
     }
 
+    /************************************Navigation control**************************************/
+
+    override fun onBackPressed() {
+        if(this.drawerLayout.isDrawerOpen(GravityCompat.START)){
+            this.drawerLayout.closeDrawers()
+        }else {
+            super.onBackPressed()
+        }
+    }
+
     /*******************************Menu monitoring**********************************************/
 
     /**Click on menu item from...**/
@@ -230,8 +241,7 @@ class MainActivity :
 
         val menuPopupHelper=MenuPopupHelper(this, menuBuilder, this.addButton)
         menuPopupHelper.setForceShowIcon(true)
-        val menuPopupMargin=resources.getDimension(R.dimen.components_margin_medium).toInt()
-        menuPopupHelper.show(menuPopupMargin, menuPopupMargin)
+        menuPopupHelper.show()
     }
 
     /****************************Data monitoring**************************************************/

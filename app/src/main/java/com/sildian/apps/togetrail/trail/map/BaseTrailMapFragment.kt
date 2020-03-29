@@ -30,8 +30,7 @@ abstract class BaseTrailMapFragment :
     BaseDataFlowFragment(),
     OnMapReadyCallback,
     GoogleMap.OnMapClickListener,
-    GoogleMap.OnMarkerClickListener,
-    GoogleMap.OnPolylineClickListener
+    GoogleMap.OnMarkerClickListener
 {
 
     /**********************************Static items**********************************************/
@@ -198,7 +197,6 @@ abstract class BaseTrailMapFragment :
             this.map?.mapType= GoogleMap.MAP_TYPE_TERRAIN
             this.map?.setOnMapClickListener(this)
             this.map?.setOnMarkerClickListener(this)
-            this.map?.setOnPolylineClickListener(this)
             this.map?.isMyLocationEnabled=true
             onMapReadyActionsFinished()
         }

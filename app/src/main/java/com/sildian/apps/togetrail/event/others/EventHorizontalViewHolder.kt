@@ -87,6 +87,6 @@ class EventHorizontalViewHolder(
     }
 
     private fun updateLocationText(){
-        this.locationText.text=this.event.meetingPoint.fullAddress
+        this.locationText.text=this.event.meetingPoint.toString()
     }
 }
