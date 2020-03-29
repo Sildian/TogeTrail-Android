@@ -19,7 +19,7 @@ import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
 import com.sildian.apps.togetrail.trail.infoEdit.TrailInfoEditActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
-import com.sildian.apps.togetrail.trail.model.support.TrailHelper
+import com.sildian.apps.togetrail.trail.model.support.TrailBuilder
 import com.sildian.apps.togetrail.trail.model.support.TrailFirebaseQueries
 import io.ticofab.androidgpxparser.parser.GPXParser
 import kotlinx.android.synthetic.main.activity_trail.*
@@ -159,7 +159,9 @@ class TrailActivity : BaseDataFlowActivity() {
             try {
                 val gpx = gpxParser.parse(inputStream)
                 this.trail=
-                    TrailHelper.buildFromGpx(gpx)
+                    TrailBuilder
+                        .withGpx(gpx)
+                        .build()
                 this.fragment.updateTrailAndShowTrackAndInfo(this.trail)
             }
 
@@ -173,11 +175,11 @@ class TrailActivity : BaseDataFlowActivity() {
                 e.printStackTrace()
                 //TODO handle
             }
-            catch(e: TrailHelper.TrailBuildNoTrackException){
+            catch(e: TrailBuilder.TrailBuildNoTrackException){
                 e.printStackTrace()
                 //TODO handle
             }
-            catch(e: TrailHelper.TrailBuildTooManyTracksException){
+            catch(e: TrailBuilder.TrailBuildTooManyTracksException){
                 e.printStackTrace()
                 //TODO handle
             }

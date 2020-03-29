@@ -13,7 +13,6 @@ import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.event.edit.EventEditActivity
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
-import com.sildian.apps.togetrail.event.model.support.EventHelper
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
@@ -106,7 +105,7 @@ class EventActivity : BaseDataFlowActivity() {
             if(intent.hasExtra(KEY_BUNDLE_EVENT)){
                 this.event= intent.getParcelableExtra(KEY_BUNDLE_EVENT)
             }else{
-                this.event= EventHelper.buildFromNothing()
+                this.event= Event()
             }
             if(intent.hasExtra(KEY_BUNDLE_HIKER)){
                 this.hiker=intent.getParcelableExtra(KEY_BUNDLE_HIKER)

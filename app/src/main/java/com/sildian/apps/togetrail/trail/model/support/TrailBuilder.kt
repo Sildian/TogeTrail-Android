@@ -10,7 +10,7 @@ import io.ticofab.androidgpxparser.parser.domain.Gpx
  * Provides with functions allowing to build a Trail
  ************************************************************************************************/
 
-object TrailHelper {
+object TrailBuilder {
 
     /******************************Exceptions messages*******************************************/
 
@@ -33,25 +33,22 @@ object TrailHelper {
 
     class TrailBuildTooManyTracksException(message:String):Exception(message)
 
-    /**
-     * Builds a new Trail from nothing but a name. Sets the source as TogeTrail.
-     * @return the resulted trail
-     */
+    /**********************************Trail fields**********************************************/
 
-    fun buildFromNothing(): Trail {
-        val source="TogeTrail"
-        return Trail(
-            source = source
-        )
-    }
+    private var name:String?=null
+    private var source:String="TogeTrail"
+    private var description:String?=null
+    private var trailTrack:TrailTrack=TrailTrack()
+
+    /********************************Build steps*************************************************/
 
     /**
-     * Builds a Trail by uploading a gpx file
-     * @param gpx : the gpx file
-     * @return the resulted Trail
+     * Uses a Gpx to build a trail
+     * @param gpx : the gpx
+     * @return an instance of TrailBuilder
      */
 
-    fun buildFromGpx(gpx:Gpx): Trail {
+    fun withGpx(gpx:Gpx): TrailBuilder {
 
         /*If no track is available in the gpx, raises a TrailBuildNoTrackException*/
 
@@ -114,14 +111,30 @@ object TrailHelper {
             )
         }
 
-        /*Creates the trail and auto-calculates the metrics*/
+        /*Sets the fields*/
 
-        val trail= Trail(
-            name = name,
-            source = source,
-            description = description,
-            trailTrack = trailTrack
+        this.name = name
+        this.source = source
+        this.description = description
+        this.trailTrack = trailTrack
+
+        return this
+    }
+
+    /**
+     * Builds a Trail with the provided fields
+     * @return a Trail
+     */
+
+    fun build():Trail{
+
+        val trail=Trail(
+            name = this.name,
+            source = this.source,
+            description = this.description,
+            trailTrack = this.trailTrack
         )
+
         trail.autoPopulatePosition()
         trail.autoCalculateMetrics()
 

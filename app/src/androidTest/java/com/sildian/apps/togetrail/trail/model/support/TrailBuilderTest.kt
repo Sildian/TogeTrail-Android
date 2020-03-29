@@ -2,18 +2,15 @@ package com.sildian.apps.togetrail.trail.model.support
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
-import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.trail.model.support.TrailHelper
 import io.ticofab.androidgpxparser.parser.GPXParser
 import org.junit.Test
 import org.junit.Assert.*
 
-class TrailHelperTest {
+class TrailBuilderTest {
 
     @Test
     fun given_name_when_buildFromNothing_then_checkResultIsOk(){
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        val trail= TrailHelper.buildFromNothing()
+        val trail= TrailBuilder.build()
         assertEquals("TogeTrail", trail.source)
     }
 
@@ -25,7 +22,9 @@ class TrailHelperTest {
         val gpx = gpxParser.parse(inputStream)
         assertNotNull(gpx)
 
-        val trail= TrailHelper.buildFromGpx(gpx)
+        val trail= TrailBuilder
+            .withGpx(gpx)
+            .build()
         assertEquals("Test", trail.name)
         assertEquals("Sildian apps", trail.source)
         assertTrue(trail.trailTrack.trailPoints.size>0)
@@ -45,9 +44,11 @@ class TrailHelperTest {
         assertNotNull(gpx)
 
         try {
-            val trail = TrailHelper.buildFromGpx(gpx)
+            val trail = TrailBuilder
+                .withGpx(gpx)
+                .build()
         }
-        catch(e: TrailHelper.TrailBuildNoTrackException){
+        catch(e: TrailBuilder.TrailBuildNoTrackException){
             assertEquals("No track is available in the gpx.", e.message)
         }
     }
@@ -61,9 +62,11 @@ class TrailHelperTest {
         assertNotNull(gpx)
 
         try {
-            val trail = TrailHelper.buildFromGpx(gpx)
+            val trail = TrailBuilder
+                .withGpx(gpx)
+                .build()
         }
-        catch(e: TrailHelper.TrailBuildTooManyTracksException){
+        catch(e: TrailBuilder.TrailBuildTooManyTracksException){
             assertEquals("Gpx with more than one track are not supported.", e.message)
         }
     }

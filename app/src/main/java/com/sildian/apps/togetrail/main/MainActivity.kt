@@ -34,7 +34,7 @@ import com.sildian.apps.togetrail.hiker.profileEdit.ProfileEditActivity
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
-import com.sildian.apps.togetrail.hiker.model.support.HikerHelper
+import com.sildian.apps.togetrail.hiker.model.support.HikerBuilder
 import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
 import com.sildian.apps.togetrail.hiker.profile.ProfileActivity
 import com.sildian.apps.togetrail.location.model.core.Location
@@ -264,7 +264,9 @@ class MainActivity :
                     /*Else, creates a hiker profile in the database*/
 
                     else{
-                        this.currentHiker=HikerHelper.buildFromFirebaseUser(user)
+                        this.currentHiker=HikerBuilder
+                            .withFirebaseUser(user)
+                            .build()
                         HikerFirebaseQueries.createOrUpdateHiker(this.currentHiker!!)
                             .addOnSuccessListener {
                                 //TODO handle
