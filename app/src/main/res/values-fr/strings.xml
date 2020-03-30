@@ -6,8 +6,6 @@
     <string name="menu_trails">Randos</string>
     <string name="menu_events">Evènements</string>
     <string name="menu_user_profile">Mon profil</string>
-    <string name="menu_user_trails">Mes randos</string>
-    <string name="menu_user_events">Mes évènements</string>
     <string name="menu_user_settings">Mes paramètres</string>
     <string name="menu_user_login">Connexion / Déconnexion</string>
     <string name="menu_new_trail">Nouvelle rando</string>

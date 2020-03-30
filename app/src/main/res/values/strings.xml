@@ -7,8 +7,6 @@
     <string name="menu_trails">Trails</string>
     <string name="menu_events">Events</string>
     <string name="menu_user_profile">My profile</string>
-    <string name="menu_user_trails">My trails</string>
-    <string name="menu_user_events">My events</string>
     <string name="menu_user_settings">My settings</string>
     <string name="menu_user_login">Log in / off</string>
     <string name="menu_new_trail">New trail</string>

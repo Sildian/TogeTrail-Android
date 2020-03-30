@@ -26,15 +26,6 @@
 
         <com.google.android.material.button.MaterialButton
             style="@style/IconButtonStyle"
-            android:id="@+id/fragment_trail_info_button_see"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="@dimen/components_margin_medium"
-            app:icon="@drawable/ic_see_white" />
-
-        <com.google.android.material.button.MaterialButton
-            style="@style/IconButtonStyle"
             android:id="@+id/fragment_trail_info_button_edit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

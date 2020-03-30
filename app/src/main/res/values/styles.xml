@@ -93,8 +93,8 @@
     <style name="BottomNavigationViewTheme" parent="@style/Widget.MaterialComponents.BottomNavigationView">
         <item name="android:background">@color/colorWhite</item>
         <item name="backgroundTint">@color/colorPrimary</item>
-        <item name="itemIconTint">@color/colorset_menu</item>
-        <item name="itemTextColor">@color/colorset_menu</item>
+        <item name="itemIconTint">@color/colorset_menu_text</item>
+        <item name="itemTextColor">@color/colorset_menu_text</item>
         <item name="itemRippleColor">@color/colorSecondaryLight</item>
     </style>
 
@@ -134,11 +134,25 @@
     </style>
 
     <!-- Icon buttons -->
-    <style name="IconButtonStyle" parent="@style/Widget.MaterialComponents.Button.UnelevatedButton">
-        <item name="backgroundTint">@android:color/transparent</item>
+    <style name="IconButtonStyle" parent="@style/Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="iconPadding">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:minWidth">48dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="iconGravity">textStart</item>
+        <item name="strokeColor">@android:color/transparent</item>
         <item name="rippleColor">@color/colorSecondaryLight</item>
         <item name="iconTint">@color/colorSecondary</item>
-        <item name="iconGravity">textStart</item>
+    </style>
+
+    <!-- Toggle Icon buttons -->
+    <style name="ToggleIconButtonStyle" parent="@style/IconButtonStyle">
+        <item name="backgroundTint">@color/colorset_toggle_background</item>
+        <item name="iconTint">@color/colorWhite</item>
+        <item name="rippleColor">@color/colorWhite</item>
     </style>
 
     <!-- Text input fields -->
@@ -165,7 +179,6 @@
     </style>
 
     <!-- Main Shape appearance -->
-
     <style name="ShapeAppearanceOverlay.Main">
         <item name="cornerFamily">cut</item>
         <item name="cornerSizeTopLeft">@dimen/components_corner_medium</item>
@@ -173,7 +186,6 @@
     </style>
 
     <!-- Left Shape appearance -->
-
     <style name="ShapeAppearanceOverlay.Left">
         <item name="cornerFamily">cut</item>
         <item name="cornerSizeBottomRight">@dimen/components_corner_medium</item>

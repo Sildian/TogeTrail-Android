@@ -39,7 +39,6 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
 
     private lateinit var layout:View
     private val nameText by lazy {layout.fragment_trail_info_text_name}
-    private val seeButton by lazy {layout.fragment_trail_info_button_see}
     private val editButton by lazy {layout.fragment_trail_info_button_edit}
     private val levelText by lazy {layout.fragment_trail_info_text_level}
     private val typeText by lazy {layout.fragment_trail_info_text_type}
@@ -72,7 +71,6 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
 
     private fun initializeAllUIComponents(){
         initializeNameText()
-        initializeSeeButton()
         initializeEditButton()
         initializeLevelText()
         initializeTypeText()
@@ -92,25 +90,9 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
         this.nameText.text=this.trail?.name
     }
 
-    private fun initializeSeeButton(){
-        if(activity is MainActivity) {
-            this.seeButton.setOnClickListener {
-                (parentFragment as TrailMapFragment).showTrailDetail()
-            }
-        }
-        else{
-            this.seeButton.visibility=View.GONE
-        }
-    }
-
     private fun initializeEditButton(){
-        if(activity is TrailActivity) {
-            this.editButton.setOnClickListener {
-                (parentFragment as BaseTrailMapFragment).editTrailInfo()
-            }
-        }
-        else{
-            this.editButton.visibility=View.GONE
+        this.editButton.setOnClickListener {
+            (parentFragment as BaseTrailMapFragment).editTrailInfo()
         }
     }
 

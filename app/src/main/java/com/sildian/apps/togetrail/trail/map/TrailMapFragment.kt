@@ -44,9 +44,15 @@ class TrailMapFragment (
         private const val TAG = "TrailMapFragment"
     }
 
+    /**************************************Data**************************************************/
+
+    private var showTrails=true                     //True if trails must be shown
+    private var showEvents=false                    //True if events must be shown
+
     /**********************************UI component**********************************************/
 
     private val searchButton by lazy {layout.fragment_trail_map_button_search}
+    private val filterToggle by lazy {layout.fragment_trail_map_toggle_filter}
 
     /************************************Life cycle**********************************************/
 
@@ -54,27 +60,28 @@ class TrailMapFragment (
         super.onCreateView(inflater, container, savedInstanceState)
         Log.d(TAG, "Fragment '${javaClass.simpleName}' created")
         initializeSearchButton()
+        initializeFilterToggle()
         return this.layout
     }
 
     /**********************************Data monitoring*******************************************/
 
     override fun updateData() {
-        (activity as MainActivity).loadTrails(this::handleTrailsQueryResult)
-        (activity as MainActivity).loadEvents(this::handleEventsQueryResult)
+        if(this.showTrails) {
+            (activity as MainActivity).loadTrails(this::handleTrailsQueryResult)
+        }
+        if(this.showEvents) {
+            (activity as MainActivity).loadEvents(this::handleEventsQueryResult)
+        }
     }
 
     private fun handleTrailsQueryResult(trails: List<Trail>) {
         this.trails=trails
-        this.map?.clear()
         showTrailsOnMap()
-        showEventsOnMap()
     }
 
     private fun handleEventsQueryResult(events: List<Event>) {
         this.events=events
-        this.map?.clear()
-        showTrailsOnMap()
         showEventsOnMap()
     }
 
@@ -101,8 +108,31 @@ class TrailMapFragment (
             val point=this.map?.cameraPosition?.target
             if(point!=null) {
                 (activity as MainActivity).setQueriesToSearchAroundPoint(point)
-                (activity as MainActivity).loadTrails(this::handleTrailsQueryResult)
-                (activity as MainActivity).loadEvents(this::handleEventsQueryResult)
+                if(this.showTrails) {
+                    (activity as MainActivity).loadTrails(this::handleTrailsQueryResult)
+                }
+                if(this.showEvents) {
+                    (activity as MainActivity).loadEvents(this::handleEventsQueryResult)
+                }
+            }
+        }
+    }
+
+    private fun initializeFilterToggle(){
+        this.filterToggle.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            when(checkedId){
+                R.id.fragment_trail_map_toggle_filter_trails ->
+                    if(isChecked) {
+                        this.showTrails=true
+                        this.showEvents=false
+                        (activity as MainActivity).loadTrails(this::handleTrailsQueryResult)
+                    }
+                R.id.fragment_trail_map_toggle_filter_events ->
+                    if(isChecked) {
+                        this.showTrails=false
+                        this.showEvents=true
+                        (activity as MainActivity).loadEvents(this::handleEventsQueryResult)
+                    }
             }
         }
     }
@@ -113,11 +143,19 @@ class TrailMapFragment (
         this.map?.setInfoWindowAdapter(this)
         this.map?.setOnInfoWindowClickListener(this)
         if(this.trails.isEmpty()){
-            (activity as MainActivity).loadTrails(this::handleTrailsQueryResult)
-            (activity as MainActivity).loadEvents(this::handleEventsQueryResult)
+            if(this.showTrails) {
+                (activity as MainActivity).loadTrails(this::handleTrailsQueryResult)
+            }
+            if(this.showEvents) {
+                (activity as MainActivity).loadEvents(this::handleEventsQueryResult)
+            }
         }else {
-            showTrailsOnMap()
-            showEventsOnMap()
+            if(this.showTrails) {
+                showTrailsOnMap()
+            }
+            if(this.showEvents) {
+                showEventsOnMap()
+            }
         }
     }
 
@@ -204,6 +242,8 @@ class TrailMapFragment (
 
     private fun showTrailsOnMap(){
 
+        this.map?.clear()
+
         /*For each trail in the list, shows a marker*/
 
         this.trails.forEach { trail ->
@@ -219,17 +259,13 @@ class TrailMapFragment (
         }
     }
 
-    /**Shows the current trail's detail**/
-
-    fun showTrailDetail(){
-        (activity as MainActivity).seeTrail(this.trail)
-    }
-
     /***********************************Events monitoring****************************************/
 
     /**Shows the list of events on the map**/
 
     private fun showEventsOnMap(){
+
+        this.map?.clear()
 
         /*For each event in the list, shows a marker*/
 

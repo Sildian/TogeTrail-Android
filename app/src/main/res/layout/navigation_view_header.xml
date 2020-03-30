@@ -30,8 +30,7 @@
             android:layout_height="@dimen/image_size_small"
             android:layout_margin="@dimen/components_margin_medium"
             android:contentDescription="@string/example_image_content_description"
-            app:srcCompat="@drawable/ic_person_black"
-            android:tint="@color/colorWhite"/>
+            app:srcCompat="@drawable/ic_person_white" />
 
         <TextView
             android:id="@+id/navigation_view_header_text_user_name"
