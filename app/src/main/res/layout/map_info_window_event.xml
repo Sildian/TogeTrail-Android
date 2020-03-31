@@ -21,8 +21,8 @@
 
             <ImageView
                 android:id="@+id/map_info_window_event_image_view_photo"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="@dimen/image_size_small"
+                android:layout_height="@dimen/image_size_small"
                 app:srcCompat="@drawable/ic_trail_black"
                 android:contentDescription="@string/example_image_content_description"/>
 

@@ -172,7 +172,8 @@ class EventEditActivity : BaseDataFlowActivity() {
                                 this.event?.creationDate!!,
                                 this.event?.id!!,
                                 this.event?.name!!,
-                                this.event?.meetingPoint?.toString()
+                                this.event?.meetingPoint?.toString(),
+                                this.event?.mainPhotoUrl
                             )
                             HikerFirebaseQueries.createOrUpdateHiker(this.hiker!!)
                             HikerFirebaseQueries.addHistoryItem(this.hiker!!.id, historyItem)

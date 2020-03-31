@@ -203,9 +203,10 @@ class EventEditFragment(private val event: Event?=null) :
     private fun addTrail(trail:Trail){
         Log.d(TAG, "Added trail '${trail.id}'")
 
-        /*Updates the event's latitude and longitude*/
+        /*Updates some data in the event with the given trail*/
 
         updateEventPosition(trail)
+        updateEventMainPhotoUrl(trail)
 
         /*If the event has no id yet, updates the offline adapter. Else updates the attached trail in the database*/
 
@@ -245,5 +246,11 @@ class EventEditFragment(private val event: Event?=null) :
 
     private fun updateEventPosition(trail:Trail){
         this.event?.position=trail.position
+    }
+
+    /**Updates the event's main photo url with the first photo url found in the given trail**/
+
+    private fun updateEventMainPhotoUrl(trail: Trail){
+        this.event?.mainPhotoUrl=trail.getFirstPhotoUrl()
     }
 }

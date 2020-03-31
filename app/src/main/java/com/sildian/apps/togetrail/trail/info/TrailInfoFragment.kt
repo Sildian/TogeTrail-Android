@@ -6,17 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
-import com.sildian.apps.togetrail.main.MainActivity
 import com.sildian.apps.togetrail.trail.map.BaseTrailMapFragment
-import com.sildian.apps.togetrail.trail.map.TrailActivity
-import com.sildian.apps.togetrail.trail.map.TrailMapFragment
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailLevel
-import com.sildian.apps.togetrail.trail.model.core.TrailType
 import kotlinx.android.synthetic.main.fragment_trail_info.view.*
 
 /*************************************************************************************************
@@ -40,8 +35,8 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
     private lateinit var layout:View
     private val nameText by lazy {layout.fragment_trail_info_text_name}
     private val editButton by lazy {layout.fragment_trail_info_button_edit}
+    private val levelImage by lazy {layout.fragment_trail_info_image_level}
     private val levelText by lazy {layout.fragment_trail_info_text_level}
-    private val typeText by lazy {layout.fragment_trail_info_text_type}
     private val durationText by lazy {layout.fragment_trail_info_text_duration}
     private val photoText by lazy {layout.fragment_trail_info_text_photo}
     private val photosRecyclerView by lazy {layout.fragment_trail_info_recycler_view_photos}
@@ -72,8 +67,8 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
     private fun initializeAllUIComponents(){
         initializeNameText()
         initializeEditButton()
+        initializeLevelImage()
         initializeLevelText()
-        initializeTypeText()
         initializeDuration()
         initializePhotosRecyclerView()
         initializeAscentText()
@@ -96,43 +91,19 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
         }
     }
 
-    private fun initializeLevelText(){
+    private fun initializeLevelImage(){
         when(this.trail?.level){
-            TrailLevel.EASY->{
-                this.levelText.compoundDrawablesRelative[0]=
-                    ContextCompat.getDrawable(context!!, R.drawable.ic_level_easy)
-                this.levelText.setText(R.string.label_trail_level_easy)
-            }
-            TrailLevel.MEDIUM->{
-                this.levelText.compoundDrawablesRelative[0]=
-                    ContextCompat.getDrawable(context!!, R.drawable.ic_level_medium)
-                this.levelText.setText(R.string.label_trail_level_medium)
-            }
-            TrailLevel.HARD->{
-                this.levelText.compoundDrawablesRelative[0]=
-                    ContextCompat.getDrawable(context!!, R.drawable.ic_level_hard)
-                this.levelText.setText(R.string.label_trail_level_hard)
-            }
+            TrailLevel.EASY-> this.levelImage.setImageResource(R.drawable.ic_level_easy)
+            TrailLevel.MEDIUM-> this.levelImage.setImageResource(R.drawable.ic_level_medium)
+            TrailLevel.HARD-> this.levelImage.setImageResource(R.drawable.ic_level_hard)
         }
     }
 
-    private fun initializeTypeText(){
-        when(this.trail?.type){
-            TrailType.HIKING->{
-                this.typeText.compoundDrawablesRelative[0]=
-                    ContextCompat.getDrawable(context!!, R.drawable.ic_hiking_white)
-                this.typeText.setText(R.string.label_trail_type_hiking)
-            }
-            TrailType.BIKING->{
-                this.typeText.compoundDrawablesRelative[0]=
-                    ContextCompat.getDrawable(context!!, R.drawable.ic_biking_white)
-                this.typeText.setText(R.string.label_trail_type_biking)
-            }
-            TrailType.OTHER->{
-                this.typeText.compoundDrawablesRelative[0]=
-                    ContextCompat.getDrawable(context!!, R.drawable.ic_trail_white)
-                this.typeText.setText(R.string.label_trail_type_other)
-            }
+    private fun initializeLevelText(){
+        when(this.trail?.level){
+            TrailLevel.EASY-> this.levelText.setText(R.string.label_trail_level_easy)
+            TrailLevel.MEDIUM-> this.levelText.setText(R.string.label_trail_level_medium)
+            TrailLevel.HARD-> this.levelText.setText(R.string.label_trail_level_hard)
         }
     }
 
@@ -196,11 +167,7 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
 
     private fun updatePhotos(){
         this.photosUrls.clear()
-        this.trail?.trailTrack?.trailPointsOfInterest?.forEach { trailPointOfInteret ->
-            if(!trailPointOfInteret.photoUrl.isNullOrEmpty()){
-                this.photosUrls.add(trailPointOfInteret.photoUrl!!)
-            }
-        }
+        this.trail?.getAllPhotosUrls()?.let { this.photosUrls.addAll(it) }
         this.photoAdapter.notifyDataSetChanged()
         updatePhotosVisibility()
     }

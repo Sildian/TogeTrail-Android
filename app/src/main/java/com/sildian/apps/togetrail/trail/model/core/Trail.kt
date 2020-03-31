@@ -23,9 +23,9 @@ data class Trail (
     var description:String?=null,
     val creationDate:Date=Date(),
     var lastUpdate:Date=Date(),
-    var type: TrailType = TrailType.HIKING,
     var level: TrailLevel = TrailLevel.MEDIUM,
     var loop:Boolean=true,
+    var mainPhotoUrl:String?=null,
     val trailTrack: TrailTrack = TrailTrack(),
     var duration:Int?=null,
     var distance:Int?=null,
@@ -94,6 +94,44 @@ data class Trail (
         this.minElevation=this.trailTrack.getMinElevation()
     }
 
+    /**
+     * Gets the list of all photos urls contained in the trail and all trailPointsOfInterests
+     * @return a list of urls
+     */
+
+    fun getAllPhotosUrls():List<String>{
+        val photosUrls= arrayListOf<String>()
+        if(!this.mainPhotoUrl.isNullOrEmpty()){
+            photosUrls.add(this.mainPhotoUrl.toString())
+        }
+        this.trailTrack.trailPointsOfInterest.forEach { trailPointOfInteret ->
+            if(!trailPointOfInteret.photoUrl.isNullOrEmpty()){
+                photosUrls.add(trailPointOfInteret.photoUrl.toString())
+            }
+        }
+        return photosUrls
+    }
+
+    /**
+     * Gets the first photo url : the trail's main photo, or if it is null, the first poi's non null photo
+     * If no photo exists, return null
+     * @return a string with an url or null if no photo exist
+     */
+
+    fun getFirstPhotoUrl():String?{
+        if(!this.mainPhotoUrl.isNullOrEmpty()){
+            return this.mainPhotoUrl
+        }
+        else{
+            this.trailTrack.trailPointsOfInterest.forEach { trailPointOfInterest ->
+                if(!trailPointOfInterest.photoUrl.isNullOrEmpty()){
+                    return trailPointOfInterest.photoUrl
+                }
+            }
+        }
+        return null
+    }
+
     /**Parcelable override**/
 
     companion object : Parceler<Trail> {
@@ -107,9 +145,9 @@ data class Trail (
             parcel.writeString(this.description)
             parcel.writeLong(this.creationDate.time)
             parcel.writeLong(this.lastUpdate.time)
-            parcel.writeParcelable(this.type, Parcelable.CONTENTS_FILE_DESCRIPTOR)
             parcel.writeParcelable(this.level, Parcelable.CONTENTS_FILE_DESCRIPTOR)
             parcel.writeInt(if(this.loop) 1 else 0)
+            parcel.writeString(this.mainPhotoUrl)
             parcel.writeParcelable(this.trailTrack, Parcelable.CONTENTS_FILE_DESCRIPTOR)
             parcel.writeInt(this.duration?:-1)
             parcel.writeInt(this.distance?:-1)
@@ -130,9 +168,9 @@ data class Trail (
                 parcel.readString(),
                 Date(parcel.readLong()),
                 Date(parcel.readLong()),
-                parcel.readParcelable(TrailType::class.java.classLoader)!!,
                 parcel.readParcelable(TrailLevel::class.java.classLoader)!!,
                 parcel.readInt() == 1,
+                parcel.readString(),
                 parcel.readParcelable(TrailTrack::class.java.classLoader)!!,
                 parcel.readInt(),
                 parcel.readInt(),

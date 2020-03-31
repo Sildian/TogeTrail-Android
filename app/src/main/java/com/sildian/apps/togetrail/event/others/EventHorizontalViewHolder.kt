@@ -2,11 +2,12 @@ package com.sildian.apps.togetrail.event.others
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.event.model.core.Event
 import kotlinx.android.synthetic.main.item_recycler_view_event_horizontal.view.*
-import kotlinx.android.synthetic.main.item_recycler_view_trail_horizontal.view.*
 
 /*************************************************************************************************
  * Displays an event's main info within an horizontal RecyclerView
@@ -31,7 +32,7 @@ class EventHorizontalViewHolder(
 
     /**********************************UI components*********************************************/
 
-    private val photoImageView by lazy {itemView.item_recycler_view_trail_horizontal_image_view_photo}
+    private val photoImageView by lazy {itemView.item_recycler_view_event_horizontal_image_view_photo}
     private val nameText by lazy {itemView.item_recycler_view_event_horizontal_text_name}
     private val beginDateText by lazy {itemView.item_recycler_view_event_horizontal_text_begin_date}
     private val nbDaysText by lazy {itemView.item_recycler_view_event_horizontal_text_nb_days}
@@ -55,8 +56,15 @@ class EventHorizontalViewHolder(
     }
 
     private fun updatePhotoImageView(){
-
-        //TODO Implement later, fetch photos within trails?
+        if(this.event.mainPhotoUrl!=null) {
+            Glide.with(this.itemView)
+                .load(this.event.mainPhotoUrl)
+                .apply(RequestOptions.centerCropTransform())
+                .placeholder(R.drawable.ic_trail_black)
+                .into(this.photoImageView)
+        }else{
+            this.photoImageView.setImageResource(R.drawable.ic_trail_black)
+        }
     }
 
     private fun updateNameText(){

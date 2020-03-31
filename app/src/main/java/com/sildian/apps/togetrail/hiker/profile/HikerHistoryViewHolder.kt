@@ -2,6 +2,9 @@ package com.sildian.apps.togetrail.hiker.profile
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import kotlinx.android.synthetic.main.item_recycler_view_hiker_history.view.*
@@ -50,7 +53,15 @@ class HikerHistoryViewHolder (
     }
 
     private fun updateImage(){
-        //TODO see that later, ensure that trails and events have photos
+        if(this.historyItem.photoUrl!=null) {
+            Glide.with(this.itemView)
+                .load(this.historyItem.photoUrl)
+                .apply(RequestOptions.centerCropTransform())
+                .placeholder(R.drawable.ic_trail_black)
+                .into(this.image)
+        }else{
+            this.image.setImageResource(R.drawable.ic_trail_black)
+        }
     }
 
     private fun updateNameText(){

@@ -233,7 +233,8 @@ class TrailActivity : BaseDataFlowActivity() {
                                 this.trail?.creationDate!!,
                                 this.trail?.id!!,
                                 this.trail?.name!!,
-                                this.trail?.location?.toString()
+                                this.trail?.location?.toString(),
+                                this.trail?.getFirstPhotoUrl()
                             )
                             HikerFirebaseQueries.createOrUpdateHiker(this.hiker!!)
                             HikerFirebaseQueries.addHistoryItem(this.hiker!!.id, historyItem)

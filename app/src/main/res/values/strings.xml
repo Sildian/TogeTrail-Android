@@ -71,10 +71,6 @@
     <string name="label_trail_level_easy">Lvl Easy</string>
     <string name="label_trail_level_medium">Lvl Medium</string>
     <string name="label_trail_level_hard">Lvl Hard</string>
-    <string name="label_trail_type">Type</string>
-    <string name="label_trail_type_hiking">Hiking</string>
-    <string name="label_trail_type_biking">Biking</string>
-    <string name="label_trail_type_other">Other</string>
     <string name="label_trail_metrics">Metrics</string>
     <string name="label_trail_ascent_short">Asc</string>
     <string name="label_trail_descent_short">Desc</string>
@@ -203,13 +199,6 @@
         <item>Easy</item>
         <item>Medium</item>
         <item>Hard</item>
-    </string-array>
-
-    <!-- Trail level array -->
-    <string-array name="array_trail_types">
-        <item>Hiking</item>
-        <item>Biking</item>
-        <item>Other</item>
     </string-array>
 
 </resources>

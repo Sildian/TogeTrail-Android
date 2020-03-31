@@ -64,14 +64,14 @@ object EventFirebaseQueries {
         when {
             location.region!=null -> {
                 getCollection()
-                    .whereEqualTo(FieldPath.of("location", "country", "code"), location.country?.code)
-                    .whereEqualTo(FieldPath.of("location", "region", "code"), location.region.code)
+                    .whereEqualTo(FieldPath.of("meetingPoint", "country", "code"), location.country?.code)
+                    .whereEqualTo(FieldPath.of("meetingPoint", "region", "code"), location.region.code)
                     .whereGreaterThan("beginDate", Date())
                     .orderBy("beginDate", Query.Direction.ASCENDING)
             }
             location.country!=null -> {
                 getCollection()
-                    .whereEqualTo(FieldPath.of("location", "country", "code"), location.country.code)
+                    .whereEqualTo(FieldPath.of("meetingPoint", "country", "code"), location.country.code)
                     .whereGreaterThan("beginDate", Date())
                     .orderBy("beginDate", Query.Direction.ASCENDING)
             }

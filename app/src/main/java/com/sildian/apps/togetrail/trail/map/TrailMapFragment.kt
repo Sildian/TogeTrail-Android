@@ -1,10 +1,17 @@
 package com.sildian.apps.togetrail.trail.map
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
@@ -185,8 +192,8 @@ class TrailMapFragment (
 
     override fun getInfoWindow(marker: Marker?): View? {
         return when(marker?.tag){
-            is Trail -> showTrailInfoWindow(marker.tag as Trail)
-            is Event -> showEventInfoWindow(marker.tag as Event)
+            is Trail -> showTrailInfoWindow(marker, marker.tag as Trail)
+            is Event -> showEventInfoWindow(marker, marker.tag as Event)
             else -> null
         }
     }
@@ -202,9 +209,30 @@ class TrailMapFragment (
         }
     }
 
-    private fun showTrailInfoWindow(trail:Trail):View?{
+    private fun showTrailInfoWindow(marker:Marker?, trail:Trail):View?{
         val view=layoutInflater.inflate(
             R.layout.map_info_window_trail, this.layout as ViewGroup, false)
+        if(trail.getFirstPhotoUrl()!=null) {
+            Glide.with(view)
+                .load(trail.getFirstPhotoUrl())
+                .apply(RequestOptions.centerCropTransform())
+                .placeholder(R.drawable.ic_trail_black)
+                .listener(object : RequestListener<Drawable>{
+                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                        Log.w(TAG, e?.message.toString())
+                        return false
+                    }
+                    override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                        dataSource?.let {
+                            if (dataSource != DataSource.MEMORY_CACHE) {
+                                marker?.showInfoWindow()
+                            }
+                        }
+                        return false
+                    }
+                })
+                .into(view.map_info_window_trail_image_view_photo)
+        }
         view.map_info_window_trail_text_name.text=trail.name
         when(trail.level){
             TrailLevel.EASY -> view.map_info_window_trail_text_level.setText(R.string.label_trail_level_easy)
@@ -219,9 +247,30 @@ class TrailMapFragment (
         return view
     }
 
-    private fun showEventInfoWindow(event:Event):View?{
+    private fun showEventInfoWindow(marker:Marker?, event:Event):View?{
         val view=layoutInflater.inflate(
             R.layout.map_info_window_event, this.layout as ViewGroup, false)
+        if(event.mainPhotoUrl!=null) {
+            Glide.with(view)
+                .load(event.mainPhotoUrl)
+                .apply(RequestOptions.centerCropTransform())
+                .placeholder(R.drawable.ic_trail_black)
+                .listener(object : RequestListener<Drawable>{
+                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                        Log.w(TAG, e?.message.toString())
+                        return false
+                    }
+                    override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                        dataSource?.let {
+                            if (dataSource != DataSource.MEMORY_CACHE) {
+                                marker?.showInfoWindow()
+                            }
+                        }
+                        return false
+                    }
+                })
+                .into(view.map_info_window_event_image_view_photo)
+        }
         view.map_info_window_event_text_name.text=event.name
         view.map_info_window_event_text_begin_date.text= DateUtilities.displayDateShort(event.beginDate!!)
         val nbDays=event.getNbDays()

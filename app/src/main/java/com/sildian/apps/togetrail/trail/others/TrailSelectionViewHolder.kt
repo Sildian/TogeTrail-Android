@@ -62,10 +62,7 @@ class TrailSelectionViewHolder (
 
         /*Fetches photos within the trail*/
 
-        val photoUrl=
-            this.trail.trailTrack.trailPointsOfInterest.firstOrNull { trailPointOfInterest ->
-                trailPointOfInterest.photoUrl!=null
-            }?.photoUrl
+        val photoUrl=this.trail.getFirstPhotoUrl()
 
         /*Shows a photo only if at least one photo exists*/
 

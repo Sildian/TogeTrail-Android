@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
@@ -96,7 +98,15 @@ class EventFragment(
     }
 
     private fun updatePhotoImageView(){
-        //TODO implement
+        if(this.event?.mainPhotoUrl!=null) {
+            Glide.with(context!!)
+                .load(this.event?.mainPhotoUrl)
+                .apply(RequestOptions.centerCropTransform())
+                .placeholder(R.drawable.ic_trail_black)
+                .into(this.photoImageView)
+        }else{
+            this.photoImageView.setImageResource(R.drawable.ic_trail_black)
+        }
     }
 
     private fun updateNameText(){

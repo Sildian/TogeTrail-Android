@@ -42,53 +42,80 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/TextInputFieldDropDownMenuStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:baselineAligned="false">
+            android:layout_marginTop="@dimen/components_margin_small"
+            android:layout_marginBottom="@dimen/components_margin_small"
+            android:layout_marginStart="@dimen/components_margin_medium"
+            android:layout_marginEnd="@dimen/components_margin_small"
+            android:hint="@string/label_trail_level">
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/TextInputFieldDropDownMenuStyle"
-                android:layout_width="0dp"
+            <AutoCompleteTextView
+                android:id="@+id/fragment_trail_info_edit_text_field_dropdown_level"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginTop="@dimen/components_margin_small"
-                android:layout_marginBottom="@dimen/components_margin_small"
-                android:layout_marginStart="@dimen/components_margin_medium"
-                android:layout_marginEnd="@dimen/components_margin_small"
-                android:hint="@string/label_trail_level">
+                android:inputType="textCapSentences"
+                android:focusable="false" />
 
-                <AutoCompleteTextView
-                    android:id="@+id/fragment_trail_info_edit_text_field_dropdown_level"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textCapSentences"
-                    android:focusable="false" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/components_margin_small"
+            android:layout_marginBottom="@dimen/components_margin_small"
+            android:layout_marginStart="@dimen/components_margin_medium"
+            android:layout_marginEnd="@dimen/components_margin_medium"
+            app:cardCornerRadius="@dimen/components_corner_medium">
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/TextInputFieldDropDownMenuStyle"
-                android:layout_width="0dp"
+            <TextView
+                android:id="@+id/fragment_trail_info_edit_text_photo"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginTop="@dimen/components_margin_small"
-                android:layout_marginBottom="@dimen/components_margin_small"
-                android:layout_marginStart="@dimen/components_margin_small"
-                android:layout_marginEnd="@dimen/components_margin_medium"
-                android:hint="@string/label_trail_type">
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/message_no_photo_available"
+                android:drawableStart="@drawable/ic_trail_black"
+                android:drawablePadding="@dimen/components_margin_small"
+                android:visibility="invisible"/>
 
-                <AutoCompleteTextView
-                    android:id="@+id/fragment_trail_info_edit_text_field_dropdown_type"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textCapSentences"
-                    android:focusable="false" />
+            <ImageView
+                android:id="@+id/fragment_trail_info_edit_image_view_photo"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/image_size_large"
+                android:contentDescription="@string/example_image_content_description"
+                app:srcCompat="@drawable/ic_trail_black"/>
 
-            </com.google.android.material.textfield.TextInputLayout>
+            <ImageButton
+                android:id="@+id/fragment_trail_info_edit_button_delete_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/components_margin_small"
+                android:layout_gravity="top|end"
+                android:contentDescription="@string/example_image_content_description"
+                app:srcCompat="@drawable/ic_delete_black"/>
 
-        </LinearLayout>
+            <ImageButton
+                android:id="@+id/fragment_trail_info_edit_button_add_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/components_margin_small"
+                android:layout_gravity="bottom|start"
+                android:contentDescription="@string/example_image_content_description"
+                app:srcCompat="@drawable/ic_add_black"/>
+
+            <ImageButton
+                android:id="@+id/fragment_trail_info_edit_button_take_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/components_margin_small"
+                android:layout_gravity="bottom|end"
+                android:contentDescription="@string/example_image_content_description"
+                app:srcCompat="@drawable/ic_add_photo_black"/>
+
+        </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:layout_width="wrap_content"
