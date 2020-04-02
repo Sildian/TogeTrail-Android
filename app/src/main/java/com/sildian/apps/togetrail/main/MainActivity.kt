@@ -74,7 +74,9 @@ class MainActivity :
         /**Request keys for activities**/
         private const val KEY_REQUEST_LOGIN=1001
         private const val KEY_REQUEST_PROFILE=1002
-        private const val KEY_REQUEST_LOCATION_SEARCH=1003
+        private const val KEY_REQUEST_TRAIL=1003
+        private const val KEY_REQUEST_EVENT=1004
+        private const val KEY_REQUEST_LOCATION_SEARCH=1005
 
         /**Request keys for permissions**/
         private const val KEY_REQUEST_PERMISSION_LOCATION=2001
@@ -590,7 +592,7 @@ class MainActivity :
             trailActivityIntent.putExtra(TrailActivity.KEY_BUNDLE_TRAIL, trail)
         }
         trailActivityIntent.putExtra(TrailActivity.KEY_BUNDLE_HIKER, this.currentHiker)
-        startActivity(trailActivityIntent)
+        startActivityForResult(trailActivityIntent, KEY_REQUEST_TRAIL)
     }
 
     /**
@@ -603,7 +605,7 @@ class MainActivity :
         if(this.currentHiker!=null){
             eventActivityIntent.putExtra(EventActivity.KEY_BUNDLE_HIKER, this.currentHiker)
         }
-        startActivity(eventActivityIntent)
+        startActivityForResult(eventActivityIntent, KEY_REQUEST_EVENT)
     }
 
     /**
@@ -632,6 +634,8 @@ class MainActivity :
         when(requestCode){
             KEY_REQUEST_LOGIN -> handleLoginResult(resultCode, data)
             KEY_REQUEST_PROFILE -> handleProfileResult(resultCode, data)
+            KEY_REQUEST_TRAIL -> handleTrailResult(resultCode, data)
+            KEY_REQUEST_EVENT -> handleEventResult(resultCode, data)
             KEY_REQUEST_LOCATION_SEARCH -> handleLocationSearchResult(resultCode, data)
         }
     }
@@ -667,6 +671,28 @@ class MainActivity :
         if(resultCode== Activity.RESULT_OK){
             if(data!=null && data.hasExtra(ProfileActivity.KEY_BUNDLE_HIKER)){
                 this.currentHiker=data.getParcelableExtra(ProfileActivity.KEY_BUNDLE_HIKER)
+                updateNavigationViewUserItems()
+            }
+        }
+    }
+
+    /**Handles trail result**/
+
+    private fun handleTrailResult(resultCode: Int, data: Intent?){
+        if(resultCode== Activity.RESULT_OK){
+            if(data!=null && data.hasExtra(TrailActivity.KEY_BUNDLE_HIKER)){
+                this.currentHiker=data.getParcelableExtra(TrailActivity.KEY_BUNDLE_HIKER)
+                updateNavigationViewUserItems()
+            }
+        }
+    }
+
+    /**Handles event result**/
+
+    private fun handleEventResult(resultCode: Int, data: Intent?){
+        if(resultCode== Activity.RESULT_OK){
+            if(data!=null && data.hasExtra(EventActivity.KEY_BUNDLE_HIKER)){
+                this.currentHiker=data.getParcelableExtra(EventActivity.KEY_BUNDLE_HIKER)
                 updateNavigationViewUserItems()
             }
         }

@@ -285,6 +285,7 @@ class EventEditActivity : BaseDataFlowActivity() {
     private fun finishOk(){
         val resultIntent=Intent()
         resultIntent.putExtra(KEY_BUNDLE_EVENT, this.event)
+        resultIntent.putExtra(KEY_BUNDLE_HIKER, this.hiker)
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
     }

@@ -157,7 +157,15 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
     fun saveTrail(){
         this.progressDialog=DialogHelper.createProgressDialog(this)
         this.progressDialog.show()
-        saveTrailOnline()
+        if(this.imagePathToUploadIntoDatabase!=null) {
+            saveImage()
+        }
+        else{
+            saveTrailOnline()
+        }
+        if(this.imagePathToDeleteFromDatabase!=null) {
+            deleteImage()
+        }
     }
 
     fun saveTrailPoi(trailPointOfInterest: TrailPointOfInterest){
@@ -188,10 +196,20 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
                     ?.addOnSuccessListener { url ->
                         Log.d(TAG, "Image successfully uploaded with url '${url}'")
 
-                        /*Then updates the trailPOI with this url*/
+                        /*Then updates the trail or the trailPOI with this url*/
 
-                        this.trailPointOfInterest?.photoUrl=url.toString()
-                        updateTrailPointOfInterest(this.trailPointOfInterest!!)
+                        when(this.currentAction){
+                            ACTION_TRAIL_EDIT_INFO -> {
+                                this.trail?.mainPhotoUrl=url.toString()
+                            }
+                            ACTION_TRAIL_EDIT_POI_INFO -> {
+                                this.trailPointOfInterest?.photoUrl=url.toString()
+                                updateTrailPointOfInterest(this.trailPointOfInterest!!)
+                            }
+                        }
+
+                        /*And saves the trail*/
+
                         saveTrailOnline()
                     }
                     ?.addOnFailureListener { e ->
@@ -380,6 +398,7 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
     private fun finishOk(){
         val resultIntent=Intent()
         resultIntent.putExtra(KEY_BUNDLE_TRAIL, this.trail)
+        resultIntent.putExtra(KEY_BUNDLE_HIKER, this.hiker)
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
     }

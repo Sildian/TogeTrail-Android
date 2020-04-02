@@ -399,6 +399,9 @@ class TrailActivity : BaseDataFlowActivity() {
                     val updatedTrail = data.getParcelableExtra<Trail>(TrailInfoEditActivity.KEY_BUNDLE_TRAIL)!!
                     updateTrail(updatedTrail)
                 }
+                if(data.hasExtra(TrailInfoEditActivity.KEY_BUNDLE_HIKER)) {
+                    this.hiker=data.getParcelableExtra(TrailInfoEditActivity.KEY_BUNDLE_HIKER)
+                }
             }
         }
     }
@@ -406,7 +409,9 @@ class TrailActivity : BaseDataFlowActivity() {
     /**Finish with ok result (the trail is saved)**/
 
     private fun finishOk(){
-        setResult(Activity.RESULT_OK)
+        val resultIntent=Intent()
+        resultIntent.putExtra(KEY_BUNDLE_HIKER, this.hiker)
+        setResult(Activity.RESULT_OK, resultIntent)
         finish()
     }
 

@@ -18,6 +18,7 @@ import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
 import kotlinx.android.synthetic.main.activity_event.*
+import java.util.*
 
 /*************************************************************************************************
  * Displays an event's detail info and allows a user to register on this event
@@ -86,11 +87,11 @@ class EventActivity : BaseDataFlowActivity() {
     /********************************Navigation control******************************************/
 
     override fun onBackPressed() {
-        finish()
+        finishOk()
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        finish()
+        finishOk()
         return true
     }
 
@@ -136,10 +137,11 @@ class EventActivity : BaseDataFlowActivity() {
 
                             val historyItem=HikerHistoryItem(
                                 HikerHistoryType.EVENT_ATTENDED,
-                                this.event?.creationDate!!,
+                                Date(),
                                 this.event?.id!!,
                                 this.event?.name,
-                                this.event?.meetingPoint.toString()
+                                this.event?.meetingPoint.toString(),
+                                this.event?.mainPhotoUrl
                             )
 
                             HikerFirebaseQueries.addHistoryItem(this.hiker?.id!!, historyItem)
@@ -258,12 +260,30 @@ class EventActivity : BaseDataFlowActivity() {
         }
     }
 
-    private fun handleEventEditActivityResult(resultCode: Int, data: Intent?){
-        if(resultCode== Activity.RESULT_OK){
-            if(data!=null && data.hasExtra(EventEditActivity.KEY_BUNDLE_EVENT)){
-                this.event=data.getParcelableExtra(EventEditActivity.KEY_BUNDLE_EVENT)
-                (this.fragment as EventFragment).updateEvent(this.event)
+    private fun handleEventEditActivityResult(resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                if (data.hasExtra(EventEditActivity.KEY_BUNDLE_EVENT)) {
+                    this.event = data.getParcelableExtra(EventEditActivity.KEY_BUNDLE_EVENT)
+                    (this.fragment as EventFragment).updateEvent(this.event)
+                }
+                if (data.hasExtra(EventEditActivity.KEY_BUNDLE_HIKER)) {
+                    this.hiker = data.getParcelableExtra(EventEditActivity.KEY_BUNDLE_HIKER)
+                }
             }
         }
+    }
+
+    private fun finishOk(){
+        val resultIntent=Intent()
+        resultIntent.putExtra(KEY_BUNDLE_EVENT, this.event)
+        resultIntent.putExtra(KEY_BUNDLE_HIKER, this.hiker)
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish()
+    }
+
+    private fun finishCancel(){
+        setResult(Activity.RESULT_CANCELED)
+        finish()
     }
 }
