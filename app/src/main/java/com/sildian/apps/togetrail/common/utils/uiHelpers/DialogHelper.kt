@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.RecyclerViewFirebaseHelper
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.support.TrailFirebaseQueries
 import com.sildian.apps.togetrail.trail.others.TrailSelectionAdapter
@@ -110,7 +110,7 @@ object DialogHelper {
 
         val trailsRecyclerView=view.dialog_trail_selection_recycler_view_trails
         val trailsAdapter=TrailSelectionAdapter(
-            RecyclerViewFirebaseHelper.generateOptionsForAdapter(
+            DatabaseFirebaseHelper.generateOptionsForAdapter(
                 Trail::class.java, TrailFirebaseQueries.getTrails(), activity),
             object:TrailSelectionViewHolder.OnTrailClickListener{
 

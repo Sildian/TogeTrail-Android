@@ -1,15 +1,11 @@
 package com.sildian.apps.togetrail.trail.map
 
-import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.Polyline
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
@@ -22,29 +18,11 @@ import kotlinx.android.synthetic.main.fragment_trail_map_draw.view.*
 
 class TrailMapDrawFragment : BaseTrailMapGenerateFragment(){
 
-    /**********************************Static items**********************************************/
-
-    companion object {
-
-        /**Logs**/
-        private const val TAG = "TrailMapDrawFragment"
-    }
-
     /**********************************UI component**********************************************/
 
     private val actionsButtonsLayout by lazy {layout.fragment_trail_map_draw_layout_actions_buttons}
     private val removePointButton by lazy {layout.fragment_trail_map_draw_button_point_remove}
     private val addPoiButton by lazy {layout.fragment_trail_map_draw_button_poi_add}
-
-    /************************************Life cycle**********************************************/
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        Log.d(TAG, "Fragment '${javaClass.simpleName}' created")
-        initializeRemovePointButton()
-        initializeAddPoiButton()
-        return this.layout
-    }
 
     /************************************UI monitoring*******************************************/
 
@@ -66,6 +44,15 @@ class TrailMapDrawFragment : BaseTrailMapGenerateFragment(){
         this.map?.uiSettings?.setAllGesturesEnabled(false)
         this.removePointButton.isEnabled=false
         this.addPoiButton.isEnabled=false
+    }
+
+    override fun initializeUI() {
+        initializeRemovePointButton()
+        initializeAddPoiButton()
+    }
+
+    override fun refreshUI() {
+        //Nothing
     }
 
     private fun initializeRemovePointButton(){
@@ -118,16 +105,12 @@ class TrailMapDrawFragment : BaseTrailMapGenerateFragment(){
         }
         else {
             if (point != null) {
-                Log.d(TAG, "Clicked on map at point lat ${point.latitude} lng ${point.longitude}")
                 val trailPoint=
                     TrailPoint(
                         point.latitude,
                         point.longitude
                     )
                 addTrailPoint(trailPoint)
-            } else {
-                //TODO handle
-                Log.w(TAG, "Clicked on map at unknown point")
             }
         }
     }
@@ -138,7 +121,6 @@ class TrailMapDrawFragment : BaseTrailMapGenerateFragment(){
 
         return when(marker?.tag){
             is TrailPointOfInterest ->{
-                Log.d(TAG, "Clicked on marker (TrailPointOfInterest)")
                 val trailPointOfInterest=marker.tag as TrailPointOfInterest
                 val trailPoiPosition=marker.snippet.toInt()
                 showTrailPOIInfoFragment(trailPointOfInterest, trailPoiPosition)
@@ -146,12 +128,10 @@ class TrailMapDrawFragment : BaseTrailMapGenerateFragment(){
                 true
             }
             is TrailPoint ->{
-                Log.d(TAG, "Clicked on marker (TrailPoint)")
                 showTrailInfoFragment()
                 true
             }
             else-> {
-                Log.w(TAG, "Clicked on marker (Unknown category)")
                 false
             }
         }
@@ -167,12 +147,8 @@ class TrailMapDrawFragment : BaseTrailMapGenerateFragment(){
 
     override fun onInfoWindowClick(marker: Marker?) {
         if(marker?.tag is TrailPointOfInterest) {
-            Log.d(TAG, "Clicked on info window (TrailPointOfInterest)")
             val trailPointOfInterest=marker.tag as TrailPointOfInterest
             removeTrailPointOfInterest(trailPointOfInterest)
-        }
-        else{
-            Log.w(TAG, "Clicked on info window (Unknown category)")
         }
     }
 }

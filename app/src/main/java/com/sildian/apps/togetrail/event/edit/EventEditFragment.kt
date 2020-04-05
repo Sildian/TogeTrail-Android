@@ -1,19 +1,15 @@
 package com.sildian.apps.togetrail.event.edit
 
-import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.DateUtilities
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.RecyclerViewFirebaseHelper
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.PickerHelper
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
+import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.others.TrailHorizontalAdapter
 import com.sildian.apps.togetrail.trail.others.TrailHorizontalAdapterOffline
@@ -45,7 +41,6 @@ class EventEditFragment(private val event: Event?=null) :
 
     /**********************************UI component**********************************************/
 
-    private lateinit var layout:View
     private val nameTextField by lazy {layout.fragment_event_edit_text_field_name}
     private val beginDateTextField by lazy {layout.fragment_event_edit_text_field_dropdown_begin_date}
     private val beginTimeTextField by lazy {layout.fragment_event_edit_text_field_dropdown_begin_time}
@@ -58,19 +53,13 @@ class EventEditFragment(private val event: Event?=null) :
     private val meetingPointTextField by lazy {layout.fragment_event_edit_text_field_meeting_point}
     private val descriptionTextField by lazy {layout.fragment_event_edit_text_field_description}
 
-    /************************************Life cycle**********************************************/
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d(TAG, "Fragment '${javaClass.simpleName}' created")
-        this.layout=inflater.inflate(R.layout.fragment_event_edit, container, false)
-        initializeAllUIComponents()
-        return this.layout
-    }
-
     /*********************************Data monitoring********************************************/
 
-    override fun updateData() {
-        initializeAllUIComponents()
+    override fun updateData(data:Any?) {
+        if(data is Location){
+            this.event?.meetingPoint=data
+            updateMeetingPointTextField()
+        }
     }
 
     override fun saveData() {
@@ -80,46 +69,52 @@ class EventEditFragment(private val event: Event?=null) :
         if(this.event?.id==null){
             (activity as EventEditActivity).updateAttachedTrailsToUpdate(this.attachedTrails)
         }
-        (activity as EventEditActivity).saveEvent()
+        (activity as EventEditActivity).saveEventInDatabase()
     }
 
     /***********************************UI monitoring********************************************/
 
-    private fun initializeAllUIComponents(){
-        initializeNameTextField()
-        initializeBeginDateTextField()
-        initializeBeginTimeTextField()
-        initializeEndDateTextField()
-        initializeEndTimeTextField()
+    override fun getLayoutId(): Int = R.layout.fragment_event_edit
+
+    override fun initializeUI() {
         initializeAttachedTrailsRecyclerView()
         initializeAddTrailsButton()
-        initializeMeetingPointTextField()
-        initializeDescriptionTextField()
+        refreshUI()
     }
 
-    private fun initializeNameTextField(){
+    override fun refreshUI() {
+        updateNameTextField()
+        updateBeginDateTextField()
+        updateBeginTimeTextField()
+        updateEndDateTextField()
+        updateEndTimeTextField()
+        updateMeetingPointTextField()
+        updateDescriptionTextField()
+    }
+
+    private fun updateNameTextField(){
         this.nameTextField.setText(this.event?.name)
     }
 
-    private fun initializeBeginDateTextField(){
+    private fun updateBeginDateTextField(){
         PickerHelper.populateEditTextWithDatePicker(
             this.beginDateTextField, activity as AppCompatActivity, this.event?.beginDate
         )
     }
 
-    private fun initializeBeginTimeTextField(){
+    private fun updateBeginTimeTextField(){
         PickerHelper.populateEditTextWithTimePicker(
             this.beginTimeTextField, activity as AppCompatActivity, this.event?.beginDate
         )
     }
 
-    private fun initializeEndDateTextField(){
+    private fun updateEndDateTextField(){
         PickerHelper.populateEditTextWithDatePicker(
             this.endDateTextField, activity as AppCompatActivity, this.event?.endDate
         )
     }
 
-    private fun initializeEndTimeTextField(){
+    private fun updateEndTimeTextField(){
         PickerHelper.populateEditTextWithTimePicker(
             this.endTimeTextField, activity as AppCompatActivity, this.event?.endDate
         )
@@ -139,9 +134,9 @@ class EventEditFragment(private val event: Event?=null) :
         }else {
             this.attachedTrailsAdapter=
                 TrailHorizontalAdapter(
-                    RecyclerViewFirebaseHelper.generateOptionsForAdapter(
+                    DatabaseFirebaseHelper.generateOptionsForAdapter(
                         Trail::class.java,
-                        EventFirebaseQueries.getAttachedTrails(this.event.id!!),
+                        EventFirebaseQueries.getAttachedTrails(this.event.id.toString()),
                         activity as AppCompatActivity
                 ), this, true, this
             )
@@ -155,14 +150,14 @@ class EventEditFragment(private val event: Event?=null) :
         }
     }
 
-    private fun initializeMeetingPointTextField(){
+    private fun updateMeetingPointTextField(){
         this.meetingPointTextField.setText(this.event?.meetingPoint?.fullAddress)
         this.meetingPointTextField.setOnClickListener {
             (activity as EventEditActivity).searchLocation()
         }
     }
 
-    private fun initializeDescriptionTextField(){
+    private fun updateDescriptionTextField(){
         this.descriptionTextField.setText(this.event?.description)
     }
 
@@ -201,7 +196,6 @@ class EventEditFragment(private val event: Event?=null) :
     /**Adds a trail to the event**/
 
     private fun addTrail(trail:Trail){
-        Log.d(TAG, "Added trail '${trail.id}'")
 
         /*Updates some data in the event with the given trail*/
 
@@ -222,14 +216,14 @@ class EventEditFragment(private val event: Event?=null) :
     /**On trail click**/
 
     override fun onTrailClick(trail: Trail) {
-        Log.d(TAG, "Click on trail '${trail.id}'")
-        //TODO show the trail's detail?
+        trail.id?.let { id ->
+            (activity as EventEditActivity).seeTrail(id)
+        }
     }
 
     /**Removes a trail from the event**/
 
     override fun onTrailRemoved(trail: Trail) {
-        Log.d(TAG, "Removed trail '${trail.id}'")
 
         /*If the event has no id yet, updates the offline adapter. Else updates the attached trail in the database*/
 

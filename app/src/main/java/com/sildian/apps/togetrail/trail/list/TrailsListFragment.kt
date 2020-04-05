@@ -1,17 +1,9 @@
 package com.sildian.apps.togetrail.trail.list
 
-import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.RecyclerViewFirebaseHelper
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.UserFirebaseHelper
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.main.MainActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
@@ -30,17 +22,8 @@ class TrailsListFragment (private val currentHiker: Hiker?=null) :
     TrailHorizontalViewHolder.OnTrailClickListener
 {
 
-    /**********************************Static items**********************************************/
-
-    companion object{
-
-        /**Logs**/
-        private const val TAG="TrailsListFragment"
-    }
-
     /**********************************UI component**********************************************/
 
-    private lateinit var layout:View
     private val lastAddedTrailsRecyclerView by lazy {layout.fragment_trails_list_recycler_view_last_added_trails }
     private lateinit var lastAddedTrailsAdapter:TrailHorizontalAdapter
     private val myTrailsRecyclerView by lazy {layout.fragment_trails_list_recycler_view_my_trails}
@@ -48,22 +31,23 @@ class TrailsListFragment (private val currentHiker: Hiker?=null) :
     private val nearbyTrailsRecyclerView by lazy {layout.fragment_trails_list_recycler_view_nearby_trails}
     private lateinit var nearbyTrailsAdapter:TrailHorizontalAdapter
 
-    /************************************Life cycle**********************************************/
+    /***********************************UI monitoring********************************************/
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d(TAG, "Fragment '${javaClass.simpleName}' created")
-        this.layout=inflater.inflate(R.layout.fragment_trails_list, container, false)
+    override fun getLayoutId(): Int = R.layout.fragment_trails_list
+
+    override fun initializeUI() {
         initializeLastAddedTrailsRecyclerView()
         initializeMyTrailsRecyclerView()
         initializeNearbyTrailsRecyclerView()
-        return this.layout
     }
 
-    /***********************************UI monitoring********************************************/
+    override fun refreshUI() {
+        //Nothing
+    }
 
     private fun initializeLastAddedTrailsRecyclerView(){
         this.lastAddedTrailsAdapter= TrailHorizontalAdapter(
-            RecyclerViewFirebaseHelper.generateOptionsForAdapter(
+            DatabaseFirebaseHelper.generateOptionsForAdapter(
                 Trail::class.java,
                 TrailFirebaseQueries.getLastTrails(),
                 activity as AppCompatActivity
@@ -77,7 +61,7 @@ class TrailsListFragment (private val currentHiker: Hiker?=null) :
 
         if(this.currentHiker!=null) {
             this.myTrailsAdapter = TrailHorizontalAdapter(
-                RecyclerViewFirebaseHelper.generateOptionsForAdapter(
+                DatabaseFirebaseHelper.generateOptionsForAdapter(
                     Trail::class.java,
                     TrailFirebaseQueries.getMyTrails(this.currentHiker.id),
                     activity as AppCompatActivity
@@ -93,7 +77,7 @@ class TrailsListFragment (private val currentHiker: Hiker?=null) :
 
         if(this.currentHiker?.liveLocation?.country!=null) {
             this.nearbyTrailsAdapter = TrailHorizontalAdapter(
-                RecyclerViewFirebaseHelper.generateOptionsForAdapter(
+                DatabaseFirebaseHelper.generateOptionsForAdapter(
                     Trail::class.java,
                     TrailFirebaseQueries.getTrailsNearbyLocation(this.currentHiker.liveLocation)!!,
                     activity as AppCompatActivity
@@ -106,7 +90,6 @@ class TrailsListFragment (private val currentHiker: Hiker?=null) :
     /***********************************Trails monitoring****************************************/
 
     override fun onTrailClick(trail: Trail) {
-        Log.d(TAG, "Clicked on trail '${trail.id}")
         (activity as MainActivity).seeTrail(trail)
     }
 }

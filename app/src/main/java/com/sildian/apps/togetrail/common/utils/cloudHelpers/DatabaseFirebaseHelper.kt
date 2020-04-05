@@ -5,10 +5,10 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.Query
 
 /*************************************************************************************************
- * Provides with functions allowing to populate RecyclerViews with Firebase queries
+ * Provides with some support functions to use Firebase queries
  ************************************************************************************************/
 
-object RecyclerViewFirebaseHelper {
+object DatabaseFirebaseHelper {
 
     /**
      * Generates options for adapter allowing to populate a RecyclerView with Firebase data

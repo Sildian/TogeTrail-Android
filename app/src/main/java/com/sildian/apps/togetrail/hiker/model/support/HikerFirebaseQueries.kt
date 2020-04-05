@@ -2,7 +2,6 @@ package com.sildian.apps.togetrail.hiker.model.support
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.sildian.apps.togetrail.event.model.core.Event
@@ -31,11 +30,11 @@ object HikerFirebaseQueries {
     /**
      * Gets a given hiker
      * @param id : the id of the hiker
-     * @return a task result
+     * @return a document reference
      */
 
-    fun getHiker(id:String): Task<DocumentSnapshot> =
-        getCollection().document(id).get()
+    fun getHiker(id:String): DocumentReference =
+        getCollection().document(id)
 
     /**
      * Creates or updates the given hiker

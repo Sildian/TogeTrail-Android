@@ -11,8 +11,8 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowActivity
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.location.search.LocationSearchActivity
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.ImageStorageFirebaseHelper
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.UserFirebaseHelper
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageFirebaseHelper
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
@@ -41,8 +41,8 @@ class ProfileEditActivity : BaseDataFlowActivity() {
         const val ACTION_PROFILE_EDIT_SETTINGS=2
 
         /**Bundle keys for intents**/
-        const val KEY_BUNDLE_PROFILE_ACTION="KEY_BUNDLE_PROFILE_ACTION"
-        const val KEY_BUNDLE_HIKER="KEY_BUNDLE_HIKER"
+        const val KEY_BUNDLE_PROFILE_ACTION="KEY_BUNDLE_PROFILE_ACTION"     //Which action to perform (see above) -> Mandatory
+        const val KEY_BUNDLE_HIKER="KEY_BUNDLE_HIKER"                       //The hiker -> Mandatory
 
         /**Request keys for intents**/
         private const val KEY_REQUEST_LOCATION_SEARCH=1001
@@ -56,8 +56,8 @@ class ProfileEditActivity : BaseDataFlowActivity() {
     /**********************************UI component**********************************************/
 
     private val toolbar by lazy {activity_profile_edit_toolbar}
-    private lateinit var fragment: BaseDataFlowFragment
-    private lateinit var progressDialog: AlertDialog
+    private var fragment: BaseDataFlowFragment?=null
+    private var progressDialog: AlertDialog?=null
 
     /**********************************Pictures support******************************************/
 
@@ -68,10 +68,6 @@ class ProfileEditActivity : BaseDataFlowActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG, "Activity '${javaClass.simpleName}' created")
-        setContentView(R.layout.activity_profile_edit)
-        loadData()
-        initializeToolbar()
         startProfileAction()
     }
 
@@ -79,12 +75,12 @@ class ProfileEditActivity : BaseDataFlowActivity() {
 
     override fun onBackPressed() {
         //TODO ask the user if he wants to save
-        finishCancel()
+        finish()
     }
 
     override fun onSupportNavigateUp(): Boolean {
         //TODO ask the user if he wants to save
-        finishCancel()
+        finish()
         return true
     }
 
@@ -100,7 +96,6 @@ class ProfileEditActivity : BaseDataFlowActivity() {
     /**Click on menu item from toolbar**/
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.d(TAG, "Menu '${item.title}' clicked")
         if(item.groupId==R.id.menu_save){
             if(item.itemId==R.id.menu_save_save){
                 saveData()
@@ -111,13 +106,19 @@ class ProfileEditActivity : BaseDataFlowActivity() {
 
     /******************************Data monitoring************************************************/
 
+    /**Loads data**/
+
     override fun loadData() {
         readDataFromIntent()
     }
 
+    /**Saves data**/
+
     override fun saveData() {
-        this.fragment.saveData()
+        this.fragment?.saveData()
     }
+
+    /**Reads data from intent**/
 
     private fun readDataFromIntent(){
         if(intent!=null){
@@ -130,25 +131,35 @@ class ProfileEditActivity : BaseDataFlowActivity() {
         }
     }
 
+    /**Starts saving the hiker within the database**/
+
     fun saveHiker(){
+
+        /*Shows a progress dialog*/
+
         this.progressDialog= DialogHelper.createProgressDialog(this)
-        this.progressDialog.show()
+        this.progressDialog?.show()
+
+        /*Manages images to store within the cloud before saving the hiker*/
+
         if(this.imagePathToUploadIntoDatabase!=null) {
             saveImage()
         }
         else{
-            saveHikerOnline()
+            saveHikerInDatabase()
         }
         if(this.imagePathToDeleteFromDatabase!=null) {
             deleteImage()
         }
     }
 
+    /**Saves an image within the cloud**/
+
     private fun saveImage(){
 
         /*Uploads the image matching the path indicated within the image path to upload*/
 
-        ImageStorageFirebaseHelper.uploadImage(this.imagePathToUploadIntoDatabase.toString())
+        StorageFirebaseHelper.uploadImage(this.imagePathToUploadIntoDatabase.toString())
             .addOnSuccessListener { uploadTask ->
 
                 /*When success, fetches the url of the created image in the database*/
@@ -160,26 +171,28 @@ class ProfileEditActivity : BaseDataFlowActivity() {
                         /*Then updates the hiker with this url*/
 
                         this.hiker?.photoUrl=url.toString()
-                        saveHikerOnline()
+                        saveHikerInDatabase()
                     }
                     ?.addOnFailureListener { e ->
                         //TODO handle
                         Log.w(TAG, e.message.toString())
-                        saveHikerOnline()
+                        saveHikerInDatabase()
                     }
             }
             .addOnFailureListener { e ->
                 //TODO handle
                 Log.w(TAG, e.message.toString())
-                saveHikerOnline()
+                saveHikerInDatabase()
             }
     }
+
+    /**Deletes an image from the cloud**/
 
     private fun deleteImage(){
 
         /*Deletes the image matching the url indicated within the image path to delete*/
 
-        ImageStorageFirebaseHelper.deleteImage(this.imagePathToDeleteFromDatabase.toString())
+        StorageFirebaseHelper.deleteImage(this.imagePathToDeleteFromDatabase.toString())
             .addOnSuccessListener {
                 Log.d(TAG, "Deleted image from database with success")
             }
@@ -189,28 +202,32 @@ class ProfileEditActivity : BaseDataFlowActivity() {
             }
     }
 
-    private fun saveHikerOnline(){
-        HikerFirebaseQueries.createOrUpdateHiker(this.hiker!!)
-            .addOnSuccessListener {
-                Log.d(TAG, "Hiker '${this.hiker?.id}' updated in the database")
-                this.progressDialog.dismiss()
-                //TODO show a snackbar when finished
-                updateUserProfile()
-            }
-            .addOnFailureListener { e ->
-                Log.w(TAG, e.message.toString())
-                this.progressDialog.dismiss()
-                //TODO handle
-                finishCancel()
-            }
+    /**Saves the hiker within the database**/
+
+    private fun saveHikerInDatabase(){
+        this.hiker?.let { hiker ->
+            updateHiker(hiker, this::updateUserProfile)
+        }
     }
 
+    /**
+     * Gives an image to be stored on the cloud
+     * @param imagePath : the temporary image's uri
+     */
+
     fun updateImagePathToUploadIntoDatabase(imagePath:String){
-        if(this.hiker?.photoUrl!=null && this.hiker?.photoUrl!!.startsWith("https://")){
-            this.imagePathToDeleteFromDatabase=this.hiker?.photoUrl
+        this.hiker?.photoUrl?.let { photoUrl ->
+            if (photoUrl.startsWith("https://")) {
+                this.imagePathToDeleteFromDatabase = photoUrl
+            }
+            this.imagePathToUploadIntoDatabase = imagePath
         }
-        this.imagePathToUploadIntoDatabase=imagePath
     }
+
+    /**
+     * Gives an image to be deleted from the cloud
+     * @param imagePath : the image's url
+     */
 
     fun updateImagePathToDeleteFromDatabase(imagePath:String){
         this.imagePathToUploadIntoDatabase=null
@@ -219,39 +236,40 @@ class ProfileEditActivity : BaseDataFlowActivity() {
         }
     }
 
-    /******************************User monitoring************************************************/
+    /******************************User Auth monitoring******************************************/
 
     /**Updates the user's profile in the backend**/
 
     fun updateUserProfile(){
-        UserFirebaseHelper.updateUserProfile(this.hiker?.name!!, this.hiker?.photoUrl)
-            ?.addOnSuccessListener {
-                Log.d(TAG, "User profile updated in the database")
-                this.progressDialog.dismiss()
-                //TODO show a snackbar when finished
-                finishOk()
-            }
-            ?.addOnFailureListener { e ->
-                Log.w(TAG, e.message.toString())
-                this.progressDialog.dismiss()
-                //TODO handle
-                finishCancel()
-            }
+        this.hiker?.let { hiker ->
+            AuthFirebaseHelper.updateUserProfile(hiker.name?:"", hiker.photoUrl)
+                ?.addOnSuccessListener {
+                    Log.d(TAG, "User profile updated in the database")
+                    this.progressDialog?.dismiss()
+                    //TODO show a snackbar when finished
+                    finish()
+                }
+                ?.addOnFailureListener { e ->
+                    Log.w(TAG, e.message.toString())
+                    this.progressDialog?.dismiss()
+                    //TODO handle
+                }
+        }
     }
 
     /**Resets the user's password in the backend**/
 
     fun resetUserPassword(){
         this.progressDialog= DialogHelper.createProgressDialog(this)
-        UserFirebaseHelper.resetUserPassword()
+        AuthFirebaseHelper.resetUserPassword()
             ?.addOnSuccessListener {
                 Log.d(TAG, "Email sent to the user to let him reset his password")
-                this.progressDialog.dismiss()
+                this.progressDialog?.dismiss()
                 //TODO show a snackbar when finished
             }
             ?.addOnFailureListener { e ->
                 Log.w(TAG, e.message.toString())
-                this.progressDialog.dismiss()
+                this.progressDialog?.dismiss()
                 //TODO handle
             }
     }
@@ -264,38 +282,50 @@ class ProfileEditActivity : BaseDataFlowActivity() {
 
         /*Deletes the hiker's data related to the user*/
 
-        HikerFirebaseQueries.deleteHiker(this.hiker!!)
-            .addOnSuccessListener {
-                Log.d(TAG, "Hiker deleted from the database")
+        this.hiker?.let { hiker ->
+            HikerFirebaseQueries.deleteHiker(hiker)
+                .addOnSuccessListener {
+                    Log.d(TAG, "Hiker deleted from the database")
 
-                /*Delete the user's account*/
+                    /*Delete the user's account*/
 
-                UserFirebaseHelper.deleteUserAccount()
-                    ?.addOnSuccessListener {
-                        Log.d(TAG, "User deleted from the database")
-                        this.progressDialog.dismiss()
+                    AuthFirebaseHelper.deleteUserAccount()
+                        ?.addOnSuccessListener {
+                            Log.d(TAG, "User deleted from the database")
+                            this.progressDialog?.dismiss()
 
-                        /*Deletes the user's photo*/
+                            /*Deletes the user's photo*/
 
-                        if(this.hiker?.photoUrl!=null) {
-                            ImageStorageFirebaseHelper.deleteImage(this.hiker?.photoUrl.toString())
+                            if (hiker.photoUrl != null) {
+                                StorageFirebaseHelper.deleteImage(hiker.photoUrl.toString())
+                            }
+                            //TODO show a snackbar when finished
                         }
-                        //TODO show a snackbar when finished
-                    }
-                    ?.addOnFailureListener { e ->
-                        Log.w(TAG, e.message.toString())
-                        this.progressDialog.dismiss()
-                        //TODO handle
-                    }
-            }
-            .addOnFailureListener { e ->
-                Log.w(TAG, e.message.toString())
-                this.progressDialog.dismiss()
-                //TODO handle
-            }
+                        ?.addOnFailureListener { e ->
+                            Log.w(TAG, e.message.toString())
+                            this.progressDialog?.dismiss()
+                            //TODO handle
+                        }
+                }
+                .addOnFailureListener { e ->
+                    Log.w(TAG, e.message.toString())
+                    this.progressDialog?.dismiss()
+                    //TODO handle
+                }
+        }
     }
 
     /******************************UI monitoring**************************************************/
+
+    override fun getLayoutId(): Int = R.layout.activity_profile_edit
+
+    override fun initializeUI() {
+        initializeToolbar()
+    }
+
+    override fun refreshUI() {
+        //Nothing
+    }
 
     private fun initializeToolbar(){
         setSupportActionBar(this.toolbar)
@@ -325,7 +355,7 @@ class ProfileEditActivity : BaseDataFlowActivity() {
 
     private fun updateLiveLocation(location: Location){
         this.hiker?.liveLocation=location
-        this.fragment.updateData()
+        this.fragment?.updateData(location)
     }
 
     /******************************Fragments monitoring******************************************/
@@ -342,36 +372,39 @@ class ProfileEditActivity : BaseDataFlowActivity() {
             ID_FRAGMENT_SETTINGS ->
                 this.fragment=ProfileSettingsEditFragment(this.hiker)
         }
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.activity_profile_edit_fragment, this.fragment).commit()
+        this.fragment?.let { fragment ->
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.activity_profile_edit_fragment, fragment).commit()
+        }
     }
 
     /*************************************Navigation*********************************************/
+
+    /**Starts searching a location**/
 
     private fun startLocationSearchActivity(){
         val locationSearchActivityIntent=Intent(this, LocationSearchActivity::class.java)
         startActivityForResult(locationSearchActivityIntent, KEY_REQUEST_LOCATION_SEARCH)
     }
 
+    /**Gets the activity result**/
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode== KEY_REQUEST_LOCATION_SEARCH){
-            if(data!=null&&data.hasExtra(LocationSearchActivity.KEY_BUNDLE_LOCATION)){
-                val location=data.getParcelableExtra<Location>(LocationSearchActivity.KEY_BUNDLE_LOCATION)
-                updateLiveLocation(location)
-            }
+        when(requestCode) {
+            KEY_REQUEST_LOCATION_SEARCH -> handleLocationSearchActivityResult(resultCode, data)
         }
     }
 
-    private fun finishOk(){
-        val resultIntent=Intent()
-        resultIntent.putExtra(KEY_BUNDLE_HIKER, this.hiker)
-        setResult(Activity.RESULT_OK, resultIntent)
-        finish()
-    }
+    /**Handles location search activity result**/
 
-    private fun finishCancel(){
-        setResult(Activity.RESULT_CANCELED)
-        finish()
+    private fun handleLocationSearchActivityResult(resultCode: Int, data: Intent?){
+        if(resultCode== Activity.RESULT_OK) {
+            if (data != null && data.hasExtra(LocationSearchActivity.KEY_BUNDLE_LOCATION)) {
+                val location =
+                    data.getParcelableExtra<Location>(LocationSearchActivity.KEY_BUNDLE_LOCATION)
+                location?.let { loc -> updateLiveLocation(loc) }
+            }
+        }
     }
 }

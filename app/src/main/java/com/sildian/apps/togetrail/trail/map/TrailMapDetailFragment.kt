@@ -1,16 +1,10 @@
 package com.sildian.apps.togetrail.trail.map
 
-import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.Polyline
-
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 
@@ -18,25 +12,7 @@ import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
  * Shows a specific trail on the map and allows to see all its detail information
  ************************************************************************************************/
 
-class TrailMapDetailFragment : BaseTrailMapFragment() {
-
-    /**********************************Static items**********************************************/
-
-    companion object {
-
-        /**Logs**/
-        private const val TAG = "TrailMapDetailFragment"
-    }
-
-    /**********************************UI component**********************************************/
-
-    /************************************Life cycle**********************************************/
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
-        super.onCreateView(inflater, container, savedInstanceState)
-        Log.d(TAG, "Fragment '${javaClass.simpleName}' created")
-        return this.layout
-    }
+class TrailMapDetailFragment(trail: Trail?=null) : BaseTrailMapFragment(trail) {
 
     /************************************UI monitoring*******************************************/
 
@@ -56,6 +32,14 @@ class TrailMapDetailFragment : BaseTrailMapFragment() {
         this.map?.uiSettings?.setAllGesturesEnabled(false)
     }
 
+    override fun initializeUI() {
+        //Nothing
+    }
+
+    override fun refreshUI() {
+        //Nothing
+    }
+
     /***********************************Map monitoring*******************************************/
 
     override fun onMapReadyActionsFinished() {
@@ -63,7 +47,6 @@ class TrailMapDetailFragment : BaseTrailMapFragment() {
     }
 
     override fun onMapClick(point: LatLng?) {
-        Log.d(TAG, "Clicked on map at point lat ${point?.latitude} lng ${point?.longitude}")
         hideInfoBottomSheet()
     }
 
@@ -73,19 +56,16 @@ class TrailMapDetailFragment : BaseTrailMapFragment() {
 
         return when(marker?.tag){
             is TrailPointOfInterest ->{
-                Log.d(TAG, "Clicked on marker (TrailPointOfInterest)")
                 val trailPointOfInterest=marker.tag as TrailPointOfInterest
                 val trailPoiPosition=marker.snippet.toInt()
                 showTrailPOIInfoFragment(trailPointOfInterest, trailPoiPosition)
                 true
             }
             is TrailPoint ->{
-                Log.d(TAG, "Clicked on marker (TrailPoint)")
                 showTrailInfoFragment()
                 true
             }
             else-> {
-                Log.w(TAG, "Clicked on marker (Unknown category)")
                 false
             }
         }

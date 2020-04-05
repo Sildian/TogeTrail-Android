@@ -1,9 +1,5 @@
 package com.sildian.apps.togetrail.trail.map
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
@@ -21,18 +17,12 @@ abstract class BaseTrailMapGenerateFragment :
     GoogleMap.OnInfoWindowClickListener
 {
 
-    /************************************Life cycle**********************************************/
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        initializeTrail()
-        return this.layout
-    }
-
     /**********************************Data monitoring*******************************************/
 
-    private fun initializeTrail(){
-        this.trail= TrailBuilder.build()
+    override fun loadData() {
+        this.trail= TrailBuilder
+            .withDefault()
+            .build()
     }
 
     /************************************UI monitoring*******************************************/

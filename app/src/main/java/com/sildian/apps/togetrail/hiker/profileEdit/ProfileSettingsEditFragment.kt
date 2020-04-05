@@ -2,7 +2,6 @@ package com.sildian.apps.togetrail.hiker.profileEdit
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,55 +17,40 @@ import kotlinx.android.synthetic.main.fragment_profile_settings_edit.view.*
  * @param hiker : the current user
  ************************************************************************************************/
 
-class ProfileSettingsEditFragment(val hiker: Hiker?=null) : BaseDataFlowFragment()
+class ProfileSettingsEditFragment(private val hiker: Hiker?=null) : BaseDataFlowFragment()
 {
-
-    /**********************************Static items**********************************************/
-
-    companion object {
-
-        /**Logs**/
-        private const val TAG="ProfileSettingsEditFragment"
-    }
 
     /**********************************UI component**********************************************/
 
-    private lateinit var layout:View
     private val emailText by lazy {layout.fragment_profile_settings_edit_text_email}
     private val registrationDateText by lazy {layout.fragment_profile_settings_edit_text_registration_date}
     private val resetPasswordButton by lazy {layout.fragment_profile_settings_edit_button_reset_password}
     private val deleteAccountButton by lazy {layout.fragment_profile_settings_edit_button_delete_account}
 
-    /************************************Life cycle**********************************************/
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d(TAG, "Fragment '${javaClass.simpleName}' created")
-        this.layout=inflater.inflate(R.layout.fragment_profile_settings_edit, container, false)
-        initializeAllUIComponents()
-        return this.layout
-    }
-
-    /*****************************************Data***********************************************/
-
-    override fun saveData() {
-        //TODO implement
-    }
-
     /***********************************UI monitoring********************************************/
 
-    private fun initializeAllUIComponents(){
-        initializeEmailText()
-        initializeRegistrationDateText()
+    override fun getLayoutId(): Int = R.layout.fragment_profile_settings_edit
+
+    override fun initializeUI(){
         initializeChangePasswordButton()
         initializeDeleteAccountButton()
+        refreshUI()
     }
 
-    private fun initializeEmailText(){
+    override fun refreshUI(){
+        updateEmailText()
+        updateRegistrationDateText()
+    }
+
+    private fun updateEmailText(){
         this.emailText.text=this.hiker?.email
     }
 
-    private fun initializeRegistrationDateText(){
-        this.registrationDateText.text=DateUtilities.displayDateShort(this.hiker?.registrationDate!!)
+    private fun updateRegistrationDateText(){
+        this.hiker?.registrationDate?.let { registrationDate ->
+            this.registrationDateText.text =
+                DateUtilities.displayDateShort(registrationDate)
+        }
     }
 
     private fun initializeChangePasswordButton(){

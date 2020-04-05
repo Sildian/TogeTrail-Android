@@ -8,10 +8,10 @@ import java.io.FileInputStream
 import java.util.*
 
 /*************************************************************************************************
- * Provides with Firebase queries allowing to store images
+ * Provides with Firebase queries allowing to store files within cloud
  ************************************************************************************************/
 
-object ImageStorageFirebaseHelper {
+object StorageFirebaseHelper {
 
     /**
      * Uploads an image into Firebase

@@ -7,10 +7,10 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 
 /*************************************************************************************************
- * Provides with Firebase queries allowing to manage users
+ * Provides with Firebase queries allowing to manage user authentication
  ************************************************************************************************/
 
-object UserFirebaseHelper {
+object AuthFirebaseHelper {
 
     /**
      * Gets the current user connected to Firebase

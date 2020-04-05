@@ -1,17 +1,17 @@
 package com.sildian.apps.togetrail.hiker.profile
 
-import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowActivity
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.UserFirebaseHelper
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
+import com.sildian.apps.togetrail.event.detail.EventActivity
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.profileEdit.ProfileEditActivity
+import com.sildian.apps.togetrail.trail.map.TrailActivity
 import kotlinx.android.synthetic.main.activity_profile.*
 
 /*************************************************************************************************
@@ -24,64 +24,40 @@ class ProfileActivity : BaseDataFlowActivity() {
 
     companion object {
 
-        /**Logs**/
-        private const val TAG="ProfileActivity"
-
-        /**Fragments ids**/
-        private const val ID_FRAGMENT_PROFILE=1
-        private const val ID_FRAGMENT_TRAILS=2
-        private const val ID_FRAGMENT_EVENTS=3
-
-        /**Actions to perform**/
-        const val ACTION_PROFILE_SEE_PROFILE=1
-        const val ACTION_PROFILE_SEE_TRAILS=2
-        const val ACTION_PROFILE_SEE_EVENTS=3
-
-        /**Request keys for activities**/
-        private const val KEY_REQUEST_PROFILE_EDIT=1001
-
         /**Bundle keys for intents**/
-        const val KEY_BUNDLE_PROFILE_ACTION="KEY_BUNDLE_PROFILE_ACTION"
-        const val KEY_BUNDLE_HIKER="KEY_BUNDLE_HIKER"
+        const val KEY_BUNDLE_HIKER_ID="KEY_BUNDLE_HIKER_ID"         //Hiker id -> Mandatory
     }
 
     /****************************************Data************************************************/
 
-    private var currentAction= ACTION_PROFILE_SEE_PROFILE       //Action defining what the user is performing
-    private var hiker: Hiker?=null                              //The hiker
+    private var hikerId: String?=null                               //The hiker id
+    private var hiker: Hiker?=null                                  //The hiker
 
     /**********************************UI component**********************************************/
 
     private val toolbar by lazy {activity_profile_toolbar}
-    private lateinit var fragment: BaseDataFlowFragment
-
-    /************************************Life cycle**********************************************/
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d(TAG, "Activity '${javaClass.simpleName}' created")
-        setContentView(R.layout.activity_profile)
-        loadData()
-        initializeToolbar()
-        startProfileAction()
-    }
+    private val progressbar by lazy {activity_profile_progressbar}
+    private var fragment: BaseDataFlowFragment?=null
 
     /********************************Menu monitoring*********************************************/
 
     /**Generates the menu within the toolbar**/
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_edit, menu)
-        return true
+        return if(this.hikerId==AuthFirebaseHelper.getCurrentUser()?.uid){
+            menuInflater.inflate(R.menu.menu_edit, menu)
+            true
+        } else {
+            true
+        }
     }
 
     /**Click on menu item from toolbar**/
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.d(TAG, "Menu '${item.title}' clicked")
         if(item.groupId==R.id.menu_edit){
             if(item.itemId==R.id.menu_edit_edit){
-                editProfile()
+                startProfileEditActivity()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -90,123 +66,132 @@ class ProfileActivity : BaseDataFlowActivity() {
     /********************************Navigation control******************************************/
 
     override fun onBackPressed() {
-        finishOk()
+        finish()
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        finishOk()
+        finish()
         return true
     }
 
     /******************************Data monitoring************************************************/
 
+    /**Loads data**/
+
     override fun loadData() {
         readDataFromIntent()
     }
 
+    /**Reads data from intent**/
+
     private fun readDataFromIntent(){
         if(intent!=null){
-            if(intent.hasExtra(KEY_BUNDLE_PROFILE_ACTION)){
-                this.currentAction=intent.getIntExtra(
-                    KEY_BUNDLE_PROFILE_ACTION,
-                    ACTION_PROFILE_SEE_EVENTS
-                )
+            if(intent.hasExtra(KEY_BUNDLE_HIKER_ID)){
+                this.hikerId = intent.getStringExtra(KEY_BUNDLE_HIKER_ID)
+                this.hikerId?.let{ hikerId ->
+                    loadHikerFromDatabase(hikerId)
+                }
             }
-            if(intent.hasExtra(KEY_BUNDLE_HIKER)){
-                this.hiker= intent.getParcelableExtra(KEY_BUNDLE_HIKER)
-            }
+        }
+    }
+
+    /**
+     * Loads a hiker from the database
+     * @param hikerId : the hiker's id
+     */
+
+    private fun loadHikerFromDatabase(hikerId:String){
+        getHikerRealTime(hikerId, this::handleHikerResult)
+    }
+
+    /**
+     * Handles the hiker result when loaded from the database
+     * @param hiker : the resulted hiker
+     */
+
+    private fun handleHikerResult(hiker:Hiker?){
+        this.progressbar.visibility=View.GONE
+        this.hiker=hiker
+        if(this.fragment==null){
+            showFragment()
+        }else if(this.fragment?.isVisible==true){
+            this.fragment?.updateData(this.hiker)
         }
     }
 
     /******************************UI monitoring**************************************************/
 
+    override fun getLayoutId(): Int = R.layout.activity_profile
+
+    override fun initializeUI() {
+        initializeToolbar()
+    }
+
+    override fun refreshUI() {
+        //Nothing
+    }
+
     private fun initializeToolbar(){
         setSupportActionBar(this.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        when(this.currentAction){
-            ACTION_PROFILE_SEE_PROFILE -> {
-                if(this.hiker?.id==UserFirebaseHelper.getCurrentUser()?.uid){
-                    supportActionBar?.setTitle(R.string.toolbar_hiker_my_profile)
-                }else{
-                    supportActionBar?.setTitle(R.string.toolbar_hiker_profile)
-                }
-            }
-            ACTION_PROFILE_SEE_TRAILS ->
-                supportActionBar?.setTitle(R.string.toolbar_hiker_my_trails)
-            ACTION_PROFILE_SEE_EVENTS ->
-                supportActionBar?.setTitle(R.string.toolbar_hiker_my_events)
+        if(this.hikerId==AuthFirebaseHelper.getCurrentUser()?.uid){
+            supportActionBar?.setTitle(R.string.toolbar_hiker_my_profile)
+        }else{
+            supportActionBar?.setTitle(R.string.toolbar_hiker_profile)
         }
     }
 
-    /*************************************Profile action*****************************************/
+    /******************************Trails monitoring*********************************************/
 
-    private fun startProfileAction(){
-        when(this.currentAction){
-            ACTION_PROFILE_SEE_PROFILE -> showFragment(ID_FRAGMENT_PROFILE)
-            //TODO handle other fragments
-        }
+    fun seeTrail(trailId:String){
+        startTrailActivity(trailId)
     }
 
-    fun editProfile(){
-        startProfileEditActivity(ProfileEditActivity.ACTION_PROFILE_EDIT_INFO)
+    /******************************Events monitoring*********************************************/
+
+    fun seeEvent(eventId:String){
+        startEventActivity(eventId)
     }
 
     /******************************Fragments monitoring******************************************/
 
     /**
-     * Shows a fragment
-     * @param fragmentId : defines which fragment to display (choice within ID_FRAGMENT_xxx)
+     * Shows the fragment
      */
 
-    private fun showFragment(fragmentId:Int){
-        when(fragmentId){
-            ID_FRAGMENT_PROFILE -> this.fragment=ProfileFragment(this.hiker)
-            //TODO handle other fragments
+    private fun showFragment(){
+        this.fragment=ProfileFragment(this.hiker)
+        this.fragment?.let { fragment ->
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.activity_profile_fragment, fragment).commit()
         }
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.activity_profile_fragment, this.fragment).commit()
     }
 
     /***********************************Navigation***********************************************/
 
-    /**
-     * Starts profile Edit activity
-     * @param profileActionId : defines which action should be performed (choice within ProfileEditActivity.ACTION_PROFILE_xxx
-     */
+    /**Starts Profile edit activity**/
 
-    private fun startProfileEditActivity(profileActionId:Int){
+    private fun startProfileEditActivity(){
         val profileEditActivityIntent=Intent(this, ProfileEditActivity::class.java)
-        profileEditActivityIntent.putExtra(ProfileEditActivity.KEY_BUNDLE_PROFILE_ACTION, profileActionId)
+        profileEditActivityIntent.putExtra(ProfileEditActivity.KEY_BUNDLE_PROFILE_ACTION, ProfileEditActivity.ACTION_PROFILE_EDIT_INFO)
         profileEditActivityIntent.putExtra(ProfileEditActivity.KEY_BUNDLE_HIKER, this.hiker)
-        startActivityForResult(profileEditActivityIntent, KEY_REQUEST_PROFILE_EDIT)
+        startActivity(profileEditActivityIntent)
     }
 
-    /**Activity result**/
+    /**Starts Trail activity**/
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when(requestCode){
-            KEY_REQUEST_PROFILE_EDIT -> handleProfileEditResult(resultCode, data)
-        }
+    private fun startTrailActivity(trailId:String){
+        val trailActivityIntent=Intent(this, TrailActivity::class.java)
+        trailActivityIntent.putExtra(TrailActivity.KEY_BUNDLE_TRAIL_ACTION, TrailActivity.ACTION_TRAIL_SEE)
+        trailActivityIntent.putExtra(TrailActivity.KEY_BUNDLE_TRAIL_ID, trailId)
+        startActivity(trailActivityIntent)
     }
 
-    /**Handles profile edit result**/
+    /**Starts Event activity**/
 
-    private fun handleProfileEditResult(resultCode: Int, data: Intent?){
-        if(resultCode== Activity.RESULT_OK){
-            if(data!=null && data.hasExtra(ProfileEditActivity.KEY_BUNDLE_HIKER)){
-                this.hiker=data.getParcelableExtra(ProfileEditActivity.KEY_BUNDLE_HIKER)
-                (this.fragment as ProfileFragment).updateHiker(this.hiker!!)
-            }
-        }
-    }
-
-    /**Finishes the activity and sends the hiker as a result**/
-
-    private fun finishOk(){
-        val resultIntent=Intent()
-        resultIntent.putExtra(KEY_BUNDLE_HIKER, this.hiker)
-        setResult(Activity.RESULT_OK, resultIntent)
-        finish()
+    private fun startEventActivity(eventId:String){
+        val eventActivityIntent=Intent(this, EventActivity::class.java)
+        eventActivityIntent.putExtra(EventActivity.KEY_BUNDLE_EVENT_ID, eventId)
+        startActivity(eventActivityIntent)
     }
 }

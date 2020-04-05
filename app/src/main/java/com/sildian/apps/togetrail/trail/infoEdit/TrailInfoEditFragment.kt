@@ -17,6 +17,7 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DropdownMenuHelper
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
+import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailLevel
 import kotlinx.android.synthetic.main.fragment_trail_info_edit.view.*
@@ -27,7 +28,7 @@ import pl.aprilapps.easyphotopicker.*
  * @param trail : the related trail
  ************************************************************************************************/
 
-class TrailInfoEditFragment(val trail: Trail?=null) :
+class TrailInfoEditFragment(private val trail: Trail?=null) :
     BaseDataFlowFragment(),
     Croller.onProgressChangedListener
 {
@@ -67,7 +68,6 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
 
     /**********************************UI component**********************************************/
 
-    private lateinit var layout:View
     private val nameTextField by lazy {layout.fragment_trail_info_edit_text_field_name}
     private val photoText by lazy {layout.fragment_trail_info_edit_text_photo}
     private val photoImageView by lazy {layout.fragment_trail_info_edit_image_view_photo}
@@ -104,17 +104,18 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
     /************************************Life cycle**********************************************/
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d(TAG, "Fragment '${javaClass.simpleName}' created")
-        this.layout=inflater.inflate(R.layout.fragment_trail_info_edit, container, false)
+        super.onCreateView(inflater, container, savedInstanceState)
         initializeEasyImage()
-        initializeAllUIComponents()
         return this.layout
     }
 
     /*********************************Data monitoring********************************************/
 
-    override fun updateData() {
-        initializeAllUIComponents()
+    override fun updateData(data:Any?) {
+        if(data is Location){
+            this.trail?.location=data
+            updateLocationTextField()
+        }
     }
 
     override fun saveData() {
@@ -128,9 +129,9 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
 
     /***********************************UI monitoring********************************************/
 
-    private fun initializeAllUIComponents(){
-        initializeNameTextField()
-        initializeLevelTextFieldDropDown()
+    override fun getLayoutId(): Int = R.layout.fragment_trail_info_edit
+
+    override fun initializeUI() {
         initializeDeletePhotoButton()
         initializeAddPhotoButton()
         initializeTakePhotoButton()
@@ -141,17 +142,23 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
         initializeDistanceText()
         initializeMaxElevationText()
         initializeMinElevationText()
-        initializeLocationTextField()
-        initializeDescriptionTextField()
+        refreshUI()
+    }
+
+    override fun refreshUI() {
+        updateNameTextField()
+        updateLevelTextFieldDropDown()
         updateCurrentMetricToSet(METRIC_DURATION)
+        updateLocationTextField()
+        updateDescriptionTextField()
         updatePhoto()
     }
 
-    private fun initializeNameTextField(){
+    private fun updateNameTextField(){
         this.nameTextField.setText(this.trail?.name)
     }
 
-    private fun initializeLevelTextFieldDropDown(){
+    private fun updateLevelTextFieldDropDown(){
         val choice=resources.getStringArray(R.array.array_trail_levels)
         val initialValue=(this.trail?.level?.value?: TrailLevel.MEDIUM.value)-1
         DropdownMenuHelper.populateDropdownMenu(this.levelTextFieldDropDown, choice, initialValue)
@@ -246,14 +253,14 @@ class TrailInfoEditFragment(val trail: Trail?=null) :
         }
     }
 
-    private fun initializeLocationTextField(){
+    private fun updateLocationTextField(){
         this.locationTextField.setText(this.trail?.location?.fullAddress)
         this.locationTextField.setOnClickListener {
             (activity as TrailInfoEditActivity).searchLocation()
         }
     }
 
-    private fun initializeDescriptionTextField(){
+    private fun updateDescriptionTextField(){
         this.descriptionTextField.setText(this.trail?.description)
     }
 

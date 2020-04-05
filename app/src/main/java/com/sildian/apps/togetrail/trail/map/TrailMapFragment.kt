@@ -1,9 +1,7 @@
 package com.sildian.apps.togetrail.trail.map
 
 import android.graphics.drawable.Drawable
-import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
@@ -61,24 +59,23 @@ class TrailMapFragment (
     private val searchButton by lazy {layout.fragment_trail_map_button_search}
     private val filterToggle by lazy {layout.fragment_trail_map_toggle_filter}
 
-    /************************************Life cycle**********************************************/
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
-        super.onCreateView(inflater, container, savedInstanceState)
-        Log.d(TAG, "Fragment '${javaClass.simpleName}' created")
-        initializeSearchButton()
-        initializeFilterToggle()
-        return this.layout
-    }
-
     /**********************************Data monitoring*******************************************/
 
-    override fun updateData() {
-        if(this.showTrails) {
-            (activity as MainActivity).loadTrails(this::handleTrailsQueryResult)
+    override fun updateData(data:Any?) {
+        if(data is List<*>){
+            Log.d(TAG, "Coucou")
+            when{
+                data.firstOrNull() is Trail -> handleTrailsQueryResult(data as List<Trail>)
+                data.firstOrNull() is Event -> handleEventsQueryResult(data as List<Event>)
+            }
         }
-        if(this.showEvents) {
-            (activity as MainActivity).loadEvents(this::handleEventsQueryResult)
+        else if(data==null) {
+            if (this.showTrails) {
+                (activity as MainActivity).loadTrailsFromDatabase()
+            }
+            if (this.showEvents) {
+                (activity as MainActivity).loadEventsFromDatabase()
+            }
         }
     }
 
@@ -110,16 +107,25 @@ class TrailMapFragment (
         this.map?.uiSettings?.setAllGesturesEnabled(false)
     }
 
+    override fun initializeUI() {
+        initializeSearchButton()
+        initializeFilterToggle()
+    }
+
+    override fun refreshUI() {
+        //Nothing
+    }
+
     private fun initializeSearchButton(){
         this.searchButton.setOnClickListener {
             val point=this.map?.cameraPosition?.target
             if(point!=null) {
                 (activity as MainActivity).setQueriesToSearchAroundPoint(point)
                 if(this.showTrails) {
-                    (activity as MainActivity).loadTrails(this::handleTrailsQueryResult)
+                    (activity as MainActivity).loadTrailsFromDatabase()
                 }
                 if(this.showEvents) {
-                    (activity as MainActivity).loadEvents(this::handleEventsQueryResult)
+                    (activity as MainActivity).loadEventsFromDatabase()
                 }
             }
         }
@@ -132,13 +138,13 @@ class TrailMapFragment (
                     if(isChecked) {
                         this.showTrails=true
                         this.showEvents=false
-                        (activity as MainActivity).loadTrails(this::handleTrailsQueryResult)
+                        (activity as MainActivity).loadTrailsFromDatabase()
                     }
                 R.id.fragment_trail_map_toggle_filter_events ->
                     if(isChecked) {
                         this.showTrails=false
                         this.showEvents=true
-                        (activity as MainActivity).loadEvents(this::handleEventsQueryResult)
+                        (activity as MainActivity).loadEventsFromDatabase()
                     }
             }
         }
@@ -151,10 +157,10 @@ class TrailMapFragment (
         this.map?.setOnInfoWindowClickListener(this)
         if(this.trails.isEmpty()){
             if(this.showTrails) {
-                (activity as MainActivity).loadTrails(this::handleTrailsQueryResult)
+                (activity as MainActivity).loadTrailsFromDatabase()
             }
             if(this.showEvents) {
-                (activity as MainActivity).loadEvents(this::handleEventsQueryResult)
+                (activity as MainActivity).loadEventsFromDatabase()
             }
         }else {
             if(this.showTrails) {
@@ -167,24 +173,20 @@ class TrailMapFragment (
     }
 
     override fun onMapClick(point: LatLng?) {
-        Log.d(TAG, "Clicked on map at point lat ${point?.latitude} lng ${point?.longitude}")
         hideInfoBottomSheet()
     }
 
     override fun onMarkerClick(marker: Marker?): Boolean {
         return when(marker?.tag){
             is Trail -> {
-                Log.d(TAG, "Clicked on marker (Trail)")
                 marker.showInfoWindow()
                 true
             }
             is Event -> {
-                Log.d(TAG, "Clicked on marker (Event)")
                 marker.showInfoWindow()
                 true
             }
             else -> {
-                Log.w(TAG, "Clicked on marker (Unknown category)")
                 false
             }
         }
@@ -272,15 +274,18 @@ class TrailMapFragment (
                 .into(view.map_info_window_event_image_view_photo)
         }
         view.map_info_window_event_text_name.text=event.name
-        view.map_info_window_event_text_begin_date.text= DateUtilities.displayDateShort(event.beginDate!!)
-        val nbDays=event.getNbDays()
-        val metric=if(nbDays!!>1){
-            resources.getString(R.string.label_event_days)
-        }else{
-            resources.getString(R.string.label_event_day)
+        event.beginDate?.let { beginDate ->
+            view.map_info_window_event_text_begin_date.text = DateUtilities.displayDateShort(beginDate)
         }
-        val nbDaysToDisplay="$nbDays $metric"
-        view.map_info_window_event_text_nb_days.text=nbDaysToDisplay
+        event.getNbDays()?.let { nbDays ->
+            val metric = if (nbDays > 1) {
+                resources.getString(R.string.label_event_days)
+            } else {
+                resources.getString(R.string.label_event_day)
+            }
+            val nbDaysToDisplay = "$nbDays $metric"
+            view.map_info_window_event_text_nb_days.text = nbDaysToDisplay
+        }
         view.map_info_window_event_text_location.text=event.meetingPoint.toString()
         return view
     }

@@ -12,7 +12,6 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.sdsmdg.harjot.crollerTest.Croller
-
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
@@ -25,7 +24,7 @@ import pl.aprilapps.easyphotopicker.*
  * @param trailPointOfInterest : the related trailPointOfInterest
  ************************************************************************************************/
 
-class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=null) :
+class TrailPOIInfoEditFragment(private val trailPointOfInterest: TrailPointOfInterest?=null) :
     BaseDataFlowFragment(),
     Croller.onProgressChangedListener
 {
@@ -51,7 +50,6 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
 
     /**********************************UI component**********************************************/
 
-    private lateinit var layout:View
     private val nameTextField by lazy {layout.fragment_trail_poi_info_edit_text_field_name}
     private val photoText by lazy {layout.fragment_trail_poi_info_edit_text_photo}
     private val photoImageView by lazy {layout.fragment_trail_poi_info_edit_image_view_photo}
@@ -70,35 +68,41 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
     /************************************Life cycle**********************************************/
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d(TAG, "Fragment '${javaClass.simpleName}' created")
-        this.layout= inflater.inflate(R.layout.fragment_trail_poi_info_edit, container, false)
+        super.onCreateView(inflater, container, savedInstanceState)
         initializeEasyImage()
-        initializeAllUIComponents()
         return this.layout
     }
 
     /*********************************Data monitoring********************************************/
 
     override fun saveData() {
-        this.trailPointOfInterest?.name=this.nameTextField.text.toString()
-        this.trailPointOfInterest?.description=this.descriptionTextField.text.toString()
-        (activity as TrailInfoEditActivity).saveTrailPoi(this.trailPointOfInterest!!)
+        if(this.trailPointOfInterest!=null) {
+            this.trailPointOfInterest.name = this.nameTextField.text.toString()
+            this.trailPointOfInterest.description = this.descriptionTextField.text.toString()
+            (activity as TrailInfoEditActivity).saveTrailPoi(this.trailPointOfInterest)
+        }
     }
 
     /***********************************UI monitoring********************************************/
 
-    private fun initializeAllUIComponents(){
-        initializeNameTextField()
+    override fun getLayoutId(): Int = R.layout.fragment_trail_poi_info_edit
+
+    override fun initializeUI() {
         initializeDeletePhotoButton()
         initializeAddPhotoButton()
         initializeTakePhotoButton()
         initializeMetricsCroller()
         initializeElevationText()
-        initializeDescriptionTextField()
+        refreshUI()
+    }
+
+    override fun refreshUI() {
+        updateNameTextField()
+        updateDescriptionTextField()
         updatePhoto()
     }
 
-    private fun initializeNameTextField(){
+    private fun updateNameTextField(){
         this.nameTextField.setText(this.trailPointOfInterest?.name)
     }
 
@@ -131,7 +135,7 @@ class TrailPOIInfoEditFragment(val trailPointOfInterest: TrailPointOfInterest?=n
         updateElevation(elevation)
     }
 
-    private fun initializeDescriptionTextField(){
+    private fun updateDescriptionTextField(){
         this.descriptionTextField.setText(this.trailPointOfInterest?.description)
     }
 

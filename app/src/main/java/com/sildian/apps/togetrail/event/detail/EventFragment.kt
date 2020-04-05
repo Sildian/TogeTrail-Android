@@ -1,18 +1,14 @@
 package com.sildian.apps.togetrail.event.detail
 
-import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.DateUtilities
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.RecyclerViewFirebaseHelper
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
@@ -26,12 +22,10 @@ import kotlinx.android.synthetic.main.fragment_event.view.*
 /*************************************************************************************************
  * Displays an event's detail info and allows a user to register on this event
  * @param event : the related event
- * @param hiker : the current hiker
  ************************************************************************************************/
 
 class EventFragment(
-    private var event: Event?=null,
-    private var hiker:Hiker?=null
+    private var event: Event?=null
 ) :
     BaseDataFlowFragment(),
     HikerPhotoViewHolder.OnHikerClickListener,
@@ -39,17 +33,8 @@ class EventFragment(
     TrailHorizontalViewHolder.OnTrailClickListener
 {
 
-    /**********************************Static items**********************************************/
-
-    companion object {
-
-        /**Logs**/
-        private const val TAG="EventFragment"
-    }
-
     /**********************************UI component**********************************************/
 
-    private lateinit var layout:View
     private val photoImageView by lazy {layout.fragment_event_image_view_photo}
     private val nameText by lazy {layout.fragment_event_text_name}
     private val nbDaysText by lazy {layout.fragment_event_text_nb_days}
@@ -65,33 +50,32 @@ class EventFragment(
     private val userRegisteredText by lazy {layout.fragment_event_text_user_registered}
     private val unregisterUserButton by lazy {layout.fragment_event_button_unregister_user}
 
-    /************************************Life cycle**********************************************/
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d(TAG, "Fragment '${javaClass.simpleName}' created")
-        this.layout=inflater.inflate(R.layout.fragment_event, container, false)
-        updateUI()
-        return this.layout
-    }
-
     /***********************************Data monitoring******************************************/
 
-    fun updateEvent(event:Event?){
-        this.event=event
-        updateUI()
+    override fun updateData(data: Any?) {
+        if(data is Event){
+            this.event=data
+            refreshUI()
+        }
     }
 
     /***********************************UI monitoring********************************************/
 
-    private fun updateUI(){
+    override fun getLayoutId(): Int = R.layout.fragment_event
+
+    override fun initializeUI() {
+        initializeRegisteredHikersRecyclerView()
+        initializeAttachedTrailsRecyclerView()
+        refreshUI()
+    }
+
+    override fun refreshUI() {
         updatePhotoImageView()
         updateNameText()
         updateNbDaysText()
         updateBeginDateText()
         updateMeetingPointText()
         updateRegisteredHikersText()
-        updateRegisteredHikersRecyclerView()
-        updateAttachedTrailsRecyclerView()
         updateDescriptionText()
         updateRegisterUserButton()
         updateUnregisterUserButton()
@@ -146,9 +130,9 @@ class EventFragment(
         this.registeredHikersText.text=nbHikersToDisplay
     }
 
-    private fun updateRegisteredHikersRecyclerView(){
+    private fun initializeRegisteredHikersRecyclerView(){
         this.registeredHikersAdapter= HikerPhotoAdapter(
-            RecyclerViewFirebaseHelper.generateOptionsForAdapter(
+            DatabaseFirebaseHelper.generateOptionsForAdapter(
                 Hiker::class.java,
                 EventFirebaseQueries.getRegisteredHikers(this.event?.id!!),
                 activity as AppCompatActivity
@@ -175,9 +159,9 @@ class EventFragment(
         }
     }
 
-    private fun updateAttachedTrailsRecyclerView(){
+    private fun initializeAttachedTrailsRecyclerView(){
         this.attachedTrailsAdapter= TrailHorizontalAdapter(
-            RecyclerViewFirebaseHelper.generateOptionsForAdapter(
+            DatabaseFirebaseHelper.generateOptionsForAdapter(
                 Trail::class.java,
                 EventFirebaseQueries.getAttachedTrails(this.event?.id!!),
                 activity as AppCompatActivity
@@ -188,8 +172,9 @@ class EventFragment(
     }
 
     private fun updateUserRegisterItemsVisibility(){
+        val user=AuthFirebaseHelper.getCurrentUser()
         val userIsRegistered=
-            this.registeredHikersAdapter.snapshots.firstOrNull { it.id==this.hiker?.id } !=null
+            this.registeredHikersAdapter.snapshots.firstOrNull { it.id==user?.uid } !=null
         if(userIsRegistered){
             this.registerUserButton.visibility=View.GONE
             this.userRegisteredText.visibility=View.VISIBLE
@@ -204,11 +189,10 @@ class EventFragment(
     /***********************************Hikers monitoring****************************************/
 
     override fun onHikerClick(hiker: Hiker) {
-        //TODO implement
+        (activity as EventActivity).seeHiker(hiker.id)
     }
 
     override fun onHikersChanged() {
-        Log.d(TAG, "Registered hikers changed")
         updateRegisteredHikersText()
         updateUserRegisterItemsVisibility()
     }
@@ -216,6 +200,8 @@ class EventFragment(
     /***********************************Trails monitoring****************************************/
 
     override fun onTrailClick(trail: Trail) {
-        //TODO implement
+        trail.id?.let { id ->
+            (activity as EventActivity).seeTrail(id)
+        }
     }
 }

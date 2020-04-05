@@ -43,6 +43,19 @@ object TrailBuilder {
     /********************************Build steps*************************************************/
 
     /**
+     * Initializes the trail with the default info
+     * @return an instance of TrailBuilder
+     */
+
+    fun withDefault():TrailBuilder{
+        this.name=null
+        this.source="TogeTrail"
+        this.description=null
+        this.trailTrack=TrailTrack()
+        return this
+    }
+
+    /**
      * Uses a Gpx to build a trail
      * @param gpx : the gpx
      * @return an instance of TrailBuilder

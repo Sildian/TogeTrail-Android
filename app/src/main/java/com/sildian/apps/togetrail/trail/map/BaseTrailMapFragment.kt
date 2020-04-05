@@ -24,9 +24,10 @@ import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 
 /*************************************************************************************************
  * Base for all Trail fragments using a map
+ * @param trail : the trail to show
  ************************************************************************************************/
 
-abstract class BaseTrailMapFragment :
+abstract class BaseTrailMapFragment (protected var trail:Trail?=null) :
     BaseDataFlowFragment(),
     OnMapReadyCallback,
     GoogleMap.OnMapClickListener,
@@ -44,13 +45,8 @@ abstract class BaseTrailMapFragment :
         const val KEY_BUNDLE_MAP_VIEW="KEY_BUNDLE_MAP_VIEW"
     }
 
-    /***************************************Data*************************************************/
-
-    protected var trail: Trail?=null                    //The current trail shown on the map
-
     /**********************************UI component**********************************************/
 
-    protected lateinit var layout:View                  //The fragment's layout
     protected lateinit var mapView:MapView              //The map view
     protected lateinit var infoBottomSheet:BottomSheetBehavior<View>    //Bottom sheet with additional info
     protected lateinit var infoFragment:Fragment        //Nested fragment allowing to see info about the trail
@@ -66,7 +62,7 @@ abstract class BaseTrailMapFragment :
     /************************************Life cycle**********************************************/
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
-        this.layout=inflater.inflate(getLayoutId(), container, false)
+        super.onCreateView(inflater, container, savedInstanceState)
         initializeInfoBottomSheet()
         initializeMap(savedInstanceState)
         initializeUserLocation()
@@ -85,19 +81,19 @@ abstract class BaseTrailMapFragment :
     }
 
     override fun onPause() {
-        super.onPause()
         this.map?.isMyLocationEnabled=false
         this.mapView.onPause()
+        super.onPause()
     }
 
     override fun onStop() {
-        super.onStop()
         this.mapView.onStop()
+        super.onStop()
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         this.mapView.onDestroy()
+        super.onDestroy()
     }
 
     override fun onLowMemory() {
@@ -117,48 +113,21 @@ abstract class BaseTrailMapFragment :
 
     /**********************************Data monitoring*******************************************/
 
-    /**Save data**/
-
     override fun saveData(){
         this.trail?.autoPopulatePosition()
-        (activity as TrailActivity).saveTrail(this.trail)
+        (activity as TrailActivity).saveTrailInDatabase(this.trail)
     }
 
-    /**
-     * Updates the current trail
-     * @param trail : the trail
-     */
-
-    fun updateTrail(trail:Trail?){
-        this.trail=trail
-    }
-
-    /**
-     * Updates the current trail then shows it on the map
-     * @param trail : the trail
-     */
-
-    fun updateTrailAndShowTrack(trail: Trail?){
-        this.trail=trail
-        this.map?.clear()
-        showTrailTrackOnMap()
-    }
-
-    /**
-     * Updates the current trail then shows it on the map and shows its related info
-     * @param trail : the trail to be shown
-     */
-
-    fun updateTrailAndShowTrackAndInfo(trail: Trail?){
-        this.trail=trail
-        this.map?.clear()
-        showTrailTrackOnMap()
-        showTrailInfoFragment()
+    override fun updateData(data: Any?) {
+        if(data is Trail){
+            this.trail=data
+            this.map?.clear()
+            showTrailTrackOnMap()
+            showTrailInfoFragment()
+        }
     }
 
     /************************************UI monitoring*******************************************/
-
-    abstract fun getLayoutId():Int
 
     abstract fun getMapViewId():Int
 

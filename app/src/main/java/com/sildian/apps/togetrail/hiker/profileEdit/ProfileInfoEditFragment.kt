@@ -17,15 +17,16 @@ import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.utils.uiHelpers.PickerHelper
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
+import com.sildian.apps.togetrail.location.model.core.Location
 import kotlinx.android.synthetic.main.fragment_profile_info_edit.view.*
 import pl.aprilapps.easyphotopicker.*
 
 /*************************************************************************************************
  * Lets the user edit its profile's information
- * @param hiker : the current user
+ * @param hiker : the hiker
  ************************************************************************************************/
 
-class ProfileInfoEditFragment(val hiker: Hiker?=null) : BaseDataFlowFragment()
+class ProfileInfoEditFragment(private val hiker: Hiker?=null) : BaseDataFlowFragment()
 {
 
     /**********************************Static items**********************************************/
@@ -46,7 +47,6 @@ class ProfileInfoEditFragment(val hiker: Hiker?=null) : BaseDataFlowFragment()
 
     /**********************************UI component**********************************************/
 
-    private lateinit var layout:View
     private val photoImageView by lazy {layout.fragment_profile_info_edit_image_view_photo}
     private val addPhotoButton by lazy {layout.fragment_profile_info_edit_button_add_photo}
     private val takePhotoButton by lazy {layout.fragment_profile_info_edit_button_take_photo}
@@ -63,17 +63,18 @@ class ProfileInfoEditFragment(val hiker: Hiker?=null) : BaseDataFlowFragment()
     /************************************Life cycle**********************************************/
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d(TAG, "Fragment '${javaClass.simpleName}' created")
-        this.layout=inflater.inflate(R.layout.fragment_profile_info_edit, container, false)
+        super.onCreateView(inflater, container, savedInstanceState)
         initializeEasyImage()
-        initializeAllUIComponents()
         return this.layout
     }
 
     /*****************************************Data***********************************************/
 
-    override fun updateData() {
-        initializeAllUIComponents()
+    override fun updateData(data:Any?) {
+        if(data is Location){
+            this.hiker?.liveLocation=data
+            updateLiveLocationTextField()
+        }
     }
 
     override fun saveData() {
@@ -88,13 +89,19 @@ class ProfileInfoEditFragment(val hiker: Hiker?=null) : BaseDataFlowFragment()
 
     /***********************************UI monitoring********************************************/
 
-    private fun initializeAllUIComponents(){
+    override fun getLayoutId(): Int = R.layout.fragment_profile_info_edit
+
+    override fun initializeUI(){
         initializeAddPhotoButton()
         initializeTakePhotoButton()
-        initializeNameTextField()
-        initializeBirthdayTextFieldDropdown()
-        initializeLiveLocationTextField()
-        initializeDescriptionTextField()
+        refreshUI()
+    }
+
+    override fun refreshUI(){
+        updateNameTextField()
+        updateBirthdayTextFieldDropdown()
+        updateLiveLocationTextField()
+        updateDescriptionTextField()
         updatePhoto()
     }
 
@@ -110,23 +117,23 @@ class ProfileInfoEditFragment(val hiker: Hiker?=null) : BaseDataFlowFragment()
         }
     }
 
-    private fun initializeNameTextField(){
+    private fun updateNameTextField(){
         this.nameTextField.setText(this.hiker?.name)
     }
 
-    private fun initializeBirthdayTextFieldDropdown(){
+    private fun updateBirthdayTextFieldDropdown(){
         PickerHelper.populateEditTextWithDatePicker(
             this.birthdayTextFieldDropdown, activity as AppCompatActivity, this.hiker?.birthday)
     }
 
-    private fun initializeLiveLocationTextField(){
+    private fun updateLiveLocationTextField(){
         this.liveLocationTextField.setText(this.hiker?.liveLocation?.fullAddress)
         this.liveLocationTextField.setOnClickListener {
             (activity as ProfileEditActivity).searchLocation()
         }
     }
 
-    private fun initializeDescriptionTextField(){
+    private fun updateDescriptionTextField(){
         this.descriptionTextField.setText(this.hiker?.description)
     }
 

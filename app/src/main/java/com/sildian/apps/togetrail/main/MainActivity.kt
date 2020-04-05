@@ -10,8 +10,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.core.view.GravityCompat
@@ -24,8 +24,9 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.common.flows.BaseDataFlowActivity
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.UserFirebaseHelper
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
 import com.sildian.apps.togetrail.event.detail.EventActivity
 import com.sildian.apps.togetrail.event.edit.EventEditActivity
 import com.sildian.apps.togetrail.event.list.EventsListFragment
@@ -36,7 +37,6 @@ import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.support.HikerBuilder
-import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
 import com.sildian.apps.togetrail.hiker.profile.ProfileActivity
 import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.location.search.LocationSearchActivity
@@ -54,7 +54,7 @@ import net.danlew.android.joda.JodaTimeAndroid
  ************************************************************************************************/
 
 class MainActivity :
-    AppCompatActivity(),
+    BaseDataFlowActivity(),
     NavigationView.OnNavigationItemSelectedListener,
     BottomNavigationView.OnNavigationItemSelectedListener
 {
@@ -73,10 +73,7 @@ class MainActivity :
 
         /**Request keys for activities**/
         private const val KEY_REQUEST_LOGIN=1001
-        private const val KEY_REQUEST_PROFILE=1002
-        private const val KEY_REQUEST_TRAIL=1003
-        private const val KEY_REQUEST_EVENT=1004
-        private const val KEY_REQUEST_LOCATION_SEARCH=1005
+        private const val KEY_REQUEST_LOCATION_SEARCH=1002
 
         /**Request keys for permissions**/
         private const val KEY_REQUEST_PERMISSION_LOCATION=2001
@@ -87,9 +84,9 @@ class MainActivity :
 
     /****************************************Data************************************************/
 
-    private var currentHiker: Hiker?=null               //The current hiker connected to the app
-    private val trails= arrayListOf<Trail>()            //The list of trails to display
-    private val events= arrayListOf<Event>()            //The list of events to display
+    private var currentUser: Hiker?=null                //The current user connected to the app
+    private var trails= listOf<Trail>()                 //The list of trails to display
+    private var events= listOf<Event>()                 //The list of events to display
 
     /*************************************Queries************************************************/
 
@@ -98,9 +95,10 @@ class MainActivity :
 
     /**********************************UI component**********************************************/
 
-    private lateinit var fragment:BaseDataFlowFragment
+    private var fragment:BaseDataFlowFragment?=null
     private val toolbar by lazy {activity_main_toolbar}
     private val searchTextField by lazy {activity_main_text_field_research}
+    private val progressbar by lazy {activity_main_progressbar}
     private val drawerLayout by lazy {activity_main_drawer_layout}
     private val navigationView by lazy {activity_main_navigation_view}
     private val navigationViewHeader by lazy {
@@ -119,17 +117,9 @@ class MainActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG, "Activity '${javaClass.simpleName}' created")
-        setContentView(R.layout.activity_main)
         JodaTimeAndroid.init(this)
         Places.initialize(applicationContext, resources.getString(R.string.google_maps_key))
-        initializeToolbar()
-        initializeSearchTextField()
-        initializeNavigationView()
-        initializeBottomNavigationView()
-        initializeAddButton()
         requestLocationPermission()
-        updateAndSaveCurrentHiker()
     }
 
     /************************************Navigation control**************************************/
@@ -147,8 +137,6 @@ class MainActivity :
     /**Click on menu item from...**/
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-
-        Log.d(TAG, "Menu '${item.title}' clicked")
 
         return when(item.groupId) {
 
@@ -172,15 +160,15 @@ class MainActivity :
                 //TODO handle clicks
                 when (item.itemId) {
                     R.id.menu_user_profile -> {
-                        if(UserFirebaseHelper.getCurrentUser()!=null){
-                            startProfileActivity(ProfileActivity.ACTION_PROFILE_SEE_PROFILE)
+                        if(AuthFirebaseHelper.getCurrentUser()!=null){
+                            startProfileActivity()
                         }else{
                             //TODO handle user not connected
                         }
                     }
                     R.id.menu_user_settings ->
-                        if(UserFirebaseHelper.getCurrentUser()!=null){
-                            startProfileEditActivity(ProfileEditActivity.ACTION_PROFILE_EDIT_SETTINGS)
+                        if(AuthFirebaseHelper.getCurrentUser()!=null){
+                            startProfileEditActivity()
                         }else{
                             //TODO handle user not connected
                         }
@@ -196,8 +184,6 @@ class MainActivity :
     /**Click on menu item from PopupMenu**/
 
     private fun onPopupMenuItemClick(item: MenuItem?): Boolean {
-
-        Log.d(TAG, "Menu '${item?.title}' clicked")
 
         when(item?.groupId) {
             R.id.menu_add -> {
@@ -248,129 +234,103 @@ class MainActivity :
 
     /****************************Data monitoring**************************************************/
 
-    /**
-     * Updates and saves the current hiker in the database
-     */
+    /**Loads data**/
 
-    private fun updateAndSaveCurrentHiker(){
+    override fun loadData() {
+        loadCurrentUserFromDatabase()
+    }
 
-        /*Checks if the user is connected*/
+    /**Loads the current user's info from the database**/
 
-        val user=UserFirebaseHelper.getCurrentUser()
-        if(user!=null) {
-
-            /*If the user is connected, gets its related hiker profile from the database*/
-
-            HikerFirebaseQueries.getHiker(user.uid)
-                .addOnSuccessListener { documentSnapshot ->
-
-                    Log.d(TAG, "Hiker '${user.uid}' loaded from the database")
-                    val hiker=documentSnapshot.toObject(Hiker::class.java)
-
-                    /*If the profile exists, then updates the currentHiker*/
-
-                    if(hiker!=null) {
-                        this.currentHiker = hiker
-                    }
-
-                    /*Else, creates a hiker profile in the database*/
-
-                    else{
-                        this.currentHiker=HikerBuilder
-                            .withFirebaseUser(user)
-                            .build()
-                        HikerFirebaseQueries.createOrUpdateHiker(this.currentHiker!!)
-                            .addOnSuccessListener {
-                                //TODO handle
-                                Log.d(TAG, "Hiker '${user.uid}' registered in the database")
-
-                                /*And updates the hiker's history*/
-
-                                val historyItem= HikerHistoryItem(
-                                    HikerHistoryType.HIKER_REGISTERED,
-                                    this.currentHiker?.registrationDate!!
-                                )
-                                HikerFirebaseQueries.addHistoryItem(this.currentHiker?.id!!, historyItem)
-                            }
-                            .addOnFailureListener { e ->
-                                //TODO handle
-                                Log.w(TAG, e.message.toString())
-                            }
-                    }
-                }
-                .addOnFailureListener { e ->
-                    //TODO handle
-                    Log.w(TAG, e.message.toString())
-                }
+    private fun loadCurrentUserFromDatabase(){
+        val user=AuthFirebaseHelper.getCurrentUser()
+        user?.uid?.let { userId ->
+            this.progressbar.visibility= View.VISIBLE
+            getHikerRealTime(userId, this::handleHikerResult)
         }
     }
 
-    /**
-     * Loads the trails from the database
-     * @param callback : the callback to handle the result
+    /**Handles the hiker result when loaded
+     * @param hiker : the resulted hiker
      */
 
-    fun loadTrails(callback:(List<Trail>)->Unit){
+    private fun handleHikerResult(hiker: Hiker?){
 
-        //TODO add a progress bar
-        
-        this.trailsQuery
-            .addSnapshotListener { querySnapshot, e ->
+        /*If the hiker exists, sets it as the current user*/
 
-                /*If the query is a success, displays the results*/
+        if(hiker!=null){
+            this.progressbar.visibility= View.GONE
+            this.currentUser=hiker
+        }
 
-                if(querySnapshot!=null){
-                    Log.d(TAG, "Query finished with ${querySnapshot.size()} trails")
-                    this.trails.clear()
-                    querySnapshot.forEach { documentSnapshot ->
-                        val trail=documentSnapshot.toObject(Trail::class.java)
-                        trail.id=documentSnapshot.id
-                        this.trails.add(trail)
-                        callback.invoke(this.trails)
-                    }
-                }
+        /*Else creates a new Hiker with the Firebase user Auth info*/
 
-                /*Else*/
-
-                else if(e!=null){
-                    //TODO handle
-                    Log.w(TAG, e.message.toString())
-                }
+        else{
+            val user=AuthFirebaseHelper.getCurrentUser()
+            user?.let { firebaseUser ->
+                this.currentUser = HikerBuilder
+                    .withFirebaseUser(firebaseUser)
+                    .build()
+                saveCurrentUserInDatabase()
             }
+        }
+    }
+
+    /**Saves the current user's info within the database**/
+
+    private fun saveCurrentUserInDatabase(){
+        this.currentUser?.let { hiker ->
+            updateHiker(hiker, this::saveCurrentUserHistoryItemInDatabase)
+        }
+    }
+
+    /**Saves an history item within the current user's profile**/
+
+    private fun saveCurrentUserHistoryItemInDatabase(){
+        this.progressbar.visibility= View.GONE
+        this.currentUser?.let { hiker ->
+            val historyItem = HikerHistoryItem(
+                HikerHistoryType.HIKER_REGISTERED,
+                hiker.registrationDate
+            )
+            addHikerHistoryItem(hiker.id, historyItem)
+        }
+    }
+
+    /**Loads the trails from the database**/
+
+    fun loadTrailsFromDatabase(){
+        this.progressbar.visibility= View.VISIBLE
+        getTrailsRealTime(this.trailsQuery, this::handleTrailsResult)
     }
 
     /**
-     * Loads the events from the database
-     * @param callback : the callback to handle the result
+     * Handles trails result when loaded from the database
+     * @param trails : the resulted list of trails
      */
 
-    fun loadEvents(callback:(List<Event>)->Unit){
+    private fun handleTrailsResult(trails:List<Trail>){
+        this.progressbar.visibility= View.GONE
+        this.trails=trails
+        this.fragment?.updateData(this.trails)
+    }
 
-        //TODO add a progress bar
+    /**Loads the events from the database**/
 
-        this.eventsQuery
-            .addSnapshotListener { querySnapshot, e ->
+    fun loadEventsFromDatabase(){
+        this.progressbar.visibility= View.VISIBLE
+        getEventsRealTime(this.eventsQuery, this::handleEventsResult)
+    }
 
-                /*If the query is a success, displays the results*/
+    /**
+     * Handles events result when loaded from the database
+     * @param events : the resulted list of trails
+     */
 
-                if(querySnapshot!=null){
-                    Log.d(TAG, "Query finished with ${querySnapshot.size()} events")
-                    this.events.clear()
-                    querySnapshot.forEach { documentSnapshot ->
-                        val event=documentSnapshot.toObject(Event::class.java)
-                        event.id=documentSnapshot.id
-                        this.events.add(event)
-                        callback.invoke(this.events)
-                    }
-                }
-
-                /*Else*/
-
-                else if(e!=null){
-                    //TODO handle
-                    Log.w(TAG, e.message.toString())
-                }
-            }
+    private fun handleEventsResult(events:List<Event>){
+        this.progressbar.visibility= View.GONE
+        this.events=events
+        this.fragment?.updateData(this.events)
     }
 
     /**
@@ -379,6 +339,8 @@ class MainActivity :
      */
 
     fun setQueriesToSearchAroundPoint(point: LatLng){
+        this.trailsQueryRegistration?.remove()
+        this.eventsQueryRegistration?.remove()
         this.trailsQuery=TrailFirebaseQueries.getTrailsAroundPoint(point)
         this.eventsQuery=EventFirebaseQueries.getEventsAroundPoint(point)
     }
@@ -390,9 +352,11 @@ class MainActivity :
 
     fun setQueriesToSearchAroundLocation(location:Location){
         if(location.country!=null) {
+            this.trailsQueryRegistration?.remove()
+            this.eventsQueryRegistration?.remove()
             this.trailsQuery = TrailFirebaseQueries.getTrailsNearbyLocation(location)!!
             this.eventsQuery = EventFirebaseQueries.getEventsNearbyLocation(location)!!
-            this.fragment.updateData()
+            this.fragment?.updateData(null)
         }
     }
 
@@ -409,6 +373,20 @@ class MainActivity :
     }
 
     /******************************UI monitoring**************************************************/
+
+    override fun getLayoutId(): Int = R.layout.activity_main
+
+    override fun initializeUI() {
+        initializeToolbar()
+        initializeSearchTextField()
+        initializeNavigationView()
+        initializeBottomNavigationView()
+        initializeAddButton()
+    }
+
+    override fun refreshUI() {
+        //Nothing
+    }
 
     private fun initializeToolbar(){
         setSupportActionBar(this.toolbar)
@@ -445,7 +423,7 @@ class MainActivity :
 
         /*If the user is null, then shows default info*/
 
-        val user=UserFirebaseHelper.getCurrentUser()
+        val user=AuthFirebaseHelper.getCurrentUser()
         if(user==null){
             this.navigationHeaderUserImage.setImageResource(R.drawable.ic_person_black)
             this.navigationHeaderUserNameText.setText(R.string.message_user_unknown)
@@ -466,13 +444,12 @@ class MainActivity :
     /******************************Login / Logout************************************************/
 
     private fun login(){
-        //TODO add a progress bar
-        val user=UserFirebaseHelper.getCurrentUser()
+        val user=AuthFirebaseHelper.getCurrentUser()
         if(user==null){
             startLoginActivity()
         }else{
-            this.currentHiker=null
-            UserFirebaseHelper.signUserOut()
+            this.currentUser=null
+            AuthFirebaseHelper.signUserOut()
             updateNavigationViewUserItems()
         }
         this.drawerLayout.closeDrawers()
@@ -490,15 +467,19 @@ class MainActivity :
             ID_FRAGMENT_MAP->
                 this.fragment= TrailMapFragment(this.trails)
             ID_FRAGMENT_TRAILS->
-                this.fragment=TrailsListFragment(this.currentHiker)
+                this.fragment=TrailsListFragment(this.currentUser)
             ID_FRAGMENT_EVENTS->
-                this.fragment= EventsListFragment(this.currentHiker)
+                this.fragment= EventsListFragment(this.currentUser)
         }
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.activity_main_fragment, this.fragment).commitAllowingStateLoss()
+        this.fragment?.let { fragment ->
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.activity_main_fragment, fragment).commitAllowingStateLoss()
+        }
     }
 
     /***********************************Permissions**********************************************/
+
+    /**Requests location permission**/
 
     private fun requestLocationPermission(){
         if(Build.VERSION.SDK_INT>=23
@@ -520,6 +501,8 @@ class MainActivity :
         }
     }
 
+    /**Handles location permission result**/
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             KEY_REQUEST_PERMISSION_LOCATION->if(grantResults.isNotEmpty()){
@@ -539,9 +522,7 @@ class MainActivity :
 
     /***********************************Navigation***********************************************/
 
-    /**
-     * Starts login on the server
-     */
+    /**Starts login on the server**/
 
     private fun startLoginActivity(){
         startActivityForResult(
@@ -555,34 +536,27 @@ class MainActivity :
         )
     }
 
-    /**
-     * Starts profile activity
-     * @param profileActionId : defines which action should be performed (choice within ProfileActivity.ACTION_PROFILE_xxx
-     */
+    /**Starts profile activity**/
 
-    private fun startProfileActivity(profileActionId:Int){
+    private fun startProfileActivity(){
         val profileActivityIntent=Intent(this, ProfileActivity::class.java)
-        profileActivityIntent.putExtra(ProfileActivity.KEY_BUNDLE_PROFILE_ACTION, profileActionId)
-        profileActivityIntent.putExtra(ProfileActivity.KEY_BUNDLE_HIKER, this.currentHiker)
-        startActivityForResult(profileActivityIntent, KEY_REQUEST_PROFILE)
+        profileActivityIntent.putExtra(ProfileActivity.KEY_BUNDLE_HIKER_ID, this.currentUser?.id)
+        startActivity(profileActivityIntent)
     }
 
-    /**
-     * Starts profile Edit activity
-     * @param profileActionId : defines which action should be performed (choice within ProfileEditActivity.ACTION_PROFILE_xxx
-     */
+    /**Starts profile Edit activity**/
 
-    private fun startProfileEditActivity(profileActionId:Int){
+    private fun startProfileEditActivity(){
         val profileEditActivityIntent=Intent(this, ProfileEditActivity::class.java)
-        profileEditActivityIntent.putExtra(ProfileEditActivity.KEY_BUNDLE_PROFILE_ACTION, profileActionId)
-        profileEditActivityIntent.putExtra(ProfileEditActivity.KEY_BUNDLE_HIKER, this.currentHiker)
-        startActivityForResult(profileEditActivityIntent, KEY_REQUEST_PROFILE)
+        profileEditActivityIntent.putExtra(ProfileEditActivity.KEY_BUNDLE_PROFILE_ACTION, ProfileEditActivity.ACTION_PROFILE_EDIT_SETTINGS)
+        profileEditActivityIntent.putExtra(ProfileEditActivity.KEY_BUNDLE_HIKER, this.currentUser)
+        startActivity(profileEditActivityIntent)
     }
 
     /**
      * Starts the TrailActivity
      * @param trailActionId : defines which action should be performed (choice within TrailActivity.ACTION_TRAIL_xxx)
-     * @param trail (optionnal) : the trail to see
+     * @param trail (optional) : the trail to show
      */
 
     private fun startTrailActivity(trailActionId: Int, trail:Trail?=null){
@@ -591,36 +565,28 @@ class MainActivity :
         if(trailActionId==TrailActivity.ACTION_TRAIL_SEE){
             trailActivityIntent.putExtra(TrailActivity.KEY_BUNDLE_TRAIL, trail)
         }
-        trailActivityIntent.putExtra(TrailActivity.KEY_BUNDLE_HIKER, this.currentHiker)
-        startActivityForResult(trailActivityIntent, KEY_REQUEST_TRAIL)
+        startActivity(trailActivityIntent)
     }
 
     /**
      * Starts the EventActivity
+     * @param event : the event to show
      */
 
     private fun startEventActivity(event: Event?){
         val eventActivityIntent=Intent(this, EventActivity::class.java)
-        eventActivityIntent.putExtra(EventActivity.KEY_BUNDLE_EVENT, event)
-        if(this.currentHiker!=null){
-            eventActivityIntent.putExtra(EventActivity.KEY_BUNDLE_HIKER, this.currentHiker)
-        }
-        startActivityForResult(eventActivityIntent, KEY_REQUEST_EVENT)
+        eventActivityIntent.putExtra(EventActivity.KEY_BUNDLE_EVENT_ID, event?.id)
+        startActivity(eventActivityIntent)
     }
 
-    /**
-     * Starts the EventEditActivity
-     */
+    /**Starts the EventEditActivity**/
 
     private fun startEventEditActivity(){
         val eventEditActivityIntent= Intent(this, EventEditActivity::class.java)
-        eventEditActivityIntent.putExtra(EventEditActivity.KEY_BUNDLE_HIKER, this.currentHiker)
         startActivity(eventEditActivityIntent)
     }
 
-    /**
-     * Starts the LocationSearchActivity
-     */
+    /**Starts the LocationSearchActivity**/
 
     private fun startLocationSearchActivity(){
         val locationSearchActivity=Intent(this, LocationSearchActivity::class.java)
@@ -633,9 +599,6 @@ class MainActivity :
         super.onActivityResult(requestCode, resultCode, data)
         when(requestCode){
             KEY_REQUEST_LOGIN -> handleLoginResult(resultCode, data)
-            KEY_REQUEST_PROFILE -> handleProfileResult(resultCode, data)
-            KEY_REQUEST_TRAIL -> handleTrailResult(resultCode, data)
-            KEY_REQUEST_EVENT -> handleEventResult(resultCode, data)
             KEY_REQUEST_LOCATION_SEARCH -> handleLocationSearchResult(resultCode, data)
         }
     }
@@ -648,7 +611,7 @@ class MainActivity :
             resultCode== Activity.RESULT_OK -> {
                 Log.d(TAG, "Login successful")
                 updateNavigationViewUserItems()
-                updateAndSaveCurrentHiker()
+                loadCurrentUserFromDatabase()
             }
             resultCode==Activity.RESULT_CANCELED -> {
                 //TODO handle
@@ -665,47 +628,15 @@ class MainActivity :
         }
     }
 
-    /**Handles profile result**/
-
-    private fun handleProfileResult(resultCode: Int, data: Intent?){
-        if(resultCode== Activity.RESULT_OK){
-            if(data!=null && data.hasExtra(ProfileActivity.KEY_BUNDLE_HIKER)){
-                this.currentHiker=data.getParcelableExtra(ProfileActivity.KEY_BUNDLE_HIKER)
-                updateNavigationViewUserItems()
-            }
-        }
-    }
-
-    /**Handles trail result**/
-
-    private fun handleTrailResult(resultCode: Int, data: Intent?){
-        if(resultCode== Activity.RESULT_OK){
-            if(data!=null && data.hasExtra(TrailActivity.KEY_BUNDLE_HIKER)){
-                this.currentHiker=data.getParcelableExtra(TrailActivity.KEY_BUNDLE_HIKER)
-                updateNavigationViewUserItems()
-            }
-        }
-    }
-
-    /**Handles event result**/
-
-    private fun handleEventResult(resultCode: Int, data: Intent?){
-        if(resultCode== Activity.RESULT_OK){
-            if(data!=null && data.hasExtra(EventActivity.KEY_BUNDLE_HIKER)){
-                this.currentHiker=data.getParcelableExtra(EventActivity.KEY_BUNDLE_HIKER)
-                updateNavigationViewUserItems()
-            }
-        }
-    }
-
     /**Handles location search result**/
 
     private fun handleLocationSearchResult(resultCode: Int, data: Intent?){
         if(resultCode== Activity.RESULT_OK){
             if(data!=null && data.hasExtra(LocationSearchActivity.KEY_BUNDLE_LOCATION)){
                 val location=data.getParcelableExtra<Location>(LocationSearchActivity.KEY_BUNDLE_LOCATION)
-                if(location != null) {
-                    setQueriesToSearchAroundLocation(location)
+                location?.let { loc ->
+                    this.searchTextField.setText(loc.toString())
+                    setQueriesToSearchAroundLocation(loc)
                 }
             }
         }

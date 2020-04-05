@@ -1,15 +1,11 @@
 package com.sildian.apps.togetrail.trail.map
 
-import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.Polyline
-
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.GeoUtilities
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
@@ -51,14 +47,6 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
 
     /************************************Life cycle**********************************************/
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        Log.d(TAG, "Fragment '${javaClass.simpleName}' created")
-        initializeAddPoiButton()
-        initializePlayButton()
-        return this.layout
-    }
-
     override fun onDestroy() {
         isRecording=false
         super.onDestroy()
@@ -84,6 +72,15 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
         this.map?.uiSettings?.setAllGesturesEnabled(false)
         this.addPoiButton.isEnabled=false
         this.playButton.isEnabled=false
+    }
+
+    override fun initializeUI() {
+        initializeAddPoiButton()
+        initializePlayButton()
+    }
+
+    override fun refreshUI() {
+        //Nothing
     }
 
     private fun initializeAddPoiButton(){
@@ -120,7 +117,6 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
     }
 
     override fun onMapClick(point: LatLng?) {
-        Log.d(TAG, "Clicked on map at point lat ${point?.latitude} lng ${point?.longitude}")
         hideInfoBottomSheet()
     }
 
@@ -130,7 +126,6 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
 
         return when(marker?.tag){
             is TrailPointOfInterest ->{
-                Log.d(TAG, "Clicked on marker (TrailPointOfInterest)")
                 val trailPointOfInterest=marker.tag as TrailPointOfInterest
                 val trailPoiPosition=marker.snippet.toInt()
                 showTrailPOIInfoFragment(trailPointOfInterest, trailPoiPosition)
@@ -138,12 +133,10 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
                 true
             }
             is TrailPoint ->{
-                Log.d(TAG, "Clicked on marker (TrailPoint)")
                 showTrailInfoFragment()
                 true
             }
             else-> {
-                Log.w(TAG, "Clicked on marker (Unknown category)")
                 false
             }
         }
@@ -159,12 +152,8 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
 
     override fun onInfoWindowClick(marker: Marker?) {
         if(marker?.tag is TrailPointOfInterest) {
-            Log.d(TAG, "Clicked on info window (TrailPointOfInterest)")
             val trailPointOfInterest=marker.tag as TrailPointOfInterest
             removeTrailPointOfInterest(trailPointOfInterest)
-        }
-        else{
-            Log.w(TAG, "Clicked on info window (Unknown category)")
         }
     }
 
@@ -235,8 +224,8 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
                 }
             }
             .addOnFailureListener { e->
-                //TODO handle
                 Log.w(TAG, e.message.toString())
+                //TODO handle
             }
     }
 

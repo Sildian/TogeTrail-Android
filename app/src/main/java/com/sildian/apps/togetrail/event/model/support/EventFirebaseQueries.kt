@@ -98,11 +98,11 @@ object EventFirebaseQueries {
     /**
      * Gets a given event
      * @param id : the id of the event
-     * @return a task result
+     * @return a document reference
      */
 
-    fun getEvent(id:String): Task<DocumentSnapshot> =
-        getCollection().document(id).get()
+    fun getEvent(id:String): DocumentReference =
+        getCollection().document(id)
 
     /**
      * Creates a new event in the database

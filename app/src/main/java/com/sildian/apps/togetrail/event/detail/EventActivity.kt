@@ -1,15 +1,15 @@
 package com.sildian.apps.togetrail.event.detail
 
-import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowActivity
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
 import com.sildian.apps.togetrail.event.edit.EventEditActivity
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
@@ -17,6 +17,8 @@ import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
+import com.sildian.apps.togetrail.hiker.profile.ProfileActivity
+import com.sildian.apps.togetrail.trail.map.TrailActivity
 import kotlinx.android.synthetic.main.activity_event.*
 import java.util.*
 
@@ -33,34 +35,26 @@ class EventActivity : BaseDataFlowActivity() {
         /**Logs**/
         private const val TAG="EventActivity"
 
-        /**Request keys for activities**/
-        private const val KEY_REQUEST_EVENT_EDIT=1001
-
         /**Bundle keys for intents**/
-        const val KEY_BUNDLE_EVENT="KEY_BUNDLE_EVENT"
-        const val KEY_BUNDLE_HIKER="KEY_BUNDLE_HIKER"
+        const val KEY_BUNDLE_EVENT_ID="KEY_BUNDLE_EVENT_ID"     //Event's id -> Mandatory
     }
 
     /****************************************Data************************************************/
 
-    private var event: Event?=null                          //The event
-    private var hiker: Hiker?=null                          //The current hiker
+    private var event: Event?=null                              //The event
 
     /**********************************UI component**********************************************/
 
     private val toolbar by lazy {activity_event_toolbar}
-    private lateinit var fragment: BaseDataFlowFragment
-    private lateinit var progressDialog: AlertDialog
+    private val progressbar by lazy {activity_event_progressbar}
+    private var fragment: BaseDataFlowFragment?=null
+    private var progressDialog: AlertDialog?=null
 
     /************************************Life cycle**********************************************/
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d(TAG, "Activity '${javaClass.simpleName}' created")
-        setContentView(R.layout.activity_event)
-        loadData()
-        initializeToolbar()
-        showFragment()
+    override fun onDestroy() {
+        this.eventQueryRegistration?.remove()
+        super.onDestroy()
     }
 
     /********************************Menu monitoring*********************************************/
@@ -75,10 +69,9 @@ class EventActivity : BaseDataFlowActivity() {
     /**Click on menu item from toolbar**/
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.d(TAG, "Menu '${item.title}' clicked")
         if(item.groupId==R.id.menu_edit){
             if(item.itemId==R.id.menu_edit_edit){
-                editEvent()
+                startEventEditActivity()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -87,138 +80,158 @@ class EventActivity : BaseDataFlowActivity() {
     /********************************Navigation control******************************************/
 
     override fun onBackPressed() {
-        finishOk()
+        finish()
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        finishOk()
+        finish()
         return true
     }
 
     /******************************Data monitoring************************************************/
 
+    /**Loads data**/
+
     override fun loadData() {
         readDataFromIntent()
     }
 
+    /**Reads data from intent**/
+
     private fun readDataFromIntent(){
         if(intent!=null){
-            if(intent.hasExtra(KEY_BUNDLE_EVENT)){
-                this.event= intent.getParcelableExtra(KEY_BUNDLE_EVENT)
-            }else{
-                this.event= Event()
-            }
-            if(intent.hasExtra(KEY_BUNDLE_HIKER)){
-                this.hiker=intent.getParcelableExtra(KEY_BUNDLE_HIKER)
+            if(intent.hasExtra(KEY_BUNDLE_EVENT_ID)){
+                val eventId= intent.getStringExtra(KEY_BUNDLE_EVENT_ID)
+                eventId?.let { id -> loadEventFromDatabase(id) }
             }
         }
     }
 
+    /**
+     * Loads an event from the database
+     * @param eventId : the event's id
+     */
+
+    private fun loadEventFromDatabase(eventId:String){
+        getEventRealTime(eventId, this::handleEventResult)
+    }
+
+    /**
+     * Handles the event result when loaded from the database
+     * @param event : the event loaded from the database
+     */
+
+    private fun handleEventResult(event:Event?){
+        this.progressbar.visibility= View.GONE
+        this.event=event
+        if(this.fragment==null){
+            showFragment()
+        }else if(this.fragment?.isVisible==true){
+            this.fragment?.updateData(this.event)
+        }
+    }
+
+    /**Starts register the current user to the event**/
+
     fun registerUserToEvent(){
-        if(this.hiker!=null){
+
+        /*First, gets the current user with updated info*/
+
+        val user=AuthFirebaseHelper.getCurrentUser()
+        user?.uid?.let { hikerId ->
+            getHiker(hikerId, this::handleHikerToRegister)
+        }
+    }
+
+    /**
+     * Handles the hiker to register to the event when loaded from the database
+     * @param hiker : the hiker to register
+     */
+
+    private fun handleHikerToRegister(hiker:Hiker?){
+
+        if(hiker!=null && this.event!=null) {
 
             /*Increases the number of hikers registered to the event*/
 
+            hiker.nbEventsAttended++
             this.event!!.nbHikersRegistered++
-            this.hiker!!.nbEventsAttended++
 
-            /*Updates the hiker registered to the event*/
+            this.event?.let { event ->
 
-            EventFirebaseQueries.updateRegisteredHiker(this.event?.id!!, this.hiker!!)
-                .addOnSuccessListener {
+                /*Updates both the hiker and the event*/
 
-                    /*Then updates the event for which the hiker attended*/
+                updateHiker(hiker)
+                updateEvent(event)
+                updateHikerAttendedEvent(hiker.id, event)
+                updateEventRegisteredHiker(event.id.toString(), hiker)
 
-                    HikerFirebaseQueries.updateAttendedEvent(this.hiker?.id!!, this.event!!)
-                        .addOnSuccessListener {
-                            Log.d(TAG, "Hiker registered successfully")
+                /*Adds an history item to the hiker*/
 
-                            /*And updates the hiker's history*/
-
-                            val historyItem=HikerHistoryItem(
-                                HikerHistoryType.EVENT_ATTENDED,
-                                Date(),
-                                this.event?.id!!,
-                                this.event?.name,
-                                this.event?.meetingPoint.toString(),
-                                this.event?.mainPhotoUrl
-                            )
-
-                            HikerFirebaseQueries.addHistoryItem(this.hiker?.id!!, historyItem)
-
-                        }
-                        .addOnFailureListener { e ->
-                            Log.w(TAG, e.message.toString())
-                            //TODO handle
-                        }
-                }
-                .addOnFailureListener { e ->
-                    Log.w(TAG, e.message.toString())
-                    //TODO handle
-                }
-
-            /*Also updates the event within the original tree*/
-
-            EventFirebaseQueries.updateEvent(this.event!!)
-                .addOnFailureListener { e ->
-                    Log.w(TAG, e.message.toString())
-                }
-
-            /*And updates the hiker within the original tree*/
-
-            HikerFirebaseQueries.createOrUpdateHiker(this.hiker!!)
-                .addOnFailureListener { e ->
-                    Log.w(TAG, e.message.toString())
-                }
+                val historyItem = HikerHistoryItem(
+                    HikerHistoryType.EVENT_ATTENDED,
+                    Date(),
+                    event.id,
+                    event.name,
+                    event.meetingPoint.toString(),
+                    event.mainPhotoUrl
+                )
+                addHikerHistoryItem(hiker.id, historyItem)
+            }
         }
     }
 
+    /**Starts unregister the current user from the event**/
+
     fun unregisterUserFromEvent(){
-        if(this.hiker!=null){
 
-            /*Decreases the number of hikers registered to the event*/
+        /*First, gets the current user with updated info*/
 
+        val user=AuthFirebaseHelper.getCurrentUser()
+        user?.uid?.let { hikerId ->
+            getHiker(hikerId, this::handleHikerToUnregister)
+        }
+    }
+
+    /**
+     * Handles the hiker to unregister from the event when loaded from the database
+     * @param hiker : the hiker to register
+     */
+
+    private fun handleHikerToUnregister(hiker:Hiker?){
+
+        if(hiker!=null && this.event!=null) {
+
+            /*Increases the number of hikers registered to the event*/
+
+            hiker.nbEventsAttended--
             this.event!!.nbHikersRegistered--
-            this.hiker!!.nbEventsAttended--
 
-            /*Deletes the hiker registered from the event*/
+            this.event?.let { event ->
 
-            EventFirebaseQueries.deleteRegisteredHiker(this.event?.id!!, this.hiker?.id!!)
-                .addOnSuccessListener {
+                /*Updates both the hiker and the event*/
 
-                    /*Then deletes the event for which the hiker attended*/
+                updateHiker(hiker)
+                updateEvent(event)
+                deleteHikerAttendedEvent(hiker.id, event.id.toString())
+                deleteEventRegisteredHiker(event.id.toString(), hiker.id)
 
-                    HikerFirebaseQueries.deleteAttendedEvent(this.hiker?.id!!, this.event?.id!!)
-                        .addOnSuccessListener {
-                            Log.d(TAG, "Hiker unregistered successfully")
-                        }
-                        .addOnFailureListener { e ->
-                            Log.w(TAG, e.message.toString())
-                            //TODO handle
-                        }
-                }
-                .addOnFailureListener { e ->
-                    Log.w(TAG, e.message.toString())
-                    //TODO handle
-                }
-
-            /*Also updates the event within the original tree*/
-
-            EventFirebaseQueries.updateEvent(this.event!!)
-                .addOnFailureListener { e ->
-                    Log.w(TAG, e.message.toString())
-                }
-
-            /*And updates the hiker within the original tree*/
-
-            HikerFirebaseQueries.createOrUpdateHiker(this.hiker!!)
-                .addOnFailureListener { e ->
-                    Log.w(TAG, e.message.toString())
-                }
+                //TODO should be nice to remove the related history item
+            }
         }
     }
 
     /******************************UI monitoring**************************************************/
+
+    override fun getLayoutId(): Int = R.layout.activity_event
+
+    override fun initializeUI() {
+        initializeToolbar()
+    }
+
+    override fun refreshUI() {
+        //Nothing
+    }
 
     private fun initializeToolbar(){
         setSupportActionBar(this.toolbar)
@@ -226,64 +239,52 @@ class EventActivity : BaseDataFlowActivity() {
         supportActionBar?.setTitle(R.string.toolbar_event)
     }
 
-    /******************************Event monitoring**********************************************/
-
-    fun editEvent(){
-        startEventEditActivity()
-    }
-
     /******************************Fragments monitoring******************************************/
 
-    /**
-     * Shows a fragment
-     */
-
     private fun showFragment(){
-        this.fragment= EventFragment(this.event, this.hiker)
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.activity_event_fragment, this.fragment).commit()
+        this.fragment= EventFragment(this.event)
+        this.fragment?.let { fragment ->
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.activity_event_fragment, fragment).commit()
+        }
+    }
+
+    /*********************************Hikers monitoring******************************************/
+
+    fun seeHiker(hikerId: String){
+        startProfileActivity(hikerId)
+    }
+
+    /*********************************Trails monitoring******************************************/
+
+    fun seeTrail(trailId:String){
+        startTrailActivity(trailId)
     }
 
     /***********************************Navigation***********************************************/
 
+    /**Starts Event edit activity**/
+
     private fun startEventEditActivity(){
         val eventEditActivityIntent= Intent(this, EventEditActivity::class.java)
         eventEditActivityIntent.putExtra(EventEditActivity.KEY_BUNDLE_EVENT,this.event)
-        eventEditActivityIntent.putExtra(EventEditActivity.KEY_BUNDLE_HIKER, this.hiker)
-        startActivityForResult(eventEditActivityIntent, KEY_REQUEST_EVENT_EDIT)
+        startActivity(eventEditActivityIntent)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when(requestCode){
-            KEY_REQUEST_EVENT_EDIT -> handleEventEditActivityResult(resultCode, data)
-        }
+    /**Starts Profile activity**/
+
+    private fun startProfileActivity(hikerId:String){
+        val profileActivityIntent=Intent(this, ProfileActivity::class.java)
+        profileActivityIntent.putExtra(ProfileActivity.KEY_BUNDLE_HIKER_ID, hikerId)
+        startActivity(profileActivityIntent)
     }
 
-    private fun handleEventEditActivityResult(resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK) {
-            if (data != null) {
-                if (data.hasExtra(EventEditActivity.KEY_BUNDLE_EVENT)) {
-                    this.event = data.getParcelableExtra(EventEditActivity.KEY_BUNDLE_EVENT)
-                    (this.fragment as EventFragment).updateEvent(this.event)
-                }
-                if (data.hasExtra(EventEditActivity.KEY_BUNDLE_HIKER)) {
-                    this.hiker = data.getParcelableExtra(EventEditActivity.KEY_BUNDLE_HIKER)
-                }
-            }
-        }
-    }
+    /**Starts Trail activity**/
 
-    private fun finishOk(){
-        val resultIntent=Intent()
-        resultIntent.putExtra(KEY_BUNDLE_EVENT, this.event)
-        resultIntent.putExtra(KEY_BUNDLE_HIKER, this.hiker)
-        setResult(Activity.RESULT_OK, resultIntent)
-        finish()
-    }
-
-    private fun finishCancel(){
-        setResult(Activity.RESULT_CANCELED)
-        finish()
+    private fun startTrailActivity(trailId:String){
+        val trailActivityIntent=Intent(this, TrailActivity::class.java)
+        trailActivityIntent.putExtra(TrailActivity.KEY_BUNDLE_TRAIL_ACTION, TrailActivity.ACTION_TRAIL_SEE)
+        trailActivityIntent.putExtra(TrailActivity.KEY_BUNDLE_TRAIL_ID, trailId)
+        startActivity(trailActivityIntent)
     }
 }

@@ -93,11 +93,11 @@ object TrailFirebaseQueries {
     /**
      * Gets a given trail
      * @param id : the id of the trail
-     * @return a task result
+     * @return a document reference
      */
 
-    fun getTrail(id:String):Task<DocumentSnapshot> =
-        getCollection().document(id).get()
+    fun getTrail(id:String):DocumentReference =
+        getCollection().document(id)
 
     /**
      * Creates a new trail in the database
