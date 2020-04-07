@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.DateUtilities
@@ -49,11 +50,14 @@ class ProfileInfoEditFragment(private val hiker: Hiker?=null) : BaseDataFlowFrag
 
     private val photoImageView by lazy {layout.fragment_profile_info_edit_image_view_photo}
     private val addPhotoButton by lazy {layout.fragment_profile_info_edit_button_add_photo}
-    private val takePhotoButton by lazy {layout.fragment_profile_info_edit_button_take_photo}
+    private val nameTextFieldLayout by lazy {layout.fragment_profile_info_edit_text_field_layout_name}
     private val nameTextField by lazy {layout.fragment_profile_info_edit_text_field_name}
     private val birthdayTextFieldDropdown by lazy {layout.fragment_profile_info_edit_text_field_dropdown_birthday}
     private val liveLocationTextField by lazy {layout.fragment_profile_info_edit_text_field_live_location}
     private val descriptionTextField by lazy {layout.fragment_profile_info_edit_text_field_description}
+    private lateinit var addPhotoBottomSheet: BottomSheetBehavior<View>
+    private val selectPhotoButton by lazy {layout.fragment_profile_info_edit_button_select_photo}
+    private val takePhotoButton by lazy {layout.fragment_profile_info_edit_button_take_photo}
 
     /**********************************Pictures support******************************************/
 
@@ -78,13 +82,25 @@ class ProfileInfoEditFragment(private val hiker: Hiker?=null) : BaseDataFlowFrag
     }
 
     override fun saveData() {
-        this.hiker?.name=this.nameTextField.text.toString()
-        this.hiker?.birthday=
-            if(!this.birthdayTextFieldDropdown.text.isNullOrEmpty())
-                DateUtilities.getDateFromString(this.birthdayTextFieldDropdown.text.toString())
-            else null
-        this.hiker?.description=this.descriptionTextField.text.toString()
-        (activity as ProfileEditActivity).saveHiker()
+        if(checkDataIsValid()) {
+            this.hiker?.name = this.nameTextField.text.toString()
+            this.hiker?.birthday =
+                if (!this.birthdayTextFieldDropdown.text.isNullOrEmpty())
+                    DateUtilities.getDateFromString(this.birthdayTextFieldDropdown.text.toString())
+                else null
+            this.hiker?.description = this.descriptionTextField.text.toString()
+            (activity as ProfileEditActivity).saveHiker()
+        }
+    }
+
+    private fun checkDataIsValid():Boolean{
+        return if(this.nameTextField.text.isNullOrEmpty()){
+            this.nameTextFieldLayout.error=resources.getString(R.string.message_text_field_empty)
+            false
+        }else{
+            this.nameTextFieldLayout.error=null
+            true
+        }
     }
 
     /***********************************UI monitoring********************************************/
@@ -93,27 +109,31 @@ class ProfileInfoEditFragment(private val hiker: Hiker?=null) : BaseDataFlowFrag
 
     override fun initializeUI(){
         initializeAddPhotoButton()
+        initializeAddPhotoBottomSheet()
+        initializeSelectPhotoButton()
         initializeTakePhotoButton()
         refreshUI()
     }
 
     override fun refreshUI(){
+        updatePhoto()
         updateNameTextField()
         updateBirthdayTextFieldDropdown()
         updateLiveLocationTextField()
         updateDescriptionTextField()
-        updatePhoto()
+    }
+
+    private fun updatePhoto(){
+        Glide.with(this)
+            .load(this.hiker?.photoUrl)
+            .apply(RequestOptions.circleCropTransform())
+            .placeholder(R.drawable.ic_person_black)
+            .into(this.photoImageView)
     }
 
     private fun initializeAddPhotoButton(){
         this.addPhotoButton.setOnClickListener {
-            requestWritePermission()
-        }
-    }
-
-    private fun initializeTakePhotoButton(){
-        this.takePhotoButton.setOnClickListener {
-            requestWriteAndCameraPermission()
+            this.addPhotoBottomSheet.state=BottomSheetBehavior.STATE_EXPANDED
         }
     }
 
@@ -137,12 +157,23 @@ class ProfileInfoEditFragment(private val hiker: Hiker?=null) : BaseDataFlowFrag
         this.descriptionTextField.setText(this.hiker?.description)
     }
 
-    private fun updatePhoto(){
-        Glide.with(this)
-            .load(this.hiker?.photoUrl)
-            .apply(RequestOptions.circleCropTransform())
-            .placeholder(R.drawable.ic_person_black)
-            .into(this.photoImageView)
+    private fun initializeAddPhotoBottomSheet(){
+        this.addPhotoBottomSheet=
+            BottomSheetBehavior
+                .from(this.layout.findViewById(R.id.fragment_profile_info_edit_bottom_sheet_add_photo))
+        this.addPhotoBottomSheet.state=BottomSheetBehavior.STATE_HIDDEN
+    }
+
+    private fun initializeSelectPhotoButton(){
+        this.selectPhotoButton.setOnClickListener {
+            requestWritePermission()
+        }
+    }
+
+    private fun initializeTakePhotoButton(){
+        this.takePhotoButton.setOnClickListener {
+            requestWriteAndCameraPermission()
+        }
     }
 
     /*******************************Photos monitoring********************************************/

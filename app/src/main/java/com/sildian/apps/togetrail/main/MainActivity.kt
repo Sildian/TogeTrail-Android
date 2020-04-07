@@ -256,10 +256,11 @@ class MainActivity :
 
     private fun handleHikerResult(hiker: Hiker?){
 
+        this.progressbar.visibility= View.GONE
+
         /*If the hiker exists, sets it as the current user*/
 
         if(hiker!=null){
-            this.progressbar.visibility= View.GONE
             this.currentUser=hiker
         }
 

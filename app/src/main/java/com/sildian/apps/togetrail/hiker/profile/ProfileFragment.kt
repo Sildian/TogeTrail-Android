@@ -6,13 +6,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
 import kotlinx.android.synthetic.main.fragment_profile.view.*
-import java.util.*
 
 /*************************************************************************************************
  * Shows a hiker's profile
@@ -26,10 +26,10 @@ class ProfileFragment (private var hiker: Hiker?)
 
     /**********************************UI component**********************************************/
 
+    private val toolbar by lazy {layout.fragment_profile_toolbar}
     private val photoImageView by lazy {layout.fragment_profile_image_view_photo}
     private val nameText by lazy {layout.fragment_profile_text_name}
     private val liveLocationText by lazy {layout.fragment_profile_text_live_location}
-    private val ageText by lazy {layout.fragment_profile_text_age}
     private val nbTrailsCreatedText by lazy {layout.fragment_profile_text_nb_trails_created}
     private val nbTrailsCreatedLabel by lazy {layout.fragment_profile_label_nb_trails_created}
     private val nbEventsCreatedText by lazy {layout.fragment_profile_text_nb_events_created}
@@ -54,6 +54,7 @@ class ProfileFragment (private var hiker: Hiker?)
     override fun getLayoutId(): Int = R.layout.fragment_profile
 
     override fun initializeUI(){
+        initializeToolbar()
         initializeItemsRecyclerView()
         refreshUI()
     }
@@ -62,18 +63,27 @@ class ProfileFragment (private var hiker: Hiker?)
         updatePhotoImageView()
         updateNameText()
         updateLiveLocationText()
-        updateAgeText()
         updateNbTrailsCreatedText()
         updateNbEventsCreatedText()
         updateNbEventsRegisteredText()
         updateDescriptionText()
     }
 
+    private fun initializeToolbar(){
+        (activity as ProfileActivity).setSupportActionBar(this.toolbar)
+        (activity as ProfileActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        if(this.hiker?.id== AuthFirebaseHelper.getCurrentUser()?.uid){
+            (activity as ProfileActivity).supportActionBar?.setTitle(R.string.toolbar_hiker_my_profile)
+        }else{
+            (activity as ProfileActivity).supportActionBar?.setTitle(R.string.toolbar_hiker_profile)
+        }
+    }
+
     private fun updatePhotoImageView(){
         Glide.with(this)
             .load(this.hiker?.photoUrl)
             .apply(RequestOptions.circleCropTransform())
-            .placeholder(R.drawable.ic_person_black)
+            .placeholder(R.drawable.ic_person_white)
             .into(this.photoImageView)
     }
 
@@ -89,18 +99,6 @@ class ProfileFragment (private var hiker: Hiker?)
         }
         else{
             this.liveLocationText.visibility=View.GONE
-        }
-    }
-
-    private fun updateAgeText(){
-        val age=this.hiker?.getAge(Date())
-        if(age!=null) {
-            this.ageText.visibility=View.VISIBLE
-            val ageToDisplay="$age "+resources.getString(R.string.label_hiker_age)
-            this.ageText.text = ageToDisplay
-        }
-        else{
-            this.ageText.visibility=View.GONE
         }
     }
 

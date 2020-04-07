@@ -35,7 +35,6 @@ class ProfileActivity : BaseDataFlowActivity() {
 
     /**********************************UI component**********************************************/
 
-    private val toolbar by lazy {activity_profile_toolbar}
     private val progressbar by lazy {activity_profile_progressbar}
     private var fragment: BaseDataFlowFragment?=null
 
@@ -124,21 +123,11 @@ class ProfileActivity : BaseDataFlowActivity() {
     override fun getLayoutId(): Int = R.layout.activity_profile
 
     override fun initializeUI() {
-        initializeToolbar()
+        //Nothing
     }
 
     override fun refreshUI() {
         //Nothing
-    }
-
-    private fun initializeToolbar(){
-        setSupportActionBar(this.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        if(this.hikerId==AuthFirebaseHelper.getCurrentUser()?.uid){
-            supportActionBar?.setTitle(R.string.toolbar_hiker_my_profile)
-        }else{
-            supportActionBar?.setTitle(R.string.toolbar_hiker_profile)
-        }
     }
 
     /******************************Trails monitoring*********************************************/
