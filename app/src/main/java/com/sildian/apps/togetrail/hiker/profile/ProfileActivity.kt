@@ -122,14 +122,6 @@ class ProfileActivity : BaseDataFlowActivity() {
 
     override fun getLayoutId(): Int = R.layout.activity_profile
 
-    override fun initializeUI() {
-        //Nothing
-    }
-
-    override fun refreshUI() {
-        //Nothing
-    }
-
     /******************************Trails monitoring*********************************************/
 
     fun seeTrail(trailId:String){

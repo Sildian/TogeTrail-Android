@@ -35,6 +35,7 @@ class EventFragment(
 
     /**********************************UI component**********************************************/
 
+    private val toolbar by lazy {layout.fragment_event_toolbar}
     private val photoImageView by lazy {layout.fragment_event_image_view_photo}
     private val nameText by lazy {layout.fragment_event_text_name}
     private val nbDaysText by lazy {layout.fragment_event_text_nb_days}
@@ -64,6 +65,7 @@ class EventFragment(
     override fun getLayoutId(): Int = R.layout.fragment_event
 
     override fun initializeUI() {
+        initializeToolbar()
         initializeRegisteredHikersRecyclerView()
         initializeAttachedTrailsRecyclerView()
         refreshUI()
@@ -81,15 +83,21 @@ class EventFragment(
         updateUnregisterUserButton()
     }
 
+    private fun initializeToolbar(){
+        (activity as EventActivity).setSupportActionBar(this.toolbar)
+        (activity as EventActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (activity as EventActivity).supportActionBar?.setTitle(R.string.toolbar_event)
+    }
+
     private fun updatePhotoImageView(){
         if(this.event?.mainPhotoUrl!=null) {
             Glide.with(context!!)
                 .load(this.event?.mainPhotoUrl)
                 .apply(RequestOptions.centerCropTransform())
-                .placeholder(R.drawable.ic_trail_black)
+                .placeholder(R.drawable.ic_trail_white)
                 .into(this.photoImageView)
         }else{
-            this.photoImageView.setImageResource(R.drawable.ic_trail_black)
+            this.photoImageView.setImageResource(R.drawable.ic_trail_white)
         }
     }
 

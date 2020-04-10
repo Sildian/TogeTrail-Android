@@ -63,7 +63,6 @@ class TrailMapFragment (
 
     override fun updateData(data:Any?) {
         if(data is List<*>){
-            Log.d(TAG, "Coucou")
             when{
                 data.firstOrNull() is Trail -> handleTrailsQueryResult(data as List<Trail>)
                 data.firstOrNull() is Event -> handleEventsQueryResult(data as List<Event>)

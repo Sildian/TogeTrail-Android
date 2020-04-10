@@ -1,12 +1,15 @@
 package com.sildian.apps.togetrail.event.edit
 
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.PickerHelper
+import com.sildian.apps.togetrail.common.utils.uiHelpers.TextFieldHelper
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
 import com.sildian.apps.togetrail.location.model.core.Location
@@ -27,33 +30,34 @@ class EventEditFragment(private val event: Event?=null) :
     TrailHorizontalViewHolder.OnTrailRemovedListener
 {
 
-    /**********************************Static items**********************************************/
-
-    companion object {
-
-        /**Logs**/
-        private const val TAG="EventEditFragment"
-    }
-
     /**************************************Data**************************************************/
 
     private val attachedTrails= arrayListOf<Trail>()    //The list of attached trails (useful only when the event has no id yet)
 
     /**********************************UI component**********************************************/
 
+    private val nameTextFieldLayout by lazy {layout.fragment_event_edit_text_field_layout_name}
     private val nameTextField by lazy {layout.fragment_event_edit_text_field_name}
-    private val beginDateTextField by lazy {layout.fragment_event_edit_text_field_dropdown_begin_date}
-    private val beginTimeTextField by lazy {layout.fragment_event_edit_text_field_dropdown_begin_time}
-    private val endDateTextField by lazy {layout.fragment_event_edit_text_field_dropdown_end_date}
-    private val endTimeTextField by lazy {layout.fragment_event_edit_text_field_dropdown_end_time}
+    private val beginDateTextFieldLayout by lazy {layout.fragment_event_edit_text_field_layout_begin_date}
+    private val beginDateTextField by lazy {layout.fragment_event_edit_text_field_begin_date}
+    private val beginTimeTextFieldLayout by lazy {layout.fragment_event_edit_text_field_layout_begin_time}
+    private val beginTimeTextField by lazy {layout.fragment_event_edit_text_field_begin_time}
+    private val endDateTextFieldLayout by lazy {layout.fragment_event_edit_text_field_layout_end_date}
+    private val endDateTextField by lazy {layout.fragment_event_edit_text_field_end_date}
+    private val endTimeTextFieldLayout by lazy {layout.fragment_event_edit_text_field_layout_end_time}
+    private val endTimeTextField by lazy {layout.fragment_event_edit_text_field_end_time}
     private val attachedTrailsRecyclerView by lazy {layout.fragment_event_edit_recycler_view_attached_trails}
     private lateinit var attachedTrailsAdapter:TrailHorizontalAdapter
     private lateinit var attachedTrailsAdapterOffline:TrailHorizontalAdapterOffline
     private val addTrailsButton by lazy {layout.fragment_event_edit_button_add_trails}
+    private val meetingPointTextFieldLayout by lazy {layout.fragment_event_edit_text_field_layout_meeting_point}
     private val meetingPointTextField by lazy {layout.fragment_event_edit_text_field_meeting_point}
+    private val descriptionTextFieldLayout by lazy {layout.fragment_event_edit_text_field_layout_description}
     private val descriptionTextField by lazy {layout.fragment_event_edit_text_field_description}
 
     /*********************************Data monitoring********************************************/
+
+    /**Updates data**/
 
     override fun updateData(data:Any?) {
         if(data is Location){
@@ -62,14 +66,74 @@ class EventEditFragment(private val event: Event?=null) :
         }
     }
 
+    /**Saves data**/
+
     override fun saveData() {
-        this.event?.name=this.nameTextField.text.toString()
         updateDates()
-        this.event?.description=this.descriptionTextField.text.toString()
-        if(this.event?.id==null){
-            (activity as EventEditActivity).updateAttachedTrailsToUpdate(this.attachedTrails)
+        if(checkDataIsValid()) {
+            this.event?.name = this.nameTextField.text.toString()
+            this.event?.description = this.descriptionTextField.text.toString()
+            if (this.event?.id == null) {
+                (activity as EventEditActivity).updateAttachedTrailsToUpdate(this.attachedTrails)
+            }
+            (activity as EventEditActivity).saveEventInDatabase()
         }
-        (activity as EventEditActivity).saveEventInDatabase()
+    }
+
+    /**Checks data is valid**/
+
+    override fun checkDataIsValid():Boolean{
+        if(checkTextFieldsAreNotEmpty()){
+            if(checkBeginDateIsBeforeEndDate()){
+                if(checkTrailsAreAttached()){
+                    return true
+                }else{
+                    //TODO handle
+                }
+            }else{
+                //TODO handle
+            }
+        }
+        else{
+            //TODO handle
+        }
+        return false
+    }
+
+    /**Checks that no text field is empty**/
+
+    private fun checkTextFieldsAreNotEmpty():Boolean{
+        val textFieldsAndLayouts= hashMapOf<TextInputEditText, TextInputLayout>()
+        textFieldsAndLayouts[this.nameTextField]=this.nameTextFieldLayout
+        textFieldsAndLayouts[this.beginDateTextField]=this.beginDateTextFieldLayout
+        textFieldsAndLayouts[this.beginTimeTextField]=this.beginTimeTextFieldLayout
+        textFieldsAndLayouts[this.endDateTextField]=this.endDateTextFieldLayout
+        textFieldsAndLayouts[this.endTimeTextField]=this.endTimeTextFieldLayout
+        textFieldsAndLayouts[this.meetingPointTextField]=this.meetingPointTextFieldLayout
+        textFieldsAndLayouts[this.descriptionTextField]=this.descriptionTextFieldLayout
+        return TextFieldHelper.checkAllTextFieldsAreNotEmpty(textFieldsAndLayouts)
+    }
+
+    /**Checks that the begin date is before the end date**/
+
+    private fun checkBeginDateIsBeforeEndDate():Boolean {
+        this.event?.beginDate?.let { beginDate ->
+            this.event.endDate?.let { endDate ->
+                return beginDate.time < endDate.time
+            }
+        }
+        return false
+    }
+
+    /**Checks that at least 1 trail is attached to the event**/
+
+    private fun checkTrailsAreAttached():Boolean{
+        val trails=if(this.event?.id==null){
+            this.attachedTrails
+        }else{
+            this.attachedTrailsAdapter.snapshots
+        }
+        return trails.isNotEmpty()
     }
 
     /***********************************UI monitoring********************************************/

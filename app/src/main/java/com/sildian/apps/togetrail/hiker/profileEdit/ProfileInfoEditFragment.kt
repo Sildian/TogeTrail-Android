@@ -17,6 +17,7 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.utils.uiHelpers.PickerHelper
+import com.sildian.apps.togetrail.common.utils.uiHelpers.TextFieldHelper
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.location.model.core.Location
 import kotlinx.android.synthetic.main.fragment_profile_info_edit.view.*
@@ -93,15 +94,8 @@ class ProfileInfoEditFragment(private val hiker: Hiker?=null) : BaseDataFlowFrag
         }
     }
 
-    private fun checkDataIsValid():Boolean{
-        return if(this.nameTextField.text.isNullOrEmpty()){
-            this.nameTextFieldLayout.error=resources.getString(R.string.message_text_field_empty)
-            false
-        }else{
-            this.nameTextFieldLayout.error=null
-            true
-        }
-    }
+    override fun checkDataIsValid():Boolean =
+        TextFieldHelper.checkTextFieldIsNotEmpty(this.nameTextField, this.nameTextFieldLayout)
 
     /***********************************UI monitoring********************************************/
 

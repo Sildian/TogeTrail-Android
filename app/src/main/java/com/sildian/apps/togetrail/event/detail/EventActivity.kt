@@ -45,7 +45,6 @@ class EventActivity : BaseDataFlowActivity() {
 
     /**********************************UI component**********************************************/
 
-    private val toolbar by lazy {activity_event_toolbar}
     private val progressbar by lazy {activity_event_progressbar}
     private var fragment: BaseDataFlowFragment?=null
     private var progressDialog: AlertDialog?=null
@@ -226,17 +225,11 @@ class EventActivity : BaseDataFlowActivity() {
     override fun getLayoutId(): Int = R.layout.activity_event
 
     override fun initializeUI() {
-        initializeToolbar()
+        //Nothing
     }
 
     override fun refreshUI() {
         //Nothing
-    }
-
-    private fun initializeToolbar(){
-        setSupportActionBar(this.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setTitle(R.string.toolbar_event)
     }
 
     /******************************Fragments monitoring******************************************/

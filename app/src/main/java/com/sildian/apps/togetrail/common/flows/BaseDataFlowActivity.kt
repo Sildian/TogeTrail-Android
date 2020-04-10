@@ -17,7 +17,7 @@ import com.sildian.apps.togetrail.trail.model.support.TrailFirebaseQueries
  * Base activity for all activity aiming to load and save data
  ************************************************************************************************/
 
-abstract class BaseDataFlowActivity : AppCompatActivity(), DataFlow {
+abstract class BaseDataFlowActivity : AppCompatActivity() {
 
     /**********************************Static items**********************************************/
 
@@ -55,21 +55,19 @@ abstract class BaseDataFlowActivity : AppCompatActivity(), DataFlow {
 
     /*********************************Data monitoring*******************************************/
 
-    override fun loadData() {
-        //Nothing here, override in children
-    }
+    open fun loadData(){}
 
-    override fun updateData(data: Any?) {
-        //Nothing here, override in children
-    }
+    open fun updateData(data: Any?){}
 
-    override fun saveData() {
-        //Nothing here, override in children
-    }
+    open fun saveData(){}
 
     /************************************UI monitoring*******************************************/
 
     abstract fun getLayoutId(): Int
+
+    open fun initializeUI(){}
+
+    open fun refreshUI(){}
 
     /**************************************Queries***********************************************/
 

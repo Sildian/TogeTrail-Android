@@ -323,10 +323,6 @@ class ProfileEditActivity : BaseDataFlowActivity() {
         initializeToolbar()
     }
 
-    override fun refreshUI() {
-        //Nothing
-    }
-
     private fun initializeToolbar(){
         setSupportActionBar(this.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

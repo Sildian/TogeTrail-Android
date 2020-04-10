@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
  * Base fragment for all fragment aiming to load and save data
  ************************************************************************************************/
 
-abstract class BaseDataFlowFragment : Fragment(), DataFlow {
+abstract class BaseDataFlowFragment : Fragment() {
 
     /*********************************UI components**********************************************/
 
@@ -27,19 +27,19 @@ abstract class BaseDataFlowFragment : Fragment(), DataFlow {
 
     /*********************************Data monitoring*******************************************/
 
-    override fun loadData() {
-        //Nothing here, override in children
-    }
+    open fun loadData(){}
 
-    override fun updateData(data:Any?) {
-        //Nothing here, override in children
-    }
+    open fun updateData(data:Any?){}
 
-    override fun saveData() {
-        //Nothing here, override in children
-    }
+    open fun saveData(){}
+
+    open fun checkDataIsValid():Boolean = true
 
     /************************************UI monitoring*******************************************/
 
     abstract fun getLayoutId():Int
+
+    open fun initializeUI(){}
+
+    open fun refreshUI(){}
 }
