@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.trail.others
+package com.sildian.apps.togetrail.trail.selection
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -13,7 +13,9 @@ import com.sildian.apps.togetrail.trail.model.core.Trail
 
 class TrailSelectionAdapter (
     options: FirestoreRecyclerOptions<Trail>,
-    private val listener: TrailSelectionViewHolder.OnTrailClickListener?=null
+    private val selectedTrails:List<Trail>,
+    private val onTrailSelectListener: TrailSelectionViewHolder.OnTrailSelectListener,
+    private val onTrailClickListener: TrailSelectionViewHolder.OnTrailClickListener?=null
 ):
     FirestoreRecyclerAdapter<Trail, TrailSelectionViewHolder>(options)
 {
@@ -21,10 +23,11 @@ class TrailSelectionAdapter (
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrailSelectionViewHolder {
         val inflater= LayoutInflater.from(parent.context)
         val view=inflater.inflate(R.layout.item_recycler_view_trail_selection, parent, false)
-        return TrailSelectionViewHolder(view, this.listener)
+        return TrailSelectionViewHolder(view, this.onTrailSelectListener, this.onTrailClickListener)
     }
 
     override fun onBindViewHolder(holder: TrailSelectionViewHolder, position: Int, trail: Trail) {
-        holder.updateUI(trail)
+        val isSelected=this.selectedTrails.firstOrNull { it.id==trail.id }!=null
+        holder.updateUI(trail, isSelected)
     }
 }

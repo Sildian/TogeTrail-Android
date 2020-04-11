@@ -19,6 +19,7 @@ import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.location.search.LocationSearchActivity
 import com.sildian.apps.togetrail.trail.map.TrailActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
+import com.sildian.apps.togetrail.trail.selection.TrailSelectionActivity
 import kotlinx.android.synthetic.main.activity_event_edit.*
 
 /*************************************************************************************************
@@ -36,6 +37,7 @@ class EventEditActivity : BaseDataFlowActivity() {
 
         /**Request keys for intents**/
         private const val KEY_REQUEST_LOCATION_SEARCH=1001
+        private const val KEY_REQUEST_TRAIL_SELECTION=1002
     }
 
     /****************************************Data************************************************/
@@ -271,6 +273,10 @@ class EventEditActivity : BaseDataFlowActivity() {
 
     /*********************************Trails monitoring******************************************/
 
+    fun selectTrail(selectedTrails:ArrayList<Trail>){
+        startTrailSelectionActivity(selectedTrails)
+    }
+
     fun seeTrail(trailId:String){
         startTrailActivity(trailId)
     }
@@ -297,6 +303,14 @@ class EventEditActivity : BaseDataFlowActivity() {
         startActivityForResult(locationSearchActivityIntent, KEY_REQUEST_LOCATION_SEARCH)
     }
 
+    /**Starts Trail selection Activity**/
+
+    private fun startTrailSelectionActivity(selectedTrails:ArrayList<Trail>){
+        val trailSelectionActivityIntent=Intent(this, TrailSelectionActivity::class.java)
+        trailSelectionActivityIntent.putParcelableArrayListExtra(TrailSelectionActivity.KEY_BUNDLE_SELECTED_TRAILS, selectedTrails)
+        startActivityForResult(trailSelectionActivityIntent, KEY_REQUEST_TRAIL_SELECTION)
+    }
+
     /**Starts Trail activity**/
 
     private fun startTrailActivity(trailId:String){
@@ -312,6 +326,7 @@ class EventEditActivity : BaseDataFlowActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         when(requestCode){
             KEY_REQUEST_LOCATION_SEARCH -> handleLocationSearchActivityResult(resultCode, data)
+            KEY_REQUEST_TRAIL_SELECTION -> handleTrailSelectionActivityResult(resultCode, data)
         }
     }
 
@@ -324,6 +339,19 @@ class EventEditActivity : BaseDataFlowActivity() {
                     data.getParcelableExtra<Location>(LocationSearchActivity.KEY_BUNDLE_LOCATION)
                 location?.let { loc ->
                     updateMeetingPoint(loc)
+                }
+            }
+        }
+    }
+
+    /**Handles Trail selection activity result**/
+
+    private fun handleTrailSelectionActivityResult(resultCode: Int, data: Intent?){
+        if(resultCode==Activity.RESULT_OK){
+            if(data!=null && data.hasExtra(TrailSelectionActivity.KEY_BUNDLE_SELECTED_TRAILS)){
+                val selectedTrails=data.getParcelableArrayListExtra<Trail>(TrailSelectionActivity.KEY_BUNDLE_SELECTED_TRAILS)
+                selectedTrails?.let { trails ->
+                    this.fragment?.updateData(trails)
                 }
             }
         }

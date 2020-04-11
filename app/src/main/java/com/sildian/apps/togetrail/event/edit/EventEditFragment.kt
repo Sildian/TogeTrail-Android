@@ -64,6 +64,11 @@ class EventEditFragment(private val event: Event?=null) :
             this.event?.meetingPoint=data
             updateMeetingPointTextField()
         }
+        else if(data is List<*>){
+            if(data.firstOrNull() is Trail){
+                attachTrails(data as List<Trail>)
+            }
+        }
     }
 
     /**Saves data**/
@@ -210,7 +215,10 @@ class EventEditFragment(private val event: Event?=null) :
 
     private fun initializeAddTrailsButton(){
         this.addTrailsButton.setOnClickListener {
-            showTrailsList()
+            if(this.event?.id!=null){
+                attachedTrails.addAll(this.attachedTrailsAdapter.snapshots)
+            }
+            (activity as EventEditActivity).selectTrail(this.attachedTrails)
         }
     }
 
@@ -247,33 +255,40 @@ class EventEditFragment(private val event: Event?=null) :
         }
     }
 
-    /**Runs a dialog allowing to add a trail to the event**/
+    /**
+     * Attaches the given list of trails to the event
+     * @param trails : the list of trails to attach
+     */
 
-    private fun showTrailsList() {
-        DialogHelper
-            .createTrailSelectionDialog(
-                activity as AppCompatActivity,
-                this::addTrail)
-            .show()
-    }
-
-    /**Adds a trail to the event**/
-
-    private fun addTrail(trail:Trail){
+    private fun attachTrails(trails:List<Trail>){
 
         /*Updates some data in the event with the given trail*/
 
-        updateEventPosition(trail)
-        updateEventMainPhotoUrl(trail)
+        updateEventPosition(trails.first())
+        updateEventMainPhotoUrl(trails.first())
 
-        /*If the event has no id yet, updates the offline adapter. Else updates the attached trail in the database*/
+        /*If the event has no id yet, updates the offline adapter*/
 
         if(this.event?.id==null){
-            this.attachedTrails.add(trail)
+            this.attachedTrails.clear()
+            this.attachedTrails.addAll(trails)
             this.attachedTrailsAdapterOffline.notifyDataSetChanged()
         }
         else{
-            (activity as EventEditActivity).updateAttachedTrail(trail)
+
+            /*Else, deletes each attached trail which is not in the new list of selected trails*/
+
+            this.attachedTrails.forEach { trail ->
+                if(trails.firstOrNull { it.id==trail.id } ==null){
+                    (activity as EventEditActivity).deleteAttachedTrail(trail)
+                }
+            }
+
+            /*And updates the attached trails with each item in the new list of selected trails*/
+
+            trails.forEach { trail ->
+                (activity as EventEditActivity).updateAttachedTrail(trail)
+            }
         }
     }
 

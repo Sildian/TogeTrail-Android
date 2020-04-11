@@ -29,6 +29,7 @@
     <string name="toolbar_trail_info">Trail info</string>
     <string name="toolbar_trail_poi_info">Point of interest info</string>
     <string name="toolbar_event">Event</string>
+    <string name="toolbar_event_select_trails">Select trails</string>
 
     <!-- Navigation drawer events -->
     <string name="navigation_drawer_open">Opening navigation drawer</string>
@@ -52,6 +53,7 @@
     <string name="button_hiker_account_delete">Delete my account</string>
     <!-- Event -->
     <string name="button_event_add_trails">Add trails</string>
+    <string name="button_event_validate_selected_trails">Validate</string>
     <string name="button_event_register_user">Register</string>
     <string name="button_event_unregister_user">Unregister</string>
 
@@ -122,7 +124,6 @@
     <string name="label_event_description">Description</string>
     <string name="label_event_description2">Some information for the attendees</string>
     <string name="label_event_attached_trails">Trails on schedule</string>
-    <string name="label_event_available_trails">Add the trails you like</string>
     <string name="label_event_user_registered">I attend</string>
     <string name="label_event_registered_hikers_sing">person attend</string>
     <string name="label_event_registered_hikers_plur">persons attend</string>

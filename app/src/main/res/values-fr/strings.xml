@@ -28,6 +28,7 @@
     <string name="toolbar_trail_info">Infos rando</string>
     <string name="toolbar_trail_poi_info">Infos point d\'intérêt</string>
     <string name="toolbar_event">Evènement</string>
+    <string name="toolbar_event_select_trails">Selectionnez des randos</string>
 
     <!-- Navigation drawer events -->
     <string name="navigation_drawer_open">Ouverture du navigation drawer</string>
@@ -51,6 +52,7 @@
     <string name="button_hiker_account_delete">Supprimer mon compte</string>
     <!-- Event -->
     <string name="button_event_add_trails">Ajouter des randos</string>
+    <string name="button_event_validate_selected_trails">Valider</string>
     <string name="button_event_register_user">M\'inscrire</string>
     <string name="button_event_unregister_user">Me désinscrire</string>
 
@@ -121,7 +123,6 @@
     <string name="label_event_description">Description</string>
     <string name="label_event_description2">Quelques infos pour les participants</string>
     <string name="label_event_attached_trails">Randos au programme</string>
-    <string name="label_event_available_trails">Ajoutez les randos que vous aimez</string>
     <string name="label_event_user_registered">Je participe</string>
     <string name="label_event_registered_hikers_sing">personne participe</string>
     <string name="label_event_registered_hikers_plur">personnes participent</string>

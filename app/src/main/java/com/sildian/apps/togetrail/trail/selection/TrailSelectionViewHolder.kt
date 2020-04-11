@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.trail.others
+package com.sildian.apps.togetrail.trail.selection
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
@@ -16,12 +16,18 @@ import kotlinx.android.synthetic.main.item_recycler_view_trail_selection.view.*
 
 class TrailSelectionViewHolder (
     itemView:View,
-    private val listener: OnTrailClickListener?=null
+    private val onTrailSelectListener: OnTrailSelectListener,
+    private val onTrailClickListener: OnTrailClickListener?=null
 )
     :RecyclerView.ViewHolder(itemView)
 {
 
     /***********************************Callbacks************************************************/
+
+    interface OnTrailSelectListener{
+        fun onTrailSelected(trail:Trail)
+        fun onTrailUnSelected(trail:Trail)
+    }
 
     interface OnTrailClickListener{
         fun onTrailClick(trail: Trail)
@@ -33,6 +39,8 @@ class TrailSelectionViewHolder (
 
     /**********************************UI components*********************************************/
 
+    private val checkbox by lazy {itemView.item_recycler_view_trail_selection_checkbox}
+    private val infoLayout by lazy {itemView.item_recycler_view_trail_selection_layout_info}
     private val photoImageView by lazy {itemView.item_recycler_view_trail_selection_image_view_photo}
     private val nameText by lazy {itemView.item_recycler_view_trail_selection_text_name}
     private val levelText by lazy {itemView.item_recycler_view_trail_selection_text_level}
@@ -43,19 +51,30 @@ class TrailSelectionViewHolder (
     /**************************************Init**************************************************/
 
     init{
-        this.itemView.setOnClickListener { this.listener?.onTrailClick(this.trail) }
+        this.infoLayout.setOnClickListener { this.onTrailClickListener?.onTrailClick(this.trail) }
+        this.checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+            when(isChecked){
+                true -> this.onTrailSelectListener.onTrailSelected(this.trail)
+                false -> this.onTrailSelectListener.onTrailUnSelected(this.trail)
+            }
+        }
     }
 
     /************************************UI update***********************************************/
 
-    fun updateUI(trail:Trail){
+    fun updateUI(trail:Trail, isSelected:Boolean){
         this.trail=trail
+        updateCheckbox(isSelected)
         updatePhotoImageView()
         updateNameText()
         updateLevelText()
         updateDurationText()
         updateAscentText()
         updateLocationText()
+    }
+
+    private fun updateCheckbox(isSelected: Boolean){
+        this.checkbox.isChecked=isSelected
     }
 
     private fun updatePhotoImageView(){

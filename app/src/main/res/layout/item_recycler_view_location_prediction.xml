@@ -6,13 +6,6 @@
     android:orientation="vertical"
     android:background="?attr/selectableItemBackground">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="@dimen/components_margin_medium"
-        android:layout_marginEnd="@dimen/components_margin_medium"
-        android:background="?android:attr/listDivider" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

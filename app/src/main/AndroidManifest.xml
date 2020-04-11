@@ -19,8 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.sildian.apps.togetrail.location.search.LocationSearchActivity"
-            android:configChanges="orientation|screenSize"/>
+            android:name=".location.search.LocationSearchActivity"
+            android:configChanges="orientation|screenSize" />
         <activity
             android:name=".event.detail.EventActivity"
             android:configChanges="orientation|screenSize" />
@@ -33,6 +33,9 @@
         <activity
             android:name=".hiker.profileEdit.ProfileEditActivity"
             android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".trail.selection.TrailSelectionActivity"
+            android:configChanges="orientation|screenSize"/>
         <activity
             android:name=".trail.infoEdit.TrailInfoEditActivity"
             android:configChanges="orientation|screenSize" />
