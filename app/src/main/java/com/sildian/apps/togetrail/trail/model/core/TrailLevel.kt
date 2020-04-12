@@ -9,6 +9,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 enum class TrailLevel (val value:Int) :Parcelable {
+    UNKNOWN(0),
     EASY(1),
     MEDIUM(2),
     HARD(3);

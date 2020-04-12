@@ -1,51 +1,24 @@
 package com.sildian.apps.togetrail.hiker.profileEdit
 
-import android.Manifest
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
-import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.baseControllers.BaseImagePickerFragment
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.utils.uiHelpers.PickerHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.TextFieldHelper
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.location.model.core.Location
 import kotlinx.android.synthetic.main.fragment_profile_info_edit.view.*
-import pl.aprilapps.easyphotopicker.*
 
 /*************************************************************************************************
  * Lets the user edit its profile's information
  * @param hiker : the hiker
  ************************************************************************************************/
 
-class ProfileInfoEditFragment(private val hiker: Hiker?=null) : BaseDataFlowFragment()
+class ProfileInfoEditFragment(private val hiker: Hiker?=null) : BaseImagePickerFragment()
 {
-
-    /**********************************Static items**********************************************/
-
-    companion object{
-
-        /**Logs**/
-        private const val TAG="ProfileInfoEditFragment"
-
-        /**Request keys for permissions**/
-        private const val KEY_REQUEST_PERMISSION_WRITE=2001
-        private const val KEY_REQUEST_PERMISSION_WRITE_AND_CAMERA=2002
-
-        /**Bundle keys for permissions**/
-        private const val KEY_BUNDLE_PERMISSION_WRITE= Manifest.permission.WRITE_EXTERNAL_STORAGE
-        private const val KEY_BUNDLE_PERMISSION_CAMERA= Manifest.permission.CAMERA
-    }
 
     /**********************************UI component**********************************************/
 
@@ -56,22 +29,8 @@ class ProfileInfoEditFragment(private val hiker: Hiker?=null) : BaseDataFlowFrag
     private val birthdayTextFieldDropdown by lazy {layout.fragment_profile_info_edit_text_field_dropdown_birthday}
     private val liveLocationTextField by lazy {layout.fragment_profile_info_edit_text_field_live_location}
     private val descriptionTextField by lazy {layout.fragment_profile_info_edit_text_field_description}
-    private lateinit var addPhotoBottomSheet: BottomSheetBehavior<View>
     private val selectPhotoButton by lazy {layout.fragment_profile_info_edit_button_select_photo}
     private val takePhotoButton by lazy {layout.fragment_profile_info_edit_button_take_photo}
-
-    /**********************************Pictures support******************************************/
-
-    //EasyImage support allowing to pick pictures on the device
-    private lateinit var easyImage: EasyImage
-
-    /************************************Life cycle**********************************************/
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        initializeEasyImage()
-        return this.layout
-    }
 
     /*****************************************Data***********************************************/
 
@@ -101,9 +60,10 @@ class ProfileInfoEditFragment(private val hiker: Hiker?=null) : BaseDataFlowFrag
 
     override fun getLayoutId(): Int = R.layout.fragment_profile_info_edit
 
+    override fun getAddPhotoBottomSheetId(): Int = R.id.fragment_profile_info_edit_bottom_sheet_add_photo
+
     override fun initializeUI(){
         initializeAddPhotoButton()
-        initializeAddPhotoBottomSheet()
         initializeSelectPhotoButton()
         initializeTakePhotoButton()
         refreshUI()
@@ -127,7 +87,7 @@ class ProfileInfoEditFragment(private val hiker: Hiker?=null) : BaseDataFlowFrag
 
     private fun initializeAddPhotoButton(){
         this.addPhotoButton.setOnClickListener {
-            this.addPhotoBottomSheet.state=BottomSheetBehavior.STATE_EXPANDED
+            expandAddPhotoBottomSheet()
         }
     }
 
@@ -151,13 +111,6 @@ class ProfileInfoEditFragment(private val hiker: Hiker?=null) : BaseDataFlowFrag
         this.descriptionTextField.setText(this.hiker?.description)
     }
 
-    private fun initializeAddPhotoBottomSheet(){
-        this.addPhotoBottomSheet=
-            BottomSheetBehavior
-                .from(this.layout.findViewById(R.id.fragment_profile_info_edit_bottom_sheet_add_photo))
-        this.addPhotoBottomSheet.state=BottomSheetBehavior.STATE_HIDDEN
-    }
-
     private fun initializeSelectPhotoButton(){
         this.selectPhotoButton.setOnClickListener {
             requestWritePermission()
@@ -172,131 +125,10 @@ class ProfileInfoEditFragment(private val hiker: Hiker?=null) : BaseDataFlowFrag
 
     /*******************************Photos monitoring********************************************/
 
-    private fun initializeEasyImage(){
-        this.easyImage= EasyImage.Builder(context!!)
-            .setChooserType(ChooserType.CAMERA_AND_GALLERY)
-            .allowMultiple(false)
-            .build()
-    }
-
-    private fun addPhoto(filePath:String){
+    override fun addPhoto(filePath:String){
         (activity as ProfileEditActivity)
             .updateImagePathToUploadIntoDatabase(filePath)
         this.hiker?.photoUrl=filePath
         updatePhoto()
-    }
-
-    /***********************************Permissions**********************************************/
-
-    private fun requestWritePermission(){
-        if(Build.VERSION.SDK_INT>=23
-            && activity?.checkSelfPermission(KEY_BUNDLE_PERMISSION_WRITE)!= PackageManager.PERMISSION_GRANTED){
-
-            /*If permission not already granted, requests it*/
-
-            if(shouldShowRequestPermissionRationale(KEY_BUNDLE_PERMISSION_WRITE)){
-
-                //TODO handle
-
-            }else{
-                requestPermissions(
-                    arrayOf(KEY_BUNDLE_PERMISSION_WRITE), KEY_REQUEST_PERMISSION_WRITE)
-            }
-        }else{
-
-            /*If SDK <23 or permission already granted, directly proceeds the action*/
-
-            startAddPhoto()
-        }
-    }
-
-    private fun requestWriteAndCameraPermission(){
-        if(Build.VERSION.SDK_INT>=23
-            &&(activity?.checkSelfPermission(KEY_BUNDLE_PERMISSION_WRITE)!= PackageManager.PERMISSION_GRANTED
-                    ||activity?.checkSelfPermission(KEY_BUNDLE_PERMISSION_CAMERA)!= PackageManager.PERMISSION_GRANTED)){
-
-            /*If permission not already granted, requests it*/
-
-            if(shouldShowRequestPermissionRationale(KEY_BUNDLE_PERMISSION_WRITE)
-                || shouldShowRequestPermissionRationale(KEY_BUNDLE_PERMISSION_CAMERA)){
-
-                //TODO handle
-
-            }else{
-                requestPermissions(
-                    arrayOf(KEY_BUNDLE_PERMISSION_WRITE, KEY_BUNDLE_PERMISSION_CAMERA),
-                    KEY_REQUEST_PERMISSION_WRITE_AND_CAMERA)
-            }
-        }else{
-
-            /*If SDK <23 or permission already granted, directly proceeds the action*/
-
-            startTakePhoto()
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            KEY_REQUEST_PERMISSION_WRITE ->if(grantResults.isNotEmpty()){
-                when(grantResults[0]) {
-                    PackageManager.PERMISSION_GRANTED -> {
-                        Log.d(TAG, "Permission '$KEY_BUNDLE_PERMISSION_WRITE' granted")
-                        startAddPhoto()
-                    }
-                    PackageManager.PERMISSION_DENIED -> {
-                        //TODO handle
-                        Log.d(TAG, "Permission '$KEY_BUNDLE_PERMISSION_WRITE' denied")
-                    }
-                }
-            }
-            KEY_REQUEST_PERMISSION_WRITE_AND_CAMERA ->if(grantResults.isNotEmpty()){
-                when(grantResults[0]){
-                    PackageManager.PERMISSION_GRANTED -> {
-                        Log.d(TAG, "Permission '$KEY_BUNDLE_PERMISSION_WRITE' granted")
-                        Log.d(TAG, "Permission '$KEY_BUNDLE_PERMISSION_CAMERA' granted")
-                        startTakePhoto()
-                    }
-                    PackageManager.PERMISSION_DENIED -> {
-                        //TODO handle
-                        Log.d(TAG, "Permission '$KEY_BUNDLE_PERMISSION_WRITE' denied")
-                        Log.d(TAG, "Permission '$KEY_BUNDLE_PERMISSION_CAMERA' denied")
-                    }
-                }
-            }
-        }
-    }
-
-    /***********************************Navigation***********************************************/
-
-    private fun startAddPhoto(){
-        this.easyImage.openGallery(this)
-    }
-
-    private fun startTakePhoto(){
-        this.easyImage.openCameraForImage(this)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        handleNewPhotoResult(requestCode, resultCode, data)
-    }
-
-    private fun handleNewPhotoResult(requestCode: Int, resultCode: Int, data: Intent?){
-
-        this.easyImage.handleActivityResult(requestCode, resultCode, data, activity!!, object: DefaultCallback(){
-
-            override fun onMediaFilesPicked(imageFiles: Array<MediaFile>, source: MediaSource) {
-                Log.d(TAG, "Successfully added the new photo")
-                for(image in imageFiles){
-                    addPhoto(image.file.toURI().path)
-                }
-            }
-
-            override fun onImagePickerError(error: Throwable, source: MediaSource) {
-                super.onImagePickerError(error, source)
-                Log.w(TAG, error.message.toString())
-                //TODO handle
-            }
-        })
     }
 }

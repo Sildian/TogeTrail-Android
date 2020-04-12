@@ -1,22 +1,19 @@
 package com.sildian.apps.togetrail.event.detail
 
 import android.content.Intent
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.flows.BaseDataFlowActivity
-import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowActivity
+import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
 import com.sildian.apps.togetrail.event.edit.EventEditActivity
 import com.sildian.apps.togetrail.event.model.core.Event
-import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
-import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
 import com.sildian.apps.togetrail.hiker.profile.ProfileActivity
 import com.sildian.apps.togetrail.trail.map.TrailActivity
 import kotlinx.android.synthetic.main.activity_event.*

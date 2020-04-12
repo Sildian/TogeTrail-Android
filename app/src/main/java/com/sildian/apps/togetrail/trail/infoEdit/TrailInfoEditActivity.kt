@@ -7,9 +7,11 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.flows.BaseDataFlowActivity
-import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowActivity
+import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.baseControllers.BaseImagePickerFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
@@ -63,7 +65,7 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
     /**********************************UI component**********************************************/
 
     private val toolbar by lazy {activity_trail_info_edit_toolbar}
-    private var fragment: BaseDataFlowFragment?=null
+    private var fragment: BaseImagePickerFragment?=null
     private var progressDialog:AlertDialog?=null
 
     /**********************************Pictures support******************************************/
@@ -81,8 +83,12 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
     /********************************Navigation control******************************************/
 
     override fun onBackPressed() {
-        //TODO ask the user if he wants to save
-        finishCancel()
+        if(this.fragment?.getAddPhotoBottomSheetState()!=BottomSheetBehavior.STATE_HIDDEN){
+            this.fragment?.hideAddPhotoBottomSheet()
+        }else {
+            //TODO ask the user if he wants to save
+            finishCancel()
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

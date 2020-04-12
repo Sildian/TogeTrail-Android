@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.common.flows
+package com.sildian.apps.togetrail.common.baseControllers
 
 import android.os.Bundle
 import android.util.Log

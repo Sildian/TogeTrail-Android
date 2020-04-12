@@ -93,6 +93,7 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
 
     private fun initializeLevelImage(){
         when(this.trail?.level){
+            TrailLevel.UNKNOWN -> this.levelImage.setImageResource(R.drawable.ic_level_medium)
             TrailLevel.EASY-> this.levelImage.setImageResource(R.drawable.ic_level_easy)
             TrailLevel.MEDIUM-> this.levelImage.setImageResource(R.drawable.ic_level_medium)
             TrailLevel.HARD-> this.levelImage.setImageResource(R.drawable.ic_level_hard)
@@ -101,6 +102,7 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
 
     private fun initializeLevelText(){
         when(this.trail?.level){
+            TrailLevel.UNKNOWN -> this.levelText.setText(R.string.label_trail_level_unknown)
             TrailLevel.EASY-> this.levelText.setText(R.string.label_trail_level_easy)
             TrailLevel.MEDIUM-> this.levelText.setText(R.string.label_trail_level_medium)
             TrailLevel.HARD-> this.levelText.setText(R.string.label_trail_level_hard)

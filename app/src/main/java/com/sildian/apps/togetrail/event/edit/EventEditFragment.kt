@@ -4,10 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
-import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.PickerHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.TextFieldHelper
 import com.sildian.apps.togetrail.event.model.core.Event

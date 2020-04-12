@@ -7,8 +7,8 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.flows.BaseDataFlowActivity
-import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowActivity
+import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.event.model.core.Event

@@ -5,8 +5,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.flows.BaseDataFlowActivity
-import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowActivity
+import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
 import com.sildian.apps.togetrail.event.detail.EventActivity
 import com.sildian.apps.togetrail.hiker.model.core.Hiker

@@ -15,7 +15,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.MapMarkersUtilities
 import com.sildian.apps.togetrail.trail.info.TrailInfoFragment
 import com.sildian.apps.togetrail.trail.info.TrailPOIInfoFragment

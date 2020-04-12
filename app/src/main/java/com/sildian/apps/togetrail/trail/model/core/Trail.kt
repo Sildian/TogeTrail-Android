@@ -23,7 +23,7 @@ data class Trail (
     var description:String?=null,
     val creationDate:Date=Date(),
     var lastUpdate:Date=Date(),
-    var level: TrailLevel = TrailLevel.MEDIUM,
+    var level: TrailLevel = TrailLevel.UNKNOWN,
     var loop:Boolean=true,
     var mainPhotoUrl:String?=null,
     val trailTrack: TrailTrack = TrailTrack(),

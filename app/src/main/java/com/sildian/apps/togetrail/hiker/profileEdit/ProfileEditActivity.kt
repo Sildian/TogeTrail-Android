@@ -7,9 +7,11 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.flows.BaseDataFlowActivity
-import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowActivity
+import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.baseControllers.BaseImagePickerFragment
 import com.sildian.apps.togetrail.location.search.LocationSearchActivity
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
@@ -74,8 +76,14 @@ class ProfileEditActivity : BaseDataFlowActivity() {
     /********************************Navigation control******************************************/
 
     override fun onBackPressed() {
-        //TODO ask the user if he wants to save
-        finish()
+        if(this.currentAction== ACTION_PROFILE_EDIT_INFO
+            &&(this.fragment as BaseImagePickerFragment).getAddPhotoBottomSheetState()!=BottomSheetBehavior.STATE_HIDDEN){
+                (this.fragment as BaseImagePickerFragment).hideAddPhotoBottomSheet()
+            }
+        else {
+            //TODO ask the user if he wants to save
+            finish()
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

@@ -2,7 +2,7 @@ package com.sildian.apps.togetrail.trail.list
 
 import androidx.appcompat.app.AppCompatActivity
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.main.MainActivity

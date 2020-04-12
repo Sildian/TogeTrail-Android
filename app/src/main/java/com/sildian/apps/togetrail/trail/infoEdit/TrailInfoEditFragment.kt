@@ -1,28 +1,22 @@
 package com.sildian.apps.togetrail.trail.infoEdit
 
-import android.Manifest
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
-import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.baseControllers.BaseImagePickerFragment
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DropdownMenuHelper
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
+import com.sildian.apps.togetrail.common.utils.uiHelpers.TextFieldHelper
 import com.sildian.apps.togetrail.common.views.circularSlider.CircularSlider
 import com.sildian.apps.togetrail.common.views.circularSlider.ValueFormaters
 import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailLevel
 import kotlinx.android.synthetic.main.fragment_trail_info_edit.view.*
-import pl.aprilapps.easyphotopicker.*
 
 /*************************************************************************************************
  * Allows to edit information about a trail
@@ -30,7 +24,7 @@ import pl.aprilapps.easyphotopicker.*
  ************************************************************************************************/
 
 class TrailInfoEditFragment(private val trail: Trail?=null) :
-    BaseDataFlowFragment(),
+    BaseImagePickerFragment(),
     CircularSlider.OnValueChangedListener
 {
 
@@ -38,18 +32,7 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
 
     companion object{
 
-        /**Logs**/
-        private const val TAG="TrailInfoEditFragment"
-
-        /**Request keys for permissions**/
-        private const val KEY_REQUEST_PERMISSION_WRITE=2001
-        private const val KEY_REQUEST_PERMISSION_WRITE_AND_CAMERA=2002
-
-        /**Bundle keys for permissions**/
-        private const val KEY_BUNDLE_PERMISSION_WRITE= Manifest.permission.WRITE_EXTERNAL_STORAGE
-        private const val KEY_BUNDLE_PERMISSION_CAMERA= Manifest.permission.CAMERA
-
-        /**Metrics to set with the croller**/
+        /**Metrics to set with the slider**/
         private const val METRIC_DURATION=0
         private const val METRIC_ASCENT=1
         private const val METRIC_DESCENT=2
@@ -65,16 +48,17 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
 
     /***************************************Data*************************************************/
 
-    private var currentMetricToSet= METRIC_DURATION     //The current metric to set with the croller
+    private var currentMetricToSet= METRIC_DURATION     //The current metric to set with the slider
 
     /**********************************UI component**********************************************/
 
+    private val nameTextFieldLayout by lazy {layout.fragment_trail_info_edit_text_field_layout_name}
     private val nameTextField by lazy {layout.fragment_trail_info_edit_text_field_name}
     private val photoText by lazy {layout.fragment_trail_info_edit_text_photo}
     private val photoImageView by lazy {layout.fragment_trail_info_edit_image_view_photo}
     private val deletePhotoButton by lazy {layout.fragment_trail_info_edit_button_delete_photo}
     private val addPhotoButton by lazy {layout.fragment_trail_info_edit_button_add_photo}
-    private val takePhotoButton by lazy {layout.fragment_trail_info_edit_button_take_photo}
+    private val levelTextFieldDropDownLayout by lazy {layout.fragment_trail_info_edit_text_field_dropdown_layout_level}
     private val levelTextFieldDropDown by lazy {layout.fragment_trail_info_edit_text_field_dropdown_level}
     private val metricsSlider by lazy {layout.fragment_trail_info_edit_slider_metrics}
     private val durationText by lazy {layout.fragment_trail_info_edit_text_duration}
@@ -83,8 +67,12 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
     private val distanceText by lazy {layout.fragment_trail_info_edit_text_distance}
     private val maxElevationText by lazy {layout.fragment_trail_info_edit_text_max_elevation}
     private val minElevationText by lazy {layout.fragment_trail_info_edit_text_min_elevation}
+    private val resetMetricsButton by lazy {layout.fragment_trail_info_edit_button_metrics_reset}
+    private val locationTextFieldLayout by lazy {layout.fragment_trail_info_edit_text_field_layout_location}
     private val locationTextField by lazy {layout.fragment_trail_info_edit_text_field_location}
     private val descriptionTextField by lazy {layout.fragment_trail_info_edit_text_field_description}
+    private val selectPhotoButton by lazy {layout.fragment_trail_info_edit_button_select_photo}
+    private val takePhotoButton by lazy {layout.fragment_trail_info_edit_button_take_photo}
 
     private val metricsTexts by lazy {
         arrayOf(
@@ -97,19 +85,6 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
         )
     }
 
-    /**********************************Pictures support******************************************/
-
-    //EasyImage support allowing to pick pictures on the device
-    private lateinit var easyImage: EasyImage
-
-    /************************************Life cycle**********************************************/
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        initializeEasyImage()
-        return this.layout
-    }
-
     /*********************************Data monitoring********************************************/
 
     override fun updateData(data:Any?) {
@@ -120,22 +95,68 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
     }
 
     override fun saveData() {
-        this.trail?.name=this.nameTextField.text.toString()
-        this.trail?.level=
-            TrailLevel.fromValue(this.levelTextFieldDropDown.tag.toString().toInt()+1)
-        this.trail?.description=this.descriptionTextField.text.toString()
-        this.trail?.autoPopulatePosition()
-        (activity as TrailInfoEditActivity).saveTrail()
+        if(checkDataIsValid()) {
+            this.trail?.name = this.nameTextField.text.toString()
+            this.trail?.level =
+                TrailLevel.fromValue(this.levelTextFieldDropDown.tag.toString().toInt())
+            this.trail?.description = this.descriptionTextField.text.toString()
+            this.trail?.autoPopulatePosition()
+            (activity as TrailInfoEditActivity).saveTrail()
+        }
+    }
+
+    override fun checkDataIsValid(): Boolean {
+        if(checkTextFieldsAreNotEmpty()){
+            if(checkTextFieldsDropDownAreNotUnknown()){
+                if(checkMetricsAreNotEmpty()){
+                    return true
+                }else{
+                    //TODO handle
+                }
+            }else{
+                //TODO handle
+            }
+        }else{
+            //TODO handle
+        }
+        return false
+    }
+
+    private fun checkTextFieldsAreNotEmpty():Boolean{
+        val textFieldsAndLayouts:HashMap<TextInputEditText, TextInputLayout> =hashMapOf()
+        textFieldsAndLayouts[this.nameTextField]=this.nameTextFieldLayout
+        textFieldsAndLayouts[this.locationTextField]=this.locationTextFieldLayout
+        return TextFieldHelper.checkAllTextFieldsAreNotEmpty(textFieldsAndLayouts)
+    }
+
+    private fun checkTextFieldsDropDownAreNotUnknown():Boolean{
+        return if(this.levelTextFieldDropDown.tag==0){
+            this.levelTextFieldDropDownLayout.error=getString(R.string.message_text_field_empty)
+            false
+        }else{
+            this.levelTextFieldDropDownLayout.error=null
+            true
+        }
+    }
+
+    private fun checkMetricsAreNotEmpty():Boolean{
+        return this.trail?.duration!=null
+                &&this.trail.ascent!=null
+                &&this.trail.descent!=null
+                &&this.trail.distance!=null
+                &&this.trail.maxElevation!=null
+                &&this.trail.minElevation!=null
     }
 
     /***********************************UI monitoring********************************************/
 
     override fun getLayoutId(): Int = R.layout.fragment_trail_info_edit
 
+    override fun getAddPhotoBottomSheetId(): Int = R.id.fragment_trail_info_edit_bottom_sheet_add_photo
+
     override fun initializeUI() {
         initializeDeletePhotoButton()
         initializeAddPhotoButton()
-        initializeTakePhotoButton()
         initializeMetricsSlider()
         initializeDurationText()
         initializeAscentText()
@@ -143,6 +164,9 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
         initializeDistanceText()
         initializeMaxElevationText()
         initializeMinElevationText()
+        initializeResetMetricsButton()
+        initializeSelectPhotoButton()
+        initializeTakePhotoButton()
         refreshUI()
     }
 
@@ -161,7 +185,7 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
 
     private fun updateLevelTextFieldDropDown(){
         val choice=resources.getStringArray(R.array.array_trail_levels)
-        val initialValue=(this.trail?.level?.value?: TrailLevel.MEDIUM.value)-1
+        val initialValue=(this.trail?.level?.value?: TrailLevel.MEDIUM.value)
         DropdownMenuHelper.populateDropdownMenu(this.levelTextFieldDropDown, choice, initialValue)
     }
 
@@ -173,13 +197,7 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
 
     private fun initializeAddPhotoButton(){
         this.addPhotoButton.setOnClickListener {
-            requestWritePermission()
-        }
-    }
-
-    private fun initializeTakePhotoButton(){
-        this.takePhotoButton.setOnClickListener {
-            requestWriteAndCameraPermission()
+            expandAddPhotoBottomSheet()
         }
     }
 
@@ -254,6 +272,40 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
         }
     }
 
+    private fun initializeResetMetricsButton(){
+        this.resetMetricsButton.setOnClickListener {
+            val value=when(this.currentMetricToSet){
+                METRIC_DURATION -> {
+                    this.trail?.autoCalculateDuration()
+                    this.trail?.duration
+                }
+                METRIC_ASCENT -> {
+                    this.trail?.autoCalculateAscent()
+                    this.trail?.ascent
+                }
+                METRIC_DESCENT -> {
+                    this.trail?.autoCalculateDescent()
+                    this.trail?.descent
+                }
+                METRIC_DISTANCE -> {
+                    this.trail?.autoCalculateDistance()
+                    this.trail?.distance
+                }
+                METRIC_MAX_ELEVATION -> {
+                    this.trail?.autoCalculateMaxElevation()
+                    this.trail?.maxElevation
+                }
+                METRIC_MIN_ELEVATION -> {
+                    this.trail?.autoCalculateMinElevation()
+                    this.trail?.minElevation
+                }
+                else -> null
+            }
+            updateMetricsSlider(this.currentMetricToSet, value)
+            updateCurrentMetric(value)
+        }
+    }
+
     private fun updateLocationTextField(){
         this.locationTextField.setText(this.trail?.location?.fullAddress)
         this.locationTextField.setOnClickListener {
@@ -276,6 +328,18 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
                 val color = ContextCompat.getColor(context!!, R.color.colorBlack)
                 this.metricsTexts[i].setTextColor(color)
             }
+        }
+    }
+
+    private fun initializeSelectPhotoButton(){
+        this.selectPhotoButton.setOnClickListener {
+            requestWritePermission()
+        }
+    }
+
+    private fun initializeTakePhotoButton(){
+        this.takePhotoButton.setOnClickListener {
+            requestWriteAndCameraPermission()
         }
     }
 
@@ -386,144 +450,19 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
 
     /*******************************Photos monitoring********************************************/
 
-    private fun initializeEasyImage(){
-        this.easyImage= EasyImage.Builder(context!!)
-            .setChooserType(ChooserType.CAMERA_AND_GALLERY)
-            .allowMultiple(false)
-            .build()
-    }
-
-    private fun addPhoto(filePath:String){
+    override fun addPhoto(filePath:String){
         (activity as TrailInfoEditActivity)
             .updateImagePathToUploadIntoDatabase(filePath)
         this.trail?.mainPhotoUrl=filePath
         updatePhoto()
     }
 
-    private fun deletePhoto(){
+    override fun deletePhoto(){
         if(!this.trail?.mainPhotoUrl.isNullOrEmpty()) {
             (activity as TrailInfoEditActivity)
                 .updateImagePathToDeleteFromDatabase(this.trail?.mainPhotoUrl!!)
             this.trail.mainPhotoUrl = null
             updatePhoto()
         }
-    }
-
-    /***********************************Permissions**********************************************/
-
-    private fun requestWritePermission(){
-        if(Build.VERSION.SDK_INT>=23
-            && activity?.checkSelfPermission(KEY_BUNDLE_PERMISSION_WRITE)!= PackageManager.PERMISSION_GRANTED){
-
-            /*If permission not already granted, requests it*/
-
-            if(shouldShowRequestPermissionRationale(KEY_BUNDLE_PERMISSION_WRITE)){
-
-                //TODO handle
-
-            }else{
-                requestPermissions(
-                    arrayOf(KEY_BUNDLE_PERMISSION_WRITE), KEY_REQUEST_PERMISSION_WRITE)
-            }
-        }else{
-
-            /*If SDK <23 or permission already granted, directly proceeds the action*/
-
-            startAddPhoto()
-        }
-    }
-
-    private fun requestWriteAndCameraPermission(){
-        if(Build.VERSION.SDK_INT>=23
-            &&(activity?.checkSelfPermission(KEY_BUNDLE_PERMISSION_WRITE)!= PackageManager.PERMISSION_GRANTED
-                    ||activity?.checkSelfPermission(KEY_BUNDLE_PERMISSION_CAMERA)!= PackageManager.PERMISSION_GRANTED)){
-
-            /*If permission not already granted, requests it*/
-
-            if(shouldShowRequestPermissionRationale(KEY_BUNDLE_PERMISSION_WRITE)
-                || shouldShowRequestPermissionRationale(KEY_BUNDLE_PERMISSION_CAMERA)){
-
-                //TODO handle
-
-            }else{
-                requestPermissions(
-                    arrayOf(
-                        KEY_BUNDLE_PERMISSION_WRITE,
-                        KEY_BUNDLE_PERMISSION_CAMERA
-                    ),
-                    KEY_REQUEST_PERMISSION_WRITE_AND_CAMERA
-                )
-            }
-        }else{
-
-            /*If SDK <23 or permission already granted, directly proceeds the action*/
-
-            startTakePhoto()
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            KEY_REQUEST_PERMISSION_WRITE->if(grantResults.isNotEmpty()){
-                when(grantResults[0]) {
-                    PackageManager.PERMISSION_GRANTED -> {
-                        Log.d(TAG,"Permission '${KEY_BUNDLE_PERMISSION_WRITE}' granted")
-                        startAddPhoto()
-                    }
-                    PackageManager.PERMISSION_DENIED -> {
-                        //TODO handle
-                        Log.d(TAG, "Permission '${KEY_BUNDLE_PERMISSION_WRITE}' denied")
-                    }
-                }
-            }
-            KEY_REQUEST_PERMISSION_WRITE_AND_CAMERA ->if(grantResults.isNotEmpty()){
-                when(grantResults[0]){
-                    PackageManager.PERMISSION_GRANTED -> {
-                        Log.d(TAG, "Permission '${KEY_BUNDLE_PERMISSION_WRITE}' granted")
-                        Log.d(TAG, "Permission '${KEY_BUNDLE_PERMISSION_CAMERA}' granted")
-                        startTakePhoto()
-                    }
-                    PackageManager.PERMISSION_DENIED -> {
-                        //TODO handle
-                        Log.d(TAG, "Permission '${KEY_BUNDLE_PERMISSION_WRITE}' denied")
-                        Log.d(TAG, "Permission '${KEY_BUNDLE_PERMISSION_CAMERA}' denied")
-                    }
-                }
-            }
-        }
-    }
-
-    /***********************************Navigation***********************************************/
-
-    private fun startAddPhoto(){
-        this.easyImage.openGallery(this)
-    }
-
-    private fun startTakePhoto(){
-        this.easyImage.openCameraForImage(this)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        handleNewPhotoResult(requestCode, resultCode, data)
-    }
-
-    private fun handleNewPhotoResult(requestCode: Int, resultCode: Int, data: Intent?){
-
-        this.easyImage.handleActivityResult(requestCode, resultCode, data, activity!!, object: DefaultCallback(){
-
-            override fun onMediaFilesPicked(imageFiles: Array<MediaFile>, source: MediaSource) {
-                Log.d(TAG, "Successfully added the new photo")
-                for(image in imageFiles){
-                    addPhoto(image.file.toURI().path)
-                }
-            }
-
-            override fun onImagePickerError(error: Throwable, source: MediaSource) {
-                super.onImagePickerError(error, source)
-                Log.w(TAG, error.message.toString())
-                //TODO handle
-            }
-        })
     }
 }

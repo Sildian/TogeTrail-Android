@@ -3,7 +3,7 @@ package com.sildian.apps.togetrail.trail.selection
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.Query
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import kotlinx.android.synthetic.main.fragment_trail_selection.view.*
