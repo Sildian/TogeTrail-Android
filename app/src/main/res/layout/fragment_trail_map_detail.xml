@@ -17,11 +17,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom">
 
-        <FrameLayout
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/fragment_trail_map_detail_bottom_sheet_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            app:cardBackgroundColor="@color/colorPrimary"
+            app:cardElevation="@dimen/components_elevation"
+            app:cardCornerRadius="0dp"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
             app:behavior_hideable="true">
 
@@ -30,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-        </FrameLayout>
+        </com.google.android.material.card.MaterialCardView>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

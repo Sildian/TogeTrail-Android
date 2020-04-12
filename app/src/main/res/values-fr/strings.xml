@@ -72,7 +72,7 @@
     <string name="label_trail_name">Nom</string>
     <string name="label_trail_description">Description</string>
     <string name="label_trail_level">Niveau</string>
-    <string name="label_trail_level_unknown">Nb Inconnu</string>
+    <string name="label_trail_level_unknown">Nv Inconnu</string>
     <string name="label_trail_level_easy">Nv Facile</string>
     <string name="label_trail_level_medium">Nv Moyen</string>
     <string name="label_trail_level_hard">Nv Difficile</string>

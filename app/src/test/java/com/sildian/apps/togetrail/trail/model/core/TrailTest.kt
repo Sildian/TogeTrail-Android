@@ -1,10 +1,36 @@
 package com.sildian.apps.togetrail.trail.model.core
 
+import com.sildian.apps.togetrail.location.model.core.Country
+import com.sildian.apps.togetrail.location.model.core.Location
 import org.junit.Test
 
 import org.junit.Assert.*
 
 class TrailTest {
+
+    @Test
+    fun given_validTrail_when_isDataValid_then_checkResultIsTrue(){
+        val trail=Trail(
+            name="Super Trail",
+            location = Location(country = Country("FR", "France")),
+            level=TrailLevel.MEDIUM,
+            duration = 60,
+            distance = 10000,
+            ascent = 500,
+            descent = 500,
+            maxElevation = 1000,
+            minElevation = 500
+        )
+        assertTrue(trail.isDataValid())
+    }
+
+    @Test
+    fun given_nonValidTrail_when_isDataValid_then_checkResultIsFalse(){
+        val trail=Trail(
+            name="Super Trail"
+        )
+        assertFalse(trail.isDataValid())
+    }
 
     @Test
     fun given_photosUrls_when_getAllPhotosUrls_then_checkResultContainsAllPhotosUrls() {

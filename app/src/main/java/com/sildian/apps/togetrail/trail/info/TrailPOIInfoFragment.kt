@@ -1,15 +1,9 @@
 package com.sildian.apps.togetrail.trail.info
 
-import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
 import com.sildian.apps.togetrail.trail.map.BaseTrailMapFragment
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
@@ -23,41 +17,24 @@ import kotlinx.android.synthetic.main.fragment_trail_poi_info.view.*
  ************************************************************************************************/
 
 class TrailPOIInfoFragment (
-    val trailPointOfInterest: TrailPointOfInterest?=null,
-    val trailPointOfInterestPosition:Int?=null
+    private val trailPointOfInterest: TrailPointOfInterest?=null,
+    private val trailPointOfInterestPosition:Int?=null
 )
-    : Fragment() {
-
-    /**********************************Static items**********************************************/
-
-    companion object{
-
-        /**Logs**/
-        private const val TAG="TrailPOIInfoFragment"
-    }
+    : BaseDataFlowFragment() {
 
     /**********************************UI component**********************************************/
 
-    private lateinit var layout:View
     private val nameText by lazy {layout.fragment_trail_poi_info_text_name}
-    private val photoText by lazy {layout.fragment_trail_poi_info_text_photo}
     private val photoImageView by lazy {layout.fragment_trail_poi_info_image_view_photo}
     private val editButton by lazy {layout.fragment_trail_poi_info_button_edit}
     private val elevationText by lazy {layout.fragment_trail_poi_info_text_elevation}
     private val descriptionText by lazy {layout.fragment_trail_poi_info_text_description}
 
-    /************************************Life cycle**********************************************/
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d(TAG, "Fragment '${javaClass.simpleName}' created")
-        this.layout=inflater.inflate(R.layout.fragment_trail_poi_info, container, false)
-        initializeAllUIComponents()
-        return this.layout
-    }
-
     /***********************************UI monitoring********************************************/
 
-    private fun initializeAllUIComponents(){
+    override fun getLayoutId(): Int = R.layout.fragment_trail_poi_info
+
+    override fun initializeUI() {
         initializeNameText()
         initializeEditButton()
         initializeElevationText()
@@ -97,22 +74,5 @@ class TrailPOIInfoFragment (
             .apply(RequestOptions.fitCenterTransform())
             .placeholder(R.drawable.ic_trail_black)
             .into(this.photoImageView)
-        updatePhotoVisibility()
-    }
-
-    private fun updatePhotoVisibility() {
-
-        /*If no photo is available, shows a text to notify the user*/
-
-        if (this.trailPointOfInterest?.photoUrl.isNullOrEmpty()) {
-            this.photoText.visibility = View.VISIBLE
-            this.photoImageView.visibility = View.INVISIBLE
-        }
-
-        /*Else shows the image*/
-        else {
-            this.photoText.visibility = View.INVISIBLE
-            this.photoImageView.visibility = View.VISIBLE
-        }
     }
 }

@@ -29,3 +29,15 @@ class TrailPointOfInterest(
 )
     : TrailPoint(latitude, longitude, elevation, time),
         Parcelable
+{
+
+    /**
+     * Checks that data are valid
+     * @return true if valid, false otherwise
+     */
+
+    fun isDataValid():Boolean{
+        return this.elevation!=null
+                &&this.name!=null
+    }
+}

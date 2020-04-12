@@ -114,8 +114,10 @@ abstract class BaseTrailMapFragment (protected var trail:Trail?=null) :
     /**********************************Data monitoring*******************************************/
 
     override fun saveData(){
-        this.trail?.autoPopulatePosition()
-        (activity as TrailActivity).saveTrailInDatabase(this.trail)
+        if(this.checkDataIsValid()) {
+            this.trail?.autoPopulatePosition()
+            (activity as TrailActivity).saveTrailInDatabase(this.trail)
+        }
     }
 
     override fun updateData(data: Any?) {
@@ -125,6 +127,25 @@ abstract class BaseTrailMapFragment (protected var trail:Trail?=null) :
             showTrailTrackOnMap()
             showTrailInfoFragment()
         }
+    }
+
+    override fun checkDataIsValid(): Boolean {
+        if(this.trail!=null) {
+            if (this.trail!!.isDataValid()) {
+                for(i in this.trail!!.trailTrack.trailPointsOfInterest.indices){
+                    if(!this.trail!!.trailTrack.trailPointsOfInterest[i].isDataValid()) {
+                        //TODO handle
+                        return false
+                    }
+                }
+                return true
+            }else{
+                //TODO handle
+            }
+        }else{
+            //TODO handle
+        }
+        return false
     }
 
     /************************************UI monitoring*******************************************/
@@ -144,6 +165,7 @@ abstract class BaseTrailMapFragment (protected var trail:Trail?=null) :
             BottomSheetBehavior.from(this.layout.findViewById(getInfoBottomSheetId()))
         val peekHeight=resources.getDimension(R.dimen.bottom_sheet_peek_height).toInt()
         this.infoBottomSheet.peekHeight=peekHeight
+        this.infoBottomSheet.addBottomSheetCallback(InfoBottomSheetCallback())
         hideInfoBottomSheet()
     }
 
@@ -274,6 +296,16 @@ abstract class BaseTrailMapFragment (protected var trail:Trail?=null) :
 
     fun expandInfoBottomSheet(){
         this.infoBottomSheet.state=BottomSheetBehavior.STATE_EXPANDED
+    }
+
+    inner class InfoBottomSheetCallback:BottomSheetBehavior.BottomSheetCallback(){
+        override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            //TODO implement
+        }
+
+        override fun onStateChanged(bottomSheet: View, newState: Int) {
+            //TODO implement
+        }
     }
 
     /**************************Nested Fragments monitoring***************************************/

@@ -30,7 +30,7 @@
     <dimen name="image_size_large">192dp</dimen>
 
     <!-- BottomSheets -->
-    <dimen name="bottom_sheet_peek_height">112dp</dimen>
+    <dimen name="bottom_sheet_peek_height">128dp</dimen>
 
     <!-- Circle radius (constraintLayout) -->
     <dimen name="constraint_circle_radius">120dp</dimen>

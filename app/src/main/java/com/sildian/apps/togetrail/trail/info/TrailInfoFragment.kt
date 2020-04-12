@@ -1,13 +1,7 @@
 package com.sildian.apps.togetrail.trail.info
 
-import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
 import com.sildian.apps.togetrail.trail.map.BaseTrailMapFragment
 import com.sildian.apps.togetrail.trail.model.core.Trail
@@ -20,25 +14,15 @@ import kotlinx.android.synthetic.main.fragment_trail_info.view.*
  * @param trail : the related trail
  ************************************************************************************************/
 
-class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
-
-    /**********************************Static items**********************************************/
-
-    companion object{
-
-        /**Logs**/
-        private const val TAG="TrailInfoFragment"
-    }
+class TrailInfoFragment(private val trail: Trail?=null) : BaseDataFlowFragment() {
 
     /**********************************UI component**********************************************/
 
-    private lateinit var layout:View
     private val nameText by lazy {layout.fragment_trail_info_text_name}
     private val editButton by lazy {layout.fragment_trail_info_button_edit}
     private val levelImage by lazy {layout.fragment_trail_info_image_level}
     private val levelText by lazy {layout.fragment_trail_info_text_level}
     private val durationText by lazy {layout.fragment_trail_info_text_duration}
-    private val photoText by lazy {layout.fragment_trail_info_text_photo}
     private val photosRecyclerView by lazy {layout.fragment_trail_info_recycler_view_photos}
     private lateinit var photoAdapter:PhotoAdapter
     private val ascentText by lazy {layout.fragment_trail_info_text_ascent}
@@ -53,18 +37,11 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
 
     private val photosUrls:ArrayList<String> = arrayListOf()        //The list of photos urls of the trail
 
-    /************************************Life cycle**********************************************/
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d(TAG, "Fragment '${javaClass.simpleName}' created")
-        this.layout=inflater.inflate(R.layout.fragment_trail_info, container, false)
-        initializeAllUIComponents()
-        return this.layout
-    }
-
     /***********************************UI monitoring********************************************/
 
-    private fun initializeAllUIComponents(){
+    override fun getLayoutId(): Int = R.layout.fragment_trail_info
+
+    override fun initializeUI() {
         initializeNameText()
         initializeEditButton()
         initializeLevelImage()
@@ -171,17 +148,5 @@ class TrailInfoFragment(val trail: Trail?=null) : Fragment() {
         this.photosUrls.clear()
         this.trail?.getAllPhotosUrls()?.let { this.photosUrls.addAll(it) }
         this.photoAdapter.notifyDataSetChanged()
-        updatePhotosVisibility()
-    }
-
-    private fun updatePhotosVisibility(){
-        if(this.photosUrls.isEmpty()){
-            this.photoText.visibility=View.VISIBLE
-            this.photosRecyclerView.visibility=View.INVISIBLE
-        }
-        else{
-            this.photoText.visibility=View.INVISIBLE
-            this.photosRecyclerView.visibility=View.VISIBLE
-        }
     }
 }
