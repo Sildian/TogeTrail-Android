@@ -11,10 +11,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.sdsmdg.harjot.crollerTest.Croller
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
+import com.sildian.apps.togetrail.common.views.circularSlider.CircularSlider
+import com.sildian.apps.togetrail.common.views.circularSlider.ValueFormaters
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 import kotlinx.android.synthetic.main.fragment_trail_poi_info_edit.view.*
 import pl.aprilapps.easyphotopicker.*
@@ -26,7 +27,7 @@ import pl.aprilapps.easyphotopicker.*
 
 class TrailPOIInfoEditFragment(private val trailPointOfInterest: TrailPointOfInterest?=null) :
     BaseDataFlowFragment(),
-    Croller.onProgressChangedListener
+    CircularSlider.OnValueChangedListener
 {
 
     /**********************************Static items**********************************************/
@@ -56,7 +57,7 @@ class TrailPOIInfoEditFragment(private val trailPointOfInterest: TrailPointOfInt
     private val deletePhotoButton by lazy {layout.fragment_trail_poi_info_edit_button_delete_photo}
     private val addPhotoButton by lazy {layout.fragment_trail_poi_info_edit_button_add_photo}
     private val takePhotoButton by lazy {layout.fragment_trail_poi_info_edit_button_take_photo}
-    private val metricsCroller by lazy {layout.fragment_trail_poi_info_edit_croller_metrics}
+    private val metricsSlider by lazy {layout.fragment_trail_poi_info_edit_slider_metrics}
     private val elevationText by lazy {layout.fragment_trail_poi_info_edit_text_elevation}
     private val descriptionTextField by lazy {layout.fragment_trail_poi_info_edit_text_field_description}
 
@@ -91,7 +92,7 @@ class TrailPOIInfoEditFragment(private val trailPointOfInterest: TrailPointOfInt
         initializeDeletePhotoButton()
         initializeAddPhotoButton()
         initializeTakePhotoButton()
-        initializeMetricsCroller()
+        initializeMetricsSlider()
         initializeElevationText()
         refreshUI()
     }
@@ -124,10 +125,10 @@ class TrailPOIInfoEditFragment(private val trailPointOfInterest: TrailPointOfInt
         }
     }
 
-    private fun initializeMetricsCroller(){
+    private fun initializeMetricsSlider(){
         val elevation=this.trailPointOfInterest?.elevation
-        updateCroller(elevation)
-        this.metricsCroller.setOnProgressChangedListener(this)
+        updateMetricsSlider(elevation)
+        this.metricsSlider.addOnValueChangedListener(this)
     }
 
     private fun initializeElevationText(){
@@ -167,25 +168,23 @@ class TrailPOIInfoEditFragment(private val trailPointOfInterest: TrailPointOfInt
         }
     }
 
-    /*****************************Metrics monitoring with croller*********************************/
+    /***********************************Metrics monitoring***************************************/
 
-    override fun onProgressChanged(progress: Int) {
-        updateElevation(progress)
+    override fun onValueChanged(view: CircularSlider, value: Int) {
+        updateElevation(value)
     }
 
-    private fun updateCroller(currentValue:Int?){
-        this.metricsCroller.max= VALUE_MAX_ALTITUDE
-        this.metricsCroller.progress=currentValue?:0
+    private fun updateMetricsSlider(currentValue:Int?){
+        this.metricsSlider.valueFormater=ValueFormaters.AltitudeValueFormater()
+        this.metricsSlider.setMaxValue(VALUE_MAX_ALTITUDE)
+        this.metricsSlider.setCurrentValue(currentValue?:0)
     }
 
     private fun updateElevation(elevation:Int?){
         this.trailPointOfInterest?.elevation=elevation
         val elevationToDisplay=MetricsHelper.displayElevation(
             context!!, elevation, true, true)
-        val elevationToDisplayInCroller=MetricsHelper.displayElevation(
-            context!!, elevation, false, false)
         this.elevationText.text=elevationToDisplay
-        this.metricsCroller.label = elevationToDisplayInCroller
     }
 
     /*******************************Photos monitoring********************************************/

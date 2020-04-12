@@ -49,6 +49,7 @@
             android:layout_marginBottom="@dimen/components_margin_small"
             android:layout_marginStart="@dimen/components_margin_medium"
             android:layout_marginEnd="@dimen/components_margin_medium"
+            app:cardElevation="@dimen/components_elevation"
             app:cardCornerRadius="@dimen/components_corner_medium">
 
             <TextView
@@ -114,25 +115,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.sdsmdg.harjot.crollerTest.Croller
-                android:id="@+id/fragment_trail_poi_info_edit_croller_metrics"
+            <com.sildian.apps.togetrail.common.views.circularSlider.CircularSlider
+                android:id="@+id/fragment_trail_poi_info_edit_slider_metrics"
                 android:layout_width="@dimen/components_size_large"
                 android:layout_height="@dimen/components_size_large"
-                android:padding="@dimen/components_margin_medium"
-                app:is_continuous="true"
-                app:main_circle_color="@color/colorPrimary"
-                app:back_circle_color="@color/colorSecondaryDark"
-                app:label_color="@color/colorSecondaryDark"
-                app:label_size="22"
-                app:indicator_color="@color/colorSecondary"
-                app:indicator_width="10"
-                app:progress_primary_color="@color/colorSecondaryDark"
-                app:progress_primary_stroke_width="8"
-                app:progress_secondary_color="@color/colorPrimary"
-                app:progress_secondary_stroke_width="4"
-                app:min="0"
-                app:max="1000"
-                app:start_offset="45"
+                android:padding="@dimen/components_margin_small"
+                app:minValue="0"
+                app:maxValue="1000"
+                app:stepValue="10"
+                app:sliderColor="@color/colorSecondaryDark"
+                app:valueTextSize="@dimen/text_size_title"
+                app:valueTextColor="@color/colorSecondaryDark"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -151,7 +144,7 @@
                 android:text="@string/example_trail_poi_elevation"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintCircle="@id/fragment_trail_poi_info_edit_croller_metrics"
+                app:layout_constraintCircle="@id/fragment_trail_poi_info_edit_slider_metrics"
                 app:layout_constraintCircleRadius="@dimen/constraint_circle_radius"
                 app:layout_constraintCircleAngle="270" />
 

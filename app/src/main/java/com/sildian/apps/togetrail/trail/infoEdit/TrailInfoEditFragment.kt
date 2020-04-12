@@ -12,11 +12,12 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.sdsmdg.harjot.crollerTest.Croller
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.flows.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DropdownMenuHelper
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
+import com.sildian.apps.togetrail.common.views.circularSlider.CircularSlider
+import com.sildian.apps.togetrail.common.views.circularSlider.ValueFormaters
 import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailLevel
@@ -30,7 +31,7 @@ import pl.aprilapps.easyphotopicker.*
 
 class TrailInfoEditFragment(private val trail: Trail?=null) :
     BaseDataFlowFragment(),
-    Croller.onProgressChangedListener
+    CircularSlider.OnValueChangedListener
 {
 
     /**********************************Static items**********************************************/
@@ -75,7 +76,7 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
     private val addPhotoButton by lazy {layout.fragment_trail_info_edit_button_add_photo}
     private val takePhotoButton by lazy {layout.fragment_trail_info_edit_button_take_photo}
     private val levelTextFieldDropDown by lazy {layout.fragment_trail_info_edit_text_field_dropdown_level}
-    private val metricsCroller by lazy {layout.fragment_trail_info_edit_croller_metrics}
+    private val metricsSlider by lazy {layout.fragment_trail_info_edit_slider_metrics}
     private val durationText by lazy {layout.fragment_trail_info_edit_text_duration}
     private val ascentText by lazy {layout.fragment_trail_info_edit_text_ascent}
     private val descentText by lazy {layout.fragment_trail_info_edit_text_descent}
@@ -135,7 +136,7 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
         initializeDeletePhotoButton()
         initializeAddPhotoButton()
         initializeTakePhotoButton()
-        initializeMetricsCroller()
+        initializeMetricsSlider()
         initializeDurationText()
         initializeAscentText()
         initializeDescentText()
@@ -182,10 +183,10 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
         }
     }
 
-    private fun initializeMetricsCroller(){
+    private fun initializeMetricsSlider(){
         val duration=this.trail?.duration
-        updateCroller(METRIC_DURATION, duration)
-        this.metricsCroller.setOnProgressChangedListener(this)
+        updateMetricsSlider(METRIC_DURATION, duration)
+        this.metricsSlider.addOnValueChangedListener(this)
     }
 
     private fun initializeDurationText(){
@@ -194,7 +195,7 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
         this.durationText.setOnClickListener {
             val duration=this.trail?.duration
             updateCurrentMetricToSet(METRIC_DURATION)
-            updateCroller(METRIC_DURATION, duration)
+            updateMetricsSlider(METRIC_DURATION, duration)
         }
     }
 
@@ -205,7 +206,7 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
         this.ascentText.setOnClickListener {
             val ascent=this.trail?.ascent
             updateCurrentMetricToSet(METRIC_ASCENT)
-            updateCroller(METRIC_ASCENT, ascent)
+            updateMetricsSlider(METRIC_ASCENT, ascent)
         }
     }
 
@@ -216,7 +217,7 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
         this.descentText.setOnClickListener {
             val descent=this.trail?.descent
             updateCurrentMetricToSet(METRIC_DESCENT)
-            updateCroller(METRIC_DESCENT, descent)
+            updateMetricsSlider(METRIC_DESCENT, descent)
         }
     }
 
@@ -227,7 +228,7 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
         this.distanceText.setOnClickListener {
             val distance=this.trail?.distance
             updateCurrentMetricToSet(METRIC_DISTANCE)
-            updateCroller(METRIC_DISTANCE, distance)
+            updateMetricsSlider(METRIC_DISTANCE, distance)
         }
     }
 
@@ -238,7 +239,7 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
         this.maxElevationText.setOnClickListener {
             val maxElevation=this.trail?.maxElevation
             updateCurrentMetricToSet(METRIC_MAX_ELEVATION)
-            updateCroller(METRIC_MAX_ELEVATION, maxElevation)
+            updateMetricsSlider(METRIC_MAX_ELEVATION, maxElevation)
         }
     }
 
@@ -249,7 +250,7 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
         this.minElevationText.setOnClickListener {
             val minElevation=this.trail?.minElevation
             updateCurrentMetricToSet(METRIC_MIN_ELEVATION)
-            updateCroller(METRIC_MIN_ELEVATION, minElevation)
+            updateMetricsSlider(METRIC_MIN_ELEVATION, minElevation)
         }
     }
 
@@ -306,20 +307,29 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
         }
     }
 
-    /*****************************Metrics monitoring with croller*********************************/
+    /*********************************Metrics monitoring*****************************************/
 
-    override fun onProgressChanged(progress: Int) {
-        updateCurrentMetric(progress)
+    override fun onValueChanged(view: CircularSlider, value: Int) {
+        updateCurrentMetric(value)
     }
 
-    private fun updateCroller(valueToSet:Int, currentValue:Int?){
+    private fun updateMetricsSlider(valueToSet:Int, currentValue:Int?){
         this.currentMetricToSet=valueToSet
         when(this.currentMetricToSet){
-            METRIC_DURATION -> this.metricsCroller.max= VALUE_MAX_DURATION
-            METRIC_DISTANCE -> this.metricsCroller.max= VALUE_MAX_DISTANCE
-            else -> this.metricsCroller.max= VALUE_MAX_ALTITUDE
+            METRIC_DURATION -> {
+                this.metricsSlider.valueFormater=ValueFormaters.DurationValueFormater()
+                this.metricsSlider.setMaxValue(VALUE_MAX_DURATION)
+            }
+            METRIC_DISTANCE -> {
+                this.metricsSlider.valueFormater=ValueFormaters.DistanceValueFormater()
+                this.metricsSlider.setMaxValue(VALUE_MAX_DISTANCE)
+            }
+            else -> {
+                this.metricsSlider.valueFormater=ValueFormaters.AltitudeValueFormater()
+                this.metricsSlider.setMaxValue(VALUE_MAX_ALTITUDE)
+            }
         }
-        this.metricsCroller.progress=currentValue?:0
+        this.metricsSlider.setCurrentValue(currentValue?:0)
     }
 
     private fun updateCurrentMetric(value:Int?){
@@ -337,57 +347,41 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
         this.trail?.duration=duration
         val durationToDisplay=MetricsHelper.displayDuration(context!!, duration?.toLong())
         this.durationText.text=durationToDisplay
-        this.metricsCroller.label = durationToDisplay
     }
 
     private fun updateAscent(ascent:Int?) {
         this.trail?.ascent = ascent
         val ascentToDisplay = MetricsHelper.displayAscent(
             context!!, ascent, true, true)
-        val ascentToDisplayInCroller = MetricsHelper.displayAscent(
-            context!!, ascent, false, false)
         this.ascentText.text = ascentToDisplay
-        this.metricsCroller.label = ascentToDisplayInCroller
     }
 
     private fun updateDescent(descent:Int?) {
         this.trail?.descent = descent
         val descentToDisplay = MetricsHelper.displayDescent(
             context!!, descent, true, true)
-        val descentToDisplayInCroller = MetricsHelper.displayAscent(
-            context!!, descent, false, false)
         this.descentText.text = descentToDisplay
-        this.metricsCroller.label = descentToDisplayInCroller
     }
 
     private fun updateDistance(distance:Int) {
         this.trail?.distance = distance
         val distanceToDisplay = MetricsHelper.displayDistance(
             context!!, distance, true, true)
-        val distanceToDisplayInCroller = MetricsHelper.displayAscent(
-            context!!, distance, false, false)
         this.distanceText.text = distanceToDisplay
-        this.metricsCroller.label = distanceToDisplayInCroller
     }
 
     private fun updateMaxElevation(elevation:Int?) {
         this.trail?.maxElevation = elevation
         val maxElevationToDisplay = MetricsHelper.displayMaxElevation(
             context!!, elevation, true, true)
-        val maxElevationToDisplayInCroller = MetricsHelper.displayMaxElevation(
-            context!!, elevation, false, false)
         this.maxElevationText.text = maxElevationToDisplay
-        this.metricsCroller.label = maxElevationToDisplayInCroller
     }
 
     private fun updateMinElevation(elevation:Int?) {
         this.trail?.minElevation = elevation
         val minElevationToDisplay = MetricsHelper.displayMinElevation(
             context!!, elevation, true, true)
-        val minElevationToDisplayInCroller = MetricsHelper.displayMinElevation(
-            context!!, elevation, false, false)
         this.minElevationText.text = minElevationToDisplay
-        this.metricsCroller.label = minElevationToDisplayInCroller
     }
 
     /*******************************Photos monitoring********************************************/
