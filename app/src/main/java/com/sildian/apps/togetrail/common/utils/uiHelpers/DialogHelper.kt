@@ -29,6 +29,23 @@ object DialogHelper {
     }
 
     /**
+     * Creates a dialog aiming to give an info to the user
+     * @param context : the context
+     * @param titleId : the resId for the title
+     * @param messageId : the resId for the message
+     */
+
+    fun createInfoDialog(context: Context, titleId:Int, messageId:Int):AlertDialog {
+        return MaterialAlertDialogBuilder(context)
+            .setBackground(ContextCompat.getDrawable(
+                context, R.drawable.shape_corners_round_color_primary))
+            .setTitle(titleId)
+            .setMessage(messageId)
+            .setNeutralButton(R.string.button_common_ok) { dialog, which ->  }
+            .create()
+    }
+
+    /**
      * Creates a dialog requesting a yes / no answer from the user
      * @param context : the context
      * @param titleId : the resId for the title

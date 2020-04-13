@@ -86,13 +86,11 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
         if(this.fragment?.getAddPhotoBottomSheetState()!=BottomSheetBehavior.STATE_HIDDEN){
             this.fragment?.hideAddPhotoBottomSheet()
         }else {
-            //TODO ask the user if he wants to save
             finishCancel()
         }
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        //TODO ask the user if he wants to save
         finishCancel()
         return true
     }
@@ -245,13 +243,11 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
                         saveTrailInDatabase()
                     }
                     ?.addOnFailureListener { e ->
-                        //TODO handle
                         Log.w(TAG, e.message.toString())
                         saveTrailInDatabase()
                     }
             }
             .addOnFailureListener { e ->
-                //TODO handle
                 Log.w(TAG, e.message.toString())
                 saveTrailInDatabase()
             }
@@ -266,7 +262,6 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
                 Log.d(TAG, "Deleted image from database with success")
             }
             .addOnFailureListener { e ->
-                //TODO handle
                 Log.w(TAG, e.message.toString())
             }
     }

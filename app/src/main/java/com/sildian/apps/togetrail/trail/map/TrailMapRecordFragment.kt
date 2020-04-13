@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
+import com.google.android.material.snackbar.Snackbar
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.GeoUtilities
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
@@ -44,6 +45,7 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
     private val actionsButtonsLayout by lazy {layout.fragment_trail_map_record_layout_actions_buttons}
     private val addPoiButton by lazy {layout.fragment_trail_map_record_button_poi_add}
     private val playButton by lazy {layout.fragment_trail_map_record_button_play}
+    private val messageView by lazy {layout.fragment_trail_map_record_view_message}
 
     /************************************Life cycle**********************************************/
 
@@ -208,24 +210,37 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
 
         this.userLocation.lastLocation
             .addOnSuccessListener { userLocation->
-                val trailPoint=
-                    TrailPoint(
-                        userLocation.latitude, userLocation.longitude, userLocation.altitude.toInt()
-                    )
+                if(userLocation!=null) {
+                    val trailPoint =
+                        TrailPoint(
+                            userLocation.latitude,
+                            userLocation.longitude,
+                            userLocation.altitude.toInt()
+                        )
 
-                /*If minimum distance to previous point is fulfilled, adds the new trailPoint*/
+                    /*If minimum distance to previous point is fulfilled, adds the new trailPoint*/
 
-                if(checkMinDistanceToPreviousPointIsFulfilled(trailPoint)) {
-                    Log.d(TAG, "Point registered at lat ${trailPoint.latitude} lng ${trailPoint.longitude}")
-                    addTrailPoint(trailPoint)
-                }
-                else{
-                    Log.d(TAG, "Point not registered, too closed to the previous point")
+                    if (checkMinDistanceToPreviousPointIsFulfilled(trailPoint)) {
+                        Log.d(
+                            TAG,
+                            "Point registered at lat ${trailPoint.latitude} lng ${trailPoint.longitude}"
+                        )
+                        addTrailPoint(trailPoint)
+                    } else {
+                        Log.d(TAG, "Point not registered, too closed to the previous point")
+                    }
+                }else{
+                    Log.w(TAG, "User location cannot be reached")
+                    Snackbar.make(this.messageView, R.string.message_user_location_failure, Snackbar.LENGTH_LONG)
+                        .setAnchorView(this.playButton)
+                        .show()
                 }
             }
             .addOnFailureListener { e->
                 Log.w(TAG, e.message.toString())
-                //TODO handle
+                Snackbar.make(this.messageView, R.string.message_user_location_failure, Snackbar.LENGTH_LONG)
+                    .setAnchorView(this.playButton)
+                    .show()
             }
     }
 

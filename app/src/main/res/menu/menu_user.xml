@@ -7,6 +7,14 @@
             android:title="@string/menu_user_profile"
             android:icon="@drawable/ic_person_black"/>
         <item
+            android:id="@+id/menu_user_trails"
+            android:title="@string/menu_user_trails"
+            android:icon="@drawable/ic_trail_black"/>
+        <item
+            android:id="@+id/menu_user_events"
+            android:title="@string/menu_user_events"
+            android:icon="@drawable/ic_event_black"/>
+        <item
             android:id="@+id/menu_user_settings"
             android:title="@string/menu_user_settings"
             android:icon="@drawable/ic_settings_black"/>

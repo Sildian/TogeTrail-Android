@@ -6,6 +6,8 @@
     <string name="menu_trails">Randos</string>
     <string name="menu_events">Evènements</string>
     <string name="menu_user_profile">Mon profil</string>
+    <string name="menu_user_trails">Mes randos</string>
+    <string name="menu_user_events">Mes évènements</string>
     <string name="menu_user_settings">Mes paramètres</string>
     <string name="menu_user_login">Connexion / Déconnexion</string>
     <string name="menu_new_trail">Nouvelle rando</string>
@@ -36,6 +38,7 @@
 
     <!-- Buttons -->
     <!-- Common -->
+    <string name="button_common_ok">OK</string>
     <string name="button_common_yes">Oui</string>
     <string name="button_common_no">Non</string>
     <string name="button_common_cancel">Annuler</string>
@@ -176,15 +179,10 @@
     <string name="example_event_registered_hikers">5 personnes participent</string>
 
     <!-- Messages to the user -->
+    <!-- Texts -->
     <string name="message_text_field_empty">Obligatoire</string>
     <string name="message_unknown_short">\?</string>
     <string name="message_user_unknown">Utilisateur inconnu</string>
-    <string name="message_password_not_valid_short">Mot de passe non valide</string>
-    <string name="message_password_not_valid_long">Oups! Le même mot de passe doit être saisi deux fois.</string>
-    <string name="message_password_reset_confirmation_title">Réinitialisation du mot de passe</string>
-    <string name="message_password_reset_confirmation_message">Vous voulez donc réinitialiser votre mot de passe?</string>
-    <string name="message_account_delete_confirmation_title">Suppression de compte</string>
-    <string name="message_account_delete_confirmation_message">Oula! Vous êtes sur le point de supprimer définitivement votre compte. Etes-vous bien sûr de vouloir faire cela?</string>
     <string name="message_hiker_no_description_available">Je n\'ai encore rien raconté à propos de moi</string>
     <string name="message_trail_name_unknown">Parcours inconnu</string>
     <string name="message_trail_poi_name_unknown">Point d\'intérêt inconnu</string>
@@ -192,7 +190,39 @@
     <string name="message_no_location_available">L\'emplacement n\'est pas disponible</string>
     <string name="message_no_description_available">Aucune description n\'est disponible</string>
     <string name="message_no_photo_available">Aucune photo n\'est disponible</string>
+    <!-- Dialogs -->
     <string name="message_wait">Un tout petit peu d\'attente…</string>
+    <string name="message_permission_requested_title">Permission requise</string>
+    <string name="message_permission_requested_message_location">Votre permission est nécessaire pour accéder à votre position et fournir les fonctionnalités de base de cette application.</string>
+    <string name="message_permission_requested_message_write">Votre permission est nécessaire pour accéder au stockage de votre appareil et sélectionner des photos.</string>
+    <string name="message_permission_requested_message_camera">Votre permission est nécessaire pour accéder à la caméra de votre appareil et prendre des photos.</string>
+    <string name="message_map_failure_title">Echec de la carte</string>
+    <string name="message_map_failure_message">Aïe, la carte n\'a pu être charger. Il va falloir essayer plus tard.</string>
+    <string name="message_query_failure_title">Echec de la requête</string>
+    <string name="message_query_failure_message">Oh non, la requête a échoué! Vous devriez essayer plus tard.</string>
+    <string name="message_log_failure_title">Echec de la connexion</string>
+    <string name="message_log_failure_message">Oups, il semble que la connexion ait échoué. Vous devriez essayer plus tard.</string>
+    <string name="message_user_not_connected_title">Vous n\êtes pas connecté</string>
+    <string name="message_user_not_connected_message">Un compte est nécessaire pour accéder à cette fonctionnalité. Voulez-vous vous connecter ou créer un compte maintenant?</string>
+    <string name="message_password_reset_confirmation_title">Réinitialisation du mot de passe</string>
+    <string name="message_password_reset_confirmation_message">Vous voulez donc réinitialiser votre mot de passe?</string>
+    <string name="message_account_delete_confirmation_title">Suppression de compte</string>
+    <string name="message_account_delete_confirmation_message">Oula! Vous êtes sur le point de supprimer définitivement votre compte. Etes-vous bien sûr de vouloir faire cela?</string>
+    <string name="message_file_failure">Echec du fichier</string>
+    <string name="message_file_failure_gpx_no_track">Les Gpx sans balise \'Track\' ne sont pas pris en compte. Ce fichier ne peut pas être chargé.</string>
+    <string name="message_file_failure_gpx_too_many_tracks">Les Gpx incluant plus d\'une balise \'Track\' ne sont pas supportés. Ce fichier ne peut être chargé.</string>
+    <string name="message_file_failure_gpx_other_reason">Ce fichier n\'a pas pu être chargé. Veuillez vérifier qu\'il s\'agit bien d\'un Gpx et qu\'il n\'est pas corrompu.</string>
+    <string name="message_trail_info_empty_title">Infos manquantes</string>
+    <string name="message_trail_info_empty_message">Les infos de la randos et de chaque point d\'intérêt doivent être indiquées.</string>
+    <!-- Toasts / Snackbars -->
+    <string name="message_text_fields_empty">Certains champs sont vides</string>
+    <string name="message_trail_info_empty">Les infos de la rando doivent être indiquées</string>
+    <string name="message_trail_poi_info_empty">Les infos de chaque point d\'intérêt doivent être indiquées</string>
+    <string name="message_trail_level_unknown">Le niveau de difficulté doit être indiqué</string>
+    <string name="message_trail_metrics_unknown">Toutes les mesures doivent être indiquées</string>
+    <string name="message_event_dates_issue">Attention aux dates</string>
+    <string name="message_event_no_trail_attached">Au moins 1 rando doit être sélectionnée</string>
+    <string name="message_user_location_failure">Echec lors de la récupération de votre position</string>
 
     <!-- Metrics -->
     <string name="metric_hour">h</string>

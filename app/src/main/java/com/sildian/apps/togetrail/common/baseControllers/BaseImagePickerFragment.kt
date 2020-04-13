@@ -10,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import pl.aprilapps.easyphotopicker.*
 
 /*************************************************************************************************
@@ -98,7 +100,11 @@ abstract class BaseImagePickerFragment : BaseDataFlowFragment() {
 
             if(shouldShowRequestPermissionRationale(KEY_BUNDLE_PERMISSION_WRITE)){
 
-                //TODO handle
+                DialogHelper.createInfoDialog(
+                    context!!,
+                    R.string.message_permission_requested_title,
+                    R.string.message_permission_requested_message_write
+                ).show()
 
             }else{
                 requestPermissions(
@@ -124,7 +130,11 @@ abstract class BaseImagePickerFragment : BaseDataFlowFragment() {
             if(shouldShowRequestPermissionRationale(KEY_BUNDLE_PERMISSION_WRITE)
                 || shouldShowRequestPermissionRationale(KEY_BUNDLE_PERMISSION_CAMERA)){
 
-                //TODO handle
+                DialogHelper.createInfoDialog(
+                    context!!,
+                    R.string.message_permission_requested_title,
+                    R.string.message_permission_requested_message_camera
+                ).show()
 
             }else{
                 requestPermissions(
@@ -150,8 +160,12 @@ abstract class BaseImagePickerFragment : BaseDataFlowFragment() {
                         startSelectPhoto()
                     }
                     PackageManager.PERMISSION_DENIED -> {
-                        //TODO handle
                         Log.d(TAG, "Permission '$KEY_BUNDLE_PERMISSION_WRITE' denied")
+                        DialogHelper.createInfoDialog(
+                            context!!,
+                            R.string.message_permission_requested_title,
+                            R.string.message_permission_requested_message_write
+                        ).show()
                     }
                 }
             }
@@ -163,9 +177,13 @@ abstract class BaseImagePickerFragment : BaseDataFlowFragment() {
                         startTakePhoto()
                     }
                     PackageManager.PERMISSION_DENIED -> {
-                        //TODO handle
                         Log.d(TAG, "Permission '$KEY_BUNDLE_PERMISSION_WRITE' denied")
                         Log.d(TAG, "Permission '$KEY_BUNDLE_PERMISSION_CAMERA' denied")
+                        DialogHelper.createInfoDialog(
+                            context!!,
+                            R.string.message_permission_requested_title,
+                            R.string.message_permission_requested_message_camera
+                        ).show()
                     }
                 }
             }

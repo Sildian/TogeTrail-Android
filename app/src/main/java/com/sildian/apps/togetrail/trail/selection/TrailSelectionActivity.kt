@@ -54,12 +54,10 @@ class TrailSelectionActivity : BaseDataFlowActivity() {
     /********************************Navigation control******************************************/
 
     override fun onBackPressed() {
-        //TODO ask the user if he wants to save
         finishCancel()
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        //TODO ask the user if he wants to save
         finishCancel()
         return true
     }

@@ -3,6 +3,7 @@ package com.sildian.apps.togetrail.trail.infoEdit
 import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.snackbar.Snackbar
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseImagePickerFragment
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
@@ -44,6 +45,8 @@ class TrailPOIInfoEditFragment(private val trailPointOfInterest: TrailPointOfInt
     private val descriptionTextField by lazy {layout.fragment_trail_poi_info_edit_text_field_description}
     private val selectPhotoButton by lazy {layout.fragment_trail_poi_info_edit_button_select_photo}
     private val takePhotoButton by lazy {layout.fragment_trail_poi_info_edit_button_take_photo}
+    private val messageView by lazy {layout.fragment_trail_poi_info_edit_view_message}
+    private val messageAnchorView by lazy {layout.fragment_trail_poi_info_edit_bottom_sheet_add_photo}
 
     /*********************************Data monitoring********************************************/
 
@@ -62,10 +65,14 @@ class TrailPOIInfoEditFragment(private val trailPointOfInterest: TrailPointOfInt
             if(checkMetricsAreNotEmpty()){
                 return true
             }else{
-                //TODO handle
+                Snackbar.make(this.messageView, R.string.message_trail_metrics_unknown, Snackbar.LENGTH_LONG)
+                    .setAnchorView(this.messageAnchorView)
+                    .show()
             }
         }else{
-            //TODO handle
+            Snackbar.make(this.messageView, R.string.message_text_fields_empty, Snackbar.LENGTH_LONG)
+                .setAnchorView(this.messageAnchorView)
+                .show()
         }
         return false
     }

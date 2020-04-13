@@ -5,6 +5,8 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
+import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
@@ -78,7 +80,11 @@ abstract class BaseDataFlowActivity : AppCompatActivity() {
 
     private fun handleQueryError(e: Exception) {
         Log.w(TAG, e.message.toString())
-        //TODO handle
+        DialogHelper.createInfoDialog(
+            this,
+            R.string.message_query_failure_title,
+            R.string.message_query_failure_message
+        ).show()
     }
 
     /*****************************Hiker queries**/

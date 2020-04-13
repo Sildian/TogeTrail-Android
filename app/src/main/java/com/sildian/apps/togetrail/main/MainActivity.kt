@@ -3,6 +3,7 @@ package com.sildian.apps.togetrail.main
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -27,6 +28,7 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
+import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.event.detail.EventActivity
 import com.sildian.apps.togetrail.event.edit.EventEditActivity
 import com.sildian.apps.togetrail.event.list.EventsListFragment
@@ -157,21 +159,46 @@ class MainActivity :
             /*Navigation View*/
 
             R.id.menu_user -> {
-                //TODO handle clicks
                 when (item.itemId) {
                     R.id.menu_user_profile -> {
                         if(AuthFirebaseHelper.getCurrentUser()!=null){
                             startProfileActivity()
                         }else{
-                            //TODO handle user not connected
+                            DialogHelper.createYesNoDialog(
+                                this,
+                                R.string.message_user_not_connected_title,
+                                R.string.message_user_not_connected_message,
+                                DialogInterface.OnClickListener { dialog, which ->
+                                    if(which==DialogInterface.BUTTON_POSITIVE){
+                                        login()
+                                    }
+                                }
+                            ).show()
                         }
                     }
                     R.id.menu_user_settings ->
                         if(AuthFirebaseHelper.getCurrentUser()!=null){
                             startProfileEditActivity()
                         }else{
-                            //TODO handle user not connected
+                            DialogHelper.createYesNoDialog(
+                                this,
+                                R.string.message_user_not_connected_title,
+                                R.string.message_user_not_connected_message,
+                                DialogInterface.OnClickListener { dialog, which ->
+                                    if(which==DialogInterface.BUTTON_POSITIVE){
+                                        login()
+                                    }
+                                }
+                            ).show()
                         }
+                    R.id.menu_user_trails -> {
+                        this.drawerLayout.closeDrawer(GravityCompat.START)
+                        this.bottomNavigationView.selectedItemId = R.id.menu_main_trails
+                    }
+                    R.id.menu_user_events -> {
+                        this.drawerLayout.closeDrawer(GravityCompat.START)
+                        this.bottomNavigationView.selectedItemId = R.id.menu_main_events
+                    }
                     R.id.menu_user_login ->
                         login()
                 }
@@ -185,25 +212,45 @@ class MainActivity :
 
     private fun onPopupMenuItemClick(item: MenuItem?): Boolean {
 
-        when(item?.groupId) {
-            R.id.menu_add -> {
-                when (item.itemId) {
-                    R.id.menu_add_event ->
-                        startEventEditActivity()
+        /*Allows the user to use these features only if he is connected*/
+
+        if(AuthFirebaseHelper.getCurrentUser()!=null) {
+
+            when (item?.groupId) {
+                R.id.menu_add -> {
+                    when (item.itemId) {
+                        R.id.menu_add_event ->
+                            startEventEditActivity()
+                    }
+                }
+                R.id.menu_add_new_trail -> {
+                    when (item.itemId) {
+                        R.id.menu_add_trail_load_gpx ->
+                            startTrailActivity(TrailActivity.ACTION_TRAIL_CREATE_FROM_GPX)
+                        R.id.menu_add_trail_draw ->
+                            startTrailActivity(TrailActivity.ACTION_TRAIL_DRAW)
+                        R.id.menu_add_trail_record ->
+                            startTrailActivity(TrailActivity.ACTION_TRAIL_RECORD)
+                    }
                 }
             }
-            R.id.menu_add_new_trail-> {
-                when (item.itemId) {
-                    R.id.menu_add_trail_load_gpx ->
-                        startTrailActivity(TrailActivity.ACTION_TRAIL_CREATE_FROM_GPX)
-                    R.id.menu_add_trail_draw ->
-                        startTrailActivity(TrailActivity.ACTION_TRAIL_DRAW)
-                    R.id.menu_add_trail_record ->
-                        startTrailActivity(TrailActivity.ACTION_TRAIL_RECORD)
+            return true
+
+            /*Else, asks if he wants to log in*/
+
+        }else{
+            DialogHelper.createYesNoDialog(
+                this,
+                R.string.message_user_not_connected_title,
+                R.string.message_user_not_connected_message,
+                DialogInterface.OnClickListener { dialog, which ->
+                    if (which==DialogInterface.BUTTON_POSITIVE){
+                        login()
+                    }
                 }
-            }
+            ).show()
+            return false
         }
-        return true
     }
 
     /**Shows the add menu options within a PopupMenu**/
@@ -385,10 +432,6 @@ class MainActivity :
         initializeAddButton()
     }
 
-    override fun refreshUI() {
-        //Nothing
-    }
-
     private fun initializeToolbar(){
         setSupportActionBar(this.toolbar)
         supportActionBar?.title=""
@@ -426,7 +469,7 @@ class MainActivity :
 
         val user=AuthFirebaseHelper.getCurrentUser()
         if(user==null){
-            this.navigationHeaderUserImage.setImageResource(R.drawable.ic_person_black)
+            this.navigationHeaderUserImage.setImageResource(R.drawable.ic_person_white)
             this.navigationHeaderUserNameText.setText(R.string.message_user_unknown)
         }
 
@@ -436,7 +479,7 @@ class MainActivity :
             Glide.with(this)
                 .load(user.photoUrl)
                 .apply(RequestOptions.circleCropTransform())
-                .placeholder(R.drawable.ic_person_black)
+                .placeholder(R.drawable.ic_person_white)
                 .into(this.navigationHeaderUserImage)
             this.navigationHeaderUserNameText.text=user.displayName
         }
@@ -489,7 +532,11 @@ class MainActivity :
             /*If permission not already granted, requests it*/
 
             if(shouldShowRequestPermissionRationale(KEY_BUNDLE_PERMISSION_LOCATION)){
-                //TODO handle
+                DialogHelper.createInfoDialog(
+                    this,
+                    R.string.message_permission_requested_title,
+                    R.string.message_permission_requested_message_location
+                ).show()
             }else{
                 requestPermissions(
                     arrayOf(KEY_BUNDLE_PERMISSION_LOCATION), KEY_REQUEST_PERMISSION_LOCATION)
@@ -513,7 +560,11 @@ class MainActivity :
                         showFragment(ID_FRAGMENT_MAP)
                     }
                     PackageManager.PERMISSION_DENIED -> {
-                        //TODO handle
+                        DialogHelper.createInfoDialog(
+                            this,
+                            R.string.message_permission_requested_title,
+                            R.string.message_permission_requested_message_location
+                        ).show()
                         Log.d(TAG, "Permission '$KEY_BUNDLE_PERMISSION_LOCATION' denied")
                     }
                 }
@@ -615,16 +666,23 @@ class MainActivity :
                 loadCurrentUserFromDatabase()
             }
             resultCode==Activity.RESULT_CANCELED -> {
-                //TODO handle
                 Log.d(TAG, "Login canceled")
             }
             idpResponse?.error!=null -> {
-                //TODO handle
                 Log.w(TAG, "Login failed : ${idpResponse.error?.message}")
+                DialogHelper.createInfoDialog(
+                    this,
+                    R.string.message_log_failure_title,
+                    R.string.message_log_failure_message
+                ).show()
             }
             else -> {
-                //TODO handle
                 Log.w(TAG, "Login failed : unknown error")
+                DialogHelper.createInfoDialog(
+                    this,
+                    R.string.message_log_failure_title,
+                    R.string.message_log_failure_message
+                ).show()
             }
         }
     }

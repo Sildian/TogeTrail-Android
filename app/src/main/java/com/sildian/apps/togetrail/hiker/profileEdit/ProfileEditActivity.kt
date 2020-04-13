@@ -81,13 +81,11 @@ class ProfileEditActivity : BaseDataFlowActivity() {
                 (this.fragment as BaseImagePickerFragment).hideAddPhotoBottomSheet()
             }
         else {
-            //TODO ask the user if he wants to save
             finish()
         }
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        //TODO ask the user if he wants to save
         finish()
         return true
     }
@@ -182,13 +180,11 @@ class ProfileEditActivity : BaseDataFlowActivity() {
                         saveHikerInDatabase()
                     }
                     ?.addOnFailureListener { e ->
-                        //TODO handle
                         Log.w(TAG, e.message.toString())
                         saveHikerInDatabase()
                     }
             }
             .addOnFailureListener { e ->
-                //TODO handle
                 Log.w(TAG, e.message.toString())
                 saveHikerInDatabase()
             }
@@ -205,7 +201,6 @@ class ProfileEditActivity : BaseDataFlowActivity() {
                 Log.d(TAG, "Deleted image from database with success")
             }
             .addOnFailureListener { e ->
-                //TODO handle
                 Log.w(TAG, e.message.toString())
             }
     }
@@ -254,13 +249,16 @@ class ProfileEditActivity : BaseDataFlowActivity() {
                 ?.addOnSuccessListener {
                     Log.d(TAG, "User profile updated in the database")
                     this.progressDialog?.dismiss()
-                    //TODO show a snackbar when finished
                     finish()
                 }
                 ?.addOnFailureListener { e ->
                     Log.w(TAG, e.message.toString())
                     this.progressDialog?.dismiss()
-                    //TODO handle
+                    DialogHelper.createInfoDialog(
+                        this,
+                        R.string.message_query_failure_title,
+                        R.string.message_query_failure_message
+                    ).show()
                 }
         }
     }
@@ -273,12 +271,15 @@ class ProfileEditActivity : BaseDataFlowActivity() {
             ?.addOnSuccessListener {
                 Log.d(TAG, "Email sent to the user to let him reset his password")
                 this.progressDialog?.dismiss()
-                //TODO show a snackbar when finished
             }
             ?.addOnFailureListener { e ->
                 Log.w(TAG, e.message.toString())
                 this.progressDialog?.dismiss()
-                //TODO handle
+                DialogHelper.createInfoDialog(
+                    this,
+                    R.string.message_query_failure_title,
+                    R.string.message_query_failure_message
+                ).show()
             }
     }
 
@@ -307,18 +308,25 @@ class ProfileEditActivity : BaseDataFlowActivity() {
                             if (hiker.photoUrl != null) {
                                 StorageFirebaseHelper.deleteImage(hiker.photoUrl.toString())
                             }
-                            //TODO show a snackbar when finished
                         }
                         ?.addOnFailureListener { e ->
                             Log.w(TAG, e.message.toString())
                             this.progressDialog?.dismiss()
-                            //TODO handle
+                            DialogHelper.createInfoDialog(
+                                this,
+                                R.string.message_query_failure_title,
+                                R.string.message_query_failure_message
+                            ).show()
                         }
                 }
                 .addOnFailureListener { e ->
                     Log.w(TAG, e.message.toString())
                     this.progressDialog?.dismiss()
-                    //TODO handle
+                    DialogHelper.createInfoDialog(
+                        this,
+                        R.string.message_query_failure_title,
+                        R.string.message_query_failure_message
+                    ).show()
                 }
         }
     }

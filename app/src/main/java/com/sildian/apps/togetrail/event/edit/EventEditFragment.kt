@@ -1,6 +1,7 @@
 package com.sildian.apps.togetrail.event.edit
 
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.sildian.apps.togetrail.R
@@ -53,6 +54,7 @@ class EventEditFragment(private val event: Event?=null) :
     private val meetingPointTextField by lazy {layout.fragment_event_edit_text_field_meeting_point}
     private val descriptionTextFieldLayout by lazy {layout.fragment_event_edit_text_field_layout_description}
     private val descriptionTextField by lazy {layout.fragment_event_edit_text_field_description}
+    private val messageView by lazy {layout.fragment_event_edit_view_message}
 
     /*********************************Data monitoring********************************************/
 
@@ -92,14 +94,14 @@ class EventEditFragment(private val event: Event?=null) :
                 if(checkTrailsAreAttached()){
                     return true
                 }else{
-                    //TODO handle
+                    Snackbar.make(this.messageView, R.string.message_event_no_trail_attached, Snackbar.LENGTH_LONG).show()
                 }
             }else{
-                //TODO handle
+                Snackbar.make(this.messageView, R.string.message_event_dates_issue, Snackbar.LENGTH_LONG).show()
             }
         }
         else{
-            //TODO handle
+            Snackbar.make(this.messageView, R.string.message_text_fields_empty, Snackbar.LENGTH_LONG).show()
         }
         return false
     }

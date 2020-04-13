@@ -77,13 +77,11 @@ class TrailActivity : BaseDataFlowActivity() {
             this.fragment?.getInfoBottomSheetState()!=BottomSheetBehavior.STATE_HIDDEN->
                 this.fragment?.hideInfoBottomSheet()
             else->
-                //TODO ask the user if he wants to save
                 finish()
         }
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        //TODO ask the user if he wants to save
         finish()
         return true
     }
@@ -203,23 +201,43 @@ class TrailActivity : BaseDataFlowActivity() {
 
             catch(e:IOException){
                 e.printStackTrace()
-                //TODO handle
+                DialogHelper.createInfoDialog(
+                    this,
+                    R.string.message_file_failure,
+                    R.string.message_file_failure_gpx_other_reason
+                ).show()
             }
             catch(e:XmlPullParserException){
                 e.printStackTrace()
-                //TODO handle
+                DialogHelper.createInfoDialog(
+                    this,
+                    R.string.message_file_failure,
+                    R.string.message_file_failure_gpx_other_reason
+                ).show()
             }
             catch(e: TrailBuilder.TrailBuildNoTrackException){
                 e.printStackTrace()
-                //TODO handle
+                DialogHelper.createInfoDialog(
+                    this,
+                    R.string.message_file_failure,
+                    R.string.message_file_failure_gpx_no_track
+                ).show()
             }
             catch(e: TrailBuilder.TrailBuildTooManyTracksException){
                 e.printStackTrace()
-                //TODO handle
+                DialogHelper.createInfoDialog(
+                    this,
+                    R.string.message_file_failure,
+                    R.string.message_file_failure_gpx_too_many_tracks
+                ).show()
             }
         }
         else{
-            //TODO handle
+            DialogHelper.createInfoDialog(
+                this,
+                R.string.message_file_failure,
+                R.string.message_file_failure_gpx_no_track
+            ).show()
         }
     }
 

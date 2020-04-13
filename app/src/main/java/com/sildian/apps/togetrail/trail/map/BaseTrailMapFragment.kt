@@ -17,6 +17,7 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.MapMarkersUtilities
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
+import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.trail.info.BaseInfoFragment
 import com.sildian.apps.togetrail.trail.info.TrailInfoFragment
 import com.sildian.apps.togetrail.trail.info.TrailPOIInfoFragment
@@ -139,16 +140,22 @@ abstract class BaseTrailMapFragment (
             if (this.trail!!.isDataValid()) {
                 for(i in this.trail!!.trailTrack.trailPointsOfInterest.indices){
                     if(!this.trail!!.trailTrack.trailPointsOfInterest[i].isDataValid()) {
-                        //TODO handle
+                        DialogHelper.createInfoDialog(
+                            context!!,
+                            R.string.message_trail_info_empty_title,
+                            R.string.message_trail_info_empty_message
+                        ).show()
                         return false
                     }
                 }
                 return true
             }else{
-                //TODO handle
+                DialogHelper.createInfoDialog(
+                    context!!,
+                    R.string.message_trail_info_empty_title,
+                    R.string.message_trail_info_empty_message
+                ).show()
             }
-        }else{
-            //TODO handle
         }
         return false
     }
@@ -197,8 +204,12 @@ abstract class BaseTrailMapFragment (
             onMapReadyActionsFinished()
         }
         else{
-            //TODO handle exception
             Log.w(TAG, "Map couldn't be loaded in '${this.javaClass.simpleName}'")
+            DialogHelper.createInfoDialog(
+                context!!,
+                R.string.message_map_failure_title,
+                R.string.message_map_failure_message
+            ).show()
         }
     }
 

@@ -21,8 +21,8 @@ data class Hiker (
     var description:String?=null,
     val registrationDate:Date=Date(),
     /*Extra info*/
-    var nbTrailsCreated:Int=0,  //TODO update this when creating a trail
-    var nbEventsCreated:Int=0,  //TODO update this when creating an event
+    var nbTrailsCreated:Int=0,
+    var nbEventsCreated:Int=0,
     var nbEventsAttended:Int=0
 )
     :Parcelable

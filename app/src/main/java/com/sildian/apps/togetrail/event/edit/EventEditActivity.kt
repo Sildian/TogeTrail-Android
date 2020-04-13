@@ -1,6 +1,7 @@
 package com.sildian.apps.togetrail.event.edit
 
 import android.app.Activity
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -61,12 +62,10 @@ class EventEditActivity : BaseDataFlowActivity() {
     /********************************Navigation control******************************************/
 
     override fun onBackPressed() {
-        //TODO ask the user if he wants to save
         finish()
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        //TODO ask the user if he wants to save
         finish()
         return true
     }
