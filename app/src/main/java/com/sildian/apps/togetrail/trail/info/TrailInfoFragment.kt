@@ -1,7 +1,9 @@
 package com.sildian.apps.togetrail.trail.info
 
+import android.view.View
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
 import com.sildian.apps.togetrail.trail.map.BaseTrailMapFragment
 import com.sildian.apps.togetrail.trail.model.core.Trail
@@ -12,19 +14,24 @@ import kotlinx.android.synthetic.main.fragment_trail_info.view.*
  * Shows information about a trail
  * This fragment should be used as a nested fragment within a BottomSheet
  * @param trail : the related trail
+ * @param isEditable : true if the info can be edited
  ************************************************************************************************/
 
-class TrailInfoFragment(private val trail: Trail?=null) : BaseDataFlowFragment() {
+class TrailInfoFragment(
+    private val trail: Trail?=null,
+    private val isEditable:Boolean=false
+)
+    : BaseInfoFragment()
+{
 
     /**********************************UI component**********************************************/
 
+    private val photoImageView by lazy {layout.fragment_trail_info_image_view_photo}
     private val nameText by lazy {layout.fragment_trail_info_text_name}
     private val editButton by lazy {layout.fragment_trail_info_button_edit}
     private val levelImage by lazy {layout.fragment_trail_info_image_level}
     private val levelText by lazy {layout.fragment_trail_info_text_level}
     private val durationText by lazy {layout.fragment_trail_info_text_duration}
-    private val photosRecyclerView by lazy {layout.fragment_trail_info_recycler_view_photos}
-    private lateinit var photoAdapter:PhotoAdapter
     private val ascentText by lazy {layout.fragment_trail_info_text_ascent}
     private val descentText by lazy {layout.fragment_trail_info_text_descent}
     private val distanceText by lazy {layout.fragment_trail_info_text_distance}
@@ -33,13 +40,13 @@ class TrailInfoFragment(private val trail: Trail?=null) : BaseDataFlowFragment()
     private val locationText by lazy {layout.fragment_trail_info_text_location}
     private val descriptionText by lazy {layout.fragment_trail_info_text_description}
 
-    /**************************************Data**************************************************/
-
-    private val photosUrls:ArrayList<String> = arrayListOf()        //The list of photos urls of the trail
-
     /***********************************UI monitoring********************************************/
 
     override fun getLayoutId(): Int = R.layout.fragment_trail_info
+
+    override fun getTopViewId(): Int = R.id.fragment_trail_info_image_view_photo
+
+    override fun getBottomViewId(): Int = R.id.fragment_trail_info_layout_info
 
     override fun initializeUI() {
         initializeNameText()
@@ -47,7 +54,6 @@ class TrailInfoFragment(private val trail: Trail?=null) : BaseDataFlowFragment()
         initializeLevelImage()
         initializeLevelText()
         initializeDuration()
-        initializePhotosRecyclerView()
         initializeAscentText()
         initializeDescentText()
         initializeDistanceText()
@@ -55,7 +61,7 @@ class TrailInfoFragment(private val trail: Trail?=null) : BaseDataFlowFragment()
         initializeMinElevationText()
         initializeLocationText()
         initializeDescriptionText()
-        updatePhotos()
+        updatePhoto()
     }
 
     private fun initializeNameText(){
@@ -63,8 +69,13 @@ class TrailInfoFragment(private val trail: Trail?=null) : BaseDataFlowFragment()
     }
 
     private fun initializeEditButton(){
-        this.editButton.setOnClickListener {
-            (parentFragment as BaseTrailMapFragment).editTrailInfo()
+        if(this.isEditable){
+            this.editButton.visibility= View.VISIBLE
+            this.editButton.setOnClickListener {
+                (parentFragment as BaseTrailMapFragment).editTrailInfo()
+            }
+        }else{
+            this.editButton.visibility= View.GONE
         }
     }
 
@@ -89,11 +100,6 @@ class TrailInfoFragment(private val trail: Trail?=null) : BaseDataFlowFragment()
     private fun initializeDuration(){
         val durationToDisplay=MetricsHelper.displayDuration(context!!, this.trail?.duration?.toLong())
         this.durationText.text=durationToDisplay
-    }
-
-    private fun initializePhotosRecyclerView(){
-        this.photoAdapter= PhotoAdapter(this.photosUrls)
-        this.photosRecyclerView.adapter=this.photoAdapter
     }
 
     private fun initializeAscentText(){
@@ -144,9 +150,11 @@ class TrailInfoFragment(private val trail: Trail?=null) : BaseDataFlowFragment()
         }
     }
 
-    private fun updatePhotos(){
-        this.photosUrls.clear()
-        this.trail?.getAllPhotosUrls()?.let { this.photosUrls.addAll(it) }
-        this.photoAdapter.notifyDataSetChanged()
+    private fun updatePhoto(){
+        Glide.with(context!!)
+            .load(this.trail?.mainPhotoUrl)
+            .apply(RequestOptions.centerCropTransform())
+            .placeholder(R.drawable.ic_trail_black)
+            .into(this.photoImageView)
     }
 }

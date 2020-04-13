@@ -1,9 +1,10 @@
 package com.sildian.apps.togetrail.trail.info
 
+import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.textfield.TextInputEditText
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
 import com.sildian.apps.togetrail.trail.map.BaseTrailMapFragment
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
@@ -14,18 +15,20 @@ import kotlinx.android.synthetic.main.fragment_trail_poi_info.view.*
  * This fragment should be used as a nested fragment within a BottomSheet
  * @param trailPointOfInterest : the related point of interest
  * @param trailPointOfInterestPosition : the position of the trailPointOfInterest in the trailTrack
+ * @param isEditable : true if the info can be edited
  ************************************************************************************************/
 
 class TrailPOIInfoFragment (
     private val trailPointOfInterest: TrailPointOfInterest?=null,
-    private val trailPointOfInterestPosition:Int?=null
+    private val trailPointOfInterestPosition:Int?=null,
+    private val isEditable:Boolean=false
 )
-    : BaseDataFlowFragment() {
+    : BaseInfoFragment() {
 
     /**********************************UI component**********************************************/
 
-    private val nameText by lazy {layout.fragment_trail_poi_info_text_name}
     private val photoImageView by lazy {layout.fragment_trail_poi_info_image_view_photo}
+    private val nameText by lazy {layout.fragment_trail_poi_info_text_name}
     private val editButton by lazy {layout.fragment_trail_poi_info_button_edit}
     private val elevationText by lazy {layout.fragment_trail_poi_info_text_elevation}
     private val descriptionText by lazy {layout.fragment_trail_poi_info_text_description}
@@ -33,6 +36,10 @@ class TrailPOIInfoFragment (
     /***********************************UI monitoring********************************************/
 
     override fun getLayoutId(): Int = R.layout.fragment_trail_poi_info
+
+    override fun getTopViewId(): Int = R.id.fragment_trail_poi_info_image_view_photo
+
+    override fun getBottomViewId(): Int = R.id.fragment_trail_poi_info_layout_info
 
     override fun initializeUI() {
         initializeNameText()
@@ -47,9 +54,14 @@ class TrailPOIInfoFragment (
     }
 
     private fun initializeEditButton(){
-        this.editButton.setOnClickListener {
-            (parentFragment as BaseTrailMapFragment)
-                .editTrailPoiInfo(this.trailPointOfInterestPosition!!)
+        if(isEditable){
+            this.editButton.visibility= View.VISIBLE
+            this.editButton.setOnClickListener {
+                (parentFragment as BaseTrailMapFragment)
+                    .editTrailPoiInfo(this.trailPointOfInterestPosition!!)
+            }
+        }else{
+            this.editButton.visibility=View.GONE
         }
     }
 
@@ -71,7 +83,7 @@ class TrailPOIInfoFragment (
     private fun updatePhoto(){
         Glide.with(context!!)
             .load(this.trailPointOfInterest?.photoUrl)
-            .apply(RequestOptions.fitCenterTransform())
+            .apply(RequestOptions.centerCropTransform())
             .placeholder(R.drawable.ic_trail_black)
             .into(this.photoImageView)
     }

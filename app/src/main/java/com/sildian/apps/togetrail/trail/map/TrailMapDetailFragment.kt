@@ -12,7 +12,9 @@ import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
  * Shows a specific trail on the map and allows to see all its detail information
  ************************************************************************************************/
 
-class TrailMapDetailFragment(trail: Trail?=null) : BaseTrailMapFragment(trail) {
+class TrailMapDetailFragment(trail: Trail?=null, isEditable:Boolean=false)
+    : BaseTrailMapFragment(trail, isEditable)
+{
 
     /************************************UI monitoring*******************************************/
 

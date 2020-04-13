@@ -11,6 +11,7 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorGreen">#388E3C</color>
     <color name="colorPurple">#673ab7</color>
+    <color name="colorBlue">#1976d2</color>
     <color name="colorYellow">#FBC02D</color>
     <color name="colorRed">#D32F2F</color>
 </resources>

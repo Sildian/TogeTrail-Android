@@ -38,15 +38,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fragment_trail_map_record_button_play"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/components_margin_medium"
-            app:srcCompat="@drawable/ic_record_play_white"
-            app:layout_anchor="@id/fragment_trail_map_record_bottom_sheet_info"
-            app:layout_anchorGravity="center_horizontal" />
-
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/fragment_trail_map_record_bottom_sheet_info"
             android:layout_width="match_parent"
@@ -64,6 +55,16 @@
                 android:layout_height="wrap_content"/>
 
         </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fragment_trail_map_record_button_play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/components_margin_medium"
+            app:elevation="@dimen/components_elevation"
+            app:srcCompat="@drawable/ic_record_play_white"
+            app:layout_anchor="@id/fragment_trail_map_record_bottom_sheet_info"
+            app:layout_anchorGravity="center_horizontal" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

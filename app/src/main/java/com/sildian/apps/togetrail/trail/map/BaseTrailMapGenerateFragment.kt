@@ -12,7 +12,7 @@ import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
  ************************************************************************************************/
 
 abstract class BaseTrailMapGenerateFragment :
-    BaseTrailMapFragment(),
+    BaseTrailMapFragment(isEditable = true),
     GoogleMap.InfoWindowAdapter,
     GoogleMap.OnInfoWindowClickListener
 {

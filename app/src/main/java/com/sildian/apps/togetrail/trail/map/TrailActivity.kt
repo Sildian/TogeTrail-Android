@@ -3,7 +3,6 @@ package com.sildian.apps.togetrail.trail.map
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
@@ -63,19 +62,13 @@ class TrailActivity : BaseDataFlowActivity() {
 
     private var currentAction= ACTION_TRAIL_SEE                 //Action defining what the user is performing
     private var trail: Trail?=null                              //Current trail shown
+    private var isEditable = false                              //True if the trail is editable
 
     /**********************************UI component**********************************************/
 
     private val toolbar by lazy {activity_trail_toolbar}
     private var fragment: BaseTrailMapFragment?=null
     private var progressDialog:AlertDialog?=null
-
-    /************************************Life cycle**********************************************/
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        startTrailAction()
-    }
 
     /********************************Navigation control******************************************/
 
@@ -155,8 +148,12 @@ class TrailActivity : BaseDataFlowActivity() {
                 val trailId=intent.getStringExtra(KEY_BUNDLE_TRAIL_ID)
                 trailId?.let { id -> loadTrailFromDatabase(id) }
             }
-            if(intent.hasExtra(KEY_BUNDLE_TRAIL)) {
+            else if(intent.hasExtra(KEY_BUNDLE_TRAIL)) {
                 this.trail = intent.getParcelableExtra(KEY_BUNDLE_TRAIL)
+                startTrailAction()
+            }
+            else{
+                startTrailAction()
             }
         }
     }
@@ -177,7 +174,8 @@ class TrailActivity : BaseDataFlowActivity() {
 
     private fun handleTrailResult(trail:Trail?){
         this.trail=trail
-        this.fragment?.updateData(this.trail)
+        startTrailAction()
+        //this.fragment?.updateData(this.trail)
     }
 
     /**
@@ -359,7 +357,7 @@ class TrailActivity : BaseDataFlowActivity() {
     private fun showFragment(fragmentId:Int){
         when(fragmentId){
             ID_FRAGMENT_TRAIL_DETAIL ->
-                this.fragment= TrailMapDetailFragment(this.trail)
+                this.fragment= TrailMapDetailFragment(this.trail, this.isEditable)
             ID_FRAGMENT_TRAIL_DRAW ->
                 this.fragment = TrailMapDrawFragment()
             ID_FRAGMENT_TRAIL_RECORD ->
@@ -376,16 +374,22 @@ class TrailActivity : BaseDataFlowActivity() {
     private fun startTrailAction(){
         when(this.currentAction){
             ACTION_TRAIL_SEE -> {
+                this.isEditable=AuthFirebaseHelper.getCurrentUser()?.uid==this.trail?.authorId
                 showFragment(ID_FRAGMENT_TRAIL_DETAIL)
             }
             ACTION_TRAIL_CREATE_FROM_GPX ->{
+                this.isEditable=true
                 showFragment(ID_FRAGMENT_TRAIL_DETAIL)
                 startLoadGpx()
             }
-            ACTION_TRAIL_DRAW ->
+            ACTION_TRAIL_DRAW -> {
+                this.isEditable=true
                 showFragment(ID_FRAGMENT_TRAIL_DRAW)
-            ACTION_TRAIL_RECORD ->
+            }
+            ACTION_TRAIL_RECORD -> {
+                this.isEditable=true
                 showFragment(ID_FRAGMENT_TRAIL_RECORD)
+            }
         }
     }
 

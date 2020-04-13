@@ -2,7 +2,6 @@ package com.sildian.apps.togetrail.trail.map
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +16,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.MapMarkersUtilities
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
+import com.sildian.apps.togetrail.trail.info.BaseInfoFragment
 import com.sildian.apps.togetrail.trail.info.TrailInfoFragment
 import com.sildian.apps.togetrail.trail.info.TrailPOIInfoFragment
 import com.sildian.apps.togetrail.trail.model.core.Trail
@@ -25,9 +26,13 @@ import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 /*************************************************************************************************
  * Base for all Trail fragments using a map
  * @param trail : the trail to show
+ * @param isEditable : true if the trail is editable
  ************************************************************************************************/
 
-abstract class BaseTrailMapFragment (protected var trail:Trail?=null) :
+abstract class BaseTrailMapFragment (
+    protected var trail:Trail?=null,
+    protected var isEditable:Boolean=false
+) :
     BaseDataFlowFragment(),
     OnMapReadyCallback,
     GoogleMap.OnMapClickListener,
@@ -47,9 +52,9 @@ abstract class BaseTrailMapFragment (protected var trail:Trail?=null) :
 
     /**********************************UI component**********************************************/
 
-    protected lateinit var mapView:MapView              //The map view
+    protected lateinit var mapView:MapView                              //The map view
     protected lateinit var infoBottomSheet:BottomSheetBehavior<View>    //Bottom sheet with additional info
-    protected lateinit var infoFragment:Fragment        //Nested fragment allowing to see info about the trail
+    protected lateinit var infoFragment:BaseInfoFragment                //Nested fragment allowing to see info about the trail
 
     /**************************************Map support*******************************************/
 
@@ -299,12 +304,20 @@ abstract class BaseTrailMapFragment (protected var trail:Trail?=null) :
     }
 
     inner class InfoBottomSheetCallback:BottomSheetBehavior.BottomSheetCallback(){
+
         override fun onSlide(bottomSheet: View, slideOffset: Float) {
-            //TODO implement
+
+            /*If the offset is above 0, drags the view, else hides it*/
+
+            if(slideOffset>0){
+                infoFragment.dragView(slideOffset)
+            }else{
+                infoFragment.hideView()
+            }
         }
 
         override fun onStateChanged(bottomSheet: View, newState: Int) {
-            //TODO implement
+            //Nothing
         }
     }
 
@@ -312,7 +325,7 @@ abstract class BaseTrailMapFragment (protected var trail:Trail?=null) :
 
     fun showTrailInfoFragment(){
         this.infoFragment=
-            TrailInfoFragment(this.trail)
+            TrailInfoFragment(this.trail, this.isEditable)
         childFragmentManager.beginTransaction()
             .replace(getInfoFragmentId(), this.infoFragment).commit()
         collapseInfoBottomSheet()
@@ -321,7 +334,7 @@ abstract class BaseTrailMapFragment (protected var trail:Trail?=null) :
     fun showTrailPOIInfoFragment(trailPointOfInterest: TrailPointOfInterest, trailPointOfInterestPosition:Int){
         this.infoFragment=
             TrailPOIInfoFragment(
-                trailPointOfInterest, trailPointOfInterestPosition
+                trailPointOfInterest, trailPointOfInterestPosition, this.isEditable
             )
         childFragmentManager.beginTransaction()
             .replace(getInfoFragmentId(), this.infoFragment).commit()
