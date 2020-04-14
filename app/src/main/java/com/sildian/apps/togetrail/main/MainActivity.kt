@@ -24,6 +24,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
@@ -92,8 +93,8 @@ class MainActivity :
 
     /*************************************Queries************************************************/
 
-    private var trailsQuery=TrailFirebaseQueries.getLastTrails()    //The current query used to fetch trails
-    private var eventsQuery=EventFirebaseQueries.getNextEvents()    //The current query used to fetch events
+    var trailsQuery=TrailFirebaseQueries.getLastTrails();private set    //The current query used to fetch trails
+    var eventsQuery=EventFirebaseQueries.getNextEvents();private set    //The current query used to fetch events
 
     /**********************************UI component**********************************************/
 
@@ -114,6 +115,7 @@ class MainActivity :
     }
     private val bottomNavigationView by lazy {activity_main_bottom_navigation_view}
     private val addButton by lazy {activity_main_button_add}
+    private val messageView by lazy {activity_main_view_message}
 
     /************************************Life cycle**********************************************/
 
@@ -359,8 +361,14 @@ class MainActivity :
 
     private fun handleTrailsResult(trails:List<Trail>){
         this.progressbar.visibility= View.GONE
-        this.trails=trails
-        this.fragment?.updateData(this.trails)
+        if(trails.isNotEmpty()) {
+            this.trails = trails
+            this.fragment?.updateData(this.trails)
+        }else{
+            Snackbar.make(this.messageView, R.string.message_query_result_empty, Snackbar.LENGTH_LONG)
+                .setAnchorView(this.addButton)
+                .show()
+        }
     }
 
     /**Loads the events from the database**/
@@ -377,8 +385,14 @@ class MainActivity :
 
     private fun handleEventsResult(events:List<Event>){
         this.progressbar.visibility= View.GONE
-        this.events=events
-        this.fragment?.updateData(this.events)
+        if(events.isNotEmpty()) {
+            this.events = events
+            this.fragment?.updateData(this.events)
+        }else{
+            Snackbar.make(this.messageView, R.string.message_query_result_empty, Snackbar.LENGTH_LONG)
+                .setAnchorView(this.addButton)
+                .show()
+        }
     }
 
     /**
@@ -391,6 +405,10 @@ class MainActivity :
         this.eventsQueryRegistration?.remove()
         this.trailsQuery=TrailFirebaseQueries.getTrailsAroundPoint(point)
         this.eventsQuery=EventFirebaseQueries.getEventsAroundPoint(point)
+        when (this.fragment) {
+            is TrailsListFragment -> this.fragment?.updateData(this.trailsQuery)
+            is EventsListFragment -> this.fragment?.updateData(this.eventsQuery)
+        }
     }
 
     /**
@@ -405,6 +423,10 @@ class MainActivity :
             this.trailsQuery = TrailFirebaseQueries.getTrailsNearbyLocation(location)!!
             this.eventsQuery = EventFirebaseQueries.getEventsNearbyLocation(location)!!
             this.fragment?.updateData(null)
+            when (this.fragment) {
+                is TrailsListFragment -> this.fragment?.updateData(this.trailsQuery)
+                is EventsListFragment -> this.fragment?.updateData(this.eventsQuery)
+            }
         }
     }
 
@@ -509,7 +531,7 @@ class MainActivity :
     private fun showFragment(fragmentId:Int){
         when(fragmentId){
             ID_FRAGMENT_MAP->
-                this.fragment= TrailMapFragment(this.trails)
+                this.fragment= TrailMapFragment(this.trails, this.events)
             ID_FRAGMENT_TRAILS->
                 this.fragment=TrailsListFragment(this.currentUser)
             ID_FRAGMENT_EVENTS->

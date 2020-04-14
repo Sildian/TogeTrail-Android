@@ -219,7 +219,11 @@ abstract class BaseImagePickerFragment : BaseDataFlowFragment() {
             override fun onImagePickerError(error: Throwable, source: MediaSource) {
                 super.onImagePickerError(error, source)
                 Log.w(TAG, error.message.toString())
-                //TODO handle
+                DialogHelper.createInfoDialog(
+                    context!!,
+                    R.string.message_file_failure,
+                    R.string.message_file_failure_image
+                ).show()
             }
         })
     }

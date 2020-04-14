@@ -12,6 +12,49 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/fragment_events_list_text_current_research"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/components_margin_medium"
+            android:layout_marginBottom="@dimen/components_margin_small"
+            android:layout_marginStart="@dimen/components_margin_medium"
+            android:layout_marginEnd="@dimen/components_margin_medium"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_size_title"
+            android:textColor="@color/colorSecondaryDark"
+            android:text="@string/label_event_list_current_research"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragment_events_list_recycler_view_current_research"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:reverseLayout="false"/>
+
+        <TextView
+            android:id="@+id/fragment_events_list_text_i_attend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/components_margin_medium"
+            android:layout_marginBottom="@dimen/components_margin_small"
+            android:layout_marginStart="@dimen/components_margin_medium"
+            android:layout_marginEnd="@dimen/components_margin_medium"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_size_title"
+            android:textColor="@color/colorSecondaryDark"
+            android:text="@string/label_event_list_i_attend"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragment_events_list_recycler_view_i_attend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:reverseLayout="false"/>
+
+        <TextView
+            android:id="@+id/fragment_events_list_text_next_events"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/components_margin_medium"
@@ -32,6 +75,7 @@
             app:reverseLayout="false"/>
 
         <TextView
+            android:id="@+id/fragment_events_list_text_my_events"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/components_margin_medium"
@@ -52,6 +96,7 @@
             app:reverseLayout="false"/>
 
         <TextView
+            android:id="@+id/fragment_events_list_text_nearby_home"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/components_margin_medium"
@@ -61,10 +106,10 @@
             android:textStyle="bold"
             android:textSize="@dimen/text_size_title"
             android:textColor="@color/colorSecondaryDark"
-            android:text="@string/label_event_list_nearby_events"/>
+            android:text="@string/label_event_list_nearby_home"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/fragment_events_list_recycler_view_nearby_events"
+            android:id="@+id/fragment_events_list_recycler_view_nearby_home"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"

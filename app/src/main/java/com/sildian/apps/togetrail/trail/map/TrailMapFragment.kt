@@ -154,20 +154,19 @@ class TrailMapFragment (
     override fun onMapReadyActionsFinished() {
         this.map?.setInfoWindowAdapter(this)
         this.map?.setOnInfoWindowClickListener(this)
-        if(this.trails.isEmpty()){
-            if(this.showTrails) {
-                (activity as MainActivity).loadTrailsFromDatabase()
-            }
-            if(this.showEvents) {
-                (activity as MainActivity).loadEventsFromDatabase()
-            }
-        }else {
-            if(this.showTrails) {
-                showTrailsOnMap()
-            }
-            if(this.showEvents) {
-                showEventsOnMap()
-            }
+        when{
+            this.showTrails ->
+                if(this.trails.isEmpty()) {
+                    (activity as MainActivity).loadTrailsFromDatabase()
+                }else{
+                    showTrailsOnMap()
+                }
+            this.showEvents ->
+                if(this.events.isEmpty()){
+                    (activity as MainActivity).loadEventsFromDatabase()
+                }else{
+                    showEventsOnMap()
+                }
         }
     }
 

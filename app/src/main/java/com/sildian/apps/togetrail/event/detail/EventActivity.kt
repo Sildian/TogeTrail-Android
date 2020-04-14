@@ -211,8 +211,6 @@ class EventActivity : BaseDataFlowActivity() {
                 updateEvent(event)
                 deleteHikerAttendedEvent(hiker.id, event.id.toString())
                 deleteEventRegisteredHiker(event.id.toString(), hiker.id)
-
-                //TODO should be nice to remove the related history item
             }
         }
     }

@@ -3,6 +3,7 @@ package com.sildian.apps.togetrail.trail.selection
 import android.app.Activity
 import android.content.Intent
 import android.view.View
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -12,6 +13,8 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowActivity
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
+import com.sildian.apps.togetrail.location.model.core.Location
+import com.sildian.apps.togetrail.location.search.LocationSearchActivity
 import com.sildian.apps.togetrail.trail.map.TrailActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.support.TrailFirebaseQueries
@@ -30,10 +33,14 @@ class TrailSelectionActivity : BaseDataFlowActivity() {
         /**Bundle keys for intents**/
         const val KEY_BUNDLE_SELECTED_TRAILS="KEY_BUNDLE_SELECTED_TRAILS"
 
-        /**Queries keys**/
+        /**Queries keys for hashMap**/
         private const val KEY_QUERY_LAST_TRAILS="KEY_QUERY_LAST_TRAILS"
         private const val KEY_QUERY_MY_TRAILS="KEY_QUERY_MY_TRAILS"
         private const val KEY_QUERY_TRAILS_NEARBY_HOME="KEY_QUERY_TRAILS_NEARBY_HOME"
+        private const val KEY_QUERY_CURRENT_RESEARCH="KEY_QUERY_CURRENT_RESEARCH"
+
+        /**Request keys for activities**/
+        private const val KEY_REQUEST_LOCATION_SEARCH=1001
     }
 
     /**************************************Data**************************************************/
@@ -45,6 +52,7 @@ class TrailSelectionActivity : BaseDataFlowActivity() {
     /**********************************UI component**********************************************/
 
     private val toolbar by lazy {activity_trail_selection_toolbar}
+    private val searchTextField by lazy {activity_trail_selection_text_field_research}
     private val progressbar by lazy {activity_trail_selection_progressbar}
     private val viewpagerLayout by lazy {activity_trail_selection_layout_viewpager}
     private val tabs by lazy {activity_trail_selection_tabs}
@@ -94,7 +102,7 @@ class TrailSelectionActivity : BaseDataFlowActivity() {
 
     private fun defineTrailsQueries(){
 
-        /*Adds the last added trails query*/
+        /*Adds the last trails query*/
 
         this.trailsQueries[KEY_QUERY_LAST_TRAILS]=
             TrailFirebaseQueries.getLastTrails()
@@ -115,6 +123,22 @@ class TrailSelectionActivity : BaseDataFlowActivity() {
                     TrailFirebaseQueries.getTrailsNearbyLocation(user.liveLocation)!!
             }
         }
+
+        /*Adds the current research query (set to last trails by default)*/
+
+        this.trailsQueries[KEY_QUERY_CURRENT_RESEARCH] =
+            TrailFirebaseQueries.getLastTrails()
+    }
+
+    private fun setResearchQuery(location: Location){
+        if(location.country!=null) {
+            this.trailsQueries[KEY_QUERY_CURRENT_RESEARCH] =
+                TrailFirebaseQueries.getTrailsNearbyLocation(location)!!
+            this.pager.adapter?.notifyDataSetChanged()
+            val index=this.trailsQueries.keys.toList().indexOf(KEY_QUERY_CURRENT_RESEARCH)
+            this.pager.setCurrentItem(index, true)
+            showViewPager()
+        }
     }
 
     /*************************************UI monitoring******************************************/
@@ -123,12 +147,19 @@ class TrailSelectionActivity : BaseDataFlowActivity() {
 
     override fun initializeUI() {
         initializeToolbar()
+        initializeSearchTextField()
     }
 
     private fun initializeToolbar(){
         setSupportActionBar(this.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setTitle(R.string.toolbar_event_select_trails)
+    }
+
+    private fun initializeSearchTextField(){
+        this.searchTextField.setOnClickListener {
+            startLocationSearchActivity()
+        }
     }
 
     private fun activateValidateButton(){
@@ -165,7 +196,8 @@ class TrailSelectionActivity : BaseDataFlowActivity() {
             when(this.trailsQueries.keys.toList()[position]){
                 KEY_QUERY_LAST_TRAILS -> tab.setText(R.string.label_trail_list_last_added)
                 KEY_QUERY_MY_TRAILS -> tab.setText(R.string.label_trail_list_my_trails)
-                KEY_QUERY_TRAILS_NEARBY_HOME -> tab.setText(R.string.label_trail_list_nearby_trails)
+                KEY_QUERY_TRAILS_NEARBY_HOME -> tab.setText(R.string.label_trail_list_nearby_home)
+                KEY_QUERY_CURRENT_RESEARCH -> tab.setText(R.string.label_trail_list_current_research)
             }
         }.attach()
     }
@@ -183,6 +215,8 @@ class TrailSelectionActivity : BaseDataFlowActivity() {
 
     /*************************************Navigation*********************************************/
 
+    /**Starts Trail Activity**/
+
     private fun startTrailActivity(trail:Trail){
         val trailActivityIntent= Intent(this, TrailActivity::class.java)
         trailActivityIntent.putExtra(TrailActivity.KEY_BUNDLE_TRAIL_ACTION, TrailActivity.ACTION_TRAIL_SEE)
@@ -190,12 +224,46 @@ class TrailSelectionActivity : BaseDataFlowActivity() {
         startActivity(trailActivityIntent)
     }
 
+    /**Starts the LocationSearchActivity**/
+
+    private fun startLocationSearchActivity(){
+        val locationSearchActivity=Intent(this, LocationSearchActivity::class.java)
+        startActivityForResult(locationSearchActivity, KEY_REQUEST_LOCATION_SEARCH)
+    }
+
+    /**Activity result**/
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when(requestCode){
+            KEY_REQUEST_LOCATION_SEARCH -> handleLocationSearchResult(resultCode, data)
+        }
+    }
+
+    /**Handles location search result**/
+
+    private fun handleLocationSearchResult(resultCode: Int, data: Intent?){
+        if(resultCode== Activity.RESULT_OK){
+            if(data!=null && data.hasExtra(LocationSearchActivity.KEY_BUNDLE_LOCATION)){
+                val location=data.getParcelableExtra<Location>(LocationSearchActivity.KEY_BUNDLE_LOCATION)
+                location?.let { loc ->
+                    this.searchTextField.setText(loc.toString())
+                    setResearchQuery(loc)
+                }
+            }
+        }
+    }
+
+    /**Finishes with Ok result**/
+
     private fun finishOk(){
         val resultIntent=Intent()
         resultIntent.putExtra(KEY_BUNDLE_SELECTED_TRAILS, this.selectedTrails)
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
     }
+
+    /**Finishes with cancel result**/
 
     private fun finishCancel(){
         setResult(Activity.RESULT_CANCELED)

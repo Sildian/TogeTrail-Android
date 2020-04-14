@@ -85,9 +85,10 @@
     <string name="label_trail_distance_short">Dist</string>
     <string name="label_trail_max_elevation_short">Alt max</string>
     <string name="label_trail_min_elevation_short">Alt min</string>
-    <string name="label_trail_list_last_added">Dernières randos ajoutées</string>
+    <string name="label_trail_list_last_added">Dernières randos</string>
     <string name="label_trail_list_my_trails">Mes randos à moi</string>
-    <string name="label_trail_list_nearby_trails">Les randos proches de chez moi</string>
+    <string name="label_trail_list_nearby_home">Les randos proches de chez moi</string>
+    <string name="label_trail_list_current_research">Recherche en cours</string>
     <!-- TrailPointOfInterest -->
     <string name="label_trail_poi_main_info">Infos principales</string>
     <string name="label_trail_poi_name">Nom</string>
@@ -133,9 +134,11 @@
     <string name="label_event_registered_hikers_plur">personnes participent</string>
     <string name="label_event_day">jour</string>
     <string name="label_event_days">jours</string>
+    <string name="label_event_list_i_attend">Je participe</string>
     <string name="label_event_list_next_events">Prochains évènements</string>
     <string name="label_event_list_my_events">Mes évènements à moi</string>
-    <string name="label_event_list_nearby_events">Les évènements proches de chez moi</string>
+    <string name="label_event_list_nearby_home">Les évènements proches de chez moi</string>
+    <string name="label_event_list_current_research">Recherche en cours</string>
 
     <!-- Examples for layout preview -->
     <!-- Common -->
@@ -212,9 +215,11 @@
     <string name="message_file_failure_gpx_no_track">Les Gpx sans balise \'Track\' ne sont pas pris en compte. Ce fichier ne peut pas être chargé.</string>
     <string name="message_file_failure_gpx_too_many_tracks">Les Gpx incluant plus d\'une balise \'Track\' ne sont pas supportés. Ce fichier ne peut être chargé.</string>
     <string name="message_file_failure_gpx_other_reason">Ce fichier n\'a pas pu être chargé. Veuillez vérifier qu\'il s\'agit bien d\'un Gpx et qu\'il n\'est pas corrompu.</string>
+    <string name="message_file_failure_image">L\'image n\'a pas pu être chargée. Veuillez vérifier qu\'elle n\'est pas corrompue.</string>
     <string name="message_trail_info_empty_title">Infos manquantes</string>
     <string name="message_trail_info_empty_message">Les infos de la randos et de chaque point d\'intérêt doivent être indiquées.</string>
     <!-- Toasts / Snackbars -->
+    <string name="message_query_result_empty">Ah, aucun résultat ne correspond à votre recherche</string>
     <string name="message_text_fields_empty">Certains champs sont vides</string>
     <string name="message_trail_info_empty">Les infos de la rando doivent être indiquées</string>
     <string name="message_trail_poi_info_empty">Les infos de chaque point d\'intérêt doivent être indiquées</string>

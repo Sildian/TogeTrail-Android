@@ -79,6 +79,25 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/activity_main_view_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/activity_main_bottom_navigation_view"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/activity_main_button_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/components_margin_medium"
+                android:layout_gravity="bottom|end"
+                android:clickable="true"
+                android:focusable="true"
+                app:srcCompat="@drawable/ic_add_black" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/activity_main_bottom_navigation_view"
             android:layout_width="0dp"
@@ -87,17 +106,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:menu="@menu/menu_main"/>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/activity_main_button_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/components_margin_medium"
-            app:layout_constraintBottom_toTopOf="@id/activity_main_bottom_navigation_view"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:clickable="true"
-            android:focusable="true"
-            app:srcCompat="@drawable/ic_add_black" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
