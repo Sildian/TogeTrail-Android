@@ -79,7 +79,10 @@ class TrailSelectionActivity : BaseDataFlowActivity() {
     private fun readDataFromIntent(){
         if(intent!=null){
             if(intent.hasExtra(KEY_BUNDLE_SELECTED_TRAILS)){
-                this.selectedTrails=intent.getParcelableArrayListExtra(KEY_BUNDLE_SELECTED_TRAILS)
+                val trails=intent.getParcelableArrayListExtra<Trail>(KEY_BUNDLE_SELECTED_TRAILS)
+                if(trails!=null) {
+                    this.selectedTrails = trails
+                }
             }
         }
     }

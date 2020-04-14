@@ -51,7 +51,16 @@ class TrailSelectionViewHolder (
     /**************************************Init**************************************************/
 
     init{
+        setOnTrailClickListener()
+        setOnTrailSelectListener()
+    }
+
+    private fun setOnTrailClickListener(){
         this.infoLayout.setOnClickListener { this.onTrailClickListener?.onTrailClick(this.trail) }
+    }
+
+    @Suppress("UNUSED_ANONYMOUS_PARAMETER")
+    private fun setOnTrailSelectListener(){
         this.checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
             when(isChecked){
                 true -> this.onTrailSelectListener.onTrailSelected(this.trail)

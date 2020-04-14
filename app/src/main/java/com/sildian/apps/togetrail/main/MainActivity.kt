@@ -606,7 +606,10 @@ class MainActivity :
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setTheme(R.style.LoginTheme)
-                .setAvailableProviders(listOf(AuthUI.IdpConfig.EmailBuilder().build()))
+                .setAvailableProviders(listOf(
+                    AuthUI.IdpConfig.EmailBuilder().build(),
+                    AuthUI.IdpConfig.GoogleBuilder().build()
+                ))
                 .setIsSmartLockEnabled(false, true)
                 .build(),
             KEY_REQUEST_LOGIN
