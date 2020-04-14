@@ -1,7 +1,6 @@
 package com.sildian.apps.togetrail.event.edit
 
 import android.app.Activity
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -247,10 +246,6 @@ class EventEditActivity : BaseDataFlowActivity() {
 
     override fun initializeUI() {
         initializeToolbar()
-    }
-
-    override fun refreshUI() {
-        //Nothing
     }
 
     private fun initializeToolbar(){

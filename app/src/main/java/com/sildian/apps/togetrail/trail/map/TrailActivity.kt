@@ -142,16 +142,18 @@ class TrailActivity : BaseDataFlowActivity() {
                 this.currentAction=
                     intent.getIntExtra(KEY_BUNDLE_TRAIL_ACTION, ACTION_TRAIL_SEE)
             }
-            if(intent.hasExtra(KEY_BUNDLE_TRAIL_ID)) {
-                val trailId=intent.getStringExtra(KEY_BUNDLE_TRAIL_ID)
-                trailId?.let { id -> loadTrailFromDatabase(id) }
-            }
-            else if(intent.hasExtra(KEY_BUNDLE_TRAIL)) {
-                this.trail = intent.getParcelableExtra(KEY_BUNDLE_TRAIL)
-                startTrailAction()
-            }
-            else{
-                startTrailAction()
+            when {
+                intent.hasExtra(KEY_BUNDLE_TRAIL_ID) -> {
+                    val trailId=intent.getStringExtra(KEY_BUNDLE_TRAIL_ID)
+                    trailId?.let { id -> loadTrailFromDatabase(id) }
+                }
+                intent.hasExtra(KEY_BUNDLE_TRAIL) -> {
+                    this.trail = intent.getParcelableExtra(KEY_BUNDLE_TRAIL)
+                    startTrailAction()
+                }
+                else -> {
+                    startTrailAction()
+                }
             }
         }
     }

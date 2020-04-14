@@ -21,14 +21,6 @@ object TrailFirebaseQueries {
     /*************************************Queries************************************************/
 
     /**
-     * Gets the trails from the database
-     * @return a query
-     */
-
-    fun getTrails():Query =
-        getCollection().orderBy("creationDate", Query.Direction.DESCENDING)
-
-    /**
      * Gets the 20 last created trails
      * @return a query
      */

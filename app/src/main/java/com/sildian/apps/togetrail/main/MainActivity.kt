@@ -140,6 +140,7 @@ class MainActivity :
 
     /**Click on menu item from...**/
 
+    @Suppress("UNUSED_ANONYMOUS_PARAMETER")
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 
         return when(item.groupId) {
@@ -212,6 +213,7 @@ class MainActivity :
 
     /**Click on menu item from PopupMenu**/
 
+    @Suppress("UNUSED_ANONYMOUS_PARAMETER")
     private fun onPopupMenuItemClick(item: MenuItem?): Boolean {
 
         /*Allows the user to use these features only if he is connected*/
@@ -416,6 +418,7 @@ class MainActivity :
      * @param location : the location
      */
 
+    @Suppress("MemberVisibilityCanBePrivate")
     fun setQueriesToSearchAroundLocation(location:Location){
         if(location.country!=null) {
             this.trailsQueryRegistration?.remove()

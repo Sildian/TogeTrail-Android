@@ -25,7 +25,7 @@ object PickerHelper {
         if(initialValue!=null) {
             editText.setText(DateUtilities.displayDateShort(initialValue))
         }
-        editText.setOnClickListener { v ->
+        editText.setOnClickListener {
             DatePickerDialogFragment(editText)
                 .show(activity.supportFragmentManager, "datePicker")
         }
@@ -43,7 +43,7 @@ object PickerHelper {
         if(initialValue!=null) {
             editText.setText(DateUtilities.displayTime(initialValue))
         }
-        editText.setOnClickListener { v ->
+        editText.setOnClickListener {
             TimePickerDialogFragment(editText)
                 .show(activity.supportFragmentManager, "timePicker")
         }

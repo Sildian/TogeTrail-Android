@@ -38,7 +38,7 @@ abstract class BaseImagePickerFragment : BaseDataFlowFragment() {
 
     /**********************************UI component**********************************************/
 
-    private lateinit var addPhotoBottomSheet: BottomSheetBehavior<View>
+    private lateinit var addPhotoBottomSheet: BottomSheetBehavior<View>     //Bottom sheet allowing to add photos
 
     /**********************************Pictures support******************************************/
 
@@ -192,22 +192,32 @@ abstract class BaseImagePickerFragment : BaseDataFlowFragment() {
 
     /***********************************Navigation***********************************************/
 
+    /**Starts selecting a photo in the device**/
+
     private fun startSelectPhoto(){
         this.easyImage.openGallery(this)
     }
 
+    /**Starts taking a photo with the device**/
+
     private fun startTakePhoto(){
         this.easyImage.openCameraForImage(this)
     }
+
+    /**Activity result**/
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         handleNewPhotoResult(requestCode, resultCode, data)
     }
 
+    /**Handles the photo result**/
+
     private fun handleNewPhotoResult(requestCode: Int, resultCode: Int, data: Intent?){
 
         this.easyImage.handleActivityResult(requestCode, resultCode, data, activity!!, object: DefaultCallback(){
+
+            /*If success, adds the photo*/
 
             override fun onMediaFilesPicked(imageFiles: Array<MediaFile>, source: MediaSource) {
                 Log.d(TAG, "Successfully added the new photo")
@@ -215,6 +225,8 @@ abstract class BaseImagePickerFragment : BaseDataFlowFragment() {
                     addPhoto(image.file.toURI().path)
                 }
             }
+
+            /*If error, shows a message*/
 
             override fun onImagePickerError(error: Throwable, source: MediaSource) {
                 super.onImagePickerError(error, source)

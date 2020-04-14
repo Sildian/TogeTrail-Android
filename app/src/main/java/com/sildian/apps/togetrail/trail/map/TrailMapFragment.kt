@@ -130,6 +130,7 @@ class TrailMapFragment (
         }
     }
 
+    @Suppress("UNUSED_ANONYMOUS_PARAMETER")
     private fun initializeFilterToggle(){
         this.filterToggle.addOnButtonCheckedListener { group, checkedId, isChecked ->
             when(checkedId){
@@ -235,6 +236,7 @@ class TrailMapFragment (
         }
         view.map_info_window_trail_text_name.text=trail.name
         when(trail.level){
+            TrailLevel.UNKNOWN -> view.map_info_window_trail_text_level.setText(R.string.label_trail_level_unknown)
             TrailLevel.EASY -> view.map_info_window_trail_text_level.setText(R.string.label_trail_level_easy)
             TrailLevel.MEDIUM -> view.map_info_window_trail_text_level.setText(R.string.label_trail_level_medium)
             TrailLevel.HARD -> view.map_info_window_trail_text_level.setText(R.string.label_trail_level_hard)

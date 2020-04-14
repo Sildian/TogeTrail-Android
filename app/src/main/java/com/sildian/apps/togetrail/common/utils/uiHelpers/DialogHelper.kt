@@ -35,6 +35,7 @@ object DialogHelper {
      * @param messageId : the resId for the message
      */
 
+    @Suppress("UNUSED_ANONYMOUS_PARAMETER")
     fun createInfoDialog(context: Context, titleId:Int, messageId:Int):AlertDialog {
         return MaterialAlertDialogBuilder(context)
             .setBackground(ContextCompat.getDrawable(

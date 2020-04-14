@@ -102,6 +102,7 @@ class TrailSelectionViewHolder (
 
     private fun updateLevelText(){
         when(this.trail.level){
+            TrailLevel.UNKNOWN -> this.levelText.setText(R.string.label_trail_level_unknown)
             TrailLevel.EASY -> this.levelText.setText(R.string.label_trail_level_easy)
             TrailLevel.MEDIUM -> this.levelText.setText(R.string.label_trail_level_medium)
             TrailLevel.HARD -> this.levelText.setText(R.string.label_trail_level_hard)

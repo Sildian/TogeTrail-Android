@@ -3,7 +3,6 @@ package com.sildian.apps.togetrail.trail.info
 import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.textfield.TextInputEditText
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
 import com.sildian.apps.togetrail.trail.map.BaseTrailMapFragment

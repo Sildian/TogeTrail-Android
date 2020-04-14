@@ -21,6 +21,7 @@ import kotlin.math.round
  * A view allowing to set a value by swiping the finger on a circular slider
  ************************************************************************************************/
 
+@Suppress("unused")
 class CircularSlider(context:Context, attrs:AttributeSet) : View(context, attrs) {
 
     /*************************************Callbacks**********************************************/
@@ -168,6 +169,8 @@ class CircularSlider(context:Context, attrs:AttributeSet) : View(context, attrs)
 
     /****************************************Draw***********************************************/
 
+    /**On draw**/
+
     override fun onDraw(canvas: Canvas?) {
         calculateCenter()
         drawBackSlider(canvas)
@@ -177,10 +180,14 @@ class CircularSlider(context:Context, attrs:AttributeSet) : View(context, attrs)
         }
     }
 
+    /**Refreshes the center of the view**/
+
     private fun calculateCenter(){
         this.centerX=this.width.toFloat()/2
         this.centerY=this.height.toFloat()/2
     }
+
+    /**Draws the back slider**/
 
     private fun drawBackSlider(canvas: Canvas?){
         canvas?.drawArc(
@@ -195,6 +202,8 @@ class CircularSlider(context:Context, attrs:AttributeSet) : View(context, attrs)
         )
     }
 
+    /**Draws the front slider**/
+
     private fun drawFrontSlider(canvas: Canvas?){
         canvas?.drawArc(
             RectF(0f+paddingLeft,
@@ -207,6 +216,8 @@ class CircularSlider(context:Context, attrs:AttributeSet) : View(context, attrs)
             this.frontSliderPaint
         )
     }
+
+    /**Draws the value text**/
 
     private fun drawValueText(canvas: Canvas?){
         val valueToDisplay=
@@ -239,9 +250,13 @@ class CircularSlider(context:Context, attrs:AttributeSet) : View(context, attrs)
 
     /***********************************Gestures************************************************/
 
+    /**Performs click**/
+
     override fun performClick(): Boolean {
         return super.performClick()
     }
+
+    /**Prevents the parent layout from getting the touch event**/
 
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
         if(event?.action == MotionEvent.ACTION_DOWN){
@@ -249,6 +264,8 @@ class CircularSlider(context:Context, attrs:AttributeSet) : View(context, attrs)
         }
         return super.dispatchTouchEvent(event)
     }
+
+    /**Touch event**/
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         performClick()
@@ -264,6 +281,8 @@ class CircularSlider(context:Context, attrs:AttributeSet) : View(context, attrs)
         }
     }
 
+    /**Calculates the gesture angle**/
+
     private fun calculateGestureAngle(event:MotionEvent):Double{
         var angle=Math.toDegrees(atan2((this.centerX-event.x).toDouble(), (this.centerY-event.y).toDouble()))
         if(event.x>this.centerX){
@@ -278,6 +297,8 @@ class CircularSlider(context:Context, attrs:AttributeSet) : View(context, attrs)
         return angle
     }
 
+    /**Updates the current value with the gesture angle**/
+
     private fun updateCurrentValue(angle:Double){
         if(angle in this.minAngleGesture..this.maxAngleGesture) {
             this.onValueChangedListener?.onValueChanged(this, this.currentValue)
@@ -291,6 +312,8 @@ class CircularSlider(context:Context, attrs:AttributeSet) : View(context, attrs)
         }
     }
 
+    /**Rounds the current value using the step**/
+
     private fun roundCurrentValueWithStep(){
         val floor=floor(this.currentValue.toDouble()/this.stepValue.toDouble())*this.stepValue.toDouble()
         val cap=ceil(this.currentValue.toDouble()/this.stepValue.toDouble())*this.stepValue.toDouble()
@@ -298,6 +321,8 @@ class CircularSlider(context:Context, attrs:AttributeSet) : View(context, attrs)
         if((this.currentValue-floor)<middle) this.currentValue=floor.toInt()
         else this.currentValue=cap.toInt()
     }
+
+    /**Gesture detector**/
 
     inner class GestureListener:GestureDetector.SimpleOnGestureListener(){
         override fun onDown(e: MotionEvent?): Boolean {

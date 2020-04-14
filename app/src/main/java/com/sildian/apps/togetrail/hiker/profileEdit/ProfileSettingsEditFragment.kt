@@ -63,6 +63,7 @@ class ProfileSettingsEditFragment(private val hiker: Hiker?=null) : BaseDataFlow
 
     /******************************Reset password action*****************************************/
 
+    @Suppress("UNUSED_ANONYMOUS_PARAMETER")
     private fun requestResetUserPasswordConfirmation(){
         val dialog=DialogHelper.createYesNoDialog(
             context!!,
@@ -78,6 +79,7 @@ class ProfileSettingsEditFragment(private val hiker: Hiker?=null) : BaseDataFlow
 
     /*******************************Delete account action****************************************/
 
+    @Suppress("UNUSED_ANONYMOUS_PARAMETER")
     private fun requestDeleteUserAccountConfirmation(){
         val dialog=DialogHelper.createYesNoCriticalDialog(
             context!!,

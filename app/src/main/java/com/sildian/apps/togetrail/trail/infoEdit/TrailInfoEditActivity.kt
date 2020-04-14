@@ -10,7 +10,6 @@ import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowActivity
-import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.baseControllers.BaseImagePickerFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
@@ -129,7 +128,7 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
         if(data is TrailPointOfInterest) {
             if (this.trail != null) {
                 this.trailPointOfInterestPosition?.let { index ->
-                    this.trailPointOfInterest = trailPointOfInterest
+                    this.trailPointOfInterest = data
                     this.trail!!.trailTrack.trailPointsOfInterest[index] = data
                 }
             }

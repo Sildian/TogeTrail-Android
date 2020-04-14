@@ -96,6 +96,7 @@ class LocationSearchActivity : AppCompatActivity(), LocationPredictionViewHolder
         supportActionBar?.title=""
     }
 
+    @Suppress("UNUSED_ANONYMOUS_PARAMETER")
     private fun initializeResearchTextField(){
         this.researchTextField.doOnTextChanged { text, start, count, after ->
             if(count>=1) {

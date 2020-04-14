@@ -17,9 +17,10 @@ object DropdownMenuHelper {
      * @param initialValue : the id of the initial value in the choice
      */
 
+    @Suppress("UNUSED_ANONYMOUS_PARAMETER")
     fun populateDropdownMenu(autoCompleteTextView: AutoCompleteTextView, choice:Array<String>, initialValue:Int){
 
-        val adapter= ArrayAdapter<String>(autoCompleteTextView.context, R.layout.item_dropdown_menu, choice)
+        val adapter= ArrayAdapter(autoCompleteTextView.context, R.layout.item_dropdown_menu, choice)
         autoCompleteTextView.setAdapter(adapter)
         val currentText=autoCompleteTextView.adapter.getItem(initialValue)
         autoCompleteTextView.setText(currentText.toString(), false)

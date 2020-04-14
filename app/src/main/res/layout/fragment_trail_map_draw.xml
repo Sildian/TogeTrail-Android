@@ -19,7 +19,8 @@
         android:orientation="vertical"
         android:layoutAnimation="@anim/layout_appear_right"
         android:gravity="left"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:ignore="RtlHardcoded">
 
         <com.google.android.material.button.MaterialButton
             style="@style/MapButtonLeftStyle"

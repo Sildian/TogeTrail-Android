@@ -232,6 +232,7 @@ class ProfileEditActivity : BaseDataFlowActivity() {
      * @param imagePath : the image's url
      */
 
+    @Suppress("unused")
     fun updateImagePathToDeleteFromDatabase(imagePath:String){
         this.imagePathToUploadIntoDatabase=null
         if(imagePath.startsWith("https://")){
@@ -361,9 +362,13 @@ class ProfileEditActivity : BaseDataFlowActivity() {
 
     /*******************************Location monitoring******************************************/
 
+    /**Searches a location**/
+
     fun searchLocation(){
         startLocationSearchActivity()
     }
+
+    /**Updates the hiker's live location**/
 
     private fun updateLiveLocation(location: Location){
         this.hiker?.liveLocation=location

@@ -174,6 +174,7 @@ abstract class BaseDataFlowActivity : AppCompatActivity() {
             }
     }
 
+    @Suppress("unused")
     protected fun getTrailRealTime(trailId:String, callback:(Trail?)->Unit){
         this.trailQueryRegistration= TrailFirebaseQueries.getTrail(trailId)
             .addSnapshotListener { snapshot, e ->
@@ -255,6 +256,7 @@ abstract class BaseDataFlowActivity : AppCompatActivity() {
             }
     }
 
+    @Suppress("unused")
     protected fun getEvent(eventId:String, callback:(Event?)->Unit){
         EventFirebaseQueries.getEvent(eventId).get()
             .addOnSuccessListener{ snapshot ->
@@ -313,7 +315,7 @@ abstract class BaseDataFlowActivity : AppCompatActivity() {
     }
 
     protected fun updateEventRegisteredHiker(eventId:String, hiker:Hiker, callback:(()->Unit)?=null){
-        EventFirebaseQueries.updateRegisteredHiker(eventId.toString(), hiker)
+        EventFirebaseQueries.updateRegisteredHiker(eventId, hiker)
             .addOnSuccessListener {
                 callback?.invoke()
             }

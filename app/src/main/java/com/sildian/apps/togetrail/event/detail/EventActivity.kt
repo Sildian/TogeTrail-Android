@@ -4,7 +4,6 @@ import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
@@ -29,9 +28,6 @@ class EventActivity : BaseDataFlowActivity() {
 
     companion object {
 
-        /**Logs**/
-        private const val TAG="EventActivity"
-
         /**Bundle keys for intents**/
         const val KEY_BUNDLE_EVENT_ID="KEY_BUNDLE_EVENT_ID"     //Event's id -> Mandatory
     }
@@ -44,7 +40,6 @@ class EventActivity : BaseDataFlowActivity() {
 
     private val progressbar by lazy {activity_event_progressbar}
     private var fragment: BaseDataFlowFragment?=null
-    private var progressDialog: AlertDialog?=null
 
     /************************************Life cycle**********************************************/
 
@@ -218,14 +213,6 @@ class EventActivity : BaseDataFlowActivity() {
     /******************************UI monitoring**************************************************/
 
     override fun getLayoutId(): Int = R.layout.activity_event
-
-    override fun initializeUI() {
-        //Nothing
-    }
-
-    override fun refreshUI() {
-        //Nothing
-    }
 
     /******************************Fragments monitoring******************************************/
 
