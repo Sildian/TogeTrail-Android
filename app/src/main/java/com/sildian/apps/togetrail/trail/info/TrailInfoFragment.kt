@@ -38,6 +38,7 @@ class TrailInfoFragment(
     private val maxElevationText by lazy {layout.fragment_trail_info_text_max_elevation}
     private val minElevationText by lazy {layout.fragment_trail_info_text_min_elevation}
     private val locationText by lazy {layout.fragment_trail_info_text_location}
+    private val loopLayout by lazy {layout.fragment_trail_info_layout_loop}
     private val descriptionText by lazy {layout.fragment_trail_info_text_description}
 
     /***********************************UI monitoring********************************************/
@@ -60,6 +61,7 @@ class TrailInfoFragment(
         initializeMaxElevationText()
         initializeMinElevationText()
         initializeLocationText()
+        initializeLoopLayout()
         initializeDescriptionText()
         updatePhoto()
     }
@@ -130,6 +132,14 @@ class TrailInfoFragment(
         val minElevationToDisplay=MetricsHelper.displayMinElevation(
             context!!, this.trail?.minElevation, true, true)
         this.minElevationText.text=minElevationToDisplay
+    }
+
+    private fun initializeLoopLayout(){
+        this.trail?.let { trail ->
+            if(!trail.loop){
+                this.loopLayout.visibility=View.GONE
+            }
+        }
     }
 
     private fun initializeLocationText(){

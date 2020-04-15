@@ -11,7 +11,6 @@ class TrailPointOfInterestTest {
         val trailPointOfInterest=TrailPointOfInterest(
             latitude = 50.0,
             longitude = 50.0,
-            elevation = 1000,
             name="Beautiful view"
         )
         assertTrue(trailPointOfInterest.isDataValid())

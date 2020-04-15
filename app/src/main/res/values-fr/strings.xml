@@ -47,6 +47,7 @@
     <!-- Location -->
     <string name="button_location_search_in_area">Rechercher dans cette zone</string>
     <!-- Trail -->
+    <string name="button_trail_info_see">Infos rando</string>
     <string name="button_trail_point_remove">Retirer dernier point</string>
     <string name="button_trail_poi_add">Ajouter point d\'intérêt</string>
     <string name="button_trail_poi_remove">Retirer</string>
@@ -79,6 +80,7 @@
     <string name="label_trail_level_easy">Nv Facile</string>
     <string name="label_trail_level_medium">Nv Moyen</string>
     <string name="label_trail_level_hard">Nv Difficile</string>
+    <string name="label_trail_loop">Retour au point de départ</string>
     <string name="label_trail_metrics">Mesures</string>
     <string name="label_trail_ascent_short">Dnv +</string>
     <string name="label_trail_descent_short">Dnv -</string>

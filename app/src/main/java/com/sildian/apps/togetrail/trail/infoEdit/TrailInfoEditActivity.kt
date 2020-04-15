@@ -347,6 +347,7 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
 
     private fun handleHikerToUpdate(hiker:Hiker?){
         hiker?.let { hikerToUpdate ->
+            hiker.nbTrailsCreated++
             updateHiker(hikerToUpdate)
             val historyItem = HikerHistoryItem(
                 HikerHistoryType.TRAIL_CREATED,

@@ -13,13 +13,7 @@ class TrailTest {
         val trail=Trail(
             name="Super Trail",
             location = Location(country = Country("FR", "France")),
-            level=TrailLevel.MEDIUM,
-            duration = 60,
-            distance = 10000,
-            ascent = 500,
-            descent = 500,
-            maxElevation = 1000,
-            minElevation = 500
+            level=TrailLevel.MEDIUM
         )
         assertTrue(trail.isDataValid())
     }

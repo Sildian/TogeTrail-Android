@@ -36,7 +36,6 @@ class TrailPointOfInterest(
      */
 
     fun isDataValid():Boolean{
-        return this.elevation!=null
-                &&this.name!=null
+        return this.name!=null
     }
 }

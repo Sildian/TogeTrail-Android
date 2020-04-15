@@ -7,6 +7,7 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
+import kotlinx.android.synthetic.main.fragment_trail_map_detail.view.*
 
 /*************************************************************************************************
  * Shows a specific trail on the map and allows to see all its detail information
@@ -15,6 +16,10 @@ import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 class TrailMapDetailFragment(trail: Trail?=null, isEditable:Boolean=false)
     : BaseTrailMapFragment(trail, isEditable)
 {
+
+    /************************************UI components*******************************************/
+
+    private val seeInfoButton by lazy {layout.fragment_trail_map_detail_button_info_see}
 
     /************************************UI monitoring*******************************************/
 
@@ -35,11 +40,13 @@ class TrailMapDetailFragment(trail: Trail?=null, isEditable:Boolean=false)
     }
 
     override fun initializeUI() {
-        //Nothing
+        initializeSeeInfoButton()
     }
 
-    override fun refreshUI() {
-        //Nothing
+    private fun initializeSeeInfoButton(){
+        this.seeInfoButton.setOnClickListener {
+            showTrailInfoFragment()
+        }
     }
 
     /***********************************Map monitoring*******************************************/

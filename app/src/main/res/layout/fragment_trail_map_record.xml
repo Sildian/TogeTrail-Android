@@ -13,12 +13,31 @@
         android:layout_height="match_parent" />
 
     <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="right"
+        tools:ignore="RtlHardcoded">
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/IconButtonStyle"
+            android:id="@+id/fragment_trail_map_record_button_info_see"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/components_margin_small"
+            android:alpha="0.87"
+            app:icon="@drawable/ic_see_white"
+            app:backgroundTint="@color/colorPrimary" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/fragment_trail_map_record_layout_actions_buttons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_gravity="left"
         android:layoutAnimation="@anim/layout_appear_right"
-        android:gravity="left"
         android:visibility="gone"
         tools:ignore="RtlHardcoded">
 

@@ -200,6 +200,7 @@ abstract class BaseTrailMapFragment (
             this.map?.setOnMapClickListener(this)
             this.map?.setOnMarkerClickListener(this)
             this.map?.isMyLocationEnabled=true
+            this.map?.uiSettings?.isMyLocationButtonEnabled=false
             onMapReadyActionsFinished()
         }
         else{
@@ -256,7 +257,7 @@ abstract class BaseTrailMapFragment (
                     ?.tag = firstPoint
             }
 
-            if(lastPoint!=null) {
+            if(lastPoint!=null && this.trail?.loop==false) {
                 this.map?.addMarker(
                     MarkerOptions()
                         .position(LatLng(lastPoint.latitude, lastPoint.longitude))
@@ -342,9 +343,10 @@ abstract class BaseTrailMapFragment (
     }
 
     fun showTrailPOIInfoFragment(trailPointOfInterest: TrailPointOfInterest, trailPointOfInterestPosition:Int){
+        val poiIsEditable=this.isEditable && this.trail?.isDataValid()==true
         this.infoFragment=
             TrailPOIInfoFragment(
-                trailPointOfInterest, trailPointOfInterestPosition, this.isEditable
+                trailPointOfInterest, trailPointOfInterestPosition, poiIsEditable
             )
         childFragmentManager.beginTransaction()
             .replace(getInfoFragmentId(), this.infoFragment).commit()

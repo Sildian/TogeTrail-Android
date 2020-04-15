@@ -55,12 +55,13 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
 
     private val nameTextFieldLayout by lazy {layout.fragment_trail_info_edit_text_field_layout_name}
     private val nameTextField by lazy {layout.fragment_trail_info_edit_text_field_name}
+    private val levelTextFieldDropDownLayout by lazy {layout.fragment_trail_info_edit_text_field_dropdown_layout_level}
+    private val levelTextFieldDropDown by lazy {layout.fragment_trail_info_edit_text_field_dropdown_level}
+    private val loopSwitch by lazy {layout.fragment_trail_info_edit_switch_loop}
     private val photoText by lazy {layout.fragment_trail_info_edit_text_photo}
     private val photoImageView by lazy {layout.fragment_trail_info_edit_image_view_photo}
     private val deletePhotoButton by lazy {layout.fragment_trail_info_edit_button_delete_photo}
     private val addPhotoButton by lazy {layout.fragment_trail_info_edit_button_add_photo}
-    private val levelTextFieldDropDownLayout by lazy {layout.fragment_trail_info_edit_text_field_dropdown_layout_level}
-    private val levelTextFieldDropDown by lazy {layout.fragment_trail_info_edit_text_field_dropdown_level}
     private val metricsSlider by lazy {layout.fragment_trail_info_edit_slider_metrics}
     private val durationText by lazy {layout.fragment_trail_info_edit_text_duration}
     private val ascentText by lazy {layout.fragment_trail_info_edit_text_ascent}
@@ -102,6 +103,7 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
             this.trail?.name = this.nameTextField.text.toString()
             this.trail?.level =
                 TrailLevel.fromValue(this.levelTextFieldDropDown.tag.toString().toInt())
+            this.trail?.loop=this.loopSwitch.isChecked
             this.trail?.description = this.descriptionTextField.text.toString()
             this.trail?.autoPopulatePosition()
             (activity as TrailInfoEditActivity).saveTrail()
@@ -111,13 +113,7 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
     override fun checkDataIsValid(): Boolean {
         if(checkTextFieldsAreNotEmpty()){
             if(checkTextFieldsDropDownAreNotUnknown()){
-                if(checkMetricsAreNotEmpty()){
-                    return true
-                }else{
-                    Snackbar.make(this.messageView, R.string.message_trail_metrics_unknown, Snackbar.LENGTH_LONG)
-                        .setAnchorView(this.messageAnchorView)
-                        .show()
-                }
+                return true
             }else{
                 Snackbar.make(this.messageView, R.string.message_trail_level_unknown, Snackbar.LENGTH_LONG)
                     .setAnchorView(this.messageAnchorView)
@@ -148,15 +144,6 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
         }
     }
 
-    private fun checkMetricsAreNotEmpty():Boolean{
-        return this.trail?.duration!=null
-                &&this.trail.ascent!=null
-                &&this.trail.descent!=null
-                &&this.trail.distance!=null
-                &&this.trail.maxElevation!=null
-                &&this.trail.minElevation!=null
-    }
-
     /***********************************UI monitoring********************************************/
 
     override fun getLayoutId(): Int = R.layout.fragment_trail_info_edit
@@ -164,6 +151,7 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
     override fun getAddPhotoBottomSheetId(): Int = R.id.fragment_trail_info_edit_bottom_sheet_add_photo
 
     override fun initializeUI() {
+        initializeLoopSwitch()
         initializeDeletePhotoButton()
         initializeAddPhotoButton()
         initializeMetricsSlider()
@@ -196,6 +184,12 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
         val choice=resources.getStringArray(R.array.array_trail_levels)
         val initialValue=(this.trail?.level?.value?: TrailLevel.MEDIUM.value)
         DropdownMenuHelper.populateDropdownMenu(this.levelTextFieldDropDown, choice, initialValue)
+    }
+
+    private fun initializeLoopSwitch(){
+        this.trail?.let { trail ->
+            this.loopSwitch.isChecked = trail.loop
+        }
     }
 
     private fun initializeDeletePhotoButton(){

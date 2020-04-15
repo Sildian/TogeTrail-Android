@@ -47,12 +47,6 @@ data class Trail (
         return this.name!=null
                 &&this.location.country!=null
                 &&this.level!=TrailLevel.UNKNOWN
-                &&this.duration!=null
-                &&this.distance!=null
-                &&this.ascent!=null
-                &&this.descent!=null
-                &&this.maxElevation!=null
-                &&this.minElevation!=null
     }
 
     /**Populates the position with the first trailPoint's coordinates**/

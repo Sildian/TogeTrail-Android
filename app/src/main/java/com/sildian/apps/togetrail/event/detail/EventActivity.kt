@@ -32,6 +32,10 @@ class EventActivity : BaseDataFlowActivity() {
         const val KEY_BUNDLE_EVENT_ID="KEY_BUNDLE_EVENT_ID"     //Event's id -> Mandatory
     }
 
+    /****************************************Menu************************************************/
+
+    private var menu:Menu?=null                                 //The activity menu
+
     /****************************************Data************************************************/
 
     private var event: Event?=null                              //The event
@@ -53,7 +57,8 @@ class EventActivity : BaseDataFlowActivity() {
     /**Generates the menu within the toolbar**/
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_edit, menu)
+        this.menu=menu
+        defineMenuItems()
         return true
     }
 
@@ -66,6 +71,16 @@ class EventActivity : BaseDataFlowActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    /**Defines the menu items**/
+
+    private fun defineMenuItems(){
+        if(AuthFirebaseHelper.getCurrentUser()?.uid==this.event?.authorId){
+            if(this.menu!=null) {
+                menuInflater.inflate(R.menu.menu_edit, this.menu)
+            }
+        }
     }
 
     /********************************Navigation control******************************************/
@@ -115,6 +130,7 @@ class EventActivity : BaseDataFlowActivity() {
     private fun handleEventResult(event:Event?){
         this.progressbar.visibility= View.GONE
         this.event=event
+        defineMenuItems()
         if(this.fragment==null){
             showFragment()
         }else if(this.fragment?.isVisible==true){

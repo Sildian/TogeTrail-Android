@@ -48,26 +48,47 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/TextInputFieldDropDownMenuStyle"
-                android:id="@+id/fragment_trail_info_edit_text_field_dropdown_layout_level"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/components_margin_small"
-                android:layout_marginBottom="@dimen/components_margin_small"
-                android:layout_marginStart="@dimen/components_margin_medium"
-                android:layout_marginEnd="@dimen/components_margin_small"
-                android:hint="@string/label_trail_level"
-                app:errorEnabled="true">
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-                <AutoCompleteTextView
-                    android:id="@+id/fragment_trail_info_edit_text_field_dropdown_level"
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/TextInputFieldDropDownMenuStyle"
+                    android:id="@+id/fragment_trail_info_edit_text_field_dropdown_layout_level"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:inputType="textCapSentences"
-                    android:focusable="false" />
+                    android:layout_weight="1"
+                    android:layout_marginTop="@dimen/components_margin_small"
+                    android:layout_marginBottom="@dimen/components_margin_small"
+                    android:layout_marginStart="@dimen/components_margin_medium"
+                    android:layout_marginEnd="@dimen/components_margin_small"
+                    android:hint="@string/label_trail_level"
+                    app:errorEnabled="true">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <AutoCompleteTextView
+                        android:id="@+id/fragment_trail_info_edit_text_field_dropdown_level"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textCapSentences"
+                        android:focusable="false" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Switch
+                    android:id="@+id/fragment_trail_info_edit_switch_loop"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginTop="@dimen/components_margin_small"
+                    android:layout_marginBottom="@dimen/components_margin_small"
+                    android:layout_marginStart="@dimen/components_margin_medium"
+                    android:layout_marginEnd="@dimen/components_margin_small"
+                    android:text="@string/label_trail_loop"
+                    android:checked="true"/>
+
+            </LinearLayout>
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"

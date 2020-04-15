@@ -48,6 +48,7 @@
     <!-- Location -->
     <string name="button_location_search_in_area">Search within this area</string>
     <!-- Trail -->
+    <string name="button_trail_info_see">Trail\'s info</string>
     <string name="button_trail_point_remove">Remove last point</string>
     <string name="button_trail_poi_add">Add point of interest</string>
     <string name="button_trail_poi_remove">Remove</string>
@@ -80,6 +81,7 @@
     <string name="label_trail_level_easy">Lvl Easy</string>
     <string name="label_trail_level_medium">Lvl Medium</string>
     <string name="label_trail_level_hard">Lvl Hard</string>
+    <string name="label_trail_loop">Return to starting point</string>
     <string name="label_trail_metrics">Metrics</string>
     <string name="label_trail_ascent_short">Asc</string>
     <string name="label_trail_descent_short">Desc</string>

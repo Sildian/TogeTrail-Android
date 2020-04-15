@@ -203,6 +203,7 @@ class EventEditActivity : BaseDataFlowActivity() {
 
     private fun handleHikerToUpdate(hiker:Hiker?){
         hiker?.let { hikerToUpdate ->
+            hiker.nbEventsCreated++
             updateHiker(hikerToUpdate)
             val historyItem = HikerHistoryItem(
                 HikerHistoryType.EVENT_CREATED,

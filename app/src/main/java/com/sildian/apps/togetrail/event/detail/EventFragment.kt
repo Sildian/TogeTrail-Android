@@ -47,6 +47,7 @@ class EventFragment(
     private val attachedTrailsRecyclerView by lazy {layout.fragment_event_recycler_view_attached_trails}
     private lateinit var attachedTrailsAdapter:TrailHorizontalAdapter
     private val descriptionText by lazy {layout.fragment_event_text_description}
+    private val registrationLayout by lazy {layout.fragment_event_layout_registration}
     private val registerUserButton by lazy {layout.fragment_event_button_register_user}
     private val userRegisteredText by lazy {layout.fragment_event_text_user_registered}
     private val unregisterUserButton by lazy {layout.fragment_event_button_unregister_user}
@@ -68,6 +69,7 @@ class EventFragment(
         initializeToolbar()
         initializeRegisteredHikersRecyclerView()
         initializeAttachedTrailsRecyclerView()
+        initializeRegistrationLayout()
         refreshUI()
     }
 
@@ -153,6 +155,12 @@ class EventFragment(
 
     private fun updateDescriptionText(){
         this.descriptionText.text=this.event?.description
+    }
+
+    private fun initializeRegistrationLayout(){
+        if(AuthFirebaseHelper.getCurrentUser()==null){
+            this.registrationLayout.visibility=View.GONE
+        }
     }
 
     private fun updateRegisterUserButton(){

@@ -20,6 +20,7 @@ class TrailMapDrawFragment : BaseTrailMapGenerateFragment(){
 
     /**********************************UI component**********************************************/
 
+    private val seeInfoButton by lazy {layout.fragment_trail_map_draw_button_info_see}
     private val actionsButtonsLayout by lazy {layout.fragment_trail_map_draw_layout_actions_buttons}
     private val removePointButton by lazy {layout.fragment_trail_map_draw_button_point_remove}
     private val addPoiButton by lazy {layout.fragment_trail_map_draw_button_poi_add}
@@ -47,12 +48,15 @@ class TrailMapDrawFragment : BaseTrailMapGenerateFragment(){
     }
 
     override fun initializeUI() {
+        initializeSeeInfoButton()
         initializeRemovePointButton()
         initializeAddPoiButton()
     }
 
-    override fun refreshUI() {
-        //Nothing
+    private fun initializeSeeInfoButton(){
+        this.seeInfoButton.setOnClickListener {
+            showTrailInfoFragment()
+        }
     }
 
     private fun initializeRemovePointButton(){

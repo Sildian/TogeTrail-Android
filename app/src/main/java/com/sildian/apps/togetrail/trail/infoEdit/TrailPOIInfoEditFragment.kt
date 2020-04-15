@@ -62,13 +62,7 @@ class TrailPOIInfoEditFragment(private val trailPointOfInterest: TrailPointOfInt
 
     override fun checkDataIsValid(): Boolean {
         if(checkTextFieldsAreNotEmpty()){
-            if(checkMetricsAreNotEmpty()){
-                return true
-            }else{
-                Snackbar.make(this.messageView, R.string.message_trail_metrics_unknown, Snackbar.LENGTH_LONG)
-                    .setAnchorView(this.messageAnchorView)
-                    .show()
-            }
+            return true
         }else{
             Snackbar.make(this.messageView, R.string.message_text_fields_empty, Snackbar.LENGTH_LONG)
                 .setAnchorView(this.messageAnchorView)
@@ -79,10 +73,6 @@ class TrailPOIInfoEditFragment(private val trailPointOfInterest: TrailPointOfInt
 
     private fun checkTextFieldsAreNotEmpty():Boolean{
         return TextFieldHelper.checkTextFieldIsNotEmpty(this.nameTextField, this.nameTextFieldLayout)
-    }
-
-    private fun checkMetricsAreNotEmpty():Boolean{
-        return this.trailPointOfInterest?.elevation!=null
     }
 
     /***********************************UI monitoring********************************************/

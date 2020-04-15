@@ -42,6 +42,7 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
 
     /**********************************UI component**********************************************/
 
+    private val seeInfoButton by lazy {layout.fragment_trail_map_record_button_info_see}
     private val actionsButtonsLayout by lazy {layout.fragment_trail_map_record_layout_actions_buttons}
     private val addPoiButton by lazy {layout.fragment_trail_map_record_button_poi_add}
     private val playButton by lazy {layout.fragment_trail_map_record_button_play}
@@ -50,7 +51,7 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
     /************************************Life cycle**********************************************/
 
     override fun onDestroy() {
-        isRecording=false
+        this.isRecording=false
         super.onDestroy()
     }
 
@@ -77,12 +78,15 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
     }
 
     override fun initializeUI() {
+        initializeSeeInfoButton()
         initializeAddPoiButton()
         initializePlayButton()
     }
 
-    override fun refreshUI() {
-        //Nothing
+    private fun initializeSeeInfoButton(){
+        this.seeInfoButton.setOnClickListener {
+            showTrailInfoFragment()
+        }
     }
 
     private fun initializeAddPoiButton(){
