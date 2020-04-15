@@ -20,15 +20,14 @@
         android:scaleType="centerCrop"
         app:srcCompat="@drawable/shape_gradient_transparent_to_black" />
 
-    <!--TODO replace image by the logo-->
     <ImageView
         android:id="@+id/navigation_view_header_image"
-        android:layout_width="@dimen/image_size_small"
-        android:layout_height="@dimen/image_size_small"
-        android:layout_margin="@dimen/components_margin_large"
-        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/components_margin_medium"
+        android:layout_gravity="top|center_horizontal"
         android:contentDescription="@string/example_image_content_description"
-        app:srcCompat="@drawable/ic_trail_white" />
+        app:srcCompat="@drawable/ic_togetrail_logo_with_name" />
 
     <LinearLayout
         android:layout_width="wrap_content"
