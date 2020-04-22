@@ -78,6 +78,7 @@ class EventActivity : BaseDataFlowActivity() {
     private fun defineMenuItems(){
         if(AuthFirebaseHelper.getCurrentUser()?.uid==this.event?.authorId){
             if(this.menu!=null) {
+                this.menu?.clear()
                 menuInflater.inflate(R.menu.menu_edit, this.menu)
             }
         }

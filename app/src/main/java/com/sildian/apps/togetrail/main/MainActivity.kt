@@ -28,6 +28,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.utils.NumberUtilities
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.event.detail.EventActivity
@@ -101,6 +102,7 @@ class MainActivity :
     private var fragment:BaseDataFlowFragment?=null
     private val toolbar by lazy {activity_main_toolbar}
     private val searchTextField by lazy {activity_main_text_field_research}
+    private val clearResearchButton by lazy {activity_main_button_research_clear}
     private val progressbar by lazy {activity_main_progressbar}
     private val drawerLayout by lazy {activity_main_drawer_layout}
     private val navigationView by lazy {activity_main_navigation_view}
@@ -403,11 +405,16 @@ class MainActivity :
      */
 
     fun setQueriesToSearchAroundPoint(point: LatLng){
+        val latToDisplay=NumberUtilities.displayNumber(point.latitude, 4)
+        val lngToDisplay=NumberUtilities.displayNumber(point.longitude, 4)
+        val pointToDisplay="$latToDisplay ; $lngToDisplay"
+        this.searchTextField.setText(pointToDisplay)
         this.trailsQueryRegistration?.remove()
         this.eventsQueryRegistration?.remove()
         this.trailsQuery=TrailFirebaseQueries.getTrailsAroundPoint(point)
         this.eventsQuery=EventFirebaseQueries.getEventsAroundPoint(point)
         when (this.fragment) {
+            is TrailMapFragment -> this.fragment?.updateData(null)
             is TrailsListFragment -> this.fragment?.updateData(this.trailsQuery)
             is EventsListFragment -> this.fragment?.updateData(this.eventsQuery)
         }
@@ -421,15 +428,31 @@ class MainActivity :
     @Suppress("MemberVisibilityCanBePrivate")
     fun setQueriesToSearchAroundLocation(location:Location){
         if(location.country!=null) {
+            this.searchTextField.setText(location.toString())
             this.trailsQueryRegistration?.remove()
             this.eventsQueryRegistration?.remove()
             this.trailsQuery = TrailFirebaseQueries.getTrailsNearbyLocation(location)!!
             this.eventsQuery = EventFirebaseQueries.getEventsNearbyLocation(location)!!
-            this.fragment?.updateData(null)
             when (this.fragment) {
+                is TrailMapFragment -> this.fragment?.updateData(null)
                 is TrailsListFragment -> this.fragment?.updateData(this.trailsQuery)
                 is EventsListFragment -> this.fragment?.updateData(this.eventsQuery)
             }
+        }
+    }
+
+    /**Clears the current research and resets the queries by default**/
+
+    fun resetQueries(){
+        this.searchTextField.text=null
+        this.trailsQueryRegistration?.remove()
+        this.eventsQueryRegistration?.remove()
+        this.trailsQuery=TrailFirebaseQueries.getLastTrails()
+        this.eventsQuery=EventFirebaseQueries.getNextEvents()
+        when (this.fragment) {
+            is TrailMapFragment -> this.fragment?.updateData(null)
+            is TrailsListFragment -> this.fragment?.updateData(this.trailsQuery)
+            is EventsListFragment -> this.fragment?.updateData(this.eventsQuery)
         }
     }
 
@@ -452,6 +475,7 @@ class MainActivity :
     override fun initializeUI() {
         initializeToolbar()
         initializeSearchTextField()
+        initializeClearResearchButton()
         initializeNavigationView()
         initializeBottomNavigationView()
         initializeAddButton()
@@ -465,6 +489,12 @@ class MainActivity :
     private fun initializeSearchTextField(){
         this.searchTextField.setOnClickListener {
             startLocationSearchActivity()
+        }
+    }
+
+    private fun initializeClearResearchButton(){
+        this.clearResearchButton.setOnClickListener {
+            resetQueries()
         }
     }
 
@@ -606,6 +636,7 @@ class MainActivity :
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setTheme(R.style.LoginTheme)
+                .setLogo(R.drawable.ic_togetrail_logo_with_name)
                 .setAvailableProviders(listOf(
                     AuthUI.IdpConfig.EmailBuilder().build(),
                     AuthUI.IdpConfig.GoogleBuilder().build()
@@ -722,7 +753,6 @@ class MainActivity :
             if(data!=null && data.hasExtra(LocationSearchActivity.KEY_BUNDLE_LOCATION)){
                 val location=data.getParcelableExtra<Location>(LocationSearchActivity.KEY_BUNDLE_LOCATION)
                 location?.let { loc ->
-                    this.searchTextField.setText(loc.toString())
                     setQueriesToSearchAroundLocation(loc)
                 }
             }
