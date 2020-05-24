@@ -78,7 +78,7 @@ abstract class BaseDataFlowActivity : AppCompatActivity() {
      * @param e : the exception
      */
 
-    private fun handleQueryError(e: Exception) {
+    protected fun handleQueryError(e: Exception) {
         Log.w(TAG, e.message.toString())
         DialogHelper.createInfoDialog(
             this,

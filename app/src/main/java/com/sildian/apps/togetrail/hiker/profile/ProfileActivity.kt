@@ -141,7 +141,7 @@ class ProfileActivity : BaseDataFlowActivity() {
      */
 
     private fun showFragment(){
-        this.fragment=ProfileFragment(this.hiker)
+        this.fragment=ProfileFragment(this.hiker?.id)
         this.fragment?.let { fragment ->
             supportFragmentManager.beginTransaction()
                 .replace(R.id.activity_profile_fragment, fragment).commit()
