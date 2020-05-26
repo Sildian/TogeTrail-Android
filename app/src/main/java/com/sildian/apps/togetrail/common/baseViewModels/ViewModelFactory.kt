@@ -1,7 +1,8 @@
-package com.sildian.apps.togetrail.common.viewModels
+package com.sildian.apps.togetrail.common.baseViewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.sildian.apps.togetrail.event.model.support.EventViewModel
 import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
 
 /*************************************************************************************************
@@ -9,6 +10,10 @@ import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
  ************************************************************************************************/
 
 object ViewModelFactory : ViewModelProvider.Factory{
+
+    /**Messages**/
+
+    private const val UNKNOWN_VIEWMODEL_MESSAGE="Unknown ViewModel class"
 
     /**
      * Creates a ViewModel class
@@ -20,7 +25,8 @@ object ViewModelFactory : ViewModelProvider.Factory{
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return when{
             modelClass.isAssignableFrom(HikerViewModel::class.java) -> HikerViewModel() as T
-            else -> throw IllegalArgumentException("Unknown ViewModel class")
+            modelClass.isAssignableFrom(EventViewModel::class.java) -> EventViewModel() as T
+            else -> throw IllegalArgumentException(UNKNOWN_VIEWMODEL_MESSAGE)
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.common.viewModels
+package com.sildian.apps.togetrail.common.baseViewModels
 
 import androidx.databinding.Observable
 import androidx.databinding.PropertyChangeRegistry

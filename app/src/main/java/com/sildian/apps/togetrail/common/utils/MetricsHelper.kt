@@ -184,4 +184,47 @@ object MetricsHelper {
             suffixBottom
         )
     }
+
+    /**
+     * Displays a number of days. Uses the sing or plural as metric.
+     * @param context : the context
+     * @param nbDays : the number of days
+     * @return the nb of days to display
+     */
+
+    @JvmStatic
+    fun displayNbDays(context: Context, nbDays:Int?):String{
+        return if(nbDays!=null){
+            val metric=if(nbDays>1){
+                context.resources.getString(R.string.label_event_days)
+            }else{
+                context.resources.getString(R.string.label_event_day)
+            }
+            "$nbDays $metric"
+        }else{
+            ""
+        }
+    }
+
+    /**
+     * Displays a number of registered hikers to an event. Uses the sing or plural as metric.
+     * @param context : the context
+     * @param nbHikers : the number of registered hikers
+     * @return the nb of hikers to display
+     */
+
+    @JvmStatic
+    fun displayNbRegisteredHikers(context: Context, nbHikers:Int?):String{
+        return if(nbHikers!=null) {
+            val metric = if (nbHikers > 1) {
+                context.resources.getString(R.string.label_event_registered_hikers_plur)
+            }else {
+                context.resources.getString(R.string.label_event_registered_hikers_sing)
+            }
+            "$nbHikers $metric"
+        }
+        else{
+            ""
+        }
+    }
 }

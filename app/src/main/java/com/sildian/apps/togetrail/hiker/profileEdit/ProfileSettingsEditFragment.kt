@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
-import com.sildian.apps.togetrail.common.viewModels.ViewModelFactory
+import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.databinding.FragmentProfileSettingsEditBinding
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel

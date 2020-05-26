@@ -38,6 +38,7 @@ class EventActivity : BaseDataFlowActivity() {
 
     /****************************************Data************************************************/
 
+    private var eventId:String?=null                            //The event's id
     private var event: Event?=null                              //The event
 
     /**********************************UI component**********************************************/
@@ -108,8 +109,8 @@ class EventActivity : BaseDataFlowActivity() {
     private fun readDataFromIntent(){
         if(intent!=null){
             if(intent.hasExtra(KEY_BUNDLE_EVENT_ID)){
-                val eventId= intent.getStringExtra(KEY_BUNDLE_EVENT_ID)
-                eventId?.let { id -> loadEventFromDatabase(id) }
+                this.eventId= intent.getStringExtra(KEY_BUNDLE_EVENT_ID)
+                this.eventId?.let { id -> loadEventFromDatabase(id) }
             }
         }
     }
@@ -234,7 +235,7 @@ class EventActivity : BaseDataFlowActivity() {
     /******************************Fragments monitoring******************************************/
 
     private fun showFragment(){
-        this.fragment= EventFragment(this.event)
+        this.fragment= EventFragment(this.eventId)
         this.fragment?.let { fragment ->
             supportFragmentManager.beginTransaction()
                 .replace(R.id.activity_event_fragment, fragment).commit()

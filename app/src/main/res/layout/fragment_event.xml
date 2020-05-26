@@ -1,259 +1,291 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".event.detail.EventFragment">
+<layout>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/fragment_event_layout_registration"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+    <data>
+        <import type="android.view.View"/>
+        <import type="com.sildian.apps.togetrail.common.utils.DateUtilities"/>
+        <import type="com.sildian.apps.togetrail.common.utils.MetricsHelper"/>
+        <variable
+            name="eventFragment"
+            type="com.sildian.apps.togetrail.event.detail.EventFragment" />
+        <variable
+            name="eventViewModel"
+            type="com.sildian.apps.togetrail.event.model.support.EventViewModel" />
+    </data>
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".event.detail.EventFragment">
 
-            <com.google.android.material.appbar.CollapsingToolbarLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:contentScrim="?attr/colorPrimary"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="@{eventViewModel.event==null ? View.VISIBLE : View.GONE}"/>
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_collapseMode="parallax">
-
-                    <ImageView
-                        android:id="@+id/fragment_event_image_view_photo"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/image_size_large"
-                        app:srcCompat="@drawable/ic_trail_white"
-                        android:contentDescription="@string/example_image_content_description" />
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/image_size_large"
-                        app:srcCompat="@drawable/shape_gradient_black_to_transparent"
-                        android:contentDescription="@string/example_image_content_description" />
-
-                </FrameLayout>
-
-                <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/fragment_event_toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:theme="@style/ToolbarWrappedStyle"
-                    android:minHeight="?attr/actionBarSize"
-                    app:layout_collapseMode="pin"/>
-
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <androidx.core.widget.NestedScrollView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+            android:visibility="@{eventViewModel.event==null ? View.GONE : View.VISIBLE}">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/fragment_event_layout_registration"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <com.google.android.material.appbar.AppBarLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.appbar.CollapsingToolbarLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:contentScrim="?attr/colorPrimary"
+                        app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_collapseMode="parallax">
+
+                            <ImageView
+                                android:id="@+id/fragment_event_image_view_photo"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/image_size_large"
+                                app:srcCompat="@drawable/ic_trail_white"
+                                android:contentDescription="@string/example_image_content_description" />
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/image_size_large"
+                                app:srcCompat="@drawable/shape_gradient_black_to_transparent"
+                                android:contentDescription="@string/example_image_content_description" />
+
+                        </FrameLayout>
+
+                        <com.google.android.material.appbar.MaterialToolbar
+                            android:id="@+id/fragment_event_toolbar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:theme="@style/ToolbarWrappedStyle"
+                            android:minHeight="?attr/actionBarSize"
+                            app:layout_collapseMode="pin"/>
+
+                    </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+                </com.google.android.material.appbar.AppBarLayout>
+
+                <androidx.core.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/fragment_event_text_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/components_margin_medium"
+                            android:layout_marginBottom="@dimen/components_margin_small"
+                            android:layout_marginStart="@dimen/components_margin_medium"
+                            android:layout_marginEnd="@dimen/components_margin_medium"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/text_size_very_important"
+                            android:textColor="@color/colorBlack"
+                            android:text="@{eventViewModel.event.name, default=@string/example_event_name}"/>
+
+                        <TextView
+                            android:id="@+id/fragment_event_text_nb_days"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/components_margin_small"
+                            android:layout_marginBottom="@dimen/components_margin_small"
+                            android:layout_marginStart="@dimen/components_margin_medium"
+                            android:layout_marginEnd="@dimen/components_margin_medium"
+                            android:textSize="@dimen/text_size_title"
+                            android:text="@{MetricsHelper.displayNbDays(eventFragment.context, eventViewModel.event.nbDays), default=@string/example_event_nb_days}"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/components_margin_medium"
+                            android:layout_marginBottom="@dimen/components_margin_small"
+                            android:layout_marginStart="@dimen/components_margin_medium"
+                            android:layout_marginEnd="@dimen/components_margin_medium"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/text_size_title"
+                            android:textColor="@color/colorSecondaryDark"
+                            android:text="@string/label_event_meeting"/>
+
+                        <TextView
+                            android:id="@+id/fragment_event_text_begin_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/components_margin_small"
+                            android:layout_marginBottom="@dimen/components_margin_small"
+                            android:layout_marginStart="@dimen/components_margin_medium"
+                            android:layout_marginEnd="@dimen/components_margin_medium"
+                            android:gravity="center_vertical"
+                            android:drawableStart="@drawable/ic_date_black"
+                            android:drawablePadding="@dimen/components_margin_small"
+                            android:text="@{eventViewModel.event.beginDate==null ? `` : DateUtilities.displayDateAndTimeFull(eventViewModel.event.beginDate), default=@string/example_event_begin_date_full}"/>
+
+                        <TextView
+                            android:id="@+id/fragment_event_text_meeting_point"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/components_margin_small"
+                            android:layout_marginBottom="@dimen/components_margin_small"
+                            android:layout_marginStart="@dimen/components_margin_medium"
+                            android:layout_marginEnd="@dimen/components_margin_medium"
+                            android:gravity="center_vertical"
+                            android:drawableStart="@drawable/ic_location_event"
+                            android:drawablePadding="@dimen/components_margin_small"
+                            android:text="@{eventViewModel.event.meetingPoint.fullAddress, default=@string/example_location_fine}"/>
+
+                        <TextView
+                            android:id="@+id/fragment_event_text_registered_hikers"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/components_margin_medium"
+                            android:layout_marginBottom="@dimen/components_margin_small"
+                            android:layout_marginStart="@dimen/components_margin_medium"
+                            android:layout_marginEnd="@dimen/components_margin_medium"
+                            android:gravity="center_vertical"
+                            android:drawableStart="@drawable/ic_people_black"
+                            android:drawablePadding="@dimen/components_margin_small"
+                            android:textSize="@dimen/text_size_title"
+                            android:textColor="@color/colorBlack"
+                            android:text="@{MetricsHelper.displayNbRegisteredHikers(eventFragment.context, eventViewModel.event.nbHikersRegistered), default=@string/example_event_registered_hikers}"/>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/fragment_event_recycler_view_registered_hikers"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            app:reverseLayout="false" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/components_margin_medium"
+                            android:layout_marginBottom="@dimen/components_margin_small"
+                            android:layout_marginStart="@dimen/components_margin_medium"
+                            android:layout_marginEnd="@dimen/components_margin_medium"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/text_size_title"
+                            android:textColor="@color/colorSecondaryDark"
+                            android:text="@string/label_event_attached_trails"/>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/fragment_event_recycler_view_attached_trails"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            app:reverseLayout="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/components_margin_medium"
+                            android:layout_marginBottom="@dimen/components_margin_small"
+                            android:layout_marginStart="@dimen/components_margin_medium"
+                            android:layout_marginEnd="@dimen/components_margin_medium"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/text_size_title"
+                            android:textColor="@color/colorSecondaryDark"
+                            android:text="@string/label_event_description"/>
+
+                        <TextView
+                            android:id="@+id/fragment_event_text_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/components_margin_small"
+                            android:layout_marginBottom="@dimen/components_margin_small"
+                            android:layout_marginStart="@dimen/components_margin_medium"
+                            android:layout_marginEnd="@dimen/components_margin_medium"
+                            android:text="@{eventViewModel.event.description, default=@string/example_event_description}"/>
+
+                    </LinearLayout>
+
+                </androidx.core.widget.NestedScrollView>
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/fragment_event_layout_registration"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="@dimen/components_elevation">
 
-                <TextView
-                    android:id="@+id/fragment_event_text_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/components_margin_medium"
-                    android:layout_marginBottom="@dimen/components_margin_small"
-                    android:layout_marginStart="@dimen/components_margin_medium"
-                    android:layout_marginEnd="@dimen/components_margin_medium"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/text_size_very_important"
-                    android:textColor="@color/colorBlack"
-                    android:text="@string/example_event_name"/>
-
-                <TextView
-                    android:id="@+id/fragment_event_text_nb_days"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/components_margin_small"
-                    android:layout_marginBottom="@dimen/components_margin_small"
-                    android:layout_marginStart="@dimen/components_margin_medium"
-                    android:layout_marginEnd="@dimen/components_margin_medium"
-                    android:textSize="@dimen/text_size_title"
-                    android:text="@string/example_event_nb_days"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/components_margin_medium"
-                    android:layout_marginBottom="@dimen/components_margin_small"
-                    android:layout_marginStart="@dimen/components_margin_medium"
-                    android:layout_marginEnd="@dimen/components_margin_medium"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/text_size_title"
-                    android:textColor="@color/colorSecondaryDark"
-                    android:text="@string/label_event_meeting"/>
-
-                <TextView
-                    android:id="@+id/fragment_event_text_begin_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/components_margin_small"
-                    android:layout_marginBottom="@dimen/components_margin_small"
-                    android:layout_marginStart="@dimen/components_margin_medium"
-                    android:layout_marginEnd="@dimen/components_margin_medium"
-                    android:gravity="center_vertical"
-                    android:drawableStart="@drawable/ic_date_black"
-                    android:drawablePadding="@dimen/components_margin_small"
-                    android:text="@string/example_event_begin_date_full"/>
-
-                <TextView
-                    android:id="@+id/fragment_event_text_meeting_point"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/components_margin_small"
-                    android:layout_marginBottom="@dimen/components_margin_small"
-                    android:layout_marginStart="@dimen/components_margin_medium"
-                    android:layout_marginEnd="@dimen/components_margin_medium"
-                    android:drawableStart="@drawable/ic_location_event"
-                    android:drawablePadding="@dimen/components_margin_small"
-                    android:text="@string/example_location_fine"/>
-
-                <TextView
-                    android:id="@+id/fragment_event_text_registered_hikers"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/components_margin_medium"
-                    android:layout_marginBottom="@dimen/components_margin_small"
-                    android:layout_marginStart="@dimen/components_margin_medium"
-                    android:layout_marginEnd="@dimen/components_margin_medium"
-                    android:gravity="center_vertical"
-                    android:drawableStart="@drawable/ic_people_black"
-                    android:drawablePadding="@dimen/components_margin_small"
-                    android:textSize="@dimen/text_size_title"
-                    android:textColor="@color/colorBlack"
-                    android:text="@string/example_event_registered_hikers"/>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/fragment_event_recycler_view_registered_hikers"
+                <com.google.android.material.button.MaterialButton
+                    style="@style/ClassicButtonStyle"
+                    android:id="@+id/fragment_event_button_register_user"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:reverseLayout="false" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/components_margin_medium"
-                    android:layout_marginBottom="@dimen/components_margin_small"
-                    android:layout_marginStart="@dimen/components_margin_medium"
-                    android:layout_marginEnd="@dimen/components_margin_medium"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/text_size_title"
-                    android:textColor="@color/colorSecondaryDark"
-                    android:text="@string/label_event_attached_trails"/>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/fragment_event_recycler_view_attached_trails"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:reverseLayout="false"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/components_margin_medium"
-                    android:layout_marginBottom="@dimen/components_margin_small"
-                    android:layout_marginStart="@dimen/components_margin_medium"
-                    android:layout_marginEnd="@dimen/components_margin_medium"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/text_size_title"
-                    android:textColor="@color/colorSecondaryDark"
-                    android:text="@string/label_event_description"/>
-
-                <TextView
-                    android:id="@+id/fragment_event_text_description"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/components_margin_small"
                     android:layout_marginBottom="@dimen/components_margin_small"
                     android:layout_marginStart="@dimen/components_margin_medium"
                     android:layout_marginEnd="@dimen/components_margin_medium"
-                    android:text="@string/example_event_description"/>
+                    android:text="@string/button_event_register_user"
+                    android:onClick="@{eventFragment::onRegisterUserButtonClick}"/>
 
-            </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-        </androidx.core.widget.NestedScrollView>
+                    <TextView
+                        android:id="@+id/fragment_event_text_user_registered"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/components_margin_small"
+                        android:layout_marginBottom="@dimen/components_margin_small"
+                        android:layout_marginStart="@dimen/components_margin_medium"
+                        android:layout_marginEnd="@dimen/components_margin_medium"
+                        android:gravity="center_vertical"
+                        android:drawableStart="@drawable/ic_check"
+                        android:drawablePadding="@dimen/components_margin_small"
+                        android:textColor="@color/colorBlack"
+                        android:text="@string/label_event_user_registered"
+                        android:visibility="gone"/>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/ClassicButtonStyle"
+                        android:id="@+id/fragment_event_button_unregister_user"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/components_margin_small"
+                        android:layout_marginBottom="@dimen/components_margin_small"
+                        android:layout_marginStart="@dimen/components_margin_medium"
+                        android:layout_marginEnd="@dimen/components_margin_medium"
+                        android:text="@string/button_event_unregister_user"
+                        android:visibility="gone"
+                        android:onClick="@{eventFragment::onUnregisterUserButtonClick}"/>
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/fragment_event_layout_registration"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="@dimen/components_elevation">
+                </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/ClassicButtonStyle"
-            android:id="@+id/fragment_event_button_register_user"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/components_margin_small"
-            android:layout_marginBottom="@dimen/components_margin_small"
-            android:layout_marginStart="@dimen/components_margin_medium"
-            android:layout_marginEnd="@dimen/components_margin_medium"
-            android:text="@string/button_event_register_user"/>
+            </com.google.android.material.card.MaterialCardView>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/fragment_event_text_user_registered"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/components_margin_small"
-                android:layout_marginBottom="@dimen/components_margin_small"
-                android:layout_marginStart="@dimen/components_margin_medium"
-                android:layout_marginEnd="@dimen/components_margin_medium"
-                android:gravity="center_vertical"
-                android:drawableStart="@drawable/ic_check"
-                android:drawablePadding="@dimen/components_margin_small"
-                android:textColor="@color/colorBlack"
-                android:text="@string/label_event_user_registered"
-                android:visibility="gone"/>
+    </FrameLayout>
 
-            <com.google.android.material.button.MaterialButton
-                style="@style/ClassicButtonStyle"
-                android:id="@+id/fragment_event_button_unregister_user"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/components_margin_small"
-                android:layout_marginBottom="@dimen/components_margin_small"
-                android:layout_marginStart="@dimen/components_margin_medium"
-                android:layout_marginEnd="@dimen/components_margin_medium"
-                android:text="@string/button_event_unregister_user"
-                android:visibility="gone"/>
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

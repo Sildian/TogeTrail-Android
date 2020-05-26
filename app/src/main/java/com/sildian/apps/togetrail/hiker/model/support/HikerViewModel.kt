@@ -1,16 +1,24 @@
 package com.sildian.apps.togetrail.hiker.model.support
 
 import androidx.lifecycle.viewModelScope
-import com.sildian.apps.togetrail.common.viewModels.BaseObservableViewModel
+import com.sildian.apps.togetrail.common.baseViewModels.BaseObservableViewModel
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 /*************************************************************************************************
- * This viewModel observes Hiker related data
+ * This viewModel observes a single Hiker related data
  ************************************************************************************************/
 
 class HikerViewModel : BaseObservableViewModel() {
+
+    /************************************Static items********************************************/
+
+    companion object{
+
+        /**Messages**/
+        private const val NULL_HIKER_UPDATE_MESSAGE="Cannot update a null hiker"
+    }
 
     /***************************************Data*************************************************/
 
@@ -74,7 +82,7 @@ class HikerViewModel : BaseObservableViewModel() {
                     successCallback?.invoke()
                 }
                 else{
-                    failureCallback?.invoke(NullPointerException("The hiker is null"))
+                    failureCallback?.invoke(NullPointerException(NULL_HIKER_UPDATE_MESSAGE))
                 }
             }
             catch(e:Exception){
