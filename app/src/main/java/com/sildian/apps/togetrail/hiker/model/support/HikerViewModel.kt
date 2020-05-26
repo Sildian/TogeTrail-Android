@@ -1,7 +1,6 @@
 package com.sildian.apps.togetrail.hiker.model.support
 
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.firestore.FirebaseFirestoreException
 import com.sildian.apps.togetrail.common.viewModels.BaseObservableViewModel
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import kotlinx.coroutines.async
@@ -22,15 +21,17 @@ class HikerViewModel : BaseObservableViewModel() {
     /**
      * Loads an hiker from the database in real time
      * @param hikerId : the hiker's id
+     * @param successCallback : the callback to handle a success in the query
      * @param failureCallback : the callback to handle a failure in the query
      */
 
-    fun loadHikerFromDatabaseRealTime(hikerId:String, failureCallback:((Exception)->Unit)?=null) {
+    fun loadHikerFromDatabaseRealTime(hikerId:String, successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null) {
         this.queryRegistration = HikerRepository.getHikerReference(hikerId)
             .addSnapshotListener { snapshot, e ->
                 if (snapshot != null) {
                     hiker = snapshot.toObject(Hiker::class.java)
                     notifyDataChanged()
+                    successCallback?.invoke()
                 }
                 else if(e!=null){
                     failureCallback?.invoke(e)
@@ -41,15 +42,40 @@ class HikerViewModel : BaseObservableViewModel() {
     /**
      * Loads an hiker from the database
      * @param hikerId : the hiker's id
+     * @param successCallback : the callback to handle a success in the query
      * @param failureCallback : the callback to handle a failure in the query
      */
 
-    fun loadHikerFromDatabase(hikerId:String, failureCallback:((Exception)->Unit)?=null){
+    fun loadHikerFromDatabase(hikerId:String, successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
         viewModelScope.launch {
             try {
                 val deferredHiker = async { HikerRepository.getHiker(hikerId) }
                 hiker = deferredHiker.await()
                 notifyDataChanged()
+                successCallback?.invoke()
+            }
+            catch(e:Exception){
+                failureCallback?.invoke(e)
+            }
+        }
+    }
+
+    /**
+     * Saves the hiker within the database
+     * @param successCallback : the callback to handle a success in the query
+     * @param failureCallback : the callback to handle a failure in the query
+     */
+
+    fun saveHikerInDatabase(successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
+        viewModelScope.launch {
+            try{
+                if(hiker!=null){
+                    launch { HikerRepository.updateHiker(hiker!!) }.join()
+                    successCallback?.invoke()
+                }
+                else{
+                    failureCallback?.invoke(NullPointerException("The hiker is null"))
+                }
             }
             catch(e:Exception){
                 failureCallback?.invoke(e)

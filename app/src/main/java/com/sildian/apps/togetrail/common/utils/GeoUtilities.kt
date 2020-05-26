@@ -19,6 +19,7 @@ object GeoUtilities {
      * @return the distance (in meters)
      */
 
+    @JvmStatic
     fun getDistance(pointA:LatLng, pointB:LatLng):Int{
         val earthRadius=6371.0
         val arg1:Double= sin(Math.toRadians(pointA.latitude)) * sin(Math.toRadians(pointB.latitude))
@@ -36,6 +37,7 @@ object GeoUtilities {
      * @return a bound
      */
 
+    @JvmStatic
     fun getBoundsAroundOriginPoint(originPoint:LatLng):LatLngBounds{
         val westLng=if(originPoint.longitude<=-179.5) -180.0 else originPoint.longitude-0.5
         val eastLng=if(originPoint.longitude>=179.5) 180.0 else originPoint.longitude+0.5

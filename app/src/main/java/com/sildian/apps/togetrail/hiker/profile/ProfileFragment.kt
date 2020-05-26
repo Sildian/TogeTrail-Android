@@ -44,8 +44,8 @@ class ProfileFragment (private val hikerId: String?)
             .of(this, ViewModelFactory)
             .get(HikerViewModel::class.java)
         (this.binding as FragmentProfileBinding).hikerViewModel=this.hikerViewModel
-        this.hikerId?.let { id ->
-            this.hikerViewModel.loadHikerFromDatabaseRealTime(id, this::handleQueryError)
+        this.hikerId?.let { hikerId ->
+            this.hikerViewModel.loadHikerFromDatabaseRealTime(hikerId, null, this::handleQueryError)
         }
     }
 

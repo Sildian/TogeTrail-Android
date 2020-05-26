@@ -26,6 +26,7 @@ object MapMarkersUtilities {
      * @return a BitmapDescriptor
      */
 
+    @JvmStatic
     fun createMapMarkerFromVector(context: Context?, resId: Int, text:String?=null)
             : BitmapDescriptor? {
         return if (context != null) {
@@ -52,6 +53,7 @@ object MapMarkersUtilities {
      * @param text : the text to be drawn on the marker
      */
 
+    @JvmStatic
     private fun drawTextOnMarker(context:Context, canvas:Canvas, text:String){
         val textPaint = Paint(ANTI_ALIAS_FLAG).apply {
             color = Color.BLACK

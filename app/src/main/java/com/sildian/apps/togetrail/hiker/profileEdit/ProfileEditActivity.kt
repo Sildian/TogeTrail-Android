@@ -208,9 +208,12 @@ class ProfileEditActivity : BaseDataFlowActivity() {
     /**Saves the hiker within the database**/
 
     private fun saveHikerInDatabase(){
-        this.hiker?.let { hiker ->
-            updateHiker(hiker, this::updateUserProfile)
-        }
+        //this.hiker?.let { hiker ->
+            //updateHiker(hiker, this::updateUserProfile)
+        //}
+        (this.fragment as ProfileInfoEditFragment)
+            .hikerViewModel
+            .saveHikerInDatabase(this::updateUserProfile, this::handleQueryError)
     }
 
     /**

@@ -20,6 +20,7 @@ object DateUtilities {
      * @return the resulted date
      */
 
+    @JvmStatic
     fun getDate(year:Int, month:Int, day:Int): Date {
         val calendar=Calendar.getInstance()
         calendar.set(Calendar.YEAR, year)
@@ -42,6 +43,7 @@ object DateUtilities {
      * @return the resulted date and time
      */
 
+    @JvmStatic
     fun getDateAndTime(year:Int, month:Int, day:Int, hour:Int, minute:Int):Date{
         val calendar=Calendar.getInstance()
         calendar.set(Calendar.YEAR, year)
@@ -61,6 +63,7 @@ object DateUtilities {
      * @return a single date and time
      */
 
+    @JvmStatic
     fun mergeDateAndTime(date:Date, time:Date):Date{
         val dateCalendar= Calendar.getInstance()
         dateCalendar.time=date
@@ -81,6 +84,7 @@ object DateUtilities {
      * @return a string
      */
 
+    @JvmStatic
     fun displayDateShort(date:Date):String{
         val format=SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT)
         return format.format(date)
@@ -92,6 +96,7 @@ object DateUtilities {
      * @return a string
      */
 
+    @JvmStatic
     fun displayDateMedium(date:Date):String{
         val format=SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM)
         return format.format(date)
@@ -103,6 +108,7 @@ object DateUtilities {
      * @return a string
      */
 
+    @JvmStatic
     fun displayDateFull(date:Date):String{
         val format=SimpleDateFormat.getDateInstance(SimpleDateFormat.FULL)
         return format.format(date)
@@ -114,6 +120,7 @@ object DateUtilities {
      * @return a string
      */
 
+    @JvmStatic
     fun displayTime(date:Date):String{
         val format=SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT)
         return format.format(date)
@@ -125,6 +132,7 @@ object DateUtilities {
      * @return a string
      */
 
+    @JvmStatic
     fun displayDateAndTimeShort(date:Date):String{
         val format=SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.SHORT, SimpleDateFormat.SHORT)
         return format.format(date)
@@ -136,6 +144,7 @@ object DateUtilities {
      * @return a string
      */
 
+    @JvmStatic
     fun displayDateAndTimeFull(date:Date):String{
         val format=SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.FULL, SimpleDateFormat.SHORT)
         return format.format(date)
@@ -147,6 +156,7 @@ object DateUtilities {
      * @return the date, or null if the string is not recognized
      */
 
+    @JvmStatic
     @Throws(ParseException::class)
     fun getDateFromString(displayedDate:String):Date?{
         return try {
@@ -165,6 +175,7 @@ object DateUtilities {
      * @return the time, or null if the string is not recognized
      */
 
+    @JvmStatic
     @Throws(ParseException::class)
     fun getTimeFromString(displayedTime:String):Date?{
         return try {
@@ -185,6 +196,7 @@ object DateUtilities {
      * @return a string to display the duration
      */
 
+    @JvmStatic
     fun displayDuration(minutes:Long, hourMetric:String, minuteMetric:String):String{
         val duration = Duration.standardMinutes(minutes)
         val period = duration.toPeriod()

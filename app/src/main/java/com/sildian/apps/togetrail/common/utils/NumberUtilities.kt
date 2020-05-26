@@ -15,6 +15,7 @@ object NumberUtilities {
      * @return the formated number
      */
 
+    @JvmStatic
     fun displayNumber(number:Double, fractionDigit:Int):String{
         val format=DecimalFormat.getNumberInstance()
         format.minimumFractionDigits=fractionDigit
@@ -30,6 +31,7 @@ object NumberUtilities {
      * @return the formated number
      */
 
+    @JvmStatic
     fun displayNumberWithMetric(number:Double, fractionDigit:Int, metric:String):String{
         val formatedNumber= StringBuilder(displayNumber(number, fractionDigit))
         formatedNumber.append(" $metric")
@@ -46,6 +48,7 @@ object NumberUtilities {
      * @return the formated number
      */
 
+    @JvmStatic
     fun displayNumberWithMetricAndSuffix(number:Double, fractionDigit:Int,
                                          metric:String, suffix:String, suffixBottom:Boolean):String{
 

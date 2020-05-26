@@ -1,12 +1,15 @@
 package com.sildian.apps.togetrail.hiker.profileEdit
 
 import android.content.DialogInterface
+import android.view.View
+import androidx.lifecycle.ViewModelProviders
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
-import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
+import com.sildian.apps.togetrail.common.viewModels.ViewModelFactory
+import com.sildian.apps.togetrail.databinding.FragmentProfileSettingsEditBinding
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
-import kotlinx.android.synthetic.main.fragment_profile_settings_edit.view.*
+import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
 
 /*************************************************************************************************
  * Lets the user edit its profile's settings
@@ -16,49 +19,35 @@ import kotlinx.android.synthetic.main.fragment_profile_settings_edit.view.*
 class ProfileSettingsEditFragment(private val hiker: Hiker?=null) : BaseDataFlowFragment()
 {
 
-    /**********************************UI component**********************************************/
+    /*****************************************Data***********************************************/
 
-    private val emailText by lazy {layout.fragment_profile_settings_edit_text_email}
-    private val registrationDateText by lazy {layout.fragment_profile_settings_edit_text_registration_date}
-    private val resetPasswordButton by lazy {layout.fragment_profile_settings_edit_button_reset_password}
-    private val deleteAccountButton by lazy {layout.fragment_profile_settings_edit_button_delete_account}
+    private lateinit var hikerViewModel: HikerViewModel
+
+    /***********************************Data monitoring******************************************/
+
+    override fun loadData() {
+        this.hikerViewModel= ViewModelProviders
+            .of(this, ViewModelFactory)
+            .get(HikerViewModel::class.java)
+        (this.binding as FragmentProfileSettingsEditBinding).profileSettingsEditFragment=this
+        (this.binding as FragmentProfileSettingsEditBinding).hikerViewModel=this.hikerViewModel
+        this.hiker?.id?.let { hikerId ->
+            this.hikerViewModel.loadHikerFromDatabase(hikerId, null, this::handleQueryError)
+        }
+    }
 
     /***********************************UI monitoring********************************************/
 
     override fun getLayoutId(): Int = R.layout.fragment_profile_settings_edit
 
-    override fun initializeUI(){
-        initializeChangePasswordButton()
-        initializeDeleteAccountButton()
-        refreshUI()
+    override fun useDataBinding(): Boolean = true
+
+    fun onChangePasswordButtonClick(view: View){
+        requestResetUserPasswordConfirmation()
     }
 
-    override fun refreshUI(){
-        updateEmailText()
-        updateRegistrationDateText()
-    }
-
-    private fun updateEmailText(){
-        this.emailText.text=this.hiker?.email
-    }
-
-    private fun updateRegistrationDateText(){
-        this.hiker?.registrationDate?.let { registrationDate ->
-            this.registrationDateText.text =
-                DateUtilities.displayDateShort(registrationDate)
-        }
-    }
-
-    private fun initializeChangePasswordButton(){
-        this.resetPasswordButton.setOnClickListener {
-            requestResetUserPasswordConfirmation()
-        }
-    }
-
-    private fun initializeDeleteAccountButton(){
-        this.deleteAccountButton.setOnClickListener {
-            requestDeleteUserAccountConfirmation()
-        }
+    fun onDeleteAccountButtonClick(view:View){
+        requestDeleteUserAccountConfirmation()
     }
 
     /******************************Reset password action*****************************************/

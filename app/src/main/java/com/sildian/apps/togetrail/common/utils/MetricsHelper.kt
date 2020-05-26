@@ -16,6 +16,7 @@ object MetricsHelper {
      * @return a string containing the duration to display
      */
 
+    @JvmStatic
     fun displayDuration(context: Context, duration:Long?):String{
         val hourMetric=context.resources.getString(R.string.metric_hour)
         val minuteMetric=context.resources.getString(R.string.metric_minute)
@@ -34,6 +35,7 @@ object MetricsHelper {
      * @return a string containing the distance to display
      */
 
+    @JvmStatic
     fun displayDistance(context:Context, distance:Int?, showSuffix:Boolean, suffixBottom:Boolean):String {
         val metric = context.resources.getString(R.string.metric_kilometer)
         val suffix = context.resources.getString(R.string.label_trail_distance_short)
@@ -60,6 +62,7 @@ object MetricsHelper {
      * @return a string containing the altitude to display
      */
 
+    @JvmStatic
     private fun displayAltitude(context:Context, altitude:Int?, showSuffix:Boolean, suffix:String, suffixBottom: Boolean):String{
         val metric=context.resources.getString(R.string.metric_meter)
         val unknownText=context.resources.getString(R.string.message_unknown_short)
@@ -86,6 +89,7 @@ object MetricsHelper {
      * @return a string containing the ascent to display
      */
 
+    @JvmStatic
     fun displayAscent(context:Context, altitude: Int?, showSuffix:Boolean, suffixBottom: Boolean):String{
         val suffix=context.resources.getString(R.string.label_trail_ascent_short)
         return displayAltitude(
@@ -106,6 +110,7 @@ object MetricsHelper {
      * @return a string containing the descent to display
      */
 
+    @JvmStatic
     fun displayDescent(context:Context, altitude: Int?, showSuffix:Boolean, suffixBottom: Boolean):String{
         val suffix=context.resources.getString(R.string.label_trail_descent_short)
         return displayAltitude(
@@ -126,6 +131,7 @@ object MetricsHelper {
      * @return a string containing the max elevation to display
      */
 
+    @JvmStatic
     fun displayMaxElevation(context:Context, altitude: Int?, showSuffix:Boolean, suffixBottom: Boolean):String{
         val suffix=context.resources.getString(R.string.label_trail_max_elevation_short)
         return displayAltitude(
@@ -146,6 +152,7 @@ object MetricsHelper {
      * @return a string containing the min elevation to display
      */
 
+    @JvmStatic
     fun displayMinElevation(context:Context, altitude: Int?, showSuffix:Boolean, suffixBottom: Boolean):String{
         val suffix=context.resources.getString(R.string.label_trail_min_elevation_short)
         return displayAltitude(
@@ -166,6 +173,7 @@ object MetricsHelper {
      * @return a string containing the elevation to display
      */
 
+    @JvmStatic
     fun displayElevation(context:Context, altitude: Int?, showSuffix:Boolean, suffixBottom: Boolean):String{
         val suffix=context.resources.getString(R.string.label_trail_poi_elevation)
         return displayAltitude(
