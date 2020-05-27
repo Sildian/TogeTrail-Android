@@ -22,7 +22,7 @@ class HikerViewModel : BaseObservableViewModel() {
 
     /***************************************Data*************************************************/
 
-    var hiker: Hiker?=null
+    var hiker: Hiker?=null                              //The hiker
 
     /************************************Data monitoring*****************************************/
 
