@@ -89,7 +89,6 @@ class EventFragment(private val eventId: String?=null) :
     private fun initializeToolbar(){
         (activity as EventActivity).setSupportActionBar(this.toolbar)
         (activity as EventActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        (activity as EventActivity).supportActionBar?.setTitle(R.string.toolbar_event)
     }
 
     private fun initializeRegistrationLayout(){

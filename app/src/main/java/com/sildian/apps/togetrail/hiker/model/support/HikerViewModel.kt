@@ -17,7 +17,7 @@ class HikerViewModel : BaseObservableViewModel() {
     companion object{
 
         /**Messages**/
-        private const val NULL_HIKER_UPDATE_MESSAGE="Cannot update a null hiker"
+        private const val EXCEPTION_MESSAGE_SAVE_NULL="Cannot save a null hiker"
     }
 
     /***************************************Data*************************************************/
@@ -82,7 +82,7 @@ class HikerViewModel : BaseObservableViewModel() {
                     successCallback?.invoke()
                 }
                 else{
-                    failureCallback?.invoke(NullPointerException(NULL_HIKER_UPDATE_MESSAGE))
+                    failureCallback?.invoke(NullPointerException(EXCEPTION_MESSAGE_SAVE_NULL))
                 }
             }
             catch(e:Exception){

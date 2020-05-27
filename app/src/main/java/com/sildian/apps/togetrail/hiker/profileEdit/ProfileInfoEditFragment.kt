@@ -55,6 +55,7 @@ class ProfileInfoEditFragment(private val hiker: Hiker?=null) : BaseImagePickerF
     override fun updateData(data:Any?) {
         if(data is Location){
             this.hikerViewModel.hiker?.liveLocation=data
+            this.liveLocationTextField.setText(data.fullAddress)
         }
     }
 

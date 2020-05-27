@@ -46,20 +46,21 @@ object EventRepository {
     /**
      * Adds an event
      * @param event : the event to add
+     * @return the event's id
      */
 
     @Throws(Exception::class)
-    suspend fun addEvent(event:Event){
+    suspend fun addEvent(event:Event):String? =
         withContext(Dispatchers.IO){
             try{
                 EventFirebaseQueries
                     .createEvent(event)
                     .await()
+                    .id
             }catch (e: Exception) {
                 throw e
             }
         }
-    }
 
     /**
      * Updates an event
