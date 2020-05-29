@@ -6,7 +6,7 @@ import com.google.firebase.firestore.Query
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
-import com.sildian.apps.togetrail.hiker.model.core.Hiker
+import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
 import com.sildian.apps.togetrail.main.MainActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.support.TrailFirebaseQueries
@@ -16,10 +16,10 @@ import kotlinx.android.synthetic.main.fragment_trails_list.view.*
 
 /*************************************************************************************************
  * Shows the lists of trails on the screen, using different queries to populate it
- * @param currentUser : the current user
+ * @param hikerViewModel : the current user
  ************************************************************************************************/
 
-class TrailsListFragment (private val currentUser: Hiker?=null) :
+class TrailsListFragment (private val hikerViewModel: HikerViewModel?=null) :
     BaseDataFlowFragment(),
     TrailHorizontalViewHolder.OnTrailClickListener
 {
@@ -77,11 +77,11 @@ class TrailsListFragment (private val currentUser: Hiker?=null) :
     }
 
     private fun initializeMyTrailsRecyclerView(){
-        if(this.currentUser!=null&&this.currentUser.nbTrailsCreated>0) {
+        if(this.hikerViewModel?.hiker!=null&&this.hikerViewModel.hiker?.nbTrailsCreated!!>0) {
             this.myTrailsAdapter = TrailHorizontalAdapter(
                 DatabaseFirebaseHelper.generateOptionsForAdapter(
                     Trail::class.java,
-                    TrailFirebaseQueries.getMyTrails(this.currentUser.id),
+                    TrailFirebaseQueries.getMyTrails(this.hikerViewModel.hiker?.id!!),
                     activity as AppCompatActivity
                 ), this
             )
@@ -94,11 +94,11 @@ class TrailsListFragment (private val currentUser: Hiker?=null) :
     }
 
     private fun initializeNearbyHomeTrailsRecyclerView(){
-        if(this.currentUser?.liveLocation?.country!=null) {
+        if(this.hikerViewModel?.hiker?.liveLocation?.country!=null) {
             this.nearbyHomeTrailsAdapter = TrailHorizontalAdapter(
                 DatabaseFirebaseHelper.generateOptionsForAdapter(
                     Trail::class.java,
-                    TrailFirebaseQueries.getTrailsNearbyLocation(this.currentUser.liveLocation)!!,
+                    TrailFirebaseQueries.getTrailsNearbyLocation(this.hikerViewModel.hiker?.liveLocation!!)!!,
                     activity as AppCompatActivity
                 ), this
             )

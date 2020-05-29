@@ -25,7 +25,7 @@ class EventViewModel : BaseObservableViewModel() {
 
     /***************************************Data*************************************************/
 
-    var event: Event?=null                          //The event
+    var event: Event?=null ; private set            //The event
     val attachedTrails= arrayListOf<Trail>()        //The list of attached trails (useful only when the event has no id yet)
 
     /************************************Data monitoring*****************************************/
@@ -38,6 +38,7 @@ class EventViewModel : BaseObservableViewModel() {
      */
 
     fun loadEventFromDatabaseRealTime(eventId:String, successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null) {
+        this.queryRegistration?.remove()
         this.queryRegistration = EventRepository.getEventReference(eventId)
             .addSnapshotListener { snapshot, e ->
                 if (snapshot != null) {

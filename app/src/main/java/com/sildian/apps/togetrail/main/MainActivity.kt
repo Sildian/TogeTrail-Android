@@ -16,6 +16,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.core.view.GravityCompat
+import androidx.databinding.Observable
+import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.firebase.ui.auth.AuthUI
@@ -28,6 +30,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.common.utils.NumberUtilities
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
@@ -37,10 +40,7 @@ import com.sildian.apps.togetrail.event.list.EventsListFragment
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
 import com.sildian.apps.togetrail.hiker.profileEdit.ProfileEditActivity
-import com.sildian.apps.togetrail.hiker.model.core.Hiker
-import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
-import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
-import com.sildian.apps.togetrail.hiker.model.support.HikerBuilder
+import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
 import com.sildian.apps.togetrail.hiker.profile.ProfileActivity
 import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.location.search.LocationSearchActivity
@@ -88,9 +88,7 @@ class MainActivity :
 
     /****************************************Data************************************************/
 
-    private var currentUser: Hiker?=null                //The current user connected to the app
-    private var trails= listOf<Trail>()                 //The list of trails to display
-    private var events= listOf<Event>()                 //The list of events to display
+    private lateinit var hikerViewModel:HikerViewModel      //The current user connected to the app
 
     /*************************************Queries************************************************/
 
@@ -175,7 +173,7 @@ class MainActivity :
                                 R.string.message_user_not_connected_message,
                                 DialogInterface.OnClickListener { dialog, which ->
                                     if(which==DialogInterface.BUTTON_POSITIVE){
-                                        login()
+                                        startLogin()
                                     }
                                 }
                             ).show()
@@ -191,7 +189,7 @@ class MainActivity :
                                 R.string.message_user_not_connected_message,
                                 DialogInterface.OnClickListener { dialog, which ->
                                     if(which==DialogInterface.BUTTON_POSITIVE){
-                                        login()
+                                        startLogin()
                                     }
                                 }
                             ).show()
@@ -205,7 +203,7 @@ class MainActivity :
                         this.bottomNavigationView.selectedItemId = R.id.menu_main_events
                     }
                     R.id.menu_user_login ->
-                        login()
+                        startLogin()
                 }
                 true
             }
@@ -251,7 +249,7 @@ class MainActivity :
                 R.string.message_user_not_connected_message,
                 DialogInterface.OnClickListener { dialog, which ->
                     if (which==DialogInterface.BUTTON_POSITIVE){
-                        login()
+                        startLogin()
                     }
                 }
             ).show()
@@ -290,113 +288,36 @@ class MainActivity :
     /**Loads data**/
 
     override fun loadData() {
-        loadCurrentUserFromDatabase()
+        this.hikerViewModel=ViewModelProviders
+            .of(this, ViewModelFactory)
+            .get(HikerViewModel::class.java)
+        loginCurrentUser()
     }
 
-    /**Loads the current user's info from the database**/
+    /**Logs the current user in the database**/
 
-    private fun loadCurrentUserFromDatabase(){
-        val user=AuthFirebaseHelper.getCurrentUser()
-        user?.uid?.let { userId ->
-            this.progressbar.visibility= View.VISIBLE
-            getHikerRealTime(userId, this::handleHikerResult)
+    private fun loginCurrentUser(){
+        if(AuthFirebaseHelper.getCurrentUser()!=null) {
+            this.progressbar.visibility = View.VISIBLE
+            this.hikerViewModel.loginUser(this::handleLoginCurrentUser, this::handleQueryError)
         }
     }
 
-    /**Handles the hiker result when loaded
-     * @param hiker : the resulted hiker
-     */
+    /**Handles current user login**/
 
-    private fun handleHikerResult(hiker: Hiker?){
-
+    private fun handleLoginCurrentUser(){
         this.progressbar.visibility= View.GONE
-
-        /*If the hiker exists, sets it as the current user*/
-
-        if(hiker!=null){
-            this.currentUser=hiker
-        }
-
-        /*Else creates a new Hiker with the Firebase user Auth info*/
-
-        else{
-            val user=AuthFirebaseHelper.getCurrentUser()
-            user?.let { firebaseUser ->
-                this.currentUser = HikerBuilder
-                    .withFirebaseUser(firebaseUser)
-                    .build()
-                saveCurrentUserInDatabase()
-            }
+        this.hikerViewModel.hiker?.id?.let { hikerId ->
+            this.hikerViewModel.loadHikerFromDatabaseRealTime(hikerId)
         }
     }
 
-    /**Saves the current user's info within the database**/
+    //TODO Move this?
 
-    private fun saveCurrentUserInDatabase(){
-        this.currentUser?.let { hiker ->
-            updateHiker(hiker, this::saveCurrentUserHistoryItemInDatabase)
-        }
-    }
-
-    /**Saves an history item within the current user's profile**/
-
-    private fun saveCurrentUserHistoryItemInDatabase(){
-        this.progressbar.visibility= View.GONE
-        this.currentUser?.let { hiker ->
-            val historyItem = HikerHistoryItem(
-                HikerHistoryType.HIKER_REGISTERED,
-                hiker.registrationDate
-            )
-            addHikerHistoryItem(hiker.id, historyItem)
-        }
-    }
-
-    /**Loads the trails from the database**/
-
-    fun loadTrailsFromDatabase(){
-        this.progressbar.visibility= View.VISIBLE
-        getTrailsRealTime(this.trailsQuery, this::handleTrailsResult)
-    }
-
-    /**
-     * Handles trails result when loaded from the database
-     * @param trails : the resulted list of trails
-     */
-
-    private fun handleTrailsResult(trails:List<Trail>){
-        this.progressbar.visibility= View.GONE
-        if(trails.isNotEmpty()) {
-            this.trails = trails
-            this.fragment?.updateData(this.trails)
-        }else{
-            Snackbar.make(this.messageView, R.string.message_query_result_empty, Snackbar.LENGTH_LONG)
-                .setAnchorView(this.addButton)
-                .show()
-        }
-    }
-
-    /**Loads the events from the database**/
-
-    fun loadEventsFromDatabase(){
-        this.progressbar.visibility= View.VISIBLE
-        getEventsRealTime(this.eventsQuery, this::handleEventsResult)
-    }
-
-    /**
-     * Handles events result when loaded from the database
-     * @param events : the resulted list of trails
-     */
-
-    private fun handleEventsResult(events:List<Event>){
-        this.progressbar.visibility= View.GONE
-        if(events.isNotEmpty()) {
-            this.events = events
-            this.fragment?.updateData(this.events)
-        }else{
-            Snackbar.make(this.messageView, R.string.message_query_result_empty, Snackbar.LENGTH_LONG)
-                .setAnchorView(this.addButton)
-                .show()
-        }
+    fun showEmptyMessage(){
+        Snackbar.make(this.messageView, R.string.message_query_result_empty, Snackbar.LENGTH_LONG)
+            .setAnchorView(this.addButton)
+            .show()
     }
 
     /**
@@ -506,6 +427,11 @@ class MainActivity :
         toggle.syncState()
         this.navigationView.setNavigationItemSelectedListener(this)
         updateNavigationViewUserItems()
+        this.hikerViewModel.addOnPropertyChangedCallback(object:Observable.OnPropertyChangedCallback(){
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                updateNavigationViewUserItems()
+            }
+        })
     }
 
     private fun initializeBottomNavigationView(){
@@ -522,8 +448,7 @@ class MainActivity :
 
         /*If the user is null, then shows default info*/
 
-        val user=AuthFirebaseHelper.getCurrentUser()
-        if(user==null){
+        if(this.hikerViewModel.hiker==null){
             this.navigationHeaderUserImage.setImageResource(R.drawable.ic_person_white)
             this.navigationHeaderUserNameText.setText(R.string.message_user_unknown)
         }
@@ -532,24 +457,22 @@ class MainActivity :
 
         else{
             Glide.with(this)
-                .load(user.photoUrl)
+                .load(this.hikerViewModel.hiker?.photoUrl)
                 .apply(RequestOptions.circleCropTransform())
                 .placeholder(R.drawable.ic_person_white)
                 .into(this.navigationHeaderUserImage)
-            this.navigationHeaderUserNameText.text=user.displayName
+            this.navigationHeaderUserNameText.text=this.hikerViewModel.hiker?.name
         }
     }
 
     /******************************Login / Logout************************************************/
 
-    private fun login(){
+    private fun startLogin(){
         val user=AuthFirebaseHelper.getCurrentUser()
         if(user==null){
             startLoginActivity()
         }else{
-            this.currentUser=null
-            AuthFirebaseHelper.signUserOut()
-            updateNavigationViewUserItems()
+            this.hikerViewModel.logoutUser()
         }
         this.drawerLayout.closeDrawers()
     }
@@ -564,11 +487,11 @@ class MainActivity :
     private fun showFragment(fragmentId:Int){
         when(fragmentId){
             ID_FRAGMENT_MAP->
-                this.fragment= TrailMapFragment(this.trails, this.events)
+                this.fragment= TrailMapFragment()
             ID_FRAGMENT_TRAILS->
-                this.fragment=TrailsListFragment(this.currentUser)
+                this.fragment=TrailsListFragment(this.hikerViewModel)
             ID_FRAGMENT_EVENTS->
-                this.fragment= EventsListFragment(this.currentUser)
+                this.fragment= EventsListFragment(this.hikerViewModel)
         }
         this.fragment?.let { fragment ->
             supportFragmentManager.beginTransaction()
@@ -651,7 +574,7 @@ class MainActivity :
 
     private fun startProfileActivity(){
         val profileActivityIntent=Intent(this, ProfileActivity::class.java)
-        profileActivityIntent.putExtra(ProfileActivity.KEY_BUNDLE_HIKER_ID, this.currentUser?.id)
+        profileActivityIntent.putExtra(ProfileActivity.KEY_BUNDLE_HIKER_ID, this.hikerViewModel.hiker?.id)
         startActivity(profileActivityIntent)
     }
 
@@ -660,7 +583,7 @@ class MainActivity :
     private fun startProfileEditActivity(){
         val profileEditActivityIntent=Intent(this, ProfileEditActivity::class.java)
         profileEditActivityIntent.putExtra(ProfileEditActivity.KEY_BUNDLE_PROFILE_ACTION, ProfileEditActivity.ACTION_PROFILE_EDIT_SETTINGS)
-        profileEditActivityIntent.putExtra(ProfileEditActivity.KEY_BUNDLE_HIKER, this.currentUser)
+        profileEditActivityIntent.putExtra(ProfileEditActivity.KEY_BUNDLE_HIKER, this.hikerViewModel.hiker)
         startActivity(profileEditActivityIntent)
     }
 
@@ -721,8 +644,7 @@ class MainActivity :
         when{
             resultCode== Activity.RESULT_OK -> {
                 Log.d(TAG, "Login successful")
-                updateNavigationViewUserItems()
-                loadCurrentUserFromDatabase()
+                loginCurrentUser()
             }
             resultCode==Activity.RESULT_CANCELED -> {
                 Log.d(TAG, "Login canceled")

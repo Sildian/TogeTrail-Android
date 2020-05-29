@@ -22,7 +22,7 @@ class TrailViewModel:BaseObservableViewModel() {
 
     /***************************************Data*************************************************/
 
-    var trail: Trail?=null                              //The trail
+    var trail: Trail?=null ; private set                    //The trail
 
     /************************************Data monitoring*****************************************/
 
@@ -34,6 +34,7 @@ class TrailViewModel:BaseObservableViewModel() {
      */
 
     fun loadTrailFromDatabaseRealTime(trailId:String, successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null) {
+        this.queryRegistration?.remove()
         this.queryRegistration = TrailRepository.getTrailReference(trailId)
             .addSnapshotListener { snapshot, e ->
                 if (snapshot != null) {

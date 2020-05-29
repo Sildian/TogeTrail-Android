@@ -12,15 +12,16 @@ import com.sildian.apps.togetrail.event.others.EventHorizontalAdapter
 import com.sildian.apps.togetrail.event.others.EventHorizontalViewHolder
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
+import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
 import com.sildian.apps.togetrail.main.MainActivity
 import kotlinx.android.synthetic.main.fragment_events_list.view.*
 
 /*************************************************************************************************
  * Shows the lists of events on the screen, using different queries to populate it
- * @param currentUser : the current user
+ * @param hikerViewModel : the current user
  ************************************************************************************************/
 
-class EventsListFragment (private val currentUser: Hiker?=null) :
+class EventsListFragment (private val hikerViewModel: HikerViewModel?=null) :
     BaseDataFlowFragment(),
     EventHorizontalViewHolder.OnEventClickListener
 {
@@ -73,11 +74,11 @@ class EventsListFragment (private val currentUser: Hiker?=null) :
     }
 
     private fun initializeIAttendEventsRecyclerView() {
-        if (this.currentUser!= null && this.currentUser.nbEventsAttended>0) {
+        if (this.hikerViewModel?.hiker!= null && this.hikerViewModel.hiker?.nbEventsAttended!!>0) {
             this.iAttendEventsAdapter = EventHorizontalAdapter(
                 DatabaseFirebaseHelper.generateOptionsForAdapter(
                     Event::class.java,
-                    HikerFirebaseQueries.getAttendedEvents(this.currentUser.id),
+                    HikerFirebaseQueries.getAttendedEvents(this.hikerViewModel.hiker?.id!!),
                     activity as AppCompatActivity
                 ), this
             )
@@ -100,11 +101,11 @@ class EventsListFragment (private val currentUser: Hiker?=null) :
     }
 
     private fun initializeMyEventsRecyclerView() {
-        if (this.currentUser!= null && this.currentUser.nbEventsCreated>0) {
+        if (this.hikerViewModel?.hiker!= null && this.hikerViewModel.hiker?.nbEventsCreated!!>0) {
             this.myEventsAdapter = EventHorizontalAdapter(
                 DatabaseFirebaseHelper.generateOptionsForAdapter(
                     Event::class.java,
-                    EventFirebaseQueries.getMyEvents(this.currentUser.id),
+                    EventFirebaseQueries.getMyEvents(this.hikerViewModel.hiker?.id!!),
                     activity as AppCompatActivity
                 ), this
             )
@@ -116,11 +117,11 @@ class EventsListFragment (private val currentUser: Hiker?=null) :
     }
 
     private fun initializeNearbyHomeEventsRecyclerView(){
-        if(this.currentUser?.liveLocation?.country!=null) {
+        if(this.hikerViewModel?.hiker?.liveLocation?.country!=null) {
             this.nearbyHomeEventsAdapter = EventHorizontalAdapter(
                 DatabaseFirebaseHelper.generateOptionsForAdapter(
                     Event::class.java,
-                    EventFirebaseQueries.getEventsNearbyLocation(this.currentUser.liveLocation)!!,
+                    EventFirebaseQueries.getEventsNearbyLocation(this.hikerViewModel.hiker?.liveLocation!!)!!,
                     activity as AppCompatActivity
                 ), this
             )

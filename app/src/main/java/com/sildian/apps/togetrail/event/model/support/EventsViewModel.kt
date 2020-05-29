@@ -24,6 +24,7 @@ class EventsViewModel:BaseObservableViewModel() {
      */
 
     fun loadEventsFromDatabaseRealTime(query: Query, successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
+        this.queryRegistration?.remove()
         this.queryRegistration = query
             .addSnapshotListener { querySnapshot, e ->
                 if (querySnapshot != null) {

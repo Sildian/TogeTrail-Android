@@ -4,6 +4,8 @@ import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.Observable
+import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -15,31 +17,31 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.utils.MapMarkersUtilities
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
 import com.sildian.apps.togetrail.event.model.core.Event
+import com.sildian.apps.togetrail.event.model.support.EventsViewModel
 import com.sildian.apps.togetrail.main.MainActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailLevel
+import com.sildian.apps.togetrail.trail.model.support.TrailsViewModel
 import kotlinx.android.synthetic.main.fragment_trail_map.view.*
 import kotlinx.android.synthetic.main.map_info_window_event.view.*
 import kotlinx.android.synthetic.main.map_info_window_trail.view.*
 
 /*************************************************************************************************
  * Shows the list of trails on a map, and also the list of events
- * @param trails : the list of trails to be shown
- * @param events : the list of events to be shown
  ************************************************************************************************/
 
-class TrailMapFragment (
-    private var trails: List<Trail> = emptyList(),
-    private var events: List<Event> = emptyList()
-) :
+class TrailMapFragment :
     BaseTrailMapFragment(),
     GoogleMap.InfoWindowAdapter,
     GoogleMap.OnInfoWindowClickListener
 {
+
+    //TODO add progressbar while loading trails and events
 
     /**********************************Static items**********************************************/
 
@@ -51,8 +53,10 @@ class TrailMapFragment (
 
     /**************************************Data**************************************************/
 
-    private var showTrails=true                     //True if trails must be shown
-    private var showEvents=false                    //True if events must be shown
+    private lateinit var trailsViewModel:TrailsViewModel    //The list of trails to display
+    private lateinit var eventsViewModel:EventsViewModel    //The list of events to display
+    private var showTrails=true                             //True if trails must be shown
+    private var showEvents=false                            //True if events must be shown
 
     /**********************************UI component**********************************************/
 
@@ -61,31 +65,34 @@ class TrailMapFragment (
 
     /**********************************Data monitoring*******************************************/
 
+    override fun loadData() {
+        this.trailsViewModel= ViewModelProviders
+            .of(this, ViewModelFactory)
+            .get(TrailsViewModel::class.java)
+        this.eventsViewModel= ViewModelProviders
+            .of(this, ViewModelFactory)
+            .get(EventsViewModel::class.java)
+    }
+
     override fun updateData(data:Any?) {
-        if(data is List<*>){
-            when{
-                data.firstOrNull() is Trail -> handleTrailsQueryResult(data as List<Trail>)
-                data.firstOrNull() is Event -> handleEventsQueryResult(data as List<Event>)
-            }
-        }
-        else if(data==null) {
+        if(data==null) {
             if (this.showTrails) {
-                (activity as MainActivity).loadTrailsFromDatabase()
+                loadTrails()
             }
             if (this.showEvents) {
-                (activity as MainActivity).loadEventsFromDatabase()
+                loadEvents()
             }
         }
     }
 
-    private fun handleTrailsQueryResult(trails: List<Trail>) {
-        this.trails=trails
-        showTrailsOnMap()
+    private fun loadTrails(){
+        val trailsQuery=(activity as MainActivity).trailsQuery
+        this.trailsViewModel.loadTrailsFromDatabaseRealTime(trailsQuery)
     }
 
-    private fun handleEventsQueryResult(events: List<Event>) {
-        this.events=events
-        showEventsOnMap()
+    private fun loadEvents(){
+        val eventsQuery=(activity as MainActivity).eventsQuery
+        this.eventsViewModel.loadEventsFromDatabaseRealTime(eventsQuery)
     }
 
     /************************************UI monitoring*******************************************/
@@ -100,19 +107,21 @@ class TrailMapFragment (
 
     override fun enableUI() {
         this.map?.uiSettings?.setAllGesturesEnabled(true)
+        this.searchButton.isEnabled=true
+        this.filterToggle.isEnabled=true
     }
 
     override fun disableUI() {
         this.map?.uiSettings?.setAllGesturesEnabled(false)
+        this.searchButton.isEnabled=false
+        this.filterToggle.isEnabled=false
     }
 
     override fun initializeUI() {
         initializeSearchButton()
         initializeFilterToggle()
-    }
-
-    override fun refreshUI() {
-        //Nothing
+        initializeTrailsRefreshUI()
+        initializeEventsRefreshUI()
     }
 
     private fun initializeSearchButton(){
@@ -121,10 +130,10 @@ class TrailMapFragment (
             if(point!=null) {
                 (activity as MainActivity).setQueriesToSearchAroundPoint(point)
                 if(this.showTrails) {
-                    (activity as MainActivity).loadTrailsFromDatabase()
+                    loadTrails()
                 }
                 if(this.showEvents) {
-                    (activity as MainActivity).loadEventsFromDatabase()
+                    loadEvents()
                 }
             }
         }
@@ -138,16 +147,40 @@ class TrailMapFragment (
                     if(isChecked) {
                         this.showTrails=true
                         this.showEvents=false
-                        (activity as MainActivity).loadTrailsFromDatabase()
+                        loadTrails()
                     }
                 R.id.fragment_trail_map_toggle_filter_events ->
                     if(isChecked) {
                         this.showTrails=false
                         this.showEvents=true
-                        (activity as MainActivity).loadEventsFromDatabase()
+                        loadEvents()
                     }
             }
         }
+    }
+
+    private fun initializeTrailsRefreshUI(){
+        this.trailsViewModel.addOnPropertyChangedCallback(object:Observable.OnPropertyChangedCallback(){
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                if(trailsViewModel.trails.isEmpty()){
+                    (activity as MainActivity).showEmptyMessage()
+                }else {
+                    showTrailsOnMap()
+                }
+            }
+        })
+    }
+
+    private fun initializeEventsRefreshUI(){
+        this.eventsViewModel.addOnPropertyChangedCallback(object:Observable.OnPropertyChangedCallback(){
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                if(eventsViewModel.events.isEmpty()){
+                    (activity as MainActivity).showEmptyMessage()
+                }else {
+                    showEventsOnMap()
+                }
+            }
+        })
     }
 
     /***********************************Map monitoring*******************************************/
@@ -157,14 +190,14 @@ class TrailMapFragment (
         this.map?.setOnInfoWindowClickListener(this)
         when{
             this.showTrails ->
-                if(this.trails.isEmpty()) {
-                    (activity as MainActivity).loadTrailsFromDatabase()
+                if(this.trailsViewModel.trails.isEmpty()) {
+                    loadTrails()
                 }else{
                     showTrailsOnMap()
                 }
             this.showEvents ->
-                if(this.events.isEmpty()){
-                    (activity as MainActivity).loadEventsFromDatabase()
+                if(this.eventsViewModel.events.isEmpty()){
+                    loadEvents()
                 }else{
                     showEventsOnMap()
                 }
@@ -300,7 +333,7 @@ class TrailMapFragment (
 
         /*For each trail in the list, shows a marker*/
 
-        this.trails.forEach { trail ->
+        this.trailsViewModel.trails.forEach { trail ->
             if(trail.position!=null) {
                 this.map?.addMarker(
                     MarkerOptions()
@@ -323,7 +356,7 @@ class TrailMapFragment (
 
         /*For each event in the list, shows a marker*/
 
-        this.events.forEach { event ->
+        this.eventsViewModel.events.forEach { event ->
             if(event.position!=null) {
                 this.map?.addMarker(
                     MarkerOptions()
