@@ -13,22 +13,21 @@ import com.sildian.apps.togetrail.common.utils.uiHelpers.PickerHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.TextFieldHelper
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.databinding.FragmentProfileInfoEditBinding
-import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
 import com.sildian.apps.togetrail.location.model.core.Location
 import kotlinx.android.synthetic.main.fragment_profile_info_edit.view.*
 
 /*************************************************************************************************
  * Lets the user edit its profile's information
- * @param hiker : the hiker
+ * @param hikerId : the hiker's id
  ************************************************************************************************/
 
-class ProfileInfoEditFragment(private val hiker: Hiker?=null) : BaseImagePickerFragment()
+class ProfileInfoEditFragment(private val hikerId: String?=null) : BaseImagePickerFragment()
 {
 
     /*****************************************Data***********************************************/
 
-    /*TODO private*/ lateinit var hikerViewModel: HikerViewModel
+    private lateinit var hikerViewModel: HikerViewModel
 
     /**********************************UI component**********************************************/
 
@@ -47,7 +46,7 @@ class ProfileInfoEditFragment(private val hiker: Hiker?=null) : BaseImagePickerF
             .get(HikerViewModel::class.java)
         (this.binding as FragmentProfileInfoEditBinding).profileInfoEditFragment=this
         (this.binding as FragmentProfileInfoEditBinding).hikerViewModel=this.hikerViewModel
-        this.hiker?.id?.let { hikerId ->
+        this.hikerId?.let { hikerId ->
             this.hikerViewModel.loadHikerFromDatabase(hikerId, null, this::handleQueryError)
         }
     }
@@ -67,12 +66,17 @@ class ProfileInfoEditFragment(private val hiker: Hiker?=null) : BaseImagePickerF
                     DateUtilities.getDateFromString(this.birthdayTextFieldDropdown.text.toString())
                 else null
             this.hikerViewModel.hiker?.description = this.descriptionTextField.text.toString()
-            (activity as ProfileEditActivity).saveHiker()
+            //TODO replace progress dialog
+            this.hikerViewModel.saveHikerInDatabase(this::handleSaveDataResult, this::handleQueryError)
         }
     }
 
     override fun checkDataIsValid():Boolean =
         TextFieldHelper.checkTextFieldIsNotEmpty(this.nameTextField, this.nameTextFieldLayout)
+
+    private fun handleSaveDataResult(){
+        (activity as ProfileEditActivity).finish()
+    }
 
     /***********************************UI monitoring********************************************/
 
@@ -127,8 +131,7 @@ class ProfileInfoEditFragment(private val hiker: Hiker?=null) : BaseImagePickerF
     /*******************************Photos monitoring********************************************/
 
     override fun addPhoto(filePath:String){
-        (activity as ProfileEditActivity)
-            .updateImagePathToUploadIntoDatabase(filePath)
+        this.hikerViewModel.updateImagePathToUpload(filePath)
         this.hikerViewModel.hiker?.photoUrl=filePath
         updatePhoto()
     }

@@ -62,6 +62,24 @@ object HikerRepository {
     }
 
     /**
+     * Deletes an hiker
+     * @param hiker : the hiker to delete
+     */
+
+    @Throws(Exception::class)
+    suspend fun deleteHiker(hiker:Hiker){
+        withContext(Dispatchers.IO){
+            try{
+                HikerFirebaseQueries
+                    .deleteHiker(hiker)
+                    .await()
+            } catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    /**
      * Adds an hiker's history item
      * @param hikerId : the hiker's id
      * @param historyItem : the history item to add

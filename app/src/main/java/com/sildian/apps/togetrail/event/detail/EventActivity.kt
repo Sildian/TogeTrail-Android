@@ -43,7 +43,6 @@ class EventActivity : BaseDataFlowActivity() {
 
     /**********************************UI component**********************************************/
 
-    private val progressbar by lazy {activity_event_progressbar}
     private var fragment: BaseDataFlowFragment?=null
 
     /************************************Life cycle**********************************************/
@@ -130,7 +129,6 @@ class EventActivity : BaseDataFlowActivity() {
      */
 
     private fun handleEventResult(event:Event?){
-        this.progressbar.visibility= View.GONE
         this.event=event
         defineMenuItems()
         if(this.fragment==null){

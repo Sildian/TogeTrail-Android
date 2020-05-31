@@ -2,7 +2,8 @@ package com.sildian.apps.togetrail.hiker.model.support
 
 import androidx.lifecycle.viewModelScope
 import com.sildian.apps.togetrail.common.baseViewModels.BaseObservableViewModel
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
@@ -21,11 +22,14 @@ class HikerViewModel : BaseObservableViewModel() {
 
         /**Messages**/
         private const val EXCEPTION_MESSAGE_SAVE_NULL="Cannot save a null hiker"
+        private const val EXCEPTION_MESSAGE_DELETE_NULL="Cannot delete a null hiker"
     }
 
     /***************************************Data*************************************************/
 
-    var hiker: Hiker?=null ; private set                        //The hiker
+    var hiker: Hiker?=null ; private set                //The hiker
+    var imagePathToUpload:String?=null ; private set    //Path of image to upload into the cloud
+    var imagePathToDelete:String?=null ; private set    //Path of image to delete from the cloud
 
     /************************************Data monitoring*****************************************/
 
@@ -73,7 +77,7 @@ class HikerViewModel : BaseObservableViewModel() {
     }
 
     /**
-     * Saves the hiker within the database
+     * Saves the hiker within the database, after uploading or deleting the profile's image
      * @param successCallback : the callback to handle a success in the query
      * @param failureCallback : the callback to handle a failure in the query
      */
@@ -82,7 +86,16 @@ class HikerViewModel : BaseObservableViewModel() {
         viewModelScope.launch {
             try{
                 if(hiker!=null){
+                    imagePathToDelete?.let { url ->
+                        launch { StorageRepository.deleteImage(url) }.join()
+                    }
+                    imagePathToUpload?.let { uri ->
+                        val deferredNewImageUrl=async { StorageRepository.uploadImage(uri) }
+                        val newImageUrl=deferredNewImageUrl.await()
+                        hiker?.photoUrl=newImageUrl
+                    }
                     launch { HikerRepository.updateHiker(hiker!!) }.join()
+                    launch { AuthRepository.updateUserProfile(hiker!!.name!!, hiker!!.photoUrl) }.join()
                     successCallback?.invoke()
                 }
                 else{
@@ -102,7 +115,7 @@ class HikerViewModel : BaseObservableViewModel() {
      * @param failureCallback : the callback to handle a failure in the query
      */
 
-    fun saveHikerHistoryItem(historyItem:HikerHistoryItem, successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
+    fun saveHikerHistoryItemInDatabase(historyItem:HikerHistoryItem, successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
         viewModelScope.launch {
             try{
                 if(hiker!=null){
@@ -120,6 +133,33 @@ class HikerViewModel : BaseObservableViewModel() {
     }
 
     /**
+     * Gives an image to be stored on the cloud
+     * @param imagePath : the temporary image's uri
+     */
+
+    fun updateImagePathToUpload(imagePath:String){
+        this.hiker?.photoUrl?.let { photoUrl ->
+            if (photoUrl.startsWith("https://")) {
+                this.imagePathToDelete = photoUrl
+            }
+            this.imagePathToUpload = imagePath
+        }
+    }
+
+    /**
+     * Gives an image to be deleted from the cloud
+     * @param imagePath : the image's url
+     */
+
+    @Suppress("unused")
+    fun updateImagePathToDelete(imagePath:String){
+        this.imagePathToUpload=null
+        if(imagePath.startsWith("https://")){
+            this.imagePathToDelete=imagePath
+        }
+    }
+
+    /**
      * Logs the user in and if this is a new user, creates a new Hiker
      * @param successCallback : the callback to handle a success in the query
      * @param failureCallback : the callback to handle a failure in the query
@@ -131,7 +171,7 @@ class HikerViewModel : BaseObservableViewModel() {
 
                 /*Gets the current user and the related Hiker info*/
 
-                val user = AuthFirebaseHelper.getCurrentUser()
+                val user = AuthRepository.getCurrentUser()
                 user?.let { usr ->
                     val deferredHiker = async { HikerRepository.getHiker(usr.uid) }
                     hiker = deferredHiker.await()
@@ -143,16 +183,14 @@ class HikerViewModel : BaseObservableViewModel() {
                             .withFirebaseUser(usr)
                             .build()
                         launch { HikerRepository.updateHiker(hiker!!) }.join()
+
+                        /*Also creates an history item*/
+
                         val historyItem = HikerHistoryItem(
                             HikerHistoryType.HIKER_REGISTERED,
                             hiker?.registrationDate!!
                         )
-                        launch {
-                            HikerRepository.addHikerHistoryItem(
-                                hiker!!.id,
-                                historyItem
-                            )
-                        }.join()
+                        launch { HikerRepository.addHikerHistoryItem(hiker!!.id, historyItem) }.join()
                     }
                 }
 
@@ -171,7 +209,52 @@ class HikerViewModel : BaseObservableViewModel() {
 
     fun logoutUser(){
         this.hiker=null
-        AuthFirebaseHelper.signUserOut()
+        AuthRepository.signUserOut()
         notifyDataChanged()
+    }
+
+    /**
+     * Resets the user's password
+     * @param successCallback : the callback to handle a success in the query
+     * @param failureCallback : the callback to handle a failure in the query
+     */
+
+    fun resetUserPassword(successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
+        viewModelScope.launch {
+            try{
+                launch { AuthRepository.resetUserPassword() }.join()
+                successCallback?.invoke()
+            }
+            catch(e:Exception){
+                failureCallback?.invoke(e)
+            }
+        }
+    }
+
+    /**
+     * Deletes the user's account as well as all related hiker data and the profile's image
+     * @param successCallback : the callback to handle a success in the query
+     * @param failureCallback : the callback to handle a failure in the query
+     */
+
+    fun deleteUserAccount(successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
+        viewModelScope.launch {
+            try{
+                if(hiker!=null){
+                    hiker?.photoUrl?.let { photoUrl ->
+                        launch { StorageRepository.deleteImage(photoUrl) }.join()
+                    }
+                    launch { HikerRepository.deleteHiker(hiker!!) }.join()
+                    launch { AuthRepository.deleteUserAccount() }.join()
+                    successCallback?.invoke()
+                }
+                else{
+                    failureCallback?.invoke(NullPointerException(EXCEPTION_MESSAGE_DELETE_NULL))
+                }
+            }
+            catch(e:Exception){
+                failureCallback?.invoke(e)
+            }
+        }
     }
 }

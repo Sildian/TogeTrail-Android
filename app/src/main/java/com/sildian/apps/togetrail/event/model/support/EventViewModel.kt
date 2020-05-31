@@ -2,7 +2,7 @@ package com.sildian.apps.togetrail.event.model.support
 
 import androidx.lifecycle.viewModelScope
 import com.sildian.apps.togetrail.common.baseViewModels.BaseObservableViewModel
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import kotlinx.coroutines.async
@@ -84,7 +84,7 @@ class EventViewModel : BaseObservableViewModel() {
             try{
                 if(event!=null){
                     if (event?.id == null) {
-                        event?.authorId = AuthFirebaseHelper.getCurrentUser()?.uid
+                        event?.authorId = AuthRepository.getCurrentUser()?.uid
                         val deferredEventId= async { EventRepository.addEvent(event!!) }
                         event!!.id=deferredEventId.await()
                         launch { EventRepository.updateEvent(event!!) }.join()

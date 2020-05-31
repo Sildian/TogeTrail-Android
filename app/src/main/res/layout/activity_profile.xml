@@ -5,12 +5,6 @@
     android:layout_height="match_parent"
     tools:context=".hiker.profile.ProfileActivity">
 
-    <ProgressBar
-        android:id="@+id/activity_profile_progressbar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center" />
-
     <FrameLayout
         android:id="@+id/activity_profile_fragment"
         android:layout_width="match_parent"

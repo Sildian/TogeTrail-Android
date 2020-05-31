@@ -8,15 +8,14 @@ import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.databinding.FragmentProfileSettingsEditBinding
-import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
 
 /*************************************************************************************************
  * Lets the user edit its profile's settings
- * @param hiker : the current user
+ * @param hikerId : the hiker's id
  ************************************************************************************************/
 
-class ProfileSettingsEditFragment(private val hiker: Hiker?=null) : BaseDataFlowFragment()
+class ProfileSettingsEditFragment(private val hikerId: String?=null) : BaseDataFlowFragment()
 {
 
     /*****************************************Data***********************************************/
@@ -31,7 +30,7 @@ class ProfileSettingsEditFragment(private val hiker: Hiker?=null) : BaseDataFlow
             .get(HikerViewModel::class.java)
         (this.binding as FragmentProfileSettingsEditBinding).profileSettingsEditFragment=this
         (this.binding as FragmentProfileSettingsEditBinding).hikerViewModel=this.hikerViewModel
-        this.hiker?.id?.let { hikerId ->
+        this.hikerId?.let { hikerId ->
             this.hikerViewModel.loadHikerFromDatabase(hikerId, null, this::handleQueryError)
         }
     }
@@ -60,10 +59,15 @@ class ProfileSettingsEditFragment(private val hiker: Hiker?=null) : BaseDataFlow
             R.string.message_password_reset_confirmation_message,
             DialogInterface.OnClickListener { dialog, which ->
                 if(which==DialogInterface.BUTTON_POSITIVE){
-                    (activity as ProfileEditActivity).resetUserPassword()
+                    //TODO replace progress dialog
+                    this.hikerViewModel.resetUserPassword(this::handleResetUserPasswordResult, this::handleQueryError)
                 }
             })
         dialog.show()
+    }
+
+    private fun handleResetUserPasswordResult(){
+        (activity as ProfileEditActivity).finish()
     }
 
     /*******************************Delete account action****************************************/
@@ -76,9 +80,14 @@ class ProfileSettingsEditFragment(private val hiker: Hiker?=null) : BaseDataFlow
             R.string.message_account_delete_confirmation_message,
             DialogInterface.OnClickListener { dialog, which ->
                 if(which==DialogInterface.BUTTON_POSITIVE){
-                    (activity as ProfileEditActivity).deleteUserAccount()
+                    //TODO replace progress dialog
+                    this.hikerViewModel.deleteUserAccount(this::handleDeleteUserAccountResult, this::handleQueryError)
                 }
             })
         dialog.show()
+    }
+
+    private fun handleDeleteUserAccountResult(){
+        (activity as ProfileEditActivity).finish()
     }
 }
