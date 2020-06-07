@@ -15,7 +15,6 @@ import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelp
 import com.sildian.apps.togetrail.common.utils.uiHelpers.PickerHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.TextFieldHelper
 import com.sildian.apps.togetrail.databinding.FragmentEventEditBinding
-import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
 import com.sildian.apps.togetrail.event.model.support.EventViewModel
 import com.sildian.apps.togetrail.location.model.core.Location
@@ -27,10 +26,10 @@ import kotlinx.android.synthetic.main.fragment_event_edit.view.*
 
 /*************************************************************************************************
  * Allows to edit an event
- * @param event : the related event
+ * @param eventId : the event's id
  ************************************************************************************************/
 
-class EventEditFragment(private val event: Event?=null) :
+class EventEditFragment(private val eventId: String?=null) :
     BaseDataFlowFragment(),
     TrailHorizontalViewHolder.OnTrailClickListener,
     TrailHorizontalViewHolder.OnTrailRemovedListener
@@ -38,8 +37,7 @@ class EventEditFragment(private val event: Event?=null) :
 
     /**************************************Data**************************************************/
 
-    /*TODO private*/ lateinit var eventViewModel: EventViewModel
-    private val attachedTrails= arrayListOf<Trail>()    //The list of attached trails (useful only when the event has no id yet)
+    private lateinit var eventViewModel: EventViewModel
 
     /**********************************UI component**********************************************/
 
@@ -70,8 +68,15 @@ class EventEditFragment(private val event: Event?=null) :
             .get(EventViewModel::class.java)
         (this.binding as FragmentEventEditBinding).eventEditFragment=this
         (this.binding as FragmentEventEditBinding).eventViewModel=this.eventViewModel
-        this.event?.id?.let { eventId ->
+        this.eventViewModel.addOnPropertyChangedCallback(object:Observable.OnPropertyChangedCallback(){
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                refreshUI()
+            }
+        })
+        if(this.eventId!=null){
             this.eventViewModel.loadEventFromDatabase(eventId, null, this::handleQueryError)
+        }else {
+            this.eventViewModel.initNewEvent()
         }
     }
 
@@ -96,11 +101,13 @@ class EventEditFragment(private val event: Event?=null) :
         if(checkDataIsValid()) {
             this.eventViewModel.event?.name = this.nameTextField.text.toString()
             this.eventViewModel.event?.description = this.descriptionTextField.text.toString()
-            if (this.eventViewModel.event?.id == null) {
-                (activity as EventEditActivity).updateAttachedTrailsToUpdate(this.attachedTrails)
-            }
-            (activity as EventEditActivity).saveEventInDatabase()
+            //TODO replace Progress dialog
+            this.eventViewModel.saveEventInDatabase(this::handleSaveDataResult, this::handleQueryError)
         }
+    }
+
+    private fun handleSaveDataResult(){
+        (activity as EventEditActivity).finish()
     }
 
     /**Checks data is valid**/
@@ -152,7 +159,7 @@ class EventEditFragment(private val event: Event?=null) :
 
     private fun checkTrailsAreAttached():Boolean{
         val trails=if(this.eventViewModel.event?.id==null){
-            this.attachedTrails
+            this.eventViewModel.attachedTrails
         }else{
             this.attachedTrailsAdapter.snapshots
         }
@@ -164,14 +171,6 @@ class EventEditFragment(private val event: Event?=null) :
     override fun getLayoutId(): Int = R.layout.fragment_event_edit
 
     override fun useDataBinding(): Boolean = true
-
-    override fun initializeUI() {
-        this.eventViewModel.addOnPropertyChangedCallback(object:Observable.OnPropertyChangedCallback(){
-            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                refreshUI()
-            }
-        })
-    }
 
     override fun refreshUI() {
         updateBeginDateTextField()
@@ -211,7 +210,7 @@ class EventEditFragment(private val event: Event?=null) :
 
         if(this.eventViewModel.event?.id==null){
             this.attachedTrailsAdapterOffline=
-                TrailHorizontalAdapterOffline(this.attachedTrails, this, true, this)
+                TrailHorizontalAdapterOffline(this.eventViewModel.attachedTrails, this, true, this)
             this.attachedTrailsRecyclerView.adapter=this.attachedTrailsAdapterOffline
 
             /*Else sets an online adapter*/
@@ -231,9 +230,9 @@ class EventEditFragment(private val event: Event?=null) :
 
     fun onAddTrailsButtonClick(view: View){
         if(this.eventViewModel.event?.id!=null){
-            this.attachedTrails.addAll(this.attachedTrailsAdapter.snapshots)
+            this.eventViewModel.attachedTrails.addAll(this.attachedTrailsAdapter.snapshots)
         }
-        (activity as EventEditActivity).selectTrail(this.attachedTrails)
+        (activity as EventEditActivity).selectTrail(this.eventViewModel.attachedTrails)
     }
 
     fun onMeetingPointTextFieldClick(view: View){
@@ -277,24 +276,24 @@ class EventEditFragment(private val event: Event?=null) :
         /*If the event has no id yet, updates the offline adapter*/
 
         if(this.eventViewModel.event?.id==null){
-            this.attachedTrails.clear()
-            this.attachedTrails.addAll(trails)
+            this.eventViewModel.attachedTrails.clear()
+            this.eventViewModel.attachedTrails.addAll(trails)
             this.attachedTrailsAdapterOffline.notifyDataSetChanged()
         }
         else{
 
             /*Else, deletes each attached trail which is not in the new list of selected trails*/
 
-            this.attachedTrails.forEach { trail ->
+            this.eventViewModel.attachedTrails.forEach { trail ->
                 if(trails.firstOrNull { it.id==trail.id } ==null){
-                    (activity as EventEditActivity).deleteAttachedTrail(trail)
+                    this.eventViewModel.detachTrail(trail)
                 }
             }
 
             /*And updates the attached trails with each item in the new list of selected trails*/
 
             trails.forEach { trail ->
-                (activity as EventEditActivity).updateAttachedTrail(trail)
+                this.eventViewModel.attachTrail(trail)
             }
         }
     }
@@ -314,11 +313,11 @@ class EventEditFragment(private val event: Event?=null) :
         /*If the event has no id yet, updates the offline adapter. Else updates the attached trail in the database*/
 
         if(this.eventViewModel.event?.id==null){
-            this.attachedTrails.removeAll { it.id==trail.id }
+            this.eventViewModel.attachedTrails.removeAll { it.id==trail.id }
             this.attachedTrailsAdapterOffline.notifyDataSetChanged()
         }
         else{
-            (activity as EventEditActivity).deleteAttachedTrail(trail)
+            this.eventViewModel.detachTrail(trail)
         }
     }
 

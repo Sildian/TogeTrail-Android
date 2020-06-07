@@ -3,20 +3,12 @@ package com.sildian.apps.togetrail.event.detail
 import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
 import com.sildian.apps.togetrail.event.edit.EventEditActivity
-import com.sildian.apps.togetrail.event.model.core.Event
-import com.sildian.apps.togetrail.hiker.model.core.Hiker
-import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
-import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.profile.ProfileActivity
 import com.sildian.apps.togetrail.trail.map.TrailActivity
-import kotlinx.android.synthetic.main.activity_event.*
-import java.util.*
 
 /*************************************************************************************************
  * Displays an event's detail info and allows a user to register on this event
@@ -39,7 +31,6 @@ class EventActivity : BaseDataFlowActivity() {
     /****************************************Data************************************************/
 
     private var eventId:String?=null                            //The event's id
-    private var event: Event?=null                              //The event
 
     /**********************************UI component**********************************************/
 
@@ -76,7 +67,7 @@ class EventActivity : BaseDataFlowActivity() {
     /**Defines the menu items**/
 
     private fun defineMenuItems(){
-        if(AuthFirebaseHelper.getCurrentUser()?.uid==this.event?.authorId){
+        if((this.fragment as EventFragment).currentUserIsAuthor()){
             if(this.menu!=null) {
                 this.menu?.clear()
                 menuInflater.inflate(R.menu.menu_edit, this.menu)
@@ -109,119 +100,6 @@ class EventActivity : BaseDataFlowActivity() {
         if(intent!=null){
             if(intent.hasExtra(KEY_BUNDLE_EVENT_ID)){
                 this.eventId= intent.getStringExtra(KEY_BUNDLE_EVENT_ID)
-                this.eventId?.let { id -> loadEventFromDatabase(id) }
-            }
-        }
-    }
-
-    /**
-     * Loads an event from the database
-     * @param eventId : the event's id
-     */
-
-    private fun loadEventFromDatabase(eventId:String){
-        getEventRealTime(eventId, this::handleEventResult)
-    }
-
-    /**
-     * Handles the event result when loaded from the database
-     * @param event : the event loaded from the database
-     */
-
-    private fun handleEventResult(event:Event?){
-        this.event=event
-        defineMenuItems()
-        if(this.fragment==null){
-            showFragment()
-        }else if(this.fragment?.isVisible==true){
-            this.fragment?.updateData(this.event)
-        }
-    }
-
-    /**Starts register the current user to the event**/
-
-    fun registerUserToEvent(){
-
-        /*First, gets the current user with updated info*/
-
-        val user=AuthFirebaseHelper.getCurrentUser()
-        user?.uid?.let { hikerId ->
-            getHiker(hikerId, this::handleHikerToRegister)
-        }
-    }
-
-    /**
-     * Handles the hiker to register to the event when loaded from the database
-     * @param hiker : the hiker to register
-     */
-
-    private fun handleHikerToRegister(hiker:Hiker?){
-
-        if(hiker!=null && this.event!=null) {
-
-            /*Increases the number of hikers registered to the event*/
-
-            hiker.nbEventsAttended++
-            this.event!!.nbHikersRegistered++
-
-            this.event?.let { event ->
-
-                /*Updates both the hiker and the event*/
-
-                updateHiker(hiker)
-                updateEvent(event)
-                updateHikerAttendedEvent(hiker.id, event)
-                updateEventRegisteredHiker(event.id.toString(), hiker)
-
-                /*Adds an history item to the hiker*/
-
-                val historyItem = HikerHistoryItem(
-                    HikerHistoryType.EVENT_ATTENDED,
-                    Date(),
-                    event.id,
-                    event.name,
-                    event.meetingPoint.toString(),
-                    event.mainPhotoUrl
-                )
-                addHikerHistoryItem(hiker.id, historyItem)
-            }
-        }
-    }
-
-    /**Starts unregister the current user from the event**/
-
-    fun unregisterUserFromEvent(){
-
-        /*First, gets the current user with updated info*/
-
-        val user=AuthFirebaseHelper.getCurrentUser()
-        user?.uid?.let { hikerId ->
-            getHiker(hikerId, this::handleHikerToUnregister)
-        }
-    }
-
-    /**
-     * Handles the hiker to unregister from the event when loaded from the database
-     * @param hiker : the hiker to register
-     */
-
-    private fun handleHikerToUnregister(hiker:Hiker?){
-
-        if(hiker!=null && this.event!=null) {
-
-            /*Increases the number of hikers registered to the event*/
-
-            hiker.nbEventsAttended--
-            this.event!!.nbHikersRegistered--
-
-            this.event?.let { event ->
-
-                /*Updates both the hiker and the event*/
-
-                updateHiker(hiker)
-                updateEvent(event)
-                deleteHikerAttendedEvent(hiker.id, event.id.toString())
-                deleteEventRegisteredHiker(event.id.toString(), hiker.id)
             }
         }
     }
@@ -229,6 +107,10 @@ class EventActivity : BaseDataFlowActivity() {
     /******************************UI monitoring**************************************************/
 
     override fun getLayoutId(): Int = R.layout.activity_event
+
+    override fun initializeUI() {
+        showFragment()
+    }
 
     /******************************Fragments monitoring******************************************/
 
@@ -258,7 +140,7 @@ class EventActivity : BaseDataFlowActivity() {
 
     private fun startEventEditActivity(){
         val eventEditActivityIntent= Intent(this, EventEditActivity::class.java)
-        eventEditActivityIntent.putExtra(EventEditActivity.KEY_BUNDLE_EVENT,this.event)
+        eventEditActivityIntent.putExtra(EventEditActivity.KEY_BUNDLE_EVENT_ID,this.eventId)
         startActivity(eventEditActivityIntent)
     }
 

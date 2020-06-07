@@ -44,6 +44,11 @@ class ProfileFragment (private val hikerId: String?)
             .of(this, ViewModelFactory)
             .get(HikerViewModel::class.java)
         (this.binding as FragmentProfileBinding).hikerViewModel=this.hikerViewModel
+        this.hikerViewModel.addOnPropertyChangedCallback(object:Observable.OnPropertyChangedCallback(){
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                refreshUI()
+            }
+        })
         this.hikerId?.let { hikerId ->
             this.hikerViewModel.loadHikerFromDatabaseRealTime(hikerId, null, this::handleQueryError)
         }
@@ -57,11 +62,6 @@ class ProfileFragment (private val hikerId: String?)
 
     override fun initializeUI(){
         initializeToolbar()
-        this.hikerViewModel.addOnPropertyChangedCallback(object:Observable.OnPropertyChangedCallback(){
-            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                refreshUI()
-            }
-        })
     }
 
     override fun refreshUI(){

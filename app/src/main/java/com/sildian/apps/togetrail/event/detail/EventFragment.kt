@@ -1,5 +1,6 @@
 package com.sildian.apps.togetrail.event.detail
 
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.Observable
@@ -9,7 +10,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.databinding.FragmentEventBinding
 import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
@@ -59,10 +60,17 @@ class EventFragment(private val eventId: String?=null) :
             .get(EventViewModel::class.java)
         (this.binding as FragmentEventBinding).eventFragment=this
         (this.binding as FragmentEventBinding).eventViewModel=this.eventViewModel
+        this.eventViewModel.addOnPropertyChangedCallback(object:Observable.OnPropertyChangedCallback(){
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                refreshUI()
+            }
+        })
         this.eventId?.let { eventId ->
             this.eventViewModel.loadEventFromDatabaseRealTime(eventId, null, this::handleQueryError)
         }
     }
+
+    fun currentUserIsAuthor():Boolean = this.eventViewModel.currentUserIsAuthor()
 
     /***********************************UI monitoring********************************************/
 
@@ -73,11 +81,6 @@ class EventFragment(private val eventId: String?=null) :
     override fun initializeUI() {
         initializeToolbar()
         initializeRegistrationLayout()
-        this.eventViewModel.addOnPropertyChangedCallback(object:Observable.OnPropertyChangedCallback(){
-            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                refreshUI()
-            }
-        })
     }
 
     override fun refreshUI() {
@@ -92,7 +95,7 @@ class EventFragment(private val eventId: String?=null) :
     }
 
     private fun initializeRegistrationLayout(){
-        if(AuthFirebaseHelper.getCurrentUser()==null){
+        if(AuthRepository.getCurrentUser()==null){
             this.registrationLayout.visibility=View.GONE
         }
     }
@@ -135,7 +138,7 @@ class EventFragment(private val eventId: String?=null) :
     }
 
     private fun updateUserRegisterItemsVisibility(){
-        val user=AuthFirebaseHelper.getCurrentUser()
+        val user=AuthRepository.getCurrentUser()
         val userIsRegistered=
             this.registeredHikersAdapter.snapshots.firstOrNull { it.id==user?.uid } !=null
         if(userIsRegistered){
@@ -150,11 +153,11 @@ class EventFragment(private val eventId: String?=null) :
     }
 
     fun onRegisterUserButtonClick(view:View){
-        (activity as EventActivity).registerUserToEvent()
+        this.eventViewModel.registerUserToEvent(null, this::handleQueryError)
     }
 
     fun onUnregisterUserButtonClick(view:View){
-        (activity as EventActivity).unregisterUserFromEvent()
+        this.eventViewModel.unregisterUserToEvent(null, this::handleQueryError)
     }
 
     /***********************************Hikers monitoring****************************************/

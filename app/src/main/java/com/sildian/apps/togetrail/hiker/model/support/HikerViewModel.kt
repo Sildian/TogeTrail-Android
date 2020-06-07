@@ -109,30 +109,6 @@ class HikerViewModel : BaseObservableViewModel() {
     }
 
     /**
-     * Saves an item within the hiker's history
-     * @param historyItem : the history item
-     * @param successCallback : the callback to handle a success in the query
-     * @param failureCallback : the callback to handle a failure in the query
-     */
-
-    fun saveHikerHistoryItemInDatabase(historyItem:HikerHistoryItem, successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
-        viewModelScope.launch {
-            try{
-                if(hiker!=null){
-                    launch { HikerRepository.addHikerHistoryItem(hiker!!.id, historyItem) }.join()
-                    successCallback?.invoke()
-                }
-                else{
-                    failureCallback?.invoke(NullPointerException(EXCEPTION_MESSAGE_SAVE_NULL))
-                }
-            }
-            catch(e:Exception){
-                failureCallback?.invoke(e)
-            }
-        }
-    }
-
-    /**
      * Gives an image to be stored on the cloud
      * @param imagePath : the temporary image's uri
      */
@@ -151,7 +127,6 @@ class HikerViewModel : BaseObservableViewModel() {
      * @param imagePath : the image's url
      */
 
-    @Suppress("unused")
     fun updateImagePathToDelete(imagePath:String){
         this.imagePathToUpload=null
         if(imagePath.startsWith("https://")){

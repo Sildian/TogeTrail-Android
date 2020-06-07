@@ -2,19 +2,12 @@ package com.sildian.apps.togetrail.event.edit
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
-import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
-import com.sildian.apps.togetrail.event.model.core.Event
-import com.sildian.apps.togetrail.hiker.model.core.Hiker
-import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
-import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.location.search.LocationSearchActivity
 import com.sildian.apps.togetrail.trail.map.TrailActivity
@@ -33,7 +26,7 @@ class EventEditActivity : BaseDataFlowActivity() {
     companion object {
 
         /**Bundle keys for intents**/
-        const val KEY_BUNDLE_EVENT="KEY_BUNDLE_EVENT"       //Event -> Optional, if not provided a new event is created
+        const val KEY_BUNDLE_EVENT_ID="KEY_BUNDLE_EVENT_ID"     //Event's id -> Optional, if not provided a new event is created
 
         /**Request keys for intents**/
         private const val KEY_REQUEST_LOCATION_SEARCH=1001
@@ -42,21 +35,13 @@ class EventEditActivity : BaseDataFlowActivity() {
 
     /****************************************Data************************************************/
 
-    private var event: Event?=null                          //The event
-    private val attachedTrails= arrayListOf<Trail>()        //The list of attached trails (useful only when the event has no id yet)
+    private var eventId: String?=null                           //The event's id
 
     /**********************************UI component**********************************************/
 
     private val toolbar by lazy {activity_event_edit_toolbar}
     private var fragment: BaseDataFlowFragment?=null
     private var progressDialog: AlertDialog?=null
-
-    /************************************Life cycle**********************************************/
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        showFragment()
-    }
 
     /********************************Navigation control******************************************/
 
@@ -107,137 +92,9 @@ class EventEditActivity : BaseDataFlowActivity() {
 
     private fun readDataFromIntent(){
         if(intent!=null){
-            if(intent.hasExtra(KEY_BUNDLE_EVENT)){
-                this.event= intent.getParcelableExtra(KEY_BUNDLE_EVENT)
-            }else{
-                this.event=Event()
+            if(intent.hasExtra(KEY_BUNDLE_EVENT_ID)){
+                this.eventId= intent.getStringExtra(KEY_BUNDLE_EVENT_ID)
             }
-        }
-    }
-
-    /**Updates the attached trails to update**/
-
-    fun updateAttachedTrailsToUpdate(attachedTrails:List<Trail>){
-        this.attachedTrails.clear()
-        this.attachedTrails.addAll(attachedTrails)
-    }
-
-    /**Saves the event within the database**/
-
-    fun saveEventInDatabase(){
-
-        if(this.event!=null) {
-
-            /*Shows a progress dialog*/
-
-            this.progressDialog = DialogHelper.createProgressDialog(this)
-            this.progressDialog?.show()
-
-            /*If the event has no id, it means it was not created in the database yet. Then creates it.*/
-
-            if (this.event?.id == null) {
-                this.event?.authorId = AuthFirebaseHelper.getCurrentUser()?.uid
-                createEventInDatabase()
-
-                /*Else updates it*/
-
-            } else {
-                updateEventInDatabase()
-            }
-        }
-    }
-
-    /**Creates an event in the database**/
-
-    private fun createEventInDatabase(){
-        this.event?.let { event ->
-            addEvent(event, this::handleCreatedEvent)
-        }
-    }
-
-    /**
-     * Handles the created event in the database
-     * @param eventId : the created event's id
-     */
-
-    private fun handleCreatedEvent(eventId: String){
-        this.event?.id=eventId
-        updateEventInDatabase()
-        updateCurrentUserInDatabase()
-        this.attachedTrails.forEach { trail ->
-            updateAttachedTrail(trail)
-        }
-    }
-
-    /**Updates the event in the database**/
-
-    private fun updateEventInDatabase(){
-        this.event?.let { event ->
-            updateEvent(event, this::handleUpdatedEvent)
-        }
-    }
-
-    /**Handles the updated event in the database**/
-
-    private fun handleUpdatedEvent(){
-        this.progressDialog?.dismiss()
-        finish()
-    }
-
-    /**Starts update the current user in the database**/
-
-    private fun updateCurrentUserInDatabase(){
-
-        /*First, gets current user with updates info*/
-
-        val user=AuthFirebaseHelper.getCurrentUser()
-        user?.uid?.let { hikerId ->
-            getHiker(hikerId, this::handleHikerToUpdate)
-        }
-    }
-
-    /**
-     * Handles the hiker to update when loaded from the database
-     * @param hiker : the hiker to update
-     */
-
-    private fun handleHikerToUpdate(hiker:Hiker?){
-        hiker?.let { hikerToUpdate ->
-            hiker.nbEventsCreated++
-            updateHiker(hikerToUpdate)
-            val historyItem = HikerHistoryItem(
-                HikerHistoryType.EVENT_CREATED,
-                this.event?.creationDate!!,
-                this.event?.id!!,
-                this.event?.name!!,
-                this.event?.meetingPoint?.toString(),
-                this.event?.mainPhotoUrl
-            )
-            addHikerHistoryItem(hikerToUpdate.id, historyItem)
-            this.progressDialog?.dismiss()
-            finish()
-        }
-    }
-
-    /**
-     * Attaches a trail to the event
-     * @param trail : the trail to attach
-     */
-
-    fun updateAttachedTrail(trail: Trail){
-        this.event?.id?.let { eventId ->
-            updateEventAttachedTrail(eventId, trail)
-        }
-    }
-
-    /**
-     * Detaches a trail from the event
-     * @param trail : the trail to detach
-     */
-
-    fun deleteAttachedTrail(trail: Trail){
-        this.event?.id?.let { eventId ->
-            deleteEventAttachedTrail(eventId, trail.id.toString())
         }
     }
 
@@ -247,6 +104,7 @@ class EventEditActivity : BaseDataFlowActivity() {
 
     override fun initializeUI() {
         initializeToolbar()
+        showFragment()
     }
 
     private fun initializeToolbar(){
@@ -262,7 +120,6 @@ class EventEditActivity : BaseDataFlowActivity() {
     }
 
     private fun updateMeetingPoint(location: Location){
-        this.event?.meetingPoint=location
         this.fragment?.updateData(location)
     }
 
@@ -281,7 +138,7 @@ class EventEditActivity : BaseDataFlowActivity() {
     /**Shows the fragment**/
 
     private fun showFragment(){
-        this.fragment= EventEditFragment(this.event)
+        this.fragment= EventEditFragment(this.eventId)
         this.fragment?.let { fragment ->
             supportFragmentManager.beginTransaction()
                 .replace(R.id.activity_event_edit_fragment, fragment).commit()

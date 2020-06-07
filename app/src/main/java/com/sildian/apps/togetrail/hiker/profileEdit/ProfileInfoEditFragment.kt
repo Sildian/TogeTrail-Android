@@ -46,6 +46,11 @@ class ProfileInfoEditFragment(private val hikerId: String?=null) : BaseImagePick
             .get(HikerViewModel::class.java)
         (this.binding as FragmentProfileInfoEditBinding).profileInfoEditFragment=this
         (this.binding as FragmentProfileInfoEditBinding).hikerViewModel=this.hikerViewModel
+        this.hikerViewModel.addOnPropertyChangedCallback(object:Observable.OnPropertyChangedCallback(){
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                refreshUI()
+            }
+        })
         this.hikerId?.let { hikerId ->
             this.hikerViewModel.loadHikerFromDatabase(hikerId, null, this::handleQueryError)
         }
@@ -85,14 +90,6 @@ class ProfileInfoEditFragment(private val hikerId: String?=null) : BaseImagePick
     override fun useDataBinding(): Boolean = true
 
     override fun getAddPhotoBottomSheetId(): Int = R.id.fragment_profile_info_edit_bottom_sheet_add_photo
-
-    override fun initializeUI(){
-        this.hikerViewModel.addOnPropertyChangedCallback(object:Observable.OnPropertyChangedCallback(){
-            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                refreshUI()
-            }
-        })
-    }
 
     override fun refreshUI(){
         updatePhoto()
