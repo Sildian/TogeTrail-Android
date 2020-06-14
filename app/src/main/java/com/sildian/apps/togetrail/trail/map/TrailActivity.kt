@@ -6,22 +6,21 @@ import android.net.Uri
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowActivity
+import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
-import com.sildian.apps.togetrail.hiker.model.core.Hiker
-import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
-import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.trail.infoEdit.TrailInfoEditActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.support.TrailBuilder
+import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
 import io.ticofab.androidgpxparser.parser.GPXParser
 import kotlinx.android.synthetic.main.activity_trail.*
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
-import java.util.*
 
 /*************************************************************************************************
  * This activity monitors the trails and lets the user see or edit a trail
@@ -61,8 +60,8 @@ class TrailActivity : BaseDataFlowActivity() {
     /**************************************Data**************************************************/
 
     private var currentAction= ACTION_TRAIL_SEE                 //Action defining what the user is performing
-    private var trail: Trail?=null                              //Current trail shown
     private var isEditable = false                              //True if the trail is editable
+    private lateinit var trailViewModel: TrailViewModel         //Trail data
 
     /**********************************UI component**********************************************/
 
@@ -116,16 +115,10 @@ class TrailActivity : BaseDataFlowActivity() {
     /**Loads data**/
 
     override fun loadData() {
+        this.trailViewModel= ViewModelProviders
+            .of(this, ViewModelFactory)
+            .get(TrailViewModel::class.java)
         readDataFromIntent()
-    }
-
-    /**Updates data**/
-
-    override fun updateData(data: Any?) {
-        if(data is Trail) {
-            this.trail = data
-            this.fragment?.updateData(this.trail)
-        }
     }
 
     /**Saves data**/
@@ -142,40 +135,16 @@ class TrailActivity : BaseDataFlowActivity() {
                 this.currentAction=
                     intent.getIntExtra(KEY_BUNDLE_TRAIL_ACTION, ACTION_TRAIL_SEE)
             }
-            when {
-                intent.hasExtra(KEY_BUNDLE_TRAIL_ID) -> {
-                    val trailId=intent.getStringExtra(KEY_BUNDLE_TRAIL_ID)
-                    trailId?.let { id -> loadTrailFromDatabase(id) }
-                }
-                intent.hasExtra(KEY_BUNDLE_TRAIL) -> {
-                    this.trail = intent.getParcelableExtra(KEY_BUNDLE_TRAIL)
-                    startTrailAction()
-                }
-                else -> {
-                    startTrailAction()
+            if(intent.hasExtra(KEY_BUNDLE_TRAIL_ID)) {
+                val trailId = intent.getStringExtra(KEY_BUNDLE_TRAIL_ID)
+                trailId?.let { id ->
+                    this.trailViewModel.loadTrailFromDatabase(id, this::startTrailAction, this::handleQueryError)
                 }
             }
+            else {
+                startTrailAction()
+            }
         }
-    }
-
-    /**
-     * Loads a trail from the database
-     * @param trailId : the trail's id
-     */
-
-    private fun loadTrailFromDatabase(trailId:String){
-        getTrail(trailId, this::handleTrailResult)
-    }
-
-    /**
-     * Handles trail result when loaded from database
-     * @param trail : the trail loaded from the database
-     */
-
-    private fun handleTrailResult(trail:Trail?){
-        this.trail=trail
-        startTrailAction()
-        //this.fragment?.updateData(this.trail)
     }
 
     /**
@@ -193,10 +162,7 @@ class TrailActivity : BaseDataFlowActivity() {
             val inputStream = contentResolver.openInputStream(uri)
             try {
                 val gpx = gpxParser.parse(inputStream)
-                this.trail= TrailBuilder
-                    .withGpx(gpx)
-                    .build()
-                this.fragment?.updateData(this.trail)
+                this.trailViewModel.initNewTrail(gpx)
             }
 
             /*Handles exceptions*/
@@ -243,118 +209,12 @@ class TrailActivity : BaseDataFlowActivity() {
         }
     }
 
-    /**
-     * Saves the trail in the database
-     * @param trail : the trail to sabe
-     */
-
-    fun saveTrailInDatabase(trail: Trail?){
-
-        /*Updates the trail*/
-
-        updateData(trail)
-        this.trail?.lastUpdate= Date()
-
-        if(this.trail!=null) {
-
-            /*Shows a progress dialog*/
-
-            this.progressDialog = DialogHelper.createProgressDialog(this)
-            this.progressDialog?.show()
-
-            /*If the trail has no id, it means it was not created in the database yet. Then creates it.*/
-
-            if (this.trail?.id == null) {
-                this.trail?.authorId = AuthFirebaseHelper.getCurrentUser()?.uid
-                createTrailInDatabase()
-
-                /*Else updates it*/
-
-            } else {
-                updateTrailInDatabase()
-            }
-        }
-    }
-
-    /**Creates a trail in the database**/
-
-    private fun createTrailInDatabase(){
-        this.trail?.let { trail ->
-            addTrail(trail, this::handleCreatedTrail)
-        }
-    }
-
-    /**
-     * Handles the created trail in the database
-     * @param trailId : the created trail's id
-     */
-
-    private fun handleCreatedTrail(trailId: String){
-        this.trail?.id=trailId
-        updateTrailInDatabase()
-        updateCurrentUserInDatabase()
-    }
-
-    /**Updates the trail in the database**/
-
-    private fun updateTrailInDatabase(){
-        this.trail?.let { trail ->
-            updateTrail(trail, this::handleUpdatedTrail)
-        }
-    }
-
-    /**Handles the updated trail in the database**/
-
-    private fun handleUpdatedTrail(){
-        this.progressDialog?.dismiss()
-        finish()
-    }
-
-    /**Starts update the current user in the database**/
-
-    private fun updateCurrentUserInDatabase(){
-
-        /*First, gets current user with updates info*/
-
-        val user=AuthFirebaseHelper.getCurrentUser()
-        user?.uid?.let { hikerId ->
-            getHiker(hikerId, this::handleHikerToUpdate)
-        }
-    }
-
-    /**
-     * Handles the hiker to update when loaded from the database
-     * @param hiker : the hiker to update
-     */
-
-    private fun handleHikerToUpdate(hiker:Hiker?){
-        hiker?.let { hikerToUpdate ->
-            hiker.nbTrailsCreated++
-            updateHiker(hikerToUpdate)
-            val historyItem = HikerHistoryItem(
-                HikerHistoryType.TRAIL_CREATED,
-                this.trail?.creationDate!!,
-                this.trail?.id!!,
-                this.trail?.name!!,
-                this.trail?.location?.toString(),
-                this.trail?.getFirstPhotoUrl()
-            )
-            addHikerHistoryItem(hikerToUpdate.id, historyItem)
-            this.progressDialog?.dismiss()
-            finish()
-        }
-    }
-
     /*************************************UI monitoring******************************************/
 
     override fun getLayoutId(): Int = R.layout.activity_trail
 
     override fun initializeUI() {
         initializeToolbar()
-    }
-
-    override fun refreshUI() {
-        //Nothing
     }
 
     private fun initializeToolbar(){
@@ -378,7 +238,7 @@ class TrailActivity : BaseDataFlowActivity() {
     private fun showFragment(fragmentId:Int){
         when(fragmentId){
             ID_FRAGMENT_TRAIL_DETAIL ->
-                this.fragment= TrailMapDetailFragment(this.trail, this.isEditable)
+                this.fragment= TrailMapDetailFragment(this.trailViewModel, this.isEditable)
             ID_FRAGMENT_TRAIL_DRAW ->
                 this.fragment = TrailMapDrawFragment()
             ID_FRAGMENT_TRAIL_RECORD ->
@@ -395,7 +255,7 @@ class TrailActivity : BaseDataFlowActivity() {
     private fun startTrailAction(){
         when(this.currentAction){
             ACTION_TRAIL_SEE -> {
-                this.isEditable=AuthFirebaseHelper.getCurrentUser()?.uid==this.trail?.authorId
+                this.isEditable=AuthFirebaseHelper.getCurrentUser()?.uid==this.trailViewModel.trail?.authorId
                 showFragment(ID_FRAGMENT_TRAIL_DETAIL)
             }
             ACTION_TRAIL_CREATE_FROM_GPX ->{
@@ -444,7 +304,7 @@ class TrailActivity : BaseDataFlowActivity() {
     private fun startTrailInfoEditActivity(trailEditActionId:Int, trailPointOfInterestPosition:Int?){
         val trailInfoEditActivityIntent=Intent(this, TrailInfoEditActivity::class.java)
         trailInfoEditActivityIntent.putExtra(TrailInfoEditActivity.KEY_BUNDLE_TRAIL_ACTION, trailEditActionId)
-        trailInfoEditActivityIntent.putExtra(TrailInfoEditActivity.KEY_BUNDLE_TRAIL, this.trail)
+        trailInfoEditActivityIntent.putExtra(TrailInfoEditActivity.KEY_BUNDLE_TRAIL, this.trailViewModel.trail)
         if(trailPointOfInterestPosition!=null) {
             trailInfoEditActivityIntent
                 .putExtra(TrailInfoEditActivity.KEY_BUNDLE_TRAIL_POI_POSITION, trailPointOfInterestPosition)

@@ -113,7 +113,7 @@ class EventViewModel : BaseObservableViewModel() {
 
                         event?.authorId = AuthRepository.getCurrentUser()?.uid
                         val deferredEventId= async { EventRepository.addEvent(event!!) }
-                        event!!.id=deferredEventId.await()
+                        event?.id=deferredEventId.await()
                         launch { EventRepository.updateEvent(event!!) }.join()
                         attachedTrails.forEach { trail ->
                             launch { EventRepository.updateEventAttachedTrail(event!!.id!!, trail) }.join()

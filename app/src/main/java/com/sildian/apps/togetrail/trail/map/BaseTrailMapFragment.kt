@@ -1,11 +1,16 @@
 package com.sildian.apps.togetrail.trail.map
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.checkSelfPermission
+import androidx.databinding.Observable
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.GoogleMap
@@ -20,17 +25,17 @@ import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.trail.info.BaseInfoFragment
 import com.sildian.apps.togetrail.trail.info.TrailInfoFragment
 import com.sildian.apps.togetrail.trail.info.TrailPOIInfoFragment
-import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
+import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
 
 /*************************************************************************************************
  * Base for all Trail fragments using a map
- * @param trail : the trail to show
+ * @param trailViewModel : the trail data
  * @param isEditable : true if the trail is editable
  ************************************************************************************************/
 
 abstract class BaseTrailMapFragment (
-    protected var trail:Trail?=null,
+    protected var trailViewModel: TrailViewModel?=null,
     protected var isEditable:Boolean=false
 ) :
     BaseDataFlowFragment(),
@@ -82,11 +87,19 @@ abstract class BaseTrailMapFragment (
     override fun onResume() {
         super.onResume()
         this.mapView.onResume()
-        this.map?.isMyLocationEnabled = true
+        //TODO improve permissions management
+        if(Build.VERSION.SDK_INT<23
+            &&checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED) {
+            this.map?.isMyLocationEnabled = true
+        }
     }
 
     override fun onPause() {
-        this.map?.isMyLocationEnabled=false
+        //TODO improve permissions management
+        if(Build.VERSION.SDK_INT<23
+            &&checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED) {
+            this.map?.isMyLocationEnabled = false
+        }
         this.mapView.onPause()
         super.onPause()
     }
@@ -118,27 +131,27 @@ abstract class BaseTrailMapFragment (
 
     /**********************************Data monitoring*******************************************/
 
-    override fun saveData(){
-        if(this.checkDataIsValid()) {
-            this.trail?.autoPopulatePosition()
-            (activity as TrailActivity).saveTrailInDatabase(this.trail)
-        }
+    override fun loadData() {
+        this.trailViewModel?.addOnPropertyChangedCallback(object:Observable.OnPropertyChangedCallback(){
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                refreshUI()
+            }
+        })
     }
 
-    override fun updateData(data: Any?) {
-        if(data is Trail){
-            this.trail=data
-            this.map?.clear()
-            showTrailTrackOnMap()
-            showTrailInfoFragment()
+    override fun saveData(){
+        if(this.checkDataIsValid()) {
+            this.trailViewModel?.trail?.autoPopulatePosition()
+            //TODO replace Progress dialog
+            this.trailViewModel?.saveTrailInDatabase(this::handleSaveDataResult, this::handleQueryError)
         }
     }
 
     override fun checkDataIsValid(): Boolean {
-        if(this.trail!=null) {
-            if (this.trail!!.isDataValid()) {
-                for(i in this.trail!!.trailTrack.trailPointsOfInterest.indices){
-                    if(!this.trail!!.trailTrack.trailPointsOfInterest[i].isDataValid()) {
+        if(this.trailViewModel?.trail!=null) {
+            if (this.trailViewModel?.trail!!.isDataValid()) {
+                for(i in this.trailViewModel?.trail!!.trailTrack.trailPointsOfInterest.indices){
+                    if(!this.trailViewModel?.trail!!.trailTrack.trailPointsOfInterest[i].isDataValid()) {
                         DialogHelper.createInfoDialog(
                             context!!,
                             R.string.message_trail_info_empty_title,
@@ -159,6 +172,10 @@ abstract class BaseTrailMapFragment (
         return false
     }
 
+    private fun handleSaveDataResult(){
+        (activity as TrailActivity).finish()
+    }
+
     /************************************UI monitoring*******************************************/
 
     abstract fun getMapViewId():Int
@@ -170,6 +187,12 @@ abstract class BaseTrailMapFragment (
     abstract fun enableUI()
 
     abstract fun disableUI()
+
+    override fun refreshUI() {
+        this.map?.clear()
+        showTrailTrackOnMap()
+        showTrailInfoFragment()
+    }
 
     private fun initializeInfoBottomSheet(){
         this.infoBottomSheet=
@@ -199,7 +222,11 @@ abstract class BaseTrailMapFragment (
             this.map?.mapType= GoogleMap.MAP_TYPE_TERRAIN
             this.map?.setOnMapClickListener(this)
             this.map?.setOnMarkerClickListener(this)
-            this.map?.isMyLocationEnabled=true
+            //TODO improve permissions management
+            if(Build.VERSION.SDK_INT<23
+                &&checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED) {
+                this.map?.isMyLocationEnabled = true
+            }
             this.map?.uiSettings?.isMyLocationButtonEnabled=false
             onMapReadyActionsFinished()
         }
@@ -229,12 +256,12 @@ abstract class BaseTrailMapFragment (
 
     protected open fun showTrailTrackOnMap(){
 
-        if(this.trail!=null){
+        if(this.trailViewModel?.trail!=null){
 
             /*Creates and shows the polyline from the trailPoints*/
 
             val polylineOption=PolylineOptions()
-            this.trail?.trailTrack?.trailPoints?.forEach { trailPoint->
+            this.trailViewModel?.trail?.trailTrack?.trailPoints?.forEach { trailPoint->
                 polylineOption.add(LatLng(trailPoint.latitude, trailPoint.longitude))
             }
             polylineOption.color(ContextCompat.getColor(context!!, R.color.colorSecondaryDark))
@@ -242,8 +269,8 @@ abstract class BaseTrailMapFragment (
 
             /*Gets the first and the last trailPoints*/
 
-            val firstPoint=this.trail?.trailTrack?.getFirstTrailPoint()
-            val lastPoint=this.trail?.trailTrack?.getLastTrailPoint()
+            val firstPoint=this.trailViewModel?.trail?.trailTrack?.getFirstTrailPoint()
+            val lastPoint=this.trailViewModel?.trail?.trailTrack?.getLastTrailPoint()
 
             /*Adds markers on the first and the last trailPoints*/
 
@@ -257,7 +284,7 @@ abstract class BaseTrailMapFragment (
                     ?.tag = firstPoint
             }
 
-            if(lastPoint!=null && this.trail?.loop==false) {
+            if(lastPoint!=null && this.trailViewModel?.trail?.loop==false) {
                 this.map?.addMarker(
                     MarkerOptions()
                         .position(LatLng(lastPoint.latitude, lastPoint.longitude))
@@ -269,8 +296,8 @@ abstract class BaseTrailMapFragment (
 
             /*Adds a marker for each trailPointOfInterest including its number*/
 
-            for(i in this.trail?.trailTrack?.trailPointsOfInterest!!.indices){
-                val trailPointOfInterest=this.trail?.trailTrack?.trailPointsOfInterest!![i]
+            for(i in this.trailViewModel?.trail?.trailTrack?.trailPointsOfInterest!!.indices){
+                val trailPointOfInterest=this.trailViewModel?.trail?.trailTrack?.trailPointsOfInterest!![i]
                 this.map?.addMarker(MarkerOptions()
                     .position(LatLng(trailPointOfInterest.latitude, trailPointOfInterest.longitude))
                     .icon(MapMarkersUtilities.createMapMarkerFromVector(
@@ -285,7 +312,7 @@ abstract class BaseTrailMapFragment (
 
     fun editTrailInfo(){
         hideInfoBottomSheet()
-        (activity as TrailActivity).updateTrailAndEditInfo(this.trail!!)
+        (activity as TrailActivity).updateTrailAndEditInfo(this.trailViewModel?.trail!!)
     }
 
     /**
@@ -295,7 +322,7 @@ abstract class BaseTrailMapFragment (
 
     fun editTrailPoiInfo(trailPoiPosition:Int){
         hideInfoBottomSheet()
-        (activity as TrailActivity).updateTrailAndEditPoiInfo(this.trail!!, trailPoiPosition)
+        (activity as TrailActivity).updateTrailAndEditPoiInfo(this.trailViewModel?.trail!!, trailPoiPosition)
     }
 
     /*****************************Bottom sheet monitoring****************************************/
@@ -336,14 +363,14 @@ abstract class BaseTrailMapFragment (
 
     fun showTrailInfoFragment(){
         this.infoFragment=
-            TrailInfoFragment(this.trail, this.isEditable)
+            TrailInfoFragment(this.trailViewModel?.trail, this.isEditable)
         childFragmentManager.beginTransaction()
             .replace(getInfoFragmentId(), this.infoFragment).commit()
         collapseInfoBottomSheet()
     }
 
     fun showTrailPOIInfoFragment(trailPointOfInterest: TrailPointOfInterest, trailPointOfInterestPosition:Int){
-        val poiIsEditable=this.isEditable && this.trail?.isDataValid()==true
+        val poiIsEditable=this.isEditable && this.trailViewModel?.trail?.isDataValid()==true
         this.infoFragment=
             TrailPOIInfoFragment(
                 trailPointOfInterest, trailPointOfInterestPosition, poiIsEditable

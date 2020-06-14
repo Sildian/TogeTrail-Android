@@ -222,7 +222,7 @@ class TrailSelectionActivity : BaseDataFlowActivity() {
     private fun startTrailActivity(trail:Trail){
         val trailActivityIntent= Intent(this, TrailActivity::class.java)
         trailActivityIntent.putExtra(TrailActivity.KEY_BUNDLE_TRAIL_ACTION, TrailActivity.ACTION_TRAIL_SEE)
-        trailActivityIntent.putExtra(TrailActivity.KEY_BUNDLE_TRAIL, trail)
+        trailActivityIntent.putExtra(TrailActivity.KEY_BUNDLE_TRAIL_ID, trail.id)
         startActivity(trailActivityIntent)
     }
 

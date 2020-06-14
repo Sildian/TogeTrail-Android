@@ -597,7 +597,7 @@ class MainActivity :
         val trailActivityIntent= Intent(this, TrailActivity::class.java)
         trailActivityIntent.putExtra(TrailActivity.KEY_BUNDLE_TRAIL_ACTION, trailActionId)
         if(trailActionId==TrailActivity.ACTION_TRAIL_SEE){
-            trailActivityIntent.putExtra(TrailActivity.KEY_BUNDLE_TRAIL, trail)
+            trailActivityIntent.putExtra(TrailActivity.KEY_BUNDLE_TRAIL_ID, trail?.id)
         }
         startActivity(trailActivityIntent)
     }

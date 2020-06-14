@@ -1,9 +1,13 @@
 package com.sildian.apps.togetrail.trail.map
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.material.snackbar.Snackbar
@@ -212,40 +216,52 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
 
         /*Gets the user location*/
 
-        this.userLocation.lastLocation
-            .addOnSuccessListener { userLocation->
-                if(userLocation!=null) {
-                    val trailPoint =
-                        TrailPoint(
-                            userLocation.latitude,
-                            userLocation.longitude,
-                            userLocation.altitude.toInt()
-                        )
+        //TODO improve permissions management
+        if(Build.VERSION.SDK_INT<23 &&
+            ContextCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            this.userLocation.lastLocation
+                .addOnSuccessListener { userLocation ->
+                    if (userLocation != null) {
+                        val trailPoint =
+                            TrailPoint(
+                                userLocation.latitude,
+                                userLocation.longitude,
+                                userLocation.altitude.toInt()
+                            )
 
-                    /*If minimum distance to previous point is fulfilled, adds the new trailPoint*/
+                        /*If minimum distance to previous point is fulfilled, adds the new trailPoint*/
 
-                    if (checkMinDistanceToPreviousPointIsFulfilled(trailPoint)) {
-                        Log.d(
-                            TAG,
-                            "Point registered at lat ${trailPoint.latitude} lng ${trailPoint.longitude}"
-                        )
-                        addTrailPoint(trailPoint)
+                        if (checkMinDistanceToPreviousPointIsFulfilled(trailPoint)) {
+                            Log.d(
+                                TAG,
+                                "Point registered at lat ${trailPoint.latitude} lng ${trailPoint.longitude}"
+                            )
+                            addTrailPoint(trailPoint)
+                        } else {
+                            Log.d(TAG, "Point not registered, too closed to the previous point")
+                        }
                     } else {
-                        Log.d(TAG, "Point not registered, too closed to the previous point")
+                        Log.w(TAG, "User location cannot be reached")
+                        Snackbar.make(
+                            this.messageView,
+                            R.string.message_user_location_failure,
+                            Snackbar.LENGTH_LONG
+                        )
+                            .setAnchorView(this.playButton)
+                            .show()
                     }
-                }else{
-                    Log.w(TAG, "User location cannot be reached")
-                    Snackbar.make(this.messageView, R.string.message_user_location_failure, Snackbar.LENGTH_LONG)
+                }
+                .addOnFailureListener { e ->
+                    Log.w(TAG, e.message.toString())
+                    Snackbar.make(
+                        this.messageView,
+                        R.string.message_user_location_failure,
+                        Snackbar.LENGTH_LONG
+                    )
                         .setAnchorView(this.playButton)
                         .show()
                 }
-            }
-            .addOnFailureListener { e->
-                Log.w(TAG, e.message.toString())
-                Snackbar.make(this.messageView, R.string.message_user_location_failure, Snackbar.LENGTH_LONG)
-                    .setAnchorView(this.playButton)
-                    .show()
-            }
+        }
     }
 
     /**
@@ -256,8 +272,8 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
      */
 
     private fun checkMinDistanceToPreviousPointIsFulfilled(trailPoint: TrailPoint):Boolean{
-        return if(!this.trail?.trailTrack?.trailPoints.isNullOrEmpty()) {
-            val previousPoint = this.trail?.trailTrack?.getLastTrailPoint()
+        return if(!this.trailViewModel?.trail?.trailTrack?.trailPoints.isNullOrEmpty()) {
+            val previousPoint = this.trailViewModel?.trail?.trailTrack?.getLastTrailPoint()
             if (previousPoint != null) {
                 val pointA = LatLng(trailPoint.latitude, trailPoint.longitude)
                 val pointB = LatLng(previousPoint.latitude, previousPoint.longitude)

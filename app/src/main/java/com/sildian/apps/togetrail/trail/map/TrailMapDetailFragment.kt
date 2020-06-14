@@ -7,14 +7,15 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
+import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
 import kotlinx.android.synthetic.main.fragment_trail_map_detail.view.*
 
 /*************************************************************************************************
  * Shows a specific trail on the map and allows to see all its detail information
  ************************************************************************************************/
 
-class TrailMapDetailFragment(trail: Trail?=null, isEditable:Boolean=false)
-    : BaseTrailMapFragment(trail, isEditable)
+class TrailMapDetailFragment(trailViewModel: TrailViewModel, isEditable:Boolean=false)
+    : BaseTrailMapFragment(trailViewModel, isEditable)
 {
 
     /************************************UI components*******************************************/
@@ -88,13 +89,13 @@ class TrailMapDetailFragment(trail: Trail?=null, isEditable:Boolean=false)
 
     override fun showTrailTrackOnMap() {
 
-        if(this.trail!=null) {
+        if(this.trailViewModel?.trail!=null) {
 
             super.showTrailTrackOnMap()
 
             /*Gets the first trailPoint*/
 
-            val firstPoint = this.trail?.trailTrack?.getFirstTrailPoint()
+            val firstPoint = this.trailViewModel?.trail?.trailTrack?.getFirstTrailPoint()
 
             /*Moves the camera to the first point and zoom in*/
 
