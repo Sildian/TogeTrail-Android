@@ -197,8 +197,8 @@ object DateUtilities {
      */
 
     @JvmStatic
-    fun displayDuration(minutes:Long, hourMetric:String, minuteMetric:String):String{
-        val duration = Duration.standardMinutes(minutes)
+    fun displayDuration(minutes:Int, hourMetric:String, minuteMetric:String):String{
+        val duration = Duration.standardMinutes(minutes.toLong())
         val period = duration.toPeriod()
         val periodFormat =
             if(minutes>60) {

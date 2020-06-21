@@ -363,7 +363,7 @@ abstract class BaseTrailMapFragment (
 
     fun showTrailInfoFragment(){
         this.infoFragment=
-            TrailInfoFragment(this.trailViewModel?.trail, this.isEditable)
+            TrailInfoFragment(this.trailViewModel, this.isEditable)
         childFragmentManager.beginTransaction()
             .replace(getInfoFragmentId(), this.infoFragment).commit()
         collapseInfoBottomSheet()

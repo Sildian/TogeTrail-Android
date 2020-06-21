@@ -275,7 +275,7 @@ class TrailMapFragment :
             TrailLevel.HARD -> view.map_info_window_trail_text_level.setText(R.string.label_trail_level_hard)
         }
         view.map_info_window_trail_text_duration.text=
-            MetricsHelper.displayDuration(context!!, trail.duration?.toLong())
+            MetricsHelper.displayDuration(context!!, trail.duration)
         view.map_info_window_trail_text_ascent.text=
             MetricsHelper.displayAscent(context!!, trail.ascent, true, false)
         view.map_info_window_trail_text_location.text=trail.location.toString()

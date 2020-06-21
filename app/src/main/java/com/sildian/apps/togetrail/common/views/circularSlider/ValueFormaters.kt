@@ -14,7 +14,7 @@ object ValueFormaters {
     class DurationValueFormater:ValueFormater{
         override fun formatValue(value: Int, context: Context?): String {
             return if(context!=null) {
-                MetricsHelper.displayDuration(context, value.toLong())
+                MetricsHelper.displayDuration(context, value)
             }
             else{
                 value.toString()

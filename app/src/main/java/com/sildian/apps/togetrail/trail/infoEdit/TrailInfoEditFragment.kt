@@ -211,7 +211,7 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
     }
 
     private fun initializeDurationText(){
-        val durationToDisplay=MetricsHelper.displayDuration(context!!, this.trail?.duration?.toLong())
+        val durationToDisplay=MetricsHelper.displayDuration(context!!, this.trail?.duration)
         this.durationText.text=durationToDisplay
         this.durationText.setOnClickListener {
             val duration=this.trail?.duration
@@ -412,7 +412,7 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
 
     private fun updateDuration(duration:Int?){
         this.trail?.duration=duration
-        val durationToDisplay=MetricsHelper.displayDuration(context!!, duration?.toLong())
+        val durationToDisplay=MetricsHelper.displayDuration(context!!, duration)
         this.durationText.text=durationToDisplay
     }
 

@@ -17,7 +17,7 @@ object MetricsHelper {
      */
 
     @JvmStatic
-    fun displayDuration(context: Context, duration:Long?):String{
+    fun displayDuration(context: Context, duration:Int?):String{
         val hourMetric=context.resources.getString(R.string.metric_hour)
         val minuteMetric=context.resources.getString(R.string.metric_minute)
         val unkownText=context.resources.getString(R.string.message_unknown_short)

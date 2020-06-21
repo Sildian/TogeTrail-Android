@@ -101,7 +101,7 @@ class TrailHorizontalViewHolder (
 
     private fun updateDurationText(){
         val durationToDisplay=
-            MetricsHelper.displayDuration(itemView.context, this.trail.duration?.toLong())
+            MetricsHelper.displayDuration(itemView.context, this.trail.duration)
         this.durationText.text=durationToDisplay
     }
 
