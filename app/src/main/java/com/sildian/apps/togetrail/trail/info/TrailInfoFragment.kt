@@ -28,6 +28,13 @@ class TrailInfoFragment(
 
     private val photoImageView by lazy {layout.fragment_trail_info_image_view_photo}
 
+    /************************************Life cycle**********************************************/
+
+    override fun onDestroyView() {
+        this.trailViewModel?.removeAllOnPropertyChangedCallbacks()
+        super.onDestroyView()
+    }
+
     /*********************************Data monitoring********************************************/
 
     override fun loadData() {

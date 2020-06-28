@@ -3,11 +3,11 @@ package com.sildian.apps.togetrail.trail.model.support
 import androidx.lifecycle.viewModelScope
 import com.sildian.apps.togetrail.common.baseViewModels.BaseObservableViewModel
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
-import com.sildian.apps.togetrail.event.model.support.EventViewModel
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.support.HikerRepository
 import com.sildian.apps.togetrail.trail.model.core.Trail
+import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 import io.ticofab.androidgpxparser.parser.domain.Gpx
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -29,7 +29,8 @@ class TrailViewModel:BaseObservableViewModel() {
 
     /***************************************Data*************************************************/
 
-    var trail: Trail?=null ; private set                    //The trail
+    var trail: Trail?=null ; private set                                    //The trail
+    var trailPointOfInterest: TrailPointOfInterest?=null ; private  set     //The watched point of interest if needed
 
     /************************************Data monitoring*****************************************/
 
@@ -156,5 +157,15 @@ class TrailViewModel:BaseObservableViewModel() {
                 failureCallback?.invoke(e)
             }
         }
+    }
+
+    /**
+     * Watches a point of interest
+     * @param position : the poi's position
+     */
+
+    fun watchPointOfInterest(position:Int) {
+        this.trailPointOfInterest=this.trail?.trailTrack?.trailPointsOfInterest!![position]
+        notifyDataChanged()
     }
 }

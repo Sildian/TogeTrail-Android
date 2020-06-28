@@ -4,7 +4,6 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
@@ -66,9 +65,8 @@ class TrailMapDetailFragment(trailViewModel: TrailViewModel, isEditable:Boolean=
 
         return when(marker?.tag){
             is TrailPointOfInterest ->{
-                val trailPointOfInterest=marker.tag as TrailPointOfInterest
                 val trailPoiPosition=marker.snippet.toInt()
-                showTrailPOIInfoFragment(trailPointOfInterest, trailPoiPosition)
+                showTrailPOIInfoFragment(trailPoiPosition)
                 true
             }
             is TrailPoint ->{

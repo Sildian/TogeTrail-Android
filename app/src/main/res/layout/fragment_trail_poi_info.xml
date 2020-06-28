@@ -1,104 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".trail.info.TrailPOIInfoFragment">
+<layout>
 
-    <LinearLayout
+    <data>
+        <import type="android.view.View"/>
+        <import type="com.sildian.apps.togetrail.common.utils.MetricsHelper"/>
+        <import type="com.sildian.apps.togetrail.trail.model.core.TrailLevel"/>
+        <variable
+            name="trailPOIInfoFragment"
+            type="com.sildian.apps.togetrail.trail.info.TrailPOIInfoFragment" />
+        <variable
+            name="trailViewModel"
+            type="com.sildian.apps.togetrail.trail.model.support.TrailViewModel" />
+        <variable
+            name="isEditable"
+            type="Boolean" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/fragment_trail_poi_info_image_view_photo"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/image_size_large"
-            android:background="@color/colorWhite"
-            android:contentDescription="@string/example_image_content_description"
-            app:srcCompat="@drawable/ic_trail_black" />
+        android:background="@color/colorPrimary"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".trail.info.TrailPOIInfoFragment">
 
         <LinearLayout
-            android:id="@+id/fragment_trail_poi_info_layout_info"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:background="@color/colorPrimary">
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/fragment_trail_poi_info_image_view_photo"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/image_size_large"
+                android:background="@color/colorWhite"
+                android:contentDescription="@string/example_image_content_description"
+                app:srcCompat="@drawable/ic_trail_black" />
 
             <LinearLayout
+                android:id="@+id/fragment_trail_poi_info_layout_info"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/fragment_trail_poi_info_text_name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="7"
-                    android:layout_margin="@dimen/components_margin_medium"
-                    android:textColor="@color/colorSecondary"
-                    android:textAllCaps="true"
-                    android:textStyle="bold"
-                    android:text="@string/example_trail_poi_name"/>
-
-                <com.google.android.material.button.MaterialButton
-                    style="@style/IconButtonStyle"
-                    android:id="@+id/fragment_trail_poi_info_button_edit"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_margin="@dimen/components_margin_medium"
-                    app:icon="@drawable/ic_edit_white" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/fragment_trail_poi_info_text_elevation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/components_margin_medium"
-                android:gravity="center_vertical"
-                android:textColor="@color/colorWhite"
-                android:text="@string/example_trail_poi_elevation"
-                android:drawableStart="@drawable/ic_trail_white"
-                android:drawablePadding="@dimen/components_margin_small"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/components_margin_small"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:background="@drawable/shape_corners_round_color_white">
+                android:background="@color/colorPrimary">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/components_margin_medium"
-                    android:layout_marginBottom="@dimen/components_margin_small"
-                    android:layout_marginStart="@dimen/components_margin_medium"
-                    android:layout_marginEnd="@dimen/components_margin_medium"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/text_size_title"
-                    android:textColor="@color/colorSecondaryDark"
-                    android:text="@string/label_trail_poi_description"/>
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/fragment_trail_poi_info_text_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="7"
+                        android:layout_margin="@dimen/components_margin_medium"
+                        android:textColor="@color/colorSecondary"
+                        android:textAllCaps="true"
+                        android:textStyle="bold"
+                        android:text="@{trailViewModel.trailPointOfInterest.name, default=@string/example_trail_poi_name}"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/IconButtonStyle"
+                        android:id="@+id/fragment_trail_poi_info_button_edit"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_margin="@dimen/components_margin_medium"
+                        app:icon="@drawable/ic_edit_white"
+                        android:visibility="@{isEditable ? View.VISIBLE : View.GONE}"
+                        android:onClick="@{trailPOIInfoFragment::onEditButtonClick}"/>
+
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/fragment_trail_poi_info_text_description"
+                    android:id="@+id/fragment_trail_poi_info_text_elevation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/components_margin_small"
-                    android:layout_marginBottom="@dimen/components_margin_medium"
-                    android:layout_marginStart="@dimen/components_margin_medium"
-                    android:layout_marginEnd="@dimen/components_margin_medium"
-                    android:text="@string/example_trail_poi_description"/>
+                    android:layout_margin="@dimen/components_margin_medium"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/colorWhite"
+                    android:text="@{MetricsHelper.displayElevation(trailPOIInfoFragment.context, trailViewModel.trailPointOfInterest.elevation, true, false), default=@string/example_trail_poi_elevation}"
+                    android:drawableStart="@drawable/ic_trail_white"
+                    android:drawablePadding="@dimen/components_margin_small"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/components_margin_small"
+                    android:orientation="vertical"
+                    android:background="@drawable/shape_corners_round_color_white">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/components_margin_medium"
+                        android:layout_marginBottom="@dimen/components_margin_small"
+                        android:layout_marginStart="@dimen/components_margin_medium"
+                        android:layout_marginEnd="@dimen/components_margin_medium"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/text_size_title"
+                        android:textColor="@color/colorSecondaryDark"
+                        android:text="@string/label_trail_poi_description"/>
+
+                    <TextView
+                        android:id="@+id/fragment_trail_poi_info_text_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/components_margin_small"
+                        android:layout_marginBottom="@dimen/components_margin_medium"
+                        android:layout_marginStart="@dimen/components_margin_medium"
+                        android:layout_marginEnd="@dimen/components_margin_medium"
+                        android:text="@{trailViewModel.trailPointOfInterest.description==null ? @string/message_no_description_available : trailViewModel.trailPointOfInterest.description, default=@string/example_trail_poi_description}"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-</androidx.core.widget.NestedScrollView>
+
+</layout>

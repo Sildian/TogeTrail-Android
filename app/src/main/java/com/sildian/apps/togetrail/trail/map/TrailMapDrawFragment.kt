@@ -125,9 +125,8 @@ class TrailMapDrawFragment : BaseTrailMapGenerateFragment(){
 
         return when(marker?.tag){
             is TrailPointOfInterest ->{
-                val trailPointOfInterest=marker.tag as TrailPointOfInterest
                 val trailPoiPosition=marker.snippet.toInt()
-                showTrailPOIInfoFragment(trailPointOfInterest, trailPoiPosition)
+                showTrailPOIInfoFragment(trailPoiPosition)
                 marker.showInfoWindow()
                 true
             }

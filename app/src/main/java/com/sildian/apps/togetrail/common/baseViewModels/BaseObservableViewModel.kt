@@ -36,4 +36,8 @@ abstract class BaseObservableViewModel: ViewModel(), Observable {
     override fun removeOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
         this.callbacks.remove(callback)
     }
+
+    fun removeAllOnPropertyChangedCallbacks() {
+        this.callbacks.clear()
+    }
 }

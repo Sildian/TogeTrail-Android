@@ -369,11 +369,11 @@ abstract class BaseTrailMapFragment (
         collapseInfoBottomSheet()
     }
 
-    fun showTrailPOIInfoFragment(trailPointOfInterest: TrailPointOfInterest, trailPointOfInterestPosition:Int){
+    fun showTrailPOIInfoFragment(trailPointOfInterestPosition:Int){
         val poiIsEditable=this.isEditable && this.trailViewModel?.trail?.isDataValid()==true
         this.infoFragment=
             TrailPOIInfoFragment(
-                trailPointOfInterest, trailPointOfInterestPosition, poiIsEditable
+                this.trailViewModel, trailPointOfInterestPosition, poiIsEditable
             )
         childFragmentManager.beginTransaction()
             .replace(getInfoFragmentId(), this.infoFragment).commit()
