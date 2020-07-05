@@ -1,6 +1,7 @@
 package com.sildian.apps.togetrail.trail.infoEdit
 
 import android.view.View
+import androidx.databinding.Observable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
@@ -10,15 +11,16 @@ import com.sildian.apps.togetrail.common.utils.MetricsHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.TextFieldHelper
 import com.sildian.apps.togetrail.common.views.circularSlider.CircularSlider
 import com.sildian.apps.togetrail.common.views.circularSlider.ValueFormaters
-import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
+import com.sildian.apps.togetrail.databinding.FragmentTrailPoiInfoEditBinding
+import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
 import kotlinx.android.synthetic.main.fragment_trail_poi_info_edit.view.*
 
 /*************************************************************************************************
  * Allows to edit information about a trailPointOfInterest
- * @param trailPointOfInterest : the related trailPointOfInterest
+ * @param trailViewModel : the trail data
  ************************************************************************************************/
 
-class TrailPOIInfoEditFragment(private val trailPointOfInterest: TrailPointOfInterest?=null) :
+class TrailPOIInfoEditFragment(private val trailViewModel: TrailViewModel?=null) :
     BaseImagePickerFragment(),
     CircularSlider.OnValueChangedListener
 {
@@ -35,29 +37,39 @@ class TrailPOIInfoEditFragment(private val trailPointOfInterest: TrailPointOfInt
 
     private val nameTextFieldLayout by lazy {layout.fragment_trail_poi_info_edit_text_field_layout_name}
     private val nameTextField by lazy {layout.fragment_trail_poi_info_edit_text_field_name}
-    private val photoText by lazy {layout.fragment_trail_poi_info_edit_text_photo}
     private val photoImageView by lazy {layout.fragment_trail_poi_info_edit_image_view_photo}
-    private val deletePhotoButton by lazy {layout.fragment_trail_poi_info_edit_button_delete_photo}
-    private val addPhotoButton by lazy {layout.fragment_trail_poi_info_edit_button_add_photo}
     private val metricsSlider by lazy {layout.fragment_trail_poi_info_edit_slider_metrics}
     private val elevationText by lazy {layout.fragment_trail_poi_info_edit_text_elevation}
     private val resetMetricsButton by lazy {layout.fragment_trail_poi_info_edit_button_metrics_reset}
     private val descriptionTextField by lazy {layout.fragment_trail_poi_info_edit_text_field_description}
-    private val selectPhotoButton by lazy {layout.fragment_trail_poi_info_edit_button_select_photo}
-    private val takePhotoButton by lazy {layout.fragment_trail_poi_info_edit_button_take_photo}
     private val messageView by lazy {layout.fragment_trail_poi_info_edit_view_message}
     private val messageAnchorView by lazy {layout.fragment_trail_poi_info_edit_bottom_sheet_add_photo}
 
     /*********************************Data monitoring********************************************/
 
+    override fun loadData() {
+        (this.binding as FragmentTrailPoiInfoEditBinding).trailPOIInfoEditFragment=this
+        (this.binding as FragmentTrailPoiInfoEditBinding).trailViewModel=this.trailViewModel
+        this.trailViewModel?.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback(){
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                refreshUI()
+            }
+        })
+    }
+
     override fun saveData() {
         if(checkDataIsValid()) {
-            if (this.trailPointOfInterest != null) {
-                this.trailPointOfInterest.name = this.nameTextField.text.toString()
-                this.trailPointOfInterest.description = this.descriptionTextField.text.toString()
-                (activity as TrailInfoEditActivity).saveTrailPoi(this.trailPointOfInterest)
+            if (this.trailViewModel?.trailPointOfInterest != null) {
+                this.trailViewModel?.trailPointOfInterest?.name = this.nameTextField.text.toString()
+                this.trailViewModel?.trailPointOfInterest?.description = this.descriptionTextField.text.toString()
+                //TODO replace progressbar
+                this.trailViewModel?.saveTrailInDatabase(true, this::handleTrailSaved, this::handleQueryError)
             }
         }
+    }
+
+    private fun handleTrailSaved(){
+        (activity as TrailInfoEditActivity).finishOk()
     }
 
     override fun checkDataIsValid(): Boolean {
@@ -79,49 +91,29 @@ class TrailPOIInfoEditFragment(private val trailPointOfInterest: TrailPointOfInt
 
     override fun getLayoutId(): Int = R.layout.fragment_trail_poi_info_edit
 
+    override fun useDataBinding(): Boolean = true
+
     override fun getAddPhotoBottomSheetId(): Int = R.id.fragment_trail_poi_info_edit_bottom_sheet_add_photo
 
     override fun initializeUI() {
-        initializeDeletePhotoButton()
-        initializeAddPhotoButton()
         initializeMetricsSlider()
         initializeElevationText()
         initializeResetMetricsButton()
-        initializeSelectPhotoButton()
-        initializeTakePhotoButton()
         refreshUI()
     }
 
     override fun refreshUI() {
-        updateNameTextField()
-        updateDescriptionTextField()
         updatePhoto()
     }
 
-    private fun updateNameTextField(){
-        this.nameTextField.setText(this.trailPointOfInterest?.name)
-    }
-
-    private fun initializeDeletePhotoButton(){
-        this.deletePhotoButton.setOnClickListener {
-            deletePhoto()
-        }
-    }
-
-    private fun initializeAddPhotoButton(){
-        this.addPhotoButton.setOnClickListener {
-            expandAddPhotoBottomSheet()
-        }
-    }
-
     private fun initializeMetricsSlider(){
-        val elevation=this.trailPointOfInterest?.elevation
+        val elevation=this.trailViewModel?.trailPointOfInterest?.elevation
         updateMetricsSlider(elevation)
         this.metricsSlider.addOnValueChangedListener(this)
     }
 
     private fun initializeElevationText(){
-        val elevation=this.trailPointOfInterest?.elevation
+        val elevation=this.trailViewModel?.trailPointOfInterest?.elevation
         updateElevation(elevation)
     }
 
@@ -132,48 +124,28 @@ class TrailPOIInfoEditFragment(private val trailPointOfInterest: TrailPointOfInt
         }
     }
 
-    private fun updateDescriptionTextField(){
-        this.descriptionTextField.setText(this.trailPointOfInterest?.description)
-    }
-
-    private fun initializeSelectPhotoButton(){
-        this.selectPhotoButton.setOnClickListener {
-            requestWritePermission()
-        }
-    }
-
-    private fun initializeTakePhotoButton(){
-        this.takePhotoButton.setOnClickListener {
-            requestWriteAndCameraPermission()
-        }
-    }
-
     private fun updatePhoto(){
         Glide.with(context!!)
-            .load(this.trailPointOfInterest?.photoUrl)
+            .load(this.trailViewModel?.trailPointOfInterest?.photoUrl)
             .apply(RequestOptions.centerCropTransform())
             .placeholder(R.drawable.ic_trail_black)
             .into(this.photoImageView)
-        updatePhotoVisibility()
     }
 
-    private fun updatePhotoVisibility(){
+    fun onDeletePhotoButtonClick(view:View){
+        deletePhoto()
+    }
 
-        /*If no photo is available, shows a text to notify the user*/
+    fun onAddPhotoButtonClick(view:View){
+        expandAddPhotoBottomSheet()
+    }
 
-        if(this.trailPointOfInterest?.photoUrl.isNullOrEmpty()){
-            this.photoText.visibility=View.VISIBLE
-            this.photoImageView.visibility=View.INVISIBLE
-            this.deletePhotoButton.visibility=View.INVISIBLE
-        }
+    fun onSelectPhotoButtonClick(view:View){
+        requestWritePermission()
+    }
 
-        /*Else shows the image*/
-
-        else{
-            this.photoText.visibility=View.INVISIBLE
-            this.photoImageView.visibility=View.VISIBLE
-            this.deletePhotoButton.visibility=View.VISIBLE
-        }
+    fun onTakePhotoButtonClick(view:View){
+        requestWriteAndCameraPermission()
     }
 
     /***********************************Metrics monitoring***************************************/
@@ -189,7 +161,7 @@ class TrailPOIInfoEditFragment(private val trailPointOfInterest: TrailPointOfInt
     }
 
     private fun updateElevation(elevation:Int?){
-        this.trailPointOfInterest?.elevation=elevation
+        this.trailViewModel?.trailPointOfInterest?.elevation=elevation
         val elevationToDisplay=MetricsHelper.displayElevation(
             context!!, elevation, true, true)
         this.elevationText.text=elevationToDisplay
@@ -198,17 +170,17 @@ class TrailPOIInfoEditFragment(private val trailPointOfInterest: TrailPointOfInt
     /*******************************Photos monitoring********************************************/
 
     override fun addPhoto(filePath:String){
-        (activity as TrailInfoEditActivity)
-            .updateImagePathToUploadIntoDatabase(filePath)
-        this.trailPointOfInterest?.photoUrl=filePath
+        this.trailViewModel?.updateImagePathToUpload(true, filePath)
+        this.trailViewModel?.trailPointOfInterest?.photoUrl=filePath
+        this.trailViewModel?.notifyDataChanged()
         updatePhoto()
     }
 
     override fun deletePhoto(){
-        if(!this.trailPointOfInterest?.photoUrl.isNullOrEmpty()) {
-            (activity as TrailInfoEditActivity)
-                .updateImagePathToDeleteFromDatabase(this.trailPointOfInterest?.photoUrl!!)
-            this.trailPointOfInterest.photoUrl = null
+        if(!this.trailViewModel?.trailPointOfInterest?.photoUrl.isNullOrEmpty()) {
+            this.trailViewModel?.updateImagePathToDelete(this.trailViewModel?.trailPointOfInterest?.photoUrl!!)
+            this.trailViewModel?.trailPointOfInterest?.photoUrl = null
+            this.trailViewModel?.notifyDataChanged()
             updatePhoto()
         }
     }

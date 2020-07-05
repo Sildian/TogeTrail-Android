@@ -2,6 +2,7 @@ package com.sildian.apps.togetrail.trail.infoEdit
 
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.databinding.Observable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
@@ -14,17 +15,18 @@ import com.sildian.apps.togetrail.common.utils.MetricsHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.TextFieldHelper
 import com.sildian.apps.togetrail.common.views.circularSlider.CircularSlider
 import com.sildian.apps.togetrail.common.views.circularSlider.ValueFormaters
+import com.sildian.apps.togetrail.databinding.FragmentTrailInfoEditBinding
 import com.sildian.apps.togetrail.location.model.core.Location
-import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailLevel
+import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
 import kotlinx.android.synthetic.main.fragment_trail_info_edit.view.*
 
 /*************************************************************************************************
  * Allows to edit information about a trail
- * @param trail : the related trail
+ * @param trailViewModel : the trail data
  ************************************************************************************************/
 
-class TrailInfoEditFragment(private val trail: Trail?=null) :
+class TrailInfoEditFragment(private val trailViewModel: TrailViewModel?=null) :
     BaseImagePickerFragment(),
     CircularSlider.OnValueChangedListener
 {
@@ -58,10 +60,7 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
     private val levelTextFieldDropDownLayout by lazy {layout.fragment_trail_info_edit_text_field_dropdown_layout_level}
     private val levelTextFieldDropDown by lazy {layout.fragment_trail_info_edit_text_field_dropdown_level}
     private val loopSwitch by lazy {layout.fragment_trail_info_edit_switch_loop}
-    private val photoText by lazy {layout.fragment_trail_info_edit_text_photo}
     private val photoImageView by lazy {layout.fragment_trail_info_edit_image_view_photo}
-    private val deletePhotoButton by lazy {layout.fragment_trail_info_edit_button_delete_photo}
-    private val addPhotoButton by lazy {layout.fragment_trail_info_edit_button_add_photo}
     private val metricsSlider by lazy {layout.fragment_trail_info_edit_slider_metrics}
     private val durationText by lazy {layout.fragment_trail_info_edit_text_duration}
     private val ascentText by lazy {layout.fragment_trail_info_edit_text_ascent}
@@ -73,8 +72,6 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
     private val locationTextFieldLayout by lazy {layout.fragment_trail_info_edit_text_field_layout_location}
     private val locationTextField by lazy {layout.fragment_trail_info_edit_text_field_location}
     private val descriptionTextField by lazy {layout.fragment_trail_info_edit_text_field_description}
-    private val selectPhotoButton by lazy {layout.fragment_trail_info_edit_button_select_photo}
-    private val takePhotoButton by lazy {layout.fragment_trail_info_edit_button_take_photo}
     private val messageView by lazy {layout.fragment_trail_info_edit_view_message}
     private val messageAnchorView by lazy {layout.fragment_trail_info_edit_bottom_sheet_add_photo}
 
@@ -91,23 +88,38 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
 
     /*********************************Data monitoring********************************************/
 
+    override fun loadData() {
+        (this.binding as FragmentTrailInfoEditBinding).trailInfoEditFragment=this
+        (this.binding as FragmentTrailInfoEditBinding).trailViewModel=this.trailViewModel
+        this.trailViewModel?.addOnPropertyChangedCallback(object:Observable.OnPropertyChangedCallback(){
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                refreshUI()
+            }
+        })
+    }
+
     override fun updateData(data:Any?) {
         if(data is Location){
-            this.trail?.location=data
-            updateLocationTextField()
+            this.trailViewModel?.trail?.location=data
+            this.locationTextField.setText(data.fullAddress)
         }
     }
 
     override fun saveData() {
         if(checkDataIsValid()) {
-            this.trail?.name = this.nameTextField.text.toString()
-            this.trail?.level =
+            this.trailViewModel?.trail?.name = this.nameTextField.text.toString()
+            this.trailViewModel?.trail?.level =
                 TrailLevel.fromValue(this.levelTextFieldDropDown.tag.toString().toInt())
-            this.trail?.loop=this.loopSwitch.isChecked
-            this.trail?.description = this.descriptionTextField.text.toString()
-            this.trail?.autoPopulatePosition()
-            (activity as TrailInfoEditActivity).saveTrail()
+            this.trailViewModel?.trail?.loop=this.loopSwitch.isChecked
+            this.trailViewModel?.trail?.description = this.descriptionTextField.text.toString()
+            this.trailViewModel?.trail?.autoPopulatePosition()
+            //TODO replace progressbar
+            this.trailViewModel?.saveTrailInDatabase(false, this::handleTrailSaved, this::handleQueryError)
         }
+    }
+
+    private fun handleTrailSaved(){
+        (activity as TrailInfoEditActivity).finishOk()
     }
 
     override fun checkDataIsValid(): Boolean {
@@ -148,12 +160,11 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
 
     override fun getLayoutId(): Int = R.layout.fragment_trail_info_edit
 
+    override fun useDataBinding(): Boolean = true
+
     override fun getAddPhotoBottomSheetId(): Int = R.id.fragment_trail_info_edit_bottom_sheet_add_photo
 
     override fun initializeUI() {
-        initializeLoopSwitch()
-        initializeDeletePhotoButton()
-        initializeAddPhotoButton()
         initializeMetricsSlider()
         initializeDurationText()
         initializeAscentText()
@@ -162,59 +173,32 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
         initializeMaxElevationText()
         initializeMinElevationText()
         initializeResetMetricsButton()
-        initializeSelectPhotoButton()
-        initializeTakePhotoButton()
         refreshUI()
     }
 
     override fun refreshUI() {
-        updateNameTextField()
         updateLevelTextFieldDropDown()
         updateCurrentMetricToSet(METRIC_DURATION)
-        updateLocationTextField()
-        updateDescriptionTextField()
         updatePhoto()
-    }
-
-    private fun updateNameTextField(){
-        this.nameTextField.setText(this.trail?.name)
     }
 
     private fun updateLevelTextFieldDropDown(){
         val choice=resources.getStringArray(R.array.array_trail_levels)
-        val initialValue=(this.trail?.level?.value?: TrailLevel.MEDIUM.value)
+        val initialValue=(this.trailViewModel?.trail?.level?.value?: TrailLevel.MEDIUM.value)
         DropdownMenuHelper.populateDropdownMenu(this.levelTextFieldDropDown, choice, initialValue)
     }
 
-    private fun initializeLoopSwitch(){
-        this.trail?.let { trail ->
-            this.loopSwitch.isChecked = trail.loop
-        }
-    }
-
-    private fun initializeDeletePhotoButton(){
-        this.deletePhotoButton.setOnClickListener {
-            deletePhoto()
-        }
-    }
-
-    private fun initializeAddPhotoButton(){
-        this.addPhotoButton.setOnClickListener {
-            expandAddPhotoBottomSheet()
-        }
-    }
-
     private fun initializeMetricsSlider(){
-        val duration=this.trail?.duration
+        val duration=this.trailViewModel?.trail?.duration
         updateMetricsSlider(METRIC_DURATION, duration)
         this.metricsSlider.addOnValueChangedListener(this)
     }
 
     private fun initializeDurationText(){
-        val durationToDisplay=MetricsHelper.displayDuration(context!!, this.trail?.duration)
+        val durationToDisplay=MetricsHelper.displayDuration(context!!, this.trailViewModel?.trail?.duration)
         this.durationText.text=durationToDisplay
         this.durationText.setOnClickListener {
-            val duration=this.trail?.duration
+            val duration=this.trailViewModel?.trail?.duration
             updateCurrentMetricToSet(METRIC_DURATION)
             updateMetricsSlider(METRIC_DURATION, duration)
         }
@@ -222,10 +206,10 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
 
     private fun initializeAscentText(){
         val ascentToDisplay=MetricsHelper.displayAscent(
-            context!!, this.trail?.ascent, true, true)
+            context!!, this.trailViewModel?.trail?.ascent, true, true)
         this.ascentText.text=ascentToDisplay
         this.ascentText.setOnClickListener {
-            val ascent=this.trail?.ascent
+            val ascent=this.trailViewModel?.trail?.ascent
             updateCurrentMetricToSet(METRIC_ASCENT)
             updateMetricsSlider(METRIC_ASCENT, ascent)
         }
@@ -233,10 +217,10 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
 
     private fun initializeDescentText(){
         val descentToDisplay=MetricsHelper.displayDescent(
-            context!!, this.trail?.descent, true, true)
+            context!!, this.trailViewModel?.trail?.descent, true, true)
         this.descentText.text=descentToDisplay
         this.descentText.setOnClickListener {
-            val descent=this.trail?.descent
+            val descent=this.trailViewModel?.trail?.descent
             updateCurrentMetricToSet(METRIC_DESCENT)
             updateMetricsSlider(METRIC_DESCENT, descent)
         }
@@ -244,10 +228,10 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
 
     private fun initializeDistanceText(){
         val distanceToDisplay=MetricsHelper.displayDistance(
-            context!!, this.trail?.distance, true, true)
+            context!!, this.trailViewModel?.trail?.distance, true, true)
         this.distanceText.text=distanceToDisplay
         this.distanceText.setOnClickListener {
-            val distance=this.trail?.distance
+            val distance=this.trailViewModel?.trail?.distance
             updateCurrentMetricToSet(METRIC_DISTANCE)
             updateMetricsSlider(METRIC_DISTANCE, distance)
         }
@@ -255,10 +239,10 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
 
     private fun initializeMaxElevationText(){
         val maxElevationToDisplay=MetricsHelper.displayMaxElevation(
-            context!!, this.trail?.maxElevation, true, true)
+            context!!, this.trailViewModel?.trail?.maxElevation, true, true)
         this.maxElevationText.text=maxElevationToDisplay
         this.maxElevationText.setOnClickListener {
-            val maxElevation=this.trail?.maxElevation
+            val maxElevation=this.trailViewModel?.trail?.maxElevation
             updateCurrentMetricToSet(METRIC_MAX_ELEVATION)
             updateMetricsSlider(METRIC_MAX_ELEVATION, maxElevation)
         }
@@ -266,10 +250,10 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
 
     private fun initializeMinElevationText(){
         val minElevationToDisplay=MetricsHelper.displayMinElevation(
-            context!!, this.trail?.minElevation, true, true)
+            context!!, this.trailViewModel?.trail?.minElevation, true, true)
         this.minElevationText.text=minElevationToDisplay
         this.minElevationText.setOnClickListener {
-            val minElevation=this.trail?.minElevation
+            val minElevation=this.trailViewModel?.trail?.minElevation
             updateCurrentMetricToSet(METRIC_MIN_ELEVATION)
             updateMetricsSlider(METRIC_MIN_ELEVATION, minElevation)
         }
@@ -279,45 +263,34 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
         this.resetMetricsButton.setOnClickListener {
             val value=when(this.currentMetricToSet){
                 METRIC_DURATION -> {
-                    this.trail?.autoCalculateDuration()
-                    this.trail?.duration
+                    this.trailViewModel?.trail?.autoCalculateDuration()
+                    this.trailViewModel?.trail?.duration
                 }
                 METRIC_ASCENT -> {
-                    this.trail?.autoCalculateAscent()
-                    this.trail?.ascent
+                    this.trailViewModel?.trail?.autoCalculateAscent()
+                    this.trailViewModel?.trail?.ascent
                 }
                 METRIC_DESCENT -> {
-                    this.trail?.autoCalculateDescent()
-                    this.trail?.descent
+                    this.trailViewModel?.trail?.autoCalculateDescent()
+                    this.trailViewModel?.trail?.descent
                 }
                 METRIC_DISTANCE -> {
-                    this.trail?.autoCalculateDistance()
-                    this.trail?.distance
+                    this.trailViewModel?.trail?.autoCalculateDistance()
+                    this.trailViewModel?.trail?.distance
                 }
                 METRIC_MAX_ELEVATION -> {
-                    this.trail?.autoCalculateMaxElevation()
-                    this.trail?.maxElevation
+                    this.trailViewModel?.trail?.autoCalculateMaxElevation()
+                    this.trailViewModel?.trail?.maxElevation
                 }
                 METRIC_MIN_ELEVATION -> {
-                    this.trail?.autoCalculateMinElevation()
-                    this.trail?.minElevation
+                    this.trailViewModel?.trail?.autoCalculateMinElevation()
+                    this.trailViewModel?.trail?.minElevation
                 }
                 else -> null
             }
             updateMetricsSlider(this.currentMetricToSet, value)
             updateCurrentMetric(value)
         }
-    }
-
-    private fun updateLocationTextField(){
-        this.locationTextField.setText(this.trail?.location?.fullAddress)
-        this.locationTextField.setOnClickListener {
-            (activity as TrailInfoEditActivity).searchLocation()
-        }
-    }
-
-    private fun updateDescriptionTextField(){
-        this.descriptionTextField.setText(this.trail?.description)
     }
 
     private fun updateCurrentMetricToSet(metricToSet: Int){
@@ -334,44 +307,32 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
         }
     }
 
-    private fun initializeSelectPhotoButton(){
-        this.selectPhotoButton.setOnClickListener {
-            requestWritePermission()
-        }
-    }
-
-    private fun initializeTakePhotoButton(){
-        this.takePhotoButton.setOnClickListener {
-            requestWriteAndCameraPermission()
-        }
-    }
-
     private fun updatePhoto(){
         Glide.with(context!!)
-            .load(this.trail?.mainPhotoUrl)
+            .load(this.trailViewModel?.trail?.mainPhotoUrl)
             .apply(RequestOptions.centerCropTransform())
             .placeholder(R.drawable.ic_trail_black)
             .into(this.photoImageView)
-        updatePhotoVisibility()
     }
 
-    private fun updatePhotoVisibility(){
+    fun onDeletePhotoButtonClick(view:View){
+        deletePhoto()
+    }
 
-        /*If no photo is available, shows a text to notify the user*/
+    fun onAddPhotoButtonClick(view:View){
+        expandAddPhotoBottomSheet()
+    }
 
-        if(this.trail?.mainPhotoUrl.isNullOrEmpty()){
-            this.photoText.visibility=View.VISIBLE
-            this.photoImageView.visibility=View.INVISIBLE
-            this.deletePhotoButton.visibility=View.INVISIBLE
-        }
+    fun onSelectPhotoButtonClick(view:View){
+        requestWritePermission()
+    }
 
-        /*Else shows the image*/
+    fun onTakePhotoButtonClick(view:View){
+        requestWriteAndCameraPermission()
+    }
 
-        else{
-            this.photoText.visibility=View.INVISIBLE
-            this.photoImageView.visibility=View.VISIBLE
-            this.deletePhotoButton.visibility=View.VISIBLE
-        }
+    fun onLocationTextFieldClick(view:View){
+        (activity as TrailInfoEditActivity).searchLocation()
     }
 
     /*********************************Metrics monitoring*****************************************/
@@ -401,51 +362,51 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
 
     private fun updateCurrentMetric(value:Int?){
         when(this.currentMetricToSet){
-            METRIC_DURATION -> updateDuration(value?:this.trail?.duration)
-            METRIC_ASCENT -> updateAscent(value?:this.trail?.ascent)
-            METRIC_DESCENT -> updateDescent(value?:this.trail?.descent)
-            METRIC_DISTANCE -> updateDistance(value?:this.trail?.distance?:0)
-            METRIC_MAX_ELEVATION -> updateMaxElevation(value?:this.trail?.maxElevation)
-            METRIC_MIN_ELEVATION -> updateMinElevation(value?:this.trail?.minElevation)
+            METRIC_DURATION -> updateDuration(value?:this.trailViewModel?.trail?.duration)
+            METRIC_ASCENT -> updateAscent(value?:this.trailViewModel?.trail?.ascent)
+            METRIC_DESCENT -> updateDescent(value?:this.trailViewModel?.trail?.descent)
+            METRIC_DISTANCE -> updateDistance(value?:this.trailViewModel?.trail?.distance?:0)
+            METRIC_MAX_ELEVATION -> updateMaxElevation(value?:this.trailViewModel?.trail?.maxElevation)
+            METRIC_MIN_ELEVATION -> updateMinElevation(value?:this.trailViewModel?.trail?.minElevation)
         }
     }
 
     private fun updateDuration(duration:Int?){
-        this.trail?.duration=duration
+        this.trailViewModel?.trail?.duration=duration
         val durationToDisplay=MetricsHelper.displayDuration(context!!, duration)
         this.durationText.text=durationToDisplay
     }
 
     private fun updateAscent(ascent:Int?) {
-        this.trail?.ascent = ascent
+        this.trailViewModel?.trail?.ascent = ascent
         val ascentToDisplay = MetricsHelper.displayAscent(
             context!!, ascent, true, true)
         this.ascentText.text = ascentToDisplay
     }
 
     private fun updateDescent(descent:Int?) {
-        this.trail?.descent = descent
+        this.trailViewModel?.trail?.descent = descent
         val descentToDisplay = MetricsHelper.displayDescent(
             context!!, descent, true, true)
         this.descentText.text = descentToDisplay
     }
 
     private fun updateDistance(distance:Int) {
-        this.trail?.distance = distance
+        this.trailViewModel?.trail?.distance = distance
         val distanceToDisplay = MetricsHelper.displayDistance(
             context!!, distance, true, true)
         this.distanceText.text = distanceToDisplay
     }
 
     private fun updateMaxElevation(elevation:Int?) {
-        this.trail?.maxElevation = elevation
+        this.trailViewModel?.trail?.maxElevation = elevation
         val maxElevationToDisplay = MetricsHelper.displayMaxElevation(
             context!!, elevation, true, true)
         this.maxElevationText.text = maxElevationToDisplay
     }
 
     private fun updateMinElevation(elevation:Int?) {
-        this.trail?.minElevation = elevation
+        this.trailViewModel?.trail?.minElevation = elevation
         val minElevationToDisplay = MetricsHelper.displayMinElevation(
             context!!, elevation, true, true)
         this.minElevationText.text = minElevationToDisplay
@@ -454,17 +415,17 @@ class TrailInfoEditFragment(private val trail: Trail?=null) :
     /*******************************Photos monitoring********************************************/
 
     override fun addPhoto(filePath:String){
-        (activity as TrailInfoEditActivity)
-            .updateImagePathToUploadIntoDatabase(filePath)
-        this.trail?.mainPhotoUrl=filePath
+        this.trailViewModel?.updateImagePathToUpload(false, filePath)
+        this.trailViewModel?.trail?.mainPhotoUrl=filePath
+        this.trailViewModel?.notifyDataChanged()
         updatePhoto()
     }
 
     override fun deletePhoto(){
-        if(!this.trail?.mainPhotoUrl.isNullOrEmpty()) {
-            (activity as TrailInfoEditActivity)
-                .updateImagePathToDeleteFromDatabase(this.trail?.mainPhotoUrl!!)
-            this.trail.mainPhotoUrl = null
+        if(!this.trailViewModel?.trail?.mainPhotoUrl.isNullOrEmpty()) {
+            this.trailViewModel?.updateImagePathToDelete(this.trailViewModel?.trail?.mainPhotoUrl!!)
+            this.trailViewModel?.trail?.mainPhotoUrl = null
+            this.trailViewModel?.notifyDataChanged()
             updatePhoto()
         }
     }

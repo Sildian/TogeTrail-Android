@@ -28,8 +28,8 @@ class HikerViewModel : BaseObservableViewModel() {
     /***************************************Data*************************************************/
 
     var hiker: Hiker?=null ; private set                //The hiker
-    var imagePathToUpload:String?=null ; private set    //Path of image to upload into the cloud
-    var imagePathToDelete:String?=null ; private set    //Path of image to delete from the cloud
+    private var imagePathToUpload:String?=null          //Path of image to upload into the cloud
+    private var imagePathToDelete:String?=null          //Path of image to delete from the cloud
 
     /************************************Data monitoring*****************************************/
 
@@ -118,8 +118,8 @@ class HikerViewModel : BaseObservableViewModel() {
             if (photoUrl.startsWith("https://")) {
                 this.imagePathToDelete = photoUrl
             }
-            this.imagePathToUpload = imagePath
         }
+        this.imagePathToUpload = imagePath
     }
 
     /**

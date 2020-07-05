@@ -3,6 +3,7 @@ package com.sildian.apps.togetrail.trail.model.support
 import androidx.lifecycle.viewModelScope
 import com.sildian.apps.togetrail.common.baseViewModels.BaseObservableViewModel
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.support.HikerRepository
@@ -31,6 +32,8 @@ class TrailViewModel:BaseObservableViewModel() {
 
     var trail: Trail?=null ; private set                                    //The trail
     var trailPointOfInterest: TrailPointOfInterest?=null ; private  set     //The watched point of interest if needed
+    private var imagePathToUpload:String?=null                              //Path of image to upload into the cloud
+    private var imagePathToDelete:String?=null                              //Path of image to delete from the cloud
 
     /************************************Data monitoring*****************************************/
 
@@ -52,6 +55,16 @@ class TrailViewModel:BaseObservableViewModel() {
         this.trail= TrailBuilder
             .withGpx(gpx)
             .build()
+        notifyDataChanged()
+    }
+
+    /**
+     * Initializes with an existing trail
+     * @param trail : the trail
+     */
+
+    fun initWithTrail(trail:Trail){
+        this.trail=trail
         notifyDataChanged()
     }
 
@@ -100,16 +113,32 @@ class TrailViewModel:BaseObservableViewModel() {
 
     /**
      * Saves the trail within the database
+     * @param savePOI : true if a POI needs to be saved
      * @param successCallback : the callback to handle a success in the query
      * @param failureCallback : the callback to handle a failure in the query
      */
 
-    fun saveTrailInDatabase(successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
+    fun saveTrailInDatabase(savePOI:Boolean, successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
         viewModelScope.launch {
             try {
                 if(trail!=null){
 
                     trail?.lastUpdate= Date()
+
+                    /*Stores or deletes the image in the cloud if necessary*/
+
+                    imagePathToDelete?.let { url ->
+                        launch { StorageRepository.deleteImage(url) }.join()
+                    }
+                    imagePathToUpload?.let { uri ->
+                        val deferredNewImageUrl=async { StorageRepository.uploadImage(uri) }
+                        val newImageUrl=deferredNewImageUrl.await()
+                        if(savePOI){
+                            trailPointOfInterest?.photoUrl=newImageUrl
+                        }else {
+                            trail?.mainPhotoUrl = newImageUrl
+                        }
+                    }
 
                     /*If the trail is new...*/
 
@@ -165,7 +194,44 @@ class TrailViewModel:BaseObservableViewModel() {
      */
 
     fun watchPointOfInterest(position:Int) {
-        this.trailPointOfInterest=this.trail?.trailTrack?.trailPointsOfInterest!![position]
-        notifyDataChanged()
+        if(position<=this.trail?.trailTrack?.trailPointsOfInterest!!.size-1) {
+            this.trailPointOfInterest = this.trail?.trailTrack?.trailPointsOfInterest!![position]
+            notifyDataChanged()
+        }
+    }
+
+    /**
+     * Gives an image to be stored on the cloud
+     * @param isPOIImage : true if the image to upload is related to a POI
+     * @param imagePath : the temporary image's uri
+     */
+
+    fun updateImagePathToUpload(isPOIImage:Boolean, imagePath:String){
+        if(isPOIImage){
+            this.trailPointOfInterest?.photoUrl?.let { photoUrl ->
+                if (photoUrl.startsWith("https://")) {
+                    this.imagePathToDelete = photoUrl
+                }
+            }
+        }else {
+            this.trail?.mainPhotoUrl?.let { photoUrl ->
+                if (photoUrl.startsWith("https://")) {
+                    this.imagePathToDelete = photoUrl
+                }
+            }
+        }
+        this.imagePathToUpload = imagePath
+    }
+
+    /**
+     * Gives an image to be deleted from the cloud
+     * @param imagePath : the image's url
+     */
+
+    fun updateImagePathToDelete(imagePath:String){
+        this.imagePathToUpload=null
+        if(imagePath.startsWith("https://")){
+            this.imagePathToDelete=imagePath
+        }
     }
 }

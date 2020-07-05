@@ -25,7 +25,7 @@ abstract class BaseObservableViewModel: ViewModel(), Observable {
 
     /*****************************Callbacks monitoring*******************************************/
 
-    protected fun notifyDataChanged() {
+    fun notifyDataChanged() {
         this.callbacks.notifyCallbacks(this, 0, null)
     }
 

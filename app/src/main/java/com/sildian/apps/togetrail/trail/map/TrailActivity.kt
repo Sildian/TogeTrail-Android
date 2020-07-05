@@ -43,14 +43,9 @@ class TrailActivity : BaseDataFlowActivity() {
         const val ACTION_TRAIL_DRAW=3
         const val ACTION_TRAIL_RECORD=4
 
-        /**Bundle keys for intent
-         * If the trail needs to refresh, send the trail's id
-         * If the trail doesn't need to refresh, send the trail
-         * If this is a new trail, do not send any of them
-         */
+        /**Bundle keys for intent**/
         const val KEY_BUNDLE_TRAIL_ACTION="KEY_BUNDLE_TRAIL_ACTION"     //Action to perform (see above) -> Mandatory
-        const val KEY_BUNDLE_TRAIL_ID="KEY_BUNDLE_TRAIL_ID"             //Trail id -> Optional, only if the trail needs to refresh
-        const val KEY_BUNDLE_TRAIL="KEY_BUNDLE_TRAIL"                   //Trail -> Optional, only if the trail doesn't need to refresh
+        const val KEY_BUNDLE_TRAIL_ID="KEY_BUNDLE_TRAIL_ID"             //Trail id -> Optional, only if the trail already exists
 
         /**Request keys for intent**/
         private const val KEY_REQUEST_LOAD_GPX=1001
@@ -265,10 +260,12 @@ class TrailActivity : BaseDataFlowActivity() {
             }
             ACTION_TRAIL_DRAW -> {
                 this.isEditable=true
+                this.trailViewModel.initNewTrail()
                 showFragment(ID_FRAGMENT_TRAIL_DRAW)
             }
             ACTION_TRAIL_RECORD -> {
                 this.isEditable=true
+                this.trailViewModel.initNewTrail()
                 showFragment(ID_FRAGMENT_TRAIL_RECORD)
             }
         }
@@ -343,7 +340,7 @@ class TrailActivity : BaseDataFlowActivity() {
                 if(data.hasExtra(TrailInfoEditActivity.KEY_BUNDLE_TRAIL)){
                     val trail=data.getParcelableExtra<Trail>(TrailInfoEditActivity.KEY_BUNDLE_TRAIL)
                     trail?.let { trailToUpdate ->
-                        updateData(trailToUpdate)
+                        this.trailViewModel.initWithTrail(trailToUpdate)
                     }
                 }
             }

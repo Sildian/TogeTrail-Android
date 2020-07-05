@@ -143,7 +143,7 @@ abstract class BaseTrailMapFragment (
         if(this.checkDataIsValid()) {
             this.trailViewModel?.trail?.autoPopulatePosition()
             //TODO replace Progress dialog
-            this.trailViewModel?.saveTrailInDatabase(this::handleSaveDataResult, this::handleQueryError)
+            this.trailViewModel?.saveTrailInDatabase(false, this::handleSaveDataResult, this::handleQueryError)
         }
     }
 

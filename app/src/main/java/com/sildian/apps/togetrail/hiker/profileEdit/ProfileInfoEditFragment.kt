@@ -130,6 +130,7 @@ class ProfileInfoEditFragment(private val hikerId: String?=null) : BaseImagePick
     override fun addPhoto(filePath:String){
         this.hikerViewModel.updateImagePathToUpload(filePath)
         this.hikerViewModel.hiker?.photoUrl=filePath
+        this.hikerViewModel.notifyDataChanged()
         updatePhoto()
     }
 }

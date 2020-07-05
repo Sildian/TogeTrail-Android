@@ -1,399 +1,423 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".trail.infoEdit.TrailInfoEditFragment">
+<layout>
 
-    <ScrollView
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="trailInfoEditFragment"
+            type="com.sildian.apps.togetrail.trail.infoEdit.TrailInfoEditFragment" />
+        <variable
+            name="trailViewModel"
+            type="com.sildian.apps.togetrail.trail.model.support.TrailViewModel" />
+    </data>
+
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".trail.infoEdit.TrailInfoEditFragment">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/components_margin_medium"
-                android:layout_marginBottom="@dimen/components_margin_small"
-                android:layout_marginStart="@dimen/components_margin_medium"
-                android:layout_marginEnd="@dimen/components_margin_medium"
-                android:textStyle="bold"
-                android:textSize="@dimen/text_size_title"
-                android:textColor="@color/colorSecondaryDark"
-                android:text="@string/label_trail_main_info"/>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/TextInputFieldStyle"
-                android:id="@+id/fragment_trail_info_edit_text_field_layout_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/components_margin_small"
-                android:layout_marginBottom="@dimen/components_margin_small"
-                android:layout_marginStart="@dimen/components_margin_medium"
-                android:layout_marginEnd="@dimen/components_margin_medium"
-                android:hint="@string/label_trail_name"
-                app:errorEnabled="true">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/fragment_trail_info_edit_text_field_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textCapSentences" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/TextInputFieldDropDownMenuStyle"
-                    android:id="@+id/fragment_trail_info_edit_text_field_dropdown_layout_level"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginTop="@dimen/components_margin_small"
-                    android:layout_marginBottom="@dimen/components_margin_small"
-                    android:layout_marginStart="@dimen/components_margin_medium"
-                    android:layout_marginEnd="@dimen/components_margin_small"
-                    android:hint="@string/label_trail_level"
-                    app:errorEnabled="true">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/fragment_trail_info_edit_text_field_dropdown_level"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textCapSentences"
-                        android:focusable="false" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <Switch
-                    android:id="@+id/fragment_trail_info_edit_switch_loop"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginTop="@dimen/components_margin_small"
-                    android:layout_marginBottom="@dimen/components_margin_small"
-                    android:layout_marginStart="@dimen/components_margin_medium"
-                    android:layout_marginEnd="@dimen/components_margin_small"
-                    android:text="@string/label_trail_loop"
-                    android:checked="true"/>
-
-            </LinearLayout>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/components_margin_small"
-                android:layout_marginBottom="@dimen/components_margin_small"
-                android:layout_marginStart="@dimen/components_margin_medium"
-                android:layout_marginEnd="@dimen/components_margin_medium"
-                app:cardElevation="@dimen/components_elevation"
-                app:cardCornerRadius="@dimen/components_corner_medium">
-
-                <TextView
-                    android:id="@+id/fragment_trail_info_edit_text_photo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="@string/message_no_photo_available"
-                    android:drawableStart="@drawable/ic_trail_black"
-                    android:drawablePadding="@dimen/components_margin_small"
-                    android:visibility="invisible"/>
-
-                <ImageView
-                    android:id="@+id/fragment_trail_info_edit_image_view_photo"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/image_size_large"
-                    android:contentDescription="@string/example_image_content_description"
-                    app:srcCompat="@drawable/ic_trail_black"/>
-
-                <ImageButton
-                    android:id="@+id/fragment_trail_info_edit_button_delete_photo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/components_margin_small"
-                    android:layout_gravity="top|end"
-                    android:contentDescription="@string/example_image_content_description"
-                    app:srcCompat="@drawable/ic_delete_black"/>
-
-                <ImageButton
-                    android:id="@+id/fragment_trail_info_edit_button_add_photo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/components_margin_small"
-                    android:layout_gravity="bottom|end"
-                    android:contentDescription="@string/example_image_content_description"
-                    app:srcCompat="@drawable/ic_add_photo_black"/>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/components_margin_medium"
-                android:layout_marginBottom="@dimen/components_margin_small"
-                android:layout_marginStart="@dimen/components_margin_medium"
-                android:layout_marginEnd="@dimen/components_margin_medium"
-                android:textStyle="bold"
-                android:textSize="@dimen/text_size_title"
-                android:textColor="@color/colorSecondaryDark"
-                android:text="@string/label_trail_metrics"/>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.sildian.apps.togetrail.common.views.circularSlider.CircularSlider
-                    android:id="@+id/fragment_trail_info_edit_slider_metrics"
-                    android:layout_width="@dimen/components_size_large"
-                    android:layout_height="@dimen/components_size_large"
-                    android:padding="@dimen/components_margin_small"
-                    app:minValue="0"
-                    app:maxValue="1000"
-                    app:stepValue="10"
-                    app:sliderColor="@color/colorSecondaryDark"
-                    app:valueTextSize="@dimen/text_size_title"
-                    app:valueTextColor="@color/colorSecondaryDark"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
-
-                <TextView
-                    android:id="@+id/fragment_trail_info_edit_text_duration"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/components_margin_small"
-                    android:background="?attr/selectableItemBackground"
-                    android:gravity="center_horizontal"
-                    android:drawableTop="@drawable/ic_watch_black"
-                    android:textSize="@dimen/text_size_small"
-                    android:text="@string/example_trail_duration"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintCircle="@id/fragment_trail_info_edit_slider_metrics"
-                    app:layout_constraintCircleRadius="@dimen/constraint_circle_radius"
-                    app:layout_constraintCircleAngle="270" />
-
-                <TextView
-                    android:id="@+id/fragment_trail_info_edit_text_ascent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/components_margin_small"
-                    android:background="?attr/selectableItemBackground"
-                    android:gravity="center_horizontal"
-                    android:drawableTop="@drawable/ic_ascent"
-                    android:textSize="@dimen/text_size_small"
-                    android:text="@string/example_trail_ascent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintCircle="@id/fragment_trail_info_edit_slider_metrics"
-                    app:layout_constraintCircleRadius="@dimen/constraint_circle_radius"
-                    app:layout_constraintCircleAngle="315"/>
-
-                <TextView
-                    android:id="@+id/fragment_trail_info_edit_text_descent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/components_margin_small"
-                    android:background="?attr/selectableItemBackground"
-                    android:gravity="center_horizontal"
-                    android:drawableTop="@drawable/ic_descent"
-                    android:textSize="@dimen/text_size_small"
-                    android:text="@string/example_trail_descent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintCircle="@id/fragment_trail_info_edit_slider_metrics"
-                    app:layout_constraintCircleRadius="@dimen/constraint_circle_radius"
-                    app:layout_constraintCircleAngle="45"/>
-
-                <TextView
-                    android:id="@+id/fragment_trail_info_edit_text_distance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/components_margin_small"
-                    android:background="?attr/selectableItemBackground"
-                    android:gravity="center_horizontal"
-                    android:drawableTop="@drawable/ic_distance"
-                    android:textSize="@dimen/text_size_small"
-                    android:text="@string/example_trail_distance"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintCircle="@id/fragment_trail_info_edit_slider_metrics"
-                    app:layout_constraintCircleRadius="@dimen/constraint_circle_radius"
-                    app:layout_constraintCircleAngle="90"/>
-
-                <TextView
-                    android:id="@+id/fragment_trail_info_edit_text_max_elevation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/components_margin_small"
-                    android:gravity="center_horizontal"
-                    android:background="?attr/selectableItemBackground"
-                    android:drawableTop="@drawable/ic_max_elevation"
-                    android:textSize="@dimen/text_size_small"
-                    android:text="@string/example_trail_max_elevation"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintCircle="@id/fragment_trail_info_edit_slider_metrics"
-                    app:layout_constraintCircleRadius="@dimen/constraint_circle_radius"
-                    app:layout_constraintCircleAngle="225"/>
-
-                <TextView
-                    android:id="@+id/fragment_trail_info_edit_text_min_elevation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/components_margin_small"
-                    android:background="?attr/selectableItemBackground"
-                    android:gravity="center_horizontal"
-                    android:drawableTop="@drawable/ic_min_elevation"
-                    android:textSize="@dimen/text_size_small"
-                    android:text="@string/example_trail_min_elevation"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintCircle="@id/fragment_trail_info_edit_slider_metrics"
-                    app:layout_constraintCircleRadius="@dimen/constraint_circle_radius"
-                    app:layout_constraintCircleAngle="135"/>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <com.google.android.material.button.MaterialButton
-                style="@style/ClassicButtonStyle"
-                android:id="@+id/fragment_trail_info_edit_button_metrics_reset"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/components_margin_small"
-                android:layout_marginBottom="@dimen/components_margin_small"
-                android:layout_marginStart="@dimen/components_margin_medium"
-                android:layout_marginEnd="@dimen/components_margin_medium"
-                android:text="@string/button_trail_metric_reset"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/components_margin_medium"
-                android:layout_marginBottom="@dimen/components_margin_small"
-                android:layout_marginStart="@dimen/components_margin_medium"
-                android:layout_marginEnd="@dimen/components_margin_medium"
-                android:textStyle="bold"
-                android:textSize="@dimen/text_size_title"
-                android:textColor="@color/colorSecondaryDark"
-                android:text="@string/label_location"/>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/TextInputFieldStyle"
-                android:id="@+id/fragment_trail_info_edit_text_field_layout_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/components_margin_small"
-                android:layout_marginBottom="@dimen/components_margin_small"
-                android:layout_marginStart="@dimen/components_margin_medium"
-                android:layout_marginEnd="@dimen/components_margin_small"
-                android:hint="@string/label_location"
-                app:errorEnabled="true">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/fragment_trail_info_edit_text_field_location"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textCapSentences|textMultiLine"
-                    android:focusable="false"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/components_margin_medium"
-                android:layout_marginBottom="@dimen/components_margin_small"
-                android:layout_marginStart="@dimen/components_margin_medium"
-                android:layout_marginEnd="@dimen/components_margin_medium"
-                android:textStyle="bold"
-                android:textSize="@dimen/text_size_title"
-                android:textColor="@color/colorSecondaryDark"
-                android:text="@string/label_trail_description"/>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/TextInputFieldStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/components_margin_small"
-                android:layout_marginBottom="@dimen/components_margin_small"
-                android:layout_marginStart="@dimen/components_margin_medium"
-                android:layout_marginEnd="@dimen/components_margin_medium"
-                android:hint="@string/label_trail_description">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/fragment_trail_info_edit_text_field_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textCapSentences|textMultiLine" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </LinearLayout>
-
-    </ScrollView>
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/fragment_trail_info_edit_view_message"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom">
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/fragment_trail_info_edit_bottom_sheet_add_photo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-            app:behavior_hideable="true"
-            app:cardBackgroundColor="@color/colorPrimary"
-            app:cardCornerRadius="0dp"
-            app:cardElevation="@dimen/components_elevation">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <com.google.android.material.button.MaterialButton
-                    style="@style/TransparentButtonStyle"
-                    android:id="@+id/fragment_trail_info_edit_button_select_photo"
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/components_margin_medium"
-                    android:textColor="@color/colorSecondary"
-                    android:text="@string/button_common_select_photo"
-                    app:icon="@drawable/ic_select_photo_black"
-                    app:iconTint="@color/colorSecondary"/>
+                    android:layout_marginTop="@dimen/components_margin_medium"
+                    android:layout_marginBottom="@dimen/components_margin_small"
+                    android:layout_marginStart="@dimen/components_margin_medium"
+                    android:layout_marginEnd="@dimen/components_margin_medium"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_title"
+                    android:textColor="@color/colorSecondaryDark"
+                    android:text="@string/label_trail_main_info"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/TextInputFieldStyle"
+                    android:id="@+id/fragment_trail_info_edit_text_field_layout_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/components_margin_small"
+                    android:layout_marginBottom="@dimen/components_margin_small"
+                    android:layout_marginStart="@dimen/components_margin_medium"
+                    android:layout_marginEnd="@dimen/components_margin_medium"
+                    android:hint="@string/label_trail_name"
+                    app:errorEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/fragment_trail_info_edit_text_field_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textCapSentences"
+                        android:text="@{trailViewModel.trail.name}"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/TextInputFieldDropDownMenuStyle"
+                        android:id="@+id/fragment_trail_info_edit_text_field_dropdown_layout_level"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginTop="@dimen/components_margin_small"
+                        android:layout_marginBottom="@dimen/components_margin_small"
+                        android:layout_marginStart="@dimen/components_margin_medium"
+                        android:layout_marginEnd="@dimen/components_margin_small"
+                        android:hint="@string/label_trail_level"
+                        app:errorEnabled="true">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/fragment_trail_info_edit_text_field_dropdown_level"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textCapSentences"
+                            android:focusable="false" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Switch
+                        android:id="@+id/fragment_trail_info_edit_switch_loop"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginTop="@dimen/components_margin_small"
+                        android:layout_marginBottom="@dimen/components_margin_small"
+                        android:layout_marginStart="@dimen/components_margin_medium"
+                        android:layout_marginEnd="@dimen/components_margin_small"
+                        android:text="@string/label_trail_loop"
+                        android:checked="@{trailViewModel.trail.loop ? true : false}"/>
+
+                </LinearLayout>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/components_margin_small"
+                    android:layout_marginBottom="@dimen/components_margin_small"
+                    android:layout_marginStart="@dimen/components_margin_medium"
+                    android:layout_marginEnd="@dimen/components_margin_medium"
+                    app:cardElevation="@dimen/components_elevation"
+                    app:cardCornerRadius="@dimen/components_corner_medium">
+
+                    <TextView
+                        android:id="@+id/fragment_trail_info_edit_text_photo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="@string/message_no_photo_available"
+                        android:drawableStart="@drawable/ic_trail_black"
+                        android:drawablePadding="@dimen/components_margin_small"
+                        android:visibility="@{trailViewModel.trail.mainPhotoUrl==null ? View.VISIBLE : View.INVISIBLE}"/>
+
+                    <ImageView
+                        android:id="@+id/fragment_trail_info_edit_image_view_photo"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/image_size_large"
+                        android:contentDescription="@string/example_image_content_description"
+                        app:srcCompat="@drawable/ic_trail_black"
+                        android:visibility="@{trailViewModel.trail.mainPhotoUrl==null ? View.INVISIBLE : View.VISIBLE}"/>
+
+                    <ImageButton
+                        android:id="@+id/fragment_trail_info_edit_button_delete_photo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/components_margin_small"
+                        android:layout_gravity="top|end"
+                        android:contentDescription="@string/example_image_content_description"
+                        app:srcCompat="@drawable/ic_delete_black"
+                        android:visibility="@{trailViewModel.trail.mainPhotoUrl==null ? View.INVISIBLE : View.VISIBLE}"
+                        android:onClick="@{trailInfoEditFragment::onDeletePhotoButtonClick}"/>
+
+                    <ImageButton
+                        android:id="@+id/fragment_trail_info_edit_button_add_photo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/components_margin_small"
+                        android:layout_gravity="bottom|end"
+                        android:contentDescription="@string/example_image_content_description"
+                        app:srcCompat="@drawable/ic_add_photo_black"
+                        android:onClick="@{trailInfoEditFragment::onAddPhotoButtonClick}"/>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/components_margin_medium"
+                    android:layout_marginBottom="@dimen/components_margin_small"
+                    android:layout_marginStart="@dimen/components_margin_medium"
+                    android:layout_marginEnd="@dimen/components_margin_medium"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_title"
+                    android:textColor="@color/colorSecondaryDark"
+                    android:text="@string/label_trail_metrics"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.sildian.apps.togetrail.common.views.circularSlider.CircularSlider
+                        android:id="@+id/fragment_trail_info_edit_slider_metrics"
+                        android:layout_width="@dimen/components_size_large"
+                        android:layout_height="@dimen/components_size_large"
+                        android:padding="@dimen/components_margin_small"
+                        app:minValue="0"
+                        app:maxValue="1000"
+                        app:stepValue="10"
+                        app:sliderColor="@color/colorSecondaryDark"
+                        app:valueTextSize="@dimen/text_size_title"
+                        app:valueTextColor="@color/colorSecondaryDark"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/fragment_trail_info_edit_text_duration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/components_margin_small"
+                        android:background="?attr/selectableItemBackground"
+                        android:gravity="center_horizontal"
+                        android:drawableTop="@drawable/ic_watch_black"
+                        android:textSize="@dimen/text_size_small"
+                        android:text="@string/example_trail_duration"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintCircle="@id/fragment_trail_info_edit_slider_metrics"
+                        app:layout_constraintCircleRadius="@dimen/constraint_circle_radius"
+                        app:layout_constraintCircleAngle="270" />
+
+                    <TextView
+                        android:id="@+id/fragment_trail_info_edit_text_ascent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/components_margin_small"
+                        android:background="?attr/selectableItemBackground"
+                        android:gravity="center_horizontal"
+                        android:drawableTop="@drawable/ic_ascent"
+                        android:textSize="@dimen/text_size_small"
+                        android:text="@string/example_trail_ascent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintCircle="@id/fragment_trail_info_edit_slider_metrics"
+                        app:layout_constraintCircleRadius="@dimen/constraint_circle_radius"
+                        app:layout_constraintCircleAngle="315"/>
+
+                    <TextView
+                        android:id="@+id/fragment_trail_info_edit_text_descent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/components_margin_small"
+                        android:background="?attr/selectableItemBackground"
+                        android:gravity="center_horizontal"
+                        android:drawableTop="@drawable/ic_descent"
+                        android:textSize="@dimen/text_size_small"
+                        android:text="@string/example_trail_descent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintCircle="@id/fragment_trail_info_edit_slider_metrics"
+                        app:layout_constraintCircleRadius="@dimen/constraint_circle_radius"
+                        app:layout_constraintCircleAngle="45"/>
+
+                    <TextView
+                        android:id="@+id/fragment_trail_info_edit_text_distance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/components_margin_small"
+                        android:background="?attr/selectableItemBackground"
+                        android:gravity="center_horizontal"
+                        android:drawableTop="@drawable/ic_distance"
+                        android:textSize="@dimen/text_size_small"
+                        android:text="@string/example_trail_distance"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintCircle="@id/fragment_trail_info_edit_slider_metrics"
+                        app:layout_constraintCircleRadius="@dimen/constraint_circle_radius"
+                        app:layout_constraintCircleAngle="90"/>
+
+                    <TextView
+                        android:id="@+id/fragment_trail_info_edit_text_max_elevation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/components_margin_small"
+                        android:gravity="center_horizontal"
+                        android:background="?attr/selectableItemBackground"
+                        android:drawableTop="@drawable/ic_max_elevation"
+                        android:textSize="@dimen/text_size_small"
+                        android:text="@string/example_trail_max_elevation"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintCircle="@id/fragment_trail_info_edit_slider_metrics"
+                        app:layout_constraintCircleRadius="@dimen/constraint_circle_radius"
+                        app:layout_constraintCircleAngle="225"/>
+
+                    <TextView
+                        android:id="@+id/fragment_trail_info_edit_text_min_elevation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/components_margin_small"
+                        android:background="?attr/selectableItemBackground"
+                        android:gravity="center_horizontal"
+                        android:drawableTop="@drawable/ic_min_elevation"
+                        android:textSize="@dimen/text_size_small"
+                        android:text="@string/example_trail_min_elevation"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintCircle="@id/fragment_trail_info_edit_slider_metrics"
+                        app:layout_constraintCircleRadius="@dimen/constraint_circle_radius"
+                        app:layout_constraintCircleAngle="135"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <com.google.android.material.button.MaterialButton
-                    style="@style/TransparentButtonStyle"
-                    android:id="@+id/fragment_trail_info_edit_button_take_photo"
+                    style="@style/ClassicButtonStyle"
+                    android:id="@+id/fragment_trail_info_edit_button_metrics_reset"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/components_margin_small"
+                    android:layout_marginBottom="@dimen/components_margin_small"
+                    android:layout_marginStart="@dimen/components_margin_medium"
+                    android:layout_marginEnd="@dimen/components_margin_medium"
+                    android:text="@string/button_trail_metric_reset"/>
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/components_margin_medium"
-                    android:textColor="@color/colorSecondary"
-                    android:text="@string/button_common_take_photo"
-                    app:icon="@drawable/ic_take_photo_black"
-                    app:iconTint="@color/colorSecondary"/>
+                    android:layout_marginTop="@dimen/components_margin_medium"
+                    android:layout_marginBottom="@dimen/components_margin_small"
+                    android:layout_marginStart="@dimen/components_margin_medium"
+                    android:layout_marginEnd="@dimen/components_margin_medium"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_title"
+                    android:textColor="@color/colorSecondaryDark"
+                    android:text="@string/label_location"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/TextInputFieldStyle"
+                    android:id="@+id/fragment_trail_info_edit_text_field_layout_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/components_margin_small"
+                    android:layout_marginBottom="@dimen/components_margin_small"
+                    android:layout_marginStart="@dimen/components_margin_medium"
+                    android:layout_marginEnd="@dimen/components_margin_small"
+                    android:hint="@string/label_location"
+                    app:errorEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/fragment_trail_info_edit_text_field_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textCapSentences|textMultiLine"
+                        android:focusable="false"
+                        android:text="@{trailViewModel.trail.location.fullAddress}"
+                        android:onClick="@{trailInfoEditFragment::onLocationTextFieldClick}"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/components_margin_medium"
+                    android:layout_marginBottom="@dimen/components_margin_small"
+                    android:layout_marginStart="@dimen/components_margin_medium"
+                    android:layout_marginEnd="@dimen/components_margin_medium"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_title"
+                    android:textColor="@color/colorSecondaryDark"
+                    android:text="@string/label_trail_description"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/TextInputFieldStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/components_margin_small"
+                    android:layout_marginBottom="@dimen/components_margin_small"
+                    android:layout_marginStart="@dimen/components_margin_medium"
+                    android:layout_marginEnd="@dimen/components_margin_medium"
+                    android:hint="@string/label_trail_description">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/fragment_trail_info_edit_text_field_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textCapSentences|textMultiLine"
+                        android:text="@{trailViewModel.trail.description}"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
-        </com.google.android.material.card.MaterialCardView>
+        </ScrollView>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/fragment_trail_info_edit_view_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom">
 
-</FrameLayout>
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/fragment_trail_info_edit_bottom_sheet_add_photo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+                app:behavior_hideable="true"
+                app:cardBackgroundColor="@color/colorPrimary"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="@dimen/components_elevation">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/TransparentButtonStyle"
+                        android:id="@+id/fragment_trail_info_edit_button_select_photo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/components_margin_medium"
+                        android:textColor="@color/colorSecondary"
+                        android:text="@string/button_common_select_photo"
+                        app:icon="@drawable/ic_select_photo_black"
+                        app:iconTint="@color/colorSecondary"
+                        android:onClick="@{trailInfoEditFragment::onSelectPhotoButtonClick}"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/TransparentButtonStyle"
+                        android:id="@+id/fragment_trail_info_edit_button_take_photo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/components_margin_medium"
+                        android:textColor="@color/colorSecondary"
+                        android:text="@string/button_common_take_photo"
+                        app:icon="@drawable/ic_take_photo_black"
+                        app:iconTint="@color/colorSecondary"
+                        android:onClick="@{trailInfoEditFragment::onTakePhotoButtonClick}"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </FrameLayout>
+
+</layout>
