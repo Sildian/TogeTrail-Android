@@ -2,7 +2,7 @@ package com.sildian.apps.togetrail.trail.model.support
 
 import androidx.lifecycle.viewModelScope
 import com.sildian.apps.togetrail.common.baseViewModels.BaseObservableViewModel
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
@@ -146,7 +146,7 @@ class TrailViewModel:BaseObservableViewModel() {
 
                         /*Creates the trail*/
 
-                        trail?.authorId = AuthFirebaseHelper.getCurrentUser()?.uid
+                        trail?.authorId = AuthRepository.getCurrentUser()?.uid
                         val deferredTrailId=async { TrailRepository.addTrail(trail!!) }
                         trail?.id=deferredTrailId.await()
                         launch { TrailRepository.updateTrail(trail!!) }.join()
@@ -154,8 +154,7 @@ class TrailViewModel:BaseObservableViewModel() {
                         /*Updates the author's profile*/
 
                         trail?.authorId?.let { authorId ->
-                            val deferredHiker = async { HikerRepository.getHiker(authorId) }
-                            val hiker = deferredHiker.await()
+                            val hiker = AuthRepository.getCurrentUserProfile()
                             hiker!!.nbTrailsCreated++
                             launch { HikerRepository.updateHiker(hiker) }.join()
 

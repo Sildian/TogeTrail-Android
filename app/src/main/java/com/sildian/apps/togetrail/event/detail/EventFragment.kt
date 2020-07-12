@@ -1,6 +1,5 @@
 package com.sildian.apps.togetrail.event.detail
 
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.Observable

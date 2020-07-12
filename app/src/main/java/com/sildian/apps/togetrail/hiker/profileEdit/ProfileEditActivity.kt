@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowActivity
@@ -23,9 +22,6 @@ class ProfileEditActivity : BaseDataFlowActivity() {
     /**********************************Static items**********************************************/
 
     companion object {
-
-        /**Logs**/
-        private const val TAG="ProfileEditFragment"
 
         /**Fragments ids**/
         private const val ID_FRAGMENT_INFO=1
@@ -52,7 +48,6 @@ class ProfileEditActivity : BaseDataFlowActivity() {
 
     private val toolbar by lazy {activity_profile_edit_toolbar}
     private var fragment: BaseDataFlowFragment?=null
-    private var progressDialog: AlertDialog?=null
 
     /********************************Navigation control******************************************/
 

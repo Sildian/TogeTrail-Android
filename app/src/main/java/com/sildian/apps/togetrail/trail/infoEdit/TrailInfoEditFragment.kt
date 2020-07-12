@@ -113,12 +113,13 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel?=null) :
             this.trailViewModel?.trail?.loop=this.loopSwitch.isChecked
             this.trailViewModel?.trail?.description = this.descriptionTextField.text.toString()
             this.trailViewModel?.trail?.autoPopulatePosition()
-            //TODO replace progressbar
-            this.trailViewModel?.saveTrailInDatabase(false, this::handleTrailSaved, this::handleQueryError)
+            this.baseActivity?.showProgressDialog()
+            this.trailViewModel?.saveTrailInDatabase(false, this::handleSaveDataSuccess, this::handleQueryError)
         }
     }
 
-    private fun handleTrailSaved(){
+    private fun handleSaveDataSuccess(){
+        this.baseActivity?.dismissProgressDialog()
         (activity as TrailInfoEditActivity).finishOk()
     }
 

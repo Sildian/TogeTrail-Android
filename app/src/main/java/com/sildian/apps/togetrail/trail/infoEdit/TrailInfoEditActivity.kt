@@ -54,7 +54,6 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
 
     private val toolbar by lazy {activity_trail_info_edit_toolbar}
     private var fragment: BaseImagePickerFragment?=null
-    private var progressDialog:AlertDialog?=null
 
     /************************************Life cycle**********************************************/
 

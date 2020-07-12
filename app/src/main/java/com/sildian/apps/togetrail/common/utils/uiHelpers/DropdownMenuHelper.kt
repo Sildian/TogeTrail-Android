@@ -18,6 +18,7 @@ object DropdownMenuHelper {
      */
 
     @Suppress("UNUSED_ANONYMOUS_PARAMETER")
+    @JvmStatic
     fun populateDropdownMenu(autoCompleteTextView: AutoCompleteTextView, choice:Array<String>, initialValue:Int){
 
         val adapter= ArrayAdapter(autoCompleteTextView.context, R.layout.item_dropdown_menu, choice)

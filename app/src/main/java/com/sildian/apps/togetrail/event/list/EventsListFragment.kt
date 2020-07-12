@@ -54,6 +54,8 @@ class EventsListFragment (private val hikerViewModel: HikerViewModel?=null) :
 
     override fun getLayoutId(): Int = R.layout.fragment_events_list
 
+    override fun useDataBinding(): Boolean = false
+
     override fun initializeUI() {
         updateCurrentResearchEventsRecyclerView()
         initializeIAttendEventsRecyclerView()

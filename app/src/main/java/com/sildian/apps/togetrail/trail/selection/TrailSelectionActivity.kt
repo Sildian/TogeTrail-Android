@@ -11,7 +11,6 @@ import com.google.firebase.firestore.Query
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowActivity
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
-import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.location.search.LocationSearchActivity
 import com.sildian.apps.togetrail.trail.map.TrailActivity
@@ -44,7 +43,6 @@ class TrailSelectionActivity : BaseDataFlowActivity() {
 
     /**************************************Data**************************************************/
 
-    private var currentUser: Hiker?=null                                //The current user connected to the app
     private val trailsQueries: HashMap <String, Query> = hashMapOf()    //A hashMap with the trails queries to show (key=id (see above), entry=query)
     private var selectedTrails: ArrayList<Trail> = arrayListOf()        //The list of selected trails
 
@@ -52,7 +50,6 @@ class TrailSelectionActivity : BaseDataFlowActivity() {
 
     private val toolbar by lazy {activity_trail_selection_toolbar}
     private val searchTextField by lazy {activity_trail_selection_text_field_research}
-    private val progressbar by lazy {activity_trail_selection_progressbar}
     private val viewpagerLayout by lazy {activity_trail_selection_layout_viewpager}
     private val tabs by lazy {activity_trail_selection_tabs}
     private val pager by lazy {activity_trail_selection_pager}
@@ -73,7 +70,7 @@ class TrailSelectionActivity : BaseDataFlowActivity() {
 
     override fun loadData() {
         readDataFromIntent()
-        loadCurrentUserFromDatabase()
+        defineTrailsQueries()
     }
 
     private fun readDataFromIntent(){
@@ -87,21 +84,6 @@ class TrailSelectionActivity : BaseDataFlowActivity() {
         }
     }
 
-    private fun loadCurrentUserFromDatabase(){
-        val user=AuthFirebaseHelper.getCurrentUser()
-        user?.uid?.let { userId ->
-            getHiker(userId, this::handleHikerResult)
-        }
-    }
-
-    private fun handleHikerResult(hiker:Hiker?){
-        this.progressbar.visibility=View.GONE
-        this.currentUser=hiker
-        defineTrailsQueries()
-        showViewPager()
-        activateValidateButton()
-    }
-
     private fun defineTrailsQueries(){
 
         /*Adds the last trails query*/
@@ -109,7 +91,7 @@ class TrailSelectionActivity : BaseDataFlowActivity() {
         this.trailsQueries[KEY_QUERY_LAST_TRAILS]=
             TrailFirebaseQueries.getLastTrails()
 
-        this.currentUser?.let { user ->
+        AuthFirebaseHelper.currentUserProfile?.let { user ->
 
             /*If the user created trails, adds the my trails query*/
 
@@ -150,6 +132,8 @@ class TrailSelectionActivity : BaseDataFlowActivity() {
     override fun initializeUI() {
         initializeToolbar()
         initializeSearchTextField()
+        initializeValidateButton()
+        showViewPager()
     }
 
     private fun initializeToolbar(){
@@ -164,7 +148,7 @@ class TrailSelectionActivity : BaseDataFlowActivity() {
         }
     }
 
-    private fun activateValidateButton(){
+    private fun initializeValidateButton(){
         this.validateButton.setOnClickListener {
             finishOk()
         }

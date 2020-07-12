@@ -25,7 +25,6 @@ import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.trail.info.BaseInfoFragment
 import com.sildian.apps.togetrail.trail.info.TrailInfoFragment
 import com.sildian.apps.togetrail.trail.info.TrailPOIInfoFragment
-import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
 
 /*************************************************************************************************
@@ -87,7 +86,6 @@ abstract class BaseTrailMapFragment (
     override fun onResume() {
         super.onResume()
         this.mapView.onResume()
-        //TODO improve permissions management
         if(Build.VERSION.SDK_INT<23
             &&checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED) {
             this.map?.isMyLocationEnabled = true
@@ -95,7 +93,6 @@ abstract class BaseTrailMapFragment (
     }
 
     override fun onPause() {
-        //TODO improve permissions management
         if(Build.VERSION.SDK_INT<23
             &&checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED) {
             this.map?.isMyLocationEnabled = false
@@ -142,8 +139,8 @@ abstract class BaseTrailMapFragment (
     override fun saveData(){
         if(this.checkDataIsValid()) {
             this.trailViewModel?.trail?.autoPopulatePosition()
-            //TODO replace Progress dialog
-            this.trailViewModel?.saveTrailInDatabase(false, this::handleSaveDataResult, this::handleQueryError)
+            this.baseActivity?.showProgressDialog()
+            this.trailViewModel?.saveTrailInDatabase(false, this::handleSaveDataSuccess, this::handleQueryError)
         }
     }
 
@@ -172,8 +169,9 @@ abstract class BaseTrailMapFragment (
         return false
     }
 
-    private fun handleSaveDataResult(){
-        (activity as TrailActivity).finish()
+    private fun handleSaveDataSuccess(){
+        this.baseActivity?.dismissProgressDialog()
+        this.baseActivity?.finish()
     }
 
     /************************************UI monitoring*******************************************/
@@ -222,7 +220,6 @@ abstract class BaseTrailMapFragment (
             this.map?.mapType= GoogleMap.MAP_TYPE_TERRAIN
             this.map?.setOnMapClickListener(this)
             this.map?.setOnMarkerClickListener(this)
-            //TODO improve permissions management
             if(Build.VERSION.SDK_INT<23
                 &&checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED) {
                 this.map?.isMyLocationEnabled = true

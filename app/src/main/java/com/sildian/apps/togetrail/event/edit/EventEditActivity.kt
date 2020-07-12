@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AlertDialog
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
@@ -41,7 +40,6 @@ class EventEditActivity : BaseDataFlowActivity() {
 
     private val toolbar by lazy {activity_event_edit_toolbar}
     private var fragment: BaseDataFlowFragment?=null
-    private var progressDialog: AlertDialog?=null
 
     /********************************Navigation control******************************************/
 

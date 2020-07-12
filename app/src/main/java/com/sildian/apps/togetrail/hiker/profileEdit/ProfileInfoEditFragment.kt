@@ -71,16 +71,17 @@ class ProfileInfoEditFragment(private val hikerId: String?=null) : BaseImagePick
                     DateUtilities.getDateFromString(this.birthdayTextFieldDropdown.text.toString())
                 else null
             this.hikerViewModel.hiker?.description = this.descriptionTextField.text.toString()
-            //TODO replace progress dialog
-            this.hikerViewModel.saveHikerInDatabase(this::handleSaveDataResult, this::handleQueryError)
+            this.baseActivity?.showProgressDialog()
+            this.hikerViewModel.saveHikerInDatabase(this::handleSaveDataSuccess, this::handleQueryError)
         }
     }
 
     override fun checkDataIsValid():Boolean =
         TextFieldHelper.checkTextFieldIsNotEmpty(this.nameTextField, this.nameTextFieldLayout)
 
-    private fun handleSaveDataResult(){
-        (activity as ProfileEditActivity).finish()
+    private fun handleSaveDataSuccess(){
+        this.baseActivity?.dismissProgressDialog()
+        this.baseActivity?.finish()
     }
 
     /***********************************UI monitoring********************************************/

@@ -17,6 +17,7 @@ object TextFieldHelper {
      * @return true if the field is valid, false otherwise
      */
 
+    @JvmStatic
     fun checkTextFieldIsNotEmpty(textField: TextInputEditText, textFieldLayout: TextInputLayout):Boolean{
         return if(textField.text.isNullOrEmpty()){
             textFieldLayout.error=textField.context.getString(R.string.message_text_field_empty)
@@ -34,6 +35,7 @@ object TextFieldHelper {
      * @return true if all text fields are valid, false otherwise
      */
 
+    @JvmStatic
     fun checkAllTextFieldsAreNotEmpty(textFieldsAndLayouts:HashMap<TextInputEditText, TextInputLayout>):Boolean{
         var isValid=true
         textFieldsAndLayouts.keys.forEach { textField ->

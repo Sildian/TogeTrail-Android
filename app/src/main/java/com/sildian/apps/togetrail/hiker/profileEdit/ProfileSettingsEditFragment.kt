@@ -49,7 +49,7 @@ class ProfileSettingsEditFragment(private val hikerId: String?=null) : BaseDataF
         requestDeleteUserAccountConfirmation()
     }
 
-    /******************************Reset password action*****************************************/
+    /******************************Profile settings actions**************************************/
 
     @Suppress("UNUSED_ANONYMOUS_PARAMETER")
     private fun requestResetUserPasswordConfirmation(){
@@ -59,18 +59,12 @@ class ProfileSettingsEditFragment(private val hikerId: String?=null) : BaseDataF
             R.string.message_password_reset_confirmation_message,
             DialogInterface.OnClickListener { dialog, which ->
                 if(which==DialogInterface.BUTTON_POSITIVE){
-                    //TODO replace progress dialog
-                    this.hikerViewModel.resetUserPassword(this::handleResetUserPasswordResult, this::handleQueryError)
+                    this.baseActivity?.showProgressDialog()
+                    this.hikerViewModel.resetUserPassword(this::handleSaveDataSuccess, this::handleQueryError)
                 }
             })
         dialog.show()
     }
-
-    private fun handleResetUserPasswordResult(){
-        (activity as ProfileEditActivity).finish()
-    }
-
-    /*******************************Delete account action****************************************/
 
     @Suppress("UNUSED_ANONYMOUS_PARAMETER")
     private fun requestDeleteUserAccountConfirmation(){
@@ -80,14 +74,14 @@ class ProfileSettingsEditFragment(private val hikerId: String?=null) : BaseDataF
             R.string.message_account_delete_confirmation_message,
             DialogInterface.OnClickListener { dialog, which ->
                 if(which==DialogInterface.BUTTON_POSITIVE){
-                    //TODO replace progress dialog
-                    this.hikerViewModel.deleteUserAccount(this::handleDeleteUserAccountResult, this::handleQueryError)
+                    this.baseActivity?.showProgressDialog()
+                    this.hikerViewModel.deleteUserAccount(this::handleSaveDataSuccess, this::handleQueryError)
                 }
             })
         dialog.show()
     }
 
-    private fun handleDeleteUserAccountResult(){
-        (activity as ProfileEditActivity).finish()
+    private fun handleSaveDataSuccess(){
+        this.baseActivity?.dismissProgressDialog()
     }
 }

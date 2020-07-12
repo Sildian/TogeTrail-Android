@@ -167,6 +167,8 @@ class HikerViewModel : BaseObservableViewModel() {
                         )
                         launch { HikerRepository.addHikerHistoryItem(hiker!!.id, historyItem) }.join()
                     }
+
+                    AuthRepository.signUserIn(hiker!!)
                 }
 
                 /*Then notifies the callbacks*/

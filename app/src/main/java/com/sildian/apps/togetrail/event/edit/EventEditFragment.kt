@@ -101,13 +101,14 @@ class EventEditFragment(private val eventId: String?=null) :
         if(checkDataIsValid()) {
             this.eventViewModel.event?.name = this.nameTextField.text.toString()
             this.eventViewModel.event?.description = this.descriptionTextField.text.toString()
-            //TODO replace Progress dialog
-            this.eventViewModel.saveEventInDatabase(this::handleSaveDataResult, this::handleQueryError)
+            this.baseActivity?.showProgressDialog()
+            this.eventViewModel.saveEventInDatabase(this::handleSaveDataSuccess, this::handleQueryError)
         }
     }
 
-    private fun handleSaveDataResult(){
-        (activity as EventEditActivity).finish()
+    private fun handleSaveDataSuccess(){
+        this.baseActivity?.dismissProgressDialog()
+        this.baseActivity?.finish()
     }
 
     /**Checks data is valid**/

@@ -19,6 +19,7 @@ object DialogHelper {
      * @return the dialog ready to be shown
      */
 
+    @JvmStatic
     fun createProgressDialog(context:Context): AlertDialog {
         return MaterialAlertDialogBuilder(context)
             .setBackground(ContextCompat.getDrawable(
@@ -36,6 +37,7 @@ object DialogHelper {
      */
 
     @Suppress("UNUSED_ANONYMOUS_PARAMETER")
+    @JvmStatic
     fun createInfoDialog(context: Context, titleId:Int, messageId:Int):AlertDialog {
         return MaterialAlertDialogBuilder(context)
             .setBackground(ContextCompat.getDrawable(
@@ -55,6 +57,7 @@ object DialogHelper {
      * @return the dialog ready to be shown
      */
 
+    @JvmStatic
     fun createYesNoDialog(context: Context, titleId:Int, messageId:Int,
                           listener:DialogInterface.OnClickListener):AlertDialog{
         return MaterialAlertDialogBuilder(context)
@@ -77,6 +80,7 @@ object DialogHelper {
      * @return the dialog ready to be shown
      */
 
+    @JvmStatic
     fun createYesNoCriticalDialog(context: Context, titleId:Int, messageId:Int,
                           listener:DialogInterface.OnClickListener):AlertDialog{
         return MaterialAlertDialogBuilder(context, R.style.AlertDialogCriticalStyle)

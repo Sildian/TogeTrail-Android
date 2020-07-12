@@ -63,6 +63,8 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
 
     override fun getLayoutId(): Int = R.layout.fragment_trail_map_record
 
+    override fun useDataBinding(): Boolean = false
+
     override fun getMapViewId(): Int = R.id.fragment_trail_map_record_map_view
 
     override fun getInfoBottomSheetId(): Int = R.id.fragment_trail_map_record_bottom_sheet_info
@@ -215,7 +217,6 @@ class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
 
         /*Gets the user location*/
 
-        //TODO improve permissions management
         if(Build.VERSION.SDK_INT<23 &&
             ContextCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             this.userLocation.lastLocation

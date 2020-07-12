@@ -99,6 +99,8 @@ class TrailMapFragment :
 
     override fun getLayoutId(): Int = R.layout.fragment_trail_map
 
+    override fun useDataBinding(): Boolean = false
+
     override fun getMapViewId(): Int = R.id.fragment_trail_map_map_view
 
     override fun getInfoBottomSheetId(): Int = R.id.fragment_trail_map_bottom_sheet_info

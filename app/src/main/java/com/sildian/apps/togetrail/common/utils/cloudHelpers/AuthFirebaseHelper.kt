@@ -5,12 +5,17 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.sildian.apps.togetrail.hiker.model.core.Hiker
 
 /*************************************************************************************************
  * Provides with Firebase queries allowing to manage user authentication
  ************************************************************************************************/
 
 object AuthFirebaseHelper {
+
+    /**Stores the current user's hiker profile**/
+
+    var currentUserProfile: Hiker? = null ; private set
 
     /**
      * Gets the current user connected to Firebase
@@ -20,10 +25,20 @@ object AuthFirebaseHelper {
     fun getCurrentUser() : FirebaseUser? = FirebaseAuth.getInstance().currentUser
 
     /**
+     * Signs a user in and stores the related hiker's profile
+     * @param hiker : the hiker's profile
+     */
+
+    fun signUserIn(hiker: Hiker) {
+        this.currentUserProfile = hiker
+    }
+
+    /**
      * Signs a user out
      */
 
     fun signUserOut(){
+        this.currentUserProfile = null
         FirebaseAuth.getInstance().signOut()
     }
 

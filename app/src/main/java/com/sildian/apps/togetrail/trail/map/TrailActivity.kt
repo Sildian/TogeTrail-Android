@@ -62,7 +62,6 @@ class TrailActivity : BaseDataFlowActivity() {
 
     private val toolbar by lazy {activity_trail_toolbar}
     private var fragment: BaseTrailMapFragment?=null
-    private var progressDialog:AlertDialog?=null
 
     /********************************Navigation control******************************************/
 

@@ -62,13 +62,14 @@ class TrailPOIInfoEditFragment(private val trailViewModel: TrailViewModel?=null)
             if (this.trailViewModel?.trailPointOfInterest != null) {
                 this.trailViewModel?.trailPointOfInterest?.name = this.nameTextField.text.toString()
                 this.trailViewModel?.trailPointOfInterest?.description = this.descriptionTextField.text.toString()
-                //TODO replace progressbar
-                this.trailViewModel?.saveTrailInDatabase(true, this::handleTrailSaved, this::handleQueryError)
+                this.baseActivity?.showProgressDialog()
+                this.trailViewModel?.saveTrailInDatabase(true, this::handleSaveDataSuccess, this::handleQueryError)
             }
         }
     }
 
-    private fun handleTrailSaved(){
+    private fun handleSaveDataSuccess(){
+        this.baseActivity?.dismissProgressDialog()
         (activity as TrailInfoEditActivity).finishOk()
     }
 

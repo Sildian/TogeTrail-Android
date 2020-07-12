@@ -29,6 +29,8 @@ class TrailSelectionFragment(private val trailsQuery:Query, private val selected
 
     override fun getLayoutId(): Int = R.layout.fragment_trail_selection
 
+    override fun useDataBinding(): Boolean = false
+
     override fun initializeUI() {
         initializeTrailsRecyclerView()
     }

@@ -2,6 +2,7 @@ package com.sildian.apps.togetrail.event.model.support
 
 import androidx.lifecycle.viewModelScope
 import com.sildian.apps.togetrail.common.baseViewModels.BaseObservableViewModel
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
@@ -122,8 +123,7 @@ class EventViewModel : BaseObservableViewModel() {
                         /*Updates the author's profile*/
 
                         event?.authorId?.let { authorId ->
-                            val deferredHiker = async { HikerRepository.getHiker(authorId) }
-                            val hiker = deferredHiker.await()
+                            val hiker = AuthRepository.getCurrentUserProfile()
                             hiker!!.nbEventsCreated++
                             launch { HikerRepository.updateHiker(hiker) }.join()
 
@@ -215,8 +215,7 @@ class EventViewModel : BaseObservableViewModel() {
 
                 val user = AuthRepository.getCurrentUser()
                 user?.let { usr ->
-                    val deferredHiker = async { HikerRepository.getHiker(usr.uid) }
-                    val hiker = deferredHiker.await()
+                    val hiker = AuthRepository.getCurrentUserProfile()
 
                     /*If both hiker and event are not null...*/
 
@@ -271,8 +270,7 @@ class EventViewModel : BaseObservableViewModel() {
 
                 val user = AuthRepository.getCurrentUser()
                 user?.let { usr ->
-                    val deferredHiker = async { HikerRepository.getHiker(usr.uid) }
-                    val hiker = deferredHiker.await()
+                    val hiker = AuthRepository.getCurrentUserProfile()
 
                     /*If both hiker and event are not null...*/
 

@@ -20,6 +20,7 @@ object PickerHelper {
      * @param initialValue : the initial date in the view
      */
 
+    @JvmStatic
     fun populateEditTextWithDatePicker(editText: EditText,
                                        activity: AppCompatActivity, initialValue: Date?){
         if(initialValue!=null) {
@@ -38,6 +39,7 @@ object PickerHelper {
      * @param initialValue : the initial time in the view
      */
 
+    @JvmStatic
     fun populateEditTextWithTimePicker(editText: EditText,
                                        activity: AppCompatActivity, initialValue: Date?){
         if(initialValue!=null) {
