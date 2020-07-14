@@ -5,11 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowActivity
+import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseImagePickerFragment
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.location.model.core.Location
@@ -22,7 +21,7 @@ import kotlinx.android.synthetic.main.activity_trail_info_edit.*
  * This activity allows the user to edit information about a trail or a trailPointOfInterest
  ************************************************************************************************/
 
-class TrailInfoEditActivity : BaseDataFlowActivity() {
+class TrailInfoEditActivity : BaseActivity() {
 
     /**********************************Static items**********************************************/
 
@@ -220,17 +219,10 @@ class TrailInfoEditActivity : BaseDataFlowActivity() {
 
     /**Finishes with Ok status**/
 
-    fun finishOk(){
+    override fun finishOk(){
         val resultIntent=Intent()
         resultIntent.putExtra(KEY_BUNDLE_TRAIL, this.trailViewModel.trail)
         setResult(Activity.RESULT_OK, resultIntent)
-        finish()
-    }
-
-    /**Finishes with Cancel status**/
-
-    fun finishCancel(){
-        setResult(Activity.RESULT_CANCELED)
         finish()
     }
 }

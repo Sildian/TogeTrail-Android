@@ -4,8 +4,8 @@ import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowActivity
-import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
+import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
 import com.sildian.apps.togetrail.event.detail.EventActivity
 import com.sildian.apps.togetrail.hiker.profileEdit.ProfileEditActivity
@@ -15,7 +15,7 @@ import com.sildian.apps.togetrail.trail.map.TrailActivity
  * Allows to see a hiker's profile or related information
  ************************************************************************************************/
 
-class ProfileActivity : BaseDataFlowActivity() {
+class ProfileActivity : BaseActivity() {
 
     /**********************************Static items**********************************************/
 
@@ -31,7 +31,7 @@ class ProfileActivity : BaseDataFlowActivity() {
 
     /**********************************UI component**********************************************/
 
-    private var fragment: BaseDataFlowFragment?=null
+    private var fragment: BaseFragment?=null
 
     /********************************Menu monitoring*********************************************/
 

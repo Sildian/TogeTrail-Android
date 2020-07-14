@@ -8,7 +8,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
@@ -30,7 +30,7 @@ import kotlinx.android.synthetic.main.fragment_event_edit.view.*
  ************************************************************************************************/
 
 class EventEditFragment(private val eventId: String?=null) :
-    BaseDataFlowFragment(),
+    BaseFragment(),
     TrailHorizontalViewHolder.OnTrailClickListener,
     TrailHorizontalViewHolder.OnTrailRemovedListener
 {

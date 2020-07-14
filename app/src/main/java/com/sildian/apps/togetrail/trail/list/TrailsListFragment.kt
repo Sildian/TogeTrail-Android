@@ -4,7 +4,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.Query
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
 import com.sildian.apps.togetrail.main.MainActivity
@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_trails_list.view.*
  ************************************************************************************************/
 
 class TrailsListFragment (private val hikerViewModel: HikerViewModel?=null) :
-    BaseDataFlowFragment(),
+    BaseFragment(),
     TrailHorizontalViewHolder.OnTrailClickListener
 {
 

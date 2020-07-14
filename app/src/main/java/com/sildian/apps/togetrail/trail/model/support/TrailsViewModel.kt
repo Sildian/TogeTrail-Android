@@ -1,5 +1,6 @@
 package com.sildian.apps.togetrail.trail.model.support
 
+import android.util.Log
 import com.google.firebase.firestore.Query
 import com.sildian.apps.togetrail.common.baseViewModels.BaseObservableViewModel
 import com.sildian.apps.togetrail.trail.model.core.Trail
@@ -9,6 +10,14 @@ import com.sildian.apps.togetrail.trail.model.core.Trail
  ************************************************************************************************/
 
 class TrailsViewModel:BaseObservableViewModel() {
+
+    /************************************Static items********************************************/
+
+    companion object {
+
+        /**Logs**/
+        private const val TAG = "TrailsViewModel"
+    }
 
     /***************************************Data*************************************************/
 
@@ -31,9 +40,11 @@ class TrailsViewModel:BaseObservableViewModel() {
                     trails.clear()
                     trails.addAll(querySnapshot.toObjects(Trail::class.java))
                     notifyDataChanged()
+                    Log.d(TAG, "Successfully loaded ${trails.size} trails from database")
                     successCallback?.invoke()
                 }
                 else if(e!=null){
+                    Log.e(TAG, "Failed to load trails from database : ${e.message}")
                     failureCallback?.invoke(e)
                 }
             }

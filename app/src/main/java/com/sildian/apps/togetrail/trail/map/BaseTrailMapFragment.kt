@@ -19,7 +19,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.MapMarkersUtilities
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.trail.info.BaseInfoFragment
@@ -37,7 +37,7 @@ abstract class BaseTrailMapFragment (
     protected var trailViewModel: TrailViewModel?=null,
     protected var isEditable:Boolean=false
 ) :
-    BaseDataFlowFragment(),
+    BaseFragment(),
     OnMapReadyCallback,
     GoogleMap.OnMapClickListener,
     GoogleMap.OnMarkerClickListener

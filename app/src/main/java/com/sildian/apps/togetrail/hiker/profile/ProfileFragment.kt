@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.databinding.FragmentProfileBinding
@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.fragment_profile.view.*
  ************************************************************************************************/
 
 class ProfileFragment (private val hikerId: String?)
-    : BaseDataFlowFragment(),
+    : BaseFragment(),
     HikerHistoryViewHolder.OnHikerHistoryItemClick
 {
 

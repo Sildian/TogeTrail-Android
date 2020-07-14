@@ -4,8 +4,8 @@ import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowActivity
-import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
+import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.event.edit.EventEditActivity
 import com.sildian.apps.togetrail.hiker.profile.ProfileActivity
 import com.sildian.apps.togetrail.trail.map.TrailActivity
@@ -14,7 +14,7 @@ import com.sildian.apps.togetrail.trail.map.TrailActivity
  * Displays an event's detail info and allows a user to register on this event
  ************************************************************************************************/
 
-class EventActivity : BaseDataFlowActivity() {
+class EventActivity : BaseActivity() {
 
     /**********************************Static items**********************************************/
 
@@ -34,14 +34,7 @@ class EventActivity : BaseDataFlowActivity() {
 
     /**********************************UI component**********************************************/
 
-    private var fragment: BaseDataFlowFragment?=null
-
-    /************************************Life cycle**********************************************/
-
-    override fun onDestroy() {
-        this.eventQueryRegistration?.remove()
-        super.onDestroy()
-    }
+    private var fragment: BaseFragment?=null
 
     /********************************Menu monitoring*********************************************/
 

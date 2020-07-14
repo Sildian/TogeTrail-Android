@@ -28,8 +28,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowActivity
-import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
+import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.common.utils.NumberUtilities
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
@@ -58,7 +58,7 @@ import net.danlew.android.joda.JodaTimeAndroid
  ************************************************************************************************/
 
 class MainActivity :
-    BaseDataFlowActivity(),
+    BaseActivity(),
     NavigationView.OnNavigationItemSelectedListener,
     BottomNavigationView.OnNavigationItemSelectedListener
 {
@@ -97,7 +97,7 @@ class MainActivity :
 
     /**********************************UI component**********************************************/
 
-    private var fragment:BaseDataFlowFragment?=null
+    private var fragment:BaseFragment?=null
     private val toolbar by lazy {activity_main_toolbar}
     private val searchTextField by lazy {activity_main_text_field_research}
     private val clearResearchButton by lazy {activity_main_button_research_clear}
@@ -330,8 +330,6 @@ class MainActivity :
         val lngToDisplay=NumberUtilities.displayNumber(point.longitude, 4)
         val pointToDisplay="$latToDisplay ; $lngToDisplay"
         this.searchTextField.setText(pointToDisplay)
-        this.trailsQueryRegistration?.remove()
-        this.eventsQueryRegistration?.remove()
         this.trailsQuery=TrailFirebaseQueries.getTrailsAroundPoint(point)
         this.eventsQuery=EventFirebaseQueries.getEventsAroundPoint(point)
         when (this.fragment) {
@@ -350,8 +348,6 @@ class MainActivity :
     fun setQueriesToSearchAroundLocation(location:Location){
         if(location.country!=null) {
             this.searchTextField.setText(location.toString())
-            this.trailsQueryRegistration?.remove()
-            this.eventsQueryRegistration?.remove()
             this.trailsQuery = TrailFirebaseQueries.getTrailsNearbyLocation(location)!!
             this.eventsQuery = EventFirebaseQueries.getEventsNearbyLocation(location)!!
             when (this.fragment) {
@@ -366,8 +362,6 @@ class MainActivity :
 
     fun resetQueries(){
         this.searchTextField.text=null
-        this.trailsQueryRegistration?.remove()
-        this.eventsQueryRegistration?.remove()
         this.trailsQuery=TrailFirebaseQueries.getLastTrails()
         this.eventsQuery=EventFirebaseQueries.getNextEvents()
         when (this.fragment) {
@@ -650,7 +644,7 @@ class MainActivity :
                 Log.d(TAG, "Login canceled")
             }
             idpResponse?.error!=null -> {
-                Log.w(TAG, "Login failed : ${idpResponse.error?.message}")
+                Log.e(TAG, "Login failed : ${idpResponse.error?.message}")
                 DialogHelper.createInfoDialog(
                     this,
                     R.string.message_log_failure_title,
@@ -658,7 +652,7 @@ class MainActivity :
                 ).show()
             }
             else -> {
-                Log.w(TAG, "Login failed : unknown error")
+                Log.e(TAG, "Login failed : unknown error")
                 DialogHelper.createInfoDialog(
                     this,
                     R.string.message_log_failure_title,

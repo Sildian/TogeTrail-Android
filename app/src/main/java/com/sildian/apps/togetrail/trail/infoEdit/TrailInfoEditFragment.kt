@@ -86,6 +86,13 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel?=null) :
         )
     }
 
+    /**************************************Life cycle********************************************/
+
+    override fun onDestroy() {
+        this.trailViewModel?.clearImagePaths()
+        super.onDestroy()
+    }
+
     /*********************************Data monitoring********************************************/
 
     override fun loadData() {

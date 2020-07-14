@@ -38,6 +38,13 @@ class ProfileInfoEditFragment(private val hikerId: String?=null) : BaseImagePick
     private val liveLocationTextField by lazy {layout.fragment_profile_info_edit_text_field_live_location}
     private val descriptionTextField by lazy {layout.fragment_profile_info_edit_text_field_description}
 
+    /***********************************Life cycle***********************************************/
+
+    override fun onDestroy() {
+        this.hikerViewModel.clearImagePaths()
+        super.onDestroy()
+    }
+
     /******************************Data monitoring***********************************************/
 
     override fun loadData() {

@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 
 /*************************************************************************************************
  * Base for info fragments with special effects related to BottomSheetBehavior
  ************************************************************************************************/
 
-abstract class BaseInfoFragment:BaseDataFlowFragment() {
+abstract class BaseInfoFragment:BaseFragment() {
 
     /**********************************UI component**********************************************/
 

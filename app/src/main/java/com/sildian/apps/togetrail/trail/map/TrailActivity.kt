@@ -5,11 +5,10 @@ import android.content.Intent
 import android.net.Uri
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowActivity
+import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
@@ -26,7 +25,7 @@ import java.io.IOException
  * This activity monitors the trails and lets the user see or edit a trail
  ************************************************************************************************/
 
-class TrailActivity : BaseDataFlowActivity() {
+class TrailActivity : BaseActivity() {
 
     /**********************************Static items**********************************************/
 

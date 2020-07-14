@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
@@ -28,7 +28,7 @@ import kotlinx.android.synthetic.main.fragment_event.view.*
  ************************************************************************************************/
 
 class EventFragment(private val eventId: String?=null) :
-    BaseDataFlowFragment(),
+    BaseFragment(),
     HikerPhotoViewHolder.OnHikerClickListener,
     HikerPhotoAdapter.OnHikersChangedListener,
     TrailHorizontalViewHolder.OnTrailClickListener

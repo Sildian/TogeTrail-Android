@@ -4,7 +4,7 @@ import android.content.DialogInterface
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.databinding.FragmentProfileSettingsEditBinding
@@ -15,7 +15,7 @@ import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
  * @param hikerId : the hiker's id
  ************************************************************************************************/
 
-class ProfileSettingsEditFragment(private val hikerId: String?=null) : BaseDataFlowFragment()
+class ProfileSettingsEditFragment(private val hikerId: String?=null) : BaseFragment()
 {
 
     /*****************************************Data***********************************************/

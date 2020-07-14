@@ -9,7 +9,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.firestore.Query
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowActivity
+import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
 import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.location.search.LocationSearchActivity
@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.activity_trail_selection.*
  * This activity displays different queries to select trails to attach to an event
  ************************************************************************************************/
 
-class TrailSelectionActivity : BaseDataFlowActivity() {
+class TrailSelectionActivity : BaseActivity() {
 
     /**********************************Static items**********************************************/
 
@@ -242,17 +242,10 @@ class TrailSelectionActivity : BaseDataFlowActivity() {
 
     /**Finishes with Ok result**/
 
-    private fun finishOk(){
+    override fun finishOk(){
         val resultIntent=Intent()
         resultIntent.putExtra(KEY_BUNDLE_SELECTED_TRAILS, this.selectedTrails)
         setResult(Activity.RESULT_OK, resultIntent)
-        finish()
-    }
-
-    /**Finishes with cancel result**/
-
-    private fun finishCancel(){
-        setResult(Activity.RESULT_CANCELED)
         finish()
     }
 }

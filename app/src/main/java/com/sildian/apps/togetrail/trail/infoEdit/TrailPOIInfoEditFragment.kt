@@ -45,6 +45,13 @@ class TrailPOIInfoEditFragment(private val trailViewModel: TrailViewModel?=null)
     private val messageView by lazy {layout.fragment_trail_poi_info_edit_view_message}
     private val messageAnchorView by lazy {layout.fragment_trail_poi_info_edit_bottom_sheet_add_photo}
 
+    /**************************************Life cycle********************************************/
+
+    override fun onDestroy() {
+        this.trailViewModel?.clearImagePaths()
+        super.onDestroy()
+    }
+
     /*********************************Data monitoring********************************************/
 
     override fun loadData() {

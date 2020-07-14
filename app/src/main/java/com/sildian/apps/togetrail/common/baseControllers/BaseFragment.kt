@@ -10,14 +10,14 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 
 /*************************************************************************************************
- * Base fragment for all fragment aiming to load and save data
+ * Base for all fragments
  ************************************************************************************************/
 
-abstract class BaseDataFlowFragment : Fragment() {
+abstract class BaseFragment : Fragment() {
 
     /*********************************UI components**********************************************/
 
-    protected var baseActivity: BaseDataFlowActivity? = null    //The activity reference
+    protected var baseActivity: BaseActivity? = null            //The activity reference
     protected lateinit var layout: View                         //The fragment's layout
     protected lateinit var binding: ViewDataBinding             //Item for data binding
 
@@ -25,7 +25,7 @@ abstract class BaseDataFlowFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        this.baseActivity = context as BaseDataFlowActivity
+        this.baseActivity = context as BaseActivity
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
@@ -66,7 +66,7 @@ abstract class BaseDataFlowFragment : Fragment() {
 
     open fun refreshUI(){}
 
-    /**************************************Queries***********************************************/
+    /*************************************Errors handling****************************************/
 
     /**
      * Handles query errors

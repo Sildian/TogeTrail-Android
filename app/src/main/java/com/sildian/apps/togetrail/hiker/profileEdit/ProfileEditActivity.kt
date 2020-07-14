@@ -6,8 +6,8 @@ import android.view.Menu
 import android.view.MenuItem
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowActivity
-import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
+import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.baseControllers.BaseImagePickerFragment
 import com.sildian.apps.togetrail.location.search.LocationSearchActivity
 import com.sildian.apps.togetrail.location.model.core.Location
@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_profile_edit.*
  * Lets a user see and edit his own profile
  ************************************************************************************************/
 
-class ProfileEditActivity : BaseDataFlowActivity() {
+class ProfileEditActivity : BaseActivity() {
 
     /**********************************Static items**********************************************/
 
@@ -47,7 +47,7 @@ class ProfileEditActivity : BaseDataFlowActivity() {
     /**********************************UI component**********************************************/
 
     private val toolbar by lazy {activity_profile_edit_toolbar}
-    private var fragment: BaseDataFlowFragment?=null
+    private var fragment: BaseFragment?=null
 
     /********************************Navigation control******************************************/
 

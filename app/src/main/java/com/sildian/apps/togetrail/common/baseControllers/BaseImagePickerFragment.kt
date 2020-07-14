@@ -18,7 +18,7 @@ import pl.aprilapps.easyphotopicker.*
  * Base fragment for all fragment aiming to pick images
  ************************************************************************************************/
 
-abstract class BaseImagePickerFragment : BaseDataFlowFragment() {
+abstract class BaseImagePickerFragment : BaseFragment() {
 
     /**********************************Static items**********************************************/
 

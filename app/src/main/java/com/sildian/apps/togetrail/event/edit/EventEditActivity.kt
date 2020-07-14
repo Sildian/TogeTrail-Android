@@ -5,8 +5,8 @@ import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowActivity
-import com.sildian.apps.togetrail.common.baseControllers.BaseDataFlowFragment
+import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
+import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.location.search.LocationSearchActivity
 import com.sildian.apps.togetrail.trail.map.TrailActivity
@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.activity_event_edit.*
  * Allows a user to create or edit an event
  ************************************************************************************************/
 
-class EventEditActivity : BaseDataFlowActivity() {
+class EventEditActivity : BaseActivity() {
 
     /**********************************Static items**********************************************/
 
@@ -39,7 +39,7 @@ class EventEditActivity : BaseDataFlowActivity() {
     /**********************************UI component**********************************************/
 
     private val toolbar by lazy {activity_event_edit_toolbar}
-    private var fragment: BaseDataFlowFragment?=null
+    private var fragment: BaseFragment?=null
 
     /********************************Navigation control******************************************/
 

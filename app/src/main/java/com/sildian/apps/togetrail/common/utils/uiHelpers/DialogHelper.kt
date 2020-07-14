@@ -2,13 +2,15 @@ package com.sildian.apps.togetrail.common.utils.uiHelpers
 
 import android.content.Context
 import android.content.DialogInterface
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.sildian.apps.togetrail.R
 
 /*************************************************************************************************
- * Provides with some functions allowing to create dialogs
+ * Provides with some functions allowing to create dialogs and messages
  ************************************************************************************************/
 
 object DialogHelper {
@@ -93,5 +95,39 @@ object DialogHelper {
             .setPositiveButton(R.string.button_common_yes, listener)
             .setNegativeButton(R.string.button_common_no, listener)
             .create()
+    }
+
+    /**
+     * Creates a snackBar
+     * @param view : the view used to display the snackBar
+     * @param messageId : the resId for the message
+     * @param anchorView : the view below the message, if needed
+     * @return the snackBar
+     */
+
+    @JvmStatic
+    fun createSnackBar(view: View, messageId: Int, anchorView: View?=null): Snackbar {
+        return Snackbar.make(view, messageId, Snackbar.LENGTH_LONG)
+            .setAnchorView(anchorView)
+    }
+
+    /**
+     * Creates a snackBar and allows to trigger an action
+     * @param view : the view used to display the snackBar
+     * @param messageId : the resId for the message
+     * @param actionButtonId : the resId for the action button
+     * @param actionListener : the listener handling the action
+     * @param anchorView : the view below the message, if needed
+     * @return the snackBar
+     */
+
+    @JvmStatic
+    @Suppress("DEPRECATION")
+    fun createSnackBarWithAction(view: View, messageId: Int, actionButtonId: Int,
+                                 actionListener: View.OnClickListener, anchorView: View?=null): Snackbar {
+        return Snackbar.make(view, messageId, Snackbar.LENGTH_LONG)
+            .setAction(actionButtonId, actionListener)
+            .setActionTextColor(view.resources.getColor(R.color.colorSecondary))
+            .setAnchorView(anchorView)
     }
 }
