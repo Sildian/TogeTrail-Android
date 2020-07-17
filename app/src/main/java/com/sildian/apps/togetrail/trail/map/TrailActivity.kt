@@ -233,9 +233,9 @@ class TrailActivity : BaseActivity() {
             ID_FRAGMENT_TRAIL_DETAIL ->
                 this.fragment= TrailMapDetailFragment(this.trailViewModel, this.isEditable)
             ID_FRAGMENT_TRAIL_DRAW ->
-                this.fragment = TrailMapDrawFragment()
+                this.fragment = TrailMapDrawFragment(this.trailViewModel)
             ID_FRAGMENT_TRAIL_RECORD ->
-                this.fragment = TrailMapRecordFragment()
+                this.fragment = TrailMapRecordFragment(this.trailViewModel)
         }
         this.fragment?.let { fragment ->
             supportFragmentManager.beginTransaction()

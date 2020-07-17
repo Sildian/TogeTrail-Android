@@ -10,13 +10,15 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
+import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
 import kotlinx.android.synthetic.main.fragment_trail_map_draw.view.*
 
 /*************************************************************************************************
  * Lets the user create a trail by drawing the track on the map and adding points of interest
  ************************************************************************************************/
 
-class TrailMapDrawFragment : BaseTrailMapGenerateFragment(){
+class TrailMapDrawFragment(trailViewModel: TrailViewModel)
+    : BaseTrailMapGenerateFragment(trailViewModel){
 
     /**********************************UI component**********************************************/
 

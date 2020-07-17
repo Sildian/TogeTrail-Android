@@ -15,6 +15,7 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.GeoUtilities
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
+import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
 import kotlinx.android.synthetic.main.fragment_trail_map_record.view.*
 import java.util.concurrent.Executors
 
@@ -22,7 +23,8 @@ import java.util.concurrent.Executors
  * Lets the user record a trail in real time
  ************************************************************************************************/
 
-class TrailMapRecordFragment : BaseTrailMapGenerateFragment() {
+class TrailMapRecordFragment(trailViewModel: TrailViewModel)
+    : BaseTrailMapGenerateFragment(trailViewModel) {
 
     /**********************************Static items**********************************************/
 
