@@ -7,11 +7,11 @@ import com.sildian.apps.togetrail.common.utils.MetricsHelper
  * A set of value formaters to display values
  ************************************************************************************************/
 
-object ValueFormaters {
+object ValueFormatters {
 
     /**Displays durations**/
 
-    class DurationValueFormater:ValueFormater{
+    class DurationValueFormatter:ValueFormatter{
         override fun formatValue(value: Int, context: Context?): String {
             return if(context!=null) {
                 MetricsHelper.displayDuration(context, value)
@@ -24,7 +24,7 @@ object ValueFormaters {
 
     /**Displays distances**/
 
-    class DistanceValueFormater:ValueFormater{
+    class DistanceValueFormatter:ValueFormatter{
         override fun formatValue(value: Int, context: Context?): String {
             return if(context!=null){
                 MetricsHelper.displayDistance(context, value, false, false)
@@ -37,7 +37,7 @@ object ValueFormaters {
 
     /**Displays altitudes**/
 
-    class AltitudeValueFormater:ValueFormater{
+    class AltitudeValueFormatter:ValueFormatter{
         override fun formatValue(value: Int, context: Context?): String {
             return if(context!=null){
                 MetricsHelper.displayElevation(context, value, false, false)

@@ -87,7 +87,7 @@ class CircularSlider(context:Context, attrs:AttributeSet) : View(context, attrs)
 
     /*************************************Value formater****************************************/
 
-    var valueFormater:ValueFormater?=null           //Formats the valueText before displaying it
+    var valueFormatter:ValueFormatter?=null           //Formats the valueText before displaying it
 
     /****************************************Init***********************************************/
 
@@ -221,10 +221,10 @@ class CircularSlider(context:Context, attrs:AttributeSet) : View(context, attrs)
 
     private fun drawValueText(canvas: Canvas?){
         val valueToDisplay=
-            if(this.valueFormater==null){
+            if(this.valueFormatter==null){
                 this.currentValue.toString()
             }else{
-                this.valueFormater!!.formatValue(this.currentValue, this.context)
+                this.valueFormatter!!.formatValue(this.currentValue, this.context)
             }
         val textWidth=this.valueTextPaint.measureText(valueToDisplay)
         val textX=this.centerX-textWidth/2
@@ -299,17 +299,16 @@ class CircularSlider(context:Context, attrs:AttributeSet) : View(context, attrs)
 
     /**Updates the current value with the gesture angle**/
 
-    private fun updateCurrentValue(angle:Double){
-        if(angle in this.minAngleGesture..this.maxAngleGesture) {
-            this.onValueChangedListener?.onValueChanged(this, this.currentValue)
-            this.onValueChangedCallback?.invoke(this, this.currentValue)
-            val progress=angle-this.minAngleGesture
-            val maxProgress=this.maxAngleGesture-this.minAngleGesture
-            this.currentValue = this.minValue+round((progress / maxProgress * (this.maxValue.toDouble()-this.minValue.toDouble()))).toInt()
-            if (this.currentValue < this.minValue) this.currentValue = this.minValue
-            if (this.currentValue > this.maxValue) this.currentValue = this.maxValue
-            roundCurrentValueWithStep()
-        }
+    private fun updateCurrentValue(angle:Double) {
+        val progress = angle - this.minAngleGesture
+        val maxProgress = this.maxAngleGesture - this.minAngleGesture
+        this.currentValue =
+            this.minValue + round((progress / maxProgress * (this.maxValue.toDouble() - this.minValue.toDouble()))).toInt()
+        if (this.currentValue < this.minValue) this.currentValue = this.minValue
+        if (this.currentValue > this.maxValue) this.currentValue = this.maxValue
+        roundCurrentValueWithStep()
+        this.onValueChangedListener?.onValueChanged(this, this.currentValue)
+        this.onValueChangedCallback?.invoke(this, this.currentValue)
     }
 
     /**Rounds the current value using the step**/

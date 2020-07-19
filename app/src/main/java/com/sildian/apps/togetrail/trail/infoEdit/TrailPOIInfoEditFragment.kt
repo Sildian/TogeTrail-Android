@@ -10,7 +10,7 @@ import com.sildian.apps.togetrail.common.baseControllers.BaseImagePickerFragment
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.TextFieldHelper
 import com.sildian.apps.togetrail.common.views.circularSlider.CircularSlider
-import com.sildian.apps.togetrail.common.views.circularSlider.ValueFormaters
+import com.sildian.apps.togetrail.common.views.circularSlider.ValueFormatters
 import com.sildian.apps.togetrail.databinding.FragmentTrailPoiInfoEditBinding
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
 import kotlinx.android.synthetic.main.fragment_trail_poi_info_edit.view.*
@@ -158,7 +158,7 @@ class TrailPOIInfoEditFragment(private val trailViewModel: TrailViewModel?=null)
     }
 
     private fun updateMetricsSlider(currentValue:Int?){
-        this.metricsSlider.valueFormater=ValueFormaters.AltitudeValueFormater()
+        this.metricsSlider.valueFormatter=ValueFormatters.AltitudeValueFormatter()
         this.metricsSlider.setMaxValue(VALUE_MAX_ALTITUDE)
         this.metricsSlider.setCurrentValue(currentValue?:0)
     }

@@ -6,7 +6,7 @@ import android.content.Context
  * Formats a value in order to display it
  ************************************************************************************************/
 
-interface ValueFormater {
+interface ValueFormatter {
 
     /**
      * Formats a value
