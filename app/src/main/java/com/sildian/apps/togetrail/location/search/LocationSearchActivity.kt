@@ -2,8 +2,6 @@ package com.sildian.apps.togetrail.location.search
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.util.Log
 import androidx.core.widget.doOnTextChanged
 import com.google.android.libraries.places.api.Places
@@ -15,6 +13,7 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.location.model.support.LocationBuilder
 import kotlinx.android.synthetic.main.activity_location_search.*
@@ -23,7 +22,7 @@ import kotlinx.android.synthetic.main.activity_location_search.*
  * Lets the user search for a location using Google Places API
  ************************************************************************************************/
 
-class LocationSearchActivity : AppCompatActivity(), LocationPredictionViewHolder.OnLocationClickListener {
+class LocationSearchActivity : BaseActivity(), LocationPredictionViewHolder.OnLocationClickListener {
 
     /**********************************Static items**********************************************/
 
@@ -54,19 +53,6 @@ class LocationSearchActivity : AppCompatActivity(), LocationPredictionViewHolder
     private val locationsPredictionsRecyclerView by lazy {activity_location_search_recycler_view_locations_predictions}
     private lateinit var locationsPredictionsAdapter: LocationPredictionAdapter
 
-    /************************************Life cycle**********************************************/
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_location_search)
-        this.placesClient= Places.createClient(this)
-        this.autocompleteSessionToken= AutocompleteSessionToken.newInstance()
-        readDataFromIntent()
-        initializeToolbar()
-        initializeResearchTextField()
-        initializeLocationsPredictionsRecyclerView()
-    }
-
     /********************************Navigation control******************************************/
 
     override fun onBackPressed() {
@@ -80,6 +66,12 @@ class LocationSearchActivity : AppCompatActivity(), LocationPredictionViewHolder
 
     /******************************Data monitoring************************************************/
 
+    override fun loadData() {
+        this.placesClient= Places.createClient(this)
+        this.autocompleteSessionToken= AutocompleteSessionToken.newInstance()
+        readDataFromIntent()
+    }
+
     private fun readDataFromIntent(){
         if(intent!=null){
             if(intent.hasExtra(KEY_BUNDLE_FINE_RESEARCH)){
@@ -89,6 +81,14 @@ class LocationSearchActivity : AppCompatActivity(), LocationPredictionViewHolder
     }
 
     /******************************UI monitoring**************************************************/
+
+    override fun getLayoutId(): Int = R.layout.activity_location_search
+
+    override fun initializeUI() {
+        initializeToolbar()
+        initializeResearchTextField()
+        initializeLocationsPredictionsRecyclerView()
+    }
 
     private fun initializeToolbar(){
         setSupportActionBar(this.toolbar)
@@ -178,11 +178,6 @@ class LocationSearchActivity : AppCompatActivity(), LocationPredictionViewHolder
         val resultIntent= Intent()
         resultIntent.putExtra(KEY_BUNDLE_LOCATION, location)
         setResult(Activity.RESULT_OK, resultIntent)
-        finish()
-    }
-
-    private fun finishCancel(){
-        setResult(Activity.RESULT_CANCELED)
         finish()
     }
 }

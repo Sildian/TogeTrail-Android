@@ -66,14 +66,23 @@ abstract class BaseActivity : AppCompatActivity() {
         finish()
     }
 
-    /*************************************Errors handling****************************************/
+    /**********************************Query results handling************************************/
+
+    /**
+     * Handles save operations success
+     */
+
+    fun onSaveSuccess() {
+        dismissProgressDialog()
+        finishOk()
+    }
 
     /**
      * Handles query errors
      * @param e : the exception
      */
 
-    fun handleQueryError(e: Exception) {
+    fun onQueryError(e: Exception) {
         dismissProgressDialog()
         DialogHelper.createInfoDialog(
             this,

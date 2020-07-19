@@ -65,7 +65,7 @@ class EventFragment(private val eventId: String?=null) :
             }
         })
         this.eventId?.let { eventId ->
-            this.eventViewModel.loadEventFromDatabaseRealTime(eventId, null, this::handleQueryError)
+            this.eventViewModel.loadEventFromDatabaseRealTime(eventId, null, this::onQueryError)
         }
     }
 
@@ -152,11 +152,11 @@ class EventFragment(private val eventId: String?=null) :
     }
 
     fun onRegisterUserButtonClick(view:View){
-        this.eventViewModel.registerUserToEvent(null, this::handleQueryError)
+        this.eventViewModel.registerUserToEvent(null, this::onQueryError)
     }
 
     fun onUnregisterUserButtonClick(view:View){
-        this.eventViewModel.unregisterUserToEvent(null, this::handleQueryError)
+        this.eventViewModel.unregisterUserToEvent(null, this::onQueryError)
     }
 
     /***********************************Hikers monitoring****************************************/

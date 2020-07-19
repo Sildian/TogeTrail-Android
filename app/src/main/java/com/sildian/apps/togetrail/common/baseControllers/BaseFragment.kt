@@ -66,14 +66,22 @@ abstract class BaseFragment : Fragment() {
 
     open fun refreshUI(){}
 
-    /*************************************Errors handling****************************************/
+    /**********************************Query results handling************************************/
+
+    /**
+     * Handles save operations success
+     */
+
+    fun onSaveSuccess() {
+        this.baseActivity?.onSaveSuccess()
+    }
 
     /**
      * Handles query errors
      * @param e : the exception
      */
 
-    fun handleQueryError(e: Exception) {
-        this.baseActivity?.handleQueryError(e)
+    fun onQueryError(e: Exception) {
+        this.baseActivity?.onQueryError(e)
     }
 }

@@ -50,7 +50,7 @@ class ProfileFragment (private val hikerId: String?)
             }
         })
         this.hikerId?.let { hikerId ->
-            this.hikerViewModel.loadHikerFromDatabaseRealTime(hikerId, null, this::handleQueryError)
+            this.hikerViewModel.loadHikerFromDatabaseRealTime(hikerId, null, this::onQueryError)
         }
     }
 

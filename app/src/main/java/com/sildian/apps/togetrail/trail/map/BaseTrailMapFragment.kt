@@ -140,7 +140,7 @@ abstract class BaseTrailMapFragment (
         if(this.checkDataIsValid()) {
             this.trailViewModel?.trail?.autoPopulatePosition()
             this.baseActivity?.showProgressDialog()
-            this.trailViewModel?.saveTrailInDatabase(false, this::handleSaveDataSuccess, this::handleQueryError)
+            this.trailViewModel?.saveTrailInDatabase(false, this::onSaveSuccess, this::onQueryError)
         }
     }
 
@@ -167,11 +167,6 @@ abstract class BaseTrailMapFragment (
             }
         }
         return false
-    }
-
-    private fun handleSaveDataSuccess(){
-        this.baseActivity?.dismissProgressDialog()
-        this.baseActivity?.finish()
     }
 
     /************************************UI monitoring*******************************************/

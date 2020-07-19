@@ -69,12 +69,12 @@ class TrailActivity : BaseActivity() {
             this.fragment?.getInfoBottomSheetState()!=BottomSheetBehavior.STATE_HIDDEN->
                 this.fragment?.hideInfoBottomSheet()
             else->
-                finish()
+                finishCancel()
         }
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        finish()
+        finishCancel()
         return true
     }
 
@@ -131,7 +131,7 @@ class TrailActivity : BaseActivity() {
             if(intent.hasExtra(KEY_BUNDLE_TRAIL_ID)) {
                 val trailId = intent.getStringExtra(KEY_BUNDLE_TRAIL_ID)
                 trailId?.let { id ->
-                    this.trailViewModel.loadTrailFromDatabase(id, this::startTrailAction, this::handleQueryError)
+                    this.trailViewModel.loadTrailFromDatabase(id, this::startTrailAction, this::onQueryError)
                 }
             }
             else {
@@ -326,7 +326,7 @@ class TrailActivity : BaseActivity() {
                 createTrailFromGpx(uri)
             }
             Activity.RESULT_CANCELED ->
-                finish()
+                finishCancel()
         }
     }
 

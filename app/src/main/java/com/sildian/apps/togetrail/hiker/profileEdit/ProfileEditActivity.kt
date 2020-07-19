@@ -57,12 +57,12 @@ class ProfileEditActivity : BaseActivity() {
                 (this.fragment as BaseImagePickerFragment).hideAddPhotoBottomSheet()
             }
         else {
-            finish()
+            finishCancel()
         }
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        finish()
+        finishCancel()
         return true
     }
 

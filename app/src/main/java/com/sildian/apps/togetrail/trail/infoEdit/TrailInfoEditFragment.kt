@@ -121,13 +121,8 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel?=null) :
             this.trailViewModel?.trail?.description = this.descriptionTextField.text.toString()
             this.trailViewModel?.trail?.autoPopulatePosition()
             this.baseActivity?.showProgressDialog()
-            this.trailViewModel?.saveTrailInDatabase(false, this::handleSaveDataSuccess, this::handleQueryError)
+            this.trailViewModel?.saveTrailInDatabase(false, this::onSaveSuccess, this::onQueryError)
         }
-    }
-
-    private fun handleSaveDataSuccess(){
-        this.baseActivity?.dismissProgressDialog()
-        (activity as TrailInfoEditActivity).finishOk()
     }
 
     override fun checkDataIsValid(): Boolean {

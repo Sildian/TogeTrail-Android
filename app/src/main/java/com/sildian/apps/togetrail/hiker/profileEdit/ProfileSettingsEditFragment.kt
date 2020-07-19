@@ -31,7 +31,7 @@ class ProfileSettingsEditFragment(private val hikerId: String?=null) : BaseFragm
         (this.binding as FragmentProfileSettingsEditBinding).profileSettingsEditFragment=this
         (this.binding as FragmentProfileSettingsEditBinding).hikerViewModel=this.hikerViewModel
         this.hikerId?.let { hikerId ->
-            this.hikerViewModel.loadHikerFromDatabase(hikerId, null, this::handleQueryError)
+            this.hikerViewModel.loadHikerFromDatabase(hikerId, null, this::onQueryError)
         }
     }
 
@@ -60,7 +60,7 @@ class ProfileSettingsEditFragment(private val hikerId: String?=null) : BaseFragm
             DialogInterface.OnClickListener { dialog, which ->
                 if(which==DialogInterface.BUTTON_POSITIVE){
                     this.baseActivity?.showProgressDialog()
-                    this.hikerViewModel.resetUserPassword(this::handleSaveDataSuccess, this::handleQueryError)
+                    this.hikerViewModel.resetUserPassword(this::handleSaveDataSuccess, this::onQueryError)
                 }
             })
         dialog.show()
@@ -75,7 +75,7 @@ class ProfileSettingsEditFragment(private val hikerId: String?=null) : BaseFragm
             DialogInterface.OnClickListener { dialog, which ->
                 if(which==DialogInterface.BUTTON_POSITIVE){
                     this.baseActivity?.showProgressDialog()
-                    this.hikerViewModel.deleteUserAccount(this::handleSaveDataSuccess, this::handleQueryError)
+                    this.hikerViewModel.deleteUserAccount(this::handleSaveDataSuccess, this::onQueryError)
                 }
             })
         dialog.show()

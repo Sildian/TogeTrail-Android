@@ -299,7 +299,7 @@ class MainActivity :
     private fun loginCurrentUser(){
         if(AuthFirebaseHelper.getCurrentUser()!=null) {
             this.progressbar.visibility = View.VISIBLE
-            this.hikerViewModel.loginUser(this::handleLoginCurrentUser, this::handleQueryError)
+            this.hikerViewModel.loginUser(this::handleLoginCurrentUser, this::onQueryError)
         }
     }
 

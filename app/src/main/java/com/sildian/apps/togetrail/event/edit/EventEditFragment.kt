@@ -74,7 +74,7 @@ class EventEditFragment(private val eventId: String?=null) :
             }
         })
         if(this.eventId!=null){
-            this.eventViewModel.loadEventFromDatabase(eventId, null, this::handleQueryError)
+            this.eventViewModel.loadEventFromDatabase(eventId, null, this::onQueryError)
         }else {
             this.eventViewModel.initNewEvent()
         }
@@ -102,13 +102,8 @@ class EventEditFragment(private val eventId: String?=null) :
             this.eventViewModel.event?.name = this.nameTextField.text.toString()
             this.eventViewModel.event?.description = this.descriptionTextField.text.toString()
             this.baseActivity?.showProgressDialog()
-            this.eventViewModel.saveEventInDatabase(this::handleSaveDataSuccess, this::handleQueryError)
+            this.eventViewModel.saveEventInDatabase(this::onSaveSuccess, this::onQueryError)
         }
-    }
-
-    private fun handleSaveDataSuccess(){
-        this.baseActivity?.dismissProgressDialog()
-        this.baseActivity?.finish()
     }
 
     /**Checks data is valid**/

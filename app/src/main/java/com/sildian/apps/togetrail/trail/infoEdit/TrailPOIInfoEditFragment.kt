@@ -70,14 +70,9 @@ class TrailPOIInfoEditFragment(private val trailViewModel: TrailViewModel?=null)
                 this.trailViewModel?.trailPointOfInterest?.name = this.nameTextField.text.toString()
                 this.trailViewModel?.trailPointOfInterest?.description = this.descriptionTextField.text.toString()
                 this.baseActivity?.showProgressDialog()
-                this.trailViewModel?.saveTrailInDatabase(true, this::handleSaveDataSuccess, this::handleQueryError)
+                this.trailViewModel?.saveTrailInDatabase(true, this::onSaveSuccess, this::onQueryError)
             }
         }
-    }
-
-    private fun handleSaveDataSuccess(){
-        this.baseActivity?.dismissProgressDialog()
-        (activity as TrailInfoEditActivity).finishOk()
     }
 
     override fun checkDataIsValid(): Boolean {

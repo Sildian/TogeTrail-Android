@@ -59,7 +59,7 @@ class ProfileInfoEditFragment(private val hikerId: String?=null) : BaseImagePick
             }
         })
         this.hikerId?.let { hikerId ->
-            this.hikerViewModel.loadHikerFromDatabase(hikerId, null, this::handleQueryError)
+            this.hikerViewModel.loadHikerFromDatabase(hikerId, null, this::onQueryError)
         }
     }
 
@@ -79,17 +79,12 @@ class ProfileInfoEditFragment(private val hikerId: String?=null) : BaseImagePick
                 else null
             this.hikerViewModel.hiker?.description = this.descriptionTextField.text.toString()
             this.baseActivity?.showProgressDialog()
-            this.hikerViewModel.saveHikerInDatabase(this::handleSaveDataSuccess, this::handleQueryError)
+            this.hikerViewModel.saveHikerInDatabase(this::onSaveSuccess, this::onQueryError)
         }
     }
 
     override fun checkDataIsValid():Boolean =
         TextFieldHelper.checkTextFieldIsNotEmpty(this.nameTextField, this.nameTextFieldLayout)
-
-    private fun handleSaveDataSuccess(){
-        this.baseActivity?.dismissProgressDialog()
-        this.baseActivity?.finish()
-    }
 
     /***********************************UI monitoring********************************************/
 

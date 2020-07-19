@@ -71,11 +71,11 @@ class EventActivity : BaseActivity() {
     /********************************Navigation control******************************************/
 
     override fun onBackPressed() {
-        finish()
+        finishCancel()
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        finish()
+        finishCancel()
         return true
     }
 
