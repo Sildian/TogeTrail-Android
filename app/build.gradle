@@ -80,6 +80,11 @@ dependencies {
     testImplementation 'androidx.test:core:1.2.0'
     androidTestImplementation 'androidx.test:core:1.2.0'
 
+    /**************************************MY LIBRARIES******************************************/
+
+    //Circular Slider
+    implementation 'com.github.Sildian:CircularSlider-Android:1.0.0'
+
     /**********************************EXTERNAL LIBRARIES****************************************/
 
     //Mockito

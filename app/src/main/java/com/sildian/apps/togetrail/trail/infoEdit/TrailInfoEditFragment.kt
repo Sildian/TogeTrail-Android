@@ -8,13 +8,13 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.sildian.apps.circularsliderlibrary.CircularSlider
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseImagePickerFragment
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DropdownMenuHelper
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.TextFieldHelper
-import com.sildian.apps.togetrail.common.views.circularSlider.CircularSlider
-import com.sildian.apps.togetrail.common.views.circularSlider.ValueFormatters
+import com.sildian.apps.togetrail.common.utils.uiHelpers.ValueFormatters
 import com.sildian.apps.togetrail.databinding.FragmentTrailInfoEditBinding
 import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.trail.model.core.TrailLevel
@@ -348,15 +348,15 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel?=null) :
         this.currentMetricToSet=valueToSet
         when(this.currentMetricToSet){
             METRIC_DURATION -> {
-                this.metricsSlider.valueFormatter=ValueFormatters.DurationValueFormatter()
+                this.metricsSlider.valueFormatter= ValueFormatters.DurationValueFormatter()
                 this.metricsSlider.setMaxValue(VALUE_MAX_DURATION)
             }
             METRIC_DISTANCE -> {
-                this.metricsSlider.valueFormatter=ValueFormatters.DistanceValueFormatter()
+                this.metricsSlider.valueFormatter= ValueFormatters.DistanceValueFormatter()
                 this.metricsSlider.setMaxValue(VALUE_MAX_DISTANCE)
             }
             else -> {
-                this.metricsSlider.valueFormatter=ValueFormatters.AltitudeValueFormatter()
+                this.metricsSlider.valueFormatter= ValueFormatters.AltitudeValueFormatter()
                 this.metricsSlider.setMaxValue(VALUE_MAX_ALTITUDE)
             }
         }

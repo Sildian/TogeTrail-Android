@@ -1,6 +1,7 @@
-package com.sildian.apps.togetrail.common.views.circularSlider
+package com.sildian.apps.togetrail.common.utils.uiHelpers
 
 import android.content.Context
+import com.sildian.apps.circularsliderlibrary.ValueFormatter
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
 
 /*************************************************************************************************
@@ -11,7 +12,7 @@ object ValueFormatters {
 
     /**Displays durations**/
 
-    class DurationValueFormatter:ValueFormatter{
+    class DurationValueFormatter: ValueFormatter {
         override fun formatValue(value: Int, context: Context?): String {
             return if(context!=null) {
                 MetricsHelper.displayDuration(context, value)

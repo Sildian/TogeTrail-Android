@@ -171,11 +171,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <com.sildian.apps.togetrail.common.views.circularSlider.CircularSlider
+                    <com.sildian.apps.circularsliderlibrary.CircularSlider
                         android:id="@+id/fragment_trail_info_edit_slider_metrics"
                         android:layout_width="@dimen/components_size_large"
                         android:layout_height="@dimen/components_size_large"
-                        android:padding="@dimen/components_margin_small"
                         app:minValue="0"
                         app:maxValue="1000"
                         app:stepValue="10"
