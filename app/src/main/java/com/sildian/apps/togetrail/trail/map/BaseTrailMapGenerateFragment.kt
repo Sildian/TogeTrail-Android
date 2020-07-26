@@ -3,6 +3,8 @@ package com.sildian.apps.togetrail.trail.map
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
+import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
@@ -22,6 +24,21 @@ abstract class BaseTrailMapGenerateFragment(trailViewModel: TrailViewModel) :
     abstract fun revealActionsButtons()
 
     abstract fun hideActionsButtons()
+
+    override fun initializeUI() {
+        showRequestTrailNameDialog()
+    }
+
+    private fun showRequestTrailNameDialog() {
+        DialogHelper.createRequestInfoDialog(context!!, R.string.message_trail_info_request_title) { answer ->
+            if (!answer.isNullOrEmpty()) {
+                this.trailViewModel?.trail?.name = answer
+                this.trailViewModel?.notifyDataChanged()
+            } else {
+                showRequestTrailNameDialog()
+            }
+        }.show()
+    }
 
     /***********************************Trail monitoring*****************************************/
 

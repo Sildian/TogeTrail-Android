@@ -55,6 +55,7 @@ class TrailMapDrawFragment(trailViewModel: TrailViewModel)
         initializeSeeInfoButton()
         initializeRemovePointButton()
         initializeAddPoiButton()
+        super.initializeUI()
     }
 
     private fun initializeSeeInfoButton(){

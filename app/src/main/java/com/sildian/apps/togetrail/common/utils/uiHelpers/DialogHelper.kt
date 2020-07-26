@@ -2,12 +2,12 @@ package com.sildian.apps.togetrail.common.utils.uiHelpers
 
 import android.content.Context
 import android.content.DialogInterface
-import android.view.View
+import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.sildian.apps.togetrail.R
+import kotlinx.android.synthetic.main.dialog_request_info.view.*
 
 /*************************************************************************************************
  * Provides with some functions allowing to create dialogs and messages
@@ -98,36 +98,28 @@ object DialogHelper {
     }
 
     /**
-     * Creates a snackBar
-     * @param view : the view used to display the snackBar
-     * @param messageId : the resId for the message
-     * @param anchorView : the view below the message, if needed
-     * @return the snackBar
+     * Creates a dialog requesting an info from the user
+     * @param context : the context
+     * @param titleId : the resId for the title
+     * @param callback : the callback to catch the answer
+     * @return the dialog ready to be shown
      */
 
     @JvmStatic
-    fun createSnackBar(view: View, messageId: Int, anchorView: View?=null): Snackbar {
-        return Snackbar.make(view, messageId, Snackbar.LENGTH_LONG)
-            .setAnchorView(anchorView)
-    }
+    fun createRequestInfoDialog(context: Context, titleId: Int,
+                                callback:(String?)->Unit): AlertDialog {
 
-    /**
-     * Creates a snackBar and allows to trigger an action
-     * @param view : the view used to display the snackBar
-     * @param messageId : the resId for the message
-     * @param actionButtonId : the resId for the action button
-     * @param actionListener : the listener handling the action
-     * @param anchorView : the view below the message, if needed
-     * @return the snackBar
-     */
+        val view = LayoutInflater.from(context).inflate(R.layout.dialog_request_info, null)
+        val infoTextField = view.dialog_request_info_text_field_info
 
-    @JvmStatic
-    @Suppress("DEPRECATION")
-    fun createSnackBarWithAction(view: View, messageId: Int, actionButtonId: Int,
-                                 actionListener: View.OnClickListener, anchorView: View?=null): Snackbar {
-        return Snackbar.make(view, messageId, Snackbar.LENGTH_LONG)
-            .setAction(actionButtonId, actionListener)
-            .setActionTextColor(view.resources.getColor(R.color.colorSecondary))
-            .setAnchorView(anchorView)
+        return MaterialAlertDialogBuilder(context)
+            .setBackground(ContextCompat.getDrawable(context, R.drawable.shape_corners_round_color_primary))
+            .setTitle(titleId)
+            .setView(view)
+            .setCancelable(false)
+            .setNeutralButton(R.string.button_common_ok) { dialogInterface: DialogInterface, i: Int ->
+                callback.invoke(infoTextField.text.toString())
+            }
+            .create()
     }
 }

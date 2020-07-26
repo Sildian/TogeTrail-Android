@@ -221,6 +221,7 @@
     <string name="message_file_failure_image">The image could n\'t be loaded. You should check that it is not corrupted.</string>
     <string name="message_trail_info_empty_title">Info are missing</string>
     <string name="message_trail_info_empty_message">You should provide info for the trail and each point of interest.</string>
+    <string name="message_trail_info_request_title">Please give a name to the trail</string>
     <!-- Toasts / Snackbars -->
     <string name="message_query_result_empty">Oh, no result match your research</string>
     <string name="message_text_fields_empty">Some text fields are empty</string>

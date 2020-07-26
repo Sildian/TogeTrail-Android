@@ -220,6 +220,7 @@
     <string name="message_file_failure_image">L\'image n\'a pas pu être chargée. Veuillez vérifier qu\'elle n\'est pas corrompue.</string>
     <string name="message_trail_info_empty_title">Infos manquantes</string>
     <string name="message_trail_info_empty_message">Les infos de la randos et de chaque point d\'intérêt doivent être indiquées.</string>
+    <string name="message_trail_info_request_title">Veuillez indiquer un nom pour la rando</string>
     <!-- Toasts / Snackbars -->
     <string name="message_query_result_empty">Ah, aucun résultat ne correspond à votre recherche</string>
     <string name="message_text_fields_empty">Certains champs sont vides</string>

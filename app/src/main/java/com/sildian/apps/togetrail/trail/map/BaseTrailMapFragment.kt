@@ -362,7 +362,7 @@ abstract class BaseTrailMapFragment (
     }
 
     fun showTrailPOIInfoFragment(trailPointOfInterestPosition:Int){
-        val poiIsEditable=this.isEditable && this.trailViewModel?.trail?.isDataValid()==true
+        val poiIsEditable=this.isEditable && this.trailViewModel?.trail?.name != null
         this.infoFragment=
             TrailPOIInfoFragment(
                 this.trailViewModel, trailPointOfInterestPosition, poiIsEditable

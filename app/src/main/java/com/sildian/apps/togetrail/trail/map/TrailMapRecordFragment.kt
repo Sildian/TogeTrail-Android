@@ -89,6 +89,7 @@ class TrailMapRecordFragment(trailViewModel: TrailViewModel)
         initializeSeeInfoButton()
         initializeAddPoiButton()
         initializePlayButton()
+        super.initializeUI()
     }
 
     private fun initializeSeeInfoButton(){

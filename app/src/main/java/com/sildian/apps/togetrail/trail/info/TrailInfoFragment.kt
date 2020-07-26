@@ -74,6 +74,10 @@ class TrailInfoFragment(
             .into(this.photoImageView)
     }
 
+    fun onSeeButtonClick(view:View) {
+        (parentFragment as BaseTrailMapFragment).expandInfoBottomSheet()
+    }
+
     fun onEditButtonClick(view:View){
         (parentFragment as BaseTrailMapFragment).editTrailInfo()
     }
