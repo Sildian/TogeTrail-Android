@@ -4,6 +4,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
+import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -20,7 +21,7 @@ object HikerRepository {
      * @return the document reference
      */
 
-    fun getHikerReference(hikerId: String):DocumentReference =
+    fun getHikerReference(hikerId: String): DocumentReference =
         HikerFirebaseQueries.getHiker(hikerId)
 
     /**
@@ -30,7 +31,7 @@ object HikerRepository {
      */
 
     @Throws(Exception::class)
-    suspend fun getHiker(hikerId:String):Hiker? =
+    suspend fun getHiker(hikerId: String): Hiker? =
         withContext(Dispatchers.IO) {
             try {
                 HikerFirebaseQueries
@@ -49,7 +50,7 @@ object HikerRepository {
      */
 
     @Throws(Exception::class)
-    suspend fun updateHiker(hiker:Hiker){
+    suspend fun updateHiker(hiker: Hiker) {
         withContext(Dispatchers.IO) {
             try {
                 HikerFirebaseQueries
@@ -67,9 +68,9 @@ object HikerRepository {
      */
 
     @Throws(Exception::class)
-    suspend fun deleteHiker(hiker:Hiker){
-        withContext(Dispatchers.IO){
-            try{
+    suspend fun deleteHiker(hiker: Hiker) {
+        withContext(Dispatchers.IO) {
+            try {
                 HikerFirebaseQueries
                     .deleteHiker(hiker)
                     .await()
@@ -86,12 +87,37 @@ object HikerRepository {
      */
 
     @Throws(Exception::class)
-    suspend fun addHikerHistoryItem(hikerId:String, historyItem: HikerHistoryItem){
+    suspend fun addHikerHistoryItem(hikerId: String, historyItem: HikerHistoryItem) {
         withContext(Dispatchers.IO) {
             try {
                 HikerFirebaseQueries
                     .addHistoryItem(hikerId, historyItem)
                     .await()
+            } catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    /**
+     * Deletes all history items matching the given type and item id
+     * @param type : the type of history item to delete
+     * @param relatedItemId : the id of the related item to delete (the related event or trail)
+     */
+
+    @Throws(Exception::class)
+    suspend fun deleteHikerHistoryItems(hikerId: String, type: HikerHistoryType, relatedItemId: String) {
+        withContext(Dispatchers.IO) {
+            try {
+                val historyItemsToDelete =
+                    HikerFirebaseQueries
+                        .getHistoryItemsToDelete(hikerId, type, relatedItemId)
+                        .get()
+                        .await()
+                historyItemsToDelete.forEach { historyItem ->
+                    HikerFirebaseQueries.deleteHistoryItem(hikerId, historyItem.id)
+                        .await()
+                }
             } catch (e: Exception) {
                 throw e
             }

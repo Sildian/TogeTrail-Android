@@ -156,7 +156,7 @@ class EventFragment(private val eventId: String?=null) :
     }
 
     fun onUnregisterUserButtonClick(view:View){
-        this.eventViewModel.unregisterUserToEvent(null, this::onQueryError)
+        this.eventViewModel.unregisterUserFromEvent(null, this::onQueryError)
     }
 
     /***********************************Hikers monitoring****************************************/

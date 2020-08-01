@@ -7,6 +7,7 @@ import com.google.firebase.firestore.Query
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
+import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 
 /*************************************************************************************************
  * Provides with Firebase queries on Hiker
@@ -66,13 +67,36 @@ object HikerFirebaseQueries {
             .limit(20)
 
     /**
+     * Gets a list of history items to delete, matching the given type and itemsId
+     * @param type : the type of history item to delete
+     * @param relatedItemId : the id of the related item to delete (the related event or trail)
+     * @return a query
+     */
+
+    fun getHistoryItemsToDelete(hikerId: String, type: HikerHistoryType, relatedItemId: String): Query =
+        getHistoryItemSubCollection(hikerId)
+            .whereEqualTo("type", type)
+            .whereEqualTo("itemId", relatedItemId)
+
+    /**
      * Adds an item to the hiker's history
      * @param hikerId : the id of the hiker
      * @param historyItem : the history item
+     * @return a task result
      */
 
     fun addHistoryItem(hikerId: String, historyItem: HikerHistoryItem) : Task<DocumentReference> =
         getHistoryItemSubCollection(hikerId).add(historyItem)
+
+    /**
+     * Deletes an history item
+     * @param hikerId : the id of the hiker
+     * @param historyItemId : the id of history item to delete
+     * @return a task result
+     */
+
+    fun deleteHistoryItem(hikerId: String, historyItemId: String): Task<Void> =
+        getHistoryItemSubCollection(hikerId).document(historyItemId).delete()
 
     /**
      * Gets all events for which the hiker attended

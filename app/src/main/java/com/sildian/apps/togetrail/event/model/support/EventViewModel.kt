@@ -295,7 +295,7 @@ class EventViewModel : BaseObservableViewModel() {
      * @param failureCallback : the callback to handle a failure in the query
      */
 
-    fun unregisterUserToEvent(successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
+    fun unregisterUserFromEvent(successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
         viewModelScope.launch(this.exceptionHandler) {
             try {
 
@@ -315,8 +315,7 @@ class EventViewModel : BaseObservableViewModel() {
                     launch { EventRepository.updateEvent(event!!) }
                     launch { HikerRepository.deleteHikerAttendedEvent(hiker.id, event!!.id!!) }
                     launch { EventRepository.deleteEventRegisteredHiker(event!!.id!!, hiker.id) }
-
-                    //TODO find a way to delete the related hiker history
+                    launch { HikerRepository.deleteHikerHistoryItems(hiker.id, HikerHistoryType.EVENT_ATTENDED, event!!.id!!) }
 
                     Log.d(TAG, "Successfully unregistered user from the event")
                     successCallback?.invoke()
