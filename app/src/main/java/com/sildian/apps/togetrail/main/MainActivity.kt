@@ -39,6 +39,7 @@ import com.sildian.apps.togetrail.event.edit.EventEditActivity
 import com.sildian.apps.togetrail.event.list.EventsListFragment
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
+import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.profileEdit.ProfileEditActivity
 import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
 import com.sildian.apps.togetrail.hiker.profile.ProfileActivity
@@ -423,6 +424,7 @@ class MainActivity :
         updateNavigationViewUserItems()
         this.hikerViewModel.addOnPropertyChangedCallback(object:Observable.OnPropertyChangedCallback(){
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                CurrentHikerInfo.currentHiker = hikerViewModel.hiker
                 updateNavigationViewUserItems()
             }
         })

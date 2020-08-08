@@ -7,6 +7,7 @@ import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
+import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.model.support.HikerRepository
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
@@ -168,7 +169,7 @@ class TrailViewModel:BaseObservableViewModel() {
 
                         /*Updates the author's profile*/
 
-                        AuthRepository.getCurrentUserProfile()?.let { hiker ->
+                        CurrentHikerInfo.currentHiker?.let { hiker ->
                             hiker.nbTrailsCreated++
                             launch { HikerRepository.updateHiker(hiker) }.join()
 

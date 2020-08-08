@@ -1,7 +1,6 @@
 package com.sildian.apps.togetrail.common.utils.cloudHelpers
 
 import com.google.firebase.auth.FirebaseUser
-import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -13,27 +12,11 @@ import kotlinx.coroutines.withContext
 object AuthRepository {
 
     /**
-     * Gets the current user's hiker profile
-     * @return the current user's hiker profile or null if the user is not connected
-     */
-
-    fun getCurrentUserProfile(): Hiker? = AuthFirebaseHelper.currentUserProfile
-
-    /**
      * Gets the current user connected to the app
      * @return the current user, or null if the user is not connected
      */
 
     fun getCurrentUser() : FirebaseUser? = AuthFirebaseHelper.getCurrentUser()
-
-    /**
-     * Signs a user in and stores the related hiker's profile
-     * @param hiker : the hiker's profile
-     */
-
-    fun signUserIn(hiker: Hiker) {
-        AuthFirebaseHelper.signUserIn(hiker)
-    }
 
     /**Signs a user out**/
 

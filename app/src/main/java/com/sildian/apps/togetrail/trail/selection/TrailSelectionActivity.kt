@@ -11,6 +11,7 @@ import com.google.firebase.firestore.Query
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
+import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.location.search.LocationSearchActivity
 import com.sildian.apps.togetrail.trail.map.TrailActivity
@@ -91,20 +92,20 @@ class TrailSelectionActivity : BaseActivity() {
         this.trailsQueries[KEY_QUERY_LAST_TRAILS]=
             TrailFirebaseQueries.getLastTrails()
 
-        AuthFirebaseHelper.currentUserProfile?.let { user ->
+        CurrentHikerInfo.currentHiker?.let { hiker ->
 
-            /*If the user created trails, adds the my trails query*/
+            /*If the hiker created trails, adds the my trails query*/
 
-            if (user.nbTrailsCreated > 0) {
+            if (hiker.nbTrailsCreated > 0) {
                 this.trailsQueries[KEY_QUERY_MY_TRAILS] =
-                    TrailFirebaseQueries.getMyTrails(user.id)
+                    TrailFirebaseQueries.getMyTrails(hiker.id)
             }
 
-            /*If the user indicated a live location, adds the nearby home query*/
+            /*If the hiker indicated a live location, adds the nearby home query*/
 
-            if (user.liveLocation.country != null) {
+            if (hiker.liveLocation.country != null) {
                 this.trailsQueries[KEY_QUERY_TRAILS_NEARBY_HOME] =
-                    TrailFirebaseQueries.getTrailsNearbyLocation(user.liveLocation)!!
+                    TrailFirebaseQueries.getTrailsNearbyLocation(hiker.liveLocation)!!
             }
         }
 

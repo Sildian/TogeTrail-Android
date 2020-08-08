@@ -7,6 +7,7 @@ import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
+import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.model.support.HikerRepository
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -137,7 +138,7 @@ class EventViewModel : BaseObservableViewModel() {
 
                         /*Updates the author's profile*/
 
-                        AuthRepository.getCurrentUserProfile()?.let { hiker ->
+                        CurrentHikerInfo.currentHiker?.let { hiker ->
                             hiker.nbEventsCreated++
                             launch { HikerRepository.updateHiker(hiker) }.join()
 
@@ -246,7 +247,7 @@ class EventViewModel : BaseObservableViewModel() {
 
                 /*Gets the current user and the related Hiker info*/
 
-                val hiker = AuthRepository.getCurrentUserProfile()
+                val hiker = CurrentHikerInfo.currentHiker
 
                 /*If both hiker and event are not null...*/
 
@@ -301,7 +302,7 @@ class EventViewModel : BaseObservableViewModel() {
 
                 /*Gets the current user and the related Hiker info*/
 
-                val hiker = AuthRepository.getCurrentUserProfile()
+                val hiker = CurrentHikerInfo.currentHiker
 
                 /*If both hiker and event are not null...*/
 

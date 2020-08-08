@@ -196,7 +196,7 @@ class HikerViewModel : BaseObservableViewModel() {
                         launch { HikerRepository.addHikerHistoryItem(hiker!!.id, historyItem) }.join()
                     }
 
-                    AuthRepository.signUserIn(hiker!!)
+                    CurrentHikerInfo.currentHiker = hiker
 
                     /*Then notifies the callbacks*/
 
@@ -221,6 +221,7 @@ class HikerViewModel : BaseObservableViewModel() {
 
     fun logoutUser(){
         this.hiker=null
+        CurrentHikerInfo.currentHiker = null
         AuthRepository.signUserOut()
         notifyDataChanged()
     }
