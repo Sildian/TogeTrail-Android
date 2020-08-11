@@ -9,8 +9,10 @@ import org.junit.Assert.*
 class TrailBuilderTest {
 
     @Test
-    fun given_name_when_buildFromNothing_then_checkResultIsOk(){
-        val trail= TrailBuilder.build()
+    fun given_name_when_buildFromDefault_then_checkResultIsOk(){
+        val trail= TrailBuilder()
+            .withDefault()
+            .build()
         assertEquals("TogeTrail", trail.source)
     }
 
@@ -22,7 +24,7 @@ class TrailBuilderTest {
         val gpx = gpxParser.parse(inputStream)
         assertNotNull(gpx)
 
-        val trail= TrailBuilder
+        val trail= TrailBuilder()
             .withGpx(gpx)
             .build()
         assertEquals("Test", trail.name)
@@ -44,12 +46,13 @@ class TrailBuilderTest {
         assertNotNull(gpx)
 
         try {
-            val trail = TrailBuilder
+            TrailBuilder()
                 .withGpx(gpx)
                 .build()
+            assertEquals("TRUE", "FALSE")
         }
-        catch(e: TrailBuilder.TrailBuildNoTrackException){
-            assertEquals("No track is available in the gpx.", e.message)
+        catch(e: TrailBuildException){
+            assertEquals(TrailBuildException.ErrorCode.NO_TRACK, e.errorCode)
         }
     }
 
@@ -62,12 +65,13 @@ class TrailBuilderTest {
         assertNotNull(gpx)
 
         try {
-            val trail = TrailBuilder
+            TrailBuilder()
                 .withGpx(gpx)
                 .build()
+            assertEquals("TRUE", "FALSE")
         }
-        catch(e: TrailBuilder.TrailBuildTooManyTracksException){
-            assertEquals("Gpx with more than one track are not supported.", e.message)
+        catch(e: TrailBuildException){
+            assertEquals(TrailBuildException.ErrorCode.TOO_MANY_TRACKS, e.errorCode)
         }
     }
 }

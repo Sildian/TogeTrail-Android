@@ -14,7 +14,7 @@ import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.trail.infoEdit.TrailInfoEditActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
-import com.sildian.apps.togetrail.trail.model.support.TrailBuilder
+import com.sildian.apps.togetrail.trail.model.support.TrailBuildException
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
 import io.ticofab.androidgpxparser.parser.GPXParser
 import kotlinx.android.synthetic.main.activity_trail.*
@@ -176,21 +176,22 @@ class TrailActivity : BaseActivity() {
                     R.string.message_file_failure_gpx_other_reason
                 ).show()
             }
-            catch(e: TrailBuilder.TrailBuildNoTrackException){
+            catch(e: TrailBuildException) {
                 e.printStackTrace()
-                DialogHelper.createInfoDialog(
-                    this,
-                    R.string.message_file_failure,
-                    R.string.message_file_failure_gpx_no_track
-                ).show()
-            }
-            catch(e: TrailBuilder.TrailBuildTooManyTracksException){
-                e.printStackTrace()
-                DialogHelper.createInfoDialog(
-                    this,
-                    R.string.message_file_failure,
-                    R.string.message_file_failure_gpx_too_many_tracks
-                ).show()
+                when (e.errorCode) {
+                    TrailBuildException.ErrorCode.NO_TRACK ->
+                        DialogHelper.createInfoDialog(
+                            this,
+                            R.string.message_file_failure,
+                            R.string.message_file_failure_gpx_no_track
+                        ).show()
+                    TrailBuildException.ErrorCode.TOO_MANY_TRACKS ->
+                        DialogHelper.createInfoDialog(
+                            this,
+                            R.string.message_file_failure,
+                            R.string.message_file_failure_gpx_too_many_tracks
+                        ).show()
+                }
             }
         }
         else{

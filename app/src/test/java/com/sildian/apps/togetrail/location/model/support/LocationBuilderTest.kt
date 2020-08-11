@@ -96,7 +96,7 @@ class LocationBuilderTest {
 
     @Test
     fun given_place1_when_buildWithPlace_then_checkResult() {
-        val location=LocationBuilder
+        val location=LocationBuilder()
             .withPlace(this.place1)
             .build()
         assertEquals("FR", location.country?.code)
@@ -106,7 +106,7 @@ class LocationBuilderTest {
 
     @Test
     fun given_place2_when_buildWithPlace_then_checkResult() {
-        val location=LocationBuilder
+        val location=LocationBuilder()
             .withPlace(this.place2)
             .build()
         assertEquals("FR", location.country?.code)
@@ -116,7 +116,7 @@ class LocationBuilderTest {
 
     @Test
     fun given_place3_when_buildWithPlace_then_checkResult() {
-        val location=LocationBuilder
+        val location=LocationBuilder()
             .withPlace(this.place3)
             .build()
         assertEquals("FR", location.country?.code)
@@ -126,7 +126,7 @@ class LocationBuilderTest {
 
     @Test
     fun given_place4_when_buildWithPlace_then_checkResult() {
-        val location=LocationBuilder
+        val location=LocationBuilder()
             .withPlace(this.place4)
             .build()
         assertEquals("FR", location.country?.code)

@@ -10,28 +10,7 @@ import io.ticofab.androidgpxparser.parser.domain.Gpx
  * Provides with functions allowing to build a Trail
  ************************************************************************************************/
 
-object TrailBuilder {
-
-    /******************************Exceptions messages*******************************************/
-
-    private const val EXCEPTION_MESSAGE_BUILD_GPX_NO_TRACK="No track is available in the gpx."
-    private const val EXCEPTION_MESSAGE_BUILD_GPX_TOO_MANY_TRACKS="Gpx with more than one track are not supported."
-
-    /***********************************Exceptions***********************************************/
-
-    /**
-     * This exception is raised when no track is available while trying to build a Trail
-     * @param message : the exception message
-     */
-
-    class TrailBuildNoTrackException(message:String):Exception(message)
-
-    /**
-     * This exception is raised when too many tracks exist while trying to build a Trail
-     * @param message : the exception message
-     */
-
-    class TrailBuildTooManyTracksException(message:String):Exception(message)
+class TrailBuilder {
 
     /**********************************Trail fields**********************************************/
 
@@ -59,27 +38,25 @@ object TrailBuilder {
      * Uses a Gpx to build a trail
      * @param gpx : the gpx
      * @return an instance of TrailBuilder
+     * @throws TrailBuildException when the provided gpx is invalid
      */
 
+    @Throws(TrailBuildException::class)
     fun withGpx(gpx:Gpx): TrailBuilder {
 
-        /*If no track is available in the gpx, raises a TrailBuildNoTrackException*/
+        /*If no track is available in the gpx, raises an exception*/
 
         if (gpx.tracks.isNullOrEmpty()
             || gpx.tracks[0].trackSegments.isNullOrEmpty()
-            || gpx.tracks[0].trackSegments.isNullOrEmpty()
+            || gpx.tracks[0].trackSegments[0].trackPoints.isNullOrEmpty()
         ) {
-            throw TrailBuildNoTrackException(
-                EXCEPTION_MESSAGE_BUILD_GPX_NO_TRACK
-            )
+            throw TrailBuildException(TrailBuildException.ErrorCode.NO_TRACK)
         }
 
-        /*If more than 1 track are available in the fpx, raises a TrailBuildTooManyTracksException*/
+        /*If more than 1 track are available in the fpx, raises an exception*/
 
         if(gpx.tracks.size>1){
-            throw TrailBuildTooManyTracksException(
-                EXCEPTION_MESSAGE_BUILD_GPX_TOO_MANY_TRACKS
-            )
+            throw TrailBuildException(TrailBuildException.ErrorCode.TOO_MANY_TRACKS)
         }
 
         /*Name, source and description are populated by the metadata or by the track.

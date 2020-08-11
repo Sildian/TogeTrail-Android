@@ -13,7 +13,7 @@ class HikerBuilderTest{
         Mockito.`when`(firebaseUser.uid).thenReturn("USERTOTO")
         Mockito.`when`(firebaseUser.email).thenReturn("toto@toto.com")
         Mockito.`when`(firebaseUser.displayName).thenReturn("Toto")
-        val hiker=HikerBuilder
+        val hiker=HikerBuilder()
             .withFirebaseUser(firebaseUser)
             .build()
         assertEquals("USERTOTO", hiker.id)

@@ -162,7 +162,7 @@ class LocationSearchActivity : BaseActivity(), LocationPredictionViewHolder.OnLo
 
         this.placesClient.fetchPlace(request)
             .addOnSuccessListener { response ->
-                val location=LocationBuilder
+                val location=LocationBuilder()
                     .withPlace(response.place)
                     .build()
                 finishOk(location)

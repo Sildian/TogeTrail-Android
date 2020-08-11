@@ -10,12 +10,14 @@ import java.util.*
  * Provides with functions allowing to build a Location
  ************************************************************************************************/
 
-object LocationBuilder {
+class LocationBuilder {
 
     /*******************Address components types (matching Google Places API)********************/
 
-    private const val ADDRESS_COMPONENT_COUNTRY="country"
-    private const val ADDRESS_COMPONENT_REGION="administrative_area_level_1"
+    companion object {
+        private const val ADDRESS_COMPONENT_COUNTRY = "country"
+        private const val ADDRESS_COMPONENT_REGION = "administrative_area_level_1"
+    }
 
     /*******************************Location fields**********************************************/
 

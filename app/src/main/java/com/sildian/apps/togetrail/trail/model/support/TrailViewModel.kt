@@ -52,7 +52,7 @@ class TrailViewModel:BaseObservableViewModel() {
     /**Initializes a new Trail with default data**/
 
     fun initNewTrail(){
-        this.trail= TrailBuilder
+        this.trail= TrailBuilder()
             .withDefault()
             .build()
         notifyDataChanged()
@@ -64,7 +64,7 @@ class TrailViewModel:BaseObservableViewModel() {
      */
 
     fun initNewTrail(gpx:Gpx){
-        this.trail= TrailBuilder
+        this.trail= TrailBuilder()
             .withGpx(gpx)
             .build()
         notifyDataChanged()

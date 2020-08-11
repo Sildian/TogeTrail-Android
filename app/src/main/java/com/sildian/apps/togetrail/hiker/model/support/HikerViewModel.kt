@@ -182,7 +182,7 @@ class HikerViewModel : BaseObservableViewModel() {
                     /*If the hiker is null, then creates a new Hiker in the database*/
 
                     if (hiker == null) {
-                        hiker = HikerBuilder
+                        hiker = HikerBuilder()
                             .withFirebaseUser(user)
                             .build()
                         launch { HikerRepository.updateHiker(hiker!!) }.join()
