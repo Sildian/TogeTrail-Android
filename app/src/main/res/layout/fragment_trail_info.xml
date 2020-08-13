@@ -222,7 +222,22 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/fragment_trail_info_layout_loop"
+                        android:id="@+id/fragment_trail_info_layout_chart_elevation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/components_margin_small"
+                        android:orientation="vertical"
+                        android:background="@drawable/shape_corners_round_color_white">
+
+                        <com.github.mikephil.charting.charts.LineChart
+                            android:id="@+id/fragment_trail_info_chart_elevation"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/image_size_large"
+                            android:layout_margin="@dimen/components_margin_small"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/components_margin_small"

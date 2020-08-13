@@ -7,6 +7,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.databinding.FragmentTrailInfoBinding
 import com.sildian.apps.togetrail.trail.map.BaseTrailMapFragment
+import com.sildian.apps.togetrail.trail.model.support.ElevationChartGenerator
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
 import kotlinx.android.synthetic.main.fragment_trail_info.view.*
 
@@ -27,6 +28,12 @@ class TrailInfoFragment(
     /**********************************UI component**********************************************/
 
     private val photoImageView by lazy {layout.fragment_trail_info_image_view_photo}
+    private val elevationChartLayout by lazy {layout.fragment_trail_info_layout_chart_elevation}
+    private val elevationChart by lazy { layout.fragment_trail_info_chart_elevation }
+
+    /**********************************Support items*********************************************/
+
+    private lateinit var elevationChartGenerator: ElevationChartGenerator
 
     /************************************Life cycle**********************************************/
 
@@ -46,6 +53,7 @@ class TrailInfoFragment(
                 refreshUI()
             }
         })
+        this.elevationChartGenerator = ElevationChartGenerator(context!!, this.trailViewModel?.trail)
     }
 
     /***********************************UI monitoring********************************************/
@@ -59,11 +67,22 @@ class TrailInfoFragment(
     override fun getBottomViewId(): Int = R.id.fragment_trail_info_layout_info
 
     override fun initializeUI() {
-        updatePhoto()
+        initializeElevationChart()
+        refreshUI()
     }
 
     override fun refreshUI() {
         updatePhoto()
+        updateElevationChart()
+    }
+
+    private fun initializeElevationChart() {
+        this.elevationChart.setTouchEnabled(false)
+        this.elevationChart.description = null
+        this.elevationChart.legend.isEnabled = false
+        this.elevationChart.xAxis.setDrawLabels(false)
+        this.elevationChart.axisRight.setDrawLabels(false)
+        this.elevationChart.axisLeft.valueFormatter = ElevationChartGenerator.ElevationValueFormatter(context!!)
     }
 
     private fun updatePhoto(){
@@ -72,6 +91,17 @@ class TrailInfoFragment(
             .apply(RequestOptions.centerCropTransform())
             .placeholder(R.drawable.ic_trail_black)
             .into(this.photoImageView)
+    }
+
+    private fun updateElevationChart() {
+        this.elevationChartGenerator.generateChartData()
+        if (this.elevationChartGenerator.chartData != null) {
+            this.elevationChartLayout.visibility = View.VISIBLE
+            this.elevationChart.data = this.elevationChartGenerator.chartData
+            this.elevationChart.invalidate()
+        } else {
+            this.elevationChartLayout.visibility = View.GONE
+        }
     }
 
     fun onSeeButtonClick(view:View) {
