@@ -1,12 +1,26 @@
 package com.sildian.apps.togetrail.trail.model.support
 
 import android.content.Context
-import androidx.test.core.app.ApplicationProvider
 import io.ticofab.androidgpxparser.parser.GPXParser
-import org.junit.Test
 import org.junit.Assert.*
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
+import org.robolectric.annotation.Config
 
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [28])
 class TrailBuilderTest {
+
+    private lateinit var context: Context
+
+    @Before
+    @Suppress("DEPRECATION")
+    fun setup() {
+        this.context = RuntimeEnvironment.application.applicationContext
+    }
 
     @Test
     fun given_name_when_buildFromDefault_then_checkResultIsOk(){
@@ -18,9 +32,8 @@ class TrailBuilderTest {
 
     @Test
     fun given_gpxSampleTest1_when_buildFromGpx_then_checkResultOk() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        val gpxParser=GPXParser()
-        val inputStream = context.assets.open("gpx_sample_test_1")
+        val gpxParser= GPXParser()
+        val inputStream = this.context.assets.open("gpx_sample_test_1")
         val gpx = gpxParser.parse(inputStream)
         assertNotNull(gpx)
 
@@ -29,7 +42,7 @@ class TrailBuilderTest {
             .build()
         assertEquals("Test", trail.name)
         assertEquals("Sildian apps", trail.source)
-        assertTrue(trail.trailTrack.trailPoints.size>0)
+        assertTrue(trail.trailTrack.trailPoints.size > 0)
         assertEquals(44.713993, trail.position?.latitude)
         assertEquals(4.330099, trail.position?.longitude)
         assertEquals(642, trail.trailTrack.trailPoints[0].elevation)
@@ -39,9 +52,8 @@ class TrailBuilderTest {
 
     @Test
     fun given_gpxSampleTest2_when_buildFromGpx_then_checkNoTrackExceptionIsRaised() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        val gpxParser=GPXParser()
-        val inputStream = context.assets.open("gpx_sample_test_2")
+        val gpxParser= GPXParser()
+        val inputStream = this.context.assets.open("gpx_sample_test_2")
         val gpx = gpxParser.parse(inputStream)
         assertNotNull(gpx)
 
@@ -58,9 +70,8 @@ class TrailBuilderTest {
 
     @Test
     fun given_gpxSampleTest3_when_buildFromGpx_then_checkTooManyTracksExceptionIsRaised() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        val gpxParser=GPXParser()
-        val inputStream = context.assets.open("gpx_sample_test_3")
+        val gpxParser= GPXParser()
+        val inputStream = this.context.assets.open("gpx_sample_test_3")
         val gpx = gpxParser.parse(inputStream)
         assertNotNull(gpx)
 
