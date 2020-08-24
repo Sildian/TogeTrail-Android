@@ -4,11 +4,11 @@ import android.view.View
 import androidx.databinding.Observable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.snackbar.Snackbar
 import com.sildian.apps.circularsliderlibrary.CircularSlider
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseImagePickerFragment
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
+import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.TextFieldHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.ValueFormatters
 import com.sildian.apps.togetrail.databinding.FragmentTrailPoiInfoEditBinding
@@ -79,8 +79,8 @@ class TrailPOIInfoEditFragment(private val trailViewModel: TrailViewModel?=null)
         if(checkTextFieldsAreNotEmpty()){
             return true
         }else{
-            Snackbar.make(this.messageView, R.string.message_text_fields_empty, Snackbar.LENGTH_LONG)
-                .setAnchorView(this.messageAnchorView)
+            SnackbarHelper
+                .createSimpleSnackbar(this.messageView, this.messageAnchorView, R.string.message_text_fields_empty)
                 .show()
         }
         return false

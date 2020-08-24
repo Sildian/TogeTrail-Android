@@ -26,6 +26,7 @@ class TrailMapDrawFragment(trailViewModel: TrailViewModel)
     private val actionsButtonsLayout by lazy {layout.fragment_trail_map_draw_layout_actions_buttons}
     private val removePointButton by lazy {layout.fragment_trail_map_draw_button_point_remove}
     private val addPoiButton by lazy {layout.fragment_trail_map_draw_button_poi_add}
+    private val messageView by lazy { layout.fragment_trail_map_draw_view_message }
 
     /************************************UI monitoring*******************************************/
 
@@ -50,6 +51,10 @@ class TrailMapDrawFragment(trailViewModel: TrailViewModel)
         this.removePointButton.isEnabled=false
         this.addPoiButton.isEnabled=false
     }
+
+    override fun getMessageView(): View = this.messageView
+
+    override fun getMessageAnchorView(): View? = null
 
     override fun initializeUI() {
         initializeSeeInfoButton()

@@ -10,7 +10,7 @@ import com.sildian.apps.togetrail.R
 import kotlinx.android.synthetic.main.dialog_request_info.view.*
 
 /*************************************************************************************************
- * Provides with some functions allowing to create dialogs and messages
+ * Provides with some functions allowing to create dialogs
  ************************************************************************************************/
 
 object DialogHelper {

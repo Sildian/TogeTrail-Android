@@ -1,5 +1,6 @@
 package com.sildian.apps.togetrail.trail.map
 
+import android.view.View
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
@@ -20,6 +21,7 @@ class TrailMapDetailFragment(trailViewModel: TrailViewModel, isEditable:Boolean=
     /************************************UI components*******************************************/
 
     private val seeInfoButton by lazy {layout.fragment_trail_map_detail_button_info_see}
+    private val messageView by lazy { layout.fragment_trail_map_detail_view_message }
 
     /************************************UI monitoring*******************************************/
 
@@ -40,6 +42,10 @@ class TrailMapDetailFragment(trailViewModel: TrailViewModel, isEditable:Boolean=
     override fun disableUI() {
         this.map?.uiSettings?.setAllGesturesEnabled(false)
     }
+
+    override fun getMessageView(): View = this.messageView
+
+    override fun getMessageAnchorView(): View? = null
 
     override fun initializeUI() {
         initializeSeeInfoButton()

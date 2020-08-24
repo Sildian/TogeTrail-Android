@@ -4,7 +4,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.Observable
 import androidx.lifecycle.ViewModelProviders
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.sildian.apps.togetrail.R
@@ -13,6 +12,7 @@ import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.PickerHelper
+import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.TextFieldHelper
 import com.sildian.apps.togetrail.databinding.FragmentEventEditBinding
 import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
@@ -114,14 +114,20 @@ class EventEditFragment(private val eventId: String?=null) :
                 if(checkTrailsAreAttached()){
                     return true
                 }else{
-                    Snackbar.make(this.messageView, R.string.message_event_no_trail_attached, Snackbar.LENGTH_LONG).show()
+                    SnackbarHelper
+                        .createSimpleSnackbar(this.messageView, null, R.string.message_event_no_trail_attached)
+                        .show()
                 }
             }else{
-                Snackbar.make(this.messageView, R.string.message_event_dates_issue, Snackbar.LENGTH_LONG).show()
+                SnackbarHelper
+                    .createSimpleSnackbar(this.messageView, null, R.string.message_event_dates_issue)
+                    .show()
             }
         }
         else{
-            Snackbar.make(this.messageView, R.string.message_text_fields_empty, Snackbar.LENGTH_LONG).show()
+            SnackbarHelper
+                .createSimpleSnackbar(this.messageView, null, R.string.message_text_fields_empty)
+                .show()
         }
         return false
     }

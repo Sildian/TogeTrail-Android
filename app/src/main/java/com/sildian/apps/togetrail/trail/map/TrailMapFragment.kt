@@ -62,6 +62,7 @@ class TrailMapFragment :
 
     private val searchButton by lazy {layout.fragment_trail_map_button_search}
     private val filterToggle by lazy {layout.fragment_trail_map_toggle_filter}
+    private val messageView by lazy { layout.fragment_trail_map_view_message }
 
     /**********************************Data monitoring*******************************************/
 
@@ -118,6 +119,10 @@ class TrailMapFragment :
         this.searchButton.isEnabled=false
         this.filterToggle.isEnabled=false
     }
+
+    override fun getMessageView(): View = this.messageView
+
+    override fun getMessageAnchorView(): View? = null
 
     override fun initializeUI() {
         initializeSearchButton()

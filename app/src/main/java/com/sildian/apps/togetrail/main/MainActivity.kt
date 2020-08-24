@@ -3,7 +3,6 @@ package com.sildian.apps.togetrail.main
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -26,7 +25,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
-import com.google.android.material.snackbar.Snackbar
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
@@ -34,6 +32,7 @@ import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.common.utils.NumberUtilities
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
+import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.event.detail.EventActivity
 import com.sildian.apps.togetrail.event.edit.EventEditActivity
 import com.sildian.apps.togetrail.event.list.EventsListFragment
@@ -163,46 +162,25 @@ class MainActivity :
             /*Navigation View*/
 
             R.id.menu_user -> {
+                this.drawerLayout.closeDrawer(GravityCompat.START)
                 when (item.itemId) {
                     R.id.menu_user_profile -> {
                         if(AuthFirebaseHelper.getCurrentUser()!=null){
                             startProfileActivity()
                         }else{
-                            DialogHelper.createYesNoDialog(
-                                this,
-                                R.string.message_user_not_connected_title,
-                                R.string.message_user_not_connected_message,
-                                DialogInterface.OnClickListener { dialog, which ->
-                                    if(which==DialogInterface.BUTTON_POSITIVE){
-                                        startLogin()
-                                    }
-                                }
-                            ).show()
+                            showAccountNecessaryMessage()
                         }
                     }
                     R.id.menu_user_settings ->
                         if(AuthFirebaseHelper.getCurrentUser()!=null){
                             startProfileEditActivity()
                         }else{
-                            DialogHelper.createYesNoDialog(
-                                this,
-                                R.string.message_user_not_connected_title,
-                                R.string.message_user_not_connected_message,
-                                DialogInterface.OnClickListener { dialog, which ->
-                                    if(which==DialogInterface.BUTTON_POSITIVE){
-                                        startLogin()
-                                    }
-                                }
-                            ).show()
+                            showAccountNecessaryMessage()
                         }
-                    R.id.menu_user_trails -> {
-                        this.drawerLayout.closeDrawer(GravityCompat.START)
+                    R.id.menu_user_trails ->
                         this.bottomNavigationView.selectedItemId = R.id.menu_main_trails
-                    }
-                    R.id.menu_user_events -> {
-                        this.drawerLayout.closeDrawer(GravityCompat.START)
+                    R.id.menu_user_events ->
                         this.bottomNavigationView.selectedItemId = R.id.menu_main_events
-                    }
                     R.id.menu_user_login ->
                         startLogin()
                 }
@@ -217,18 +195,20 @@ class MainActivity :
     @Suppress("UNUSED_ANONYMOUS_PARAMETER")
     private fun onPopupMenuItemClick(item: MenuItem?): Boolean {
 
-        /*Allows the user to use these features only if he is connected*/
-
-        if(AuthFirebaseHelper.getCurrentUser()!=null) {
-
-            when (item?.groupId) {
-                R.id.menu_add -> {
-                    when (item.itemId) {
-                        R.id.menu_add_event ->
+        when (item?.groupId) {
+            R.id.menu_add -> {
+                when (item.itemId) {
+                    R.id.menu_add_event -> {
+                        if (AuthFirebaseHelper.getCurrentUser() != null) {
                             startEventEditActivity()
+                        } else {
+                            showAccountNecessaryMessage()
+                        }
                     }
                 }
-                R.id.menu_add_new_trail -> {
+            }
+            R.id.menu_add_new_trail -> {
+                if (AuthFirebaseHelper.getCurrentUser() != null) {
                     when (item.itemId) {
                         R.id.menu_add_trail_load_gpx ->
                             startTrailActivity(TrailActivity.ACTION_TRAIL_CREATE_FROM_GPX)
@@ -237,25 +217,12 @@ class MainActivity :
                         R.id.menu_add_trail_record ->
                             startTrailActivity(TrailActivity.ACTION_TRAIL_RECORD)
                     }
+                } else {
+                    showAccountNecessaryMessage()
                 }
             }
-            return true
-
-            /*Else, asks if he wants to log in*/
-
-        }else{
-            DialogHelper.createYesNoDialog(
-                this,
-                R.string.message_user_not_connected_title,
-                R.string.message_user_not_connected_message,
-                DialogInterface.OnClickListener { dialog, which ->
-                    if (which==DialogInterface.BUTTON_POSITIVE){
-                        startLogin()
-                    }
-                }
-            ).show()
-            return false
         }
+        return true
     }
 
     /**Shows the add menu options within a PopupMenu**/
@@ -313,11 +280,20 @@ class MainActivity :
         }
     }
 
-    //TODO Move this?
+    /**Shows a message when a query result is empty**/
 
     fun showEmptyMessage(){
-        Snackbar.make(this.messageView, R.string.message_query_result_empty, Snackbar.LENGTH_LONG)
-            .setAnchorView(this.addButton)
+        SnackbarHelper
+            .createSimpleSnackbar(this.messageView, this.addButton, R.string.message_query_result_empty)
+            .show()
+    }
+
+    /**Shows a message when an action requires an account**/
+
+    fun showAccountNecessaryMessage() {
+        SnackbarHelper
+            .createSnackbarWithAction(this.messageView, this.addButton, R.string.message_account_necessary,
+                R.string.button_common_sign_in, this::startLogin)
             .show()
     }
 
@@ -470,7 +446,6 @@ class MainActivity :
         }else{
             this.hikerViewModel.logoutUser()
         }
-        this.drawerLayout.closeDrawers()
     }
 
     /******************************Fragments monitoring******************************************/

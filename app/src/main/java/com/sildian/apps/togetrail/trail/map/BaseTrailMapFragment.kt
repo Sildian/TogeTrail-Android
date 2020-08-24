@@ -22,6 +22,7 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.MapMarkersUtilities
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
+import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.trail.info.BaseInfoFragment
 import com.sildian.apps.togetrail.trail.info.TrailInfoFragment
 import com.sildian.apps.togetrail.trail.info.TrailPOIInfoFragment
@@ -137,6 +138,7 @@ abstract class BaseTrailMapFragment (
     }
 
     override fun saveData(){
+        hideInfoBottomSheet()
         if(this.checkDataIsValid()) {
             this.trailViewModel?.trail?.autoPopulatePosition()
             this.baseActivity?.showProgressDialog()
@@ -149,21 +151,13 @@ abstract class BaseTrailMapFragment (
             if (this.trailViewModel?.trail!!.isDataValid()) {
                 for(i in this.trailViewModel?.trail!!.trailTrack.trailPointsOfInterest.indices){
                     if(!this.trailViewModel?.trail!!.trailTrack.trailPointsOfInterest[i].isDataValid()) {
-                        DialogHelper.createInfoDialog(
-                            context!!,
-                            R.string.message_trail_info_empty_title,
-                            R.string.message_trail_info_empty_message
-                        ).show()
+                        showTrailPOIMissingInfoMessage(i)
                         return false
                     }
                 }
                 return true
             }else{
-                DialogHelper.createInfoDialog(
-                    context!!,
-                    R.string.message_trail_info_empty_title,
-                    R.string.message_trail_info_empty_message
-                ).show()
+                showTrailMissingInfoMessage()
             }
         }
         return false
@@ -181,6 +175,10 @@ abstract class BaseTrailMapFragment (
 
     abstract fun disableUI()
 
+    abstract fun getMessageView(): View
+
+    abstract fun getMessageAnchorView(): View?
+
     override fun refreshUI() {
         this.map?.clear()
         showTrailTrackOnMap()
@@ -194,6 +192,22 @@ abstract class BaseTrailMapFragment (
         this.infoBottomSheet.peekHeight=peekHeight
         this.infoBottomSheet.addBottomSheetCallback(InfoBottomSheetCallback())
         hideInfoBottomSheet()
+    }
+
+    private fun showTrailMissingInfoMessage() {
+        SnackbarHelper
+            .createSnackbarWithAction(getMessageView(), getMessageAnchorView(), R.string.message_trail_info_empty,
+                R.string.button_common_inform, this::editTrailInfo)
+            .show()
+    }
+
+    private fun showTrailPOIMissingInfoMessage(poiPosition: Int) {
+        SnackbarHelper
+            .createSnackbarWithAction(getMessageView(), getMessageAnchorView(), R.string.message_trail_poi_info_empty,
+                R.string.button_common_inform) {
+                    editTrailPoiInfo(poiPosition)
+            }
+            .show()
     }
 
     /***********************************Map monitoring*******************************************/

@@ -10,9 +10,9 @@ import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
-import com.google.android.material.snackbar.Snackbar
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.GeoUtilities
+import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
@@ -84,6 +84,10 @@ class TrailMapRecordFragment(trailViewModel: TrailViewModel)
         this.addPoiButton.isEnabled=false
         this.playButton.isEnabled=false
     }
+
+    override fun getMessageView(): View = this.messageView
+
+    override fun getMessageAnchorView(): View? = this.playButton
 
     override fun initializeUI() {
         initializeSeeInfoButton()
@@ -245,23 +249,15 @@ class TrailMapRecordFragment(trailViewModel: TrailViewModel)
                         }
                     } else {
                         Log.w(TAG, "User location cannot be reached")
-                        Snackbar.make(
-                            this.messageView,
-                            R.string.message_user_location_failure,
-                            Snackbar.LENGTH_LONG
-                        )
-                            .setAnchorView(this.playButton)
+                        SnackbarHelper
+                            .createSimpleSnackbar(this.messageView, this.playButton, R.string.message_user_location_failure)
                             .show()
                     }
                 }
                 .addOnFailureListener { e ->
                     Log.w(TAG, e.message.toString())
-                    Snackbar.make(
-                        this.messageView,
-                        R.string.message_user_location_failure,
-                        Snackbar.LENGTH_LONG
-                    )
-                        .setAnchorView(this.playButton)
+                    SnackbarHelper
+                        .createSimpleSnackbar(this.messageView, this.playButton, R.string.message_user_location_failure)
                         .show()
                 }
         }
