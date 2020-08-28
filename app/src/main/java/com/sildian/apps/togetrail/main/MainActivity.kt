@@ -126,6 +126,11 @@ class MainActivity :
         requestLocationPermission()
     }
 
+    override fun onDestroy() {
+        Places.deinitialize()
+        super.onDestroy()
+    }
+
     /************************************Navigation control**************************************/
 
     override fun onBackPressed() {
