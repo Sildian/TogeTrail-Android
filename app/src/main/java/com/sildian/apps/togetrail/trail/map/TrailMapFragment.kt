@@ -12,6 +12,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
@@ -216,6 +217,7 @@ class TrailMapFragment :
     }
 
     override fun onMarkerClick(marker: Marker?): Boolean {
+        this.map?.animateCamera(CameraUpdateFactory.newLatLng(marker?.position))
         return when(marker?.tag){
             is Trail -> {
                 marker.showInfoWindow()

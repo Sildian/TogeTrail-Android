@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.databinding.Observable
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -252,6 +253,21 @@ abstract class BaseTrailMapFragment (
 
     private fun initializeUserLocation(){
         this.userLocation=LocationServices.getFusedLocationProviderClient(context!!)
+    }
+
+    protected fun zoomToUserLocation() {
+        if(Build.VERSION.SDK_INT<23 &&
+            checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            this.userLocation.lastLocation
+                .addOnSuccessListener { userLocation ->
+                    this.map?.animateCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            LatLng(userLocation.latitude, userLocation.longitude), 15f))
+                }
+                .addOnFailureListener { e ->
+                    Log.w(TAG, e.message.toString())
+                }
+        }
     }
 
     /***********************************Trail monitoring*****************************************/

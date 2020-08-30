@@ -1,8 +1,11 @@
 package com.sildian.apps.togetrail.trail.map
 
+import android.view.View
+import android.view.ViewGroup
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
@@ -38,6 +41,50 @@ abstract class BaseTrailMapGenerateFragment(trailViewModel: TrailViewModel) :
                 showRequestTrailNameDialog()
             }
         }.show()
+    }
+
+    /***********************************Map monitoring*******************************************/
+
+    override fun onMapReadyActionsFinished() {
+        this.map?.setInfoWindowAdapter(this)
+        this.map?.setOnInfoWindowClickListener(this)
+        zoomToUserLocation()
+    }
+
+    override fun onMarkerClick(marker: Marker?): Boolean {
+
+        /*Shows an info nested fragment depending on the tag of the marker*/
+
+        return when(marker?.tag){
+            is TrailPointOfInterest ->{
+                val trailPoiPosition=marker.snippet.toInt()
+                showTrailPOIInfoFragment(trailPoiPosition)
+                marker.showInfoWindow()
+                true
+            }
+            is TrailPoint ->{
+                showTrailInfoFragment()
+                true
+            }
+            else-> {
+                false
+            }
+        }
+    }
+
+    override fun getInfoWindow(marker: Marker?): View? {
+        return layoutInflater.inflate(R.layout.map_info_window_poi_remove, this.layout as ViewGroup, false)
+    }
+
+    override fun getInfoContents(marker: Marker?): View? {
+        return null
+    }
+
+    override fun onInfoWindowClick(marker: Marker?) {
+        if(marker?.tag is TrailPointOfInterest) {
+            val trailPointOfInterest=marker.tag as TrailPointOfInterest
+            removeTrailPointOfInterest(trailPointOfInterest)
+        }
     }
 
     /***********************************Trail monitoring*****************************************/

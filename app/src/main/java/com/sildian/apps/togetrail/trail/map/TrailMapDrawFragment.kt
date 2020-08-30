@@ -1,15 +1,12 @@
 package com.sildian.apps.togetrail.trail.map
 
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
-import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
 import kotlinx.android.synthetic.main.fragment_trail_map_draw.view.*
 
@@ -108,60 +105,17 @@ class TrailMapDrawFragment(trailViewModel: TrailViewModel)
 
     /***********************************Map monitoring*******************************************/
 
-    override fun onMapReadyActionsFinished() {
-        this.map?.setInfoWindowAdapter(this)
-        this.map?.setOnInfoWindowClickListener(this)
-    }
-
     override fun onMapClick(point: LatLng?) {
-        if(this.infoBottomSheet.state!=BottomSheetBehavior.STATE_HIDDEN) {
+        if (this.infoBottomSheet.state != BottomSheetBehavior.STATE_HIDDEN) {
             hideInfoBottomSheet()
         }
-        else {
-            if (point != null) {
-                val trailPoint=
-                    TrailPoint(
-                        point.latitude,
-                        point.longitude
-                    )
-                addTrailPoint(trailPoint)
-            }
-        }
-    }
-
-    override fun onMarkerClick(marker: Marker?): Boolean {
-
-        /*Shows an info nested fragment depending on the tag of the marker*/
-
-        return when(marker?.tag){
-            is TrailPointOfInterest ->{
-                val trailPoiPosition=marker.snippet.toInt()
-                showTrailPOIInfoFragment(trailPoiPosition)
-                marker.showInfoWindow()
-                true
-            }
-            is TrailPoint ->{
-                showTrailInfoFragment()
-                true
-            }
-            else-> {
-                false
-            }
-        }
-    }
-
-    override fun getInfoWindow(marker: Marker?): View? {
-        return layoutInflater.inflate(R.layout.map_info_window_poi_remove, this.layout as ViewGroup, false)
-    }
-
-    override fun getInfoContents(marker: Marker?): View? {
-        return null
-    }
-
-    override fun onInfoWindowClick(marker: Marker?) {
-        if(marker?.tag is TrailPointOfInterest) {
-            val trailPointOfInterest=marker.tag as TrailPointOfInterest
-            removeTrailPointOfInterest(trailPointOfInterest)
+        if (point != null) {
+            val trailPoint =
+                TrailPoint(
+                    point.latitude,
+                    point.longitude
+                )
+            addTrailPoint(trailPoint)
         }
     }
 }

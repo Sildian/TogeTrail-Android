@@ -5,18 +5,16 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.GeoUtilities
 import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
-import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
 import kotlinx.android.synthetic.main.fragment_trail_map_record.view.*
+import java.util.*
 import java.util.concurrent.Executors
 
 /*************************************************************************************************
@@ -36,10 +34,10 @@ class TrailMapRecordFragment(trailViewModel: TrailViewModel)
         /**Record data**/
 
         //The time interval between each point record (in milliseconds)
-        private const val VALUE_RECORD_TIME_INTERVAL=60000
+        private const val VALUE_RECORD_TIME_INTERVAL = 5000
 
         //The minimum required distance between two points to check before register (in meters)
-        private const val VALUE_RECORD_MIN_DISTANCE=100
+        private const val VALUE_RECORD_MIN_DISTANCE = 2
     }
 
     /***************************************Data*************************************************/
@@ -56,9 +54,9 @@ class TrailMapRecordFragment(trailViewModel: TrailViewModel)
 
     /************************************Life cycle**********************************************/
 
-    override fun onDestroy() {
+    override fun onDestroyView() {
         this.isRecording=false
-        super.onDestroy()
+        super.onDestroyView()
     }
 
     /************************************UI monitoring*******************************************/
@@ -130,49 +128,8 @@ class TrailMapRecordFragment(trailViewModel: TrailViewModel)
 
     /***********************************Map monitoring*******************************************/
 
-    override fun onMapReadyActionsFinished() {
-        this.map?.setInfoWindowAdapter(this)
-        this.map?.setOnInfoWindowClickListener(this)
-    }
-
     override fun onMapClick(point: LatLng?) {
         hideInfoBottomSheet()
-    }
-
-    override fun onMarkerClick(marker: Marker?): Boolean {
-
-        /*Shows an info nested fragment depending on the tag of the marker*/
-
-        return when(marker?.tag){
-            is TrailPointOfInterest ->{
-                val trailPoiPosition=marker.snippet.toInt()
-                showTrailPOIInfoFragment(trailPoiPosition)
-                marker.showInfoWindow()
-                true
-            }
-            is TrailPoint ->{
-                showTrailInfoFragment()
-                true
-            }
-            else-> {
-                false
-            }
-        }
-    }
-
-    override fun getInfoWindow(marker: Marker?): View? {
-        return layoutInflater.inflate(R.layout.map_info_window_poi_remove, this.layout as ViewGroup, false)
-    }
-
-    override fun getInfoContents(marker: Marker?): View? {
-        return null
-    }
-
-    override fun onInfoWindowClick(marker: Marker?) {
-        if(marker?.tag is TrailPointOfInterest) {
-            val trailPointOfInterest=marker.tag as TrailPointOfInterest
-            removeTrailPointOfInterest(trailPointOfInterest)
-        }
     }
 
     /*************************************Record actions*****************************************/
@@ -233,7 +190,8 @@ class TrailMapRecordFragment(trailViewModel: TrailViewModel)
                             TrailPoint(
                                 userLocation.latitude,
                                 userLocation.longitude,
-                                userLocation.altitude.toInt()
+                                userLocation.altitude.toInt(),
+                                Date()
                             )
 
                         /*If minimum distance to previous point is fulfilled, adds the new trailPoint*/
