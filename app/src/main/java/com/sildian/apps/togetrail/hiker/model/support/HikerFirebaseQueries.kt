@@ -56,6 +56,15 @@ object HikerFirebaseQueries {
         getCollection().document(hiker.id).delete()
 
     /**
+     * Gets all history items
+     * @param hikerId : the id of the hiker
+     * @return a query
+     */
+
+    fun getHistoryItems(hikerId: String): Query =
+        getHistoryItemSubCollection(hikerId)
+
+    /**
      * Gets the last history items
      * @param hikerId : the id of the hiker
      * @return a query

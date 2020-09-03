@@ -104,7 +104,13 @@ class HikerViewModel : BaseObservableViewModel() {
             try{
                 if(hiker!=null){
                     imagePathToDelete?.let { url ->
-                        launch { StorageRepository.deleteImage(url) }.join()
+                        launch {
+                            try {
+                                StorageRepository.deleteImage(url)
+                            } catch (e:Exception) {
+                                Log.w(TAG, "Failed to delete photo at url $url : ${e.message}")
+                            }
+                        }.join()
                     }
                     imagePathToUpload?.let { uri ->
                         val deferredNewImageUrl=async { StorageRepository.uploadImage(uri) }
@@ -258,7 +264,13 @@ class HikerViewModel : BaseObservableViewModel() {
             try{
                 if(hiker!=null){
                     hiker?.photoUrl?.let { photoUrl ->
-                        launch { StorageRepository.deleteImage(photoUrl) }.join()
+                        launch {
+                            try {
+                                StorageRepository.deleteImage(photoUrl)
+                            } catch (e: Exception) {
+                                Log.w(TAG, "Failed to delete photo at url $photoUrl : ${e.message}")
+                            }
+                        }.join()
                     }
                     launch { HikerRepository.deleteHiker(hiker!!) }.join()
                     launch { AuthRepository.deleteUserAccount() }.join()

@@ -63,7 +63,7 @@ object HikerRepository {
     }
 
     /**
-     * Deletes an hiker
+     * Deletes an hiker as well as the related history items and attended events
      * @param hiker : the hiker to delete
      */
 
@@ -71,6 +71,20 @@ object HikerRepository {
     suspend fun deleteHiker(hiker: Hiker) {
         withContext(Dispatchers.IO) {
             try {
+                val historyItems = HikerFirebaseQueries
+                    .getHistoryItems(hiker.id)
+                    .get()
+                    .await()
+                historyItems.forEach { historyItem ->
+                    HikerFirebaseQueries.deleteHistoryItem(hiker.id, historyItem.id)
+                }
+                val attendedEvents = HikerFirebaseQueries
+                    .getAttendedEvents(hiker.id)
+                    .get()
+                    .await()
+                attendedEvents.forEach { attendedEvent ->
+                    HikerFirebaseQueries.deleteAttendedEvent(hiker.id, attendedEvent.id)
+                }
                 HikerFirebaseQueries
                     .deleteHiker(hiker)
                     .await()

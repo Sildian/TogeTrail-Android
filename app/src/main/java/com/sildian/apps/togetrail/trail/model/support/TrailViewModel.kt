@@ -144,7 +144,13 @@ class TrailViewModel:BaseObservableViewModel() {
                     /*Stores or deletes the image in the cloud if necessary*/
 
                     imagePathToDelete?.let { url ->
-                        launch { StorageRepository.deleteImage(url) }.join()
+                        launch {
+                            try {
+                                StorageRepository.deleteImage(url)
+                            } catch (e: Exception) {
+                                Log.w(TAG, "Failed to delete photo at url $url : ${e.message}")
+                            }
+                        }.join()
                     }
                     imagePathToUpload?.let { uri ->
                         val deferredNewImageUrl=async { StorageRepository.uploadImage(uri) }
