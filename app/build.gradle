@@ -12,8 +12,8 @@ android {
         applicationId "com.sildian.apps.togetrail"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 1
-        versionName "0.0.1-alpha"
+        versionCode 2
+        versionName "0.0.2-alpha"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary true
