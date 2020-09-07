@@ -15,7 +15,23 @@
       },
       "oauth_client": [
         {
-          "client_id": "678240548909-pre44bhaqg12q0lam59miugto1rqaebb.apps.googleusercontent.com",
+          "client_id": "678240548909-5jvsa8tdftt9gt6n37ommbl35nt6gut8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sildian.apps.togetrail",
+            "certificate_hash": "018cbcd27047cf50bdcc58d4e0614e98542aa685"
+          }
+        },
+        {
+          "client_id": "678240548909-glc1p79eqvfr073fev586fmogimoit37.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sildian.apps.togetrail",
+            "certificate_hash": "a0dc0199ab2e2d76f51a8444e0040b0c95f9c6df"
+          }
+        },
+        {
+          "client_id": "678240548909-21guupjfca5b8eu9fes4v4c0rvmtod78.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.sildian.apps.togetrail",
