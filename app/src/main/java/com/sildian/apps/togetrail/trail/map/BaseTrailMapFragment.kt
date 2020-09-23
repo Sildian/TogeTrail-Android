@@ -260,9 +260,15 @@ abstract class BaseTrailMapFragment (
             checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             this.userLocation.lastLocation
                 .addOnSuccessListener { userLocation ->
-                    this.map?.animateCamera(
-                        CameraUpdateFactory.newLatLngZoom(
-                            LatLng(userLocation.latitude, userLocation.longitude), 15f))
+                    if (userLocation != null) {
+                        this.map?.animateCamera(
+                            CameraUpdateFactory.newLatLngZoom(
+                                LatLng(userLocation.latitude, userLocation.longitude), 15f
+                            )
+                        )
+                    } else {
+                        Log.w(TAG, "User location cannot be reached")
+                    }
                 }
                 .addOnFailureListener { e ->
                     Log.w(TAG, e.message.toString())
