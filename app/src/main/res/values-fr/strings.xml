@@ -44,6 +44,7 @@
     <string name="button_common_cancel">Annuler</string>
     <string name="button_common_sign_in">Me connecter</string>
     <string name="button_common_inform">Informer</string>
+    <string name="button_common_activate">Activer</string>
     <string name="button_common_select_photo">Selectionner une photo</string>
     <string name="button_common_take_photo">Prendre une nouvelle photo</string>
     <!-- Location -->
@@ -230,6 +231,7 @@
     <string name="message_event_dates_issue">Attention aux dates</string>
     <string name="message_event_no_trail_attached">Au moins 1 rando doit être sélectionnée</string>
     <string name="message_user_location_failure">Echec lors de la récupération de votre position</string>
+    <string name="message_device_gps_unavailable">Le GPS ne semble pas activé</string>
 
     <!-- Metrics -->
     <string name="metric_hour">h</string>

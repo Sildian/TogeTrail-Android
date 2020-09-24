@@ -45,6 +45,7 @@
     <string name="button_common_cancel">Cancel</string>
     <string name="button_common_sign_in">Sign in</string>
     <string name="button_common_inform">Inform</string>
+    <string name="button_common_activate">Activate</string>
     <string name="button_common_select_photo">Select a photo</string>
     <string name="button_common_take_photo">Take a new photo</string>
     <!-- Location -->
@@ -231,6 +232,7 @@
     <string name="message_event_dates_issue">Be careful with the dates</string>
     <string name="message_event_no_trail_attached">At least 1 trail should be attached</string>
     <string name="message_user_location_failure">Your location is unreachable</string>
+    <string name="message_device_gps_unavailable">The GPS seems deactivated</string>
 
     <!-- Metrics -->
     <string name="metric_hour">h</string>

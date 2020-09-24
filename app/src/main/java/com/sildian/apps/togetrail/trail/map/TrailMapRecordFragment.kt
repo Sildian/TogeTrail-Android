@@ -1,14 +1,17 @@
 package com.sildian.apps.togetrail.trail.map
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.model.LatLng
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.common.utils.DeviceUtilities
 import com.sildian.apps.togetrail.common.utils.GeoUtilities
 import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
@@ -205,11 +208,33 @@ class TrailMapRecordFragment(trailViewModel: TrailViewModel)
                         } else {
                             Log.d(TAG, "Point not registered, too closed to the previous point")
                         }
+
                     } else {
+
+                        /*If the user location is null, check if gps is activated and if not, propose the user to activate it*/
+
                         Log.w(TAG, "User location cannot be reached")
-                        SnackbarHelper
-                            .createSimpleSnackbar(this.messageView, this.playButton, R.string.message_user_location_failure)
-                            .show()
+                        if (DeviceUtilities.isGpsAvailable(context!!)) {
+                            SnackbarHelper
+                                .createSimpleSnackbar(
+                                    this.messageView,
+                                    this.playButton,
+                                    R.string.message_user_location_failure
+                                )
+                                .show()
+                        } else {
+                            stopRecord()
+                            SnackbarHelper
+                                .createSnackbarWithAction(
+                                    this.messageView,
+                                    this.playButton,
+                                    R.string.message_device_gps_unavailable,
+                                    R.string.button_common_activate
+                                ) {
+                                    startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                                }
+                                .show()
+                        }
                     }
                 }
                 .addOnFailureListener { e ->
