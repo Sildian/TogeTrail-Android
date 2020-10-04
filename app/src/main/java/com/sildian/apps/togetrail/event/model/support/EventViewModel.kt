@@ -61,7 +61,7 @@ class EventViewModel : BaseObservableViewModel() {
      */
 
     fun currentUserIsAuthor():Boolean =
-        AuthRepository.getCurrentUser()?.uid == this.event?.authorId
+        AuthRepository().getCurrentUser()?.uid == this.event?.authorId
 
     /**
      * Loads an event from the database in real time
@@ -128,7 +128,7 @@ class EventViewModel : BaseObservableViewModel() {
 
                         /*Creates the event and its attached trails*/
 
-                        event?.authorId = AuthRepository.getCurrentUser()?.uid
+                        event?.authorId = AuthRepository().getCurrentUser()?.uid
                         val deferredEventId= async { EventRepository.addEvent(event!!) }
                         event?.id=deferredEventId.await()
                         launch { EventRepository.updateEvent(event!!) }.join()
@@ -140,7 +140,7 @@ class EventViewModel : BaseObservableViewModel() {
 
                         CurrentHikerInfo.currentHiker?.let { hiker ->
                             hiker.nbEventsCreated++
-                            launch { HikerRepository.updateHiker(hiker) }.join()
+                            launch { HikerRepository().updateHiker(hiker) }.join()
 
                             /*And creates an history item*/
 
@@ -152,7 +152,7 @@ class EventViewModel : BaseObservableViewModel() {
                                 event!!.meetingPoint.toString(),
                                 event!!.mainPhotoUrl
                             )
-                            launch { HikerRepository.addHikerHistoryItem(hiker.id, historyItem) }.join()
+                            launch { HikerRepository().addHikerHistoryItem(hiker.id, historyItem) }.join()
                         }
                         Log.d(TAG, "Successfully saved event in database")
                         successCallback?.invoke()
@@ -257,9 +257,9 @@ class EventViewModel : BaseObservableViewModel() {
 
                     hiker.nbEventsAttended++
                     event!!.nbHikersRegistered++
-                    launch { HikerRepository.updateHiker(hiker) }
+                    launch { HikerRepository().updateHiker(hiker) }
                     launch { EventRepository.updateEvent(event!!) }
-                    launch { HikerRepository.updateHikerAttendedEvent(hiker.id, event!!) }
+                    launch { HikerRepository().updateHikerAttendedEvent(hiker.id, event!!) }
                     launch { EventRepository.updateEventRegisteredHiker(event!!.id!!, hiker) }
 
                     /*Then creates an hiker history item*/
@@ -273,7 +273,7 @@ class EventViewModel : BaseObservableViewModel() {
                         event!!.mainPhotoUrl
                     )
 
-                    launch { HikerRepository.addHikerHistoryItem(hiker.id, historyItem) }
+                    launch { HikerRepository().addHikerHistoryItem(hiker.id, historyItem) }
 
                     Log.d(TAG, "Successfully registered new user to the event")
                     successCallback?.invoke()
@@ -312,11 +312,11 @@ class EventViewModel : BaseObservableViewModel() {
 
                     hiker.nbEventsAttended--
                     event!!.nbHikersRegistered--
-                    launch { HikerRepository.updateHiker(hiker) }
+                    launch { HikerRepository().updateHiker(hiker) }
                     launch { EventRepository.updateEvent(event!!) }
-                    launch { HikerRepository.deleteHikerAttendedEvent(hiker.id, event!!.id!!) }
+                    launch { HikerRepository().deleteHikerAttendedEvent(hiker.id, event!!.id!!) }
                     launch { EventRepository.deleteEventRegisteredHiker(event!!.id!!, hiker.id) }
-                    launch { HikerRepository.deleteHikerHistoryItems(hiker.id, HikerHistoryType.EVENT_ATTENDED, event!!.id!!) }
+                    launch { HikerRepository().deleteHikerHistoryItems(hiker.id, HikerHistoryType.EVENT_ATTENDED, event!!.id!!) }
 
                     Log.d(TAG, "Successfully unregistered user from the event")
                     successCallback?.invoke()

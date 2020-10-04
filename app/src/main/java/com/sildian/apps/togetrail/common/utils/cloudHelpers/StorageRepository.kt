@@ -8,25 +8,27 @@ import kotlinx.coroutines.withContext
  * Repository for Storage
  ************************************************************************************************/
 
-object StorageRepository {
+class StorageRepository {
 
     /**
      * Uploads an image into the cloud
      * @param filePath : the original image's path
-     * @return the image's url
+     * @return the uploaded image's url on the server
+     * @throws Exception if the request fails
      */
 
     @Throws(Exception::class)
-    suspend fun uploadImage(filePath:String):String? =
-        withContext(Dispatchers.IO){
-            try{
+    suspend fun uploadImage(filePath: String): String? =
+        withContext(Dispatchers.IO) {
+            try {
                 StorageFirebaseHelper.uploadImage(filePath)
                     .await()
                     .storage
                     .downloadUrl
                     .await()
                     .toString()
-            } catch (e: Exception) {
+            }
+            catch (e: Exception) {
                 throw e
             }
         }
@@ -34,15 +36,17 @@ object StorageRepository {
     /**
      * Deletes an image from the cloud
      * @param url : the image's url in the cloud
+     * @throws Exception if the request fails
      */
 
     @Throws(Exception::class)
-    suspend fun deleteImage(url:String) {
+    suspend fun deleteImage(url: String) {
         withContext(Dispatchers.IO){
-            try{
+            try {
                 StorageFirebaseHelper.deleteImage(url)
                     .await()
-            } catch (e: Exception) {
+            }
+            catch (e: Exception) {
                 throw e
             }
         }

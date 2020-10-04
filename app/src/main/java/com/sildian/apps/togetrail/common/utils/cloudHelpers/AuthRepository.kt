@@ -9,7 +9,7 @@ import kotlinx.coroutines.withContext
  * Repository for Authentication
  ************************************************************************************************/
 
-object AuthRepository {
+class AuthRepository {
 
     /**
      * Gets the current user connected to the app
@@ -28,40 +28,50 @@ object AuthRepository {
      * Updates a user's profile in the cloud
      * @param displayName : the new name
      * @param photoUri : the new photo Uri
+     * @throws Exception if the request fails
      */
 
     @Throws(Exception::class)
-    suspend fun updateUserProfile(displayName:String, photoUri:String?){
+    suspend fun updateUserProfile(displayName:String, photoUri:String?) {
         withContext(Dispatchers.IO){
             try{
                 AuthFirebaseHelper.updateUserProfile(displayName, photoUri)?.await()
-            } catch (e: Exception) {
+            }
+            catch (e: Exception) {
                 throw e
             }
         }
     }
 
-    /**Sends an email to the user to let you reset his password**/
+    /**
+     * Sends an email to the user to let him reset his password
+     * @throws Exception if the request fails
+     */
 
     @Throws(Exception::class)
-    suspend fun resetUserPassword(){
-        withContext(Dispatchers.IO){
+    suspend fun resetUserPassword() {
+        withContext(Dispatchers.IO) {
             try{
                 AuthFirebaseHelper.resetUserPassword()?.await()
-            } catch (e: Exception) {
+            }
+            catch (e: Exception) {
                 throw e
             }
         }
     }
 
-    /**Definitely deletes a user from Firebase**/
+    /**
+     * Definitely deletes a user from Firebase
+     * @throws Exception if the request fails
+     */
 
     @Throws(Exception::class)
-    suspend fun deleteUserAccount(){
-        withContext(Dispatchers.IO){
+    suspend fun deleteUserAccount() {
+        withContext(Dispatchers.IO) {
             try {
                 AuthFirebaseHelper.deleteUserAccount()?.await()
-            } catch (e: Exception) {
+            }
+            catch (e: Exception) {
                 throw e
             }
         }

@@ -94,7 +94,7 @@ class EventFragment(private val eventId: String?=null) :
     }
 
     private fun initializeRegistrationLayout(){
-        if(AuthRepository.getCurrentUser()==null){
+        if(AuthRepository().getCurrentUser()==null){
             this.registrationLayout.visibility=View.GONE
         }
     }
@@ -137,7 +137,7 @@ class EventFragment(private val eventId: String?=null) :
     }
 
     private fun updateUserRegisterItemsVisibility(){
-        val user=AuthRepository.getCurrentUser()
+        val user=AuthRepository().getCurrentUser()
         val userIsRegistered=
             this.registeredHikersAdapter.snapshots.firstOrNull { it.id==user?.uid } !=null
         if(userIsRegistered){

@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
  * Repository for Hiker
  ************************************************************************************************/
 
-object HikerRepository {
+class HikerRepository {
 
     /**
      * Gets an hiker reference
@@ -28,6 +28,7 @@ object HikerRepository {
      * Gets an hiker
      * @param hikerId : the hiker's id
      * @return the obtained hiker
+     * @throws Exception if the request fails
      */
 
     @Throws(Exception::class)
@@ -39,7 +40,8 @@ object HikerRepository {
                     .get()
                     .await()
                     ?.toObject(Hiker::class.java)
-            } catch (e: Exception) {
+            }
+            catch (e: Exception) {
                 throw e
             }
         }
@@ -47,6 +49,7 @@ object HikerRepository {
     /**
      * Updates an hiker
      * @param hiker : the hiker to update
+     * @throws Exception if the request fails
      */
 
     @Throws(Exception::class)
@@ -56,7 +59,8 @@ object HikerRepository {
                 HikerFirebaseQueries
                     .createOrUpdateHiker(hiker)
                     .await()
-            } catch (e: Exception) {
+            }
+            catch (e: Exception) {
                 throw e
             }
         }
@@ -65,6 +69,7 @@ object HikerRepository {
     /**
      * Deletes an hiker as well as the related history items and attended events
      * @param hiker : the hiker to delete
+     * @throws Exception if the request fails
      */
 
     @Throws(Exception::class)
@@ -88,7 +93,8 @@ object HikerRepository {
                 HikerFirebaseQueries
                     .deleteHiker(hiker)
                     .await()
-            } catch (e: Exception) {
+            }
+            catch (e: Exception) {
                 throw e
             }
         }
@@ -98,6 +104,7 @@ object HikerRepository {
      * Adds an hiker's history item
      * @param hikerId : the hiker's id
      * @param historyItem : the history item to add
+     * @throws Exception if the request fails
      */
 
     @Throws(Exception::class)
@@ -107,7 +114,8 @@ object HikerRepository {
                 HikerFirebaseQueries
                     .addHistoryItem(hikerId, historyItem)
                     .await()
-            } catch (e: Exception) {
+            }
+            catch (e: Exception) {
                 throw e
             }
         }
@@ -117,6 +125,7 @@ object HikerRepository {
      * Deletes all history items matching the given type and item id
      * @param type : the type of history item to delete
      * @param relatedItemId : the id of the related item to delete (the related event or trail)
+     * @throws Exception if the request fails
      */
 
     @Throws(Exception::class)
@@ -132,7 +141,8 @@ object HikerRepository {
                     HikerFirebaseQueries.deleteHistoryItem(hikerId, historyItem.id)
                         .await()
                 }
-            } catch (e: Exception) {
+            }
+            catch (e: Exception) {
                 throw e
             }
         }
@@ -142,6 +152,7 @@ object HikerRepository {
      * Creates or updates an hiker's attended event
      * @param hikerId : the hiker's id
      * @param event : the event to create or update
+     * @throws Exception if the request fails
      */
 
     @Throws(Exception::class)
@@ -151,7 +162,8 @@ object HikerRepository {
                 HikerFirebaseQueries
                     .updateAttendedEvent(hikerId, event)
                     .await()
-            } catch (e: Exception) {
+            }
+            catch (e: Exception) {
                 throw e
             }
         }
@@ -161,6 +173,7 @@ object HikerRepository {
      * Deletes an hiker's attended event
      * @param hikerId : the hiker's id
      * @param eventId : the event's id to delete
+     * @throws Exception if the request fails
      */
 
     @Throws(Exception::class)
@@ -170,7 +183,8 @@ object HikerRepository {
                 HikerFirebaseQueries
                     .deleteAttendedEvent(hikerId, eventId)
                     .await()
-            } catch (e: Exception) {
+            }
+            catch (e: Exception) {
                 throw e
             }
         }

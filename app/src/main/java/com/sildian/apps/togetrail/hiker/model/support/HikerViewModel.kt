@@ -3,11 +3,7 @@ package com.sildian.apps.togetrail.hiker.model.support
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.sildian.apps.togetrail.common.baseViewModels.BaseObservableViewModel
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
-import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
-import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -24,11 +20,6 @@ class HikerViewModel : BaseObservableViewModel() {
 
         /**Logs**/
         private const val TAG="HikerViewModel"
-
-        /**Messages**/
-        private const val EXCEPTION_MESSAGE_SAVE_NULL="Cannot save a null hiker"
-        private const val EXCEPTION_MESSAGE_LOGIN_NULL="Cannot login with a null user"
-        private const val EXCEPTION_MESSAGE_DELETE_NULL="Cannot delete a null hiker"
     }
 
     /***********************************Exception handler***************************************/
@@ -36,6 +27,10 @@ class HikerViewModel : BaseObservableViewModel() {
     private val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
         Log.e(TAG, throwable.message.toString())
     }
+
+    /**********************************Data requester*******************************************/
+
+    private val hikerDataRequester = HikerDataRequester()
 
     /***************************************Data*************************************************/
 
@@ -46,6 +41,40 @@ class HikerViewModel : BaseObservableViewModel() {
     /************************************Data monitoring*****************************************/
 
     /**
+     * Gives an image to be stored on the cloud before running saveHikerInDatabase
+     * If the hiker already has a photo, it will be deleted
+     * @param imagePath : the temporary image's uri
+     */
+
+    fun updateImagePathToUpload(imagePath:String){
+        this.hiker?.photoUrl?.let { photoUrl ->
+            if (photoUrl.startsWith("https://")) {
+                this.imagePathToDelete = photoUrl
+            }
+        }
+        this.imagePathToUpload = imagePath
+    }
+
+    /**
+     * Gives an image to be deleted from the cloud before running saveHikerInDatabase
+     * @param imagePath : the image's url
+     */
+
+    fun updateImagePathToDelete(imagePath:String){
+        this.imagePathToUpload=null
+        if(imagePath.startsWith("https://")){
+            this.imagePathToDelete=imagePath
+        }
+    }
+
+    /**Clears images paths**/
+
+    fun clearImagePaths() {
+        this.imagePathToUpload = null
+        this.imagePathToDelete = null
+    }
+
+    /**
      * Loads an hiker from the database in real time
      * @param hikerId : the hiker's id
      * @param successCallback : the callback to handle a success in the query
@@ -54,7 +83,7 @@ class HikerViewModel : BaseObservableViewModel() {
 
     fun loadHikerFromDatabaseRealTime(hikerId:String, successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null) {
         this.queryRegistration?.remove()
-        this.queryRegistration = HikerRepository.getHikerReference(hikerId)
+        this.queryRegistration = hikerDataRequester.loadHikerFromDatabaseRealTime(hikerId)
             .addSnapshotListener { snapshot, e ->
                 if (snapshot != null) {
                     hiker = snapshot.toObject(Hiker::class.java)
@@ -62,7 +91,7 @@ class HikerViewModel : BaseObservableViewModel() {
                     Log.d(TAG, "Successfully loaded hiker from database")
                     successCallback?.invoke()
                 }
-                else if(e!=null){
+                else if(e != null){
                     Log.e(TAG, "Failed to load hiker from database : ${e.message}")
                     failureCallback?.invoke(e)
                 }
@@ -79,8 +108,7 @@ class HikerViewModel : BaseObservableViewModel() {
     fun loadHikerFromDatabase(hikerId:String, successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
         viewModelScope.launch(this.exceptionHandler) {
             try {
-                val deferredHiker = async { HikerRepository.getHiker(hikerId) }
-                hiker = deferredHiker.await()
+                hiker = async { hikerDataRequester.loadHikerFromDatabase(hikerId) }.await()
                 notifyDataChanged()
                 Log.d(TAG, "Successfully loaded hiker from database")
                 successCallback?.invoke()
@@ -101,71 +129,17 @@ class HikerViewModel : BaseObservableViewModel() {
 
     fun saveHikerInDatabase(successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
         viewModelScope.launch(this.exceptionHandler) {
-            try{
-                if(hiker!=null){
-                    imagePathToDelete?.let { url ->
-                        launch {
-                            try {
-                                StorageRepository.deleteImage(url)
-                            } catch (e:Exception) {
-                                Log.w(TAG, "Failed to delete photo at url $url : ${e.message}")
-                            }
-                        }.join()
-                    }
-                    imagePathToUpload?.let { uri ->
-                        val deferredNewImageUrl=async { StorageRepository.uploadImage(uri) }
-                        val newImageUrl=deferredNewImageUrl.await()
-                        hiker?.photoUrl=newImageUrl
-                    }
-                    launch { HikerRepository.updateHiker(hiker!!) }.join()
-                    launch { AuthRepository.updateUserProfile(hiker!!.name!!, hiker!!.photoUrl) }.join()
-                    Log.d(TAG, "Successfully saved hiker in database")
-                    successCallback?.invoke()
-                }
-                else{
-                    Log.e(TAG, "Failed to save hiker in database : $EXCEPTION_MESSAGE_SAVE_NULL")
-                    failureCallback?.invoke(NullPointerException(EXCEPTION_MESSAGE_SAVE_NULL))
-                }
+            try {
+                launch { hikerDataRequester.saveHikerInDatabase(hiker, imagePathToDelete, imagePathToUpload) }.join()
+                Log.d(TAG, "Successfully saved hiker in database")
+                successCallback?.invoke()
             }
-            catch(e:Exception){
+            catch(e:Exception) {
                 Log.e(TAG, "Failed to save hiker in database : ${e.message}")
                 failureCallback?.invoke(e)
                 throw e
             }
         }
-    }
-
-    /**
-     * Gives an image to be stored on the cloud
-     * @param imagePath : the temporary image's uri
-     */
-
-    fun updateImagePathToUpload(imagePath:String){
-        this.hiker?.photoUrl?.let { photoUrl ->
-            if (photoUrl.startsWith("https://")) {
-                this.imagePathToDelete = photoUrl
-            }
-        }
-        this.imagePathToUpload = imagePath
-    }
-
-    /**
-     * Gives an image to be deleted from the cloud
-     * @param imagePath : the image's url
-     */
-
-    fun updateImagePathToDelete(imagePath:String){
-        this.imagePathToUpload=null
-        if(imagePath.startsWith("https://")){
-            this.imagePathToDelete=imagePath
-        }
-    }
-
-    /**Clears images paths**/
-
-    fun clearImagePaths() {
-        this.imagePathToUpload = null
-        this.imagePathToDelete = null
     }
 
     /**
@@ -177,43 +151,10 @@ class HikerViewModel : BaseObservableViewModel() {
     fun loginUser(successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
         viewModelScope.launch(this.exceptionHandler) {
             try {
-
-                /*Gets the current user and the related Hiker info*/
-
-                val user = AuthRepository.getCurrentUser()
-                if (user != null) {
-                    val deferredHiker = async { HikerRepository.getHiker(user.uid) }
-                    hiker = deferredHiker.await()
-
-                    /*If the hiker is null, then creates a new Hiker in the database*/
-
-                    if (hiker == null) {
-                        hiker = HikerBuilder()
-                            .withFirebaseUser(user)
-                            .build()
-                        launch { HikerRepository.updateHiker(hiker!!) }.join()
-
-                        /*Also creates an history item*/
-
-                        val historyItem = HikerHistoryItem(
-                            HikerHistoryType.HIKER_REGISTERED,
-                            hiker?.registrationDate!!
-                        )
-                        launch { HikerRepository.addHikerHistoryItem(hiker!!.id, historyItem) }.join()
-                    }
-
-                    CurrentHikerInfo.currentHiker = hiker
-
-                    /*Then notifies the callbacks*/
-
-                    notifyDataChanged()
-                    Log.d(TAG, "Successfully logged the user in")
-                    successCallback?.invoke()
-                }
-                else {
-                    Log.e(TAG, "Failed to log the user in : $EXCEPTION_MESSAGE_LOGIN_NULL")
-                    failureCallback?.invoke(NullPointerException(EXCEPTION_MESSAGE_LOGIN_NULL))
-                }
+                hiker = async { hikerDataRequester.loginUser() }.await()
+                notifyDataChanged()
+                Log.d(TAG, "Successfully logged the user in")
+                successCallback?.invoke()
             }
             catch(e:Exception){
                 Log.e(TAG, "Failed to log the user in : ${e.message}")
@@ -226,9 +167,8 @@ class HikerViewModel : BaseObservableViewModel() {
     /**Logs the user out**/
 
     fun logoutUser(){
-        this.hiker=null
-        CurrentHikerInfo.currentHiker = null
-        AuthRepository.signUserOut()
+        hikerDataRequester.logoutUser()
+        this.hiker = null
         notifyDataChanged()
     }
 
@@ -241,7 +181,7 @@ class HikerViewModel : BaseObservableViewModel() {
     fun resetUserPassword(successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
         viewModelScope.launch(this.exceptionHandler) {
             try{
-                launch { AuthRepository.resetUserPassword() }.join()
+                launch { hikerDataRequester.resetUserPassword() }.join()
                 Log.d(TAG, "Successfully reset the user password")
                 successCallback?.invoke()
             }
@@ -262,25 +202,9 @@ class HikerViewModel : BaseObservableViewModel() {
     fun deleteUserAccount(successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
         viewModelScope.launch(this.exceptionHandler) {
             try{
-                if(hiker!=null){
-                    hiker?.photoUrl?.let { photoUrl ->
-                        launch {
-                            try {
-                                StorageRepository.deleteImage(photoUrl)
-                            } catch (e: Exception) {
-                                Log.w(TAG, "Failed to delete photo at url $photoUrl : ${e.message}")
-                            }
-                        }.join()
-                    }
-                    launch { HikerRepository.deleteHiker(hiker!!) }.join()
-                    launch { AuthRepository.deleteUserAccount() }.join()
-                    Log.d(TAG, "Successfully deleted the user account")
-                    successCallback?.invoke()
-                }
-                else{
-                    Log.e(TAG, "Failed to delete the user account : $EXCEPTION_MESSAGE_DELETE_NULL")
-                    failureCallback?.invoke(NullPointerException(EXCEPTION_MESSAGE_DELETE_NULL))
-                }
+                hikerDataRequester.deleteUserAccount()
+                Log.d(TAG, "Successfully deleted the user account")
+                successCallback?.invoke()
             }
             catch(e:Exception){
                 Log.e(TAG, "Failed to delete the user account : ${e.message}")

@@ -146,14 +146,14 @@ class TrailViewModel:BaseObservableViewModel() {
                     imagePathToDelete?.let { url ->
                         launch {
                             try {
-                                StorageRepository.deleteImage(url)
+                                StorageRepository().deleteImage(url)
                             } catch (e: Exception) {
                                 Log.w(TAG, "Failed to delete photo at url $url : ${e.message}")
                             }
                         }.join()
                     }
                     imagePathToUpload?.let { uri ->
-                        val deferredNewImageUrl=async { StorageRepository.uploadImage(uri) }
+                        val deferredNewImageUrl=async { StorageRepository().uploadImage(uri) }
                         val newImageUrl=deferredNewImageUrl.await()
                         if(savePOI){
                             trailPointOfInterest?.photoUrl=newImageUrl
@@ -168,7 +168,7 @@ class TrailViewModel:BaseObservableViewModel() {
 
                         /*Creates the trail*/
 
-                        trail?.authorId = AuthRepository.getCurrentUser()?.uid
+                        trail?.authorId = AuthRepository().getCurrentUser()?.uid
                         val deferredTrailId=async { TrailRepository.addTrail(trail!!) }
                         trail?.id=deferredTrailId.await()
                         launch { TrailRepository.updateTrail(trail!!) }.join()
@@ -177,7 +177,7 @@ class TrailViewModel:BaseObservableViewModel() {
 
                         CurrentHikerInfo.currentHiker?.let { hiker ->
                             hiker.nbTrailsCreated++
-                            launch { HikerRepository.updateHiker(hiker) }.join()
+                            launch { HikerRepository().updateHiker(hiker) }.join()
 
                             /*And creates an history item*/
 
@@ -189,7 +189,7 @@ class TrailViewModel:BaseObservableViewModel() {
                                 trail!!.location.toString(),
                                 trail!!.mainPhotoUrl
                             )
-                            launch { HikerRepository.addHikerHistoryItem(hiker.id, historyItem) }.join()
+                            launch { HikerRepository().addHikerHistoryItem(hiker.id, historyItem) }.join()
                         }
                         Log.d(TAG, "Successfully saved trail in database")
                         successCallback?.invoke()
