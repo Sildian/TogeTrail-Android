@@ -339,8 +339,10 @@ abstract class BaseTrailMapFragment (
     /**Edits the trail's info**/
 
     fun editTrailInfo(){
-        hideInfoBottomSheet()
-        (activity as TrailActivity).updateTrailAndEditInfo(this.trailViewModel?.trail!!)
+        this.trailViewModel?.trail?.let { trail ->
+            hideInfoBottomSheet()
+            (activity as TrailActivity).updateTrailAndEditInfo(trail)
+        }
     }
 
     /**
@@ -349,8 +351,10 @@ abstract class BaseTrailMapFragment (
      */
 
     fun editTrailPoiInfo(trailPoiPosition:Int){
-        hideInfoBottomSheet()
-        (activity as TrailActivity).updateTrailAndEditPoiInfo(this.trailViewModel?.trail!!, trailPoiPosition)
+        this.trailViewModel?.trail?.let { trail ->
+            hideInfoBottomSheet()
+            (activity as TrailActivity).updateTrailAndEditPoiInfo(trail, trailPoiPosition)
+        }
     }
 
     /*****************************Bottom sheet monitoring****************************************/

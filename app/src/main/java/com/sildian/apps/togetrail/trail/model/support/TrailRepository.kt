@@ -10,7 +10,7 @@ import kotlinx.coroutines.withContext
  * Repository for Trail
  ************************************************************************************************/
 
-object TrailRepository {
+class TrailRepository {
 
     /**
      * Gets a trail reference
@@ -25,6 +25,7 @@ object TrailRepository {
      * Gets a trail
      * @param trailId : the trail's id
      * @return the obtained trail
+     * @throws Exception if the request fails
      */
 
     @Throws(Exception::class)
@@ -36,7 +37,8 @@ object TrailRepository {
                     .get()
                     .await()
                     ?.toObject(Trail::class.java)
-            } catch (e: Exception) {
+            }
+            catch (e: Exception) {
                 throw e
             }
         }
@@ -44,18 +46,20 @@ object TrailRepository {
     /**
      * Adds a trail
      * @param trail : the trail to add
-     * @return the trail's id
+     * @return the created trail's id
+     * @throws Exception if the request fails
      */
 
     @Throws(Exception::class)
-    suspend fun addTrail(trail:Trail):String? =
-        withContext(Dispatchers.IO){
-            try{
+    suspend fun addTrail(trail:Trail): String? =
+        withContext(Dispatchers.IO) {
+            try {
                 TrailFirebaseQueries
                     .createTrail(trail)
                     .await()
                     .id
-            }catch (e: Exception) {
+            }
+            catch (e: Exception) {
                 throw e
             }
         }
@@ -63,16 +67,18 @@ object TrailRepository {
     /**
      * Updates a trail
      * @param trail : the trail to update
+     * @throws Exception if the request fails
      */
 
     @Throws(Exception::class)
-    suspend fun updateTrail(trail:Trail){
+    suspend fun updateTrail(trail:Trail) {
         withContext(Dispatchers.IO) {
             try {
                 TrailFirebaseQueries
                     .updateTrail(trail)
                     .await()
-            } catch (e: Exception) {
+            }
+            catch (e: Exception) {
                 throw e
             }
         }

@@ -297,6 +297,8 @@ class TrailActivity : BaseActivity() {
      * @param trailPointOfInterestPosition : if a trailPointOfInterest is edited, defines its position in the trailTrack
      */
 
+    //TODO it the trail is too big, it may fail to pass to the intent. An other way needs to be found to edit a trail.
+
     private fun startTrailInfoEditActivity(trailEditActionId:Int, trailPointOfInterestPosition:Int?){
         val trailInfoEditActivityIntent=Intent(this, TrailInfoEditActivity::class.java)
         trailInfoEditActivityIntent.putExtra(TrailInfoEditActivity.KEY_BUNDLE_TRAIL_ACTION, trailEditActionId)

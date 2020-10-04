@@ -3,19 +3,12 @@ package com.sildian.apps.togetrail.trail.model.support
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.sildian.apps.togetrail.common.baseViewModels.BaseObservableViewModel
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
-import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
-import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
-import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
-import com.sildian.apps.togetrail.hiker.model.support.HikerRepository
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 import io.ticofab.androidgpxparser.parser.domain.Gpx
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import java.util.*
 
 /*************************************************************************************************
  * This viewModel observes a single Trail related data
@@ -29,9 +22,6 @@ class TrailViewModel:BaseObservableViewModel() {
 
         /**Logs**/
         private const val TAG = "TrailViewModel"
-
-        /**Messages**/
-        private const val EXCEPTION_MESSAGE_SAVE_NULL="Cannot save a null trail"
     }
 
     /***********************************Exception handler***************************************/
@@ -39,6 +29,10 @@ class TrailViewModel:BaseObservableViewModel() {
     private val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
         Log.e(TAG, throwable.message.toString())
     }
+
+    /***********************************Data requester******************************************/
+
+    private val trailDataRequester = TrailDataRequester()
 
     /***************************************Data*************************************************/
 
@@ -51,7 +45,7 @@ class TrailViewModel:BaseObservableViewModel() {
 
     /**Initializes a new Trail with default data**/
 
-    fun initNewTrail(){
+    fun initNewTrail() {
         this.trail= TrailBuilder()
             .withDefault()
             .build()
@@ -63,7 +57,7 @@ class TrailViewModel:BaseObservableViewModel() {
      * @param gpx : the gpx data
      */
 
-    fun initNewTrail(gpx:Gpx){
+    fun initNewTrail(gpx:Gpx) {
         this.trail= TrailBuilder()
             .withGpx(gpx)
             .build()
@@ -75,167 +69,35 @@ class TrailViewModel:BaseObservableViewModel() {
      * @param trail : the trail
      */
 
-    fun initWithTrail(trail:Trail){
+    fun initWithTrail(trail:Trail) {
         this.trail=trail
         notifyDataChanged()
     }
 
     /**
-     * Loads a trail from the database in real time
-     * @param trailId : the trail's id
-     * @param successCallback : the callback to handle a success in the query
-     * @param failureCallback : the callback to handle a failure in the query
-     */
-
-    fun loadTrailFromDatabaseRealTime(trailId:String, successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null) {
-        this.queryRegistration?.remove()
-        this.queryRegistration = TrailRepository.getTrailReference(trailId)
-            .addSnapshotListener { snapshot, e ->
-                if (snapshot != null) {
-                    trail = snapshot.toObject(Trail::class.java)
-                    notifyDataChanged()
-                    Log.d(TAG, "Successfully loaded trail from database")
-                    successCallback?.invoke()
-                }
-                else if(e!=null){
-                    Log.e(TAG, "Failed to load trail from database : ${e.message}")
-                    failureCallback?.invoke(e)
-                }
-            }
-    }
-
-    /**
-     * Loads a trail from the database
-     * @param trailId : the trail's id
-     * @param successCallback : the callback to handle a success in the query
-     * @param failureCallback : the callback to handle a failure in the query
-     */
-
-    fun loadTrailFromDatabase(trailId:String, successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
-        viewModelScope.launch(this.exceptionHandler) {
-            try {
-                val deferredTrail = async { TrailRepository.getTrail(trailId) }
-                trail = deferredTrail.await()
-                notifyDataChanged()
-                Log.d(TAG, "Successfully loaded trail from database")
-                successCallback?.invoke()
-            }
-            catch(e:Exception){
-                Log.e(TAG, "Failed to load trail from database : ${e.message}")
-                failureCallback?.invoke(e)
-            }
-        }
-    }
-
-    /**
-     * Saves the trail within the database
-     * @param savePOI : true if a POI needs to be saved
-     * @param successCallback : the callback to handle a success in the query
-     * @param failureCallback : the callback to handle a failure in the query
-     */
-
-    fun saveTrailInDatabase(savePOI:Boolean, successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
-        viewModelScope.launch(this.exceptionHandler) {
-            try {
-                if(trail!=null){
-
-                    trail?.lastUpdate= Date()
-
-                    /*Stores or deletes the image in the cloud if necessary*/
-
-                    imagePathToDelete?.let { url ->
-                        launch {
-                            try {
-                                StorageRepository().deleteImage(url)
-                            } catch (e: Exception) {
-                                Log.w(TAG, "Failed to delete photo at url $url : ${e.message}")
-                            }
-                        }.join()
-                    }
-                    imagePathToUpload?.let { uri ->
-                        val deferredNewImageUrl=async { StorageRepository().uploadImage(uri) }
-                        val newImageUrl=deferredNewImageUrl.await()
-                        if(savePOI){
-                            trailPointOfInterest?.photoUrl=newImageUrl
-                        }else {
-                            trail?.mainPhotoUrl = newImageUrl
-                        }
-                    }
-
-                    /*If the trail is new...*/
-
-                    if(trail?.id==null){
-
-                        /*Creates the trail*/
-
-                        trail?.authorId = AuthRepository().getCurrentUser()?.uid
-                        val deferredTrailId=async { TrailRepository.addTrail(trail!!) }
-                        trail?.id=deferredTrailId.await()
-                        launch { TrailRepository.updateTrail(trail!!) }.join()
-
-                        /*Updates the author's profile*/
-
-                        CurrentHikerInfo.currentHiker?.let { hiker ->
-                            hiker.nbTrailsCreated++
-                            launch { HikerRepository().updateHiker(hiker) }.join()
-
-                            /*And creates an history item*/
-
-                            val historyItem = HikerHistoryItem(
-                                HikerHistoryType.TRAIL_CREATED,
-                                trail!!.creationDate,
-                                trail!!.id!!,
-                                trail!!.name!!,
-                                trail!!.location.toString(),
-                                trail!!.mainPhotoUrl
-                            )
-                            launch { HikerRepository().addHikerHistoryItem(hiker.id, historyItem) }.join()
-                        }
-                        Log.d(TAG, "Successfully saved trail in database")
-                        successCallback?.invoke()
-                    }
-                    else{
-
-                        /*If the trail is not new, just updates it*/
-
-                        launch { TrailRepository.updateTrail(trail!!) }.join()
-                        Log.d(TAG, "Successfully saved trail in database")
-                        successCallback?.invoke()
-                    }
-                }
-                else{
-                    Log.e(TAG, "Failed to save trail in database : $EXCEPTION_MESSAGE_SAVE_NULL")
-                    failureCallback?.invoke(NullPointerException(EXCEPTION_MESSAGE_SAVE_NULL))
-                }
-            }
-            catch(e:Exception){
-                Log.e(TAG, "Failed to save trail in database : ${e.message}")
-                failureCallback?.invoke(e)
-                throw e
-            }
-        }
-    }
-
-    /**
      * Watches a point of interest
+     * It means that the observed data focus on the POI related to the given position
      * @param position : the poi's position
      */
 
     fun watchPointOfInterest(position:Int) {
-        if(position<=this.trail?.trailTrack?.trailPointsOfInterest!!.size-1) {
-            this.trailPointOfInterest = this.trail?.trailTrack?.trailPointsOfInterest!![position]
-            notifyDataChanged()
+        this.trail?.trailTrack?.trailPointsOfInterest?.let { trailPoiList ->
+            if(position <= trailPoiList.size-1) {
+                this.trailPointOfInterest = trailPoiList[position]
+                notifyDataChanged()
+            }
         }
     }
 
     /**
      * Gives an image to be stored on the cloud
-     * @param isPOIImage : true if the image to upload is related to a POI
+     * If the trail or the POI already has an image, it will be deleted from the storage
+     * @param isPOIImage : true if the image to upload is related to a POI, otherwise it is related to the trail itself
      * @param imagePath : the temporary image's uri
      */
 
-    fun updateImagePathToUpload(isPOIImage:Boolean, imagePath:String){
-        if(isPOIImage){
+    fun updateImagePathToUpload(isPOIImage:Boolean, imagePath:String) {
+        if(isPOIImage) {
             this.trailPointOfInterest?.photoUrl?.let { photoUrl ->
                 if (photoUrl.startsWith("https://")) {
                     this.imagePathToDelete = photoUrl
@@ -268,5 +130,84 @@ class TrailViewModel:BaseObservableViewModel() {
     fun clearImagePaths() {
         this.imagePathToUpload = null
         this.imagePathToDelete = null
+    }
+
+    /**
+     * Loads a trail from the database in real time
+     * @param trailId : the trail's id
+     * @param successCallback : the callback to handle a success in the query
+     * @param failureCallback : the callback to handle a failure in the query
+     */
+
+    fun loadTrailFromDatabaseRealTime(trailId:String, successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null) {
+        this.queryRegistration?.remove()
+        this.queryRegistration = trailDataRequester.loadTrailFromDatabaseRealTime(trailId)
+            .addSnapshotListener { snapshot, e ->
+                if (snapshot != null) {
+                    trail = snapshot.toObject(Trail::class.java)
+                    notifyDataChanged()
+                    Log.d(TAG, "Successfully loaded trail from database")
+                    successCallback?.invoke()
+                }
+                else if(e!=null){
+                    Log.e(TAG, "Failed to load trail from database : ${e.message}")
+                    failureCallback?.invoke(e)
+                }
+            }
+    }
+
+    /**
+     * Loads a trail from the database
+     * @param trailId : the trail's id
+     * @param successCallback : the callback to handle a success in the query
+     * @param failureCallback : the callback to handle a failure in the query
+     */
+
+    fun loadTrailFromDatabase(trailId:String, successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
+        viewModelScope.launch(this.exceptionHandler) {
+            try {
+                trail = async { trailDataRequester.loadTrailFromDatabase(trailId) }.await()
+                notifyDataChanged()
+                Log.d(TAG, "Successfully loaded trail from database")
+                successCallback?.invoke()
+            }
+            catch(e:Exception){
+                Log.e(TAG, "Failed to load trail from database : ${e.message}")
+                failureCallback?.invoke(e)
+            }
+        }
+    }
+
+    /**
+     * Saves the trail within the database
+     * @param savePOI : true if a POI needs to be saved
+     * @param successCallback : the callback to handle a success in the query
+     * @param failureCallback : the callback to handle a failure in the query
+     */
+
+    fun saveTrailInDatabase(savePOI:Boolean, successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
+        viewModelScope.launch(this.exceptionHandler) {
+            try {
+                if (savePOI) {
+                    launch {
+                        trailDataRequester.saveTrailInDatabase(
+                            trail, trailPointOfInterest, imagePathToDelete, imagePathToUpload
+                        )
+                    }.join()
+                }
+                else {
+                    launch {
+                        trailDataRequester.saveTrailInDatabase(trail, imagePathToDelete, imagePathToUpload)
+                    }.join()
+                }
+                Log.d(TAG, "Successfully saved trail in database")
+                successCallback?.invoke()
+            }
+            catch(e:Exception){
+                Log.e(TAG, "Failed to save trail in database : ${e.message}")
+                failureCallback?.invoke(e)
+                throw e
+            }
+        }
     }
 }
