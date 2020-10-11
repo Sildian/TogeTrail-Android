@@ -206,7 +206,6 @@ class TrailViewModel:BaseObservableViewModel() {
             catch(e:Exception){
                 Log.e(TAG, "Failed to save trail in database : ${e.message}")
                 failureCallback?.invoke(e)
-                throw e
             }
         }
     }

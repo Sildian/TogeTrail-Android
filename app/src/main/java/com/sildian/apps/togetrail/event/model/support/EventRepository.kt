@@ -12,7 +12,7 @@ import kotlinx.coroutines.withContext
  * Repository for Event
  ************************************************************************************************/
 
-object EventRepository {
+class EventRepository {
 
     /**
      * Gets an event reference
@@ -20,13 +20,14 @@ object EventRepository {
      * @return the document reference
      */
 
-    fun getEventReference(eventId:String):DocumentReference =
+    fun getEventReference(eventId:String): DocumentReference =
         EventFirebaseQueries.getEvent(eventId)
 
     /**
      * Gets an event
      * @param eventId : the event's id
      * @return the obtained event
+     * @throws Exception if the request fails
      */
 
     @Throws(Exception::class)
@@ -38,7 +39,8 @@ object EventRepository {
                     .get()
                     .await()
                     ?.toObject(Event::class.java)
-            } catch (e: Exception) {
+            }
+            catch (e: Exception) {
                 throw e
             }
         }
@@ -47,17 +49,19 @@ object EventRepository {
      * Adds an event
      * @param event : the event to add
      * @return the event's id
+     * @throws Exception if the request fails
      */
 
     @Throws(Exception::class)
-    suspend fun addEvent(event:Event):String? =
+    suspend fun addEvent(event:Event): String? =
         withContext(Dispatchers.IO){
             try{
                 EventFirebaseQueries
                     .createEvent(event)
                     .await()
                     .id
-            }catch (e: Exception) {
+            }
+            catch (e: Exception) {
                 throw e
             }
         }
@@ -65,16 +69,18 @@ object EventRepository {
     /**
      * Updates an event
      * @param event : the event to update
+     * @throws Exception if the request fails
      */
 
     @Throws(Exception::class)
-    suspend fun updateEvent(event:Event){
+    suspend fun updateEvent(event:Event) {
         withContext(Dispatchers.IO) {
             try {
                 EventFirebaseQueries
                     .updateEvent(event)
                     .await()
-            } catch (e: Exception) {
+            }
+            catch (e: Exception) {
                 throw e
             }
         }
@@ -84,16 +90,18 @@ object EventRepository {
      * Updates an event's attached trail
      * @param eventId : the event's id
      * @param trail : the trail to attach
+     * @throws Exception if the request fails
      */
 
     @Throws(Exception::class)
-    suspend fun updateEventAttachedTrail(eventId:String, trail:Trail){
+    suspend fun updateEventAttachedTrail(eventId:String, trail:Trail) {
         withContext(Dispatchers.IO) {
             try {
                 EventFirebaseQueries
                     .updateAttachedTrail(eventId, trail)
                     .await()
-            } catch (e: Exception) {
+            }
+            catch (e: Exception) {
                 throw e
             }
         }
@@ -103,16 +111,18 @@ object EventRepository {
      * Deletes an event's attached trail
      * @param eventId : the event's id
      * @param trailId : the trail's id
+     * @throws Exception if the request fails
      */
 
     @Throws(Exception::class)
-    suspend fun deleteEventAttachedTrail(eventId:String, trailId:String){
+    suspend fun deleteEventAttachedTrail(eventId:String, trailId:String) {
         withContext(Dispatchers.IO) {
             try {
                 EventFirebaseQueries
                     .deleteAttachedTrail(eventId, trailId)
                     .await()
-            } catch (e: Exception) {
+            }
+            catch (e: Exception) {
                 throw e
             }
         }
@@ -122,16 +132,18 @@ object EventRepository {
      * Updates an event's registered hiker
      * @param eventId : the event's id
      * @param hiker : the hiker to register
+     * @throws Exception if the request fails
      */
 
     @Throws(Exception::class)
-    suspend fun updateEventRegisteredHiker(eventId:String, hiker:Hiker){
+    suspend fun updateEventRegisteredHiker(eventId:String, hiker:Hiker) {
         withContext(Dispatchers.IO) {
             try {
                 EventFirebaseQueries
                     .updateRegisteredHiker(eventId, hiker)
                     .await()
-            } catch (e: Exception) {
+            }
+            catch (e: Exception) {
                 throw e
             }
         }
@@ -141,16 +153,18 @@ object EventRepository {
      * Deletes an event's registered hiker
      * @param eventId : the event's id
      * @param hikerId : the hiker's id
+     * @throws Exception if the request fails
      */
 
     @Throws(Exception::class)
-    suspend fun deleteEventRegisteredHiker(eventId:String, hikerId:String){
+    suspend fun deleteEventRegisteredHiker(eventId:String, hikerId:String) {
         withContext(Dispatchers.IO) {
             try {
                 EventFirebaseQueries
                     .deleteRegisteredHiker(eventId, hikerId)
                     .await()
-            } catch (e: Exception) {
+            }
+            catch (e: Exception) {
                 throw e
             }
         }

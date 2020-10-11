@@ -1,6 +1,7 @@
 package com.sildian.apps.togetrail
 
 import com.google.firebase.auth.FirebaseUser
+import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.trail.model.core.Trail
@@ -23,7 +24,8 @@ import org.robolectric.annotation.Config
         AuthRepositoryShadow::class,
         StorageRepositoryShadow::class,
         HikerRepositoryShadow::class,
-        TrailRepositoryShadow::class
+        TrailRepositoryShadow::class,
+        EventRepositoryShadow::class
     ]
 )
 open class BaseDataRequesterTest {
@@ -40,26 +42,45 @@ open class BaseDataRequesterTest {
         const val PHOTO_URL = "https://toto.jpg"
         const val TRAIL_ID = "TRAIL_BEST"
         const val TRAIL_NAME = "Best trail in the world"
+        const val EVENT_ID = "EVENT_BEST"
+        const val EVENT_NAME = "Best event in the world"
 
-        /**Allows to set params for samples to return within shadows**/
+        /**Allows to set params for fake objects sent by shadows**/
+        /*Set it to true to send null objects*/
         var returnUserSampleNull = false
         var returnHikerSampleNull = false
         var returnTrailSampleNull = false
+        var returnEventSampleNull = false
+        /*Set it to true to indicate that the object has a photo*/
         var hikerSampleHasPhoto = false
         var trailSampleHasPhoto = false
 
-        /**Set to true by shadows instead of requesting the server**/
+        /**When a shadow is invoked, it set one of these items to true**/
+        /*Auth*/
         var isUserUpdated = false
         var isUserSignedOut = false
         var isUserPasswordReset = false
         var isUserAccountDeleted = false
+        /*Storage*/
         var isImageDeleted = false
         var isImageUploaded = false
+        /*Hiker*/
         var isHikerUpdated = false
         var isHikerDeleted = false
-        var isHistoryItemAdded = false
+        var isHikerHistoryItemAdded = false
+        var isHikerHistoryItemDeleted = false
+        var isHikerRegisteredToEvent = false
+        var isHikerUnregisteredFromEvent = false
+        /*Trail*/
         var isTrailAdded = false
         var isTrailUpdated = false
+        /*Event*/
+        var isEventAdded = false
+        var isEventUpdated = false
+        var isEventHasTrailAttached = false
+        var isEventHasTrailDetached = false
+        var isEventHasHikerRegistered = false
+        var isEventHasHikerUnregistered = false
 
         /**Gets a default user sample**/
         fun getUserSample(): FirebaseUser? {
@@ -91,14 +112,25 @@ open class BaseDataRequesterTest {
                 else -> Trail(id = TRAIL_ID, name = TRAIL_NAME)
             }
         }
+
+        /**Gets a default event sample**/
+        fun getEventSample(): Event? {
+            return when {
+                returnEventSampleNull -> null
+                else -> Event(id = EVENT_ID, name = EVENT_NAME)
+            }
+        }
     }
 
+    /**Reset all**/
+    
     @After
     fun finish() {
         CurrentHikerInfo.currentHiker = null
         returnUserSampleNull = false
         returnHikerSampleNull = false
         returnTrailSampleNull = false
+        returnEventSampleNull = false
         hikerSampleHasPhoto = false
         trailSampleHasPhoto = false
         isUserUpdated = false
@@ -109,8 +141,17 @@ open class BaseDataRequesterTest {
         isImageUploaded = false
         isHikerUpdated = false
         isHikerDeleted = false
-        isHistoryItemAdded = false
+        isHikerHistoryItemAdded = false
+        isHikerHistoryItemDeleted = false
+        isHikerRegisteredToEvent = false
+        isHikerUnregisteredFromEvent = false
         isTrailAdded = false
         isTrailUpdated = false
+        isEventAdded = false
+        isEventUpdated = false
+        isEventHasTrailAttached = false
+        isEventHasTrailDetached = false
+        isEventHasHikerRegistered = false
+        isEventHasHikerUnregistered = false
     }
 }

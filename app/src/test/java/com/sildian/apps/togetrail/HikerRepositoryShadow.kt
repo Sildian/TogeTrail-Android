@@ -1,7 +1,9 @@
 package com.sildian.apps.togetrail
 
+import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
+import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.support.HikerRepository
 import org.robolectric.annotation.Implementation
 import org.robolectric.annotation.Implements
@@ -34,6 +36,24 @@ class HikerRepositoryShadow {
     @Implementation
     suspend fun addHikerHistoryItem(hikerId: String, historyItem: HikerHistoryItem) {
         println("FAKE HikerRepository : Add history item")
-        BaseDataRequesterTest.isHistoryItemAdded = true
+        BaseDataRequesterTest.isHikerHistoryItemAdded = true
+    }
+
+    @Implementation
+    suspend fun deleteHikerHistoryItems(hikerId: String, type: HikerHistoryType, relatedItemId: String) {
+        println("FAKE HikerRepository : Delete history item")
+        BaseDataRequesterTest.isHikerHistoryItemDeleted = true
+    }
+
+    @Implementation
+    suspend fun updateHikerAttendedEvent(hikerId:String, event: Event) {
+        println("FAKE HikerRepository : Update attended event")
+        BaseDataRequesterTest.isHikerRegisteredToEvent = true
+    }
+
+    @Implementation
+    suspend fun deleteHikerAttendedEvent(hikerId: String, eventId: String) {
+        println("FAKE HikerRepository : Delete attended event")
+        BaseDataRequesterTest.isHikerUnregisteredFromEvent = true
     }
 }

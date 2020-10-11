@@ -45,7 +45,7 @@ class TrailDataRequesterTest: BaseDataRequesterTest() {
             assertFalse(isTrailAdded)
             assertFalse(isTrailUpdated)
             assertFalse(isHikerUpdated)
-            assertFalse(isHistoryItemAdded)
+            assertFalse(isHikerHistoryItemAdded)
         }
     }
 
@@ -68,7 +68,7 @@ class TrailDataRequesterTest: BaseDataRequesterTest() {
             assertFalse(isTrailAdded)
             assertFalse(isTrailUpdated)
             assertFalse(isHikerUpdated)
-            assertFalse(isHistoryItemAdded)
+            assertFalse(isHikerHistoryItemAdded)
         }
     }
 
@@ -87,7 +87,7 @@ class TrailDataRequesterTest: BaseDataRequesterTest() {
             assertFalse(isTrailAdded)
             assertTrue(isTrailUpdated)
             assertFalse(isHikerUpdated)
-            assertFalse(isHistoryItemAdded)
+            assertFalse(isHikerHistoryItemAdded)
         }
     }
 
@@ -107,7 +107,7 @@ class TrailDataRequesterTest: BaseDataRequesterTest() {
             assertTrue(isTrailAdded)
             assertTrue(isTrailUpdated)
             assertTrue(isHikerUpdated)
-            assertTrue(isHistoryItemAdded)
+            assertTrue(isHikerHistoryItemAdded)
         }
     }
 
@@ -126,7 +126,7 @@ class TrailDataRequesterTest: BaseDataRequesterTest() {
             assertFalse(isTrailAdded)
             assertTrue(isTrailUpdated)
             assertFalse(isHikerUpdated)
-            assertFalse(isHistoryItemAdded)
+            assertFalse(isHikerHistoryItemAdded)
         }
     }
 }

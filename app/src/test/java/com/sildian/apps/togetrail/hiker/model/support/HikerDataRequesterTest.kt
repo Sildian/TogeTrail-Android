@@ -83,7 +83,7 @@ class HikerDataRequesterTest: BaseDataRequesterTest() {
                 }
             }.await()
             assertFalse(isHikerUpdated)
-            assertFalse(isHistoryItemAdded)
+            assertFalse(isHikerHistoryItemAdded)
             assertNull(hiker)
             assertNull(CurrentHikerInfo.currentHiker)
         }
@@ -94,7 +94,7 @@ class HikerDataRequesterTest: BaseDataRequesterTest() {
         runBlocking {
             val hiker = async { hikerDataRequester.loginUser() }.await()
             assertFalse(isHikerUpdated)
-            assertFalse(isHistoryItemAdded)
+            assertFalse(isHikerHistoryItemAdded)
             assertEquals(USER_ID, hiker?.id)
             assertEquals(USER_NAME, hiker?.name)
             assertEquals(USER_EMAIL, hiker?.email)
@@ -108,7 +108,7 @@ class HikerDataRequesterTest: BaseDataRequesterTest() {
             returnHikerSampleNull = true
             val hiker = async { hikerDataRequester.loginUser() }.await()
             assertTrue(isHikerUpdated)
-            assertTrue(isHistoryItemAdded)
+            assertTrue(isHikerHistoryItemAdded)
             assertEquals(USER_ID, hiker?.id)
             assertEquals(USER_NAME, hiker?.name)
             assertEquals(USER_EMAIL, hiker?.email)
