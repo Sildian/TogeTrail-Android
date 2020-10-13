@@ -202,7 +202,7 @@ class HikerViewModel : BaseObservableViewModel() {
     fun deleteUserAccount(successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
         viewModelScope.launch(this.exceptionHandler) {
             try{
-                hikerDataRequester.deleteUserAccount()
+                launch { hikerDataRequester.deleteUserAccount() }.join()
                 Log.d(TAG, "Successfully deleted the user account")
                 successCallback?.invoke()
             }
