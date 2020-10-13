@@ -46,6 +46,8 @@ open class BaseDataRequesterTest {
         const val EVENT_NAME = "Best event in the world"
 
         /**Allows to set params for fake objects sent by shadows**/
+        /*Set it to true to simulate a request failure*/
+        var requestShouldFail = false
         /*Set it to true to send null objects*/
         var returnUserSampleNull = false
         var returnHikerSampleNull = false
@@ -127,6 +129,7 @@ open class BaseDataRequesterTest {
     @After
     fun finish() {
         CurrentHikerInfo.currentHiker = null
+        requestShouldFail = false
         returnUserSampleNull = false
         returnHikerSampleNull = false
         returnTrailSampleNull = false

@@ -1,20 +1,34 @@
 package com.sildian.apps.togetrail.hiker.model.support
 
+import com.google.firebase.FirebaseException
 import com.sildian.apps.togetrail.BaseDataRequesterTest
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
-import org.junit.Before
 import org.junit.Test
 
 class HikerDataRequesterTest: BaseDataRequesterTest() {
 
-    private lateinit var hikerDataRequester: HikerDataRequester
+    private val hikerDataRequester = HikerDataRequester()
 
-    @Before
-    fun init() {
-        hikerDataRequester = HikerDataRequester()
+    @Test
+    fun given_requestFailure_when_loadHikerFromDatabase_then_checkHikerIsNull() {
+        runBlocking {
+            requestShouldFail = true
+            val hiker = async {
+                try {
+                    val hiker = hikerDataRequester.loadHikerFromDatabase(USER_ID)
+                    assertEquals("TRUE", "FALSE")
+                    hiker
+                }
+                catch (e: FirebaseException) {
+                    println(e.message)
+                    null
+                }
+            }.await()
+            assertNull(hiker)
+        }
     }
 
     @Test
@@ -22,6 +36,26 @@ class HikerDataRequesterTest: BaseDataRequesterTest() {
         runBlocking {
             val hiker = async { hikerDataRequester.loadHikerFromDatabase(USER_ID) }.await()
             assertEquals(USER_NAME, hiker?.name)
+        }
+    }
+
+    @Test
+    fun given_requestFailure_when_saveHikerInDatabase_then_checkHikerIsNotSaved() {
+        runBlocking {
+            requestShouldFail = true
+            launch {
+                try {
+                    hikerDataRequester.saveHikerInDatabase(getHikerSample(), null, null)
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: FirebaseException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isHikerUpdated)
+            assertFalse(isImageDeleted)
+            assertFalse(isImageUploaded)
+            assertFalse(isUserUpdated)
         }
     }
 
@@ -34,7 +68,7 @@ class HikerDataRequesterTest: BaseDataRequesterTest() {
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: NullPointerException) {
-
+                    println(e.message)
                 }
             }.join()
             assertFalse(isHikerUpdated)
@@ -69,6 +103,28 @@ class HikerDataRequesterTest: BaseDataRequesterTest() {
     }
 
     @Test
+    fun given_requestFailure_when_loginUser_then_checkHikerInfoAreNull() {
+        runBlocking {
+            requestShouldFail = true
+            val hiker = async {
+                try {
+                    val hiker = hikerDataRequester.loginUser()
+                    assertEquals("TRUE", "FALSE")
+                    hiker
+                }
+                catch (e: FirebaseException) {
+                    println(e.message)
+                    null
+                }
+            }.await()
+            assertFalse(isHikerUpdated)
+            assertFalse(isHikerHistoryItemAdded)
+            assertNull(hiker)
+            assertNull(CurrentHikerInfo.currentHiker)
+        }
+    }
+
+    @Test
     fun given_nullUser_when_loginUser_then_checkHikerInfoAreNull() {
         runBlocking {
             returnUserSampleNull = true
@@ -79,6 +135,7 @@ class HikerDataRequesterTest: BaseDataRequesterTest() {
                     hiker
                 }
                 catch (e: NullPointerException) {
+                    println(e.message)
                     null
                 }
             }.await()
@@ -125,6 +182,23 @@ class HikerDataRequesterTest: BaseDataRequesterTest() {
     }
 
     @Test
+    fun given_requestFailure_when_resetUserPassword_then_checkUserPasswordIsNotReset() {
+        runBlocking {
+            requestShouldFail = true
+            launch {
+                try {
+                    hikerDataRequester.resetUserPassword()
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: FirebaseException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isUserPasswordReset)
+        }
+    }
+
+    @Test
     fun given_nullUser_when_resetUserPassword_then_checkUserPasswordIsNotReset() {
         runBlocking {
             returnUserSampleNull = true
@@ -134,7 +208,7 @@ class HikerDataRequesterTest: BaseDataRequesterTest() {
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: NullPointerException) {
-
+                    println(e.message)
                 }
             }.join()
             assertFalse(isUserPasswordReset)
@@ -150,6 +224,28 @@ class HikerDataRequesterTest: BaseDataRequesterTest() {
     }
 
     @Test
+    fun given_requestFailure_when_deleteUserAccount_then_checkNothingHappens() {
+        runBlocking {
+            requestShouldFail = true
+            val hiker = getHikerSample()
+            CurrentHikerInfo.currentHiker = hiker
+            launch {
+                try {
+                    hikerDataRequester.deleteUserAccount()
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: FirebaseException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isImageDeleted)
+            assertFalse(isHikerDeleted)
+            assertFalse(isUserAccountDeleted)
+            assertNotNull(CurrentHikerInfo.currentHiker)
+        }
+    }
+
+    @Test
     fun given_nullUser_when_deleteUserAccount_then_checkNothingHappens() {
         runBlocking {
             returnUserSampleNull = true
@@ -161,7 +257,7 @@ class HikerDataRequesterTest: BaseDataRequesterTest() {
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: NullPointerException) {
-
+                    println(e.message)
                 }
             }.join()
             assertFalse(isImageDeleted)
@@ -181,7 +277,7 @@ class HikerDataRequesterTest: BaseDataRequesterTest() {
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: NullPointerException) {
-
+                    println(e.message)
                 }
             }.join()
             assertFalse(isImageDeleted)

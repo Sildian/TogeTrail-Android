@@ -1,21 +1,35 @@
 package com.sildian.apps.togetrail.trail.model.support
 
+import com.google.firebase.FirebaseException
 import com.sildian.apps.togetrail.BaseDataRequesterTest
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
-import org.junit.Before
 import org.junit.Test
 
 class TrailDataRequesterTest: BaseDataRequesterTest() {
 
-    private lateinit var trailDataRequester: TrailDataRequester
+    private val trailDataRequester = TrailDataRequester()
 
-    @Before
-    fun init() {
-        trailDataRequester = TrailDataRequester()
+    @Test
+    fun given_requestFailure_when_loadTrailFromDatabase_then_checkTrailIsNull() {
+        runBlocking {
+            requestShouldFail = true
+            val trail = async {
+                try {
+                    val trail = trailDataRequester.loadTrailFromDatabase(TRAIL_ID)
+                    assertEquals("TRUE", "FALSE")
+                    trail
+                }
+                catch (e: FirebaseException) {
+                    println(e.message)
+                    null
+                }
+            }.await()
+            assertNull(trail)
+        }
     }
 
     @Test
@@ -23,6 +37,31 @@ class TrailDataRequesterTest: BaseDataRequesterTest() {
         runBlocking {
             val trail = async { trailDataRequester.loadTrailFromDatabase(TRAIL_ID) }.await()
             assertEquals(TRAIL_NAME, trail?.name)
+        }
+    }
+
+    @Test
+    fun given_requestFailure_when_saveTrailInDatabase_then_checkTrailIsNotSaved() {
+        runBlocking {
+            CurrentHikerInfo.currentHiker = getHikerSample()
+            requestShouldFail = true
+            launch {
+                try {
+                    trailDataRequester.saveTrailInDatabase(
+                        getTrailSample(), null, null
+                    )
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: FirebaseException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isImageDeleted)
+            assertFalse(isImageUploaded)
+            assertFalse(isTrailAdded)
+            assertFalse(isTrailUpdated)
+            assertFalse(isHikerUpdated)
+            assertFalse(isHikerHistoryItemAdded)
         }
     }
 
@@ -36,8 +75,9 @@ class TrailDataRequesterTest: BaseDataRequesterTest() {
                         getTrailSample(), null, null
                     )
                     assertEquals("TRUE", "FALSE")
-                } catch (e: NullPointerException) {
-
+                }
+                catch (e: NullPointerException) {
+                    println(e.message)
                 }
             }.join()
             assertFalse(isImageDeleted)
@@ -59,8 +99,9 @@ class TrailDataRequesterTest: BaseDataRequesterTest() {
                         null, null, null
                     )
                     assertEquals("TRUE", "FALSE")
-                } catch (e: NullPointerException) {
-
+                }
+                catch (e: NullPointerException) {
+                    println(e.message)
                 }
             }.join()
             assertFalse(isImageDeleted)

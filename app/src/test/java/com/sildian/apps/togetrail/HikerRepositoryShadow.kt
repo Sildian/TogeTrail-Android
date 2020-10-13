@@ -1,5 +1,6 @@
 package com.sildian.apps.togetrail
 
+import com.google.firebase.FirebaseException
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
@@ -15,45 +16,84 @@ import org.robolectric.annotation.Implements
 @Implements(HikerRepository::class)
 class HikerRepositoryShadow {
 
+    companion object {
+        private const val EXCEPTION_MESSAGE_REQUEST_FAILURE = "FAKE HikerRepository : Request failure"
+    }
+
     @Implementation
     suspend fun getHiker(hikerId: String): Hiker? {
         println("FAKE HikerRepository : Get hiker")
-        return BaseDataRequesterTest.getHikerSample()
+        if (!BaseDataRequesterTest.requestShouldFail) {
+            return BaseDataRequesterTest.getHikerSample()
+        }
+        else {
+            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
+        }
     }
 
     @Implementation
     suspend fun updateHiker(hiker: Hiker) {
         println("FAKE HikerRepository : Update hiker")
-        BaseDataRequesterTest.isHikerUpdated = true
+        if (!BaseDataRequesterTest.requestShouldFail) {
+            BaseDataRequesterTest.isHikerUpdated = true
+        }
+        else {
+            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
+        }
     }
 
     @Implementation
     suspend fun deleteHiker(hiker: Hiker) {
         println("FAKE HikerRepository : Delete hiker")
-        BaseDataRequesterTest.isHikerDeleted = true
+        if (!BaseDataRequesterTest.requestShouldFail) {
+            BaseDataRequesterTest.isHikerDeleted = true
+        }
+        else {
+            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
+        }
     }
 
     @Implementation
     suspend fun addHikerHistoryItem(hikerId: String, historyItem: HikerHistoryItem) {
         println("FAKE HikerRepository : Add history item")
-        BaseDataRequesterTest.isHikerHistoryItemAdded = true
+        if (!BaseDataRequesterTest.requestShouldFail) {
+            BaseDataRequesterTest.isHikerHistoryItemAdded = true
+        }
+        else {
+            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
+        }
     }
 
     @Implementation
     suspend fun deleteHikerHistoryItems(hikerId: String, type: HikerHistoryType, relatedItemId: String) {
         println("FAKE HikerRepository : Delete history item")
-        BaseDataRequesterTest.isHikerHistoryItemDeleted = true
+        if (!BaseDataRequesterTest.requestShouldFail) {
+            BaseDataRequesterTest.isHikerHistoryItemDeleted = true
+        }
+        else {
+            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
+        }
     }
 
     @Implementation
     suspend fun updateHikerAttendedEvent(hikerId:String, event: Event) {
         println("FAKE HikerRepository : Update attended event")
-        BaseDataRequesterTest.isHikerRegisteredToEvent = true
+        if (!BaseDataRequesterTest.requestShouldFail) {
+            BaseDataRequesterTest.isHikerRegisteredToEvent = true
+        }
+        else {
+            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
+        }
     }
 
     @Implementation
     suspend fun deleteHikerAttendedEvent(hikerId: String, eventId: String) {
         println("FAKE HikerRepository : Delete attended event")
-        BaseDataRequesterTest.isHikerUnregisteredFromEvent = true
+        if (!BaseDataRequesterTest.requestShouldFail) {
+            BaseDataRequesterTest.isHikerUnregisteredFromEvent = true
+        }
+        else {
+            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
+        }
     }
 }

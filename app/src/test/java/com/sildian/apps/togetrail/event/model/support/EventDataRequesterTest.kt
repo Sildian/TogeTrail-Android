@@ -1,5 +1,6 @@
 package com.sildian.apps.togetrail.event.model.support
 
+import com.google.firebase.FirebaseException
 import com.sildian.apps.togetrail.BaseDataRequesterTest
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.trail.model.core.Trail
@@ -7,16 +8,29 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
-import org.junit.Before
 import org.junit.Test
 
 class EventDataRequesterTest: BaseDataRequesterTest() {
 
-    private lateinit var eventDataRequester: EventDataRequester
+    private val eventDataRequester = EventDataRequester()
 
-    @Before
-    fun init() {
-        eventDataRequester = EventDataRequester()
+    @Test
+    fun given_requestFailure_when_loadEventFromDatabase_then_checkEventIsNull() {
+        runBlocking {
+            requestShouldFail = true
+            val event = async {
+                try {
+                    val event = eventDataRequester.loadEventFromDatabase(EVENT_ID)
+                    assertEquals("TRUE", "FALSE")
+                    event
+                }
+                catch (e: FirebaseException) {
+                    println(e.message)
+                    null
+                }
+            }.await()
+            assertNull(event)
+        }
     }
 
     @Test
@@ -24,6 +38,28 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
         runBlocking {
             val event = async { eventDataRequester.loadEventFromDatabase(EVENT_ID) }.await()
             assertEquals(EVENT_NAME, event?.name)
+        }
+    }
+
+    @Test
+    fun given_requestFailure_when_saveEventInDatabase_then_checkEventIsNotSaved() {
+        runBlocking {
+            CurrentHikerInfo.currentHiker = getHikerSample()
+            requestShouldFail = true
+            launch {
+                try {
+                    eventDataRequester.saveEventInDatabase(getEventSample(), null)
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: FirebaseException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isEventAdded)
+            assertFalse(isEventUpdated)
+            assertFalse(isEventHasTrailAttached)
+            assertFalse(isHikerUpdated)
+            assertFalse(isHikerHistoryItemAdded)
         }
     }
 
@@ -37,7 +73,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: NullPointerException) {
-
+                    println(e.message)
                 }
             }.join()
             assertFalse(isEventAdded)
@@ -58,7 +94,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: NullPointerException) {
-
+                    println(e.message)
                 }
             }.join()
             assertFalse(isEventAdded)
@@ -114,6 +150,23 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
     }
 
     @Test
+    fun given_requestFailure_when_attachTrail_then_checkTrailIsNotAttached() {
+        runBlocking {
+            requestShouldFail = true
+            launch {
+                try {
+                    eventDataRequester.attachTrail(getEventSample(), getTrailSample()!!)
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: FirebaseException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isEventHasTrailAttached)
+        }
+    }
+
+    @Test
     fun given_nullEvent_when_attachTrail_then_checkTrailIsNotAttached() {
         runBlocking {
             launch {
@@ -122,7 +175,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: NullPointerException) {
-
+                    println(e.message)
                 }
             }.join()
             assertFalse(isEventHasTrailAttached)
@@ -140,7 +193,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: IllegalArgumentException) {
-
+                    println(e.message)
                 }
             }.join()
             assertFalse(isEventHasTrailAttached)
@@ -158,7 +211,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: IllegalArgumentException) {
-
+                    println(e.message)
                 }
             }.join()
             assertFalse(isEventHasTrailAttached)
@@ -174,6 +227,23 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
     }
 
     @Test
+    fun given_requestFailure_when_detachTrail_then_checkTrailIsNotDetached() {
+        runBlocking {
+            requestShouldFail = true
+            launch {
+                try {
+                    eventDataRequester.detachTrail(getEventSample(), getTrailSample()!!)
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: FirebaseException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isEventHasTrailDetached)
+        }
+    }
+
+    @Test
     fun given_nullEvent_when_detachTrail_then_checkTrailIsNotDetached() {
         runBlocking {
             launch {
@@ -182,7 +252,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: NullPointerException) {
-
+                    println(e.message)
                 }
             }.join()
             assertFalse(isEventHasTrailDetached)
@@ -200,7 +270,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: IllegalArgumentException) {
-
+                    println(e.message)
                 }
             }.join()
             assertFalse(isEventHasTrailDetached)
@@ -218,7 +288,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: IllegalArgumentException) {
-
+                    println(e.message)
                 }
             }.join()
             assertFalse(isEventHasTrailDetached)
@@ -232,7 +302,29 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
             assertTrue(isEventHasTrailDetached)
         }
     }
-    
+
+    @Test
+    fun given_requestFailure_when_registerUserToEvent_then_checkHikerIsNotRegistered() {
+        runBlocking {
+            CurrentHikerInfo.currentHiker = getHikerSample()
+            requestShouldFail = true
+            launch {
+                try {
+                    eventDataRequester.registerUserToEvent(getEventSample())
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: FirebaseException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isHikerUpdated)
+            assertFalse(isEventUpdated)
+            assertFalse(isHikerRegisteredToEvent)
+            assertFalse(isEventHasHikerRegistered)
+            assertFalse(isHikerHistoryItemAdded)
+        }
+    }
+
     @Test
     fun given_nullHiker_when_registerUserToEvent_then_checkHikerIsNotRegistered() {
         runBlocking { 
@@ -243,7 +335,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: NullPointerException) {
-                    
+                    println(e.message)
                 }
             }.join()
             assertFalse(isHikerUpdated)
@@ -264,7 +356,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: NullPointerException) {
-
+                    println(e.message)
                 }
             }.join()
             assertFalse(isHikerUpdated)
@@ -287,7 +379,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: IllegalArgumentException) {
-
+                    println(e.message)
                 }
             }.join()
             assertFalse(isHikerUpdated)
@@ -312,6 +404,28 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
     }
 
     @Test
+    fun given_requestFailure_when_unregisterUserFromEvent_then_checkHikerIsNotUnregistered() {
+        runBlocking {
+            CurrentHikerInfo.currentHiker = getHikerSample()
+            requestShouldFail = true
+            launch {
+                try {
+                    eventDataRequester.unregisterUserFromEvent(getEventSample())
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: FirebaseException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isHikerUpdated)
+            assertFalse(isEventUpdated)
+            assertFalse(isHikerUnregisteredFromEvent)
+            assertFalse(isEventHasHikerUnregistered)
+            assertFalse(isHikerHistoryItemDeleted)
+        }
+    }
+
+    @Test
     fun given_nullHiker_when_unregisterUserFromEvent_then_checkHikerIsNotUnregistered() {
         runBlocking {
             CurrentHikerInfo.currentHiker = null
@@ -321,7 +435,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: NullPointerException) {
-
+                    println(e.message)
                 }
             }.join()
             assertFalse(isHikerUpdated)
@@ -342,7 +456,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: NullPointerException) {
-
+                    println(e.message)
                 }
             }.join()
             assertFalse(isHikerUpdated)
@@ -365,7 +479,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: IllegalArgumentException) {
-
+                    println(e.message)
                 }
             }.join()
             assertFalse(isHikerUpdated)

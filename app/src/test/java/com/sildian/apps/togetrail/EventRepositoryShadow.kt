@@ -1,5 +1,6 @@
 package com.sildian.apps.togetrail
 
+import com.google.firebase.FirebaseException
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.support.EventRepository
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
@@ -14,46 +15,85 @@ import org.robolectric.annotation.Implements
 @Implements(EventRepository::class)
 class EventRepositoryShadow {
 
+    companion object {
+        private const val EXCEPTION_MESSAGE_REQUEST_FAILURE = "FAKE EventRepository : Request failure"
+    }
+
     @Implementation
     suspend fun getEvent(eventId:String): Event? {
         println("FAKE EventRepository : Get event")
-        return BaseDataRequesterTest.getEventSample()
+        if (!BaseDataRequesterTest.requestShouldFail) {
+            return BaseDataRequesterTest.getEventSample()
+        }
+        else {
+            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
+        }
     }
 
     @Implementation
     suspend fun addEvent(event:Event): String? {
         println("FAKE EventRepository : Add event")
-        BaseDataRequesterTest.isEventAdded = true
-        return BaseDataRequesterTest.EVENT_ID
+        if (!BaseDataRequesterTest.requestShouldFail) {
+            BaseDataRequesterTest.isEventAdded = true
+            return BaseDataRequesterTest.EVENT_ID
+        }
+        else {
+            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
+        }
     }
 
     @Implementation
     suspend fun updateEvent(event:Event) {
         println("FAKE EventRepository : Update event")
-        BaseDataRequesterTest.isEventUpdated = true
+        if (!BaseDataRequesterTest.requestShouldFail) {
+            BaseDataRequesterTest.isEventUpdated = true
+        }
+        else {
+            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
+        }
     }
 
     @Implementation
     suspend fun updateEventAttachedTrail(eventId:String, trail: Trail) {
         println("FAKE EventRepository : Update attached trail")
-        BaseDataRequesterTest.isEventHasTrailAttached = true
+        if (!BaseDataRequesterTest.requestShouldFail) {
+            BaseDataRequesterTest.isEventHasTrailAttached = true
+        }
+        else {
+            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
+        }
     }
 
     @Implementation
     suspend fun deleteEventAttachedTrail(eventId:String, trailId:String) {
         println("FAKE EventRepository : Delete attached trail")
-        BaseDataRequesterTest.isEventHasTrailDetached = true
+        if (!BaseDataRequesterTest.requestShouldFail) {
+            BaseDataRequesterTest.isEventHasTrailDetached = true
+        }
+        else {
+            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
+        }
     }
 
     @Implementation
     suspend fun updateEventRegisteredHiker(eventId:String, hiker: Hiker) {
         println("FAKE EventRepository : Update registered hiker")
-        BaseDataRequesterTest.isEventHasHikerRegistered = true
+        if (!BaseDataRequesterTest.requestShouldFail) {
+            BaseDataRequesterTest.isEventHasHikerRegistered = true
+        }
+        else {
+            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
+        }
     }
 
     @Implementation
     suspend fun deleteEventRegisteredHiker(eventId:String, hikerId:String) {
         println("FAKE EventRepository : Delete registered hiker")
-        BaseDataRequesterTest.isEventHasHikerUnregistered = true
+        if (!BaseDataRequesterTest.requestShouldFail) {
+            BaseDataRequesterTest.isEventHasHikerUnregistered = true
+        }
+        else {
+            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
+        }
     }
 }
