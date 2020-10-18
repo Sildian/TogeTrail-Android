@@ -1,24 +1,23 @@
 package com.sildian.apps.togetrail.trail.map
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
+import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.maps.model.LatLng
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.utils.DeviceUtilities
-import com.sildian.apps.togetrail.common.utils.GeoUtilities
+import com.sildian.apps.togetrail.common.exceptions.UserLocationException
 import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
 import kotlinx.android.synthetic.main.fragment_trail_map_record.view.*
-import java.util.*
-import java.util.concurrent.Executors
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /*************************************************************************************************
  * Lets the user record a trail in real time
@@ -27,25 +26,9 @@ import java.util.concurrent.Executors
 class TrailMapRecordFragment(trailViewModel: TrailViewModel)
     : BaseTrailMapGenerateFragment(trailViewModel) {
 
-    /**********************************Static items**********************************************/
+    /*************************************Executor***********************************************/
 
-    companion object{
-
-        /**Logs**/
-        private const val TAG = "TrailMapRecordFragment"
-
-        /**Record data**/
-
-        //The time interval between each point record (in milliseconds)
-        private const val VALUE_RECORD_TIME_INTERVAL = 5000
-
-        //The minimum required distance between two points to check before register (in meters)
-        private const val VALUE_RECORD_MIN_DISTANCE = 2
-    }
-
-    /***************************************Data*************************************************/
-
-    private var isRecording=false                       //True when the trail is being recorded
+    private var trailRecordExecutor: TrailRecordExecutor? = null    //TODO what if screen orientation changed ?
 
     /**********************************UI component**********************************************/
 
@@ -57,8 +40,19 @@ class TrailMapRecordFragment(trailViewModel: TrailViewModel)
 
     /************************************Life cycle**********************************************/
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
+        initTrailRecordExecutor()
+        return this.layout
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateTrailTrack(this.trailRecordExecutor?.trailPointsRegistered)
+    }
+
     override fun onDestroyView() {
-        this.isRecording=false
+        stopRecord()
         super.onDestroyView()
     }
 
@@ -111,7 +105,7 @@ class TrailMapRecordFragment(trailViewModel: TrailViewModel)
 
     private fun initializePlayButton(){
         this.playButton.setOnClickListener {
-            when(this.isRecording){
+            when (this.trailRecordExecutor?.isRecording()) {
                 false -> startRecord()
                 true -> stopRecord()
             }
@@ -135,136 +129,87 @@ class TrailMapRecordFragment(trailViewModel: TrailViewModel)
         hideInfoBottomSheet()
     }
 
+    /***********************************Trail monitoring*****************************************/
+
+    private fun updateTrailTrack(trailPoints: List<TrailPoint>?) {
+        if (!trailPoints.isNullOrEmpty()) {
+            this.trailViewModel?.trail?.trailTrack?.trailPoints?.clear()
+            this.trailViewModel?.trail?.trailTrack?.trailPoints?.addAll(trailPoints)
+            showTrailTrackOnMap()
+            if(this.trailViewModel?.trail?.trailTrack?.trailPoints?.size==1) {
+                revealActionsButtons()
+            }
+        }
+    }
+
     /*************************************Record actions*****************************************/
 
-    /**
-     * Starts recording the trail
-     */
-
-    private fun startRecord(){
-        this.isRecording=true
-        this.playButton.setImageResource(R.drawable.ic_record_pause_white)
-        recordTrail()
-    }
-
-    /**
-     * Stops recording the trail
-     */
-
-    private fun stopRecord(){
-        this.isRecording=false
-        this.playButton.setImageResource(R.drawable.ic_record_play_white)
-    }
-
-    /**
-     * Records the trail
-     * Runs a thread which registers a point each time the time interval is reached
-     */
-
-    private fun recordTrail(){
-        Executors.newSingleThreadExecutor().execute {
-            while(isRecording){
-                registerUserLocation()
-                var remainingTime= VALUE_RECORD_TIME_INTERVAL
-                while(remainingTime > 0){
-                    Thread.sleep(1000)
-                    remainingTime-=1000
-                }
-            }
+    private fun initTrailRecordExecutor() {
+        context?.let { context ->
+            this.trailRecordExecutor = TrailRecordExecutor(context)
+            observeTrailRecordPoint()
+            observeTrailRecordFailure()
         }
     }
 
-    /********************************Location monitoring*****************************************/
+    private fun observeTrailRecordPoint() {
+        this.trailRecordExecutor?.trailPointsRegisteredLiveData?.observe(this, { trailPoints ->
+            updateTrailTrack(trailPoints)
+        })
+    }
 
-    /**
-     * Gets the user location and use it to add a new trailPoint
-     */
-
-    private fun registerUserLocation(){
-
-        /*Gets the user location*/
-
-        if(Build.VERSION.SDK_INT<23 &&
-            ContextCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            this.userLocation.lastLocation
-                .addOnSuccessListener { userLocation ->
-                    if (userLocation != null) {
-                        val trailPoint =
-                            TrailPoint(
-                                userLocation.latitude,
-                                userLocation.longitude,
-                                userLocation.altitude.toInt(),
-                                Date()
-                            )
-
-                        /*If minimum distance to previous point is fulfilled, adds the new trailPoint*/
-
-                        if (checkMinDistanceToPreviousPointIsFulfilled(trailPoint)) {
-                            Log.d(
-                                TAG,
-                                "Point registered at lat ${trailPoint.latitude} lng ${trailPoint.longitude}"
-                            )
-                            addTrailPoint(trailPoint)
-                        } else {
-                            Log.d(TAG, "Point not registered, too closed to the previous point")
-                        }
-
-                    } else {
-
-                        /*If the user location is null, check if gps is activated and if not, propose the user to activate it*/
-
-                        Log.w(TAG, "User location cannot be reached")
-                        if (DeviceUtilities.isGpsAvailable(context!!)) {
-                            SnackbarHelper
-                                .createSimpleSnackbar(
-                                    this.messageView,
-                                    this.playButton,
-                                    R.string.message_user_location_failure
-                                )
-                                .show()
-                        } else {
-                            stopRecord()
-                            SnackbarHelper
-                                .createSnackbarWithAction(
-                                    this.messageView,
-                                    this.playButton,
-                                    R.string.message_device_gps_unavailable,
-                                    R.string.button_common_activate
-                                ) {
-                                    startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-                                }
-                                .show()
-                        }
+    private fun observeTrailRecordFailure() {
+        this.trailRecordExecutor?.userLocationFailureLiveData?.observe(this, { e ->
+            e?.errorCode?.let { errorCode ->
+                stopRecord()
+                when (errorCode) {
+                    UserLocationException.ErrorCode.ACCESS_NOT_GRANTED -> {
+                        //TODO prompt an appropriate action ?
+                        SnackbarHelper
+                            .createSimpleSnackbar(
+                                this.messageView,
+                                this.playButton,
+                                R.string.message_user_location_failure
+                            ).show()
+                    }
+                    UserLocationException.ErrorCode.GPS_UNAVAILABLE -> {
+                        SnackbarHelper.createSnackbarWithAction(
+                            this.messageView,
+                            this.playButton,
+                            R.string.message_device_gps_unavailable,
+                            R.string.button_common_activate
+                        ) {
+                            startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                        }.show()
+                    }
+                    UserLocationException.ErrorCode.ERROR_UNKNOWN -> {
+                        SnackbarHelper
+                            .createSimpleSnackbar(
+                                this.messageView,
+                                this.playButton,
+                                R.string.message_user_location_failure
+                            ).show()
                     }
                 }
-                .addOnFailureListener { e ->
-                    Log.w(TAG, e.message.toString())
-                    SnackbarHelper
-                        .createSimpleSnackbar(this.messageView, this.playButton, R.string.message_user_location_failure)
-                        .show()
-                }
+            }
+        })
+    }
+
+    private fun startRecord() {
+        lifecycleScope.launch {
+            withContext(Dispatchers.Main) {
+                playButton.setImageResource(R.drawable.ic_record_pause_white)
+                trailRecordExecutor?.start()
+            }
         }
     }
 
-    /**
-     * Checks that the distance between a trailPoint and the previous registered point is
-     * higher than the minimum required distance
-     * @param trailPoint : the new trailPoint to register
-     * @return true if the minimum distance is fulfilled or if no point was previously recorded
-     */
-
-    private fun checkMinDistanceToPreviousPointIsFulfilled(trailPoint: TrailPoint):Boolean{
-        return if(!this.trailViewModel?.trail?.trailTrack?.trailPoints.isNullOrEmpty()) {
-            val previousPoint = this.trailViewModel?.trail?.trailTrack?.getLastTrailPoint()
-            if (previousPoint != null) {
-                val pointA = LatLng(trailPoint.latitude, trailPoint.longitude)
-                val pointB = LatLng(previousPoint.latitude, previousPoint.longitude)
-                GeoUtilities.getDistance(pointA, pointB) >= VALUE_RECORD_MIN_DISTANCE
-            } else {
-                true
+    private fun stopRecord() {
+        lifecycleScope.launch {
+            withContext(Dispatchers.Main) {
+                playButton.setImageResource(R.drawable.ic_record_play_white)
+                trailRecordExecutor?.stop()
             }
-        }else{
-            true
         }
     }
 }
