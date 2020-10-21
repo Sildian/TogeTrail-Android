@@ -240,10 +240,10 @@ class MainActivity :
         val menuBuilder=MenuBuilder(this)
         MenuInflater(this).inflate(R.menu.menu_add, menuBuilder)
         menuBuilder.setCallback(object:MenuBuilder.Callback{
-            override fun onMenuModeChange(menu: MenuBuilder?) {
+            override fun onMenuModeChange(menu: MenuBuilder) {
                 //Nothing here
             }
-            override fun onMenuItemSelected(menu: MenuBuilder?, item: MenuItem?): Boolean {
+            override fun onMenuItemSelected(menu: MenuBuilder, item: MenuItem): Boolean {
                 onPopupMenuItemClick(item)
                 return true
             }

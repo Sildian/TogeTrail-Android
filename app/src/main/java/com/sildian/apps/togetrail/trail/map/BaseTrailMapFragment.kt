@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.databinding.Observable
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -21,13 +22,19 @@ import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
+import com.sildian.apps.togetrail.common.exceptions.UserLocationException
 import com.sildian.apps.togetrail.common.utils.MapMarkersUtilities
+import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.trail.info.BaseInfoFragment
 import com.sildian.apps.togetrail.trail.info.TrailInfoFragment
 import com.sildian.apps.togetrail.trail.info.TrailPOIInfoFragment
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /*************************************************************************************************
  * Base for all Trail fragments using a map
@@ -64,11 +71,11 @@ abstract class BaseTrailMapFragment (
 
     /**************************************Map support*******************************************/
 
-    protected var map: GoogleMap?=null                                      //Map
+    protected var map: GoogleMap?=null
 
     /************************************Location support****************************************/
 
-    protected lateinit var userLocation: FusedLocationProviderClient        //User location
+    protected lateinit var userLocationProvider: FusedLocationProviderClient
 
     /************************************Life cycle**********************************************/
 
@@ -252,27 +259,38 @@ abstract class BaseTrailMapFragment (
     /********************************Location monitoring*****************************************/
 
     private fun initializeUserLocation(){
-        this.userLocation=LocationServices.getFusedLocationProviderClient(context!!)
+        this.userLocationProvider=LocationServices.getFusedLocationProviderClient(context!!)
     }
 
     protected fun zoomToUserLocation() {
-        if(Build.VERSION.SDK_INT<23 &&
-            checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            this.userLocation.lastLocation
-                .addOnSuccessListener { userLocation ->
-                    if (userLocation != null) {
-                        this.map?.animateCamera(
-                            CameraUpdateFactory.newLatLngZoom(
-                                LatLng(userLocation.latitude, userLocation.longitude), 15f
-                            )
-                        )
-                    } else {
-                        Log.w(TAG, "User location cannot be reached")
+        lifecycleScope.launch {
+            withContext(Dispatchers.Main) {
+                context?.let { context ->
+
+                    if (Build.VERSION.SDK_INT < 23 || checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+                        val userLocation = async {
+                            try {
+                                UserLocationHelper.getLastUserLocation(userLocationProvider)
+                            }
+                            catch (e: UserLocationException) {
+                                e.printStackTrace()
+                                Log.w(TAG, "User location cannot be reached : ${e.message}")
+                                null
+                            }
+                        }.await()
+
+                        if (userLocation != null) {
+                            map?.animateCamera(
+                                CameraUpdateFactory.newLatLngZoom(
+                                    LatLng(userLocation.latitude, userLocation.longitude), 15f))
+                        }
+                    }
+                    else {
+                        Log.w(TAG, "User location cannot be reached : permission is not granted")
                     }
                 }
-                .addOnFailureListener { e ->
-                    Log.w(TAG, e.message.toString())
-                }
+            }
         }
     }
 

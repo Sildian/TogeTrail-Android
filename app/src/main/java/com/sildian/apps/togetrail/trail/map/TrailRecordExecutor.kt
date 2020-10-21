@@ -20,6 +20,7 @@ import java.util.*
 /*************************************************************************************************
  * Runs a loop recording a trail using the user location
  * @param context : the context
+ * TODO improve it to allow location update when the screen is off
  ************************************************************************************************/
 
 class TrailRecordExecutor(private val context: Context) {
@@ -109,6 +110,7 @@ class TrailRecordExecutor(private val context: Context) {
             }
             else {
                 userLocationFailure = UserLocationException(UserLocationException.ErrorCode.ACCESS_NOT_GRANTED)
+                userLocationFailureLiveData.postValue(userLocationFailure)
             }
         }
     }

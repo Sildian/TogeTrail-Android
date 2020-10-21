@@ -28,7 +28,7 @@ class TrailMapRecordFragment(trailViewModel: TrailViewModel)
 
     /*************************************Executor***********************************************/
 
-    private var trailRecordExecutor: TrailRecordExecutor? = null    //TODO what if screen orientation changed ?
+    private var trailRecordExecutor: TrailRecordExecutor? = null
 
     /**********************************UI component**********************************************/
 
