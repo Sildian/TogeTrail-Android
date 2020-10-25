@@ -2,7 +2,7 @@ package com.sildian.apps.togetrail.trail.model.support
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.sildian.apps.togetrail.common.baseViewModels.BaseObservableViewModel
+import com.sildian.apps.togetrail.common.baseViewModels.BaseViewModel
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 import io.ticofab.androidgpxparser.parser.domain.Gpx
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
  * This viewModel observes a single Trail related data
  ************************************************************************************************/
 
-class TrailViewModel:BaseObservableViewModel() {
+class TrailViewModel:BaseViewModel() {
 
     /************************************Static items********************************************/
 

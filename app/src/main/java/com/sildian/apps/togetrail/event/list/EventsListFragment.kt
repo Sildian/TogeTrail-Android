@@ -75,11 +75,11 @@ class EventsListFragment (private val hikerViewModel: HikerViewModel?=null) :
     }
 
     private fun initializeIAttendEventsRecyclerView() {
-        if (this.hikerViewModel?.hiker!= null && this.hikerViewModel.hiker?.nbEventsAttended!!>0) {
+        if (this.hikerViewModel?.hiker?.value != null && this.hikerViewModel.hiker.value?.nbEventsAttended!! > 0) {
             this.iAttendEventsAdapter = EventHorizontalAdapter(
                 DatabaseFirebaseHelper.generateOptionsForAdapter(
                     Event::class.java,
-                    HikerFirebaseQueries.getAttendedEvents(this.hikerViewModel.hiker?.id!!),
+                    HikerFirebaseQueries.getAttendedEvents(this.hikerViewModel.hiker.value?.id!!),
                     activity as AppCompatActivity
                 ), this
             )
@@ -102,11 +102,11 @@ class EventsListFragment (private val hikerViewModel: HikerViewModel?=null) :
     }
 
     private fun initializeMyEventsRecyclerView() {
-        if (this.hikerViewModel?.hiker!= null && this.hikerViewModel.hiker?.nbEventsCreated!!>0) {
+        if (this.hikerViewModel?.hiker?.value != null && this.hikerViewModel.hiker.value?.nbEventsCreated!! > 0) {
             this.myEventsAdapter = EventHorizontalAdapter(
                 DatabaseFirebaseHelper.generateOptionsForAdapter(
                     Event::class.java,
-                    EventFirebaseQueries.getMyEvents(this.hikerViewModel.hiker?.id!!),
+                    EventFirebaseQueries.getMyEvents(this.hikerViewModel.hiker.value?.id!!),
                     activity as AppCompatActivity
                 ), this
             )
@@ -118,11 +118,11 @@ class EventsListFragment (private val hikerViewModel: HikerViewModel?=null) :
     }
 
     private fun initializeNearbyHomeEventsRecyclerView(){
-        if(this.hikerViewModel?.hiker?.liveLocation?.country!=null) {
+        if(this.hikerViewModel?.hiker?.value?.liveLocation?.country!=null) {
             this.nearbyHomeEventsAdapter = EventHorizontalAdapter(
                 DatabaseFirebaseHelper.generateOptionsForAdapter(
                     Event::class.java,
-                    EventFirebaseQueries.getEventsNearbyLocation(this.hikerViewModel.hiker?.liveLocation!!)!!,
+                    EventFirebaseQueries.getEventsNearbyLocation(this.hikerViewModel.hiker.value?.liveLocation!!)!!,
                     activity as AppCompatActivity
                 ), this
             )

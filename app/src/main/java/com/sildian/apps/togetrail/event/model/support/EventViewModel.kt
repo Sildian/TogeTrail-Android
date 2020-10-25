@@ -2,7 +2,7 @@ package com.sildian.apps.togetrail.event.model.support
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.sildian.apps.togetrail.common.baseViewModels.BaseObservableViewModel
+import com.sildian.apps.togetrail.common.baseViewModels.BaseViewModel
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.trail.model.core.Trail
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
  * This viewModel observes a single Event related data
  ************************************************************************************************/
 
-class EventViewModel : BaseObservableViewModel() {
+class EventViewModel : BaseViewModel() {
 
     /************************************Static items********************************************/
 

@@ -2,14 +2,14 @@ package com.sildian.apps.togetrail.event.model.support
 
 import android.util.Log
 import com.google.firebase.firestore.Query
-import com.sildian.apps.togetrail.common.baseViewModels.BaseObservableViewModel
+import com.sildian.apps.togetrail.common.baseViewModels.BaseViewModel
 import com.sildian.apps.togetrail.event.model.core.Event
 
 /*************************************************************************************************
  * This viewModel observes a list of events
  ************************************************************************************************/
 
-class EventsViewModel:BaseObservableViewModel() {
+class EventsViewModel:BaseViewModel() {
 
     /************************************Static items********************************************/
 

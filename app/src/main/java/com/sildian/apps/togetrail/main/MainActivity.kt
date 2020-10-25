@@ -258,42 +258,56 @@ class MainActivity :
 
     /****************************Data monitoring**************************************************/
 
-    /**Loads data**/
-
     override fun loadData() {
-        this.hikerViewModel=ViewModelProviders
-            .of(this, ViewModelFactory)
-            .get(HikerViewModel::class.java)
+        initializeData()
+        observeHiker()
+        observeRequestFailure()
         loginCurrentUser()
     }
 
-    /**Logs the current user in the database**/
+    private fun initializeData() {
+        this.hikerViewModel = ViewModelProviders
+            .of(this, ViewModelFactory)
+            .get(HikerViewModel::class.java)
+    }
 
-    private fun loginCurrentUser(){
-        if(AuthFirebaseHelper.getCurrentUser()!=null) {
-            this.progressbar.visibility = View.VISIBLE
-            this.hikerViewModel.loginUser(this::handleLoginCurrentUser, this::onQueryError)
+    private fun observeHiker() {
+        this.hikerViewModel.hiker.observe(this) { hiker ->
+            this.progressbar.visibility = View.GONE
+            if (!this.hikerViewModel.isQueryRegistrationBusy() && hiker != null) {
+                loadHiker()
+            } else {
+                updateNavigationViewUserItems()
+            }
         }
     }
 
-    /**Handles current user login**/
+    private fun observeRequestFailure() {
+        this.hikerViewModel.requestFailure.observe(this) { e ->
+            if (e != null) {
+                onQueryError(e)
+            }
+        }
+    }
 
-    private fun handleLoginCurrentUser(){
-        this.progressbar.visibility= View.GONE
-        this.hikerViewModel.hiker?.id?.let { hikerId ->
+    private fun loginCurrentUser() {
+        if (AuthFirebaseHelper.getCurrentUser() != null) {
+            this.progressbar.visibility = View.VISIBLE
+            this.hikerViewModel.loginUser()
+        }
+    }
+
+    private fun loadHiker() {
+        this.hikerViewModel.hiker.value?.id?.let { hikerId ->
             this.hikerViewModel.loadHikerFromDatabaseRealTime(hikerId)
         }
     }
 
-    /**Shows a message when a query result is empty**/
-
-    fun showEmptyMessage(){
+    fun showQueryResultEmptyMessage(){
         SnackbarHelper
             .createSimpleSnackbar(this.messageView, this.addButton, R.string.message_query_result_empty)
             .show()
     }
-
-    /**Shows a message when an action requires an account**/
 
     fun showAccountNecessaryMessage() {
         SnackbarHelper
@@ -405,7 +419,7 @@ class MainActivity :
         updateNavigationViewUserItems()
         this.hikerViewModel.addOnPropertyChangedCallback(object:Observable.OnPropertyChangedCallback(){
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                CurrentHikerInfo.currentHiker = hikerViewModel.hiker
+                CurrentHikerInfo.currentHiker = hikerViewModel.hiker.value
                 updateNavigationViewUserItems()
             }
         })
@@ -425,7 +439,7 @@ class MainActivity :
 
         /*If the user is null, then shows default info*/
 
-        if(this.hikerViewModel.hiker==null){
+        if(this.hikerViewModel.hiker.value == null){
             this.navigationHeaderUserImage.setImageResource(R.drawable.ic_person_white)
             this.navigationHeaderUserNameText.setText(R.string.message_user_unknown)
         }
@@ -434,11 +448,11 @@ class MainActivity :
 
         else{
             Glide.with(this)
-                .load(this.hikerViewModel.hiker?.photoUrl)
+                .load(this.hikerViewModel.hiker.value?.photoUrl)
                 .apply(RequestOptions.circleCropTransform())
                 .placeholder(R.drawable.ic_person_white)
                 .into(this.navigationHeaderUserImage)
-            this.navigationHeaderUserNameText.text=this.hikerViewModel.hiker?.name
+            this.navigationHeaderUserNameText.text=this.hikerViewModel.hiker.value?.name
         }
     }
 
@@ -550,7 +564,7 @@ class MainActivity :
 
     private fun startProfileActivity(){
         val profileActivityIntent=Intent(this, ProfileActivity::class.java)
-        profileActivityIntent.putExtra(ProfileActivity.KEY_BUNDLE_HIKER_ID, this.hikerViewModel.hiker?.id)
+        profileActivityIntent.putExtra(ProfileActivity.KEY_BUNDLE_HIKER_ID, this.hikerViewModel.hiker.value?.id)
         startActivity(profileActivityIntent)
     }
 
@@ -559,7 +573,7 @@ class MainActivity :
     private fun startProfileEditActivity(){
         val profileEditActivityIntent=Intent(this, ProfileEditActivity::class.java)
         profileEditActivityIntent.putExtra(ProfileEditActivity.KEY_BUNDLE_PROFILE_ACTION, ProfileEditActivity.ACTION_PROFILE_EDIT_SETTINGS)
-        profileEditActivityIntent.putExtra(ProfileEditActivity.KEY_BUNDLE_HIKER_ID, this.hikerViewModel.hiker?.id)
+        profileEditActivityIntent.putExtra(ProfileEditActivity.KEY_BUNDLE_HIKER_ID, this.hikerViewModel.hiker.value?.id)
         startActivity(profileEditActivityIntent)
     }
 

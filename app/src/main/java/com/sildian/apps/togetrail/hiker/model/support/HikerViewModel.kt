@@ -1,8 +1,9 @@
 package com.sildian.apps.togetrail.hiker.model.support
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.sildian.apps.togetrail.common.baseViewModels.BaseObservableViewModel
+import com.sildian.apps.togetrail.common.baseViewModels.BaseViewModel
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
@@ -12,14 +13,14 @@ import kotlinx.coroutines.launch
  * This viewModel observes a single Hiker related data
  ************************************************************************************************/
 
-class HikerViewModel : BaseObservableViewModel() {
+class HikerViewModel : BaseViewModel() {
 
     /************************************Static items********************************************/
 
     companion object{
 
         /**Logs**/
-        private const val TAG="HikerViewModel"
+        private const val TAG = "HikerViewModel"
     }
 
     /***********************************Exception handler***************************************/
@@ -32,11 +33,16 @@ class HikerViewModel : BaseObservableViewModel() {
 
     private val hikerDataRequester = HikerDataRequester()
 
-    /***************************************Data*************************************************/
+    /*********************************Monitoring info*******************************************/
 
-    var hiker: Hiker?=null ; private set                //The hiker
-    private var imagePathToUpload:String?=null          //Path of image to upload into the cloud
-    private var imagePathToDelete:String?=null          //Path of image to delete from the cloud
+    private var imagePathToUpload: String? = null
+    private var imagePathToDelete: String? = null
+
+    /********************************LiveData to be observed*************************************/
+
+    val hiker = MutableLiveData<Hiker?>()
+    val saveRequestSuccess = MutableLiveData<Boolean>()
+    val requestFailure = MutableLiveData<Exception?>()
 
     /************************************Data monitoring*****************************************/
 
@@ -46,8 +52,8 @@ class HikerViewModel : BaseObservableViewModel() {
      * @param imagePath : the temporary image's uri
      */
 
-    fun updateImagePathToUpload(imagePath:String){
-        this.hiker?.photoUrl?.let { photoUrl ->
+    fun updateImagePathToUpload(imagePath:String) {
+        this.hiker.value?.photoUrl?.let { photoUrl ->
             if (photoUrl.startsWith("https://")) {
                 this.imagePathToDelete = photoUrl
             }
@@ -60,9 +66,9 @@ class HikerViewModel : BaseObservableViewModel() {
      * @param imagePath : the image's url
      */
 
-    fun updateImagePathToDelete(imagePath:String){
+    fun updateImagePathToDelete(imagePath:String) {
         this.imagePathToUpload=null
-        if(imagePath.startsWith("https://")){
+        if (imagePath.startsWith("https://")) {
             this.imagePathToDelete=imagePath
         }
     }
@@ -77,23 +83,20 @@ class HikerViewModel : BaseObservableViewModel() {
     /**
      * Loads an hiker from the database in real time
      * @param hikerId : the hiker's id
-     * @param successCallback : the callback to handle a success in the query
-     * @param failureCallback : the callback to handle a failure in the query
      */
 
-    fun loadHikerFromDatabaseRealTime(hikerId:String, successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null) {
+    fun loadHikerFromDatabaseRealTime(hikerId:String) {
         this.queryRegistration?.remove()
         this.queryRegistration = hikerDataRequester.loadHikerFromDatabaseRealTime(hikerId)
             .addSnapshotListener { snapshot, e ->
                 if (snapshot != null) {
-                    hiker = snapshot.toObject(Hiker::class.java)
-                    notifyDataChanged()
+                    val result = snapshot.toObject(Hiker::class.java)
                     Log.d(TAG, "Successfully loaded hiker from database")
-                    successCallback?.invoke()
+                    hiker.postValue(result)
                 }
-                else if(e != null){
+                else if(e != null) {
                     Log.e(TAG, "Failed to load hiker from database : ${e.message}")
-                    failureCallback?.invoke(e)
+                    requestFailure.postValue(e)
                 }
             }
     }
@@ -101,115 +104,99 @@ class HikerViewModel : BaseObservableViewModel() {
     /**
      * Loads an hiker from the database
      * @param hikerId : the hiker's id
-     * @param successCallback : the callback to handle a success in the query
-     * @param failureCallback : the callback to handle a failure in the query
      */
 
-    fun loadHikerFromDatabase(hikerId:String, successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
+    fun loadHikerFromDatabase(hikerId:String) {
         viewModelScope.launch(this.exceptionHandler) {
             try {
-                hiker = async { hikerDataRequester.loadHikerFromDatabase(hikerId) }.await()
-                notifyDataChanged()
+                val result = async { hikerDataRequester.loadHikerFromDatabase(hikerId) }.await()
                 Log.d(TAG, "Successfully loaded hiker from database")
-                successCallback?.invoke()
+                hiker.postValue(result)
             }
-            catch(e:Exception){
+            catch(e:Exception) {
                 Log.e(TAG, "Failed to load hiker from database : ${e.message}")
-                failureCallback?.invoke(e)
-                throw e
+                requestFailure.postValue(e)
             }
         }
     }
 
     /**
      * Saves the hiker within the database, after uploading or deleting the profile's image
-     * @param successCallback : the callback to handle a success in the query
-     * @param failureCallback : the callback to handle a failure in the query
      */
 
-    fun saveHikerInDatabase(successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
+    fun saveHikerInDatabase() {
         viewModelScope.launch(this.exceptionHandler) {
             try {
-                launch { hikerDataRequester.saveHikerInDatabase(hiker, imagePathToDelete, imagePathToUpload) }.join()
+                launch { hikerDataRequester.saveHikerInDatabase(hiker.value, imagePathToDelete, imagePathToUpload) }.join()
                 Log.d(TAG, "Successfully saved hiker in database")
-                successCallback?.invoke()
+                saveRequestSuccess.postValue(true)
             }
             catch(e:Exception) {
                 Log.e(TAG, "Failed to save hiker in database : ${e.message}")
-                failureCallback?.invoke(e)
-                throw e
+                requestFailure.postValue(e)
             }
         }
     }
 
     /**
      * Logs the user in and if this is a new user, creates a new Hiker
-     * @param successCallback : the callback to handle a success in the query
-     * @param failureCallback : the callback to handle a failure in the query
      */
 
-    fun loginUser(successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
+    fun loginUser() {
         viewModelScope.launch(this.exceptionHandler) {
             try {
-                hiker = async { hikerDataRequester.loginUser() }.await()
-                notifyDataChanged()
+                val result = async { hikerDataRequester.loginUser() }.await()
                 Log.d(TAG, "Successfully logged the user in")
-                successCallback?.invoke()
+                hiker.postValue(result)
             }
-            catch(e:Exception){
+            catch(e:Exception) {
                 Log.e(TAG, "Failed to log the user in : ${e.message}")
-                failureCallback?.invoke(e)
-                throw e
+                requestFailure.postValue(e)
             }
         }
     }
 
     /**Logs the user out**/
 
-    fun logoutUser(){
+    fun logoutUser() {
+        clearQueryRegistration()
         hikerDataRequester.logoutUser()
-        this.hiker = null
-        notifyDataChanged()
+        this.hiker.postValue(null)
     }
 
     /**
      * Resets the user's password
-     * @param successCallback : the callback to handle a success in the query
-     * @param failureCallback : the callback to handle a failure in the query
      */
 
-    fun resetUserPassword(successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
+    fun resetUserPassword() {
         viewModelScope.launch(this.exceptionHandler) {
-            try{
+            try {
                 launch { hikerDataRequester.resetUserPassword() }.join()
                 Log.d(TAG, "Successfully reset the user password")
-                successCallback?.invoke()
+                saveRequestSuccess.postValue(true)
             }
             catch(e:Exception){
                 Log.e(TAG, "Failed to reset the user password : ${e.message}")
-                failureCallback?.invoke(e)
-                throw e
+                requestFailure.postValue(e)
             }
         }
     }
 
     /**
      * Deletes the user's account as well as all related hiker data and the profile's image
-     * @param successCallback : the callback to handle a success in the query
-     * @param failureCallback : the callback to handle a failure in the query
      */
 
-    fun deleteUserAccount(successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
+    fun deleteUserAccount() {
         viewModelScope.launch(this.exceptionHandler) {
-            try{
+            try {
+                clearQueryRegistration()
                 launch { hikerDataRequester.deleteUserAccount() }.join()
                 Log.d(TAG, "Successfully deleted the user account")
-                successCallback?.invoke()
+                saveRequestSuccess.postValue(true)
             }
-            catch(e:Exception){
+            catch(e:Exception) {
                 Log.e(TAG, "Failed to delete the user account : ${e.message}")
-                failureCallback?.invoke(e)
-                throw e
+                requestFailure.postValue(e)
             }
         }
     }

@@ -79,11 +79,11 @@ class TrailsListFragment (private val hikerViewModel: HikerViewModel?=null) :
     }
 
     private fun initializeMyTrailsRecyclerView(){
-        if(this.hikerViewModel?.hiker!=null&&this.hikerViewModel.hiker?.nbTrailsCreated!!>0) {
+        if(this.hikerViewModel?.hiker?.value != null && this.hikerViewModel.hiker.value?.nbTrailsCreated!! > 0) {
             this.myTrailsAdapter = TrailHorizontalAdapter(
                 DatabaseFirebaseHelper.generateOptionsForAdapter(
                     Trail::class.java,
-                    TrailFirebaseQueries.getMyTrails(this.hikerViewModel.hiker?.id!!),
+                    TrailFirebaseQueries.getMyTrails(this.hikerViewModel.hiker.value?.id!!),
                     activity as AppCompatActivity
                 ), this
             )
@@ -96,11 +96,11 @@ class TrailsListFragment (private val hikerViewModel: HikerViewModel?=null) :
     }
 
     private fun initializeNearbyHomeTrailsRecyclerView(){
-        if(this.hikerViewModel?.hiker?.liveLocation?.country!=null) {
+        if(this.hikerViewModel?.hiker?.value?.liveLocation?.country!=null) {
             this.nearbyHomeTrailsAdapter = TrailHorizontalAdapter(
                 DatabaseFirebaseHelper.generateOptionsForAdapter(
                     Trail::class.java,
-                    TrailFirebaseQueries.getTrailsNearbyLocation(this.hikerViewModel.hiker?.liveLocation!!)!!,
+                    TrailFirebaseQueries.getTrailsNearbyLocation(this.hikerViewModel.hiker.value?.liveLocation!!)!!,
                     activity as AppCompatActivity
                 ), this
             )

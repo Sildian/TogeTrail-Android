@@ -2,14 +2,14 @@ package com.sildian.apps.togetrail.trail.model.support
 
 import android.util.Log
 import com.google.firebase.firestore.Query
-import com.sildian.apps.togetrail.common.baseViewModels.BaseObservableViewModel
+import com.sildian.apps.togetrail.common.baseViewModels.BaseViewModel
 import com.sildian.apps.togetrail.trail.model.core.Trail
 
 /*************************************************************************************************
  * This viewModel observes a list of trails
  ************************************************************************************************/
 
-class TrailsViewModel:BaseObservableViewModel() {
+class TrailsViewModel:BaseViewModel() {
 
     /************************************Static items********************************************/
 

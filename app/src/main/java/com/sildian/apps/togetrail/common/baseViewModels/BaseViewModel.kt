@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.ListenerRegistration
 
 /*************************************************************************************************
- * Base for observable viewModels
+ * Base for viewModels
  ************************************************************************************************/
 
-abstract class BaseObservableViewModel: ViewModel(), Observable {
+abstract class BaseViewModel: ViewModel(), Observable {
 
     /**********************************Attrs*****************************************************/
 
@@ -20,8 +20,17 @@ abstract class BaseObservableViewModel: ViewModel(), Observable {
 
     override fun onCleared() {
         this.callbacks.clear()
-        this.queryRegistration?.remove()
+        clearQueryRegistration()
     }
+
+    /**************************Query registration monitoring*************************************/
+
+    protected fun clearQueryRegistration() {
+        this.queryRegistration?.remove()
+        this.queryRegistration = null
+    }
+
+    fun isQueryRegistrationBusy(): Boolean = this.queryRegistration != null
 
     /*****************************Callbacks monitoring*******************************************/
 

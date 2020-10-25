@@ -171,7 +171,7 @@ class TrailMapFragment :
         this.trailsViewModel.addOnPropertyChangedCallback(object:Observable.OnPropertyChangedCallback(){
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                 if(trailsViewModel.trails.isEmpty()){
-                    (activity as MainActivity).showEmptyMessage()
+                    (activity as MainActivity).showQueryResultEmptyMessage()
                 }else {
                     showTrailsOnMap()
                 }
@@ -183,7 +183,7 @@ class TrailMapFragment :
         this.eventsViewModel.addOnPropertyChangedCallback(object:Observable.OnPropertyChangedCallback(){
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                 if(eventsViewModel.events.isEmpty()){
-                    (activity as MainActivity).showEmptyMessage()
+                    (activity as MainActivity).showQueryResultEmptyMessage()
                 }else {
                     showEventsOnMap()
                 }

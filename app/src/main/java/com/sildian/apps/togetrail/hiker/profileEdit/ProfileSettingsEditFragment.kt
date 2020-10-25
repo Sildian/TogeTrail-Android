@@ -25,13 +25,40 @@ class ProfileSettingsEditFragment(private val hikerId: String?=null) : BaseFragm
     /***********************************Data monitoring******************************************/
 
     override fun loadData() {
+        initializeData()
+        observeSaveRequestSuccess()
+        observeRequestFailure()
+        loadHiker()
+    }
+
+    private fun initializeData() {
         this.hikerViewModel= ViewModelProviders
             .of(this, ViewModelFactory)
             .get(HikerViewModel::class.java)
-        (this.binding as FragmentProfileSettingsEditBinding).profileSettingsEditFragment=this
-        (this.binding as FragmentProfileSettingsEditBinding).hikerViewModel=this.hikerViewModel
+        this.binding.lifecycleOwner = this
+        (this.binding as FragmentProfileSettingsEditBinding).profileSettingsEditFragment = this
+        (this.binding as FragmentProfileSettingsEditBinding).hikerViewModel = this.hikerViewModel
+    }
+
+    private fun observeSaveRequestSuccess() {
+        this.hikerViewModel.saveRequestSuccess.observe(this) { success ->
+            if (success) {
+                handleSaveDataSuccess()
+            }
+        }
+    }
+
+    private fun observeRequestFailure() {
+        this.hikerViewModel.requestFailure.observe(this) { e ->
+            if (e != null) {
+                onQueryError(e)
+            }
+        }
+    }
+
+    private fun loadHiker() {
         this.hikerId?.let { hikerId ->
-            this.hikerViewModel.loadHikerFromDatabase(hikerId, null, this::onQueryError)
+            this.hikerViewModel.loadHikerFromDatabase(hikerId)
         }
     }
 
@@ -41,10 +68,12 @@ class ProfileSettingsEditFragment(private val hikerId: String?=null) : BaseFragm
 
     override fun useDataBinding(): Boolean = true
 
+    @Suppress("UNUSED_PARAMETER")
     fun onChangePasswordButtonClick(view: View){
         requestResetUserPasswordConfirmation()
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun onDeleteAccountButtonClick(view:View){
         requestDeleteUserAccountConfirmation()
     }
@@ -56,13 +85,13 @@ class ProfileSettingsEditFragment(private val hikerId: String?=null) : BaseFragm
         val dialog=DialogHelper.createYesNoDialog(
             context!!,
             R.string.message_password_reset_confirmation_title,
-            R.string.message_password_reset_confirmation_message,
-            DialogInterface.OnClickListener { dialog, which ->
-                if(which==DialogInterface.BUTTON_POSITIVE){
-                    this.baseActivity?.showProgressDialog()
-                    this.hikerViewModel.resetUserPassword(this::handleSaveDataSuccess, this::onQueryError)
-                }
-            })
+            R.string.message_password_reset_confirmation_message
+        ) { dialog, which ->
+            if (which == DialogInterface.BUTTON_POSITIVE) {
+                this.baseActivity?.showProgressDialog()
+                this.hikerViewModel.resetUserPassword()
+            }
+        }
         dialog.show()
     }
 
@@ -71,13 +100,13 @@ class ProfileSettingsEditFragment(private val hikerId: String?=null) : BaseFragm
         val dialog=DialogHelper.createYesNoCriticalDialog(
             context!!,
             R.string.message_account_delete_confirmation_title,
-            R.string.message_account_delete_confirmation_message,
-            DialogInterface.OnClickListener { dialog, which ->
-                if(which==DialogInterface.BUTTON_POSITIVE){
-                    this.baseActivity?.showProgressDialog()
-                    this.hikerViewModel.deleteUserAccount(this::handleSaveDataSuccess, this::onQueryError)
-                }
-            })
+            R.string.message_account_delete_confirmation_message
+        ) { dialog, which ->
+            if (which == DialogInterface.BUTTON_POSITIVE) {
+                this.baseActivity?.showProgressDialog()
+                this.hikerViewModel.deleteUserAccount()
+            }
+        }
         dialog.show()
     }
 

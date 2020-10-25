@@ -1,7 +1,6 @@
 package com.sildian.apps.togetrail.hiker.profile
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.Observable
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -40,17 +39,37 @@ class ProfileFragment (private val hikerId: String?)
     /***********************************Data monitoring******************************************/
 
     override fun loadData() {
-        this.hikerViewModel=ViewModelProviders
+        initializeData()
+        observeHiker()
+        observeRequestFailure()
+        loadHiker()
+    }
+
+    private fun initializeData() {
+        this.hikerViewModel = ViewModelProviders
             .of(this, ViewModelFactory)
             .get(HikerViewModel::class.java)
-        (this.binding as FragmentProfileBinding).hikerViewModel=this.hikerViewModel
-        this.hikerViewModel.addOnPropertyChangedCallback(object:Observable.OnPropertyChangedCallback(){
-            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                refreshUI()
-            }
+        this.binding.lifecycleOwner = this
+        (this.binding as FragmentProfileBinding).hikerViewModel = this.hikerViewModel
+    }
+
+    private fun observeHiker() {
+        this.hikerViewModel.hiker.observe(this, { hiker ->
+            refreshUI()
         })
+    }
+
+    private fun observeRequestFailure() {
+        this.hikerViewModel.requestFailure.observe(this) { e ->
+            if (e != null) {
+                onQueryError(e)
+            }
+        }
+    }
+
+    private fun loadHiker() {
         this.hikerId?.let { hikerId ->
-            this.hikerViewModel.loadHikerFromDatabaseRealTime(hikerId, null, this::onQueryError)
+            this.hikerViewModel.loadHikerFromDatabaseRealTime(hikerId)
         }
     }
 
@@ -76,14 +95,14 @@ class ProfileFragment (private val hikerId: String?)
 
     private fun updatePhotoImageView(){
         Glide.with(this)
-            .load(this.hikerViewModel.hiker?.photoUrl)
+            .load(this.hikerViewModel.hiker.value?.photoUrl)
             .apply(RequestOptions.circleCropTransform())
             .placeholder(R.drawable.ic_person_white)
             .into(this.photoImageView)
     }
 
     private fun updateHistoryItemsRecyclerView(){
-        this.hikerViewModel.hiker?.let { hiker ->
+        this.hikerViewModel.hiker.value?.let { hiker ->
             this.historyItemAdapter = HikerHistoryAdapter(
                 DatabaseFirebaseHelper.generateOptionsForAdapter(
                     HikerHistoryItem::class.java,
