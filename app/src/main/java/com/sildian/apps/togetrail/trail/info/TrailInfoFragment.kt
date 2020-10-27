@@ -1,7 +1,6 @@
 package com.sildian.apps.togetrail.trail.info
 
 import android.view.View
-import androidx.databinding.Observable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.sildian.apps.togetrail.R
@@ -35,25 +34,34 @@ class TrailInfoFragment(
 
     private lateinit var elevationChartGenerator: ElevationChartGenerator
 
-    /************************************Life cycle**********************************************/
-
-    override fun onDestroyView() {
-        this.trailViewModel?.removeAllOnPropertyChangedCallbacks()
-        super.onDestroyView()
-    }
-
     /*********************************Data monitoring********************************************/
 
     override fun loadData() {
+        initializeData()
+        observeTrail()
+        observeRequestFailure()
+    }
+
+    private fun initializeData() {
+        this.binding.lifecycleOwner = this
         (this.binding as FragmentTrailInfoBinding).trailInfoFragment = this
         (this.binding as FragmentTrailInfoBinding).trailViewModel = this.trailViewModel
         (this.binding as FragmentTrailInfoBinding).isEditable = this.isEditable
-        this.trailViewModel?.addOnPropertyChangedCallback(object:Observable.OnPropertyChangedCallback(){
-            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                refreshUI()
+        this.elevationChartGenerator = ElevationChartGenerator(context!!, this.trailViewModel?.trail?.value)
+    }
+
+    private fun observeTrail() {
+        this.trailViewModel?.trail?.observe(this) { trail ->
+            refreshUI()
+        }
+    }
+
+    private fun observeRequestFailure() {
+        this.trailViewModel?.requestFailure?.observe(this) { e ->
+            if (e != null) {
+                onQueryError(e)
             }
-        })
-        this.elevationChartGenerator = ElevationChartGenerator(context!!, this.trailViewModel?.trail)
+        }
     }
 
     /***********************************UI monitoring********************************************/
@@ -87,7 +95,7 @@ class TrailInfoFragment(
 
     private fun updatePhoto(){
         Glide.with(context!!)
-            .load(this.trailViewModel?.trail?.mainPhotoUrl)
+            .load(this.trailViewModel?.trail?.value?.mainPhotoUrl)
             .apply(RequestOptions.centerCropTransform())
             .placeholder(R.drawable.ic_trail_black)
             .into(this.photoImageView)
@@ -104,10 +112,12 @@ class TrailInfoFragment(
         }
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun onSeeButtonClick(view:View) {
         (parentFragment as BaseTrailMapFragment).expandInfoBottomSheet()
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun onEditButtonClick(view:View){
         (parentFragment as BaseTrailMapFragment).editTrailInfo()
     }

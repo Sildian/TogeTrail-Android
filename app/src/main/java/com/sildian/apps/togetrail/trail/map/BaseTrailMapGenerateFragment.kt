@@ -35,7 +35,7 @@ abstract class BaseTrailMapGenerateFragment(trailViewModel: TrailViewModel) :
     private fun showRequestTrailNameDialog() {
         DialogHelper.createRequestInfoDialog(context!!, R.string.message_trail_info_request_title) { answer ->
             if (!answer.isNullOrEmpty()) {
-                this.trailViewModel?.trail?.name = answer
+                this.trailViewModel?.trail?.value?.name = answer
                 this.trailViewModel?.notifyDataChanged()
             } else {
                 showRequestTrailNameDialog()
@@ -95,13 +95,13 @@ abstract class BaseTrailMapGenerateFragment(trailViewModel: TrailViewModel) :
 
     override fun showTrailTrackOnMap() {
 
-        if(this.trailViewModel?.trail!=null) {
+        if(this.trailViewModel?.trail?.value!=null) {
 
             super.showTrailTrackOnMap()
 
             /*Gets the last trailPoint*/
 
-            val lastPoint = this.trailViewModel?.trail?.trailTrack?.getLastTrailPoint()
+            val lastPoint = this.trailViewModel?.trail?.value?.trailTrack?.getLastTrailPoint()
 
             /*Moves the camera to the last point*/
 
@@ -124,13 +124,13 @@ abstract class BaseTrailMapGenerateFragment(trailViewModel: TrailViewModel) :
 
         /*Adds a new trailPoint and updates the track on the map*/
 
-        this.trailViewModel?.trail?.trailTrack?.trailPoints?.add(trailPoint)
+        this.trailViewModel?.trail?.value?.trailTrack?.trailPoints?.add(trailPoint)
         this.map?.clear()
         showTrailTrackOnMap()
 
         /*If this is the first trailPoint, reveals the actions buttons*/
 
-        if(this.trailViewModel?.trail?.trailTrack?.trailPoints?.size==1) {
+        if(this.trailViewModel?.trail?.value?.trailTrack?.trailPoints?.size==1) {
             revealActionsButtons()
         }
     }
@@ -142,30 +142,30 @@ abstract class BaseTrailMapGenerateFragment(trailViewModel: TrailViewModel) :
 
     protected fun removeLastTrailPoint(){
 
-        if(this.trailViewModel?.trail!=null&&this.trailViewModel?.trail!!.trailTrack.trailPoints.isNotEmpty()) {
+        if(this.trailViewModel?.trail?.value!=null && this.trailViewModel?.trail?.value!!.trailTrack.trailPoints.isNotEmpty()) {
 
             /*Removes the last trailPoint*/
 
-            val lastPoint = this.trailViewModel?.trail?.trailTrack?.getLastTrailPoint()
-            this.trailViewModel?.trail?.trailTrack?.trailPoints?.remove(lastPoint)
+            val lastPoint = this.trailViewModel?.trail?.value?.trailTrack?.getLastTrailPoint()
+            this.trailViewModel?.trail?.value?.trailTrack?.trailPoints?.remove(lastPoint)
 
             /*Checks if a trailPointOfInterest is attached and eventually removes it*/
 
-            val trailPoiIndex=this.trailViewModel?.trail?.trailTrack?.findTrailPointOfInterest(lastPoint!!)
+            val trailPoiIndex=this.trailViewModel?.trail?.value?.trailTrack?.findTrailPointOfInterest(lastPoint!!)
             if(trailPoiIndex!=null){
-                this.trailViewModel?.trail?.trailTrack?.trailPointsOfInterest?.removeAt(trailPoiIndex)
+                this.trailViewModel?.trail?.value?.trailTrack?.trailPointsOfInterest?.removeAt(trailPoiIndex)
             }
 
             /*Then updates the track on the map*/
 
             this.map?.clear()
-            if(this.trailViewModel?.trail!!.trailTrack.trailPoints.isNotEmpty()) {
+            if(this.trailViewModel?.trail?.value!!.trailTrack.trailPoints.isNotEmpty()) {
                 showTrailTrackOnMap()
             }
 
             /*If there is no remaining trailPoint, hides the actions buttons*/
 
-            if(this.trailViewModel?.trail!!.trailTrack.trailPoints.isEmpty()) {
+            if(this.trailViewModel?.trail?.value!!.trailTrack.trailPoints.isEmpty()) {
                 hideActionsButtons()
             }
         }
@@ -178,11 +178,11 @@ abstract class BaseTrailMapGenerateFragment(trailViewModel: TrailViewModel) :
 
     protected fun addTrailPointOfInterest(){
 
-        if(this.trailViewModel?.trail!=null&&this.trailViewModel?.trail!!.trailTrack.trailPoints.isNotEmpty()) {
+        if(this.trailViewModel?.trail?.value!=null && this.trailViewModel?.trail?.value!!.trailTrack.trailPoints.isNotEmpty()) {
 
             /*Uses the last trailPoint to create a trailPointOfInterest*/
 
-            val lastPoint = this.trailViewModel?.trail?.trailTrack?.getLastTrailPoint()
+            val lastPoint = this.trailViewModel?.trail?.value?.trailTrack?.getLastTrailPoint()
 
             if(lastPoint!=null) {
 
@@ -193,7 +193,7 @@ abstract class BaseTrailMapGenerateFragment(trailViewModel: TrailViewModel) :
                         lastPoint.elevation,
                         lastPoint.time
                     )
-                this.trailViewModel?.trail?.trailTrack?.trailPointsOfInterest?.add(trailPointOfInterest)
+                this.trailViewModel?.trail?.value?.trailTrack?.trailPointsOfInterest?.add(trailPointOfInterest)
 
                 /*Then updates the track on the map*/
 
@@ -202,8 +202,8 @@ abstract class BaseTrailMapGenerateFragment(trailViewModel: TrailViewModel) :
 
                 /*And shows the info fragment related to the trailPointOfInterest*/
 
-                val lastPoi = this.trailViewModel?.trail?.trailTrack?.trailPointsOfInterest?.last()!!
-                val lastPoiIndex = this.trailViewModel?.trail?.trailTrack?.trailPointsOfInterest?.indexOf(lastPoi)!!
+                val lastPoi = this.trailViewModel?.trail?.value?.trailTrack?.trailPointsOfInterest?.last()!!
+                val lastPoiIndex = this.trailViewModel?.trail?.value?.trailTrack?.trailPointsOfInterest?.indexOf(lastPoi)!!
                 showTrailPOIInfoFragment(lastPoiIndex)
             }
         }
@@ -215,7 +215,7 @@ abstract class BaseTrailMapGenerateFragment(trailViewModel: TrailViewModel) :
      */
 
     protected fun removeTrailPointOfInterest(trailPointOfInterest: TrailPointOfInterest){
-        this.trailViewModel?.trail?.trailTrack?.trailPointsOfInterest?.remove(trailPointOfInterest)
+        this.trailViewModel?.trail?.value?.trailTrack?.trailPointsOfInterest?.remove(trailPointOfInterest)
         hideInfoBottomSheet()
         this.map?.clear()
         showTrailTrackOnMap()

@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
-import androidx.databinding.Observable
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -138,27 +137,49 @@ abstract class BaseTrailMapFragment (
     /**********************************Data monitoring*******************************************/
 
     override fun loadData() {
-        this.trailViewModel?.addOnPropertyChangedCallback(object:Observable.OnPropertyChangedCallback(){
-            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+        observeTrail()
+        observeSaveRequestSuccess()
+        observeRequestFailure()
+    }
+
+    private fun observeTrail() {
+        this.trailViewModel?.trail?.observe(this) { trail ->
+            if (trail != null) {
                 refreshUI()
             }
-        })
+        }
+    }
+
+    private fun observeSaveRequestSuccess() {
+        this.trailViewModel?.saveRequestSuccess?.observe(this) { success ->
+            if (success) {
+                onSaveSuccess()
+            }
+        }
+    }
+
+    private fun observeRequestFailure() {
+        this.trailViewModel?.requestFailure?.observe(this) { e ->
+            if (e != null) {
+                onQueryError(e)
+            }
+        }
     }
 
     override fun saveData(){
         hideInfoBottomSheet()
         if(this.checkDataIsValid()) {
-            this.trailViewModel?.trail?.autoPopulatePosition()
+            this.trailViewModel?.trail?.value?.autoPopulatePosition()
             this.baseActivity?.showProgressDialog()
-            this.trailViewModel?.saveTrailInDatabase(false, this::onSaveSuccess, this::onQueryError)
+            this.trailViewModel?.saveTrailInDatabase(false)
         }
     }
 
     override fun checkDataIsValid(): Boolean {
-        if(this.trailViewModel?.trail!=null) {
-            if (this.trailViewModel?.trail!!.isDataValid()) {
-                for(i in this.trailViewModel?.trail!!.trailTrack.trailPointsOfInterest.indices){
-                    if(!this.trailViewModel?.trail!!.trailTrack.trailPointsOfInterest[i].isDataValid()) {
+        if(this.trailViewModel?.trail?.value != null) {
+            if (this.trailViewModel?.trail?.value!!.isDataValid()) {
+                for(i in this.trailViewModel?.trail?.value!!.trailTrack.trailPointsOfInterest.indices){
+                    if(!this.trailViewModel?.trail?.value!!.trailTrack.trailPointsOfInterest[i].isDataValid()) {
                         showTrailPOIMissingInfoMessage(i)
                         return false
                     }
@@ -302,12 +323,12 @@ abstract class BaseTrailMapFragment (
 
     protected open fun showTrailTrackOnMap(){
 
-        if(this.trailViewModel?.trail!=null){
+        if(this.trailViewModel?.trail?.value != null){
 
             /*Creates and shows the polyline from the trailPoints*/
 
             val polylineOption=PolylineOptions()
-            this.trailViewModel?.trail?.trailTrack?.trailPoints?.forEach { trailPoint->
+            this.trailViewModel?.trail?.value?.trailTrack?.trailPoints?.forEach { trailPoint->
                 polylineOption.add(LatLng(trailPoint.latitude, trailPoint.longitude))
             }
             polylineOption.color(ContextCompat.getColor(context!!, R.color.colorSecondaryDark))
@@ -315,8 +336,8 @@ abstract class BaseTrailMapFragment (
 
             /*Gets the first and the last trailPoints*/
 
-            val firstPoint=this.trailViewModel?.trail?.trailTrack?.getFirstTrailPoint()
-            val lastPoint=this.trailViewModel?.trail?.trailTrack?.getLastTrailPoint()
+            val firstPoint=this.trailViewModel?.trail?.value?.trailTrack?.getFirstTrailPoint()
+            val lastPoint=this.trailViewModel?.trail?.value?.trailTrack?.getLastTrailPoint()
 
             /*Adds markers on the first and the last trailPoints*/
 
@@ -330,7 +351,7 @@ abstract class BaseTrailMapFragment (
                     ?.tag = firstPoint
             }
 
-            if(lastPoint!=null && this.trailViewModel?.trail?.loop==false) {
+            if(lastPoint!=null && this.trailViewModel?.trail?.value?.loop==false) {
                 this.map?.addMarker(
                     MarkerOptions()
                         .position(LatLng(lastPoint.latitude, lastPoint.longitude))
@@ -342,8 +363,8 @@ abstract class BaseTrailMapFragment (
 
             /*Adds a marker for each trailPointOfInterest including its number*/
 
-            for(i in this.trailViewModel?.trail?.trailTrack?.trailPointsOfInterest!!.indices){
-                val trailPointOfInterest=this.trailViewModel?.trail?.trailTrack?.trailPointsOfInterest!![i]
+            for(i in this.trailViewModel?.trail?.value?.trailTrack?.trailPointsOfInterest!!.indices){
+                val trailPointOfInterest=this.trailViewModel?.trail?.value?.trailTrack?.trailPointsOfInterest!![i]
                 this.map?.addMarker(MarkerOptions()
                     .position(LatLng(trailPointOfInterest.latitude, trailPointOfInterest.longitude))
                     .icon(MapMarkersUtilities.createMapMarkerFromVector(
@@ -357,7 +378,7 @@ abstract class BaseTrailMapFragment (
     /**Edits the trail's info**/
 
     fun editTrailInfo(){
-        this.trailViewModel?.trail?.let { trail ->
+        this.trailViewModel?.trail?.value?.let { trail ->
             hideInfoBottomSheet()
             (activity as TrailActivity).updateTrailAndEditInfo(trail)
         }
@@ -369,7 +390,7 @@ abstract class BaseTrailMapFragment (
      */
 
     fun editTrailPoiInfo(trailPoiPosition:Int){
-        this.trailViewModel?.trail?.let { trail ->
+        this.trailViewModel?.trail?.value?.let { trail ->
             hideInfoBottomSheet()
             (activity as TrailActivity).updateTrailAndEditPoiInfo(trail, trailPoiPosition)
         }
@@ -420,7 +441,7 @@ abstract class BaseTrailMapFragment (
     }
 
     fun showTrailPOIInfoFragment(trailPointOfInterestPosition:Int){
-        val poiIsEditable=this.isEditable && this.trailViewModel?.trail?.name != null
+        val poiIsEditable=this.isEditable && this.trailViewModel?.trail?.value?.name != null
         this.infoFragment=
             TrailPOIInfoFragment(
                 this.trailViewModel, trailPointOfInterestPosition, poiIsEditable

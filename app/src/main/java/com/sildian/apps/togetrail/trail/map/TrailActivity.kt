@@ -105,22 +105,34 @@ class TrailActivity : BaseActivity() {
 
     /***********************************Data monitoring******************************************/
 
-    /**Loads data**/
-
     override fun loadData() {
-        this.trailViewModel= ViewModelProviders
-            .of(this, ViewModelFactory)
-            .get(TrailViewModel::class.java)
+        initializeData()
+        observeTrail()
+        observeRequestFailure()
         readDataFromIntent()
     }
 
-    /**Saves data**/
-
-    override fun saveData() {
-        this.fragment?.saveData()
+    private fun initializeData() {
+        this.trailViewModel= ViewModelProviders
+            .of(this, ViewModelFactory)
+            .get(TrailViewModel::class.java)
     }
 
-    /**Read data from intent**/
+    private fun observeTrail() {
+        this.trailViewModel.trail.observe(this) { trail ->
+            if (currentAction == ACTION_TRAIL_SEE && trail != null) {
+                startTrailAction()
+            }
+        }
+    }
+
+    private fun observeRequestFailure() {
+        this.trailViewModel.requestFailure.observe(this) { e ->
+            if (currentAction == ACTION_TRAIL_SEE && e != null) {
+                onQueryError(e)
+            }
+        }
+    }
 
     private fun readDataFromIntent(){
         if(intent!=null){
@@ -131,7 +143,7 @@ class TrailActivity : BaseActivity() {
             if(intent.hasExtra(KEY_BUNDLE_TRAIL_ID)) {
                 val trailId = intent.getStringExtra(KEY_BUNDLE_TRAIL_ID)
                 trailId?.let { id ->
-                    this.trailViewModel.loadTrailFromDatabase(id, this::startTrailAction, this::onQueryError)
+                    this.trailViewModel.loadTrailFromDatabase(id)
                 }
             }
             else {
@@ -203,6 +215,12 @@ class TrailActivity : BaseActivity() {
         }
     }
 
+    /**Saves data**/
+
+    override fun saveData() {
+        this.fragment?.saveData()
+    }
+
     /*************************************UI monitoring******************************************/
 
     override fun getLayoutId(): Int = R.layout.activity_trail
@@ -249,7 +267,7 @@ class TrailActivity : BaseActivity() {
     private fun startTrailAction(){
         when(this.currentAction){
             ACTION_TRAIL_SEE -> {
-                this.isEditable=AuthFirebaseHelper.getCurrentUser()?.uid==this.trailViewModel.trail?.authorId
+                this.isEditable=AuthFirebaseHelper.getCurrentUser()?.uid==this.trailViewModel.trail.value?.authorId
                 showFragment(ID_FRAGMENT_TRAIL_DETAIL)
             }
             ACTION_TRAIL_CREATE_FROM_GPX ->{
@@ -302,7 +320,7 @@ class TrailActivity : BaseActivity() {
     private fun startTrailInfoEditActivity(trailEditActionId:Int, trailPointOfInterestPosition:Int?){
         val trailInfoEditActivityIntent=Intent(this, TrailInfoEditActivity::class.java)
         trailInfoEditActivityIntent.putExtra(TrailInfoEditActivity.KEY_BUNDLE_TRAIL_ACTION, trailEditActionId)
-        trailInfoEditActivityIntent.putExtra(TrailInfoEditActivity.KEY_BUNDLE_TRAIL, this.trailViewModel.trail)
+        trailInfoEditActivityIntent.putExtra(TrailInfoEditActivity.KEY_BUNDLE_TRAIL, this.trailViewModel.trail.value)
         if(trailPointOfInterestPosition!=null) {
             trailInfoEditActivityIntent
                 .putExtra(TrailInfoEditActivity.KEY_BUNDLE_TRAIL_POI_POSITION, trailPointOfInterestPosition)

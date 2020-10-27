@@ -55,7 +55,9 @@ class ProfileFragment (private val hikerId: String?)
 
     private fun observeHiker() {
         this.hikerViewModel.hiker.observe(this, { hiker ->
-            refreshUI()
+            if (hiker != null) {
+                refreshUI()
+            }
         })
     }
 

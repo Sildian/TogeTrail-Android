@@ -48,6 +48,7 @@ class TrailInfoEditActivity : BaseActivity() {
 
     private var currentAction= ACTION_TRAIL_EDIT_INFO               //Action defining what the user is performing
     private lateinit var trailViewModel: TrailViewModel             //Trail data
+    private var trailPOIPosition: Int? = null                       //The trail POI position if needed
 
     /**********************************UI component**********************************************/
 
@@ -128,8 +129,7 @@ class TrailInfoEditActivity : BaseActivity() {
                 }
             }
             if(intent.hasExtra(KEY_BUNDLE_TRAIL_POI_POSITION)){
-                val position=intent.getIntExtra(KEY_BUNDLE_TRAIL_POI_POSITION, 0)
-                this.trailViewModel.watchPointOfInterest(position)
+                this.trailPOIPosition = intent.getIntExtra(KEY_BUNDLE_TRAIL_POI_POSITION, 0)
             }
         }
     }
@@ -187,7 +187,7 @@ class TrailInfoEditActivity : BaseActivity() {
             ID_FRAGMENT_TRAIL_POI_INFO_EDIT ->
                 this.fragment =
                     TrailPOIInfoEditFragment(
-                        this.trailViewModel
+                        this.trailViewModel, this.trailPOIPosition
                     )
         }
         this.fragment?.let { fragment ->
@@ -221,7 +221,7 @@ class TrailInfoEditActivity : BaseActivity() {
 
     override fun finishOk(){
         val resultIntent=Intent()
-        resultIntent.putExtra(KEY_BUNDLE_TRAIL, this.trailViewModel.trail)
+        resultIntent.putExtra(KEY_BUNDLE_TRAIL, this.trailViewModel.trail.value)
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
     }

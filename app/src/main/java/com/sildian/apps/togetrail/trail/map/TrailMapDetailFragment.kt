@@ -95,13 +95,13 @@ class TrailMapDetailFragment(trailViewModel: TrailViewModel, isEditable:Boolean=
 
     override fun showTrailTrackOnMap() {
 
-        if(this.trailViewModel?.trail!=null) {
+        if(this.trailViewModel?.trail?.value != null) {
 
             super.showTrailTrackOnMap()
 
             /*Gets the first trailPoint*/
 
-            val firstPoint = this.trailViewModel?.trail?.trailTrack?.getFirstTrailPoint()
+            val firstPoint = this.trailViewModel?.trail?.value?.trailTrack?.getFirstTrailPoint()
 
             /*Moves the camera to the first point and zoom in*/
 

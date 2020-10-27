@@ -1,7 +1,6 @@
 package com.sildian.apps.togetrail.trail.info
 
 import android.view.View
-import androidx.databinding.Observable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.sildian.apps.togetrail.R
@@ -29,27 +28,38 @@ class TrailPOIInfoFragment (
 
     private val photoImageView by lazy {layout.fragment_trail_poi_info_image_view_photo}
 
-    /************************************Life cycle**********************************************/
-
-    override fun onDestroyView() {
-        this.trailViewModel?.removeAllOnPropertyChangedCallbacks()
-        super.onDestroyView()
-    }
-
     /*********************************Data monitoring********************************************/
 
     override fun loadData() {
+        initializeData()
+        observeTrailPOI()
+        observeRequestFailure()
+    }
+
+    private fun initializeData() {
         this.trailPointOfInterestPosition?.let { position ->
             this.trailViewModel?.watchPointOfInterest(position)
         }
+        this.binding.lifecycleOwner = this
         (this.binding as FragmentTrailPoiInfoBinding).trailPOIInfoFragment = this
         (this.binding as FragmentTrailPoiInfoBinding).trailViewModel = this.trailViewModel
         (this.binding as FragmentTrailPoiInfoBinding).isEditable = this.isEditable
-        this.trailViewModel?.addOnPropertyChangedCallback(object:Observable.OnPropertyChangedCallback(){
-            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+    }
+
+    private fun observeTrailPOI() {
+        this.trailViewModel?.trailPointOfInterest?.observe(this) { trailPOI ->
+            if (trailPOI != null) {
                 refreshUI()
             }
-        })
+        }
+    }
+
+    private fun observeRequestFailure() {
+        this.trailViewModel?.requestFailure?.observe(this) { e ->
+            if (e != null) {
+                onQueryError(e)
+            }
+        }
     }
 
     /***********************************UI monitoring********************************************/
@@ -63,7 +73,7 @@ class TrailPOIInfoFragment (
     override fun getBottomViewId(): Int = R.id.fragment_trail_poi_info_layout_info
 
     override fun initializeUI() {
-        updatePhoto()
+        refreshUI()
     }
 
     override fun refreshUI() {
@@ -72,16 +82,18 @@ class TrailPOIInfoFragment (
 
     private fun updatePhoto(){
         Glide.with(context!!)
-            .load(this.trailViewModel?.trailPointOfInterest?.photoUrl)
+            .load(this.trailViewModel?.trailPointOfInterest?.value?.photoUrl)
             .apply(RequestOptions.centerCropTransform())
             .placeholder(R.drawable.ic_trail_black)
             .into(this.photoImageView)
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun onSeeButtonClick(view:View) {
         (parentFragment as BaseTrailMapFragment).expandInfoBottomSheet()
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun onEditButtonClick(view:View) {
         (parentFragment as BaseTrailMapFragment)
             .editTrailPoiInfo(this.trailPointOfInterestPosition!!)

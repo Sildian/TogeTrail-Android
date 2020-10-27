@@ -65,7 +65,9 @@ class ProfileInfoEditFragment(private val hikerId: String?=null) : BaseImagePick
 
     private fun observeHiker() {
         this.hikerViewModel.hiker.observe(this) { hiker ->
-            refreshUI()
+            if (hiker != null) {
+                refreshUI()
+            }
         }
     }
 
