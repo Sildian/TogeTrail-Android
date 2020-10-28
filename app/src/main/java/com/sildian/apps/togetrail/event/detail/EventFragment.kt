@@ -2,7 +2,6 @@ package com.sildian.apps.togetrail.event.detail
 
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.Observable
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -36,7 +35,7 @@ class EventFragment(private val eventId: String?=null) :
 
     /*****************************************Data***********************************************/
 
-    private lateinit var eventViewModel:EventViewModel
+    private lateinit var eventViewModel: EventViewModel
 
     /**********************************UI component**********************************************/
 
@@ -54,22 +53,42 @@ class EventFragment(private val eventId: String?=null) :
     /***********************************Data monitoring******************************************/
 
     override fun loadData() {
+        initializeData()
+        observeEvent()
+        observeRequestFailure()
+        loadEvent()
+    }
+
+    private fun initializeData() {
         this.eventViewModel=ViewModelProviders
             .of(this, ViewModelFactory)
             .get(EventViewModel::class.java)
-        (this.binding as FragmentEventBinding).eventFragment=this
-        (this.binding as FragmentEventBinding).eventViewModel=this.eventViewModel
-        this.eventViewModel.addOnPropertyChangedCallback(object:Observable.OnPropertyChangedCallback(){
-            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+        this.binding.lifecycleOwner = this
+        (this.binding as FragmentEventBinding).eventFragment = this
+        (this.binding as FragmentEventBinding).eventViewModel = this.eventViewModel
+    }
+
+    private fun observeEvent() {
+        this.eventViewModel.event.observe(this) { event ->
+            if (event != null) {
                 refreshUI()
             }
-        })
-        this.eventId?.let { eventId ->
-            this.eventViewModel.loadEventFromDatabaseRealTime(eventId, null, this::onQueryError)
         }
     }
 
-    fun currentUserIsAuthor():Boolean = this.eventViewModel.currentUserIsAuthor()
+    private fun observeRequestFailure() {
+        this.eventViewModel.requestFailure.observe(this) { e ->
+            if (e != null) {
+                onQueryError(e)
+            }
+        }
+    }
+
+    private fun loadEvent() {
+        this.eventId?.let { eventId ->
+            this.eventViewModel.loadEventFromDatabaseRealTime(eventId)
+        }
+    }
 
     /***********************************UI monitoring********************************************/
 
@@ -83,14 +102,21 @@ class EventFragment(private val eventId: String?=null) :
     }
 
     override fun refreshUI() {
+        updateToolbar()
         updatePhotoImageView()
         updateRegisteredHikersRecyclerView()
         updateAttachedTrailsRecyclerView()
     }
 
-    private fun initializeToolbar(){
+    private fun initializeToolbar() {
         (activity as EventActivity).setSupportActionBar(this.toolbar)
         (activity as EventActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    private fun updateToolbar() {
+        if (this.eventViewModel.currentUserIsAuthor()) {
+            (this.baseActivity as EventActivity).allowEditMenu()
+        }
     }
 
     private fun initializeRegistrationLayout(){
@@ -100,9 +126,9 @@ class EventFragment(private val eventId: String?=null) :
     }
 
     private fun updatePhotoImageView(){
-        if(this.eventViewModel.event?.mainPhotoUrl!=null) {
+        if(this.eventViewModel.event.value?.mainPhotoUrl!=null) {
             Glide.with(context!!)
-                .load(this.eventViewModel.event?.mainPhotoUrl)
+                .load(this.eventViewModel.event.value?.mainPhotoUrl)
                 .apply(RequestOptions.centerCropTransform())
                 .placeholder(R.drawable.ic_trail_white)
                 .into(this.photoImageView)
@@ -115,7 +141,7 @@ class EventFragment(private val eventId: String?=null) :
         this.registeredHikersAdapter= HikerPhotoAdapter(
             DatabaseFirebaseHelper.generateOptionsForAdapter(
                 Hiker::class.java,
-                EventFirebaseQueries.getRegisteredHikers(this.eventViewModel.event?.id!!),
+                EventFirebaseQueries.getRegisteredHikers(this.eventViewModel.event.value?.id!!),
                 activity as AppCompatActivity
             ),
             this,
@@ -128,7 +154,7 @@ class EventFragment(private val eventId: String?=null) :
         this.attachedTrailsAdapter= TrailHorizontalAdapter(
             DatabaseFirebaseHelper.generateOptionsForAdapter(
                 Trail::class.java,
-                EventFirebaseQueries.getAttachedTrails(this.eventViewModel.event?.id!!),
+                EventFirebaseQueries.getAttachedTrails(this.eventViewModel.event.value?.id!!),
                 activity as AppCompatActivity
             ),
             this
@@ -151,12 +177,14 @@ class EventFragment(private val eventId: String?=null) :
         }
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun onRegisterUserButtonClick(view:View){
-        this.eventViewModel.registerUserToEvent(null, this::onQueryError)
+        this.eventViewModel.registerUserToEvent()
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun onUnregisterUserButtonClick(view:View){
-        this.eventViewModel.unregisterUserFromEvent(null, this::onQueryError)
+        this.eventViewModel.unregisterUserFromEvent()
     }
 
     /***********************************Hikers monitoring****************************************/

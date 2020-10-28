@@ -1,6 +1,7 @@
 package com.sildian.apps.togetrail.event.model.support
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.sildian.apps.togetrail.common.baseViewModels.BaseViewModel
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
@@ -34,18 +35,22 @@ class EventViewModel : BaseViewModel() {
 
     private val eventDataRequester = EventDataRequester()
 
-    /***************************************Data*************************************************/
+    /*********************************Monitoring info*******************************************/
 
-    var event: Event?=null ; private set            //The event
     val attachedTrails= arrayListOf<Trail>()        //The list of attached trails (useful only when the event has no id yet)
+
+    /********************************LiveData to be observed*************************************/
+
+    val event = MutableLiveData<Event?>()
+    val saveRequestSuccess = MutableLiveData<Boolean>()
+    val requestFailure = MutableLiveData<Exception?>()
 
     /************************************Data monitoring*****************************************/
 
     /**Initializes a new event**/
 
     fun initNewEvent(){
-        this.event=Event()
-        notifyDataChanged()
+        this.event.postValue(Event())
     }
 
     /**
@@ -54,28 +59,25 @@ class EventViewModel : BaseViewModel() {
      */
 
     fun currentUserIsAuthor(): Boolean =
-        AuthRepository().getCurrentUser()?.uid == this.event?.authorId
+        AuthRepository().getCurrentUser()?.uid == this.event.value?.authorId
 
     /**
      * Loads an event from the database in real time
      * @param eventId : the event's id
-     * @param successCallback : the callback to handle a success in the query
-     * @param failureCallback : the callback to handle a failure in the query
      */
 
-    fun loadEventFromDatabaseRealTime(eventId:String, successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null) {
+    fun loadEventFromDatabaseRealTime(eventId:String) {
         this.queryRegistration?.remove()
         this.queryRegistration = eventDataRequester.loadEventFromDatabaseRealTime(eventId)
             .addSnapshotListener { snapshot, e ->
                 if (snapshot != null) {
-                    event = snapshot.toObject(Event::class.java)
-                    notifyDataChanged()
+                    val result = snapshot.toObject(Event::class.java)
                     Log.d(TAG, "Successfully loaded event from database")
-                    successCallback?.invoke()
+                    event.postValue(result)
                 }
-                else if (e!=null) {
+                else if (e != null) {
                     Log.e(TAG, "Failed to load event from database : ${e.message}")
-                    failureCallback?.invoke(e)
+                    requestFailure.postValue(e)
                 }
             }
     }
@@ -83,41 +85,36 @@ class EventViewModel : BaseViewModel() {
     /**
      * Loads an event from the database
      * @param eventId : the event's id
-     * @param successCallback : the callback to handle a success in the query
-     * @param failureCallback : the callback to handle a failure in the query
      */
 
-    fun loadEventFromDatabase(eventId:String, successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null) {
+    fun loadEventFromDatabase(eventId:String) {
         viewModelScope.launch(this.exceptionHandler) {
             try {
-                event = async { eventDataRequester.loadEventFromDatabase(eventId) }.await()
-                notifyDataChanged()
+                val result = async { eventDataRequester.loadEventFromDatabase(eventId) }.await()
                 Log.d(TAG, "Successfully loaded event from database")
-                successCallback?.invoke()
+                event.postValue(result)
             }
-            catch (e:Exception) {
+            catch (e: Exception) {
                 Log.e(TAG, "Failed to load event from database : ${e.message}")
-                failureCallback?.invoke(e)
+                requestFailure.postValue(e)
             }
         }
     }
 
     /**
      * Saves the event within the database
-     * @param successCallback : the callback to handle a success in the query
-     * @param failureCallback : the callback to handle a failure in the query
      */
 
-    fun saveEventInDatabase(successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null) {
+    fun saveEventInDatabase() {
         viewModelScope.launch(this.exceptionHandler) {
             try {
-                launch { eventDataRequester.saveEventInDatabase(event, attachedTrails) }.join()
+                launch { eventDataRequester.saveEventInDatabase(event.value, attachedTrails) }.join()
                 Log.d(TAG, "Successfully saved event in database")
-                successCallback?.invoke()
+                saveRequestSuccess.postValue(true)
             }
-            catch (e:Exception) {
+            catch (e: Exception) {
                 Log.e(TAG, "Failed to save event in database : ${e.message}")
-                failureCallback?.invoke(e)
+                requestFailure.postValue(e)
             }
         }
     }
@@ -125,20 +122,17 @@ class EventViewModel : BaseViewModel() {
     /**
      * Attaches a trail to the event
      * @param trail : the trail to attach
-     * @param successCallback : the callback to handle a success in the query
-     * @param failureCallback : the callback to handle a failure in the query
      */
 
-    fun attachTrail(trail:Trail, successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null) {
+    fun attachTrail(trail: Trail) {
         viewModelScope.launch(this.exceptionHandler) {
             try {
-                launch { eventDataRequester.attachTrail(event, trail) }.join()
+                launch { eventDataRequester.attachTrail(event.value, trail) }.join()
                 Log.d(TAG, "Successfully attached new trail to the event")
-                successCallback?.invoke()
             }
             catch (e:Exception) {
                 Log.e(TAG, "Failed to attach new trail to the event : ${e.message}")
-                failureCallback?.invoke(e)
+                requestFailure.postValue(e)
             }
         }
     }
@@ -146,60 +140,51 @@ class EventViewModel : BaseViewModel() {
     /**
      * Detaches a trail from the event
      * @param trail : the trail to detach
-     * @param successCallback : the callback to handle a success in the query
-     * @param failureCallback : the callback to handle a failure in the query
      */
 
-    fun detachTrail(trail:Trail, successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null) {
+    fun detachTrail(trail: Trail) {
         viewModelScope.launch(this.exceptionHandler) {
             try {
-                launch { eventDataRequester.detachTrail(event, trail) }.join()
+                launch { eventDataRequester.detachTrail(event.value, trail) }.join()
                 Log.d(TAG, "Successfully detached trail from the event")
-                successCallback?.invoke()
             }
             catch (e:Exception) {
                 Log.e(TAG, "Failed to detach trail from the event : ${e.message}")
-                failureCallback?.invoke(e)
+                requestFailure.postValue(e)
             }
         }
     }
 
     /**
      * Registers the current user to the event
-     * @param successCallback : the callback to handle a success in the query
-     * @param failureCallback : the callback to handle a failure in the query
      */
 
-    fun registerUserToEvent(successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null) {
+    fun registerUserToEvent() {
         viewModelScope.launch(this.exceptionHandler) {
             try {
-                launch { eventDataRequester.registerUserToEvent(event) }.join()
+                launch { eventDataRequester.registerUserToEvent(event.value) }.join()
                 Log.d(TAG, "Successfully registered new user to the event")
-                successCallback?.invoke()
             }
             catch (e:Exception) {
                 Log.e(TAG, "Failed to register new user to the event : ${e.message}")
-                failureCallback?.invoke(e)
+                requestFailure.postValue(e)
             }
         }
     }
 
     /**
      * Unregisters the current user from the event
-     * @param successCallback : the callback to handle a success in the query
-     * @param failureCallback : the callback to handle a failure in the query
      */
 
-    fun unregisterUserFromEvent(successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null) {
+    fun unregisterUserFromEvent() {
         viewModelScope.launch(this.exceptionHandler) {
             try {
-                launch { eventDataRequester.unregisterUserFromEvent(event) }.join()
+                launch { eventDataRequester.unregisterUserFromEvent(event.value) }.join()
                 Log.d(TAG, "Successfully unregistered user from the event")
-                successCallback?.invoke()
             }
             catch (e:Exception) {
                 Log.e(TAG, "Failed to unregister user from the event : ${e.message}")
-                failureCallback?.invoke(e)
+                requestFailure.postValue(e)
             }
         }
     }

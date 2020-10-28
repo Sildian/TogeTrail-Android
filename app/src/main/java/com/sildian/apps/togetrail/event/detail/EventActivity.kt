@@ -42,7 +42,6 @@ class EventActivity : BaseActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         this.menu=menu
-        defineMenuItems()
         return true
     }
 
@@ -59,12 +58,10 @@ class EventActivity : BaseActivity() {
 
     /**Defines the menu items**/
 
-    private fun defineMenuItems(){
-        if((this.fragment as EventFragment).currentUserIsAuthor()){
-            if(this.menu!=null) {
-                this.menu?.clear()
-                menuInflater.inflate(R.menu.menu_edit, this.menu)
-            }
+    fun allowEditMenu() {
+        if (this.menu != null) {
+            this.menu?.clear()
+            menuInflater.inflate(R.menu.menu_edit, this.menu)
         }
     }
 
