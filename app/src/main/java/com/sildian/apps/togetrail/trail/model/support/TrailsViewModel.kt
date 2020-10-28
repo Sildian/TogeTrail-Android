@@ -1,6 +1,7 @@
 package com.sildian.apps.togetrail.trail.model.support
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.Query
 import com.sildian.apps.togetrail.common.baseViewModels.BaseViewModel
 import com.sildian.apps.togetrail.trail.model.core.Trail
@@ -9,7 +10,7 @@ import com.sildian.apps.togetrail.trail.model.core.Trail
  * This viewModel observes a list of trails
  ************************************************************************************************/
 
-class TrailsViewModel:BaseViewModel() {
+class TrailsViewModel: BaseViewModel() {
 
     /************************************Static items********************************************/
 
@@ -21,31 +22,28 @@ class TrailsViewModel:BaseViewModel() {
 
     /***************************************Data*************************************************/
 
-    val trails= arrayListOf<Trail>()                    //The list of trails
+    val trails = MutableLiveData<List<Trail>>()
+    val requestFailure = MutableLiveData<Exception?>()
 
     /************************************Data monitoring*****************************************/
 
     /**
      * Loads a list of trails from the database in real time
      * @param query : the query to fetch trails (select a query in TrailFirebaseQuery)
-     * @param successCallback : the callback to handle a success in the query
-     * @param failureCallback : the callback to handle a failure in the query
      */
 
-    fun loadTrailsFromDatabaseRealTime(query:Query, successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
+    fun loadTrailsFromDatabaseRealTime(query: Query) {
         this.queryRegistration?.remove()
         this.queryRegistration = query
             .addSnapshotListener { querySnapshot, e ->
                 if (querySnapshot != null) {
-                    trails.clear()
-                    trails.addAll(querySnapshot.toObjects(Trail::class.java))
-                    notifyDataChanged()
-                    Log.d(TAG, "Successfully loaded ${trails.size} trails from database")
-                    successCallback?.invoke()
+                    val results = querySnapshot.toObjects(Trail::class.java)
+                    Log.d(TAG, "Successfully loaded ${results.size} trails from database")
+                    trails.postValue(results)
                 }
-                else if(e!=null){
+                else if (e != null) {
                     Log.e(TAG, "Failed to load trails from database : ${e.message}")
-                    failureCallback?.invoke(e)
+                    requestFailure.postValue(e)
                 }
             }
     }

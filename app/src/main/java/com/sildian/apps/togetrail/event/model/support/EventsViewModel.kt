@@ -1,6 +1,7 @@
 package com.sildian.apps.togetrail.event.model.support
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.Query
 import com.sildian.apps.togetrail.common.baseViewModels.BaseViewModel
 import com.sildian.apps.togetrail.event.model.core.Event
@@ -9,7 +10,7 @@ import com.sildian.apps.togetrail.event.model.core.Event
  * This viewModel observes a list of events
  ************************************************************************************************/
 
-class EventsViewModel:BaseViewModel() {
+class EventsViewModel: BaseViewModel() {
 
     /************************************Static items********************************************/
 
@@ -21,31 +22,28 @@ class EventsViewModel:BaseViewModel() {
     
     /***************************************Data*************************************************/
 
-    val events= arrayListOf<Event>()                    //The list of events
+    val events = MutableLiveData<List<Event>>()
+    val requestFailure = MutableLiveData<Exception?>()
 
     /************************************Data monitoring*****************************************/
 
     /**
      * Loads a list of events from the database in real time
      * @param query : the query to fetch events (select a query in EventFirebaseQuery)
-     * @param successCallback : the callback to handle a success in the query
-     * @param failureCallback : the callback to handle a failure in the query
      */
 
-    fun loadEventsFromDatabaseRealTime(query: Query, successCallback:(()->Unit)?=null, failureCallback:((Exception)->Unit)?=null){
+    fun loadEventsFromDatabaseRealTime(query: Query) {
         this.queryRegistration?.remove()
         this.queryRegistration = query
             .addSnapshotListener { querySnapshot, e ->
                 if (querySnapshot != null) {
-                    events.clear()
-                    events.addAll(querySnapshot.toObjects(Event::class.java))
-                    notifyDataChanged()
-                    Log.d(TAG, "Successfully loaded ${events.size} events from database")
-                    successCallback?.invoke()
+                    val results = querySnapshot.toObjects(Event::class.java)
+                    Log.d(TAG, "Successfully loaded ${results.size} events from database")
+                    events.postValue(results)
                 }
-                else if(e!=null){
+                else if (e != null) {
                     Log.e(TAG, "Failed to load events from database : ${e.message}")
-                    failureCallback?.invoke(e)
+                    requestFailure.postValue(e)
                 }
             }
     }

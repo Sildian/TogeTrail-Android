@@ -4,7 +4,6 @@ import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.Observable
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -54,10 +53,10 @@ class TrailMapFragment :
 
     /**************************************Data**************************************************/
 
-    private lateinit var trailsViewModel:TrailsViewModel    //The list of trails to display
-    private lateinit var eventsViewModel:EventsViewModel    //The list of events to display
-    private var showTrails=true                             //True if trails must be shown
-    private var showEvents=false                            //True if events must be shown
+    private lateinit var trailsViewModel: TrailsViewModel
+    private lateinit var eventsViewModel: EventsViewModel
+    private var showTrails = true
+    private var showEvents = false
 
     /**********************************UI component**********************************************/
 
@@ -68,12 +67,58 @@ class TrailMapFragment :
     /**********************************Data monitoring*******************************************/
 
     override fun loadData() {
+        initializeData()
+        observeTrails()
+        observeEvents()
+        observeRequestFailure()
+    }
+
+    private fun initializeData() {
         this.trailsViewModel= ViewModelProviders
             .of(this, ViewModelFactory)
             .get(TrailsViewModel::class.java)
         this.eventsViewModel= ViewModelProviders
             .of(this, ViewModelFactory)
             .get(EventsViewModel::class.java)
+    }
+
+    private fun observeTrails() {
+        this.trailsViewModel.trails.observe(this) { trails ->
+            if (trails != null) {
+                if (trails.isNotEmpty()) {
+                        showTrailsOnMap()
+                    }
+                else {
+                    (baseActivity as MainActivity).showQueryResultEmptyMessage()
+                }
+            }
+        }
+    }
+
+    private fun observeEvents() {
+        this.eventsViewModel.events.observe(this) { events ->
+            if (events != null) {
+                if (events.isNotEmpty()) {
+                    showEventsOnMap()
+                }
+                else {
+                    (baseActivity as MainActivity).showQueryResultEmptyMessage()
+                }
+            }
+        }
+    }
+
+    private fun observeRequestFailure() {
+        this.trailsViewModel.requestFailure.observe(this) { e ->
+            if (e != null) {
+                onQueryError(e)
+            }
+        }
+        this.eventsViewModel.requestFailure.observe(this) { e ->
+            if (e != null) {
+                onQueryError(e)
+            }
+        }
     }
 
     override fun updateData(data:Any?) {
@@ -128,8 +173,6 @@ class TrailMapFragment :
     override fun initializeUI() {
         initializeSearchButton()
         initializeFilterToggle()
-        initializeTrailsRefreshUI()
-        initializeEventsRefreshUI()
     }
 
     private fun initializeSearchButton(){
@@ -167,30 +210,6 @@ class TrailMapFragment :
         }
     }
 
-    private fun initializeTrailsRefreshUI(){
-        this.trailsViewModel.addOnPropertyChangedCallback(object:Observable.OnPropertyChangedCallback(){
-            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                if(trailsViewModel.trails.isEmpty()){
-                    (activity as MainActivity).showQueryResultEmptyMessage()
-                }else {
-                    showTrailsOnMap()
-                }
-            }
-        })
-    }
-
-    private fun initializeEventsRefreshUI(){
-        this.eventsViewModel.addOnPropertyChangedCallback(object:Observable.OnPropertyChangedCallback(){
-            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                if(eventsViewModel.events.isEmpty()){
-                    (activity as MainActivity).showQueryResultEmptyMessage()
-                }else {
-                    showEventsOnMap()
-                }
-            }
-        })
-    }
-
     /***********************************Map monitoring*******************************************/
 
     override fun onMapReadyActionsFinished() {
@@ -198,15 +217,15 @@ class TrailMapFragment :
         this.map?.setOnInfoWindowClickListener(this)
         when{
             this.showTrails ->
-                if(this.trailsViewModel.trails.isEmpty()) {
+                if (this.trailsViewModel.trails.value.isNullOrEmpty()) {
                     loadTrails()
-                }else{
+                } else {
                     showTrailsOnMap()
                 }
             this.showEvents ->
-                if(this.eventsViewModel.events.isEmpty()){
+                if(this.eventsViewModel.events.value.isNullOrEmpty()){
                     loadEvents()
-                }else{
+                } else {
                     showEventsOnMap()
                 }
         }
@@ -342,7 +361,7 @@ class TrailMapFragment :
 
         /*For each trail in the list, shows a marker*/
 
-        this.trailsViewModel.trails.forEach { trail ->
+        this.trailsViewModel.trails.value?.forEach { trail ->
             if(trail.position!=null) {
                 this.map?.addMarker(
                     MarkerOptions()
@@ -365,7 +384,7 @@ class TrailMapFragment :
 
         /*For each event in the list, shows a marker*/
 
-        this.eventsViewModel.events.forEach { event ->
+        this.eventsViewModel.events.value?.forEach { event ->
             if(event.position!=null) {
                 this.map?.addMarker(
                     MarkerOptions()
