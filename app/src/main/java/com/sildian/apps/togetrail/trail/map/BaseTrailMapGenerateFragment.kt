@@ -89,10 +89,6 @@ abstract class BaseTrailMapGenerateFragment(trailViewModel: TrailViewModel) :
 
     /***********************************Trail monitoring*****************************************/
 
-    /**
-     * Shows the current trail on the map and moves the camera to the last point
-     */
-
     override fun showTrailTrackOnMap() {
 
         if(this.trailViewModel?.trail?.value!=null) {
@@ -115,11 +111,6 @@ abstract class BaseTrailMapGenerateFragment(trailViewModel: TrailViewModel) :
         }
     }
 
-    /**
-     * Adds a trailPoint to the current trail
-     * @param trailPoint : the point to be added
-     */
-
     protected fun addTrailPoint(trailPoint: TrailPoint){
 
         /*Adds a new trailPoint and updates the track on the map*/
@@ -134,11 +125,6 @@ abstract class BaseTrailMapGenerateFragment(trailViewModel: TrailViewModel) :
             revealActionsButtons()
         }
     }
-
-    /**
-     * Removes the last trailPoint from the current trail
-     * If a trailPointOfInterest is attached, removes it as well
-     */
 
     protected fun removeLastTrailPoint(){
 
@@ -170,11 +156,6 @@ abstract class BaseTrailMapGenerateFragment(trailViewModel: TrailViewModel) :
             }
         }
     }
-
-    /**
-     * Adds a trailPointOfInterest to the current trail
-     * The new trailPointOfInterest is located at the last trailPoint's position
-     */
 
     protected fun addTrailPointOfInterest(){
 
@@ -208,11 +189,6 @@ abstract class BaseTrailMapGenerateFragment(trailViewModel: TrailViewModel) :
             }
         }
     }
-
-    /**
-     * Removes a trailPointOfInterest from the current trail
-     * @param trailPointOfInterest : the trailPointOfInterest to be removed
-     */
 
     protected fun removeTrailPointOfInterest(trailPointOfInterest: TrailPointOfInterest){
         this.trailViewModel?.trail?.value?.trailTrack?.trailPointsOfInterest?.remove(trailPointOfInterest)

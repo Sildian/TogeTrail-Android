@@ -89,10 +89,6 @@ class TrailMapDetailFragment(trailViewModel: TrailViewModel, isEditable:Boolean=
 
     /***********************************Trail monitoring*****************************************/
 
-    /**
-     * Shows the current trail on the map and zoom in to the first point
-     */
-
     override fun showTrailTrackOnMap() {
 
         if(this.trailViewModel?.trail?.value != null) {

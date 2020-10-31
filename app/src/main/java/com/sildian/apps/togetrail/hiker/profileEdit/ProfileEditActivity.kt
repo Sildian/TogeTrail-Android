@@ -88,19 +88,13 @@ class ProfileEditActivity : BaseActivity() {
 
     /******************************Data monitoring************************************************/
 
-    /**Loads data**/
-
     override fun loadData() {
         readDataFromIntent()
     }
 
-    /**Saves data**/
-
     override fun saveData() {
         this.fragment?.saveData()
     }
-
-    /**Reads data from intent**/
 
     private fun readDataFromIntent(){
         if(intent!=null){
@@ -144,24 +138,15 @@ class ProfileEditActivity : BaseActivity() {
 
     /*******************************Location monitoring******************************************/
 
-    /**Searches a location**/
-
     fun searchLocation(){
         startLocationSearchActivity()
     }
-
-    /**Updates the hiker's live location**/
 
     private fun updateLiveLocation(location: Location){
         this.fragment?.updateData(location)
     }
 
     /******************************Fragments monitoring******************************************/
-
-    /**
-     * Shows a fragment
-     * @param fragmentId : defines which fragment to display (choice within ID_FRAGMENT_xxx)
-     */
 
     private fun showFragment(fragmentId:Int){
         when(fragmentId){
@@ -178,14 +163,10 @@ class ProfileEditActivity : BaseActivity() {
 
     /*************************************Navigation*********************************************/
 
-    /**Starts searching a location**/
-
     private fun startLocationSearchActivity(){
         val locationSearchActivityIntent=Intent(this, LocationSearchActivity::class.java)
         startActivityForResult(locationSearchActivityIntent, KEY_REQUEST_LOCATION_SEARCH)
     }
-
-    /**Gets the activity result**/
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -193,8 +174,6 @@ class ProfileEditActivity : BaseActivity() {
             KEY_REQUEST_LOCATION_SEARCH -> handleLocationSearchActivityResult(resultCode, data)
         }
     }
-
-    /**Handles location search activity result**/
 
     private fun handleLocationSearchActivityResult(resultCode: Int, data: Intent?){
         if(resultCode== Activity.RESULT_OK) {

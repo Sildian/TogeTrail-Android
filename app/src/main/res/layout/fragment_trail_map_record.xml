@@ -82,6 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/components_margin_medium"
+            android:contentDescription="@string/example_image_content_description"
             app:elevation="@dimen/components_elevation"
             app:srcCompat="@drawable/ic_record_play_white"
             app:layout_anchor="@id/fragment_trail_map_record_bottom_sheet_info"

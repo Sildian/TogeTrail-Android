@@ -27,8 +27,8 @@ class HikerHistoryViewHolder (
 
     /**************************************Data**************************************************/
 
-    private lateinit var hikerName:String                   //The updated hiker's name
-    private lateinit var historyItem:HikerHistoryItem       //The related item
+    private lateinit var hikerName:String
+    private lateinit var historyItem:HikerHistoryItem
 
     /**********************************UI components*********************************************/
 

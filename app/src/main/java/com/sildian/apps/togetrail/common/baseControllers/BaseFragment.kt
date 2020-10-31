@@ -68,18 +68,9 @@ abstract class BaseFragment : Fragment() {
 
     /**********************************Query results handling************************************/
 
-    /**
-     * Handles save operations success
-     */
-
     fun onSaveSuccess() {
         this.baseActivity?.onSaveSuccess()
     }
-
-    /**
-     * Handles query errors
-     * @param e : the exception
-     */
 
     fun onQueryError(e: Exception) {
         this.baseActivity?.onQueryError(e)

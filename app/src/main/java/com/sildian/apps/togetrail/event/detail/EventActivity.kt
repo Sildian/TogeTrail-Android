@@ -78,13 +78,9 @@ class EventActivity : BaseActivity() {
 
     /******************************Data monitoring************************************************/
 
-    /**Loads data**/
-
     override fun loadData() {
         readDataFromIntent()
     }
-
-    /**Reads data from intent**/
 
     private fun readDataFromIntent(){
         if(intent!=null){
@@ -126,23 +122,17 @@ class EventActivity : BaseActivity() {
 
     /***********************************Navigation***********************************************/
 
-    /**Starts Event edit activity**/
-
     private fun startEventEditActivity(){
         val eventEditActivityIntent= Intent(this, EventEditActivity::class.java)
         eventEditActivityIntent.putExtra(EventEditActivity.KEY_BUNDLE_EVENT_ID,this.eventId)
         startActivity(eventEditActivityIntent)
     }
 
-    /**Starts Profile activity**/
-
     private fun startProfileActivity(hikerId:String){
         val profileActivityIntent=Intent(this, ProfileActivity::class.java)
         profileActivityIntent.putExtra(ProfileActivity.KEY_BUNDLE_HIKER_ID, hikerId)
         startActivity(profileActivityIntent)
     }
-
-    /**Starts Trail activity**/
 
     private fun startTrailActivity(trailId:String){
         val trailActivityIntent=Intent(this, TrailActivity::class.java)

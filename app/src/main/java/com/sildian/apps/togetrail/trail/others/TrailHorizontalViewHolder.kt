@@ -35,7 +35,7 @@ class TrailHorizontalViewHolder (
 
     /**************************************Data**************************************************/
 
-    private lateinit var trail: Trail                               //The related trail
+    private lateinit var trail: Trail
 
     /**********************************UI components*********************************************/
 

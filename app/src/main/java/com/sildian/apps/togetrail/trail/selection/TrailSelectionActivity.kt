@@ -10,7 +10,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.firestore.Query
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.location.search.LocationSearchActivity
@@ -202,8 +201,6 @@ class TrailSelectionActivity : BaseActivity() {
 
     /*************************************Navigation*********************************************/
 
-    /**Starts Trail Activity**/
-
     private fun startTrailActivity(trail:Trail){
         val trailActivityIntent= Intent(this, TrailActivity::class.java)
         trailActivityIntent.putExtra(TrailActivity.KEY_BUNDLE_TRAIL_ACTION, TrailActivity.ACTION_TRAIL_SEE)
@@ -211,14 +208,10 @@ class TrailSelectionActivity : BaseActivity() {
         startActivity(trailActivityIntent)
     }
 
-    /**Starts the LocationSearchActivity**/
-
     private fun startLocationSearchActivity(){
         val locationSearchActivity=Intent(this, LocationSearchActivity::class.java)
         startActivityForResult(locationSearchActivity, KEY_REQUEST_LOCATION_SEARCH)
     }
-
-    /**Activity result**/
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -226,8 +219,6 @@ class TrailSelectionActivity : BaseActivity() {
             KEY_REQUEST_LOCATION_SEARCH -> handleLocationSearchResult(resultCode, data)
         }
     }
-
-    /**Handles location search result**/
 
     private fun handleLocationSearchResult(resultCode: Int, data: Intent?){
         if(resultCode== Activity.RESULT_OK){
@@ -240,8 +231,6 @@ class TrailSelectionActivity : BaseActivity() {
             }
         }
     }
-
-    /**Finishes with Ok result**/
 
     override fun finishOk(){
         val resultIntent=Intent()

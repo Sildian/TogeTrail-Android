@@ -2,11 +2,8 @@ package com.sildian.apps.togetrail.common.baseControllers
 
 import android.app.Activity
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.firebase.ui.auth.ErrorCodes
-import com.firebase.ui.auth.FirebaseUiException
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 
@@ -68,19 +65,10 @@ abstract class BaseActivity : AppCompatActivity() {
 
     /**********************************Query results handling************************************/
 
-    /**
-     * Handles save operations success
-     */
-
     fun onSaveSuccess() {
         dismissProgressDialog()
         finishOk()
     }
-
-    /**
-     * Handles query errors
-     * @param e : the exception
-     */
 
     fun onQueryError(e: Exception) {
         dismissProgressDialog()

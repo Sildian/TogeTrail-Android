@@ -27,7 +27,7 @@ class HikerPhotoViewHolder(
 
     /**************************************Data**************************************************/
 
-    private lateinit var hiker:Hiker                    //The related hiker
+    private lateinit var hiker:Hiker
 
     /**********************************UI components*********************************************/
 

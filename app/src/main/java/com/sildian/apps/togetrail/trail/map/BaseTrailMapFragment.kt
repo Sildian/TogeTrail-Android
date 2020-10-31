@@ -317,10 +317,6 @@ abstract class BaseTrailMapFragment (
 
     /***********************************Trail monitoring*****************************************/
 
-    /**
-     * Shows the current trail's track on the map
-     */
-
     protected open fun showTrailTrackOnMap(){
 
         if(this.trailViewModel?.trail?.value != null){
@@ -375,19 +371,12 @@ abstract class BaseTrailMapFragment (
         }
     }
 
-    /**Edits the trail's info**/
-
     fun editTrailInfo(){
         this.trailViewModel?.trail?.value?.let { trail ->
             hideInfoBottomSheet()
             (activity as TrailActivity).updateTrailAndEditInfo(trail)
         }
     }
-
-    /**
-     * Edits a trailPointOfInterest's info
-     * @param trailPoiPosition : the trailPointOfInterest's position in the trailTrack
-     */
 
     fun editTrailPoiInfo(trailPoiPosition:Int){
         this.trailViewModel?.trail?.value?.let { trail ->

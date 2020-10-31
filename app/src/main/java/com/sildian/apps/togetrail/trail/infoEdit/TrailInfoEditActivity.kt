@@ -99,8 +99,6 @@ class TrailInfoEditActivity : BaseActivity() {
 
     /***********************************Data monitoring******************************************/
 
-    /**Loads data**/
-
     override fun loadData() {
         this.trailViewModel= ViewModelProviders
             .of(this, ViewModelFactory)
@@ -108,13 +106,9 @@ class TrailInfoEditActivity : BaseActivity() {
         readDataFromIntent()
     }
 
-    /**Saves data**/
-
     override fun saveData() {
         this.fragment?.saveData()
     }
-
-    /**Read data from intent**/
 
     private fun readDataFromIntent(){
         if(intent!=null){
@@ -172,11 +166,6 @@ class TrailInfoEditActivity : BaseActivity() {
 
     /******************************Fragments monitoring******************************************/
 
-    /**
-     * Shows a fragment
-     * @param fragmentId : defines which fragment to display (choice within ID_FRAGMENT_xxx)
-     */
-
     private fun showFragment(fragmentId:Int){
         when(fragmentId){
             ID_FRAGMENT_TRAIL_INFO_EDIT ->
@@ -198,14 +187,10 @@ class TrailInfoEditActivity : BaseActivity() {
 
     /*************************************Navigation*********************************************/
 
-    /**Starts Location search activity**/
-
     private fun startLocationSearchActivity(){
         val locationSearchActivityIntent=Intent(this, LocationSearchActivity::class.java)
         startActivityForResult(locationSearchActivityIntent, KEY_REQUEST_LOCATION_SEARCH)
     }
-
-    /**Gets Activity result**/
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -216,8 +201,6 @@ class TrailInfoEditActivity : BaseActivity() {
             }
         }
     }
-
-    /**Finishes with Ok status**/
 
     override fun finishOk(){
         val resultIntent=Intent()

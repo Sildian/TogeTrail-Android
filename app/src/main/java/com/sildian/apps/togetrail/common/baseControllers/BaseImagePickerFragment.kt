@@ -38,11 +38,10 @@ abstract class BaseImagePickerFragment : BaseFragment() {
 
     /**********************************UI component**********************************************/
 
-    private lateinit var addPhotoBottomSheet: BottomSheetBehavior<View>     //Bottom sheet allowing to add photos
+    private lateinit var addPhotoBottomSheet: BottomSheetBehavior<View>
 
     /**********************************Pictures support******************************************/
 
-    //EasyImage support allowing to pick pictures on the device
     private lateinit var easyImage: EasyImage
 
     /************************************Life cycle**********************************************/
@@ -192,26 +191,18 @@ abstract class BaseImagePickerFragment : BaseFragment() {
 
     /***********************************Navigation***********************************************/
 
-    /**Starts selecting a photo in the device**/
-
     private fun startSelectPhoto(){
         this.easyImage.openGallery(this)
     }
-
-    /**Starts taking a photo with the device**/
 
     private fun startTakePhoto(){
         this.easyImage.openCameraForImage(this)
     }
 
-    /**Activity result**/
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         handleNewPhotoResult(requestCode, resultCode, data)
     }
-
-    /**Handles the photo result**/
 
     private fun handleNewPhotoResult(requestCode: Int, resultCode: Int, data: Intent?){
 

@@ -92,8 +92,8 @@ class MainActivity :
 
     /*************************************Queries************************************************/
 
-    var trailsQuery=TrailFirebaseQueries.getLastTrails();private set    //The current query used to fetch trails
-    var eventsQuery=EventFirebaseQueries.getNextEvents();private set    //The current query used to fetch events
+    var trailsQuery=TrailFirebaseQueries.getLastTrails();private set
+    var eventsQuery=EventFirebaseQueries.getNextEvents();private set
 
     /**********************************UI component**********************************************/
 
@@ -316,11 +316,6 @@ class MainActivity :
             .show()
     }
 
-    /**
-     * Sets the queries to search results around the given point
-     * @param point : the origin point
-     */
-
     fun setQueriesToSearchAroundPoint(point: LatLng){
         val latToDisplay=NumberUtilities.displayNumber(point.latitude, 4)
         val lngToDisplay=NumberUtilities.displayNumber(point.longitude, 4)
@@ -335,11 +330,6 @@ class MainActivity :
         }
     }
 
-    /**
-     * Sets the queries to search results around the given location
-     * @param location : the location
-     */
-
     @Suppress("MemberVisibilityCanBePrivate")
     fun setQueriesToSearchAroundLocation(location:Location){
         if(location.country!=null) {
@@ -353,8 +343,6 @@ class MainActivity :
             }
         }
     }
-
-    /**Clears the current research and resets the queries by default**/
 
     fun resetQueries(){
         this.searchTextField.text=null
@@ -469,11 +457,6 @@ class MainActivity :
 
     /******************************Fragments monitoring******************************************/
 
-    /**
-     * Shows a fragment
-     * @param fragmentId : defines which fragment to display (choice within ID_FRAGMENT_xxx)
-     */
-
     private fun showFragment(fragmentId:Int){
         when(fragmentId){
             ID_FRAGMENT_MAP->
@@ -490,8 +473,6 @@ class MainActivity :
     }
 
     /***********************************Permissions**********************************************/
-
-    /**Requests location permission**/
 
     private fun requestLocationPermission(){
         if(Build.VERSION.SDK_INT>=23
@@ -517,8 +498,6 @@ class MainActivity :
         }
     }
 
-    /**Handles location permission result**/
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             KEY_REQUEST_PERMISSION_LOCATION->if(grantResults.isNotEmpty()){
@@ -542,8 +521,6 @@ class MainActivity :
 
     /***********************************Navigation***********************************************/
 
-    /**Starts login on the server**/
-
     private fun startLoginActivity(){
         startActivityForResult(
             AuthUI.getInstance()
@@ -560,15 +537,11 @@ class MainActivity :
         )
     }
 
-    /**Starts profile activity**/
-
     private fun startProfileActivity(){
         val profileActivityIntent=Intent(this, ProfileActivity::class.java)
         profileActivityIntent.putExtra(ProfileActivity.KEY_BUNDLE_HIKER_ID, this.hikerViewModel.hiker.value?.id)
         startActivity(profileActivityIntent)
     }
-
-    /**Starts profile Edit activity**/
 
     private fun startProfileEditActivity(){
         val profileEditActivityIntent=Intent(this, ProfileEditActivity::class.java)
@@ -576,12 +549,6 @@ class MainActivity :
         profileEditActivityIntent.putExtra(ProfileEditActivity.KEY_BUNDLE_HIKER_ID, this.hikerViewModel.hiker.value?.id)
         startActivity(profileEditActivityIntent)
     }
-
-    /**
-     * Starts the TrailActivity
-     * @param trailActionId : defines which action should be performed (choice within TrailActivity.ACTION_TRAIL_xxx)
-     * @param trail (optional) : the trail to show
-     */
 
     private fun startTrailActivity(trailActionId: Int, trail:Trail?=null){
         val trailActivityIntent= Intent(this, TrailActivity::class.java)
@@ -592,32 +559,21 @@ class MainActivity :
         startActivity(trailActivityIntent)
     }
 
-    /**
-     * Starts the EventActivity
-     * @param event : the event to show
-     */
-
     private fun startEventActivity(event: Event?){
         val eventActivityIntent=Intent(this, EventActivity::class.java)
         eventActivityIntent.putExtra(EventActivity.KEY_BUNDLE_EVENT_ID, event?.id)
         startActivity(eventActivityIntent)
     }
 
-    /**Starts the EventEditActivity**/
-
     private fun startEventEditActivity(){
         val eventEditActivityIntent= Intent(this, EventEditActivity::class.java)
         startActivity(eventEditActivityIntent)
     }
 
-    /**Starts the LocationSearchActivity**/
-
     private fun startLocationSearchActivity(){
         val locationSearchActivity=Intent(this, LocationSearchActivity::class.java)
         startActivityForResult(locationSearchActivity, KEY_REQUEST_LOCATION_SEARCH)
     }
-
-    /**Activity result**/
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -626,8 +582,6 @@ class MainActivity :
             KEY_REQUEST_LOCATION_SEARCH -> handleLocationSearchResult(resultCode, data)
         }
     }
-
-    /**Handles login result**/
 
     private fun handleLoginResult(resultCode: Int, data: Intent?){
         val idpResponse=IdpResponse.fromResultIntent(data)
@@ -657,8 +611,6 @@ class MainActivity :
             }
         }
     }
-
-    /**Handles location search result**/
 
     private fun handleLocationSearchResult(resultCode: Int, data: Intent?){
         if(resultCode== Activity.RESULT_OK){

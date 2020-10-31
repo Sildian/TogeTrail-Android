@@ -27,7 +27,7 @@ class ProfileActivity : BaseActivity() {
 
     /****************************************Data************************************************/
 
-    private var hikerId: String?=null                               //The hiker id
+    private var hikerId: String?=null
 
     /**********************************UI component**********************************************/
 
@@ -70,13 +70,9 @@ class ProfileActivity : BaseActivity() {
 
     /******************************Data monitoring************************************************/
 
-    /**Loads data**/
-
     override fun loadData() {
         readDataFromIntent()
     }
-
-    /**Reads data from intent**/
 
     private fun readDataFromIntent(){
         if(intent!=null){
@@ -108,10 +104,6 @@ class ProfileActivity : BaseActivity() {
 
     /******************************Fragments monitoring******************************************/
 
-    /**
-     * Shows the fragment
-     */
-
     private fun showFragment(){
         this.fragment=ProfileFragment(this.hikerId)
         this.fragment?.let { fragment ->
@@ -122,8 +114,6 @@ class ProfileActivity : BaseActivity() {
 
     /***********************************Navigation***********************************************/
 
-    /**Starts Profile edit activity**/
-
     private fun startProfileEditActivity(){
         val profileEditActivityIntent=Intent(this, ProfileEditActivity::class.java)
         profileEditActivityIntent.putExtra(ProfileEditActivity.KEY_BUNDLE_PROFILE_ACTION, ProfileEditActivity.ACTION_PROFILE_EDIT_INFO)
@@ -131,16 +121,12 @@ class ProfileActivity : BaseActivity() {
         startActivity(profileEditActivityIntent)
     }
 
-    /**Starts Trail activity**/
-
     private fun startTrailActivity(trailId:String){
         val trailActivityIntent=Intent(this, TrailActivity::class.java)
         trailActivityIntent.putExtra(TrailActivity.KEY_BUNDLE_TRAIL_ACTION, TrailActivity.ACTION_TRAIL_SEE)
         trailActivityIntent.putExtra(TrailActivity.KEY_BUNDLE_TRAIL_ID, trailId)
         startActivity(trailActivityIntent)
     }
-
-    /**Starts Event activity**/
 
     private fun startEventActivity(eventId:String){
         val eventActivityIntent=Intent(this, EventActivity::class.java)

@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/components_margin_medium"
             app:srcCompat="@drawable/ic_poi_remove_white"
-            android:tint="@color/colorSecondary"
+            app:tint="@color/colorSecondary"
             android:contentDescription="@string/example_image_content_description"/>
 
         <com.google.android.material.button.MaterialButton

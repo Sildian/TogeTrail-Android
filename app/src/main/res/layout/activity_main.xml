@@ -103,6 +103,7 @@
                 android:layout_gravity="bottom|end"
                 android:clickable="true"
                 android:focusable="true"
+                android:contentDescription="@string/example_image_content_description"
                 app:srcCompat="@drawable/ic_add_black" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>

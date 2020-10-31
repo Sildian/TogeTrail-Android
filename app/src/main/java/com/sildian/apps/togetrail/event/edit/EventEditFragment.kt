@@ -263,8 +263,6 @@ class EventEditFragment(private val eventId: String?=null) :
 
     /*****************************Trails / Events monitoring************************************/
 
-    /**Updates the begin and end dates**/
-
     private fun updateDates(){
 
         /*If the dates and times fields are not empty, refreshes the event's dates*/
@@ -282,11 +280,6 @@ class EventEditFragment(private val eventId: String?=null) :
             this.eventViewModel.event.value?.endDate=DateUtilities.mergeDateAndTime(endDate!!, endTime!!)
         }
     }
-
-    /**
-     * Attaches the given list of trails to the event
-     * @param trails : the list of trails to attach
-     */
 
     private fun attachTrails(trails:List<Trail>){
 
@@ -320,15 +313,11 @@ class EventEditFragment(private val eventId: String?=null) :
         }
     }
 
-    /**On trail click**/
-
     override fun onTrailClick(trail: Trail) {
         trail.id?.let { id ->
             (activity as EventEditActivity).seeTrail(id)
         }
     }
-
-    /**Removes a trail from the event**/
 
     override fun onTrailRemoved(trail: Trail) {
 
@@ -343,13 +332,9 @@ class EventEditFragment(private val eventId: String?=null) :
         }
     }
 
-    /**Updates the event's position with the given trail**/
-
     private fun updateEventPosition(trail: Trail) {
         this.eventViewModel.event.value?.position = trail.position
     }
-
-    /**Updates the event's main photo url with the first photo url found in the given trail**/
 
     private fun updateEventMainPhotoUrl(trail: Trail) {
         this.eventViewModel.event.value?.mainPhotoUrl = trail.getFirstPhotoUrl()

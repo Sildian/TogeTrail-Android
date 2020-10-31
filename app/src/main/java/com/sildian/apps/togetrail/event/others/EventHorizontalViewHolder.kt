@@ -28,7 +28,7 @@ class EventHorizontalViewHolder(
 
     /**************************************Data**************************************************/
 
-    private lateinit var event:Event                                //The related event
+    private lateinit var event:Event
 
     /**********************************UI components*********************************************/
 

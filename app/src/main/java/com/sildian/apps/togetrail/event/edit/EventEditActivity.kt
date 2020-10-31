@@ -74,19 +74,13 @@ class EventEditActivity : BaseActivity() {
 
     /******************************Data monitoring************************************************/
 
-    /**Loads data**/
-
     override fun loadData() {
         readDataFromIntent()
     }
 
-    /**Saves data**/
-
     override fun saveData() {
         this.fragment?.saveData()
     }
-
-    /**Reads data from intent**/
 
     private fun readDataFromIntent(){
         if(intent!=null){
@@ -133,8 +127,6 @@ class EventEditActivity : BaseActivity() {
 
     /******************************Fragments monitoring******************************************/
 
-    /**Shows the fragment**/
-
     private fun showFragment(){
         this.fragment= EventEditFragment(this.eventId)
         this.fragment?.let { fragment ->
@@ -145,23 +137,17 @@ class EventEditActivity : BaseActivity() {
 
     /*************************************Navigation*********************************************/
 
-    /**Starts Location search activity**/
-
     private fun startLocationSearchActivity(){
         val locationSearchActivityIntent=Intent(this, LocationSearchActivity::class.java)
         locationSearchActivityIntent.putExtra(LocationSearchActivity.KEY_BUNDLE_FINE_RESEARCH, true)
         startActivityForResult(locationSearchActivityIntent, KEY_REQUEST_LOCATION_SEARCH)
     }
 
-    /**Starts Trail selection Activity**/
-
     private fun startTrailSelectionActivity(selectedTrails:ArrayList<Trail>){
         val trailSelectionActivityIntent=Intent(this, TrailSelectionActivity::class.java)
         trailSelectionActivityIntent.putParcelableArrayListExtra(TrailSelectionActivity.KEY_BUNDLE_SELECTED_TRAILS, selectedTrails)
         startActivityForResult(trailSelectionActivityIntent, KEY_REQUEST_TRAIL_SELECTION)
     }
-
-    /**Starts Trail activity**/
 
     private fun startTrailActivity(trailId:String){
         val trailActivityIntent=Intent(this, TrailActivity::class.java)
@@ -170,8 +156,6 @@ class EventEditActivity : BaseActivity() {
         startActivity(trailActivityIntent)
     }
 
-    /**Gets Activity result**/
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when(requestCode){
@@ -179,8 +163,6 @@ class EventEditActivity : BaseActivity() {
             KEY_REQUEST_TRAIL_SELECTION -> handleTrailSelectionActivityResult(resultCode, data)
         }
     }
-
-    /**Handles Location search activity result**/
 
     private fun handleLocationSearchActivityResult(resultCode: Int, data: Intent?){
         if(resultCode== Activity.RESULT_OK) {
@@ -193,8 +175,6 @@ class EventEditActivity : BaseActivity() {
             }
         }
     }
-
-    /**Handles Trail selection activity result**/
 
     private fun handleTrailSelectionActivityResult(resultCode: Int, data: Intent?){
         if(resultCode==Activity.RESULT_OK){

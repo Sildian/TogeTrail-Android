@@ -152,11 +152,6 @@ class TrailActivity : BaseActivity() {
         }
     }
 
-    /**
-     * Creates a Trail with a Gpx
-     * @param uri : the gpx's uri
-     */
-
     private fun createTrailFromGpx(uri:Uri?){
 
         if(uri!=null){
@@ -215,8 +210,6 @@ class TrailActivity : BaseActivity() {
         }
     }
 
-    /**Saves data**/
-
     override fun saveData() {
         this.fragment?.saveData()
     }
@@ -241,11 +234,6 @@ class TrailActivity : BaseActivity() {
     }
 
     /******************************Fragments monitoring******************************************/
-
-    /**
-     * Shows a fragment
-     * @param fragmentId : defines which fragment to display (choice within ID_FRAGMENT_xxx)
-     */
 
     private fun showFragment(fragmentId:Int){
         when(fragmentId){
@@ -300,20 +288,12 @@ class TrailActivity : BaseActivity() {
 
     /***********************************Navigation***********************************************/
 
-    /**Starts loading a Gpx file**/
-
     private fun startLoadGpx(){
         val loadGpxIntent=Intent(Intent.ACTION_OPEN_DOCUMENT)
         loadGpxIntent.addCategory(Intent.CATEGORY_OPENABLE)
         loadGpxIntent.type="*/*"
         startActivityForResult(loadGpxIntent, KEY_REQUEST_LOAD_GPX)
     }
-
-    /**
-     * Starts TrailInfoEditActivity
-     * @param trailEditActionId : defines which action should be performed (among TrailInfoEditActivity.ACTION_TRAIL_xxx)
-     * @param trailPointOfInterestPosition : if a trailPointOfInterest is edited, defines its position in the trailTrack
-     */
 
     //TODO it the trail is too big, it may fail to pass to the intent. An other way needs to be found to edit a trail.
 
@@ -328,8 +308,6 @@ class TrailActivity : BaseActivity() {
         startActivityForResult(trailInfoEditActivityIntent, KEY_REQUEST_EDIT_TRAIL_INFO)
     }
 
-    /**Activity result**/
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when(requestCode) {
@@ -337,8 +315,6 @@ class TrailActivity : BaseActivity() {
             KEY_REQUEST_EDIT_TRAIL_INFO -> handleTrailInfoEditResult(resultCode, data)
         }
     }
-
-    /**Handles load gpx result**/
 
     private fun handleLoadGpxResult(resultCode: Int, data:Intent?){
         when (resultCode) {
@@ -350,8 +326,6 @@ class TrailActivity : BaseActivity() {
                 finishCancel()
         }
     }
-
-    /**Handles trail info edit result**/
 
     private fun handleTrailInfoEditResult(resultCode: Int, data: Intent?){
         if(resultCode== Activity.RESULT_OK){

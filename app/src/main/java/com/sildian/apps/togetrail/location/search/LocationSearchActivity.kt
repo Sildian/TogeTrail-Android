@@ -116,8 +116,6 @@ class LocationSearchActivity : BaseActivity(), LocationPredictionViewHolder.OnLo
 
     /**********************************Location research*****************************************/
 
-    /**Searches locations matching the research text with Google Places Autocomplete**/
-
     private fun searchLocations(){
 
         val typeFilter=if(this.fineResearch)
@@ -142,14 +140,10 @@ class LocationSearchActivity : BaseActivity(), LocationPredictionViewHolder.OnLo
             }
     }
 
-    /**Handles location click**/
-
     override fun onLocationClick(placeId: String) {
         Log.d(TAG, "Selected location $placeId")
         searchLocationDetail(placeId)
     }
-
-    /**Searches a location's detail with Google Places**/
 
     private fun searchLocationDetail(placeId: String){
         val request=FetchPlaceRequest

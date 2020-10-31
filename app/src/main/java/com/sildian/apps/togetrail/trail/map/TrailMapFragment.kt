@@ -353,8 +353,6 @@ class TrailMapFragment :
 
     /***********************************Trails monitoring****************************************/
 
-    /**Shows the list of trails on the map**/
-
     private fun showTrailsOnMap(){
 
         this.map?.clear()
@@ -375,8 +373,6 @@ class TrailMapFragment :
     }
 
     /***********************************Events monitoring****************************************/
-
-    /**Shows the list of events on the map**/
 
     private fun showEventsOnMap(){
 
