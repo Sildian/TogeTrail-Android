@@ -258,11 +258,11 @@ abstract class BaseTrailMapFragment (
             this.map?.mapType= GoogleMap.MAP_TYPE_TERRAIN
             this.map?.setOnMapClickListener(this)
             this.map?.setOnMarkerClickListener(this)
-            if(Build.VERSION.SDK_INT<23
-                &&checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT < 23
+                || checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 this.map?.isMyLocationEnabled = true
             }
-            this.map?.uiSettings?.isMyLocationButtonEnabled=false
+            this.map?.uiSettings?.isMyLocationButtonEnabled = false
             onMapReadyActionsFinished()
         }
         else{
