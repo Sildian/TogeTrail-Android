@@ -2,8 +2,6 @@ package com.sildian.apps.togetrail.common.baseControllers
 
 import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.common.utils.permissionsHelpers.PermissionsCallback
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import pl.aprilapps.easyphotopicker.*
 
@@ -18,7 +17,7 @@ import pl.aprilapps.easyphotopicker.*
  * Base fragment for all fragment aiming to pick images
  ************************************************************************************************/
 
-abstract class BaseImagePickerFragment : BaseFragment() {
+abstract class BaseImagePickerFragment : BaseFragment(), PermissionsCallback {
 
     /**********************************Static items**********************************************/
 
@@ -89,102 +88,52 @@ abstract class BaseImagePickerFragment : BaseFragment() {
 
     /***********************************Permissions**********************************************/
 
-    /**Requests Write permission (to pick a photo on the device)**/
-
-    protected fun requestWritePermission(){
-        if(Build.VERSION.SDK_INT>=23
-            && activity?.checkSelfPermission(KEY_BUNDLE_PERMISSION_WRITE)!= PackageManager.PERMISSION_GRANTED){
-
-            /*If permission not already granted, requests it*/
-
-            if(shouldShowRequestPermissionRationale(KEY_BUNDLE_PERMISSION_WRITE)){
-
-                DialogHelper.createInfoDialog(
-                    context!!,
-                    R.string.message_permission_requested_title,
-                    R.string.message_permission_requested_message_write
-                ).show()
-
-            }else{
-                requestPermissions(
-                    arrayOf(KEY_BUNDLE_PERMISSION_WRITE), KEY_REQUEST_PERMISSION_WRITE)
-            }
-        }else{
-
-            /*If SDK <23 or permission already granted, directly proceeds the action*/
-
-            startSelectPhoto()
-        }
+    protected fun requestWritePermission() {
+        baseActivity?.requestPermissions(
+            KEY_REQUEST_PERMISSION_WRITE,
+            arrayOf(KEY_BUNDLE_PERMISSION_WRITE),
+            this,
+            R.string.message_permission_requested_message_write
+        )
     }
-
-    /**Requests Write and Camera permission (to take a new photo with the device)**/
 
     protected fun requestWriteAndCameraPermission(){
-        if(Build.VERSION.SDK_INT>=23
-            &&(activity?.checkSelfPermission(KEY_BUNDLE_PERMISSION_WRITE)!= PackageManager.PERMISSION_GRANTED
-                    ||activity?.checkSelfPermission(KEY_BUNDLE_PERMISSION_CAMERA)!= PackageManager.PERMISSION_GRANTED)){
+        baseActivity?.requestPermissions(
+            KEY_REQUEST_PERMISSION_WRITE_AND_CAMERA,
+            arrayOf(KEY_BUNDLE_PERMISSION_WRITE, KEY_BUNDLE_PERMISSION_CAMERA),
+            this,
+            R.string.message_permission_requested_message_write_and_camera
+        )
+    }
 
-            /*If permission not already granted, requests it*/
-
-            if(shouldShowRequestPermissionRationale(KEY_BUNDLE_PERMISSION_WRITE)
-                || shouldShowRequestPermissionRationale(KEY_BUNDLE_PERMISSION_CAMERA)){
-
-                DialogHelper.createInfoDialog(
-                    context!!,
-                    R.string.message_permission_requested_title,
-                    R.string.message_permission_requested_message_camera
-                ).show()
-
-            }else{
-                requestPermissions(
-                    arrayOf(KEY_BUNDLE_PERMISSION_WRITE, KEY_BUNDLE_PERMISSION_CAMERA),
-                    KEY_REQUEST_PERMISSION_WRITE_AND_CAMERA)
-            }
-        }else{
-
-            /*If SDK <23 or permission already granted, directly proceeds the action*/
-
-            startTakePhoto()
+    override fun onPermissionsGranted(permissionsRequestCode: Int) {
+        hideAddPhotoBottomSheet()
+        when (permissionsRequestCode) {
+            KEY_REQUEST_PERMISSION_WRITE -> startSelectPhoto()
+            KEY_REQUEST_PERMISSION_WRITE_AND_CAMERA -> startTakePhoto()
         }
     }
 
-    /**Handles permissions requests results**/
+    override fun onPermissionsDenied(permissionsRequestCode: Int) {
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            KEY_REQUEST_PERMISSION_WRITE ->if(grantResults.isNotEmpty()){
-                when(grantResults[0]) {
-                    PackageManager.PERMISSION_GRANTED -> {
-                        Log.d(TAG, "Permission '$KEY_BUNDLE_PERMISSION_WRITE' granted")
-                        startSelectPhoto()
-                    }
-                    PackageManager.PERMISSION_DENIED -> {
-                        Log.d(TAG, "Permission '$KEY_BUNDLE_PERMISSION_WRITE' denied")
-                        DialogHelper.createInfoDialog(
-                            context!!,
-                            R.string.message_permission_requested_title,
-                            R.string.message_permission_requested_message_write
-                        ).show()
-                    }
-                }
-            }
-            KEY_REQUEST_PERMISSION_WRITE_AND_CAMERA ->if(grantResults.isNotEmpty()){
-                when(grantResults[0]){
-                    PackageManager.PERMISSION_GRANTED -> {
-                        Log.d(TAG, "Permission '$KEY_BUNDLE_PERMISSION_WRITE' granted")
-                        Log.d(TAG, "Permission '$KEY_BUNDLE_PERMISSION_CAMERA' granted")
-                        startTakePhoto()
-                    }
-                    PackageManager.PERMISSION_DENIED -> {
-                        Log.d(TAG, "Permission '$KEY_BUNDLE_PERMISSION_WRITE' denied")
-                        Log.d(TAG, "Permission '$KEY_BUNDLE_PERMISSION_CAMERA' denied")
-                        DialogHelper.createInfoDialog(
-                            context!!,
-                            R.string.message_permission_requested_title,
-                            R.string.message_permission_requested_message_camera
-                        ).show()
-                    }
-                }
+        hideAddPhotoBottomSheet()
+        baseActivity?.let { baseActivity ->
+
+            when (permissionsRequestCode) {
+
+                KEY_REQUEST_PERMISSION_WRITE ->
+                    DialogHelper.createInfoDialog(
+                        baseActivity,
+                        R.string.message_permission_denied_title,
+                        R.string.message_permission_denied_message_write
+                    ).show()
+
+                KEY_REQUEST_PERMISSION_WRITE_AND_CAMERA ->
+                    DialogHelper.createInfoDialog(
+                        baseActivity,
+                        R.string.message_permission_denied_title,
+                        R.string.message_permission_denied_message_write_and_camera
+                    ).show()
             }
         }
     }

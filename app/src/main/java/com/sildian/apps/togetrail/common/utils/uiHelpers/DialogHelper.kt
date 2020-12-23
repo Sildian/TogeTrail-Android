@@ -3,6 +3,7 @@ package com.sildian.apps.togetrail.common.utils.uiHelpers
 import android.content.Context
 import android.content.DialogInterface
 import android.view.LayoutInflater
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -36,17 +37,21 @@ object DialogHelper {
      * @param context : the context
      * @param titleId : the resId for the title
      * @param messageId : the resId for the message
+     * @param callback : the button click callback
      */
 
     @Suppress("UNUSED_ANONYMOUS_PARAMETER")
     @JvmStatic
-    fun createInfoDialog(context: Context, titleId:Int, messageId:Int):AlertDialog {
+    fun createInfoDialog(context: Context, @StringRes titleId:Int,
+                         @StringRes messageId:Int, callback: (()->Unit)? = null): AlertDialog {
         return MaterialAlertDialogBuilder(context)
             .setBackground(ContextCompat.getDrawable(
                 context, R.drawable.shape_corners_round_color_primary))
             .setTitle(titleId)
             .setMessage(messageId)
-            .setNeutralButton(R.string.button_common_ok) { dialog, which ->  }
+            .setNeutralButton(R.string.button_common_ok) { dialog, which ->
+                callback?.invoke()
+            }
             .create()
     }
 
@@ -60,8 +65,8 @@ object DialogHelper {
      */
 
     @JvmStatic
-    fun createYesNoDialog(context: Context, titleId:Int, messageId:Int,
-                          listener:DialogInterface.OnClickListener):AlertDialog{
+    fun createYesNoDialog(context: Context, @StringRes titleId:Int, @StringRes messageId:Int,
+                          listener:DialogInterface.OnClickListener): AlertDialog{
         return MaterialAlertDialogBuilder(context)
             .setBackground(ContextCompat.getDrawable(
                 context, R.drawable.shape_corners_round_color_primary))
@@ -83,8 +88,8 @@ object DialogHelper {
      */
 
     @JvmStatic
-    fun createYesNoCriticalDialog(context: Context, titleId:Int, messageId:Int,
-                          listener:DialogInterface.OnClickListener):AlertDialog{
+    fun createYesNoCriticalDialog(context: Context, @StringRes titleId:Int, @StringRes messageId:Int,
+                          listener:DialogInterface.OnClickListener): AlertDialog{
         return MaterialAlertDialogBuilder(context, R.style.AlertDialogCriticalStyle)
             .setBackground(ContextCompat.getDrawable(
                 context, R.drawable.shape_corners_round_color_primary))
@@ -106,8 +111,8 @@ object DialogHelper {
      */
 
     @JvmStatic
-    fun createRequestInfoDialog(context: Context, titleId: Int,
-                                callback:(String?)->Unit): AlertDialog {
+    fun createRequestInfoDialog(context: Context, @StringRes titleId: Int,
+                                callback: (String?)->Unit): AlertDialog {
 
         val view = LayoutInflater.from(context).inflate(R.layout.dialog_request_info, null)
         val infoTextField = view.dialog_request_info_text_field_info

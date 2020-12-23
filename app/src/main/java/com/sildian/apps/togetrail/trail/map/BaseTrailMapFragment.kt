@@ -1,15 +1,12 @@
 package com.sildian.apps.togetrail.trail.map
 
 import android.Manifest
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -24,6 +21,7 @@ import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.exceptions.UserLocationException
 import com.sildian.apps.togetrail.common.utils.MapMarkersUtilities
 import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationHelper
+import com.sildian.apps.togetrail.common.utils.permissionsHelpers.PermissionsHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.trail.info.BaseInfoFragment
@@ -91,19 +89,23 @@ abstract class BaseTrailMapFragment (
         this.mapView.onStart()
     }
 
+    @Suppress("MissingPermission")
     override fun onResume() {
         super.onResume()
         this.mapView.onResume()
-        if(Build.VERSION.SDK_INT<23
-            &&checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED) {
-            this.map?.isMyLocationEnabled = true
+        baseActivity?.let { baseActivity ->
+            if (PermissionsHelper.isPermissionGranted(baseActivity, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                this.map?.isMyLocationEnabled = true
+            }
         }
     }
 
+    @Suppress("MissingPermission")
     override fun onPause() {
-        if(Build.VERSION.SDK_INT<23
-            &&checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED) {
-            this.map?.isMyLocationEnabled = false
+        baseActivity?.let { baseActivity ->
+            if (PermissionsHelper.isPermissionGranted(baseActivity, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                this.map?.isMyLocationEnabled = false
+            }
         }
         this.mapView.onPause()
         super.onPause()
@@ -251,6 +253,7 @@ abstract class BaseTrailMapFragment (
         this.mapView.getMapAsync(this)
     }
 
+    @Suppress("MissingPermission")
     override fun onMapReady(map: GoogleMap?) {
         if(map!=null) {
             Log.d(TAG, "Map is ready in '${this.javaClass.simpleName}'")
@@ -258,9 +261,10 @@ abstract class BaseTrailMapFragment (
             this.map?.mapType= GoogleMap.MAP_TYPE_TERRAIN
             this.map?.setOnMapClickListener(this)
             this.map?.setOnMarkerClickListener(this)
-            if (Build.VERSION.SDK_INT < 23
-                || checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                this.map?.isMyLocationEnabled = true
+            baseActivity?.let { baseActivity ->
+                if (PermissionsHelper.isPermissionGranted(baseActivity, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    this.map?.isMyLocationEnabled = true
+                }
             }
             this.map?.uiSettings?.isMyLocationButtonEnabled = false
             onMapReadyActionsFinished()
@@ -288,7 +292,7 @@ abstract class BaseTrailMapFragment (
             withContext(Dispatchers.Main) {
                 context?.let { context ->
 
-                    if (Build.VERSION.SDK_INT < 23 || checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    if (PermissionsHelper.isPermissionGranted(context, Manifest.permission.ACCESS_FINE_LOCATION)) {
 
                         val userLocation = async {
                             try {

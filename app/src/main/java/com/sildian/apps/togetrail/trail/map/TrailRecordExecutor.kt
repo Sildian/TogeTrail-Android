@@ -2,17 +2,15 @@ package com.sildian.apps.togetrail.trail.map
 
 import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
 import android.location.Location
-import android.os.Build
 import android.util.Log
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import com.sildian.apps.togetrail.common.exceptions.UserLocationException
 import com.sildian.apps.togetrail.common.utils.GeoUtilities
 import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationHelper
+import com.sildian.apps.togetrail.common.utils.permissionsHelpers.PermissionsHelper
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
 import kotlinx.coroutines.*
 import java.util.*
@@ -89,7 +87,7 @@ class TrailRecordExecutor(private val context: Context) {
 
     suspend fun fetchUserLocation() {
         withContext(Dispatchers.IO) {
-            if (Build.VERSION.SDK_INT < 23 || ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (PermissionsHelper.isPermissionGranted(context, Manifest.permission.ACCESS_FINE_LOCATION)) {
 
                 val userLocation = async {
                     try {

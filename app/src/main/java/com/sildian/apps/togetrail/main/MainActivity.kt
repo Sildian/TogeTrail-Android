@@ -4,8 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuInflater
@@ -31,6 +29,7 @@ import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.common.utils.NumberUtilities
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
+import com.sildian.apps.togetrail.common.utils.permissionsHelpers.PermissionsCallback
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.event.detail.EventActivity
@@ -59,6 +58,7 @@ import net.danlew.android.joda.JodaTimeAndroid
 
 class MainActivity :
     BaseActivity(),
+    PermissionsCallback,
     NavigationView.OnNavigationItemSelectedListener,
     BottomNavigationView.OnNavigationItemSelectedListener
 {
@@ -475,48 +475,25 @@ class MainActivity :
     /***********************************Permissions**********************************************/
 
     private fun requestLocationPermission(){
-        if(Build.VERSION.SDK_INT>=23
-            &&checkSelfPermission(KEY_BUNDLE_PERMISSION_LOCATION)!= PackageManager.PERMISSION_GRANTED){
-
-            /*If permission not already granted, requests it*/
-
-            if(shouldShowRequestPermissionRationale(KEY_BUNDLE_PERMISSION_LOCATION)){
-                DialogHelper.createInfoDialog(
-                    this,
-                    R.string.message_permission_requested_title,
-                    R.string.message_permission_requested_message_location
-                ).show()
-            }else{
-                requestPermissions(
-                    arrayOf(KEY_BUNDLE_PERMISSION_LOCATION), KEY_REQUEST_PERMISSION_LOCATION)
-            }
-        }else{
-
-            /*If SDK <23 or permission already granted, directly shows the map fragment*/
-
-            showFragment(ID_FRAGMENT_MAP)
-        }
+        requestPermissions(
+            KEY_REQUEST_PERMISSION_LOCATION,
+            arrayOf(KEY_BUNDLE_PERMISSION_LOCATION),
+            this,
+            R.string.message_permission_requested_message_location
+        )
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            KEY_REQUEST_PERMISSION_LOCATION->if(grantResults.isNotEmpty()){
-                when(grantResults[0]){
-                    PackageManager.PERMISSION_GRANTED -> {
-                        Log.d(TAG, "Permission '$KEY_BUNDLE_PERMISSION_LOCATION' granted")
-                        showFragment(ID_FRAGMENT_MAP)
-                    }
-                    PackageManager.PERMISSION_DENIED -> {
-                        DialogHelper.createInfoDialog(
-                            this,
-                            R.string.message_permission_requested_title,
-                            R.string.message_permission_requested_message_location
-                        ).show()
-                        Log.d(TAG, "Permission '$KEY_BUNDLE_PERMISSION_LOCATION' denied")
-                    }
-                }
-            }
-        }
+    override fun onPermissionsGranted(permissionsRequestCode: Int) {
+        showFragment(ID_FRAGMENT_MAP)
+    }
+
+    override fun onPermissionsDenied(permissionsRequestCode: Int) {
+        DialogHelper.createInfoDialog(
+            this,
+            R.string.message_permission_denied_title,
+            R.string.message_permission_denied_message_location
+        ).show()
+        showFragment(ID_FRAGMENT_MAP)
     }
 
     /***********************************Navigation***********************************************/

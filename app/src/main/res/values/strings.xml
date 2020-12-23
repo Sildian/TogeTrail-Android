@@ -202,9 +202,13 @@
     <!-- Dialogs -->
     <string name="message_wait">Just a bit of waiting…</string>
     <string name="message_permission_requested_title">Permission requested</string>
-    <string name="message_permission_requested_message_location">You permission is necessary to access your location and provide you the core feature of this app.</string>
-    <string name="message_permission_requested_message_write">Your permission is necessary to access your device\'s storage and pick-up photos.</string>
-    <string name="message_permission_requested_message_camera">Your permission is necessary to access your device\'s camera and take photos.</string>
+    <string name="message_permission_requested_message_location">The access to the device\'s location is requested to display your position on the map and offer an optimized user experience.</string>
+    <string name="message_permission_requested_message_write">The access to the device\'s storage is requested to pick-up photos.</string>
+    <string name="message_permission_requested_message_write_and_camera">The access to the device\'s storage and camera is requested to take photos.</string>
+    <string name="message_permission_denied_title">Permission denied</string>
+    <string name="message_permission_denied_message_location">You denied access to the device\'s location. You still can use the app, however your position will not be displayed on the map.</string>
+    <string name="message_permission_denied_message_write">You denied access to the device\'s storage. Selecting photos is not allowed.</string>
+    <string name="message_permission_denied_message_write_and_camera">You denied access to the device\'s storage and camera. Taking photos is not allowed.</string>
     <string name="message_map_failure_title">Map failure</string>
     <string name="message_map_failure_message">Oh no, the map could n\'t be loaded. Please try again later.</string>
     <string name="message_query_failure_title">Query failure</string>

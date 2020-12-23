@@ -1,14 +1,12 @@
 package com.sildian.apps.togetrail
 
 import android.Manifest
-import android.content.pm.PackageManager
 import android.location.Location
-import android.os.Build
-import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.sildian.apps.togetrail.common.exceptions.UserLocationException
 import com.sildian.apps.togetrail.common.utils.DeviceUtilities
 import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationHelper
+import com.sildian.apps.togetrail.common.utils.permissionsHelpers.PermissionsHelper
 import org.robolectric.annotation.Implementation
 import org.robolectric.annotation.Implements
 
@@ -25,7 +23,7 @@ class UserLocationHelperShadow {
         when {
             lastUserLocation != null ->
                 return lastUserLocation!!
-            !(Build.VERSION.SDK_INT < 23 || ContextCompat.checkSelfPermission(locationProviderClient.applicationContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) ->
+            !(PermissionsHelper.isPermissionGranted(locationProviderClient.applicationContext, Manifest.permission.ACCESS_FINE_LOCATION)) ->
                 throw UserLocationException(UserLocationException.ErrorCode.ACCESS_NOT_GRANTED)
             !DeviceUtilities.isGpsAvailable(locationProviderClient.applicationContext) ->
                 throw UserLocationException(UserLocationException.ErrorCode.GPS_UNAVAILABLE)

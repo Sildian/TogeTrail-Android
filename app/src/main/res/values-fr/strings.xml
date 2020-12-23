@@ -201,9 +201,13 @@
     <!-- Dialogs -->
     <string name="message_wait">Un tout petit peu d\'attente…</string>
     <string name="message_permission_requested_title">Permission requise</string>
-    <string name="message_permission_requested_message_location">Votre permission est nécessaire pour accéder à votre position et fournir les fonctionnalités de base de cette application.</string>
-    <string name="message_permission_requested_message_write">Votre permission est nécessaire pour accéder au stockage de votre appareil et sélectionner des photos.</string>
-    <string name="message_permission_requested_message_camera">Votre permission est nécessaire pour accéder à la caméra de votre appareil et prendre des photos.</string>
+    <string name="message_permission_requested_message_location">L\'accès à la localisation de l\'appareil est nécessaire pour afficher votre position sur la carte et vous offrir une expérience utilisateur optimale.</string>
+    <string name="message_permission_requested_message_write">L\'accès au stockage de l\'appareil est nécessaire pour sélectionner des photos.</string>
+    <string name="message_permission_requested_message_write_and_camera">L\'accès au stockage et à la caméra de l\'appareil sont nécessaires pour prendre des photos.</string>
+    <string name="message_permission_denied_title">Permission refusée</string>
+    <string name="message_permission_denied_message_location">Vous avez refusé l\'accès à la position de votre appareil. Vous pouvez continuer à utiliser l\'application, cependant votre position ne sera pas affichée sur la carte.</string>
+    <string name="message_permission_denied_message_write">Vous avez refusé l\'accès au stockage de l\'appareil. La sélection de photos n\'est donc pas autorisée.</string>
+    <string name="message_permission_denied_message_write_and_camera">Vous avez refusé l\'accès au stockage et à la caméra de l\'appareil. La prise de photos n\'est donc pas autorisée.</string>
     <string name="message_map_failure_title">Echec de la carte</string>
     <string name="message_map_failure_message">Aïe, la carte n\'a pu être charger. Il va falloir essayer plus tard.</string>
     <string name="message_query_failure_title">Echec de la requête</string>
