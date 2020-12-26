@@ -1,6 +1,7 @@
 package com.sildian.apps.togetrail.common.utils.uiHelpers
 
 import android.view.View
+import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.sildian.apps.togetrail.R
@@ -20,7 +21,7 @@ object SnackbarHelper {
      */
 
     @JvmStatic
-    fun createSimpleSnackbar(messageView: View, anchorView: View?, textId: Int): Snackbar {
+    fun createSimpleSnackbar(messageView: View, anchorView: View?, @StringRes textId: Int): Snackbar {
         val snackbar = Snackbar.make(messageView, textId, Snackbar.LENGTH_LONG)
         if (anchorView != null) {
             snackbar.anchorView = anchorView
@@ -39,8 +40,8 @@ object SnackbarHelper {
      */
 
     @JvmStatic
-    fun createSnackbarWithAction(messageView: View, anchorView: View?, textId: Int,
-                                 actionButtonId: Int, actionCallback: ()-> Unit): Snackbar {
+    fun createSnackbarWithAction(messageView: View, anchorView: View?, @StringRes textId: Int,
+                                 @StringRes actionButtonId: Int, actionCallback: ()-> Unit): Snackbar {
 
         val snackbar = Snackbar.make(messageView, textId, Snackbar.LENGTH_LONG)
             .setAction(actionButtonId) { actionCallback.invoke() }

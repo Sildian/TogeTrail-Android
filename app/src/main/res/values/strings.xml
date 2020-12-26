@@ -237,6 +237,9 @@
     <string name="message_event_no_trail_attached">At least 1 trail should be attached</string>
     <string name="message_user_location_failure">Your location is unreachable</string>
     <string name="message_device_gps_unavailable">The GPS seems deactivated</string>
+    <!-- Notifications -->
+    <string name="message_trail_recording_title">A trail is being recorded</string>
+    <string name="message_trail_recording_message">TogeTrail is using your location to record a trail</string>
 
     <!-- Metrics -->
     <string name="metric_hour">h</string>

@@ -1,27 +1,25 @@
 package com.sildian.apps.togetrail.trail.map
 
-import android.Manifest
 import android.content.Context
 import android.location.Location
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
-import com.sildian.apps.togetrail.common.exceptions.UserLocationException
+import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationException
 import com.sildian.apps.togetrail.common.utils.GeoUtilities
 import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationHelper
-import com.sildian.apps.togetrail.common.utils.permissionsHelpers.PermissionsHelper
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
-import kotlinx.coroutines.*
 import java.util.*
 
 /*************************************************************************************************
- * Runs a loop recording a trail using the user location
+ * Records a Trail in real time using the user location
  * @param context : the context
- * TODO improve it to allow location update when the screen is off
  ************************************************************************************************/
 
-class TrailRecordExecutor(private val context: Context) {
+class TrailRecordExecutor(private val context: Context): LocationCallback() {
 
     companion object {
 
@@ -39,6 +37,10 @@ class TrailRecordExecutor(private val context: Context) {
 
     private val userLocationProvider = LocationServices.getFusedLocationProviderClient(context)
 
+    /*************************************Data**************************************************/
+
+    var isRecording = false ; private set
+
     /*******************************Data to be updated*******************************************/
 
     val trailPointsRegistered = arrayListOf<TrailPoint>()
@@ -49,66 +51,43 @@ class TrailRecordExecutor(private val context: Context) {
     val trailPointsRegisteredLiveData = MutableLiveData<List<TrailPoint>>()
     val userLocationFailureLiveData = MutableLiveData<UserLocationException?>()
 
-    /***********************************Running job**********************************************/
-
-    private var job: Job? = null
-
     /***********************************Job monitoring*******************************************/
 
-    suspend fun start() {
-        withContext(Dispatchers.Main) {
-            job = launch { recordTrail() }
+    fun start() {
+        try {
+            isRecording = true
+            UserLocationHelper.startUserLocationUpdates(
+                userLocationProvider,
+                VALUE_RECORD_TIME_INTERVAL.toLong(),
+                this
+            )
+        }
+        catch (e: UserLocationException) {
+            stop()
+            e.printStackTrace()
+            Log.e(TAG, "User location cannot be reached : ${e.message}")
+            userLocationFailure = e
+            userLocationFailureLiveData.postValue(userLocationFailure)
         }
     }
 
-    suspend fun stop() {
-        withContext(Dispatchers.Main) {
-            job?.cancel()
-        }
+    fun stop() {
+        isRecording = false
+        UserLocationHelper.stopUserLocationUpdates(userLocationProvider, this)
     }
-
-    fun isRecording(): Boolean =
-        this.job != null && this.job!!.isActive
 
     /***********************************Trail recording*******************************************/
 
-    private suspend fun recordTrail() {
-        withContext(Dispatchers.IO) {
-            while (true) {
-                fetchUserLocation()
-                var remainingTime= VALUE_RECORD_TIME_INTERVAL
-                while(remainingTime > 0){
-                    delay(1000)
-                    remainingTime -= 1000
+    override fun onLocationResult(locationResult: LocationResult?) {
+        if (locationResult != null) {
+            for (location in locationResult.locations) {
+                if (location != null) {
+                    handleUserLocation(location)
                 }
-            }
-        }
-    }
-
-    suspend fun fetchUserLocation() {
-        withContext(Dispatchers.IO) {
-            if (PermissionsHelper.isPermissionGranted(context, Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-                val userLocation = async {
-                    try {
-                        UserLocationHelper.getLastUserLocation(userLocationProvider)
-                    }
-                    catch (e: UserLocationException) {
-                        e.printStackTrace()
-                        Log.e(TAG, "User location cannot be reached : ${e.message}")
-                        userLocationFailure = e
-                        userLocationFailureLiveData.postValue(userLocationFailure)
-                        null
-                    }
-                }.await()
-
-                if (userLocation != null) {
-                    handleUserLocation(userLocation)
+                else {
+                    userLocationFailure = UserLocationException(UserLocationException.ErrorCode.ERROR_UNKNOWN)
+                    userLocationFailureLiveData.postValue(userLocationFailure)
                 }
-            }
-            else {
-                userLocationFailure = UserLocationException(UserLocationException.ErrorCode.ACCESS_NOT_GRANTED)
-                userLocationFailureLiveData.postValue(userLocationFailure)
             }
         }
     }

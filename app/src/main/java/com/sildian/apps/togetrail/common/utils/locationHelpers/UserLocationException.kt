@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.common.exceptions
+package com.sildian.apps.togetrail.common.utils.locationHelpers
 
 /*************************************************************************************************
  * Exception related to a location

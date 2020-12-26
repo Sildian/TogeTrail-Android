@@ -18,7 +18,7 @@ import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
-import com.sildian.apps.togetrail.common.exceptions.UserLocationException
+import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationException
 import com.sildian.apps.togetrail.common.utils.MapMarkersUtilities
 import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationHelper
 import com.sildian.apps.togetrail.common.utils.permissionsHelpers.PermissionsHelper

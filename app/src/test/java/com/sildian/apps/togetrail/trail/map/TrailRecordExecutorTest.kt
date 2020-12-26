@@ -5,9 +5,7 @@ import android.content.Context
 import android.location.Location
 import android.location.LocationManager
 import com.sildian.apps.togetrail.UserLocationHelperShadow
-import com.sildian.apps.togetrail.common.exceptions.UserLocationException
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationException
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -48,6 +46,7 @@ class TrailRecordExecutorTest {
 
     @After
     fun finish() {
+        this.trailRecordExecutor.stop()
         UserLocationHelperShadow.lastUserLocation = null
     }
 
@@ -74,89 +73,78 @@ class TrailRecordExecutorTest {
 
     @Test
     fun given_locationAccessNotGranted_when_fetchUserLocation_then_checkFailureIsRaised() {
-        runBlocking {
-            launch { trailRecordExecutor.fetchUserLocation() }.join()
-            assertTrue(trailRecordExecutor.trailPointsRegistered.isEmpty())
-            assertEquals(
-                UserLocationException.ErrorCode.ACCESS_NOT_GRANTED,
-                trailRecordExecutor.userLocationFailure?.errorCode
-            )
-        }
+        this.trailRecordExecutor.start()
+        assertTrue(this.trailRecordExecutor.trailPointsRegistered.isEmpty())
+        assertEquals(
+            UserLocationException.ErrorCode.ACCESS_NOT_GRANTED,
+            this.trailRecordExecutor.userLocationFailure?.errorCode
+        )
     }
 
     @Test
     fun given_locationUnavailable_when_fetchUserLocation_then_checkFailureIsRaised() {
-        runBlocking {
-            applicationShadow.grantPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
-            locationManagerShadow.setLocationEnabled(false)
-            launch { trailRecordExecutor.fetchUserLocation() }.join()
-            assertTrue(trailRecordExecutor.trailPointsRegistered.isEmpty())
-            assertEquals(
-                UserLocationException.ErrorCode.GPS_UNAVAILABLE,
-                trailRecordExecutor.userLocationFailure?.errorCode
-            )
-        }
+        this.applicationShadow.grantPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
+        this.locationManagerShadow.setLocationEnabled(false)
+        this.trailRecordExecutor.start()
+        assertTrue(this.trailRecordExecutor.trailPointsRegistered.isEmpty())
+        assertEquals(
+            UserLocationException.ErrorCode.GPS_UNAVAILABLE,
+            this.trailRecordExecutor.userLocationFailure?.errorCode
+        )
     }
 
     @Test
     fun given_nullLocation_when_fetchUserLocation_then_checkFailureIsRaised() {
-        runBlocking {
-            applicationShadow.grantPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
-            locationManagerShadow.setLocationEnabled(true)
-            UserLocationHelperShadow.lastUserLocation = null
-            launch { trailRecordExecutor.fetchUserLocation() }.join()
-            assertTrue(trailRecordExecutor.trailPointsRegistered.isEmpty())
-            assertEquals(
-                UserLocationException.ErrorCode.ERROR_UNKNOWN,
-                trailRecordExecutor.userLocationFailure?.errorCode
-            )
-        }
+        this.applicationShadow.grantPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
+        this.locationManagerShadow.setLocationEnabled(true)
+        UserLocationHelperShadow.lastUserLocation = null
+        this.trailRecordExecutor.start()
+        assertTrue(this.trailRecordExecutor.trailPointsRegistered.isEmpty())
+        assertEquals(
+            UserLocationException.ErrorCode.ERROR_UNKNOWN,
+            this.trailRecordExecutor.userLocationFailure?.errorCode
+        )
     }
 
     @Test
     fun given_differentCases_when_fetchUserLocation_then_checkProcess() {
-        runBlocking {
 
-            applicationShadow.grantPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
+        this.applicationShadow.grantPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
 
-            /*Step 1 : record a first location*/
-            locationManagerShadow.setLocationEnabled(true)
-            UserLocationHelperShadow.lastUserLocation = location1
-            launch { trailRecordExecutor.fetchUserLocation() }.join()
-            assertEquals(location1.latitude, trailRecordExecutor.trailPointsRegistered.last().latitude, 0.0)
-            assertEquals(location1.longitude, trailRecordExecutor.trailPointsRegistered.last().longitude, 0.0)
-            assertEquals(location1.altitude.toInt(), trailRecordExecutor.trailPointsRegistered.last().elevation)
-            assertNull(trailRecordExecutor.userLocationFailure)
+        /*Step 1 : record a first location*/
+        this.locationManagerShadow.setLocationEnabled(true)
+        UserLocationHelperShadow.lastUserLocation = location1
+        this.trailRecordExecutor.start()
+        assertEquals(this.location1.latitude, this.trailRecordExecutor.trailPointsRegistered.last().latitude, 0.0)
+        assertEquals(this.location1.longitude, this.trailRecordExecutor.trailPointsRegistered.last().longitude, 0.0)
+        assertEquals(this.location1.altitude.toInt(), this.trailRecordExecutor.trailPointsRegistered.last().elevation)
+        assertNull(this.trailRecordExecutor.userLocationFailure)
 
-            /*Step 2 : the location is unavailable*/
-            locationManagerShadow.setLocationEnabled(false)
-            UserLocationHelperShadow.lastUserLocation = null
-            launch { trailRecordExecutor.fetchUserLocation() }.join()
-            assertEquals(location1.latitude, trailRecordExecutor.trailPointsRegistered.last().latitude, 0.0)
-            assertEquals(location1.longitude, trailRecordExecutor.trailPointsRegistered.last().longitude, 0.0)
-            assertEquals(location1.altitude.toInt(), trailRecordExecutor.trailPointsRegistered.last().elevation)
-            assertEquals(
-                UserLocationException.ErrorCode.GPS_UNAVAILABLE,
-                trailRecordExecutor.userLocationFailure?.errorCode
-            )
+        /*Step 2 : the location is unavailable*/
+        locationManagerShadow.setLocationEnabled(false)
+        UserLocationHelperShadow.lastUserLocation = null
+        this.trailRecordExecutor.start()
+        assertEquals(this.location1.latitude, this.trailRecordExecutor.trailPointsRegistered.last().latitude, 0.0)
+        assertEquals(this.location1.longitude, this.trailRecordExecutor.trailPointsRegistered.last().longitude, 0.0)
+        assertEquals(this.location1.altitude.toInt(), this.trailRecordExecutor.trailPointsRegistered.last().elevation)
+        assertEquals(UserLocationException.ErrorCode.GPS_UNAVAILABLE, this.trailRecordExecutor.userLocationFailure?.errorCode)
 
-            /*Step 3 : the next location is too closed to be recorded*/
-            locationManagerShadow.setLocationEnabled(true)
-            UserLocationHelperShadow.lastUserLocation = location2
-            launch { trailRecordExecutor.fetchUserLocation() }.join()
-            assertEquals(location1.latitude, trailRecordExecutor.trailPointsRegistered.last().latitude, 0.0)
-            assertEquals(location1.longitude, trailRecordExecutor.trailPointsRegistered.last().longitude, 0.0)
-            assertEquals(location1.altitude.toInt(), trailRecordExecutor.trailPointsRegistered.last().elevation)
-            assertNull(trailRecordExecutor.userLocationFailure)
+        /*Step 3 : the next location is too closed to be recorded*/
+        locationManagerShadow.setLocationEnabled(true)
+        UserLocationHelperShadow.lastUserLocation = location2
+        this.trailRecordExecutor.start()
+        assertEquals(this.location1.latitude, this.trailRecordExecutor.trailPointsRegistered.last().latitude, 0.0)
+        assertEquals(this.location1.longitude, this.trailRecordExecutor.trailPointsRegistered.last().longitude, 0.0)
+        assertEquals(this.location1.altitude.toInt(), this.trailRecordExecutor.trailPointsRegistered.last().elevation)
+        assertNull(this.trailRecordExecutor.userLocationFailure)
 
-            /*Step 4 : the next location is far enough to be recorded*/
-            locationManagerShadow.setLocationEnabled(true)
-            UserLocationHelperShadow.lastUserLocation = location3
-            launch { trailRecordExecutor.fetchUserLocation() }.join()
-            assertEquals(location3.latitude, trailRecordExecutor.trailPointsRegistered.last().latitude, 0.0)
-            assertEquals(location3.longitude, trailRecordExecutor.trailPointsRegistered.last().longitude, 0.0)
-            assertEquals(location3.altitude.toInt(), trailRecordExecutor.trailPointsRegistered.last().elevation)
-            assertNull(trailRecordExecutor.userLocationFailure)
-        }
+        /*Step 4 : the next location is far enough to be recorded*/
+        locationManagerShadow.setLocationEnabled(true)
+        UserLocationHelperShadow.lastUserLocation = location3
+        this.trailRecordExecutor.start()
+        assertEquals(this.location3.latitude, this.trailRecordExecutor.trailPointsRegistered.last().latitude, 0.0)
+        assertEquals(this.location3.longitude, this.trailRecordExecutor.trailPointsRegistered.last().longitude, 0.0)
+        assertEquals(this.location3.altitude.toInt(), this.trailRecordExecutor.trailPointsRegistered.last().elevation)
+        assertNull(this.trailRecordExecutor.userLocationFailure)
     }
 }
