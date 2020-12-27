@@ -89,7 +89,7 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <Switch
+                    <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/fragment_trail_info_edit_switch_loop"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -120,7 +120,7 @@
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:text="@string/message_no_photo_available"
-                        android:drawableStart="@drawable/ic_trail_black"
+                        app:drawableStartCompat="@drawable/ic_trail_black"
                         android:drawablePadding="@dimen/components_margin_small"
                         android:visibility="@{trailViewModel.trail.mainPhotoUrl==null ? View.VISIBLE : View.INVISIBLE}"/>
 
@@ -193,7 +193,7 @@
                         android:padding="@dimen/components_margin_small"
                         android:background="?attr/selectableItemBackground"
                         android:gravity="center_horizontal"
-                        android:drawableTop="@drawable/ic_watch_black"
+                        app:drawableTopCompat="@drawable/ic_watch_black"
                         android:textSize="@dimen/text_size_small"
                         android:text="@string/example_trail_duration"
                         app:layout_constraintTop_toTopOf="parent"
@@ -209,7 +209,7 @@
                         android:padding="@dimen/components_margin_small"
                         android:background="?attr/selectableItemBackground"
                         android:gravity="center_horizontal"
-                        android:drawableTop="@drawable/ic_ascent"
+                        app:drawableTopCompat="@drawable/ic_ascent"
                         android:textSize="@dimen/text_size_small"
                         android:text="@string/example_trail_ascent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -225,7 +225,7 @@
                         android:padding="@dimen/components_margin_small"
                         android:background="?attr/selectableItemBackground"
                         android:gravity="center_horizontal"
-                        android:drawableTop="@drawable/ic_descent"
+                        app:drawableTopCompat="@drawable/ic_descent"
                         android:textSize="@dimen/text_size_small"
                         android:text="@string/example_trail_descent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -241,7 +241,7 @@
                         android:padding="@dimen/components_margin_small"
                         android:background="?attr/selectableItemBackground"
                         android:gravity="center_horizontal"
-                        android:drawableTop="@drawable/ic_distance"
+                        app:drawableTopCompat="@drawable/ic_distance"
                         android:textSize="@dimen/text_size_small"
                         android:text="@string/example_trail_distance"
                         app:layout_constraintTop_toTopOf="parent"
@@ -257,7 +257,7 @@
                         android:padding="@dimen/components_margin_small"
                         android:gravity="center_horizontal"
                         android:background="?attr/selectableItemBackground"
-                        android:drawableTop="@drawable/ic_max_elevation"
+                        app:drawableTopCompat="@drawable/ic_max_elevation"
                         android:textSize="@dimen/text_size_small"
                         android:text="@string/example_trail_max_elevation"
                         app:layout_constraintTop_toTopOf="parent"
@@ -273,7 +273,7 @@
                         android:padding="@dimen/components_margin_small"
                         android:background="?attr/selectableItemBackground"
                         android:gravity="center_horizontal"
-                        android:drawableTop="@drawable/ic_min_elevation"
+                        app:drawableTopCompat="@drawable/ic_min_elevation"
                         android:textSize="@dimen/text_size_small"
                         android:text="@string/example_trail_min_elevation"
                         app:layout_constraintTop_toTopOf="parent"

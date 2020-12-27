@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Enable trail record when app is on background
 ### Fixed
+- Fix compatibility down to Android 4.4 (API 19)
 - Fix user location bug occurring when creating a new trail
 
 ## [0.0.3-alpha] - 2020-09-07

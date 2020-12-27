@@ -105,7 +105,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/components_margin_medium"
-                            android:src="@{trailViewModel.trail.level==TrailLevel.EASY ? @drawable/ic_level_easy : trailViewModel.trail.level==TrailLevel.HARD ? @drawable/ic_level_hard : @drawable/ic_level_medium, default=@drawable/ic_level_medium}"
+                            app:srcCompat="@{trailViewModel.trail.level==TrailLevel.EASY ? @drawable/ic_level_easy : trailViewModel.trail.level==TrailLevel.HARD ? @drawable/ic_level_hard : @drawable/ic_level_medium, default=@drawable/ic_level_medium}"
                             android:contentDescription="@string/example_image_content_description"/>
 
                         <TextView
@@ -168,7 +168,7 @@
                             android:gravity="center"
                             android:textSize="@dimen/text_size_small"
                             android:text="@{MetricsHelper.displayAscent(trailInfoFragment.context, trailViewModel.trail.ascent, true, true), default=@string/example_trail_ascent}"
-                            android:drawableTop="@drawable/ic_ascent"
+                            app:drawableTopCompat="@drawable/ic_ascent"
                             android:drawablePadding="@dimen/components_margin_small"/>
 
                         <TextView
@@ -180,7 +180,7 @@
                             android:gravity="center"
                             android:textSize="@dimen/text_size_small"
                             android:text="@{MetricsHelper.displayDescent(trailInfoFragment.context, trailViewModel.trail.descent, true, true), default=@string/example_trail_descent}"
-                            android:drawableTop="@drawable/ic_descent"
+                            app:drawableTopCompat="@drawable/ic_descent"
                             android:drawablePadding="@dimen/components_margin_small"/>
 
                         <TextView
@@ -192,7 +192,7 @@
                             android:gravity="center"
                             android:textSize="@dimen/text_size_small"
                             android:text="@{MetricsHelper.displayDistance(trailInfoFragment.context, trailViewModel.trail.distance, true, true), default=@string/example_trail_distance}"
-                            android:drawableTop="@drawable/ic_distance"
+                            app:drawableTopCompat="@drawable/ic_distance"
                             android:drawablePadding="@dimen/components_margin_small"/>
 
                         <TextView
@@ -204,7 +204,7 @@
                             android:gravity="center"
                             android:textSize="@dimen/text_size_small"
                             android:text="@{MetricsHelper.displayMaxElevation(trailInfoFragment.context, trailViewModel.trail.maxElevation, true, true), default=@string/example_trail_max_elevation}"
-                            android:drawableTop="@drawable/ic_max_elevation"
+                            app:drawableTopCompat="@drawable/ic_max_elevation"
                             android:drawablePadding="@dimen/components_margin_small"/>
 
                         <TextView
@@ -216,7 +216,7 @@
                             android:gravity="center"
                             android:textSize="@dimen/text_size_small"
                             android:text="@{MetricsHelper.displayMinElevation(trailInfoFragment.context, trailViewModel.trail.minElevation, true, true), default=@string/example_trail_min_elevation}"
-                            android:drawableTop="@drawable/ic_min_elevation"
+                            app:drawableTopCompat="@drawable/ic_min_elevation"
                             android:drawablePadding="@dimen/components_margin_small"/>
 
                     </LinearLayout>
@@ -253,7 +253,7 @@
                             android:gravity="center_vertical"
                             android:textSize="@dimen/text_size_body"
                             android:text="@string/label_trail_loop"
-                            android:drawableStart="@drawable/ic_flag"
+                            app:drawableStartCompat="@drawable/ic_flag"
                             android:drawablePadding="@dimen/components_margin_small"/>
 
                     </LinearLayout>
@@ -273,7 +273,7 @@
                             android:gravity="center_vertical"
                             android:textSize="@dimen/text_size_body"
                             android:text="@{trailViewModel.trail.location.fullAddress == null ? @string/message_no_location_available : trailViewModel.trail.location.fullAddress, default=@string/example_location}"
-                            android:drawableStart="@drawable/ic_location_trail"
+                            app:drawableStartCompat="@drawable/ic_location_trail"
                             android:drawablePadding="@dimen/components_margin_small"/>
 
                     </LinearLayout>

@@ -6,8 +6,10 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Paint.ANTI_ALIAS_FLAG
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.VectorDrawable
 import android.os.Build
+import androidx.appcompat.content.res.AppCompatResources
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.sildian.apps.togetrail.R
@@ -27,22 +29,21 @@ object MapMarkersUtilities {
      */
 
     @JvmStatic
-    fun createMapMarkerFromVector(context: Context?, resId: Int, text:String?=null)
-            : BitmapDescriptor? {
+    fun createMapMarkerFromVector(context: Context?, resId: Int, text:String?=null): BitmapDescriptor? {
         return if (context != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val vectorDrawable = context.getDrawable(resId) as VectorDrawable
-                val w = vectorDrawable.intrinsicWidth
-                val h = vectorDrawable.intrinsicHeight
-                vectorDrawable.setBounds(0, 0, w, h)
-                val bm = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
-                val canvas = Canvas(bm)
-                vectorDrawable.draw(canvas)
-                if(text!=null) drawTextOnMarker(context, canvas, text)
-                BitmapDescriptorFactory.fromBitmap(bm)
+            val drawable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                AppCompatResources.getDrawable(context, resId) as VectorDrawable
             } else {
-                BitmapDescriptorFactory.fromResource(resId)
+                AppCompatResources.getDrawable(context, resId) as Drawable
             }
+            val w = drawable.intrinsicWidth
+            val h = drawable.intrinsicHeight
+            drawable.setBounds(0, 0, w, h)
+            val bm = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bm)
+            drawable.draw(canvas)
+            if (text != null) drawTextOnMarker(context, canvas, text)
+            BitmapDescriptorFactory.fromBitmap(bm)
         } else null
     }
 

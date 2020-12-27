@@ -137,7 +137,7 @@
                             android:layout_marginStart="@dimen/components_margin_medium"
                             android:layout_marginEnd="@dimen/components_margin_medium"
                             android:gravity="center_vertical"
-                            android:drawableStart="@drawable/ic_date_black"
+                            app:drawableStartCompat="@drawable/ic_date_black"
                             android:drawablePadding="@dimen/components_margin_small"
                             android:text="@{eventViewModel.event.beginDate==null ? `` : DateUtilities.displayDateAndTimeFull(eventViewModel.event.beginDate), default=@string/example_event_begin_date_full}"/>
 
@@ -150,7 +150,7 @@
                             android:layout_marginStart="@dimen/components_margin_medium"
                             android:layout_marginEnd="@dimen/components_margin_medium"
                             android:gravity="center_vertical"
-                            android:drawableStart="@drawable/ic_location_event"
+                            app:drawableStartCompat="@drawable/ic_location_event"
                             android:drawablePadding="@dimen/components_margin_small"
                             android:text="@{eventViewModel.event.meetingPoint.fullAddress, default=@string/example_location_fine}"/>
 
@@ -163,7 +163,7 @@
                             android:layout_marginStart="@dimen/components_margin_medium"
                             android:layout_marginEnd="@dimen/components_margin_medium"
                             android:gravity="center_vertical"
-                            android:drawableStart="@drawable/ic_people_black"
+                            app:drawableStartCompat="@drawable/ic_people_black"
                             android:drawablePadding="@dimen/components_margin_small"
                             android:textSize="@dimen/text_size_title"
                             android:textColor="@color/colorBlack"
@@ -261,7 +261,7 @@
                         android:layout_marginStart="@dimen/components_margin_medium"
                         android:layout_marginEnd="@dimen/components_margin_medium"
                         android:gravity="center_vertical"
-                        android:drawableStart="@drawable/ic_check"
+                        app:drawableStartCompat="@drawable/ic_check"
                         android:drawablePadding="@dimen/components_margin_small"
                         android:textColor="@color/colorBlack"
                         android:text="@string/label_event_user_registered"

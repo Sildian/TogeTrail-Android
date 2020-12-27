@@ -41,7 +41,7 @@
                     android:layout_marginEnd="@dimen/components_margin_small"
                     android:hint="@string/label_location_search"
                     android:inputType="textCapSentences"
-                    android:drawableStart="@drawable/ic_search_black"
+                    app:drawableStartCompat="@drawable/ic_search_black"
                     android:drawablePadding="@dimen/components_margin_small"/>
 
             </com.google.android.material.card.MaterialCardView>

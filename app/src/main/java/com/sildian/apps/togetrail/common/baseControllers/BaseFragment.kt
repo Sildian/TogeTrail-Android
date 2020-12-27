@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
@@ -30,6 +31,7 @@ abstract class BaseFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
         if(useDataBinding()){
+            AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
             this.binding= DataBindingUtil.inflate(inflater, getLayoutId(), container, false)
             this.layout=this.binding.root
         }
@@ -50,7 +52,7 @@ abstract class BaseFragment : Fragment() {
 
     open fun loadData(){}
 
-    open fun updateData(data:Any?){}
+    open fun updateData(data: Any?){}
 
     open fun saveData(){}
 

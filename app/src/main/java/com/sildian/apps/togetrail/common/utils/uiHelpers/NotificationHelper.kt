@@ -49,7 +49,7 @@ object NotificationHelper {
             NotificationCompat.Builder(context)
         }
         return builder
-            .setSmallIcon(R.drawable.ic_togetrail_logo)
+            .setSmallIcon(R.drawable.ic_togetrail_logo_png)
             .setContentTitle(context.getString(titleRes))
             .setContentText(context.getString(descriptionRes))
             .setPriority(priority)

@@ -5,7 +5,7 @@ import android.content.DialogInterface
 import android.view.LayoutInflater
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
+import androidx.appcompat.content.res.AppCompatResources
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sildian.apps.togetrail.R
 import kotlinx.android.synthetic.main.dialog_request_info.view.*
@@ -25,7 +25,7 @@ object DialogHelper {
     @JvmStatic
     fun createProgressDialog(context:Context): AlertDialog {
         return MaterialAlertDialogBuilder(context)
-            .setBackground(ContextCompat.getDrawable(
+            .setBackground(AppCompatResources.getDrawable(
                 context, R.drawable.shape_corners_round_color_primary))
             .setView(R.layout.dialog_progress)
             .setCancelable(false)
@@ -45,7 +45,7 @@ object DialogHelper {
     fun createInfoDialog(context: Context, @StringRes titleId:Int,
                          @StringRes messageId:Int, callback: (()->Unit)? = null): AlertDialog {
         return MaterialAlertDialogBuilder(context)
-            .setBackground(ContextCompat.getDrawable(
+            .setBackground(AppCompatResources.getDrawable(
                 context, R.drawable.shape_corners_round_color_primary))
             .setTitle(titleId)
             .setMessage(messageId)
@@ -68,7 +68,7 @@ object DialogHelper {
     fun createYesNoDialog(context: Context, @StringRes titleId:Int, @StringRes messageId:Int,
                           listener:DialogInterface.OnClickListener): AlertDialog{
         return MaterialAlertDialogBuilder(context)
-            .setBackground(ContextCompat.getDrawable(
+            .setBackground(AppCompatResources.getDrawable(
                 context, R.drawable.shape_corners_round_color_primary))
             .setTitle(titleId)
             .setMessage(messageId)
@@ -91,7 +91,7 @@ object DialogHelper {
     fun createYesNoCriticalDialog(context: Context, @StringRes titleId:Int, @StringRes messageId:Int,
                           listener:DialogInterface.OnClickListener): AlertDialog{
         return MaterialAlertDialogBuilder(context, R.style.AlertDialogCriticalStyle)
-            .setBackground(ContextCompat.getDrawable(
+            .setBackground(AppCompatResources.getDrawable(
                 context, R.drawable.shape_corners_round_color_primary))
             .setTitle(titleId)
             .setMessage(messageId)
@@ -118,7 +118,7 @@ object DialogHelper {
         val infoTextField = view.dialog_request_info_text_field_info
 
         return MaterialAlertDialogBuilder(context)
-            .setBackground(ContextCompat.getDrawable(context, R.drawable.shape_corners_round_color_primary))
+            .setBackground(AppCompatResources.getDrawable(context, R.drawable.shape_corners_round_color_primary))
             .setTitle(titleId)
             .setView(view)
             .setCancelable(false)
