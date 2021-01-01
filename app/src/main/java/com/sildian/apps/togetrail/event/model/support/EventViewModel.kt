@@ -188,4 +188,21 @@ class EventViewModel : BaseViewModel() {
             }
         }
     }
+
+    /**
+     * Sends a message to the event's chat
+     */
+
+    fun sendMessage(text: String) {
+        viewModelScope.launch(this.exceptionHandler) {
+            try {
+                launch { eventDataRequester.sendMessage(event.value, text) }.join()
+                Log.d(TAG, "Successfully sent the message")
+            }
+            catch (e:Exception) {
+                Log.e(TAG, "Failed to send the message : ${e.message}")
+                requestFailure.postValue(e)
+            }
+        }
+    }
 }

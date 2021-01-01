@@ -502,4 +502,101 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
             assertTrue(isHikerHistoryItemDeleted)
         }
     }
+
+    @Test
+    fun given_requestFailure_when_sendMessage_then_checkMessageIsNotSent() {
+        runBlocking {
+            CurrentHikerInfo.currentHiker = getHikerSample()
+            requestShouldFail = true
+            launch {
+                try {
+                    eventDataRequester.sendMessage(getEventSample(), "Coucou")
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: FirebaseException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isEventMessageSent)
+        }
+    }
+
+    @Test
+    fun given_nullEvent_when_sendMessage_then_checkMessageIsNotSent() {
+        runBlocking {
+            CurrentHikerInfo.currentHiker = getHikerSample()
+            launch {
+                try {
+                    eventDataRequester.sendMessage(null, "Coucou")
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: NullPointerException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isEventMessageSent)
+        }
+    }
+
+    @Test
+    fun given_NullHiker_when_sendMessage_then_checkMessageIsNotSent() {
+        runBlocking {
+            CurrentHikerInfo.currentHiker = null
+            launch {
+                try {
+                    eventDataRequester.sendMessage(getEventSample(), "Coucou")
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: NullPointerException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isEventMessageSent)
+        }
+    }
+
+    @Test
+    fun given_eventWithoutId_when_sendMessage_then_checkMessageIsNotSent() {
+        runBlocking {
+            CurrentHikerInfo.currentHiker = getHikerSample()
+            val event = getEventSample()
+            event?.id = null
+            launch {
+                try {
+                    eventDataRequester.sendMessage(event, "Coucou")
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: IllegalArgumentException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isEventMessageSent)
+        }
+    }
+
+    @Test
+    fun given_EmptyText_when_sendMessage_then_checkMessageIsNotSent() {
+        runBlocking {
+            CurrentHikerInfo.currentHiker = getHikerSample()
+            launch {
+                try {
+                    eventDataRequester.sendMessage(getEventSample(), "")
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: IllegalArgumentException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isEventMessageSent)
+        }
+    }
+
+    @Test
+    fun given_ValidText_when_sendMessage_then_checkMessageIsSent() {
+        runBlocking {
+            CurrentHikerInfo.currentHiker = getHikerSample()
+            launch { eventDataRequester.sendMessage(getEventSample(), "Coucou") }.join()
+            assertTrue(isEventMessageSent)
+        }
+    }
 }

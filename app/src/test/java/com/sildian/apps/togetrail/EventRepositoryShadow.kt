@@ -4,6 +4,7 @@ import com.google.firebase.FirebaseException
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.support.EventRepository
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
+import com.sildian.apps.togetrail.message.model.core.Message
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import org.robolectric.annotation.Implementation
 import org.robolectric.annotation.Implements
@@ -91,6 +92,17 @@ class EventRepositoryShadow {
         println("FAKE EventRepository : Delete registered hiker")
         if (!BaseDataRequesterTest.requestShouldFail) {
             BaseDataRequesterTest.isEventHasHikerUnregistered = true
+        }
+        else {
+            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
+        }
+    }
+
+    @Implementation
+    suspend fun addEventMessage(eventId: String, message: Message) {
+        println("FAKE EventRepository : Send message")
+        if (!BaseDataRequesterTest.requestShouldFail) {
+            BaseDataRequesterTest.isEventMessageSent = true
         }
         else {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)

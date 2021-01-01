@@ -83,6 +83,7 @@ open class BaseDataRequesterTest {
         var isEventHasTrailDetached = false
         var isEventHasHikerRegistered = false
         var isEventHasHikerUnregistered = false
+        var isEventMessageSent = false
 
         /**Gets a default user sample**/
         fun getUserSample(): FirebaseUser? {
@@ -156,5 +157,6 @@ open class BaseDataRequesterTest {
         isEventHasTrailDetached = false
         isEventHasHikerRegistered = false
         isEventHasHikerUnregistered = false
+        isEventMessageSent = false
     }
 }

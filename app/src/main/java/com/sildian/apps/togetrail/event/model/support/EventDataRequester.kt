@@ -6,6 +6,7 @@ import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.model.support.HikerRepository
+import com.sildian.apps.togetrail.message.model.core.Message
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -23,14 +24,12 @@ class EventDataRequester {
 
     companion object {
 
-        /**Logs**/
-        private const val TAG = "EventDataRequester"
-
         /**Exceptions messages**/
         private const val EXCEPTION_MESSAGE_NULL_HIKER = "Cannot perform the requested operation with a null hiker"
         private const val EXCEPTION_MESSAGE_NULL_EVENT = "Cannot perform the requested operation with a null event"
         private const val EXCEPTION_MESSAGE_NO_ID_TRAIL = "Cannot perform the requested operation with a trail without id"
         private const val EXCEPTION_MESSAGE_NO_ID_EVENT = "Cannot perform the requested operation with an event without id"
+        private const val EXCEPTION_MESSAGE_NO_TEXT_MESSAGE = "Cannot perform the requested operation with a message without text"
     }
 
     /************************************Repositories********************************************/
@@ -339,6 +338,53 @@ class EventDataRequester {
                         throw NullPointerException(EXCEPTION_MESSAGE_NULL_EVENT)
                     }
                 } else {
+                    throw NullPointerException(EXCEPTION_MESSAGE_NULL_HIKER)
+                }
+            }
+            catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    /**
+     * Sends a message to the event's chat
+     * @param event : the event
+     * @param text : the text
+     * @throws IllegalArgumentException if the event has no id or if the text is empty
+     * @throws NullPointerException if the event or the current hiker is null
+     */
+
+    @Throws(Exception::class)
+    suspend fun sendMessage(event: Event?, text: String) {
+        withContext(Dispatchers.IO) {
+            try {
+                val hiker = CurrentHikerInfo.currentHiker
+                if (hiker != null) {
+                    if (event != null) {
+                        if (event.id != null) {
+                            if (text.isNotEmpty()) {
+                                val message = Message(
+                                    text = text,
+                                    authorId = hiker.id,
+                                    authorName = hiker.name,
+                                    authorPhotoUrl = hiker.photoUrl
+                                )
+                                launch { eventRepository.addEventMessage(event.id!!, message) }
+                            }
+                            else {
+                                throw IllegalArgumentException(EXCEPTION_MESSAGE_NO_TEXT_MESSAGE)
+                            }
+                        }
+                        else {
+                            throw IllegalArgumentException(EXCEPTION_MESSAGE_NO_ID_EVENT)
+                        }
+                    }
+                    else {
+                        throw NullPointerException(EXCEPTION_MESSAGE_NULL_EVENT)
+                    }
+                }
+                else {
                     throw NullPointerException(EXCEPTION_MESSAGE_NULL_HIKER)
                 }
             }

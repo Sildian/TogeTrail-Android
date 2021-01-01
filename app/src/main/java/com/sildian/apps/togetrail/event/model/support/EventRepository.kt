@@ -3,6 +3,7 @@ package com.sildian.apps.togetrail.event.model.support
 import com.google.firebase.firestore.DocumentReference
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
+import com.sildian.apps.togetrail.message.model.core.Message
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -162,6 +163,27 @@ class EventRepository {
             try {
                 EventFirebaseQueries
                     .deleteRegisteredHiker(eventId, hikerId)
+                    .await()
+            }
+            catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    /**
+     * Add a message to the event's chat
+     * @param eventId : the id of the event
+     * @param message : the message
+     * @throws Exception if the request fails
+     */
+
+    @Throws(Exception::class)
+    suspend fun addEventMessage(eventId: String, message: Message) {
+        withContext(Dispatchers.IO) {
+            try {
+                EventFirebaseQueries
+                    .addMessage(eventId, message)
                     .await()
             }
             catch (e: Exception) {

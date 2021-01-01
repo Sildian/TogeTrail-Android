@@ -7,6 +7,7 @@ import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.common.utils.GeoUtilities
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
+import com.sildian.apps.togetrail.message.model.core.Message
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import java.util.*
 
@@ -21,12 +22,15 @@ object EventFirebaseQueries {
     private const val COLLECTION_NAME="event"
     private const val SUB_COLLECTION_ATTACHED_TRAIL_NAME="attachedTrail"
     private const val SUB_COLLECTION_REGISTERED_HIKER_NAME="registeredHiker"
+    private const val SUB_COLLECTION_MESSAGE="message"
     private fun getCollection() =
         FirebaseFirestore.getInstance().collection(COLLECTION_NAME)
     private fun getAttachedTrailSubCollection(eventId:String) =
         getCollection().document(eventId).collection(SUB_COLLECTION_ATTACHED_TRAIL_NAME)
     private fun getRegisteredHikerSubCollection(eventId:String) =
         getCollection().document(eventId).collection(SUB_COLLECTION_REGISTERED_HIKER_NAME)
+    private fun getMessageSubCollection(eventId: String) =
+        getCollection().document(eventId).collection(SUB_COLLECTION_MESSAGE)
 
     /*************************************Queries************************************************/
 
@@ -188,4 +192,23 @@ object EventFirebaseQueries {
 
     fun deleteRegisteredHiker(eventId:String, hikerId:String):Task<Void> =
         getRegisteredHikerSubCollection(eventId).document(hikerId).delete()
+
+    /**
+     * Get all messages related to an event
+     * @param eventId : the id of the event
+     * @return a query
+     */
+
+    fun getMessages(eventId: String): Query =
+        getMessageSubCollection(eventId)
+
+    /**
+     * Add a message to the event's chat
+     * @param eventId : the id of the event
+     * @param message : the message
+     * @return a task result
+     */
+
+    fun addMessage(eventId: String, message: Message): Task<DocumentReference> =
+        getMessageSubCollection(eventId).add(message)
 }
