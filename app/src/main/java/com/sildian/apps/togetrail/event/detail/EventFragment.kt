@@ -1,10 +1,14 @@
 package com.sildian.apps.togetrail.event.detail
 
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
@@ -49,6 +53,7 @@ class EventFragment(private val eventId: String?=null) :
     private val registerUserButton by lazy {layout.fragment_event_button_register_user}
     private val userRegisteredText by lazy {layout.fragment_event_text_user_registered}
     private val unregisterUserButton by lazy {layout.fragment_event_button_unregister_user}
+    private val eventMessageDialogFragment by lazy { EventMessageDialogFragment() }
 
     /***********************************Data monitoring******************************************/
 
@@ -178,6 +183,11 @@ class EventFragment(private val eventId: String?=null) :
     }
 
     @Suppress("UNUSED_PARAMETER")
+    fun onSendMessageButtonClick(view: View) {
+        this.eventMessageDialogFragment.show(childFragmentManager, "EventMessageDialogFragment")
+    }
+
+    @Suppress("UNUSED_PARAMETER")
     fun onRegisterUserButtonClick(view:View){
         this.eventViewModel.registerUserToEvent()
     }
@@ -202,6 +212,15 @@ class EventFragment(private val eventId: String?=null) :
     override fun onTrailClick(trail: Trail) {
         trail.id?.let { id ->
             (activity as EventActivity).seeTrail(id)
+        }
+    }
+
+    /*************************************Chat monitoring****************************************/
+
+    class EventMessageDialogFragment: BottomSheetDialogFragment() {
+
+        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+            return inflater.inflate(R.layout.dialog_fragment_event_message, container, false)
         }
     }
 }

@@ -6,7 +6,7 @@ import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.model.support.HikerRepository
-import com.sildian.apps.togetrail.message.model.core.Message
+import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async

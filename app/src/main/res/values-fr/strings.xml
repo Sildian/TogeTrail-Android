@@ -49,6 +49,8 @@
     <string name="button_common_take_photo">Prendre une nouvelle photo</string>
     <!-- Location -->
     <string name="button_location_search_in_area">Rechercher dans cette zone</string>
+    <!-- Chat -->
+    <string name="button_chat_send_message">Envoyer un message</string>
     <!-- Trail -->
     <string name="button_trail_info_see">Infos rando</string>
     <string name="button_trail_point_remove">Retirer dernier point</string>
@@ -74,6 +76,9 @@
     <string name="label_location_town">Ville / Village</string>
     <string name="label_location_address">Lieu / Adresse</string>
     <string name="label_location_search">Rechercher un lieu</string>
+    <!-- Chat -->
+    <string name="label_chat">Discussion</string>
+    <string name="label_chat_write_message">Ecrivez votre message</string>
     <!-- Trail -->
     <string name="label_trail_main_info">Infos principales</string>
     <string name="label_trail_name">Nom</string>

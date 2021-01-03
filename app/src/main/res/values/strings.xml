@@ -50,6 +50,8 @@
     <string name="button_common_take_photo">Take a new photo</string>
     <!-- Location -->
     <string name="button_location_search_in_area">Search within this area</string>
+    <!-- Chat -->
+    <string name="button_chat_send_message">Send a message</string>
     <!-- Trail -->
     <string name="button_trail_info_see">Trail\'s info</string>
     <string name="button_trail_point_remove">Remove last point</string>
@@ -75,6 +77,9 @@
     <string name="label_location_town">City / Town</string>
     <string name="label_location_address">Place / Address</string>
     <string name="label_location_search">Search a place</string>
+    <!-- Chat -->
+    <string name="label_chat">Chat</string>
+    <string name="label_chat_write_message">Write your message</string>
     <!-- Trail -->
     <string name="label_trail_main_info">Main info</string>
     <string name="label_trail_name">Name</string>

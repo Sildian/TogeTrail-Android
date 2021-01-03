@@ -7,7 +7,7 @@ import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.common.utils.GeoUtilities
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
-import com.sildian.apps.togetrail.message.model.core.Message
+import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import java.util.*
 

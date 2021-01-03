@@ -3,7 +3,7 @@ package com.sildian.apps.togetrail.event.model.support
 import com.google.firebase.firestore.DocumentReference
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
-import com.sildian.apps.togetrail.message.model.core.Message
+import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await

@@ -219,6 +219,33 @@
                             android:layout_marginEnd="@dimen/components_margin_medium"
                             android:text="@{eventViewModel.event.description, default=@string/example_event_description}"/>
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/components_margin_medium"
+                            android:layout_marginBottom="@dimen/components_margin_small"
+                            android:layout_marginStart="@dimen/components_margin_medium"
+                            android:layout_marginEnd="@dimen/components_margin_medium"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/text_size_title"
+                            android:textColor="@color/colorSecondaryDark"
+                            android:text="@string/label_chat"/>
+
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/OutlineButtonStyle"
+                            android:id="@+id/fragment_event_button_send_message"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/components_margin_small"
+                            android:layout_marginBottom="@dimen/components_margin_small"
+                            android:layout_marginStart="@dimen/components_margin_medium"
+                            android:layout_marginEnd="@dimen/components_margin_medium"
+                            android:text="@string/button_chat_send_message"
+                            app:icon="@drawable/ic_message_white"
+                            app:iconGravity="textStart"
+                            app:iconPadding="@dimen/components_margin_small"
+                            android:onClick="@{eventFragment::onSendMessageButtonClick}"/>
+
                     </LinearLayout>
 
                 </androidx.core.widget.NestedScrollView>
@@ -285,6 +312,12 @@
             </com.google.android.material.card.MaterialCardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <FrameLayout
+            android:id="@+id/fragment_event_fragment_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"/>
 
     </FrameLayout>
 

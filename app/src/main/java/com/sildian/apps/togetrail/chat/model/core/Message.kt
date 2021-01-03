@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.message.model.core
+package com.sildian.apps.togetrail.chat.model.core
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
