@@ -1,10 +1,12 @@
 package com.sildian.apps.togetrail.common.baseControllers
 
 import android.app.Activity
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
@@ -66,6 +68,11 @@ abstract class BaseActivity : AppCompatActivity() {
 
     fun dismissProgressDialog() {
         this.progressDialog?.dismiss()
+    }
+
+    fun hideKeyboard() {
+        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
     }
 
     /*************************************Navigation*********************************************/
