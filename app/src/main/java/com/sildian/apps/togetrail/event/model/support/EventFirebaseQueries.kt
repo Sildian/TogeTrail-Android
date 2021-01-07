@@ -201,6 +201,7 @@ object EventFirebaseQueries {
 
     fun getMessages(eventId: String): Query =
         getMessageSubCollection(eventId)
+            .orderBy("date", Query.Direction.ASCENDING)
 
     /**
      * Add a message to the event's chat

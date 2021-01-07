@@ -157,7 +157,6 @@ object DateUtilities {
      */
 
     @JvmStatic
-    @Throws(ParseException::class)
     fun getDateFromString(displayedDate:String):Date?{
         return try {
             val format = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT)
@@ -176,7 +175,6 @@ object DateUtilities {
      */
 
     @JvmStatic
-    @Throws(ParseException::class)
     fun getTimeFromString(displayedTime:String):Date?{
         return try {
             val format = SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT)

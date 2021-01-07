@@ -160,6 +160,9 @@
     <string name="example_location_fine">1 rue de la Montagne\nChamonix\nSavoie\nFrance</string>
     <string name="example_location_country">France</string>
     <string name="example_location_region">Savoie</string>
+    <!-- Chat -->
+    <string name="example_chat_user_name_and_date">Toto - 30/06/2020</string>
+    <string name="example_chat_message">Salut les gars ! Ca va ? Contents de faire une rando ensemble. Moi oui, c\'est super cool !</string>
     <!-- Trail -->
     <string name="example_trail_name">La super rando du siècle</string>
     <string name="example_trail_description">Une rando vraiment géniale.</string>

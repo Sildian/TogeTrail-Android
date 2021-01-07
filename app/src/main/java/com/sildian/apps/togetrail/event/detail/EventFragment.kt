@@ -14,6 +14,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.chat.model.core.Message
+import com.sildian.apps.togetrail.chat.others.MultiUsersMessageAdapter
+import com.sildian.apps.togetrail.chat.others.MultiUsersMessageViewHolder
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
@@ -41,7 +44,8 @@ class EventFragment(private val eventId: String?=null) :
     BaseFragment(),
     HikerPhotoViewHolder.OnHikerClickListener,
     HikerPhotoAdapter.OnHikersChangedListener,
-    TrailHorizontalViewHolder.OnTrailClickListener
+    TrailHorizontalViewHolder.OnTrailClickListener,
+    MultiUsersMessageViewHolder.OnAuthorClickListener
 {
 
     /*****************************************Data***********************************************/
@@ -56,6 +60,8 @@ class EventFragment(private val eventId: String?=null) :
     private lateinit var registeredHikersAdapter:HikerPhotoAdapter
     private val attachedTrailsRecyclerView by lazy {layout.fragment_event_recycler_view_attached_trails}
     private lateinit var attachedTrailsAdapter:TrailHorizontalAdapter
+    private val messagesRecyclerView by lazy { layout.fragment_event_recycler_view_messages }
+    private lateinit var messagesAdapter: MultiUsersMessageAdapter
     private val registrationLayout by lazy {layout.fragment_event_layout_registration}
     private val registerUserButton by lazy {layout.fragment_event_button_register_user}
     private val userRegisteredText by lazy {layout.fragment_event_text_user_registered}
@@ -118,6 +124,7 @@ class EventFragment(private val eventId: String?=null) :
         updatePhotoImageView()
         updateRegisteredHikersRecyclerView()
         updateAttachedTrailsRecyclerView()
+        updateMessagesRecyclerView()
     }
 
     private fun initializeToolbar() {
@@ -174,6 +181,18 @@ class EventFragment(private val eventId: String?=null) :
         this.attachedTrailsRecyclerView.adapter=this.attachedTrailsAdapter
     }
 
+    private fun updateMessagesRecyclerView() {
+        this.messagesAdapter = MultiUsersMessageAdapter(
+            DatabaseFirebaseHelper.generateOptionsForAdapter(
+                Message::class.java,
+                EventFirebaseQueries.getMessages(this.eventViewModel.event.value?.id!!),
+                activity as AppCompatActivity
+            ),
+            this
+        )
+        this.messagesRecyclerView.adapter = this.messagesAdapter
+    }
+
     private fun updateUserRegisterItemsVisibility(){
         val user=AuthRepository().getCurrentUser()
         val userIsRegistered=
@@ -226,6 +245,10 @@ class EventFragment(private val eventId: String?=null) :
 
     fun sendMessage(text: String) {
         this.eventViewModel.sendMessage(text)
+    }
+
+    override fun onAuthorClick(authorId: String) {
+        (activity as EventActivity).seeHiker(authorId)
     }
 
     class EventMessageDialogFragment: BottomSheetDialogFragment() {

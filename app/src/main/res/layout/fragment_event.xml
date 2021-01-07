@@ -231,6 +231,13 @@
                             android:textColor="@color/colorSecondaryDark"
                             android:text="@string/label_chat"/>
 
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/fragment_event_recycler_view_messages"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            app:reverseLayout="false"/>
+
                         <com.google.android.material.button.MaterialButton
                             style="@style/OutlineButtonStyle"
                             android:id="@+id/fragment_event_button_send_message"
@@ -312,12 +319,6 @@
             </com.google.android.material.card.MaterialCardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <FrameLayout
-            android:id="@+id/fragment_event_fragment_message"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"/>
 
     </FrameLayout>
 

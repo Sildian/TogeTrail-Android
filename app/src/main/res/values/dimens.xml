@@ -25,6 +25,7 @@
     <dimen name="text_size_very_important">24sp</dimen>
 
     <!-- Images -->
+    <dimen name="image_size_mini">32dp</dimen>
     <dimen name="image_size_small">48dp</dimen>
     <dimen name="image_size_medium">96dp</dimen>
     <dimen name="image_size_large">192dp</dimen>
