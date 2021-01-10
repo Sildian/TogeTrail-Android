@@ -1,30 +1,21 @@
 package com.sildian.apps.togetrail.event.detail
 
 import android.content.DialogInterface
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.chat.model.core.Message
-import com.sildian.apps.togetrail.chat.others.MessageSender
+import com.sildian.apps.togetrail.chat.others.MessageWriteDialogFragment
 import com.sildian.apps.togetrail.chat.others.MultiUsersMessageAdapter
 import com.sildian.apps.togetrail.chat.others.MultiUsersMessageViewHolder
-import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
-import com.sildian.apps.togetrail.databinding.DialogFragmentEventMessageBinding
 import com.sildian.apps.togetrail.databinding.FragmentEventBinding
 import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
 import com.sildian.apps.togetrail.event.model.support.EventViewModel
@@ -34,7 +25,6 @@ import com.sildian.apps.togetrail.hiker.others.HikerPhotoViewHolder
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.others.TrailHorizontalAdapter
 import com.sildian.apps.togetrail.trail.others.TrailHorizontalViewHolder
-import kotlinx.android.synthetic.main.dialog_fragment_event_message.view.*
 import kotlinx.android.synthetic.main.fragment_event.view.*
 
 /*************************************************************************************************
@@ -49,7 +39,7 @@ class EventFragment(private val eventId: String?=null) :
     TrailHorizontalViewHolder.OnTrailClickListener,
     MultiUsersMessageViewHolder.OnAuthorClickListener,
     MultiUsersMessageViewHolder.OnMessageModificationClickListener,
-    MessageSender
+    MessageWriteDialogFragment.MessageWriteCallback
 {
 
     /*****************************************Data***********************************************/
@@ -71,7 +61,7 @@ class EventFragment(private val eventId: String?=null) :
     private val registerUserButton by lazy {layout.fragment_event_button_register_user}
     private val userRegisteredText by lazy {layout.fragment_event_text_user_registered}
     private val unregisterUserButton by lazy {layout.fragment_event_button_unregister_user}
-    private var eventMessageDialogFragment: EventMessageDialogFragment? = null
+    private var messageWriteDialogFragment: MessageWriteDialogFragment? = null
 
     /***********************************Data monitoring******************************************/
 
@@ -222,8 +212,8 @@ class EventFragment(private val eventId: String?=null) :
 
     @Suppress("UNUSED_PARAMETER")
     fun onSendMessageButtonClick(view: View) {
-        this.eventMessageDialogFragment = EventMessageDialogFragment(this)
-        this.eventMessageDialogFragment?.show(childFragmentManager, "EventMessageDialogFragment")
+        this.messageWriteDialogFragment = MessageWriteDialogFragment(this)
+        this.messageWriteDialogFragment?.show(childFragmentManager, "EventMessageDialogFragment")
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -256,21 +246,13 @@ class EventFragment(private val eventId: String?=null) :
 
     /*************************************Chat monitoring****************************************/
 
-    override fun sendMessage(text: String) {
-        this.eventViewModel.sendMessage(text)
-    }
-
-    override fun editMessage(message: Message, newText: String) {
-        this.eventViewModel.updateMessage(message, newText)
-    }
-
     override fun onAuthorClick(authorId: String) {
         (activity as EventActivity).seeHiker(authorId)
     }
 
     override fun onMessageEditClick(message: Message) {
-        this.eventMessageDialogFragment = EventMessageDialogFragment(this, message)
-        this.eventMessageDialogFragment?.show(childFragmentManager, "EventMessageDialogFragment")
+        this.messageWriteDialogFragment = MessageWriteDialogFragment(this, message)
+        this.messageWriteDialogFragment?.show(childFragmentManager, "EventMessageDialogFragment")
     }
 
     @Suppress("UNUSED_ANONYMOUS_PARAMETER")
@@ -288,55 +270,11 @@ class EventFragment(private val eventId: String?=null) :
         }
     }
 
-    class EventMessageDialogFragment(
-        private val messageSender: MessageSender,
-        private val messageToEdit: Message? = null
-    )
-        : BottomSheetDialogFragment()
-    {
+    override fun sendMessage(text: String) {
+        this.eventViewModel.sendMessage(text)
+    }
 
-        private lateinit var layout: View
-        private lateinit var messageTextField: EditText
-
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-            AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
-            val binding: DialogFragmentEventMessageBinding = DataBindingUtil.inflate(inflater, R.layout.dialog_fragment_event_message, container, false)
-            binding.eventMessageDialogFragment = this
-            this.layout = binding.root
-            return this.layout
-        }
-
-        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-            super.onViewCreated(view, savedInstanceState)
-            this.messageTextField = this.layout.dialog_fragment_event_message_text_field_message
-            if (this.messageToEdit != null) {
-                this.messageTextField.setText(this.messageToEdit.text)
-            }
-        }
-
-        override fun onDismiss(dialog: DialogInterface) {
-            (activity as BaseActivity).hideKeyboard()
-            super.onDismiss(dialog)
-        }
-
-        @Suppress("UNUSED_PARAMETER")
-        fun onCancelMessageButtonClick(view: View) {
-            this.messageTextField.setText("")
-            dismiss()
-        }
-
-        @Suppress("UNUSED_PARAMETER")
-        fun onValidateMessageButtonClick(view: View) {
-            val text = this.messageTextField.text.toString()
-            if (text.isNotEmpty()) {
-                if (this.messageToEdit == null) {
-                    this.messageSender.sendMessage(this.messageTextField.text.toString())
-                } else {
-                    this.messageSender.editMessage(this.messageToEdit, this.messageTextField.text.toString())
-                }
-                this.messageTextField.setText("")
-                dismiss()
-            }
-        }
+    override fun editMessage(message: Message, newText: String) {
+        this.eventViewModel.updateMessage(message, newText)
     }
 }

@@ -3,8 +3,8 @@
 
     <data>
         <variable
-            name="eventMessageDialogFragment"
-            type="com.sildian.apps.togetrail.event.detail.EventFragment.EventMessageDialogFragment" />
+            name="messageWriteDialogFragment"
+            type="com.sildian.apps.togetrail.chat.others.MessageWriteDialogFragment" />
     </data>
 
     <LinearLayout
@@ -16,7 +16,7 @@
         android:gravity="center_vertical">
 
         <EditText
-            android:id="@+id/dialog_fragment_event_message_text_field_message"
+            android:id="@+id/dialog_fragment_message_write_text_field_message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -30,21 +30,21 @@
 
         <com.google.android.material.button.MaterialButton
             style="@style/IconButtonStyle"
-            android:id="@+id/dialog_fragment_event_message_button_cancel"
+            android:id="@+id/dialog_fragment_message_write_button_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:icon="@drawable/ic_cancel_message_white"
             app:iconTint="@color/colorSecondaryDark"
-            android:onClick="@{eventMessageDialogFragment::onCancelMessageButtonClick}"/>
+            android:onClick="@{messageWriteDialogFragment::onCancelMessageButtonClick}"/>
 
         <com.google.android.material.button.MaterialButton
             style="@style/IconButtonStyle"
-            android:id="@+id/dialog_fragment_event_message_button_validate"
+            android:id="@+id/dialog_fragment_message_write_button_validate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:icon="@drawable/ic_send_message_white"
             app:iconTint="@color/colorSecondaryDark"
-            android:onClick="@{eventMessageDialogFragment::onValidateMessageButtonClick}"/>
+            android:onClick="@{messageWriteDialogFragment::onValidateMessageButtonClick}"/>
 
     </LinearLayout>
 
