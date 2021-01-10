@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.chat.model.core.Message
+import com.sildian.apps.togetrail.chat.others.MessageSender
 import com.sildian.apps.togetrail.chat.others.MultiUsersMessageAdapter
 import com.sildian.apps.togetrail.chat.others.MultiUsersMessageViewHolder
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
@@ -22,6 +23,7 @@ import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
+import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.databinding.DialogFragmentEventMessageBinding
 import com.sildian.apps.togetrail.databinding.FragmentEventBinding
 import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
@@ -45,7 +47,9 @@ class EventFragment(private val eventId: String?=null) :
     HikerPhotoViewHolder.OnHikerClickListener,
     HikerPhotoAdapter.OnHikersChangedListener,
     TrailHorizontalViewHolder.OnTrailClickListener,
-    MultiUsersMessageViewHolder.OnAuthorClickListener
+    MultiUsersMessageViewHolder.OnAuthorClickListener,
+    MultiUsersMessageViewHolder.OnMessageModificationClickListener,
+    MessageSender
 {
 
     /*****************************************Data***********************************************/
@@ -62,11 +66,12 @@ class EventFragment(private val eventId: String?=null) :
     private lateinit var attachedTrailsAdapter:TrailHorizontalAdapter
     private val messagesRecyclerView by lazy { layout.fragment_event_recycler_view_messages }
     private lateinit var messagesAdapter: MultiUsersMessageAdapter
+    private val sendMessageButton by lazy { layout.fragment_event_button_send_message }
     private val registrationLayout by lazy {layout.fragment_event_layout_registration}
     private val registerUserButton by lazy {layout.fragment_event_button_register_user}
     private val userRegisteredText by lazy {layout.fragment_event_text_user_registered}
     private val unregisterUserButton by lazy {layout.fragment_event_button_unregister_user}
-    private val eventMessageDialogFragment by lazy { EventMessageDialogFragment() }
+    private var eventMessageDialogFragment: EventMessageDialogFragment? = null
 
     /***********************************Data monitoring******************************************/
 
@@ -116,6 +121,7 @@ class EventFragment(private val eventId: String?=null) :
 
     override fun initializeUI() {
         initializeToolbar()
+        initializeSendMessageButton()
         initializeRegistrationLayout()
     }
 
@@ -135,6 +141,12 @@ class EventFragment(private val eventId: String?=null) :
     private fun updateToolbar() {
         if (this.eventViewModel.currentUserIsAuthor()) {
             (this.baseActivity as EventActivity).allowEditMenu()
+        }
+    }
+
+    private fun initializeSendMessageButton() {
+        if (AuthRepository().getCurrentUser()==null) {
+            this.sendMessageButton.visibility = View.GONE
         }
     }
 
@@ -188,7 +200,7 @@ class EventFragment(private val eventId: String?=null) :
                 EventFirebaseQueries.getMessages(this.eventViewModel.event.value?.id!!),
                 activity as AppCompatActivity
             ),
-            this
+            this, this
         )
         this.messagesRecyclerView.adapter = this.messagesAdapter
     }
@@ -210,7 +222,8 @@ class EventFragment(private val eventId: String?=null) :
 
     @Suppress("UNUSED_PARAMETER")
     fun onSendMessageButtonClick(view: View) {
-        this.eventMessageDialogFragment.show(childFragmentManager, "EventMessageDialogFragment")
+        this.eventMessageDialogFragment = EventMessageDialogFragment(this)
+        this.eventMessageDialogFragment?.show(childFragmentManager, "EventMessageDialogFragment")
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -243,15 +256,44 @@ class EventFragment(private val eventId: String?=null) :
 
     /*************************************Chat monitoring****************************************/
 
-    fun sendMessage(text: String) {
+    override fun sendMessage(text: String) {
         this.eventViewModel.sendMessage(text)
+    }
+
+    override fun editMessage(message: Message, newText: String) {
+        this.eventViewModel.updateMessage(message, newText)
     }
 
     override fun onAuthorClick(authorId: String) {
         (activity as EventActivity).seeHiker(authorId)
     }
 
-    class EventMessageDialogFragment: BottomSheetDialogFragment() {
+    override fun onMessageEditClick(message: Message) {
+        this.eventMessageDialogFragment = EventMessageDialogFragment(this, message)
+        this.eventMessageDialogFragment?.show(childFragmentManager, "EventMessageDialogFragment")
+    }
+
+    @Suppress("UNUSED_ANONYMOUS_PARAMETER")
+    override fun onMessageDeleteClick(message: Message) {
+        context?.let { context ->
+            DialogHelper.createYesNoDialog(
+                context,
+                R.string.message_chat_message_delete_confirmation_title,
+                R.string.message_chat_message_delete_confirmation_message
+            ) { dialog, which ->
+                if (which == DialogInterface.BUTTON_POSITIVE) {
+                    this.eventViewModel.deleteMessage(message)
+                }
+            }.show()
+        }
+    }
+
+    class EventMessageDialogFragment(
+        private val messageSender: MessageSender,
+        private val messageToEdit: Message? = null
+    )
+        : BottomSheetDialogFragment()
+    {
 
         private lateinit var layout: View
         private lateinit var messageTextField: EditText
@@ -267,6 +309,9 @@ class EventFragment(private val eventId: String?=null) :
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
             this.messageTextField = this.layout.dialog_fragment_event_message_text_field_message
+            if (this.messageToEdit != null) {
+                this.messageTextField.setText(this.messageToEdit.text)
+            }
         }
 
         override fun onDismiss(dialog: DialogInterface) {
@@ -284,7 +329,11 @@ class EventFragment(private val eventId: String?=null) :
         fun onValidateMessageButtonClick(view: View) {
             val text = this.messageTextField.text.toString()
             if (text.isNotEmpty()) {
-                (parentFragment as EventFragment).sendMessage(this.messageTextField.text.toString())
+                if (this.messageToEdit == null) {
+                    this.messageSender.sendMessage(this.messageTextField.text.toString())
+                } else {
+                    this.messageSender.editMessage(this.messageToEdit, this.messageTextField.text.toString())
+                }
                 this.messageTextField.setText("")
                 dismiss()
             }

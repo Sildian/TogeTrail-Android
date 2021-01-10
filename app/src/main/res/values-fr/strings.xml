@@ -232,6 +232,8 @@
     <string name="message_file_failure_gpx_other_reason">Ce fichier n\'a pas pu être chargé. Veuillez vérifier qu\'il s\'agit bien d\'un Gpx et qu\'il n\'est pas corrompu.</string>
     <string name="message_file_failure_image">L\'image n\'a pas pu être chargée. Veuillez vérifier qu\'elle n\'est pas corrompue.</string>
     <string name="message_trail_info_request_title">Veuillez indiquer un nom pour la rando</string>
+    <string name="message_chat_message_delete_confirmation_title">Suppresion de message</string>
+    <string name="message_chat_message_delete_confirmation_message">Supprimer le message?</string>
     <!-- Toasts / Snackbars -->
     <string name="message_account_necessary">Un compte est nécessaire pour accéder à cette fonctionnalité</string>
     <string name="message_query_result_empty">Aucun résultat ne correspond à votre recherche</string>

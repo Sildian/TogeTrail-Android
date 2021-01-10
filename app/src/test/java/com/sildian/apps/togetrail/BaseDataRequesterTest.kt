@@ -1,6 +1,7 @@
 package com.sildian.apps.togetrail
 
 import com.google.firebase.auth.FirebaseUser
+import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
@@ -44,6 +45,8 @@ open class BaseDataRequesterTest {
         const val TRAIL_NAME = "Best trail in the world"
         const val EVENT_ID = "EVENT_BEST"
         const val EVENT_NAME = "Best event in the world"
+        const val MESSAGE_ID = "TOTO_MESSAGE"
+        const val MESSAGE_TEXT = "Coucou"
 
         /**Allows to set params for fake objects sent by shadows**/
         /*Set it to true to simulate a request failure*/
@@ -84,6 +87,8 @@ open class BaseDataRequesterTest {
         var isEventHasHikerRegistered = false
         var isEventHasHikerUnregistered = false
         var isEventMessageSent = false
+        var isEventMessageUpdated = false
+        var isEventMessageDeleted = false
 
         /**Gets a default user sample**/
         fun getUserSample(): FirebaseUser? {
@@ -123,6 +128,9 @@ open class BaseDataRequesterTest {
                 else -> Event(id = EVENT_ID, name = EVENT_NAME)
             }
         }
+
+        /**Gets a default message sample**/
+        fun getMessageSample(): Message = Message(id = MESSAGE_ID, text = MESSAGE_TEXT, authorId = USER_ID)
     }
 
     /**Reset all**/
@@ -158,5 +166,7 @@ open class BaseDataRequesterTest {
         isEventHasHikerRegistered = false
         isEventHasHikerUnregistered = false
         isEventMessageSent = false
+        isEventMessageUpdated = false
+        isEventMessageDeleted = false
     }
 }

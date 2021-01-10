@@ -29,6 +29,7 @@ class EventDataRequester {
         private const val EXCEPTION_MESSAGE_NULL_EVENT = "Cannot perform the requested operation with a null event"
         private const val EXCEPTION_MESSAGE_NO_ID_TRAIL = "Cannot perform the requested operation with a trail without id"
         private const val EXCEPTION_MESSAGE_NO_ID_EVENT = "Cannot perform the requested operation with an event without id"
+        private const val EXCEPTION_MESSAGE_NO_ID_MESSAGE = "Cannot perform the requested operation with an message without id"
         private const val EXCEPTION_MESSAGE_NO_TEXT_MESSAGE = "Cannot perform the requested operation with a message without text"
     }
 
@@ -370,7 +371,8 @@ class EventDataRequester {
                                     authorName = hiker.name,
                                     authorPhotoUrl = hiker.photoUrl
                                 )
-                                launch { eventRepository.addEventMessage(event.id!!, message) }
+                                message.id = async { eventRepository.addEventMessage(event.id!!, message) }.await()
+                                launch { eventRepository.updateEventMessage(event.id!!, message) }
                             }
                             else {
                                 throw IllegalArgumentException(EXCEPTION_MESSAGE_NO_TEXT_MESSAGE)
@@ -386,6 +388,82 @@ class EventDataRequester {
                 }
                 else {
                     throw NullPointerException(EXCEPTION_MESSAGE_NULL_HIKER)
+                }
+            }
+            catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    /**
+     * Updates a message in the event's chat
+     * @param event : the event
+     * @param message : the message to update
+     * @param newText : the new text to replace the previous one
+     * @throws IllegalArgumentException if the event or the message has no id or if the text is empty
+     * @throws NullPointerException if the event is null
+     */
+
+    @Throws(Exception::class)
+    suspend fun updateMessage(event: Event?, message: Message, newText: String) {
+        withContext(Dispatchers.IO) {
+            try {
+                if (event != null) {
+                    if (event.id != null) {
+                        if (message.id != null) {
+                            if (newText.isNotEmpty()) {
+                                message.text = newText
+                                launch { eventRepository.updateEventMessage(event.id!!, message) }
+                            } else {
+                                throw IllegalArgumentException(EXCEPTION_MESSAGE_NO_TEXT_MESSAGE)
+                            }
+                        }
+                        else {
+                            throw IllegalArgumentException(EXCEPTION_MESSAGE_NO_ID_MESSAGE)
+                        }
+                    }
+                    else {
+                        throw IllegalArgumentException(EXCEPTION_MESSAGE_NO_ID_EVENT)
+                    }
+                }
+                else {
+                    throw NullPointerException(EXCEPTION_MESSAGE_NULL_EVENT)
+                }
+            }
+            catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    /**
+     * Deletes a message from the event's chat
+     * @param event : the event
+     * @param message : the message to delete
+     * @throws IllegalArgumentException if the event or the message has no id
+     * @throws NullPointerException if the event is null
+     */
+
+    @Throws(Exception::class)
+    suspend fun deleteMessage(event: Event?, message: Message) {
+        withContext(Dispatchers.IO) {
+            try {
+                if (event != null) {
+                    if (event.id != null) {
+                        if (message.id != null) {
+                            launch { eventRepository.deleteEventMessage(event.id!!, message.id!!) }
+                        }
+                        else {
+                            throw IllegalArgumentException(EXCEPTION_MESSAGE_NO_ID_MESSAGE)
+                        }
+                    }
+                    else {
+                        throw IllegalArgumentException(EXCEPTION_MESSAGE_NO_ID_EVENT)
+                    }
+                }
+                else {
+                    throw NullPointerException(EXCEPTION_MESSAGE_NULL_EVENT)
                 }
             }
             catch (e: Exception) {

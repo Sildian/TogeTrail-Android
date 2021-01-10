@@ -13,7 +13,8 @@ import com.sildian.apps.togetrail.chat.model.core.Message
 
 class MultiUsersMessageAdapter(
     options: FirestoreRecyclerOptions<Message>,
-    private val onAuthorClickListener: MultiUsersMessageViewHolder.OnAuthorClickListener? = null
+    private val onAuthorClickListener: MultiUsersMessageViewHolder.OnAuthorClickListener? = null,
+    private val onMessageModificationClickListener: MultiUsersMessageViewHolder.OnMessageModificationClickListener? = null
 )
     : FirestoreRecyclerAdapter<Message, MultiUsersMessageViewHolder>(options)
 {
@@ -21,7 +22,7 @@ class MultiUsersMessageAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MultiUsersMessageViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.item_recycler_view_multi_users_message, parent, false)
-        return MultiUsersMessageViewHolder(view, onAuthorClickListener)
+        return MultiUsersMessageViewHolder(view, onAuthorClickListener, onMessageModificationClickListener)
     }
 
     override fun onBindViewHolder(holder: MultiUsersMessageViewHolder, position: Int, message: Message) {

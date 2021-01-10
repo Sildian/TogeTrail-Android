@@ -233,6 +233,8 @@
     <string name="message_file_failure_gpx_other_reason">This file could n\'t be loaded. You should check that the file is a Gpx and is not corrupted.</string>
     <string name="message_file_failure_image">The image could n\'t be loaded. You should check that it is not corrupted.</string>
     <string name="message_trail_info_request_title">Please give a name to the trail</string>
+    <string name="message_chat_message_delete_confirmation_title">Message deletion</string>
+    <string name="message_chat_message_delete_confirmation_message">Delete the message?</string>
     <!-- Toasts / Snackbars -->
     <string name="message_account_necessary">An account is necessary to access this feature</string>
     <string name="message_query_result_empty">No result match your research</string>

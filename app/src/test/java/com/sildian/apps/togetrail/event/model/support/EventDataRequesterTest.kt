@@ -510,7 +510,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
             requestShouldFail = true
             launch {
                 try {
-                    eventDataRequester.sendMessage(getEventSample(), "Coucou")
+                    eventDataRequester.sendMessage(getEventSample(), MESSAGE_TEXT)
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: FirebaseException) {
@@ -527,7 +527,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
             CurrentHikerInfo.currentHiker = getHikerSample()
             launch {
                 try {
-                    eventDataRequester.sendMessage(null, "Coucou")
+                    eventDataRequester.sendMessage(null, MESSAGE_TEXT)
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: NullPointerException) {
@@ -544,7 +544,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
             CurrentHikerInfo.currentHiker = null
             launch {
                 try {
-                    eventDataRequester.sendMessage(getEventSample(), "Coucou")
+                    eventDataRequester.sendMessage(getEventSample(), MESSAGE_TEXT)
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: NullPointerException) {
@@ -563,7 +563,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
             event?.id = null
             launch {
                 try {
-                    eventDataRequester.sendMessage(event, "Coucou")
+                    eventDataRequester.sendMessage(event, MESSAGE_TEXT)
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: IllegalArgumentException) {
@@ -595,8 +595,178 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
     fun given_ValidText_when_sendMessage_then_checkMessageIsSent() {
         runBlocking {
             CurrentHikerInfo.currentHiker = getHikerSample()
-            launch { eventDataRequester.sendMessage(getEventSample(), "Coucou") }.join()
+            launch { eventDataRequester.sendMessage(getEventSample(), MESSAGE_TEXT) }.join()
             assertTrue(isEventMessageSent)
+        }
+    }
+
+    @Test
+    fun given_requestFailure_when_updateMessage_then_checkMessageIsNotUpdated() {
+        runBlocking {
+            requestShouldFail = true
+            launch {
+                try {
+                    eventDataRequester.updateMessage(getEventSample(), getMessageSample(), "Hello")
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: FirebaseException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isEventMessageUpdated)
+        }
+    }
+
+    @Test
+    fun given_nullEvent_when_updateMessage_then_checkMessageIsNotUpdated() {
+        runBlocking {
+            launch {
+                try {
+                    eventDataRequester.updateMessage(null, getMessageSample(), "Hello")
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: NullPointerException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isEventMessageUpdated)
+        }
+    }
+
+    @Test
+    fun given_eventWithoutId_when_updatedMessage_then_checkMessageIsNotUpdated() {
+        runBlocking {
+            val event = getEventSample()
+            event?.id = null
+            launch {
+                try {
+                    eventDataRequester.updateMessage(event, getMessageSample(), "Hello")
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: IllegalArgumentException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isEventMessageUpdated)
+        }
+    }
+
+    @Test
+    fun given_messageWithoutId_when_updatedMessage_then_checkMessageIsNotUpdated() {
+        runBlocking {
+            val message = getMessageSample()
+            message.id = null
+            launch {
+                try {
+                    eventDataRequester.updateMessage(getEventSample(), message, "Hello")
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: IllegalArgumentException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isEventMessageUpdated)
+        }
+    }
+
+    @Test
+    fun given_EmptyText_when_updateMessage_then_checkMessageIsNotUpdated() {
+        runBlocking {
+            launch {
+                try {
+                    eventDataRequester.updateMessage(getEventSample(), getMessageSample(), "")
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: IllegalArgumentException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isEventMessageUpdated)
+        }
+    }
+
+    @Test
+    fun given_ValidText_when_updateMessage_then_checkMessageIsUpdated() {
+        runBlocking {
+            launch { eventDataRequester.updateMessage(getEventSample(), getMessageSample(), "Hello") }.join()
+            assertTrue(isEventMessageUpdated)
+        }
+    }
+
+    @Test
+    fun given_requestFailure_when_deleteMessage_then_checkMessageIsNotDeleted() {
+        runBlocking {
+            requestShouldFail = true
+            launch {
+                try {
+                    eventDataRequester.deleteMessage(getEventSample(), getMessageSample())
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: FirebaseException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isEventMessageDeleted)
+        }
+    }
+
+    @Test
+    fun given_nullEvent_when_deleteMessage_then_checkMessageIsNotDeleted() {
+        runBlocking {
+            launch {
+                try {
+                    eventDataRequester.deleteMessage(null, getMessageSample())
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: NullPointerException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isEventMessageDeleted)
+        }
+    }
+
+    @Test
+    fun given_eventWithoutId_when_deleteMessage_then_checkMessageIsNotDeleted() {
+        runBlocking {
+            val event = getEventSample()
+            event?.id = null
+            launch {
+                try {
+                    eventDataRequester.deleteMessage(event, getMessageSample())
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: IllegalArgumentException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isEventMessageDeleted)
+        }
+    }
+
+    @Test
+    fun given_messageWithoutId_when_deleteMessage_then_checkMessageIsNotDeleted() {
+        runBlocking {
+            val message = getMessageSample()
+            message.id = null
+            launch {
+                try {
+                    eventDataRequester.deleteMessage(getEventSample(), message)
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: IllegalArgumentException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isEventMessageDeleted)
+        }
+    }
+
+    @Test
+    fun given_ValidMessage_when_deleteMessage_then_checkMessageIsDeleted() {
+        runBlocking {
+            launch { eventDataRequester.deleteMessage(getEventSample(), getMessageSample()) }.join()
+            assertTrue(isEventMessageDeleted)
         }
     }
 }

@@ -3,6 +3,7 @@ package com.sildian.apps.togetrail.event.model.support
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.common.baseViewModels.BaseViewModel
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
 import com.sildian.apps.togetrail.event.model.core.Event
@@ -201,6 +202,40 @@ class EventViewModel : BaseViewModel() {
             }
             catch (e:Exception) {
                 Log.e(TAG, "Failed to send the message : ${e.message}")
+                requestFailure.postValue(e)
+            }
+        }
+    }
+
+    /**
+     * Updates a message with a new text in the event's chat
+     */
+
+    fun updateMessage(message: Message, newText: String) {
+        viewModelScope.launch(this.exceptionHandler) {
+            try {
+                launch { eventDataRequester.updateMessage(event.value, message, newText) }.join()
+                Log.d(TAG, "Successfully updated the message")
+            }
+            catch (e:Exception) {
+                Log.e(TAG, "Failed to update the message : ${e.message}")
+                requestFailure.postValue(e)
+            }
+        }
+    }
+
+    /**
+     * Deletes a message from the event's chat
+     */
+
+    fun deleteMessage(message: Message) {
+        viewModelScope.launch(this.exceptionHandler) {
+            try {
+                launch { eventDataRequester.deleteMessage(event.value, message) }.join()
+                Log.d(TAG, "Successfully deleted the message")
+            }
+            catch (e:Exception) {
+                Log.e(TAG, "Failed to delete the message : ${e.message}")
                 requestFailure.postValue(e)
             }
         }

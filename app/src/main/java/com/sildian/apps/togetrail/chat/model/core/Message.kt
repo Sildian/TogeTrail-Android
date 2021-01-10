@@ -11,7 +11,8 @@ import java.util.*
 
 @Parcelize
 data class Message (
-    val text: String = "",
+    var id: String? = null,
+    var text: String = "",
     val date: Date = Date(),
     val authorId: String = "",
     val authorName: String? = null,

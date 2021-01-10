@@ -212,4 +212,24 @@ object EventFirebaseQueries {
 
     fun addMessage(eventId: String, message: Message): Task<DocumentReference> =
         getMessageSubCollection(eventId).add(message)
+
+    /**
+     * Updates a message in the event's chat
+     * @param eventId : the id of the event
+     * @param message : the message
+     * @return a task result
+     */
+
+    fun updateMessage(eventId: String, message: Message): Task<Void> =
+        getMessageSubCollection(eventId).document(message.id!!).set(message)
+
+    /**
+     * Deletes a message from an event's chat
+     * @param eventId : the id of the event
+     * @param messageId : the id of the message
+     * @return a task result
+     */
+
+    fun deleteMessage(eventId: String, messageId: String): Task<Void> =
+        getMessageSubCollection(eventId).document(messageId).delete()
 }
