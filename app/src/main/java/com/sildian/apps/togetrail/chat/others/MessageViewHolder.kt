@@ -7,13 +7,13 @@ import com.bumptech.glide.request.RequestOptions
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
-import kotlinx.android.synthetic.main.item_recycler_view_multi_users_message.view.*
+import kotlinx.android.synthetic.main.item_recycler_view_message.view.*
 
 /*************************************************************************************************
- * Displays a message in a multi users chat space
+ * Displays a message chat space
  ************************************************************************************************/
 
-class MultiUsersMessageViewHolder(
+class MessageViewHolder(
     itemView: View,
     private val onAuthorClickListener: OnAuthorClickListener? = null,
     private val onMessageModificationClickListener: OnMessageModificationClickListener? = null
@@ -37,11 +37,11 @@ class MultiUsersMessageViewHolder(
 
     /**********************************UI components*********************************************/
 
-    private val authorPhotoImageView by lazy { itemView.item_recycler_view_multi_users_message_image_author }
-    private val authorNameAndDateText by lazy { itemView.item_recycler_view_multi_users_message_text_author_name_and_date }
-    private val editButton by lazy { itemView.item_recycler_view_multi_users_message_button_edit }
-    private val deleteButton by lazy { itemView.item_recycler_view_multi_users_message_button_delete }
-    private val messageText by lazy { itemView.item_recycler_view_multi_users_message_text_message }
+    private val authorPhotoImageView by lazy { itemView.item_recycler_view_message_image_author }
+    private val authorNameAndDateText by lazy { itemView.item_recycler_view_message_text_author_name_and_date }
+    private val editButton by lazy { itemView.item_recycler_view_message_button_edit }
+    private val deleteButton by lazy { itemView.item_recycler_view_message_button_delete }
+    private val messageText by lazy { itemView.item_recycler_view_message_text_message }
 
     /**************************************Init**************************************************/
 

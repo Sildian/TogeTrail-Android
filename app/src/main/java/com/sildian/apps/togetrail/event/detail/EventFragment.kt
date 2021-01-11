@@ -9,8 +9,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.chat.others.MessageWriteDialogFragment
-import com.sildian.apps.togetrail.chat.others.MultiUsersMessageAdapter
-import com.sildian.apps.togetrail.chat.others.MultiUsersMessageViewHolder
+import com.sildian.apps.togetrail.chat.others.MessageAdapter
+import com.sildian.apps.togetrail.chat.others.MessageViewHolder
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
@@ -37,8 +37,8 @@ class EventFragment(private val eventId: String?=null) :
     HikerPhotoViewHolder.OnHikerClickListener,
     HikerPhotoAdapter.OnHikersChangedListener,
     TrailHorizontalViewHolder.OnTrailClickListener,
-    MultiUsersMessageViewHolder.OnAuthorClickListener,
-    MultiUsersMessageViewHolder.OnMessageModificationClickListener,
+    MessageViewHolder.OnAuthorClickListener,
+    MessageViewHolder.OnMessageModificationClickListener,
     MessageWriteDialogFragment.MessageWriteCallback
 {
 
@@ -55,7 +55,7 @@ class EventFragment(private val eventId: String?=null) :
     private val attachedTrailsRecyclerView by lazy {layout.fragment_event_recycler_view_attached_trails}
     private lateinit var attachedTrailsAdapter:TrailHorizontalAdapter
     private val messagesRecyclerView by lazy { layout.fragment_event_recycler_view_messages }
-    private lateinit var messagesAdapter: MultiUsersMessageAdapter
+    private lateinit var messagesAdapter: MessageAdapter
     private val sendMessageButton by lazy { layout.fragment_event_button_send_message }
     private val registrationLayout by lazy {layout.fragment_event_layout_registration}
     private val registerUserButton by lazy {layout.fragment_event_button_register_user}
@@ -184,7 +184,7 @@ class EventFragment(private val eventId: String?=null) :
     }
 
     private fun updateMessagesRecyclerView() {
-        this.messagesAdapter = MultiUsersMessageAdapter(
+        this.messagesAdapter = MessageAdapter(
             DatabaseFirebaseHelper.generateOptionsForAdapter(
                 Message::class.java,
                 EventFirebaseQueries.getMessages(this.eventViewModel.event.value?.id!!),
