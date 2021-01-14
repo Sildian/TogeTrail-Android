@@ -38,10 +38,11 @@ class ProfileActivity : BaseActivity() {
     /**Generates the menu within the toolbar**/
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        return if(this.hikerId==AuthFirebaseHelper.getCurrentUser()?.uid){
+        return if (this.hikerId == AuthFirebaseHelper.getCurrentUser()?.uid) {
             menuInflater.inflate(R.menu.menu_edit, menu)
             true
         } else {
+            menuInflater.inflate(R.menu.menu_chat, menu)
             true
         }
     }
@@ -49,9 +50,16 @@ class ProfileActivity : BaseActivity() {
     /**Click on menu item from toolbar**/
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.groupId==R.id.menu_edit){
-            if(item.itemId==R.id.menu_edit_edit){
-                startProfileEditActivity()
+        when (item.groupId) {
+            R.id.menu_edit -> {
+                if (item.itemId == R.id.menu_edit_edit) {
+                    startProfileEditActivity()
+                }
+            }
+            R.id.menu_chat -> {
+                if (item.itemId == R.id.menu_chat_chat) {
+                    //TODO show messages screen
+                }
             }
         }
         return super.onOptionsItemSelected(item)

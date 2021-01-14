@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
@@ -142,6 +143,26 @@ class MainActivity :
     }
 
     /*******************************Menu monitoring**********************************************/
+
+    /**Generates the menu within the toolbar**/
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_chat, menu)
+        return true
+    }
+
+    /**Click on menu item from toolbar**/
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.groupId) {
+            R.id.menu_chat -> {
+                if (item.itemId == R.id.menu_chat_chat) {
+                    //TODO show messages screen
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
     /**Click on menu item from...**/
 
