@@ -99,22 +99,10 @@ class EventRepositoryShadow {
     }
 
     @Implementation
-    suspend fun addEventMessage(eventId: String, message: Message): String? {
-        println("FAKE EventRepository : Send message")
-        if (!BaseDataRequesterTest.requestShouldFail) {
-            BaseDataRequesterTest.isEventMessageSent = true
-            return BaseDataRequesterTest.MESSAGE_ID
-        }
-        else {
-            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
-        }
-    }
-
-    @Implementation
     suspend fun updateEventMessage(eventId:String, message: Message) {
         println("FAKE EventRepository : Update message")
         if (!BaseDataRequesterTest.requestShouldFail) {
-            BaseDataRequesterTest.isEventMessageUpdated = true
+            BaseDataRequesterTest.isEventMessageSent = true
         }
         else {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)

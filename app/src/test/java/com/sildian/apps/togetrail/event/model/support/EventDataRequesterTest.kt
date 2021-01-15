@@ -613,7 +613,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
                     println(e.message)
                 }
             }.join()
-            assertFalse(isEventMessageUpdated)
+            assertFalse(isEventMessageSent)
         }
     }
 
@@ -629,7 +629,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
                     println(e.message)
                 }
             }.join()
-            assertFalse(isEventMessageUpdated)
+            assertFalse(isEventMessageSent)
         }
     }
 
@@ -647,25 +647,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
                     println(e.message)
                 }
             }.join()
-            assertFalse(isEventMessageUpdated)
-        }
-    }
-
-    @Test
-    fun given_messageWithoutId_when_updatedMessage_then_checkMessageIsNotUpdated() {
-        runBlocking {
-            val message = getMessageSample()
-            message.id = null
-            launch {
-                try {
-                    eventDataRequester.updateMessage(getEventSample(), message, "Hello")
-                    assertEquals("TRUE", "FALSE")
-                }
-                catch (e: IllegalArgumentException) {
-                    println(e.message)
-                }
-            }.join()
-            assertFalse(isEventMessageUpdated)
+            assertFalse(isEventMessageSent)
         }
     }
 
@@ -681,7 +663,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
                     println(e.message)
                 }
             }.join()
-            assertFalse(isEventMessageUpdated)
+            assertFalse(isEventMessageSent)
         }
     }
 
@@ -689,7 +671,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
     fun given_ValidText_when_updateMessage_then_checkMessageIsUpdated() {
         runBlocking {
             launch { eventDataRequester.updateMessage(getEventSample(), getMessageSample(), "Hello") }.join()
-            assertTrue(isEventMessageUpdated)
+            assertTrue(isEventMessageSent)
         }
     }
 
@@ -734,24 +716,6 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
             launch {
                 try {
                     eventDataRequester.deleteMessage(event, getMessageSample())
-                    assertEquals("TRUE", "FALSE")
-                }
-                catch (e: IllegalArgumentException) {
-                    println(e.message)
-                }
-            }.join()
-            assertFalse(isEventMessageDeleted)
-        }
-    }
-
-    @Test
-    fun given_messageWithoutId_when_deleteMessage_then_checkMessageIsNotDeleted() {
-        runBlocking {
-            val message = getMessageSample()
-            message.id = null
-            launch {
-                try {
-                    eventDataRequester.deleteMessage(getEventSample(), message)
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: IllegalArgumentException) {

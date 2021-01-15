@@ -45,7 +45,6 @@ open class BaseDataRequesterTest {
         const val TRAIL_NAME = "Best trail in the world"
         const val EVENT_ID = "EVENT_BEST"
         const val EVENT_NAME = "Best event in the world"
-        const val MESSAGE_ID = "TOTO_MESSAGE"
         const val MESSAGE_TEXT = "Coucou"
 
         /**Allows to set params for fake objects sent by shadows**/
@@ -87,7 +86,6 @@ open class BaseDataRequesterTest {
         var isEventHasHikerRegistered = false
         var isEventHasHikerUnregistered = false
         var isEventMessageSent = false
-        var isEventMessageUpdated = false
         var isEventMessageDeleted = false
 
         /**Gets a default user sample**/
@@ -130,7 +128,7 @@ open class BaseDataRequesterTest {
         }
 
         /**Gets a default message sample**/
-        fun getMessageSample(): Message = Message(id = MESSAGE_ID, text = MESSAGE_TEXT, authorId = USER_ID)
+        fun getMessageSample(): Message = Message(text = MESSAGE_TEXT, authorId = USER_ID)
     }
 
     /**Reset all**/
@@ -166,7 +164,6 @@ open class BaseDataRequesterTest {
         isEventHasHikerRegistered = false
         isEventHasHikerUnregistered = false
         isEventMessageSent = false
-        isEventMessageUpdated = false
         isEventMessageDeleted = false
     }
 }

@@ -172,28 +172,6 @@ class EventRepository {
     }
 
     /**
-     * Add a message to the event's chat
-     * @param eventId : the id of the event
-     * @param message : the message
-     * @return the message's id
-     * @throws Exception if the request fails
-     */
-
-    @Throws(Exception::class)
-    suspend fun addEventMessage(eventId: String, message: Message): String? =
-        withContext(Dispatchers.IO) {
-            try {
-                EventFirebaseQueries
-                    .addMessage(eventId, message)
-                    .await()
-                    .id
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
-
-    /**
      * Updates a message to the event's chat
      * @param eventId : the event's id
      * @param message : the message
