@@ -1,6 +1,8 @@
 package com.sildian.apps.togetrail.hiker.model.support
 
 import com.google.firebase.firestore.DocumentReference
+import com.sildian.apps.togetrail.chat.model.core.Duo
+import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
@@ -67,7 +69,7 @@ class HikerRepository {
     }
 
     /**
-     * Deletes an hiker as well as the related history items and attended events
+     * Deletes an hiker as well as the related sub items
      * @param hiker : the hiker to delete
      * @throws Exception if the request fails
      */
@@ -89,6 +91,23 @@ class HikerRepository {
                     .await()
                 attendedEvents.forEach { attendedEvent ->
                     HikerFirebaseQueries.deleteAttendedEvent(hiker.id, attendedEvent.id)
+                }
+                val chats = HikerFirebaseQueries
+                    .getChats(hiker.id)
+                    .get()
+                    .await()
+                chats.forEach { chat ->
+                    val messages = HikerFirebaseQueries
+                        .getMessages(hiker.id, chat.id)
+                        .get()
+                        .await()
+                    messages.forEach { message ->
+                        HikerFirebaseQueries
+                            .deleteMessage(hiker.id, chat.id, message.id)
+                            .await()
+                    }
+                    HikerFirebaseQueries
+                        .deleteChat(hiker.id, chat.id)
                 }
                 HikerFirebaseQueries
                     .deleteHiker(hiker)
@@ -182,6 +201,96 @@ class HikerRepository {
             try {
                 HikerFirebaseQueries
                     .deleteAttendedEvent(hikerId, eventId)
+                    .await()
+            }
+            catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    /**
+     * Creates or updates the given chat
+     * @param hikerId : the id of the hiker
+     * @param duo : the chat group
+     * @return a task
+     * @throws Exception if the request fails
+     */
+
+    @Throws(Exception::class)
+    suspend fun createOrUpdateHikerChat(hikerId: String, duo: Duo) {
+        withContext(Dispatchers.IO) {
+            try {
+                HikerFirebaseQueries
+                    .createOrUpdateChat(hikerId, duo)
+                    .await()
+            }
+            catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    /**
+     * Deletes the chat for the given hiker and interlocutor
+     * @param hikerId : the id of the hiker
+     * @param interlocutorId : the id of the interlocutor
+     * @return a task
+     * @throws Exception if the request fails
+     */
+
+    @Throws(Exception::class)
+    suspend fun deleteHikerChat(hikerId: String, interlocutorId: String) {
+        withContext(Dispatchers.IO) {
+            try {
+                HikerFirebaseQueries
+                    .deleteChat(hikerId, interlocutorId)
+                    .await()
+            }
+            catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    /**
+     * Creates or updates the given message
+     * @param hikerId : the if of the hiker
+     * @param interlocutorId : the if of the interlocutor
+     * @param message : the message
+     * @return a task
+     * @throws Exception if the request fails
+     */
+
+    @Throws(Exception::class)
+    suspend fun createOrUpdateHikerMessage(hikerId: String, interlocutorId: String, message: Message) {
+        withContext(Dispatchers.IO) {
+            try {
+                HikerFirebaseQueries
+                    .createOrUpdateMessage(hikerId, interlocutorId, message)
+                    .await()
+            }
+            catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    /**
+     * Deletes the given message
+     * @param hikerId : the id of the hiker
+     * @param interlocutorId : the id of the interlocutor
+     * @param messageId : the id of the message
+     * @return a task
+     * @throws Exception if the request fails
+     */
+
+    @Throws(Exception::class)
+    suspend fun deleteHikerMessage(hikerId: String, interlocutorId: String, messageId: String) {
+        withContext(Dispatchers.IO) {
+            try {
+                HikerFirebaseQueries
+                    .deleteMessage(hikerId, interlocutorId, messageId)
                     .await()
             }
             catch (e: Exception) {

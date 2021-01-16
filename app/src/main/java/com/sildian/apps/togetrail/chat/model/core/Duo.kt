@@ -4,13 +4,13 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 /*************************************************************************************************
- * A DuoChatRoom is a private virtual place where two users can chat
- * The current user chats with the interlocutor
+ * A Duo is a group composed by two members, allowing them to chat in a private space
  ************************************************************************************************/
 
 @Parcelize
-data class DuoChatRoom (
+data class Duo (
     val interlocutorId: String = "",
+    val userId: String = "",
     var lastMessage: Message? = null,
     var lastMessageReadId: String? = null
 )

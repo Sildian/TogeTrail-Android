@@ -2,8 +2,11 @@ package com.sildian.apps.togetrail.hiker.model.support
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.sildian.apps.togetrail.chat.model.core.Duo
+import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
@@ -20,11 +23,17 @@ object HikerFirebaseQueries {
     private const val COLLECTION_NAME="hiker"
     private const val SUB_COLLECTION_HISTORY_ITEM="hikerHistoryItem"
     private const val SUB_COLLECTION_ATTENDED_EVENT_NAME="attendedEvent"
+    private const val SUB_COLLECTION_CHAT_NAME = "chat"
+    private const val SUB_COLLECTION_MESSAGE_NAME = "message"
     private fun getCollection() = FirebaseFirestore.getInstance().collection(COLLECTION_NAME)
     private fun getHistoryItemSubCollection(hikerId:String) =
         getCollection().document(hikerId).collection(SUB_COLLECTION_HISTORY_ITEM)
     private fun getAttendedEventSubCollection(hikerId:String) =
         getCollection().document(hikerId).collection(SUB_COLLECTION_ATTENDED_EVENT_NAME)
+    private fun getChatSubCollection(hikerId: String) =
+        getCollection().document(hikerId).collection(SUB_COLLECTION_CHAT_NAME)
+    private fun getMessageSubCollection(hikerId: String, interlocutorId: String) =
+        getChatSubCollection(hikerId).document(interlocutorId).collection(SUB_COLLECTION_MESSAGE_NAME)
 
     /*************************************Queries************************************************/
 
@@ -135,4 +144,67 @@ object HikerFirebaseQueries {
 
     fun deleteAttendedEvent(hikerId:String, eventId:String):Task<Void> =
         getAttendedEventSubCollection(hikerId).document(eventId).delete()
+
+    /**
+     * Gets the list of chats for the given user
+     * @param hikerId : the id of the hiker
+     * @return a query
+     */
+
+    fun getChats(hikerId: String): Query =
+        getChatSubCollection(hikerId)
+            .orderBy(FieldPath.of("lastMessage", "date"), Query.Direction.DESCENDING)
+
+    /**
+     * Creates or updates the given chat
+     * @param hikerId : the id of the hiker
+     * @param duo : the chat group
+     * @return a task
+     */
+
+    fun createOrUpdateChat(hikerId: String, duo: Duo): Task<Void> =
+        getChatSubCollection(hikerId).document(duo.interlocutorId).set(duo)
+
+    /**
+     * Deletes the chat for the given hiker and interlocutor
+     * @param hikerId : the id of the hiker
+     * @param interlocutorId : the id of the interlocutor
+     * @return a task
+     */
+
+    fun deleteChat(hikerId: String, interlocutorId: String): Task<Void> =
+        getChatSubCollection(hikerId).document(interlocutorId).delete()
+
+    /**
+     * Gets the list of messages for the the given hiker and interlocutor
+     * @param hikerId : the id of the hiker
+     * @param interlocutorId : the id of the interlocutor
+     * @return a query
+     */
+
+    fun getMessages(hikerId: String, interlocutorId: String): Query =
+        getMessageSubCollection(hikerId, interlocutorId)
+            .orderBy("date", Query.Direction.DESCENDING)
+
+    /**
+     * Creates or updates the given message
+     * @param hikerId : the if of the hiker
+     * @param interlocutorId : the if of the interlocutor
+     * @param message : the message
+     * @return a task
+     */
+
+    fun createOrUpdateMessage(hikerId: String, interlocutorId: String, message: Message): Task<Void> =
+        getMessageSubCollection(hikerId, interlocutorId).document(message.id).set(message)
+
+    /**
+     * Deletes the given message
+     * @param hikerId : the id of the hiker
+     * @param interlocutorId : the id of the interlocutor
+     * @param messageId : the id of the message
+     * @return a task
+     */
+
+    fun deleteMessage(hikerId: String, interlocutorId: String, messageId: String): Task<Void> =
+        getMessageSubCollection(hikerId, interlocutorId).document(messageId).delete()
 }
