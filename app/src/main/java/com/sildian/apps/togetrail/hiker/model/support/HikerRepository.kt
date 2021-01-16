@@ -102,12 +102,9 @@ class HikerRepository {
                         .get()
                         .await()
                     messages.forEach { message ->
-                        HikerFirebaseQueries
-                            .deleteMessage(hiker.id, chat.id, message.id)
-                            .await()
+                        HikerFirebaseQueries.deleteMessage(hiker.id, chat.id, message.id)
                     }
-                    HikerFirebaseQueries
-                        .deleteChat(hiker.id, chat.id)
+                    HikerFirebaseQueries.deleteChat(hiker.id, chat.id)
                 }
                 HikerFirebaseQueries
                     .deleteHiker(hiker)
@@ -243,6 +240,13 @@ class HikerRepository {
     suspend fun deleteHikerChat(hikerId: String, interlocutorId: String) {
         withContext(Dispatchers.IO) {
             try {
+                val messages = HikerFirebaseQueries
+                    .getMessages(hikerId, interlocutorId)
+                    .get()
+                    .await()
+                messages.forEach { message ->
+                    HikerFirebaseQueries.deleteMessage(hikerId, interlocutorId, message.id)
+                }
                 HikerFirebaseQueries
                     .deleteChat(hikerId, interlocutorId)
                     .await()
