@@ -172,18 +172,18 @@ class EventRepository {
     }
 
     /**
-     * Updates a message to the event's chat
+     * Creates or updates a message in the event's chat
      * @param eventId : the event's id
      * @param message : the message
      * @throws Exception if the request fails
      */
 
     @Throws(Exception::class)
-    suspend fun updateEventMessage(eventId:String, message: Message) {
+    suspend fun createOrUpdateEventMessage(eventId:String, message: Message) {
         withContext(Dispatchers.IO) {
             try {
                 EventFirebaseQueries
-                    .updateMessage(eventId, message)
+                    .createOrUpdateMessage(eventId, message)
                     .await()
             }
             catch (e: Exception) {

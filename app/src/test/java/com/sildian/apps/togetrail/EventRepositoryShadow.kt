@@ -99,8 +99,8 @@ class EventRepositoryShadow {
     }
 
     @Implementation
-    suspend fun updateEventMessage(eventId:String, message: Message) {
-        println("FAKE EventRepository : Update message")
+    suspend fun createOrUpdateEventMessage(eventId:String, message: Message) {
+        println("FAKE EventRepository : Create or update message")
         if (!BaseDataRequesterTest.requestShouldFail) {
             BaseDataRequesterTest.isEventMessageSent = true
         }

@@ -22,7 +22,7 @@ object EventFirebaseQueries {
     private const val COLLECTION_NAME="event"
     private const val SUB_COLLECTION_ATTACHED_TRAIL_NAME="attachedTrail"
     private const val SUB_COLLECTION_REGISTERED_HIKER_NAME="registeredHiker"
-    private const val SUB_COLLECTION_MESSAGE="message"
+    private const val SUB_COLLECTION_MESSAGE_NAME="message"
     private fun getCollection() =
         FirebaseFirestore.getInstance().collection(COLLECTION_NAME)
     private fun getAttachedTrailSubCollection(eventId:String) =
@@ -30,7 +30,7 @@ object EventFirebaseQueries {
     private fun getRegisteredHikerSubCollection(eventId:String) =
         getCollection().document(eventId).collection(SUB_COLLECTION_REGISTERED_HIKER_NAME)
     private fun getMessageSubCollection(eventId: String) =
-        getCollection().document(eventId).collection(SUB_COLLECTION_MESSAGE)
+        getCollection().document(eventId).collection(SUB_COLLECTION_MESSAGE_NAME)
 
     /*************************************Queries************************************************/
 
@@ -204,13 +204,13 @@ object EventFirebaseQueries {
             .orderBy("date", Query.Direction.ASCENDING)
 
     /**
-     * Updates a message in the event's chat
+     * Creates or updates a message in the event's chat
      * @param eventId : the id of the event
      * @param message : the message
      * @return a task result
      */
 
-    fun updateMessage(eventId: String, message: Message): Task<Void> =
+    fun createOrUpdateMessage(eventId: String, message: Message): Task<Void> =
         getMessageSubCollection(eventId).document(message.id).set(message)
 
     /**

@@ -370,7 +370,7 @@ class EventDataRequester {
                                     authorName = hiker.name,
                                     authorPhotoUrl = hiker.photoUrl
                                 )
-                                launch { eventRepository.updateEventMessage(event.id!!, message) }
+                                launch { eventRepository.createOrUpdateEventMessage(event.id!!, message) }
                             }
                             else {
                                 throw IllegalArgumentException(EXCEPTION_MESSAGE_NO_TEXT_MESSAGE)
@@ -411,7 +411,7 @@ class EventDataRequester {
                     if (event.id != null) {
                         if (newText.isNotEmpty()) {
                             message.text = newText
-                            launch { eventRepository.updateEventMessage(event.id!!, message) }
+                            launch { eventRepository.createOrUpdateEventMessage(event.id!!, message) }
                         }
                         else {
                             throw IllegalArgumentException(EXCEPTION_MESSAGE_NO_TEXT_MESSAGE)
