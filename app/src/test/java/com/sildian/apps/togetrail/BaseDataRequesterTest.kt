@@ -1,6 +1,7 @@
 package com.sildian.apps.togetrail
 
 import com.google.firebase.auth.FirebaseUser
+import com.sildian.apps.togetrail.chat.model.core.Duo
 import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
@@ -55,6 +56,8 @@ open class BaseDataRequesterTest {
         var returnHikerSampleNull = false
         var returnTrailSampleNull = false
         var returnEventSampleNull = false
+        var returnDuoSampleNull = false
+        var returnMessageSampleNull = false
         /*Set it to true to indicate that the object has a photo*/
         var hikerSampleHasPhoto = false
         var trailSampleHasPhoto = false
@@ -75,6 +78,10 @@ open class BaseDataRequesterTest {
         var isHikerHistoryItemDeleted = false
         var isHikerRegisteredToEvent = false
         var isHikerUnregisteredFromEvent = false
+        var isHikerChatUpdated = false
+        var isHikerChatDeleted = false
+        var isHikerMessageSent = false
+        var isHikerMessageDeleted = false
         /*Trail*/
         var isTrailAdded = false
         var isTrailUpdated = false
@@ -127,8 +134,21 @@ open class BaseDataRequesterTest {
             }
         }
 
+        /**Gets a default duo chat**/
+        fun getDuoSample(): Duo? {
+            return when {
+                returnDuoSampleNull -> null
+                else -> Duo(USER_ID, USER_ID)
+            }
+        }
+
         /**Gets a default message sample**/
-        fun getMessageSample(): Message = Message(text = MESSAGE_TEXT, authorId = USER_ID)
+        fun getMessageSample(): Message? {
+            return when {
+                returnMessageSampleNull -> null
+                else -> Message(text = MESSAGE_TEXT, authorId = USER_ID)
+            }
+        }
     }
 
     /**Reset all**/
@@ -141,6 +161,8 @@ open class BaseDataRequesterTest {
         returnHikerSampleNull = false
         returnTrailSampleNull = false
         returnEventSampleNull = false
+        returnDuoSampleNull = false
+        returnMessageSampleNull = false
         hikerSampleHasPhoto = false
         trailSampleHasPhoto = false
         isUserUpdated = false
@@ -155,6 +177,10 @@ open class BaseDataRequesterTest {
         isHikerHistoryItemDeleted = false
         isHikerRegisteredToEvent = false
         isHikerUnregisteredFromEvent = false
+        isHikerChatUpdated = false
+        isHikerChatDeleted = false
+        isHikerMessageSent = false
+        isHikerMessageDeleted = false
         isTrailAdded = false
         isTrailUpdated = false
         isEventAdded = false

@@ -2,6 +2,7 @@ package com.sildian.apps.togetrail.event.model.support
 
 import com.google.firebase.FirebaseException
 import com.sildian.apps.togetrail.BaseDataRequesterTest
+import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import kotlinx.coroutines.async
@@ -606,7 +607,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
             requestShouldFail = true
             launch {
                 try {
-                    eventDataRequester.updateMessage(getEventSample(), getMessageSample(), "Hello")
+                    eventDataRequester.updateMessage(getEventSample(), Message(text = MESSAGE_TEXT, authorId = USER_ID), "Hello")
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: FirebaseException) {
@@ -622,7 +623,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
         runBlocking {
             launch {
                 try {
-                    eventDataRequester.updateMessage(null, getMessageSample(), "Hello")
+                    eventDataRequester.updateMessage(null, Message(text = MESSAGE_TEXT, authorId = USER_ID), "Hello")
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: NullPointerException) {
@@ -640,7 +641,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
             event?.id = null
             launch {
                 try {
-                    eventDataRequester.updateMessage(event, getMessageSample(), "Hello")
+                    eventDataRequester.updateMessage(event, Message(text = MESSAGE_TEXT, authorId = USER_ID), "Hello")
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: IllegalArgumentException) {
@@ -656,7 +657,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
         runBlocking {
             launch {
                 try {
-                    eventDataRequester.updateMessage(getEventSample(), getMessageSample(), "")
+                    eventDataRequester.updateMessage(getEventSample(), Message(text = MESSAGE_TEXT, authorId = USER_ID), "")
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: IllegalArgumentException) {
@@ -670,7 +671,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
     @Test
     fun given_ValidText_when_updateMessage_then_checkMessageIsUpdated() {
         runBlocking {
-            launch { eventDataRequester.updateMessage(getEventSample(), getMessageSample(), "Hello") }.join()
+            launch { eventDataRequester.updateMessage(getEventSample(), Message(text = MESSAGE_TEXT, authorId = USER_ID), "Hello") }.join()
             assertTrue(isEventMessageSent)
         }
     }
@@ -681,7 +682,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
             requestShouldFail = true
             launch {
                 try {
-                    eventDataRequester.deleteMessage(getEventSample(), getMessageSample())
+                    eventDataRequester.deleteMessage(getEventSample(), Message(text = MESSAGE_TEXT, authorId = USER_ID))
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: FirebaseException) {
@@ -697,7 +698,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
         runBlocking {
             launch {
                 try {
-                    eventDataRequester.deleteMessage(null, getMessageSample())
+                    eventDataRequester.deleteMessage(null, Message(text = MESSAGE_TEXT, authorId = USER_ID))
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: NullPointerException) {
@@ -715,7 +716,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
             event?.id = null
             launch {
                 try {
-                    eventDataRequester.deleteMessage(event, getMessageSample())
+                    eventDataRequester.deleteMessage(event, Message(text = MESSAGE_TEXT, authorId = USER_ID))
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: IllegalArgumentException) {
@@ -729,7 +730,7 @@ class EventDataRequesterTest: BaseDataRequesterTest() {
     @Test
     fun given_ValidMessage_when_deleteMessage_then_checkMessageIsDeleted() {
         runBlocking {
-            launch { eventDataRequester.deleteMessage(getEventSample(), getMessageSample()) }.join()
+            launch { eventDataRequester.deleteMessage(getEventSample(), Message(text = MESSAGE_TEXT, authorId = USER_ID)) }.join()
             assertTrue(isEventMessageDeleted)
         }
     }

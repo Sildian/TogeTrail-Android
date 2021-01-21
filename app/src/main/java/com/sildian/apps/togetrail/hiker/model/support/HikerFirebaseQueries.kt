@@ -156,6 +156,16 @@ object HikerFirebaseQueries {
             .orderBy(FieldPath.of("lastMessage", "date"), Query.Direction.DESCENDING)
 
     /**
+     * Gets the chat between the two given users if exist
+     * @param hikerId : the id of the user
+     * @param interlocutorId : the id of the interlocutor
+     * @return a document reference
+     */
+
+    fun getChat(hikerId: String, interlocutorId: String): DocumentReference =
+        getChatSubCollection(hikerId).document(interlocutorId)
+
+    /**
      * Creates or updates the given chat
      * @param hikerId : the id of the hiker
      * @param duo : the chat group
@@ -185,6 +195,18 @@ object HikerFirebaseQueries {
     fun getMessages(hikerId: String, interlocutorId: String): Query =
         getMessageSubCollection(hikerId, interlocutorId)
             .orderBy("date", Query.Direction.DESCENDING)
+
+    /**
+     * Gets the last message for the given hiker and interlocutor
+     * @param hikerId : the id of the hiker
+     * @param interlocutorId : the id of the interlocutor
+     * @return a query
+     */
+
+    fun getLastMessage(hikerId: String, interlocutorId: String): Query =
+        getMessageSubCollection(hikerId, interlocutorId)
+            .orderBy("date", Query.Direction.DESCENDING)
+            .limit(1)
 
     /**
      * Creates or updates the given message

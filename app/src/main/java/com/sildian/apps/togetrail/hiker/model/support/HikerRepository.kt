@@ -207,6 +207,29 @@ class HikerRepository {
     }
 
     /**
+     * Gets the chat between the two given users if exist
+     * @param hikerId : the id of the user
+     * @param interlocutorId : the id of the interlocutor
+     * @return a Duo chat or null if no chat exist between the two users
+     * @throws Exception if the request fails
+     */
+    
+    @Throws(Exception::class)
+    suspend fun getChatBetweenUsers(hikerId: String, interlocutorId: String): Duo? =
+        withContext(Dispatchers.IO) {
+            try {
+                HikerFirebaseQueries
+                    .getChat(hikerId, interlocutorId)
+                    .get()
+                    .await()
+                    .toObject(Duo::class.java)
+            }
+            catch (e: Exception) {
+                throw e
+            }
+        }
+
+    /**
      * Creates or updates the given chat
      * @param hikerId : the id of the hiker
      * @param duo : the chat group
@@ -256,6 +279,29 @@ class HikerRepository {
             }
         }
     }
+
+    /**
+     * Gets the last message for the given hiker and interlocutor
+     * @param hikerId : the id of the hiker
+     * @param interlocutorId : the id of the interlocutor
+     * @return a message or null if no message exist
+     * @throws Exception if the request fails
+     */
+    
+    @Throws(Exception::class)
+    suspend fun getLastHikerMessage(hikerId: String, interlocutorId: String): Message? =
+        withContext(Dispatchers.IO) {
+            try {
+                HikerFirebaseQueries
+                    .getLastMessage(hikerId, interlocutorId)
+                    .get()
+                    .await()
+                    .documents.firstOrNull()?.toObject(Message::class.java)
+            }
+            catch(e: Exception) {
+                throw e
+            }
+        }
 
     /**
      * Creates or updates the given message

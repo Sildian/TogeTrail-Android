@@ -1,6 +1,8 @@
 package com.sildian.apps.togetrail
 
 import com.google.firebase.FirebaseException
+import com.sildian.apps.togetrail.chat.model.core.Duo
+import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
@@ -91,6 +93,72 @@ class HikerRepositoryShadow {
         println("FAKE HikerRepository : Delete attended event")
         if (!BaseDataRequesterTest.requestShouldFail) {
             BaseDataRequesterTest.isHikerUnregisteredFromEvent = true
+        }
+        else {
+            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
+        }
+    }
+
+    @Implementation
+    suspend fun getChatBetweenUsers(hikerId: String, interlocutorId: String): Duo? {
+        println("FAKE HikerRepository : Get chat between users")
+        if (!BaseDataRequesterTest.requestShouldFail) {
+            return BaseDataRequesterTest.getDuoSample()
+        }
+        else {
+            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
+        }
+    }
+
+    @Implementation
+    suspend fun createOrUpdateHikerChat(hikerId: String, duo: Duo) {
+        println("FAKE HikerRepository : Create or update chat")
+        if (!BaseDataRequesterTest.requestShouldFail) {
+            BaseDataRequesterTest.isHikerChatUpdated = true
+        }
+        else {
+            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
+        }
+    }
+
+    @Implementation
+    suspend fun deleteHikerChat(hikerId: String, interlocutorId: String) {
+        println("FAKE HikerRepository : Delete chat")
+        if (!BaseDataRequesterTest.requestShouldFail) {
+            BaseDataRequesterTest.isHikerChatDeleted = true
+        }
+        else {
+            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
+        }
+    }
+
+    @Implementation
+    suspend fun getLastHikerMessage(hikerId: String, interlocutorId: String): Message? {
+        println("FAKE HikerRepository : Get last hiker message")
+        if (!BaseDataRequesterTest.requestShouldFail) {
+            return BaseDataRequesterTest.getMessageSample()
+        }
+        else {
+            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
+        }
+    }
+
+    @Implementation
+    suspend fun createOrUpdateHikerMessage(hikerId: String, interlocutorId: String, message: Message) {
+        println("FAKE HikerRepository : Create of update message")
+        if (!BaseDataRequesterTest.requestShouldFail) {
+            BaseDataRequesterTest.isHikerMessageSent = true
+        }
+        else {
+            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
+        }
+    }
+
+    @Implementation
+    suspend fun deleteHikerMessage(hikerId: String, interlocutorId: String, messageId: String) {
+        println("FAKE HikerRepository : Delete message")
+        if (!BaseDataRequesterTest.requestShouldFail) {
+            BaseDataRequesterTest.isHikerMessageDeleted = true
         }
         else {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)

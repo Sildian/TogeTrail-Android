@@ -2,6 +2,8 @@ package com.sildian.apps.togetrail.hiker.model.support
 
 import android.util.Log
 import com.google.firebase.firestore.DocumentReference
+import com.sildian.apps.togetrail.chat.model.core.Duo
+import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
@@ -28,6 +30,7 @@ class HikerDataRequester {
         /**Exceptions messages**/
         private const val EXCEPTION_MESSAGE_NULL_USER = "Cannot perform the requested operation with a null user"
         private const val EXCEPTION_MESSAGE_NULL_HIKER = "Cannot perform the requested operation with a null hiker"
+        private const val EXCEPTION_MESSAGE_NO_TEXT_MESSAGE = "Cannot perform the requested operation with a message without text"
     }
 
     /************************************Repositories********************************************/
@@ -242,6 +245,143 @@ class HikerDataRequester {
                 }
             }
             catch(e:Exception){
+                throw e
+            }
+        }
+    }
+
+    /**
+     * Sends a message to the given interlocutor
+     * @param interlocutorId : the id of the interlocutor
+     * @param text : the text
+     * @throws IllegalArgumentException if the text is empty
+     * @throws NullPointerException if the current user is null
+     * @throws Exception if the request fails
+     */
+
+    @Throws(Exception::class)
+    suspend fun sendMessage(interlocutorId: String, text: String) {
+        withContext(Dispatchers.IO) {
+            try {
+
+                /*Checks that the current user is not null and that the text is not empty*/
+
+                val user = authRepository.getCurrentUser()
+                if (user != null) {
+                    if (text.isNotEmpty()) {
+
+                        /*If no chat exist between the user and the interlocutor, creates it (in both sides)*/
+
+                        var chatUserToInterlocutor = async { hikerRepository.getChatBetweenUsers(user.uid, interlocutorId) }.await()
+                        var chatInterlocutorToUser = async { hikerRepository.getChatBetweenUsers(interlocutorId, user.uid) }.await()
+                        if (chatUserToInterlocutor == null) {
+                            chatUserToInterlocutor = Duo(interlocutorId, user.uid)
+                            launch { hikerRepository.createOrUpdateHikerChat(user.uid, chatUserToInterlocutor) }.join()
+                        }
+                        if (chatInterlocutorToUser == null) {
+                            chatInterlocutorToUser = Duo(user.uid, interlocutorId)
+                            launch { hikerRepository.createOrUpdateHikerChat(interlocutorId, chatInterlocutorToUser) }.join()
+                        }
+
+                        /*Then creates and sends the message (in both sides)*/
+
+                        val message = Message(
+                            text = text,
+                            authorId = user.uid,
+                            authorName = user.displayName,
+                            authorPhotoUrl = user.photoUrl.toString()
+                        )
+                        launch { hikerRepository.createOrUpdateHikerMessage(user.uid, interlocutorId, message) }
+                        launch { hikerRepository.createOrUpdateHikerMessage(interlocutorId, user.uid, message) }
+
+                        /*And updates the chat with the last message (in both sides)*/
+
+                        chatUserToInterlocutor.lastMessage = message
+                        chatInterlocutorToUser.lastMessage = message
+                        launch { hikerRepository.createOrUpdateHikerChat(user.uid, chatUserToInterlocutor) }.join()
+                        launch { hikerRepository.createOrUpdateHikerChat(interlocutorId, chatInterlocutorToUser) }.join()
+                    }
+                    else {
+                        throw IllegalArgumentException(EXCEPTION_MESSAGE_NO_TEXT_MESSAGE)
+                    }
+                }
+                else {
+                    throw NullPointerException(EXCEPTION_MESSAGE_NULL_USER)
+                }
+            }
+            catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    /**
+     * Deletes a message
+     * @param interlocutorId : the id of the interlocutor
+     * @param message : the message to delete
+     * @throws NullPointerException if the current user is null
+     * @throws Exception if the request fails
+     */
+
+    @Throws(Exception::class)
+    suspend fun deleteMessage(interlocutorId: String, message: Message) {
+        withContext(Dispatchers.IO) {
+            try {
+
+                /*Checks that the current user is not null*/
+
+                val user = authRepository.getCurrentUser()
+                if (user != null) {
+
+                    /*Deletes the message*/
+
+                    launch { hikerRepository.deleteHikerMessage(user.uid, interlocutorId, message.id) }.join()
+
+                    /*Then updates the last message in the chat (or deletes the chat if there is no remaining message)*/
+
+                    val duo = async { hikerRepository.getChatBetweenUsers(user.uid, interlocutorId) }.await()
+                    if (duo != null) {
+                        val lastMessage = async { hikerRepository.getLastHikerMessage(user.uid, interlocutorId) }.await()
+                        if (lastMessage != null) {
+                            duo.lastMessage = lastMessage
+                            duo.lastMessageReadId = lastMessage.id
+                            launch { hikerRepository.createOrUpdateHikerChat(interlocutorId, duo) }
+                        }
+                        else {
+                            launch { hikerRepository.deleteHikerChat(user.uid, interlocutorId) }
+                        }
+                    }
+                }
+                else {
+                    throw NullPointerException(EXCEPTION_MESSAGE_NULL_USER)
+                }
+            }
+            catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    /**
+     * Deletes a chat
+     * @param interlocutorId : the id of the interlocutor
+     * @throws NullPointerException if the current user is null
+     * @throws Exception if the request fails
+     */
+
+    @Throws(Exception::class)
+    suspend fun deleteChat(interlocutorId: String) {
+        withContext(Dispatchers.IO) {
+            try {
+                val user = authRepository.getCurrentUser()
+                if (user != null) {
+                    launch { hikerRepository.deleteHikerChat(user.uid, interlocutorId) }
+                }
+                else {
+                    throw NullPointerException(EXCEPTION_MESSAGE_NULL_USER)
+                }
+            }
+            catch (e: Exception) {
                 throw e
             }
         }

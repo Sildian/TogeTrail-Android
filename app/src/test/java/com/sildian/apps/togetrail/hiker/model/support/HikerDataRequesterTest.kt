@@ -2,6 +2,7 @@ package com.sildian.apps.togetrail.hiker.model.support
 
 import com.google.firebase.FirebaseException
 import com.sildian.apps.togetrail.BaseDataRequesterTest
+import com.sildian.apps.togetrail.chat.model.core.Message
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -299,6 +300,169 @@ class HikerDataRequesterTest: BaseDataRequesterTest() {
             assertTrue(isHikerDeleted)
             assertTrue(isUserAccountDeleted)
             assertNull(CurrentHikerInfo.currentHiker)
+        }
+    }
+
+    @Test
+    fun given_requestFailure_when_sendMessage_then_checkMessageIsNotSent() {
+        runBlocking {
+            requestShouldFail = true
+            launch {
+                try {
+                    hikerDataRequester.sendMessage(USER_ID, MESSAGE_TEXT)
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: FirebaseException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isHikerChatUpdated)
+            assertFalse(isHikerMessageSent)
+        }
+    }
+
+    @Test
+    fun given_nullUser_when_sendMessage_then_checkMessageIsNotSent() {
+        runBlocking {
+            returnUserSampleNull = true
+            launch {
+                try {
+                    hikerDataRequester.sendMessage(USER_ID, MESSAGE_TEXT)
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: NullPointerException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isHikerChatUpdated)
+            assertFalse(isHikerMessageSent)
+        }
+    }
+
+    @Test
+    fun given_emptyText_when_sendMessage_then_checkMessageIsNotSent() {
+        runBlocking {
+            launch {
+                try {
+                    hikerDataRequester.sendMessage(USER_ID, "")
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: IllegalArgumentException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isHikerChatUpdated)
+            assertFalse(isHikerMessageSent)
+        }
+    }
+
+    @Test
+    fun given_validText_when_sendMessage_then_checkMessageIsSent() {
+        runBlocking {
+            launch { hikerDataRequester.sendMessage(USER_ID, MESSAGE_TEXT) }.join()
+            assertTrue(isHikerChatUpdated)
+            assertTrue(isHikerMessageSent)
+        }
+    }
+
+    @Test
+    fun given_requestFailure_when_deleteMessage_then_checkMessageIsNotDeleted() {
+        runBlocking {
+            requestShouldFail = true
+            launch {
+                try {
+                    hikerDataRequester.deleteMessage(USER_ID, Message(text = MESSAGE_TEXT, authorId = USER_ID))
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: FirebaseException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isHikerChatUpdated)
+            assertFalse(isHikerChatDeleted)
+            assertFalse(isHikerMessageDeleted)
+        }
+    }
+
+    @Test
+    fun given_nullUser_when_deleteMessage_then_checkMessageIsNotDeleted() {
+        runBlocking {
+            returnUserSampleNull = true
+            launch {
+                try {
+                    hikerDataRequester.deleteMessage(USER_ID, Message(text = MESSAGE_TEXT, authorId = USER_ID))
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: NullPointerException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isHikerChatUpdated)
+            assertFalse(isHikerChatDeleted)
+            assertFalse(isHikerMessageDeleted)
+        }
+    }
+
+    @Test
+    fun given_messageIsLastChatMessage_when_deleteMessage_then_checkMessageIsDeleted() {
+        runBlocking {
+            launch { hikerDataRequester.deleteMessage(USER_ID, Message(text = MESSAGE_TEXT, authorId = USER_ID)) }.join()
+            assertTrue(isHikerChatUpdated)
+            assertFalse(isHikerChatDeleted)
+            assertTrue(isHikerMessageDeleted)
+        }
+    }
+
+    @Test
+    fun given_messageIsNotChatMessage_when_deleteMessage_then_checkMessageAndCharAreDeleted() {
+        runBlocking {
+            returnMessageSampleNull
+            launch { hikerDataRequester.deleteMessage(USER_ID, Message(text = MESSAGE_TEXT, authorId = USER_ID)) }.join()
+            assertTrue(isHikerChatUpdated)
+            assertFalse(isHikerChatDeleted)
+            assertTrue(isHikerMessageDeleted)
+        }
+    }
+
+    @Test
+    fun given_requestFailure_when_deleteChat_then_checkChatIsNotDeleted() {
+        runBlocking {
+            requestShouldFail = true
+            launch {
+                try {
+                    hikerDataRequester.deleteChat(USER_ID)
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: FirebaseException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isHikerChatDeleted)
+        }
+    }
+
+    @Test
+    fun given_nullUser_when_deleteChat_then_checkChatIsNotDeleted() {
+        runBlocking {
+            returnUserSampleNull = true
+            launch {
+                try {
+                    hikerDataRequester.deleteChat(USER_ID)
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: NullPointerException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isHikerChatDeleted)
+        }
+    }
+
+    @Test
+    fun given_user_when_deleteChat_then_checkChatIsDeleted() {
+        runBlocking {
+            launch { hikerDataRequester.deleteChat(USER_ID) }.join()
+            assertTrue(isHikerChatDeleted)
         }
     }
 }
