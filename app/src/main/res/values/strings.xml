@@ -33,6 +33,7 @@
     <string name="toolbar_trail_poi_info">Point of interest info</string>
     <string name="toolbar_event">Event</string>
     <string name="toolbar_event_select_trails">Select trails</string>
+    <string name="toolbar_chat">Chat</string>
 
     <!-- Navigation drawer events -->
     <string name="navigation_drawer_open">Opening navigation drawer</string>

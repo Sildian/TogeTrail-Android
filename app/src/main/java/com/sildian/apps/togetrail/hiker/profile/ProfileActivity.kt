@@ -4,10 +4,12 @@ import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.chat.chatRoom.ChatActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
 import com.sildian.apps.togetrail.event.detail.EventActivity
+import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.profileEdit.ProfileEditActivity
 import com.sildian.apps.togetrail.trail.map.TrailActivity
 
@@ -58,7 +60,11 @@ class ProfileActivity : BaseActivity() {
             }
             R.id.menu_chat -> {
                 if (item.itemId == R.id.menu_chat_chat) {
-                    //TODO show messages screen
+                    this.hikerId?.let { interlocutorId ->
+                        if (interlocutorId != CurrentHikerInfo.currentHiker?.id) {
+                            startChatActivity(interlocutorId)
+                        }
+                    }
                 }
             }
         }
@@ -140,5 +146,11 @@ class ProfileActivity : BaseActivity() {
         val eventActivityIntent=Intent(this, EventActivity::class.java)
         eventActivityIntent.putExtra(EventActivity.KEY_BUNDLE_EVENT_ID, eventId)
         startActivity(eventActivityIntent)
+    }
+
+    private fun startChatActivity(interlocutorId: String) {
+        val chatActivityIntent = Intent(this, ChatActivity::class.java)
+        chatActivityIntent.putExtra(ChatActivity.KEY_BUNDLE_INTERLOCUTOR_ID, interlocutorId)
+        startActivity(chatActivityIntent)
     }
 }

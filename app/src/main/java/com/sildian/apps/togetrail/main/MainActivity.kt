@@ -25,6 +25,7 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.chat.chatRoom.ChatActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
@@ -157,7 +158,12 @@ class MainActivity :
         when (item.groupId) {
             R.id.menu_chat -> {
                 if (item.itemId == R.id.menu_chat_chat) {
-                    //TODO show messages screen
+                    if (CurrentHikerInfo.currentHiker != null) {
+                        startChatActivity()
+                    }
+                    else {
+                        showAccountNecessaryMessage()
+                    }
                 }
             }
         }
@@ -571,6 +577,11 @@ class MainActivity :
     private fun startLocationSearchActivity(){
         val locationSearchActivity=Intent(this, LocationSearchActivity::class.java)
         startActivityForResult(locationSearchActivity, KEY_REQUEST_LOCATION_SEARCH)
+    }
+
+    private fun startChatActivity() {
+        val chatActivity = Intent(this, ChatActivity::class.java)
+        startActivity(chatActivity)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

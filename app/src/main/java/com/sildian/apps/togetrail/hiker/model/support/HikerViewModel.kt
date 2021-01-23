@@ -202,6 +202,10 @@ class HikerViewModel : BaseViewModel() {
         }
     }
 
+    /**
+     * Sends a message to a given interlocutor
+     */
+
     fun sendMessage(interlocutorId: String, text: String) {
         viewModelScope.launch(this.exceptionHandler) {
             try {
@@ -215,6 +219,10 @@ class HikerViewModel : BaseViewModel() {
         }
     }
 
+    /**
+     * Deletes a message
+     */
+
     fun deleteMessage(interlocutorId: String, message: Message) {
         viewModelScope.launch(this.exceptionHandler) {
             try {
@@ -227,6 +235,10 @@ class HikerViewModel : BaseViewModel() {
             }
         }
     }
+
+    /**
+     * Deletes the existing chat between the user and the given interlocutor
+     */
 
     fun deleteChat(interlocutorId: String) {
         viewModelScope.launch(this.exceptionHandler) {

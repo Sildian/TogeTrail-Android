@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sildian.apps.togetrail">
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -25,8 +24,11 @@
             android:name=".trail.map.TrailRecordService"
             android:enabled="true"
             android:exported="false"
-            android:foregroundServiceType="location"/>
+            android:foregroundServiceType="location" />
 
+        <activity
+            android:name=".chat.chatRoom.ChatActivity"
+            android:configChanges="orientation|screenSize"/>
         <activity
             android:name=".location.search.LocationSearchActivity"
             android:configChanges="orientation|screenSize" />
