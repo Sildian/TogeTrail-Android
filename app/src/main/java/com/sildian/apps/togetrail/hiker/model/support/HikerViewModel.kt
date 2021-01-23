@@ -3,6 +3,7 @@ package com.sildian.apps.togetrail.hiker.model.support
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.common.baseViewModels.BaseViewModel
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -196,6 +197,45 @@ class HikerViewModel : BaseViewModel() {
             }
             catch(e:Exception) {
                 Log.e(TAG, "Failed to delete the user account : ${e.message}")
+                requestFailure.postValue(e)
+            }
+        }
+    }
+
+    fun sendMessage(interlocutorId: String, text: String) {
+        viewModelScope.launch(this.exceptionHandler) {
+            try {
+                launch { hikerDataRequester.sendMessage(interlocutorId, text) }.join()
+                Log.d(TAG, "Successfully sent the message")
+            }
+            catch (e:Exception) {
+                Log.e(TAG, "Failed to send the message : ${e.message}")
+                requestFailure.postValue(e)
+            }
+        }
+    }
+
+    fun deleteMessage(interlocutorId: String, message: Message) {
+        viewModelScope.launch(this.exceptionHandler) {
+            try {
+                launch { hikerDataRequester.deleteMessage(interlocutorId, message) }.join()
+                Log.d(TAG, "Successfully deleted the message")
+            }
+            catch (e:Exception) {
+                Log.e(TAG, "Failed to delete the message : ${e.message}")
+                requestFailure.postValue(e)
+            }
+        }
+    }
+
+    fun deleteChat(interlocutorId: String) {
+        viewModelScope.launch(this.exceptionHandler) {
+            try {
+                launch { hikerDataRequester.deleteChat(interlocutorId) }.join()
+                Log.d(TAG, "Successfully deleted the chat")
+            }
+            catch (e:Exception) {
+                Log.e(TAG, "Failed to delete the chat : ${e.message}")
                 requestFailure.postValue(e)
             }
         }
