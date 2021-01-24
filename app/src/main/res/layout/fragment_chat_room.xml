@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <variable
+            name="chatRoomFragment"
+            type="com.sildian.apps.togetrail.chat.chatRoom.ChatRoomFragment" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".chat.chatRoom.ChatRoomFragment">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragment_chat_room_recycler_view_messages"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:reverseLayout="false"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/fragment_chat_room_layout_write"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/fragment_chat_room_layout_write"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="0dp"
+            app:cardBackgroundColor="@color/colorWhite"
+            app:cardElevation="@dimen/components_elevation"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <EditText
+                    android:id="@+id/fragment_chat_room_text_field_message"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginTop="@dimen/components_margin_medium"
+                    android:layout_marginBottom="@dimen/components_margin_medium"
+                    android:layout_marginStart="@dimen/components_margin_small"
+                    android:layout_marginEnd="@dimen/components_margin_small"
+                    android:textSize="@dimen/text_size_body"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:hint="@string/label_chat_write_message"/>
+
+                <com.google.android.material.button.MaterialButton
+                    style="@style/IconButtonStyle"
+                    android:id="@+id/fragment_chat_room_button_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:icon="@drawable/ic_cancel_message_white"
+                    app:iconTint="@color/colorSecondaryDark"
+                    android:onClick="@{chatRoomFragment::onCancelMessageButtonClick}"/>
+
+                <com.google.android.material.button.MaterialButton
+                    style="@style/IconButtonStyle"
+                    android:id="@+id/fragment_chat_room_button_validate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:icon="@drawable/ic_send_message_white"
+                    app:iconTint="@color/colorSecondaryDark"
+                    android:onClick="@{chatRoomFragment::onValidateMessageButtonClick}"/>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

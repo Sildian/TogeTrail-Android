@@ -194,7 +194,7 @@ object HikerFirebaseQueries {
 
     fun getMessages(hikerId: String, interlocutorId: String): Query =
         getMessageSubCollection(hikerId, interlocutorId)
-            .orderBy("date", Query.Direction.DESCENDING)
+            .orderBy("date", Query.Direction.ASCENDING)
 
     /**
      * Gets the last message for the given hiker and interlocutor

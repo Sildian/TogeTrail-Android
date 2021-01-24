@@ -11,6 +11,8 @@ import kotlinx.android.parcel.Parcelize
 data class Duo (
     val interlocutorId: String = "",
     val userId: String = "",
+    var interlocutorName: String? = null,
+    var interlocutorPhotoUrl: String? = null,
     var lastMessage: Message? = null,
     var lastMessageReadId: String? = null
 )

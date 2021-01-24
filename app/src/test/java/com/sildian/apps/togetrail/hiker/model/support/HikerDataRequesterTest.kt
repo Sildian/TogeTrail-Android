@@ -309,7 +309,7 @@ class HikerDataRequesterTest: BaseDataRequesterTest() {
             requestShouldFail = true
             launch {
                 try {
-                    hikerDataRequester.sendMessage(USER_ID, MESSAGE_TEXT)
+                    hikerDataRequester.sendMessage(getHikerSample(), MESSAGE_TEXT)
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: FirebaseException) {
@@ -327,7 +327,25 @@ class HikerDataRequesterTest: BaseDataRequesterTest() {
             returnUserSampleNull = true
             launch {
                 try {
-                    hikerDataRequester.sendMessage(USER_ID, MESSAGE_TEXT)
+                    hikerDataRequester.sendMessage(getHikerSample(), MESSAGE_TEXT)
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: NullPointerException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isHikerChatUpdated)
+            assertFalse(isHikerMessageSent)
+        }
+    }
+
+    @Test
+    fun given_nullInterlocutor_when_sendMessage_then_checkMessageIsNotSent() {
+        runBlocking {
+            returnHikerSampleNull = true
+            launch {
+                try {
+                    hikerDataRequester.sendMessage(getHikerSample(), MESSAGE_TEXT)
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: NullPointerException) {
@@ -344,7 +362,7 @@ class HikerDataRequesterTest: BaseDataRequesterTest() {
         runBlocking {
             launch {
                 try {
-                    hikerDataRequester.sendMessage(USER_ID, "")
+                    hikerDataRequester.sendMessage(getHikerSample(), "")
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: IllegalArgumentException) {
@@ -359,7 +377,7 @@ class HikerDataRequesterTest: BaseDataRequesterTest() {
     @Test
     fun given_validText_when_sendMessage_then_checkMessageIsSent() {
         runBlocking {
-            launch { hikerDataRequester.sendMessage(USER_ID, MESSAGE_TEXT) }.join()
+            launch { hikerDataRequester.sendMessage(getHikerSample(), MESSAGE_TEXT) }.join()
             assertTrue(isHikerChatUpdated)
             assertTrue(isHikerMessageSent)
         }
@@ -371,7 +389,7 @@ class HikerDataRequesterTest: BaseDataRequesterTest() {
             requestShouldFail = true
             launch {
                 try {
-                    hikerDataRequester.deleteMessage(USER_ID, Message(text = MESSAGE_TEXT, authorId = USER_ID))
+                    hikerDataRequester.deleteMessage(getHikerSample(), Message(text = MESSAGE_TEXT, authorId = USER_ID))
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: FirebaseException) {
@@ -390,7 +408,26 @@ class HikerDataRequesterTest: BaseDataRequesterTest() {
             returnUserSampleNull = true
             launch {
                 try {
-                    hikerDataRequester.deleteMessage(USER_ID, Message(text = MESSAGE_TEXT, authorId = USER_ID))
+                    hikerDataRequester.deleteMessage(getHikerSample(), Message(text = MESSAGE_TEXT, authorId = USER_ID))
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: NullPointerException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isHikerChatUpdated)
+            assertFalse(isHikerChatDeleted)
+            assertFalse(isHikerMessageDeleted)
+        }
+    }
+
+    @Test
+    fun given_nullInterlocutor_when_deleteMessage_then_checkMessageIsNotDeleted() {
+        runBlocking {
+            returnHikerSampleNull = true
+            launch {
+                try {
+                    hikerDataRequester.deleteMessage(getHikerSample(), Message(text = MESSAGE_TEXT, authorId = USER_ID))
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: NullPointerException) {
@@ -406,7 +443,7 @@ class HikerDataRequesterTest: BaseDataRequesterTest() {
     @Test
     fun given_messageIsLastChatMessage_when_deleteMessage_then_checkMessageIsDeleted() {
         runBlocking {
-            launch { hikerDataRequester.deleteMessage(USER_ID, Message(text = MESSAGE_TEXT, authorId = USER_ID)) }.join()
+            launch { hikerDataRequester.deleteMessage(getHikerSample(), Message(text = MESSAGE_TEXT, authorId = USER_ID)) }.join()
             assertTrue(isHikerChatUpdated)
             assertFalse(isHikerChatDeleted)
             assertTrue(isHikerMessageDeleted)
@@ -417,7 +454,7 @@ class HikerDataRequesterTest: BaseDataRequesterTest() {
     fun given_messageIsNotChatMessage_when_deleteMessage_then_checkMessageAndCharAreDeleted() {
         runBlocking {
             returnMessageSampleNull
-            launch { hikerDataRequester.deleteMessage(USER_ID, Message(text = MESSAGE_TEXT, authorId = USER_ID)) }.join()
+            launch { hikerDataRequester.deleteMessage(getHikerSample(), Message(text = MESSAGE_TEXT, authorId = USER_ID)) }.join()
             assertTrue(isHikerChatUpdated)
             assertFalse(isHikerChatDeleted)
             assertTrue(isHikerMessageDeleted)
@@ -430,7 +467,7 @@ class HikerDataRequesterTest: BaseDataRequesterTest() {
             requestShouldFail = true
             launch {
                 try {
-                    hikerDataRequester.deleteChat(USER_ID)
+                    hikerDataRequester.deleteChat(getHikerSample())
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: FirebaseException) {
@@ -447,7 +484,24 @@ class HikerDataRequesterTest: BaseDataRequesterTest() {
             returnUserSampleNull = true
             launch {
                 try {
-                    hikerDataRequester.deleteChat(USER_ID)
+                    hikerDataRequester.deleteChat(getHikerSample())
+                    assertEquals("TRUE", "FALSE")
+                }
+                catch (e: NullPointerException) {
+                    println(e.message)
+                }
+            }.join()
+            assertFalse(isHikerChatDeleted)
+        }
+    }
+
+    @Test
+    fun given_nullHiker_when_deleteChat_then_checkChatIsNotDeleted() {
+        runBlocking {
+            returnHikerSampleNull = true
+            launch {
+                try {
+                    hikerDataRequester.deleteChat(getHikerSample())
                     assertEquals("TRUE", "FALSE")
                 }
                 catch (e: NullPointerException) {
@@ -461,7 +515,7 @@ class HikerDataRequesterTest: BaseDataRequesterTest() {
     @Test
     fun given_user_when_deleteChat_then_checkChatIsDeleted() {
         runBlocking {
-            launch { hikerDataRequester.deleteChat(USER_ID) }.join()
+            launch { hikerDataRequester.deleteChat(getHikerSample()) }.join()
             assertTrue(isHikerChatDeleted)
         }
     }

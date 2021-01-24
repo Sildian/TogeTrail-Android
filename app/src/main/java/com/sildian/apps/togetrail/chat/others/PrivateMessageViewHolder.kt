@@ -6,17 +6,15 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.chat.model.core.Message
-import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
-import kotlinx.android.synthetic.main.item_recycler_view_message.view.*
+import kotlinx.android.synthetic.main.item_recycler_view_private_message.view.*
 
 /*************************************************************************************************
- * Displays a message chat space
+ * Displays a message in a private chat space
  ************************************************************************************************/
 
-class MessageViewHolder(
+class PrivateMessageViewHolder(
     itemView: View,
     private val onAuthorClickListener: OnAuthorClickListener? = null,
-    private val onMessageModificationClickListener: OnMessageModificationClickListener? = null
 )
     : RecyclerView.ViewHolder(itemView)
 {
@@ -26,29 +24,20 @@ class MessageViewHolder(
         fun onAuthorClick(authorId: String)
     }
 
-    interface OnMessageModificationClickListener {
-        fun onMessageEditClick(message: Message)
-        fun onMessageDeleteClick(message: Message)
-    }
-
     /**************************************Data**************************************************/
 
     private lateinit var message: Message
 
     /**********************************UI components*********************************************/
 
-    private val authorPhotoImageView by lazy { itemView.item_recycler_view_message_image_author }
-    private val authorNameAndDateText by lazy { itemView.item_recycler_view_message_text_author_name_and_date }
-    private val editButton by lazy { itemView.item_recycler_view_message_button_edit }
-    private val deleteButton by lazy { itemView.item_recycler_view_message_button_delete }
-    private val messageText by lazy { itemView.item_recycler_view_message_text_message }
+    private val authorPhotoImageView by lazy { itemView.item_recycler_view_private_message_image_author }
+    private val authorNameAndDateText by lazy { itemView.item_recycler_view_private_message_text_author_name_and_date }
+    private val messageText by lazy { itemView.item_recycler_view_private_message_text_message }
 
     /**************************************Init**************************************************/
 
     init {
         this.authorPhotoImageView.setOnClickListener { this.onAuthorClickListener?.onAuthorClick(this.message.authorId) }
-        this.editButton.setOnClickListener { this.onMessageModificationClickListener?.onMessageEditClick(this.message) }
-        this.deleteButton.setOnClickListener { this.onMessageModificationClickListener?.onMessageDeleteClick(this.message) }
     }
 
     /************************************UI update***********************************************/
@@ -56,7 +45,6 @@ class MessageViewHolder(
     fun updateUI(message: Message) {
         this.message = message
         updateAuthorPhotoImageView()
-        updateModificationButtonsVisibility()
         updateTexts()
     }
 
@@ -70,16 +58,6 @@ class MessageViewHolder(
         } else {
             this.authorPhotoImageView.setImageResource(R.drawable.ic_person_black)
         }
-    }
-
-    private fun updateModificationButtonsVisibility() {
-        val visibility = if (this.message.authorId == CurrentHikerInfo.currentHiker?.id) {
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
-        this.editButton.visibility = visibility
-        this.deleteButton.visibility = visibility
     }
 
     private fun updateTexts() {

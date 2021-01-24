@@ -203,13 +203,13 @@ class HikerViewModel : BaseViewModel() {
     }
 
     /**
-     * Sends a message to a given interlocutor
+     * Sends a message to the hiker
      */
 
-    fun sendMessage(interlocutorId: String, text: String) {
+    fun sendMessage(text: String) {
         viewModelScope.launch(this.exceptionHandler) {
             try {
-                launch { hikerDataRequester.sendMessage(interlocutorId, text) }.join()
+                launch { hikerDataRequester.sendMessage(hiker.value, text) }.join()
                 Log.d(TAG, "Successfully sent the message")
             }
             catch (e:Exception) {
@@ -220,13 +220,13 @@ class HikerViewModel : BaseViewModel() {
     }
 
     /**
-     * Deletes a message
+     * Deletes a message with the hiker
      */
 
-    fun deleteMessage(interlocutorId: String, message: Message) {
+    fun deleteMessage(message: Message) {
         viewModelScope.launch(this.exceptionHandler) {
             try {
-                launch { hikerDataRequester.deleteMessage(interlocutorId, message) }.join()
+                launch { hikerDataRequester.deleteMessage(hiker.value, message) }.join()
                 Log.d(TAG, "Successfully deleted the message")
             }
             catch (e:Exception) {
@@ -237,13 +237,13 @@ class HikerViewModel : BaseViewModel() {
     }
 
     /**
-     * Deletes the existing chat between the user and the given interlocutor
+     * Deletes the existing chat between the user and the hiker
      */
 
-    fun deleteChat(interlocutorId: String) {
+    fun deleteChat() {
         viewModelScope.launch(this.exceptionHandler) {
             try {
-                launch { hikerDataRequester.deleteChat(interlocutorId) }.join()
+                launch { hikerDataRequester.deleteChat(hiker.value) }.join()
                 Log.d(TAG, "Successfully deleted the chat")
             }
             catch (e:Exception) {

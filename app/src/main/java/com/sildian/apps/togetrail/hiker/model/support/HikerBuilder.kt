@@ -28,7 +28,7 @@ class HikerBuilder {
         this.id=user.uid
         this.email=user.email
         this.name=user.displayName
-        this.photoUrl=user.photoUrl?.path
+        this.photoUrl=user.photoUrl?.toString()
         return this
     }
 

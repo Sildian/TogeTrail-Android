@@ -5,6 +5,10 @@ import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import kotlinx.android.synthetic.main.activity_chat.*
 
+/*************************************************************************************************
+ * This activity allows the user to chat with other hikers
+ ************************************************************************************************/
+
 class ChatActivity : BaseActivity() {
 
     /**********************************Static items**********************************************/
@@ -40,7 +44,9 @@ class ChatActivity : BaseActivity() {
     private fun readDataFromIntent() {
         if (intent != null && intent.hasExtra(KEY_BUNDLE_INTERLOCUTOR_ID)) {
             val interlocutorId = intent.getStringExtra(KEY_BUNDLE_INTERLOCUTOR_ID)
-            showMessageListFragment(interlocutorId)
+            interlocutorId?.let { id ->
+                showChatRoomFragment(id)
+            }
         }
         else {
             showChatListFragment()
@@ -67,7 +73,9 @@ class ChatActivity : BaseActivity() {
 
     }
 
-    private fun showMessageListFragment(interlocutorId: String) {
-
+    private fun showChatRoomFragment(interlocutorId: String) {
+        this.fragment = ChatRoomFragment(interlocutorId)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.activity_chat_fragment, this.fragment).commit()
     }
 }
