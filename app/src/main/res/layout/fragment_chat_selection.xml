@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="chatSelectionFragment"
+            type="com.sildian.apps.togetrail.chat.chatRoom.ChatSelectionFragment" />
+    </data>
+
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".chat.chatRoom.ChatSelectionFragment">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragment_chat_selection_recycler_view_chats"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:reverseLayout="false"/>
+
+        <TextView
+            android:id="@+id/fragment_chat_selection_text_no_items"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/components_margin_medium"
+            android:layout_gravity="center"
+            android:textSize="@dimen/text_size_title"
+            android:text="@string/message_no_chat"
+            android:visibility="@{chatSelectionFragment.nbChats > 0 ? View.INVISIBLE : View.VISIBLE}"/>
+
+    </FrameLayout>
+
+</layout>

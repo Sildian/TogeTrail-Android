@@ -21,7 +21,7 @@ data class Message (
 {
     var id: String = "" ; private set
 
-    /**The id is composed by the authorId and the timestamp**/
+    /*The id is composed by the authorId and the timestamp*/
 
     init {
         if (this.id.isEmpty()) {
@@ -29,13 +29,9 @@ data class Message (
         }
     }
 
-    /**To string = text**/
-
     override fun toString(): String {
         return this.text
     }
-
-    /**Write default author name and date**/
 
     fun writeAuthorNameAndDate(): String {
         return if (authorName != null) {
@@ -44,8 +40,6 @@ data class Message (
             ""
         }
     }
-
-    /**Write updated author name and date**/
 
     fun writeAuthorNameAndDate(authorName: String): String =
         "$authorName - ${DateUtilities.displayDateAndTimeShort(date)}"

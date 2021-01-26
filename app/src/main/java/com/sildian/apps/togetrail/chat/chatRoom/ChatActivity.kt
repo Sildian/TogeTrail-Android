@@ -27,11 +27,21 @@ class ChatActivity : BaseActivity() {
     /********************************Navigation control******************************************/
 
     override fun onBackPressed() {
-        finishCancel()
+        if (this.fragment is ChatRoomFragment) {
+            showChatSelectionFragment()
+        }
+        else {
+            finishCancel()
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        finishCancel()
+        if (this.fragment is ChatRoomFragment) {
+            showChatSelectionFragment()
+        }
+        else {
+            finishCancel()
+        }
         return true
     }
 
@@ -49,7 +59,7 @@ class ChatActivity : BaseActivity() {
             }
         }
         else {
-            showChatListFragment()
+            showChatSelectionFragment()
         }
     }
 
@@ -69,8 +79,14 @@ class ChatActivity : BaseActivity() {
 
     /******************************Fragments monitoring******************************************/
 
-    private fun showChatListFragment() {
+    fun seeChatRoom(interlocutorId: String) {
+        showChatRoomFragment(interlocutorId)
+    }
 
+    private fun showChatSelectionFragment() {
+        this.fragment = ChatSelectionFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.activity_chat_fragment, this.fragment).commit()
     }
 
     private fun showChatRoomFragment(interlocutorId: String) {

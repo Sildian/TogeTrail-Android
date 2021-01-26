@@ -163,6 +163,8 @@
     <string name="example_location_country">France</string>
     <string name="example_location_region">Savoie</string>
     <!-- Chat -->
+    <string name="example_chat_user_name">Toto</string>
+    <string name="example_chat_date">30/06/2020</string>
     <string name="example_chat_user_name_and_date">Toto - 30/06/2020</string>
     <string name="example_chat_message">Salut les gars ! Ca va ? Contents de faire une rando ensemble. Moi oui, c\'est super cool !</string>
     <!-- Trail -->
@@ -208,6 +210,7 @@
     <string name="message_no_location_available">L\'emplacement n\'est pas disponible</string>
     <string name="message_no_description_available">Aucune description n\'est disponible</string>
     <string name="message_no_photo_available">Aucune photo n\'est disponible</string>
+    <string name="message_no_chat">Aucune conversation en cours</string>
     <!-- Dialogs -->
     <string name="message_wait">Un tout petit peu d\'attente…</string>
     <string name="message_permission_requested_title">Permission requise</string>
