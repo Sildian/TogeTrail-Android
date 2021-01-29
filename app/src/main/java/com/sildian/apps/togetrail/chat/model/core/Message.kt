@@ -35,12 +35,12 @@ data class Message (
 
     fun writeAuthorNameAndDate(): String {
         return if (authorName != null) {
-            "$authorName - ${DateUtilities.displayDateAndTimeShort(date)}"
+            "$authorName - ${DateUtilities.displayDateAndTimeRelative(date)}"
         } else {
             ""
         }
     }
 
     fun writeAuthorNameAndDate(authorName: String): String =
-        "$authorName - ${DateUtilities.displayDateAndTimeShort(date)}"
+        "$authorName - ${DateUtilities.displayDateAndTimeRelative(date)}"
 }

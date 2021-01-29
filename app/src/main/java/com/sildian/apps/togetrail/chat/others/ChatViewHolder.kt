@@ -67,7 +67,7 @@ class ChatViewHolder(
         this.nameText.text = this.chat.interlocutorName?:""
         this.lastMessageText.text = this.chat.lastMessage?.text?:""
         this.lastMessageDateText.text = if (this.chat.lastMessage != null)
-            DateUtilities.displayDateShort(this.chat.lastMessage!!.date)
+            DateUtilities.displayDateAndTimeRelative(this.chat.lastMessage!!.date)
         else
             ""
     }

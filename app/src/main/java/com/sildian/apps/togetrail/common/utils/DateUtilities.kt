@@ -151,6 +151,32 @@ object DateUtilities {
     }
 
     /**
+     * Displays a date relatively to the current date
+     * @param dateToDisplay : the date to display
+     * @param currentDate : optional, system date by default
+     * @return the hour if the two dates are the same day, day and hour otherwise, null if dateToDisplay is after currentDate
+     */
+
+    @JvmStatic
+    fun displayDateAndTimeRelative(dateToDisplay: Date, currentDate: Date = Date()): String? {
+        val dateToDisplayCalendar = Calendar.getInstance()
+        dateToDisplayCalendar.time = dateToDisplay
+        val currentDateCalendar = Calendar.getInstance()
+        currentDateCalendar.time = currentDate
+        return when {
+            dateToDisplay.after(currentDate) ->
+                null
+            dateToDisplayCalendar.get(Calendar.YEAR) == currentDateCalendar.get(Calendar.YEAR)
+                    && dateToDisplayCalendar.get(Calendar.DAY_OF_YEAR) == currentDateCalendar.get(Calendar.DAY_OF_YEAR) ->
+                displayTime(dateToDisplay)
+            dateToDisplay.before(currentDate) ->
+                displayDateAndTimeShort(dateToDisplay)
+            else ->
+                null
+        }
+    }
+
+    /**
      * Gets a date from a string (short format)
      * @param displayedDate : the string
      * @return the date, or null if the string is not recognized

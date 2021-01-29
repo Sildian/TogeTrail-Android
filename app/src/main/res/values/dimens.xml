@@ -12,6 +12,7 @@
     <dimen name="components_size_small">32dp</dimen>
     <dimen name="components_size_medium">64dp</dimen>
     <dimen name="components_size_large">128dp</dimen>
+    <dimen name="components_size_enormous">256dp</dimen>
     <dimen name="components_stroke_small">1dp</dimen>
     <dimen name="components_stroke_medium">2dp</dimen>
     <dimen name="components_stroke_large">4dp</dimen>

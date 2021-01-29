@@ -90,6 +90,32 @@ class DateUtilitiesTest {
     }
 
     @Test
+    fun given_18nov2019at15h30AndCurrentDate18nov2019at14h_when_displayDateAndTimeRelative_then_checkResultIsNull() {
+        Locale.setDefault(Locale.US)
+        val date = DateUtilities.getDateAndTime(2019, 10, 18, 15, 30)
+        val currentDate = DateUtilities.getDateAndTime(2019, 10, 18, 14, 0)
+        assertNull(DateUtilities.displayDateAndTimeRelative(date, currentDate))
+    }
+
+    @Test
+    fun given_18nov2019at15h30AndCurrentDate18nov2019at22h45_when_displayDateAndTimeRelative_then_checkResultDisplayHour() {
+        Locale.setDefault(Locale.US)
+        val date = DateUtilities.getDateAndTime(2019, 10, 18, 15, 30)
+        val currentDate = DateUtilities.getDateAndTime(2019, 10, 18, 22, 45)
+        val expectedResult = "3:30 PM"
+        assertEquals(expectedResult, DateUtilities.displayDateAndTimeRelative(date, currentDate))
+    }
+
+    @Test
+    fun given_18nov2019at15h30AndCurrentDate19nov2019at9h00_when_displayDateAndTimeRelative_then_checkResultDisplayDayAndHour() {
+        Locale.setDefault(Locale.US)
+        val date = DateUtilities.getDateAndTime(2019, 10, 18, 15, 30)
+        val currentDate = DateUtilities.getDateAndTime(2019, 10, 19, 9, 0)
+        val expectedResult = "11/18/19 3:30 PM"
+        assertEquals(expectedResult, DateUtilities.displayDateAndTimeRelative(date, currentDate))
+    }
+
+    @Test
     fun given_18nov2019_when_getDateFromString_then_checkResultIs18nov2019() {
         Locale.setDefault(Locale.US)
         val displayedDate="11/18/19"

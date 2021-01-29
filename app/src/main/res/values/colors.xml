@@ -6,10 +6,12 @@
     <color name="colorSecondary">#ffab00</color>
     <color name="colorSecondaryDark">#c67c00</color>
     <color name="colorSecondaryLight">#ffdd4b</color>
-    <color name="colorSecondaryUltraLight">#ffffb3</color>
+    <color name="colorSecondaryUltraLight">#FFECB3</color>
     <color name="colorAccent">#ffab00</color>
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorGray">#9E9E9E</color>
+    <color name="colorGrayUltraLight">#F5F5F5</color>
     <color name="colorGreen">#388E3C</color>
     <color name="colorPurple">#673ab7</color>
     <color name="colorBlue">#1976d2</color>
