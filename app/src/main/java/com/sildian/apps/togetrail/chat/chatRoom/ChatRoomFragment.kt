@@ -55,6 +55,7 @@ class ChatRoomFragment(private val interlocutorId: String? = null) :
         this.hikerViewModel.hiker.observe(this) { hiker ->
             hiker?.name?.let { hikerName ->
                 (baseActivity as ChatActivity).setToolbarTitle(hikerName)
+                markLastMessageAsRead()
             }
         }
     }
@@ -71,6 +72,10 @@ class ChatRoomFragment(private val interlocutorId: String? = null) :
         this.interlocutorId?.let { interlocutorId ->
             this.hikerViewModel.loadHikerFromDatabaseRealTime(interlocutorId)
         }
+    }
+
+    private fun markLastMessageAsRead() {
+        this.hikerViewModel.markLastMessageAsRead()
     }
 
     /***********************************UI monitoring********************************************/

@@ -1,5 +1,6 @@
 package com.sildian.apps.togetrail.chat.others
 
+import android.graphics.Typeface
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -70,5 +71,17 @@ class ChatViewHolder(
             DateUtilities.displayDateAndTimeRelative(this.chat.lastMessage!!.date)?:""
         else
             ""
+        if (isLastMessageRead()) {
+            this.nameText.typeface = Typeface.DEFAULT
+            this.lastMessageText.typeface = Typeface.DEFAULT
+            this.lastMessageDateText.typeface = Typeface.DEFAULT
+        }
+        else {
+            this.nameText.typeface = Typeface.DEFAULT_BOLD
+            this.lastMessageText.typeface = Typeface.DEFAULT_BOLD
+            this.lastMessageDateText.typeface = Typeface.DEFAULT_BOLD
+        }
     }
+
+    private fun isLastMessageRead(): Boolean = chat.lastMessageReadId == chat.lastMessage?.id
 }

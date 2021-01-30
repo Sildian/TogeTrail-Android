@@ -220,6 +220,23 @@ class HikerViewModel : BaseViewModel() {
     }
 
     /**
+     * Marks the last message as read
+     */
+
+    fun markLastMessageAsRead() {
+        viewModelScope.launch(this.exceptionHandler) {
+            try {
+                launch { hikerDataRequester.markLastMessageAsRead(hiker.value) }.join()
+                Log.d(TAG, "Successfully marked the last message as read")
+            }
+            catch (e: Exception) {
+                Log.e(TAG, "Failed to mark the last message as read : ${e.message}")
+                requestFailure.postValue(e)
+            }
+        }
+    }
+
+    /**
      * Deletes a message with the hiker
      */
 

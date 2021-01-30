@@ -307,12 +307,46 @@ class HikerDataRequester {
                             /*And updates the chat with the last message (in both sides)*/
 
                             chatUserToInterlocutor.lastMessage = message
+                            chatUserToInterlocutor.lastMessageReadId = message.id
                             chatInterlocutorToUser.lastMessage = message
                             launch { hikerRepository.createOrUpdateHikerChat(user.uid, chatUserToInterlocutor) }.join()
                             launch { hikerRepository.createOrUpdateHikerChat(interlocutor.id, chatInterlocutorToUser) }.join()
 
                         } else {
                             throw IllegalArgumentException(EXCEPTION_MESSAGE_NO_TEXT_MESSAGE)
+                        }
+                    }
+                    else {
+                        throw NullPointerException(EXCEPTION_MESSAGE_NULL_HIKER)
+                    }
+                }
+                else {
+                    throw NullPointerException(EXCEPTION_MESSAGE_NULL_USER)
+                }
+            }
+            catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    /**
+     * Marks the last message as read for the chat with the given interlocutor
+     * @param interlocutor : the interlocutor
+     * @throws NullPointerException if the user or the hiker is null
+     * @throws Exception if the request fails
+     */
+
+    suspend fun markLastMessageAsRead(interlocutor: Hiker?) {
+        withContext(Dispatchers.IO) {
+            try {
+                val user = authRepository.getCurrentUser()
+                if (user != null) {
+                    if (interlocutor != null) {
+                        val chat = async { hikerRepository.getChatBetweenUsers(user.uid, interlocutor.id) }.await()
+                        chat?.let {
+                            chat.lastMessageReadId = chat.lastMessage?.id
+                            launch { hikerRepository.createOrUpdateHikerChat(user.uid, chat) }
                         }
                     }
                     else {
