@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.chat.others.PrivateMessageAdapter
+import com.sildian.apps.togetrail.chat.others.PrivateMessageViewHolder
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
@@ -18,7 +19,10 @@ import kotlinx.android.synthetic.main.fragment_chat_room.view.*
  * Displays a chat's content and lets the user read and send messages in the room
  ************************************************************************************************/
 
-class ChatRoomFragment(private val interlocutorId: String? = null) : BaseFragment() {
+class ChatRoomFragment(private val interlocutorId: String? = null) :
+    BaseFragment(),
+    PrivateMessageViewHolder.OnAuthorClickListener
+{
 
     /*****************************************Data***********************************************/
 
@@ -34,6 +38,7 @@ class ChatRoomFragment(private val interlocutorId: String? = null) : BaseFragmen
 
     override fun loadData() {
         initializeData()
+        observeHiker()
         observeRequestFailure()
         loadHiker()
     }
@@ -44,6 +49,14 @@ class ChatRoomFragment(private val interlocutorId: String? = null) : BaseFragmen
             .get(HikerViewModel::class.java)
         this.binding.lifecycleOwner = this
         (this.binding as FragmentChatRoomBinding).chatRoomFragment = this
+    }
+
+    private fun observeHiker() {
+        this.hikerViewModel.hiker.observe(this) { hiker ->
+            hiker?.name?.let { hikerName ->
+                (baseActivity as ChatActivity).setToolbarTitle(hikerName)
+            }
+        }
     }
 
     private fun observeRequestFailure() {
@@ -78,7 +91,7 @@ class ChatRoomFragment(private val interlocutorId: String? = null) : BaseFragmen
                         Message::class.java,
                         HikerFirebaseQueries.getMessages(userId, interlocutorId),
                         this
-                    )
+                    ), this
                 )
                 this.messagesRecyclerView.adapter = this.messagesAdapter
             }
@@ -99,5 +112,11 @@ class ChatRoomFragment(private val interlocutorId: String? = null) : BaseFragmen
                 this.messageTextField.setText("")
             }
         }
+    }
+
+    /*************************************Chat monitoring****************************************/
+
+    override fun onAuthorClick(authorId: String) {
+        (baseActivity as ChatActivity).seeHiker(authorId)
     }
 }

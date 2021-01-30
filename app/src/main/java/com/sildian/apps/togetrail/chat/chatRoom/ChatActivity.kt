@@ -1,8 +1,10 @@
 package com.sildian.apps.togetrail.chat.chatRoom
 
+import android.content.Intent
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
+import com.sildian.apps.togetrail.hiker.profile.ProfileActivity
 import kotlinx.android.synthetic.main.activity_chat.*
 
 /*************************************************************************************************
@@ -77,6 +79,10 @@ class ChatActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
+    fun setToolbarTitle(title: String) {
+        supportActionBar?.title = title
+    }
+
     /******************************Fragments monitoring******************************************/
 
     fun seeChatRoom(interlocutorId: String) {
@@ -84,6 +90,7 @@ class ChatActivity : BaseActivity() {
     }
 
     private fun showChatSelectionFragment() {
+        supportActionBar?.setTitle(R.string.toolbar_chat)
         this.fragment = ChatSelectionFragment()
         supportFragmentManager.beginTransaction()
             .replace(R.id.activity_chat_fragment, this.fragment).commit()
@@ -93,5 +100,19 @@ class ChatActivity : BaseActivity() {
         this.fragment = ChatRoomFragment(interlocutorId)
         supportFragmentManager.beginTransaction()
             .replace(R.id.activity_chat_fragment, this.fragment).commit()
+    }
+
+    /*********************************Hikers monitoring******************************************/
+
+    fun seeHiker(hikerId: String){
+        startProfileActivity(hikerId)
+    }
+
+    /***********************************Navigation***********************************************/
+
+    private fun startProfileActivity(hikerId:String){
+        val profileActivityIntent= Intent(this, ProfileActivity::class.java)
+        profileActivityIntent.putExtra(ProfileActivity.KEY_BUNDLE_HIKER_ID, hikerId)
+        startActivity(profileActivityIntent)
     }
 }
