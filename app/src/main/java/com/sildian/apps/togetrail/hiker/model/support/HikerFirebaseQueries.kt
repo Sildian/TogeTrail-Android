@@ -210,7 +210,7 @@ object HikerFirebaseQueries {
 
     /**
      * Creates or updates the given message
-     * @param hikerId : the if of the hiker
+     * @param hikerId : the id of the hiker
      * @param interlocutorId : the if of the interlocutor
      * @param message : the message
      * @return a task

@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Add possibility to chat with an other user in a private space
 - Add chat space to event screen
 ### Changed
 - Enable trail record when app is on background
