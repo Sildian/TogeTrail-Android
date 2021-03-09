@@ -4,8 +4,6 @@ import android.content.DialogInterface
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.chat.others.MessageWriteDialogFragment
@@ -49,7 +47,6 @@ class EventFragment(private val eventId: String?=null) :
     /**********************************UI component**********************************************/
 
     private val toolbar by lazy {layout.fragment_event_toolbar}
-    private val photoImageView by lazy {layout.fragment_event_image_view_photo}
     private val registeredHikersRecyclerView by lazy {layout.fragment_event_recycler_view_registered_hikers}
     private lateinit var registeredHikersAdapter:HikerPhotoAdapter
     private val attachedTrailsRecyclerView by lazy {layout.fragment_event_recycler_view_attached_trails}
@@ -117,7 +114,6 @@ class EventFragment(private val eventId: String?=null) :
 
     override fun refreshUI() {
         updateToolbar()
-        updatePhotoImageView()
         updateRegisteredHikersRecyclerView()
         updateAttachedTrailsRecyclerView()
         updateMessagesRecyclerView()
@@ -143,18 +139,6 @@ class EventFragment(private val eventId: String?=null) :
     private fun initializeRegistrationLayout(){
         if(AuthRepository().getCurrentUser()==null){
             this.registrationLayout.visibility=View.GONE
-        }
-    }
-
-    private fun updatePhotoImageView(){
-        if(this.eventViewModel.event.value?.mainPhotoUrl!=null) {
-            Glide.with(context!!)
-                .load(this.eventViewModel.event.value?.mainPhotoUrl)
-                .apply(RequestOptions.centerCropTransform())
-                .placeholder(R.drawable.ic_trail_white)
-                .into(this.photoImageView)
-        }else{
-            this.photoImageView.setImageResource(R.drawable.ic_trail_white)
         }
     }
 

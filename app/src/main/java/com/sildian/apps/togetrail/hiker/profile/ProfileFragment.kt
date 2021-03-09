@@ -2,8 +2,6 @@ package com.sildian.apps.togetrail.hiker.profile
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
@@ -32,7 +30,6 @@ class ProfileFragment (private val hikerId: String?)
     /**********************************UI component**********************************************/
 
     private val toolbar by lazy {layout.fragment_profile_toolbar}
-    private val photoImageView by lazy {layout.fragment_profile_image_view_photo}
     private val historyItemsRecyclerView by lazy {layout.fragment_profile_recycler_view_history_items}
     private lateinit var historyItemAdapter: HikerHistoryAdapter
 
@@ -86,21 +83,12 @@ class ProfileFragment (private val hikerId: String?)
     }
 
     override fun refreshUI(){
-        updatePhotoImageView()
         updateHistoryItemsRecyclerView()
     }
 
     private fun initializeToolbar(){
         (activity as ProfileActivity).setSupportActionBar(this.toolbar)
         (activity as ProfileActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    }
-
-    private fun updatePhotoImageView(){
-        Glide.with(this)
-            .load(this.hikerViewModel.hiker.value?.photoUrl)
-            .apply(RequestOptions.circleCropTransform())
-            .placeholder(R.drawable.ic_person_white)
-            .into(this.photoImageView)
     }
 
     private fun updateHistoryItemsRecyclerView(){

@@ -3,6 +3,7 @@
 
     <data>
         <import type="android.view.View"/>
+        <import type="com.bumptech.glide.request.RequestOptions"/>
         <variable
             name="hikerViewModel"
             type="com.sildian.apps.togetrail.hiker.model.support.HikerViewModel" />
@@ -57,7 +58,10 @@
                                 android:layout_height="@dimen/image_size_medium"
                                 android:layout_margin="@dimen/components_margin_medium"
                                 android:contentDescription="@string/example_image_content_description"
-                                app:srcCompat="@drawable/ic_person_white" />
+                                app:srcCompat="@drawable/ic_person_white"
+                                app:imgUrl="@{hikerViewModel.hiker.photoUrl}"
+                                app:imgPlaceHolder="@{@drawable/ic_person_white}"
+                                app:imgOptions="@{RequestOptions.circleCropTransform()}"/>
 
                             <TextView
                                 android:id="@+id/fragment_profile_text_name"

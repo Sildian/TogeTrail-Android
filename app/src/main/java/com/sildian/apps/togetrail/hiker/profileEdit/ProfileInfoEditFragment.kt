@@ -3,8 +3,6 @@ package com.sildian.apps.togetrail.hiker.profileEdit
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseImagePickerFragment
 import com.sildian.apps.togetrail.common.utils.DateUtilities
@@ -30,7 +28,6 @@ class ProfileInfoEditFragment(private val hikerId: String?=null) : BaseImagePick
 
     /**********************************UI component**********************************************/
 
-    private val photoImageView by lazy {layout.fragment_profile_info_edit_image_view_photo}
     private val nameTextFieldLayout by lazy {layout.fragment_profile_info_edit_text_field_layout_name}
     private val nameTextField by lazy {layout.fragment_profile_info_edit_text_field_name}
     private val birthdayTextFieldDropdown by lazy {layout.fragment_profile_info_edit_text_field_dropdown_birthday}
@@ -125,16 +122,7 @@ class ProfileInfoEditFragment(private val hikerId: String?=null) : BaseImagePick
     override fun getAddPhotoBottomSheetId(): Int = R.id.fragment_profile_info_edit_bottom_sheet_add_photo
 
     override fun refreshUI(){
-        updatePhoto()
         updateBirthdayTextFieldDropdown()
-    }
-
-    private fun updatePhoto(){
-        Glide.with(this)
-            .load(this.hikerViewModel.hiker.value?.photoUrl)
-            .apply(RequestOptions.circleCropTransform())
-            .placeholder(R.drawable.ic_person_black)
-            .into(this.photoImageView)
     }
 
     private fun updateBirthdayTextFieldDropdown(){
@@ -168,6 +156,5 @@ class ProfileInfoEditFragment(private val hikerId: String?=null) : BaseImagePick
         this.hikerViewModel.updateImagePathToUpload(filePath)
         this.hikerViewModel.hiker.value?.photoUrl=filePath
         this.hikerViewModel.notifyDataChanged()
-        updatePhoto()
     }
 }

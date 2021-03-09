@@ -1,13 +1,10 @@
 package com.sildian.apps.togetrail.trail.info
 
 import android.view.View
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.databinding.FragmentTrailPoiInfoBinding
 import com.sildian.apps.togetrail.trail.map.BaseTrailMapFragment
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
-import kotlinx.android.synthetic.main.fragment_trail_poi_info.view.*
 
 /*************************************************************************************************
  * Shows information about a point of interest
@@ -23,10 +20,6 @@ class TrailPOIInfoFragment (
     private val isEditable:Boolean=false
 )
     : BaseInfoFragment() {
-
-    /**********************************UI component**********************************************/
-
-    private val photoImageView by lazy {layout.fragment_trail_poi_info_image_view_photo}
 
     /*********************************Data monitoring********************************************/
 
@@ -71,22 +64,6 @@ class TrailPOIInfoFragment (
     override fun getTopViewId(): Int = R.id.fragment_trail_poi_info_image_view_photo
 
     override fun getBottomViewId(): Int = R.id.fragment_trail_poi_info_layout_info
-
-    override fun initializeUI() {
-        refreshUI()
-    }
-
-    override fun refreshUI() {
-        updatePhoto()
-    }
-
-    private fun updatePhoto(){
-        Glide.with(context!!)
-            .load(this.trailViewModel?.trailPointOfInterest?.value?.photoUrl)
-            .apply(RequestOptions.centerCropTransform())
-            .placeholder(R.drawable.ic_trail_black)
-            .into(this.photoImageView)
-    }
 
     @Suppress("UNUSED_PARAMETER")
     fun onSeeButtonClick(view:View) {

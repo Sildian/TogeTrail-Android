@@ -3,6 +3,7 @@
 
     <data>
         <import type="android.view.View"/>
+        <import type="com.bumptech.glide.request.RequestOptions"/>
         <import type="com.sildian.apps.togetrail.common.utils.DateUtilities"/>
         <import type="com.sildian.apps.togetrail.common.utils.MetricsHelper"/>
         <variable
@@ -60,6 +61,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/image_size_large"
                                 app:srcCompat="@drawable/ic_trail_white"
+                                app:imgUrl="@{eventViewModel.event.mainPhotoUrl}"
+                                app:imgPlaceHolder="@{@drawable/ic_trail_white}"
+                                app:imgOptions="@{RequestOptions.centerCropTransform()}"
                                 android:contentDescription="@string/example_image_content_description" />
 
                             <ImageView

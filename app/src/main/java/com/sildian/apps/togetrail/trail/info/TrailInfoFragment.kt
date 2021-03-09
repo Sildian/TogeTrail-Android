@@ -1,8 +1,6 @@
 package com.sildian.apps.togetrail.trail.info
 
 import android.view.View
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.databinding.FragmentTrailInfoBinding
 import com.sildian.apps.togetrail.trail.map.BaseTrailMapFragment
@@ -26,7 +24,6 @@ class TrailInfoFragment(
 
     /**********************************UI component**********************************************/
 
-    private val photoImageView by lazy {layout.fragment_trail_info_image_view_photo}
     private val elevationChartLayout by lazy {layout.fragment_trail_info_layout_chart_elevation}
     private val elevationChart by lazy { layout.fragment_trail_info_chart_elevation }
 
@@ -80,7 +77,6 @@ class TrailInfoFragment(
     }
 
     override fun refreshUI() {
-        updatePhoto()
         updateElevationChart()
     }
 
@@ -91,14 +87,6 @@ class TrailInfoFragment(
         this.elevationChart.xAxis.setDrawLabels(false)
         this.elevationChart.axisRight.setDrawLabels(false)
         this.elevationChart.axisLeft.valueFormatter = ElevationChartGenerator.ElevationValueFormatter(context!!)
-    }
-
-    private fun updatePhoto(){
-        Glide.with(context!!)
-            .load(this.trailViewModel?.trail?.value?.mainPhotoUrl)
-            .apply(RequestOptions.centerCropTransform())
-            .placeholder(R.drawable.ic_trail_black)
-            .into(this.photoImageView)
     }
 
     private fun updateElevationChart() {

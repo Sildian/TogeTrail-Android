@@ -3,6 +3,7 @@
 
     <data>
         <import type="android.view.View"/>
+        <import type="com.bumptech.glide.request.RequestOptions"/>
         <variable
             name="trailInfoEditFragment"
             type="com.sildian.apps.togetrail.trail.infoEdit.TrailInfoEditFragment" />
@@ -130,6 +131,9 @@
                         android:layout_height="@dimen/image_size_large"
                         android:contentDescription="@string/example_image_content_description"
                         app:srcCompat="@drawable/ic_trail_black"
+                        app:imgUrl="@{trailViewModel.trail.mainPhotoUrl}"
+                        app:imgPlaceHolder="@{@drawable/ic_trail_black}"
+                        app:imgOptions="@{RequestOptions.centerCropTransform()}"
                         android:visibility="@{trailViewModel.trail.mainPhotoUrl==null ? View.INVISIBLE : View.VISIBLE}"/>
 
                     <ImageButton

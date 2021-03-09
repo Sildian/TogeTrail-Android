@@ -1,8 +1,6 @@
 package com.sildian.apps.togetrail.trail.infoEdit
 
 import android.view.View
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.sildian.apps.circularsliderlibrary.CircularSlider
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseImagePickerFragment
@@ -39,7 +37,6 @@ class TrailPOIInfoEditFragment(
 
     private val nameTextFieldLayout by lazy {layout.fragment_trail_poi_info_edit_text_field_layout_name}
     private val nameTextField by lazy {layout.fragment_trail_poi_info_edit_text_field_name}
-    private val photoImageView by lazy {layout.fragment_trail_poi_info_edit_image_view_photo}
     private val metricsSlider by lazy {layout.fragment_trail_poi_info_edit_slider_metrics}
     private val elevationText by lazy {layout.fragment_trail_poi_info_edit_text_elevation}
     private val resetMetricsButton by lazy {layout.fragment_trail_poi_info_edit_button_metrics_reset}
@@ -147,7 +144,6 @@ class TrailPOIInfoEditFragment(
     override fun refreshUI() {
         updateMetricsSlider()
         updateElevationText()
-        updatePhoto()
     }
 
     private fun initializeMetricsSlider(){
@@ -170,14 +166,6 @@ class TrailPOIInfoEditFragment(
             updateMetricsSlider(null)
             updateElevation(null)
         }
-    }
-
-    private fun updatePhoto(){
-        Glide.with(context!!)
-            .load(this.trailViewModel?.trailPointOfInterest?.value?.photoUrl)
-            .apply(RequestOptions.centerCropTransform())
-            .placeholder(R.drawable.ic_trail_black)
-            .into(this.photoImageView)
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -225,7 +213,6 @@ class TrailPOIInfoEditFragment(
         this.trailViewModel?.updateImagePathToUpload(true, filePath)
         this.trailViewModel?.trailPointOfInterest?.value?.photoUrl=filePath
         this.trailViewModel?.notifyDataChanged()
-        updatePhoto()
     }
 
     override fun deletePhoto(){
@@ -233,7 +220,6 @@ class TrailPOIInfoEditFragment(
             this.trailViewModel?.updateImagePathToDelete(this.trailViewModel.trailPointOfInterest.value?.photoUrl!!)
             this.trailViewModel?.trailPointOfInterest?.value?.photoUrl = null
             this.trailViewModel?.notifyDataChanged()
-            updatePhoto()
         }
     }
 }

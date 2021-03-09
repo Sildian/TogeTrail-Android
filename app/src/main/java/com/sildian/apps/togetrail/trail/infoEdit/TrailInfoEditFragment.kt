@@ -2,8 +2,6 @@ package com.sildian.apps.togetrail.trail.infoEdit
 
 import android.view.View
 import androidx.core.content.ContextCompat
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.sildian.apps.circularsliderlibrary.CircularSlider
@@ -59,7 +57,6 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel?=null) :
     private val levelTextFieldDropDownLayout by lazy {layout.fragment_trail_info_edit_text_field_dropdown_layout_level}
     private val levelTextFieldDropDown by lazy {layout.fragment_trail_info_edit_text_field_dropdown_level}
     private val loopSwitch by lazy {layout.fragment_trail_info_edit_switch_loop}
-    private val photoImageView by lazy {layout.fragment_trail_info_edit_image_view_photo}
     private val metricsSlider by lazy {layout.fragment_trail_info_edit_slider_metrics}
     private val durationText by lazy {layout.fragment_trail_info_edit_text_duration}
     private val ascentText by lazy {layout.fragment_trail_info_edit_text_ascent}
@@ -209,7 +206,6 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel?=null) :
         updateMaxElevationText()
         updateMinElevationText()
         updateCurrentMetricToSet(METRIC_DURATION)
-        updatePhoto()
     }
 
     private fun updateLevelTextFieldDropDown(){
@@ -340,14 +336,6 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel?=null) :
         }
     }
 
-    private fun updatePhoto(){
-        Glide.with(context!!)
-            .load(this.trailViewModel?.trail?.value?.mainPhotoUrl)
-            .apply(RequestOptions.centerCropTransform())
-            .placeholder(R.drawable.ic_trail_black)
-            .into(this.photoImageView)
-    }
-
     @Suppress("UNUSED_PARAMETER")
     fun onDeletePhotoButtonClick(view:View){
         deletePhoto()
@@ -456,7 +444,6 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel?=null) :
         this.trailViewModel?.updateImagePathToUpload(false, filePath)
         this.trailViewModel?.trail?.value?.mainPhotoUrl=filePath
         this.trailViewModel?.notifyDataChanged()
-        updatePhoto()
     }
 
     override fun deletePhoto(){
@@ -464,7 +451,6 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel?=null) :
             this.trailViewModel?.updateImagePathToDelete(this.trailViewModel.trail.value?.mainPhotoUrl!!)
             this.trailViewModel?.trail?.value?.mainPhotoUrl = null
             this.trailViewModel?.notifyDataChanged()
-            updatePhoto()
         }
     }
 }
