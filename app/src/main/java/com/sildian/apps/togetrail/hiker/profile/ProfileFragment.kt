@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_profile.view.*
 
 class ProfileFragment (private val hikerId: String?)
     : BaseFragment(),
-    HikerHistoryViewHolder.OnHikerHistoryItemClick
+    HikerHistoryAdapter.OnHikerHistoryItemClick
 {
 
     /*****************************************Data***********************************************/

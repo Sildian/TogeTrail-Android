@@ -144,6 +144,11 @@
     <string name="label_event_user_registered">Je participe</string>
     <string name="label_event_registered_hikers_sing">personne participe</string>
     <string name="label_event_registered_hikers_plur">personnes participent</string>
+    <plurals name="label_event_nb_days">
+        <item quantity="one">%d jour</item>
+        <item quantity="other">%d jours</item>
+    </plurals>
+    <!-- TODO remove the days string as it is replaced by plural -->
     <string name="label_event_day">jour</string>
     <string name="label_event_days">jours</string>
     <string name="label_event_list_i_attend">Je participe</string>

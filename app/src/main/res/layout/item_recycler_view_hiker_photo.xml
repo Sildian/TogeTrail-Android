@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ImageView
-    android:id="@+id/item_recycler_view_hiker_photo_image_view"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/image_size_small"
-    android:layout_height="@dimen/image_size_small"
-    android:layout_margin="@dimen/components_margin_small"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:srcCompat="@drawable/ic_person_black"
-    android:contentDescription="@string/example_image_content_description">
+<layout>
 
-</ImageView>
+    <data>
+        <import type="com.bumptech.glide.request.RequestOptions"/>
+        <variable
+            name="hikerPhotoViewHolder"
+            type="com.sildian.apps.togetrail.hiker.others.HikerPhotoAdapter.HikerPhotoViewHolder" />
+        <variable
+            name="hiker"
+            type="com.sildian.apps.togetrail.hiker.model.core.Hiker" />
+    </data>
+
+    <ImageView
+        android:id="@+id/item_recycler_view_hiker_photo_image_view"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="@dimen/image_size_small"
+        android:layout_height="@dimen/image_size_small"
+        android:layout_margin="@dimen/components_margin_small"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:srcCompat="@drawable/ic_person_black"
+        app:imgUrl="@{hiker.photoUrl}"
+        app:imgPlaceHolder="@{@drawable/ic_person_black}"
+        app:imgOptions="@{RequestOptions.circleCropTransform()}"
+        android:onClick="@{hikerPhotoViewHolder::onHikerPhotoImageClick}"
+        android:contentDescription="@string/example_image_content_description">
+
+    </ImageView>
+
+</layout>

@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.chat.others.PrivateMessageAdapter
-import com.sildian.apps.togetrail.chat.others.PrivateMessageViewHolder
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
@@ -21,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_chat_room.view.*
 
 class ChatRoomFragment(private val interlocutorId: String? = null) :
     BaseFragment(),
-    PrivateMessageViewHolder.OnAuthorClickListener
+    PrivateMessageAdapter.OnAuthorClickListener
 {
 
     /*****************************************Data***********************************************/

@@ -9,7 +9,6 @@ import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelp
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
 import com.sildian.apps.togetrail.event.others.EventHorizontalAdapter
-import com.sildian.apps.togetrail.event.others.EventHorizontalViewHolder
 import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
 import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
 import com.sildian.apps.togetrail.main.MainActivity
@@ -22,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_events_list.view.*
 
 class EventsListFragment (private val hikerViewModel: HikerViewModel?=null) :
     BaseFragment(),
-    EventHorizontalViewHolder.OnEventClickListener
+    EventHorizontalAdapter.OnEventClickListener
 {
 
     /**********************************UI component**********************************************/

@@ -16,8 +16,8 @@ import kotlinx.android.synthetic.main.fragment_trail_selection.view.*
 
 class TrailSelectionFragment(private val trailsQuery:Query, private val selectedTrails:List<Trail>) :
     BaseFragment(),
-    TrailSelectionViewHolder.OnTrailSelectListener,
-    TrailSelectionViewHolder.OnTrailClickListener
+    TrailSelectionAdapter.OnTrailSelectListener,
+    TrailSelectionAdapter.OnTrailClickListener
 {
 
     /**********************************UI component**********************************************/

@@ -1,7 +1,11 @@
 package com.sildian.apps.togetrail.common.dataBinding
 
+import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.view.View
+import android.widget.CompoundButton
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -14,8 +18,14 @@ object DataBindingAdapters {
 
     @JvmStatic
     @BindingAdapter("app:srcCompat")
-    fun bindSrcCompat(imageView: ImageView, drawable: Drawable) {
+    fun bindSrcCompat(imageView: ImageView, drawable: Drawable?) {
         imageView.setImageDrawable(drawable)
+    }
+
+    @JvmStatic
+    @BindingAdapter("typeFace")
+    fun bindTypeFace(textView: TextView, typeFace: Typeface?) {
+        textView.typeface = typeFace
     }
 
     @JvmStatic
@@ -31,5 +41,11 @@ object DataBindingAdapters {
         else {
             imageView.setImageDrawable(imgPlaceHolder)
         }
+    }
+
+    @JvmStatic
+    @BindingAdapter("onCheckedChanged")
+    fun bindOnCheckedChanged(compoundButton: CompoundButton, listener: CompoundButton.OnCheckedChangeListener?) {
+        compoundButton.setOnCheckedChangeListener(listener)
     }
 }

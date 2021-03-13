@@ -1,70 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/components_margin_small">
+<layout>
 
-    <ImageView
-        android:id="@+id/item_recycler_view_public_message_image_author"
-        android:layout_width="@dimen/image_size_mini"
-        android:layout_height="@dimen/image_size_mini"
-        android:layout_marginEnd="@dimen/components_margin_small"
-        app:srcCompat="@drawable/ic_person_black"
-        android:contentDescription="@string/example_image_content_description"/>
+    <data>
+        <import type="android.view.View"/>
+        <import type="com.bumptech.glide.request.RequestOptions"/>
+        <variable
+            name="publicMessageViewHolder"
+            type="com.sildian.apps.togetrail.chat.others.PublicMessageAdapter.PublicMessageViewHolder" />
+        <variable
+            name="message"
+            type="com.sildian.apps.togetrail.chat.model.core.Message" />
+        <variable
+            name="messageAuthorIsCurrentUser"
+            type="Boolean" />
+    </data>
 
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/components_margin_medium"
-        android:background="@drawable/shape_corners_round_color_gray_ultra_light"
-        android:gravity="center_vertical">
+        android:layout_margin="@dimen/components_margin_small">
+
+        <ImageView
+            android:id="@+id/item_recycler_view_public_message_image_author"
+            android:layout_width="@dimen/image_size_mini"
+            android:layout_height="@dimen/image_size_mini"
+            android:layout_marginEnd="@dimen/components_margin_small"
+            app:srcCompat="@drawable/ic_person_black"
+            app:imgUrl="@{message.authorPhotoUrl}"
+            app:imgPlaceHolder="@{@drawable/ic_person_black}"
+            app:imgOptions="@{RequestOptions.circleCropTransform()}"
+            android:onClick="@{publicMessageViewHolder::onAuthorPhotoImageClick}"
+            android:contentDescription="@string/example_image_content_description"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
+            android:padding="@dimen/components_margin_medium"
+            android:background="@drawable/shape_corners_round_color_gray_ultra_light"
             android:gravity="center_vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/item_recycler_view_public_message_text_author_name_and_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/text_size_body"
+                    android:textColor="@color/colorBlack"
+                    android:text="@{message.writeAuthorNameAndDate(), default=@string/example_chat_user_name_and_date}"/>
+
+                <com.google.android.material.button.MaterialButton
+                    style="@style/IconButtonStyle"
+                    android:id="@+id/item_recycler_view_public_message_button_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:icon="@drawable/ic_edit_black"
+                    app:iconTint="@color/colorBlack"
+                    android:visibility="@{messageAuthorIsCurrentUser ? View.VISIBLE : View.GONE}"
+                    android:onClick="@{publicMessageViewHolder::onEditButtonClick}"/>
+
+                <com.google.android.material.button.MaterialButton
+                    style="@style/IconButtonStyle"
+                    android:id="@+id/item_recycler_view_public_message_button_delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:icon="@drawable/ic_delete_black"
+                    app:iconTint="@color/colorBlack"
+                    android:visibility="@{messageAuthorIsCurrentUser ? View.VISIBLE : View.GONE}"
+                    android:onClick="@{publicMessageViewHolder::onDeleteButtonClick}"/>
+
+            </LinearLayout>
+
             <TextView
-                android:id="@+id/item_recycler_view_public_message_text_author_name_and_date"
-                android:layout_width="0dp"
+                android:id="@+id/item_recycler_view_public_message_text_message"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="@dimen/text_size_body"
+                android:layout_marginTop="@dimen/components_margin_small"
+                android:textSize="@dimen/text_size_title"
                 android:textColor="@color/colorBlack"
-                android:text="@string/example_chat_user_name_and_date"/>
-
-            <com.google.android.material.button.MaterialButton
-                style="@style/IconButtonStyle"
-                android:id="@+id/item_recycler_view_public_message_button_edit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:icon="@drawable/ic_edit_black"
-                app:iconTint="@color/colorBlack"/>
-
-            <com.google.android.material.button.MaterialButton
-                style="@style/IconButtonStyle"
-                android:id="@+id/item_recycler_view_public_message_button_delete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:icon="@drawable/ic_delete_black"
-                app:iconTint="@color/colorBlack"/>
+                android:text="@{message.toString(), default=@string/example_chat_message}"/>
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/item_recycler_view_public_message_text_message"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/components_margin_small"
-            android:textSize="@dimen/text_size_title"
-            android:textColor="@color/colorBlack"
-            android:text="@string/example_chat_message"/>
-
     </LinearLayout>
 
-</LinearLayout>
+</layout>

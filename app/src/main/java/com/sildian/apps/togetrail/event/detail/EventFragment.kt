@@ -8,7 +8,6 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.chat.others.MessageWriteDialogFragment
 import com.sildian.apps.togetrail.chat.others.PublicMessageAdapter
-import com.sildian.apps.togetrail.chat.others.PublicMessageViewHolder
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
@@ -19,7 +18,6 @@ import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
 import com.sildian.apps.togetrail.event.model.support.EventViewModel
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.others.HikerPhotoAdapter
-import com.sildian.apps.togetrail.hiker.others.HikerPhotoViewHolder
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.others.TrailHorizontalAdapter
 import com.sildian.apps.togetrail.trail.others.TrailHorizontalViewHolder
@@ -32,11 +30,11 @@ import kotlinx.android.synthetic.main.fragment_event.view.*
 
 class EventFragment(private val eventId: String?=null) :
     BaseFragment(),
-    HikerPhotoViewHolder.OnHikerClickListener,
+    HikerPhotoAdapter.OnHikerClickListener,
     HikerPhotoAdapter.OnHikersChangedListener,
     TrailHorizontalViewHolder.OnTrailClickListener,
-    PublicMessageViewHolder.OnAuthorClickListener,
-    PublicMessageViewHolder.OnMessageModificationClickListener,
+    PublicMessageAdapter.OnAuthorClickListener,
+    PublicMessageAdapter.OnMessageModificationClickListener,
     MessageWriteDialogFragment.MessageWriteCallback
 {
 

@@ -1,6 +1,8 @@
 package com.sildian.apps.togetrail.trail.model.core
 
 import android.os.Parcelable
+import androidx.annotation.StringRes
+import com.sildian.apps.togetrail.R
 import kotlinx.android.parcel.Parcelize
 
 /*************************************************************************************************
@@ -8,11 +10,11 @@ import kotlinx.android.parcel.Parcelize
  ************************************************************************************************/
 
 @Parcelize
-enum class TrailLevel (val value:Int) :Parcelable {
-    UNKNOWN(0),
-    EASY(1),
-    MEDIUM(2),
-    HARD(3);
+enum class TrailLevel (val value: Int, @StringRes val textResId: Int) :Parcelable {
+    UNKNOWN(0, R.string.label_trail_level_unknown),
+    EASY(1, R.string.label_trail_level_easy),
+    MEDIUM(2, R.string.label_trail_level_medium),
+    HARD(3, R.string.label_trail_level_hard);
 
     /*********************************Static items***********************************************/
 

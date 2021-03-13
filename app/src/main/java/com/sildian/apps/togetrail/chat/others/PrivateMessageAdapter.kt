@@ -1,12 +1,16 @@
 package com.sildian.apps.togetrail.chat.others
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.chat.model.core.Message
+import com.sildian.apps.togetrail.databinding.ItemRecyclerViewPrivateMessageBinding
+import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 
 /*************************************************************************************************
  * Displays messages in a private chat space
@@ -14,26 +18,23 @@ import com.sildian.apps.togetrail.chat.model.core.Message
 
 class PrivateMessageAdapter(
     options: FirestoreRecyclerOptions<Message>,
-    private val onAuthorClickListener: PrivateMessageViewHolder.OnAuthorClickListener? = null,
+    private val onAuthorClickListener: OnAuthorClickListener? = null,
     private val onMessagesChangedListener: OnMessagesChangedListener? = null
 )
-    : FirestoreRecyclerAdapter<Message, PrivateMessageViewHolder>(options)
+    : FirestoreRecyclerAdapter<Message, PrivateMessageAdapter.PrivateMessageViewHolder>(options)
 {
 
     private var recyclerView: RecyclerView? = null
 
-    interface OnMessagesChangedListener {
-        fun onMessagesChanged()
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PrivateMessageViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.item_recycler_view_private_message, parent, false)
-        return PrivateMessageViewHolder(view, onAuthorClickListener)
+        val binding: ItemRecyclerViewPrivateMessageBinding =
+            DataBindingUtil.inflate(inflater, R.layout.item_recycler_view_private_message, parent, false)
+        return PrivateMessageViewHolder(binding, onAuthorClickListener)
     }
 
     override fun onBindViewHolder(holder: PrivateMessageViewHolder, position: Int, message: Message) {
-        holder.updateUI(message)
+        holder.bind(message)
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -49,5 +50,50 @@ class PrivateMessageAdapter(
             this.recyclerView?.smoothScrollToPosition(itemCount - 1)
         }
         this.onMessagesChangedListener?.onMessagesChanged()
+    }
+
+    /***********************************Callbacks************************************************/
+
+    interface OnMessagesChangedListener {
+        fun onMessagesChanged()
+    }
+
+    interface OnAuthorClickListener {
+        fun onAuthorClick(authorId: String)
+    }
+
+    /***********************************ViewHolder***********************************************/
+
+    class PrivateMessageViewHolder(
+        private val binding: ItemRecyclerViewPrivateMessageBinding,
+        private val onAuthorClickListener: OnAuthorClickListener? = null,
+    )
+        : RecyclerView.ViewHolder(binding.root)
+    {
+
+        /**************************************Data**********************************************/
+
+        private lateinit var message: Message
+        private var messageAuthorIsCurrentUser = false
+
+        /**************************************Init**********************************************/
+
+        init {
+            this.binding.privateMessageViewHolder = this
+        }
+
+        /********************************UI monitoring*******************************************/
+
+        fun bind(message: Message) {
+            this.message = message
+            this.messageAuthorIsCurrentUser = this.message.authorId == CurrentHikerInfo.currentHiker?.id
+            this.binding.message = this.message
+            this.binding.messageAuthorIsCurrentUser = this.messageAuthorIsCurrentUser
+        }
+
+        @Suppress("UNUSED_PARAMETER")
+        fun onAuthorPhotoImageClick(view: View) {
+            this.onAuthorClickListener?.onAuthorClick(this.message.authorId)
+        }
     }
 }

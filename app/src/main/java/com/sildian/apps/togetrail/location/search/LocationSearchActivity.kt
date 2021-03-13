@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.activity_location_search.*
  * Lets the user search for a location using Google Places API
  ************************************************************************************************/
 
-class LocationSearchActivity : BaseActivity(), LocationPredictionViewHolder.OnLocationClickListener {
+class LocationSearchActivity : BaseActivity(), LocationPredictionAdapter.OnLocationClickListener {
 
     /**********************************Static items**********************************************/
 

@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.chat.model.core.Duo
 import com.sildian.apps.togetrail.chat.others.ChatAdapter
-import com.sildian.apps.togetrail.chat.others.ChatViewHolder
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.databinding.FragmentChatSelectionBinding
@@ -16,7 +15,11 @@ import kotlinx.android.synthetic.main.fragment_chat_selection.view.*
  * Displays the current user's list of current chats
  ************************************************************************************************/
 
-class ChatSelectionFragment : BaseFragment(), ChatViewHolder.OnChatClickListener, ChatAdapter.OnChatsChangedListener {
+class ChatSelectionFragment :
+    BaseFragment(),
+    ChatAdapter.OnChatClickListener,
+    ChatAdapter.OnChatsChangedListener
+{
 
     /***************************************Data*************************************************/
 

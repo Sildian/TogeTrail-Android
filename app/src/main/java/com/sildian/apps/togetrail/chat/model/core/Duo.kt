@@ -17,3 +17,8 @@ data class Duo (
     var lastMessageReadId: String? = null
 )
     : Parcelable
+{
+
+    fun isLastMessageRead(): Boolean =
+        lastMessageReadId == lastMessage?.id
+}

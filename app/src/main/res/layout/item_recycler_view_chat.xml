@@ -1,59 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/components_size_medium"
-    android:layout_margin="@dimen/components_margin_small"
-    android:gravity="center_vertical"
-    android:background="?attr/selectableItemBackground">
+<layout>
 
-    <ImageView
-        android:id="@+id/item_recycler_view_chat_image"
-        android:layout_width="@dimen/image_size_small"
-        android:layout_height="@dimen/image_size_small"
-        app:srcCompat="@drawable/ic_person_black"
-        android:contentDescription="@string/example_image_content_description"/>
+    <data>
+        <import type="com.bumptech.glide.request.RequestOptions"/>
+        <import type="android.graphics.Typeface"/>
+        <import type="com.sildian.apps.togetrail.common.utils.DateUtilities"/>
+        <variable
+            name="chatViewHolder"
+            type="com.sildian.apps.togetrail.chat.others.ChatAdapter.ChatViewHolder" />
+        <variable
+            name="chat"
+            type="com.sildian.apps.togetrail.chat.model.core.Duo" />
+        <variable
+            name="date"
+            type="java.util.Date" />
+    </data>
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:layout_marginStart="@dimen/components_margin_medium"
-        android:layout_marginEnd="@dimen/components_margin_medium"
-        android:orientation="vertical"
-        android:gravity="center_vertical">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/components_size_medium"
+        android:layout_margin="@dimen/components_margin_small"
+        android:gravity="center_vertical"
+        android:background="?attr/selectableItemBackground"
+        android:onClick="@{chatViewHolder::onChatClick}">
+
+        <ImageView
+            android:id="@+id/item_recycler_view_chat_image"
+            android:layout_width="@dimen/image_size_small"
+            android:layout_height="@dimen/image_size_small"
+            app:srcCompat="@drawable/ic_person_black"
+            app:imgUrl="@{chat.interlocutorPhotoUrl}"
+            app:imgPlaceHolder="@{@drawable/ic_person_black}"
+            app:imgOptions="@{RequestOptions.circleCropTransform()}"
+            android:contentDescription="@string/example_image_content_description"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:layout_marginStart="@dimen/components_margin_medium"
+            android:layout_marginEnd="@dimen/components_margin_medium"
+            android:orientation="vertical"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/item_recycler_view_chat_text_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_title"
+                android:textColor="@color/colorSecondaryDark"
+                app:typeFace="@{chat.isLastMessageRead() ? Typeface.DEFAULT : Typeface.DEFAULT_BOLD}"
+                android:text="@{chat.interlocutorName, default=@string/example_chat_user_name}"/>
+
+            <TextView
+                android:id="@+id/item_recycler_view_chat_text_last_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/components_margin_small"
+                android:lines="1"
+                android:ellipsize="end"
+                android:textSize="@dimen/text_size_title"
+                android:textColor="@color/colorBlack"
+                app:typeFace="@{chat.isLastMessageRead() ? Typeface.DEFAULT : Typeface.DEFAULT_BOLD}"
+                android:text="@{chat.lastMessage.text, default=@string/example_chat_message}"/>
+
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/item_recycler_view_chat_text_name"
-            android:layout_width="match_parent"
+            android:id="@+id/item_recycler_view_chat_text_last_message_date"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/text_size_title"
-            android:textColor="@color/colorSecondaryDark"
-            android:text="@string/example_chat_user_name"/>
-
-        <TextView
-            android:id="@+id/item_recycler_view_chat_text_last_message"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/components_margin_small"
-            android:lines="1"
-            android:ellipsize="end"
-            android:textSize="@dimen/text_size_title"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_body"
             android:textColor="@color/colorBlack"
-            android:text="@string/example_chat_message"/>
+            app:typeFace="@{chat.isLastMessageRead() ? Typeface.DEFAULT : Typeface.DEFAULT_BOLD}"
+            android:text="@{chat.lastMessage==null ? `` : DateUtilities.displayDateAndTimeRelative(chat.lastMessage.date, date), default=@string/example_chat_date}"/>
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/item_recycler_view_chat_text_last_message_date"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:textSize="@dimen/text_size_body"
-        android:textColor="@color/colorBlack"
-        android:text="@string/example_chat_date"/>
-
-</LinearLayout>
+</layout>
