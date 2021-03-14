@@ -9,6 +9,8 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.sildian.apps.circularsliderlibrary.CircularSlider
+import com.sildian.apps.circularsliderlibrary.ValueFormatter
 
 /*************************************************************************************************
  * Defines specific data binding adapters
@@ -47,5 +49,19 @@ object DataBindingAdapters {
     @BindingAdapter("onCheckedChanged")
     fun bindOnCheckedChanged(compoundButton: CompoundButton, listener: CompoundButton.OnCheckedChangeListener?) {
         compoundButton.setOnCheckedChangeListener(listener)
+    }
+
+    @JvmStatic
+    @BindingAdapter("valueFormatter")
+    fun bindValueFormatter(circularSlider: CircularSlider, valueFormatter: ValueFormatter?) {
+        circularSlider.valueFormatter = valueFormatter
+    }
+
+    @JvmStatic
+    @BindingAdapter("onValueChanged")
+    fun bindOnValueChanged(circularSlider: CircularSlider, listener: CircularSlider.OnValueChangedListener?) {
+        listener?.let {
+            circularSlider.addOnValueChangedListener(listener)
+        }
     }
 }

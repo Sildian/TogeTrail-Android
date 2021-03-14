@@ -1,10 +1,11 @@
 package com.sildian.apps.togetrail.trail.infoEdit
 
 import android.view.View
+import androidx.lifecycle.MutableLiveData
 import com.sildian.apps.circularsliderlibrary.CircularSlider
+import com.sildian.apps.circularsliderlibrary.ValueFormatter
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseImagePickerFragment
-import com.sildian.apps.togetrail.common.utils.MetricsHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.TextFieldHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.ValueFormatters
@@ -18,11 +19,10 @@ import kotlinx.android.synthetic.main.fragment_trail_poi_info_edit.view.*
  ************************************************************************************************/
 
 class TrailPOIInfoEditFragment(
-    private val trailViewModel: TrailViewModel?=null,
-    private val trailPointOfInterestPosition:Int?=null
-) :
-    BaseImagePickerFragment(),
-    CircularSlider.OnValueChangedListener
+    private val trailViewModel: TrailViewModel? = null,
+    private val trailPointOfInterestPosition:Int? = null
+)
+    : BaseImagePickerFragment()
 {
 
     /**********************************Static items**********************************************/
@@ -30,16 +30,18 @@ class TrailPOIInfoEditFragment(
     companion object{
 
         /**Values max**/
-        private const val VALUE_MAX_ALTITUDE=4000       //Max value for an altitude (in meters)
+        private const val VALUE_MAX_ALTITUDE = 4000     //Max value for an altitude (in meters)
     }
+
+    /**************************************Data**************************************************/
+
+    val currentValueFormatter = MutableLiveData<ValueFormatter>(ValueFormatters.AltitudeValueFormatter())
+    val currentMaxValue = MutableLiveData(VALUE_MAX_ALTITUDE)
 
     /**********************************UI component**********************************************/
 
     private val nameTextFieldLayout by lazy {layout.fragment_trail_poi_info_edit_text_field_layout_name}
     private val nameTextField by lazy {layout.fragment_trail_poi_info_edit_text_field_name}
-    private val metricsSlider by lazy {layout.fragment_trail_poi_info_edit_slider_metrics}
-    private val elevationText by lazy {layout.fragment_trail_poi_info_edit_text_elevation}
-    private val resetMetricsButton by lazy {layout.fragment_trail_poi_info_edit_button_metrics_reset}
     private val descriptionTextField by lazy {layout.fragment_trail_poi_info_edit_text_field_description}
     private val messageView by lazy {layout.fragment_trail_poi_info_edit_view_message}
     private val messageAnchorView by lazy {layout.fragment_trail_poi_info_edit_bottom_sheet_add_photo}
@@ -65,6 +67,8 @@ class TrailPOIInfoEditFragment(
         this.binding.lifecycleOwner = this
         (this.binding as FragmentTrailPoiInfoEditBinding).trailPOIInfoEditFragment=this
         (this.binding as FragmentTrailPoiInfoEditBinding).trailViewModel=this.trailViewModel
+        this.currentValueFormatter.value = ValueFormatters.AltitudeValueFormatter()
+        this.currentMaxValue.value = VALUE_MAX_ALTITUDE
     }
 
     private fun observeTrail() {
@@ -101,8 +105,13 @@ class TrailPOIInfoEditFragment(
         }
     }
 
+    private fun setValue(value: Int?) {
+        this.trailViewModel?.trailPointOfInterest?.value?.elevation = value
+        this.trailViewModel?.trailPointOfInterest?.value = this.trailViewModel?.trailPointOfInterest?.value
+    }
+
     override fun saveData() {
-        if(checkDataIsValid()) {
+        if (checkDataIsValid()) {
             if (this.trailViewModel?.trailPointOfInterest?.value != null) {
                 this.trailViewModel.trailPointOfInterest.value?.name = this.nameTextField.text.toString()
                 this.trailViewModel.trailPointOfInterest.value?.description = this.descriptionTextField.text.toString()
@@ -113,9 +122,9 @@ class TrailPOIInfoEditFragment(
     }
 
     override fun checkDataIsValid(): Boolean {
-        if(checkTextFieldsAreNotEmpty()){
+        if (checkTextFieldsAreNotEmpty()) {
             return true
-        }else{
+        } else {
             SnackbarHelper
                 .createSimpleSnackbar(this.messageView, this.messageAnchorView, R.string.message_text_fields_empty)
                 .show()
@@ -123,7 +132,7 @@ class TrailPOIInfoEditFragment(
         return false
     }
 
-    private fun checkTextFieldsAreNotEmpty():Boolean{
+    private fun checkTextFieldsAreNotEmpty(): Boolean {
         return TextFieldHelper.checkTextFieldIsNotEmpty(this.nameTextField, this.nameTextFieldLayout)
     }
 
@@ -135,87 +144,45 @@ class TrailPOIInfoEditFragment(
 
     override fun getAddPhotoBottomSheetId(): Int = R.id.fragment_trail_poi_info_edit_bottom_sheet_add_photo
 
-    override fun initializeUI() {
-        initializeMetricsSlider()
-        initializeResetMetricsButton()
-        refreshUI()
-    }
-
-    override fun refreshUI() {
-        updateMetricsSlider()
-        updateElevationText()
-    }
-
-    private fun initializeMetricsSlider(){
-        this.metricsSlider.addOnValueChangedListener(this)
-    }
-
-    private fun updateMetricsSlider() {
-        val elevation=this.trailViewModel?.trailPointOfInterest?.value?.elevation
-        updateMetricsSlider(elevation)
-    }
-
-    private fun updateElevationText(){
-        val elevation=this.trailViewModel?.trailPointOfInterest?.value?.elevation
-        updateMetricsSlider(elevation)
-        updateElevation(elevation)
-    }
-
-    private fun initializeResetMetricsButton(){
-        this.resetMetricsButton.setOnClickListener {
-            updateMetricsSlider(null)
-            updateElevation(null)
-        }
-    }
-
     @Suppress("UNUSED_PARAMETER")
-    fun onDeletePhotoButtonClick(view:View){
+    fun onDeletePhotoButtonClick(view:View) {
         deletePhoto()
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun onAddPhotoButtonClick(view:View){
+    fun onAddPhotoButtonClick(view:View) {
         expandAddPhotoBottomSheet()
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun onSelectPhotoButtonClick(view:View){
+    fun onMetricsSliderValueChanged(view: CircularSlider, value: Int) {
+        setValue(value)
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun onResetMetricsButtonClick(view: View) {
+        setValue(null)
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun onSelectPhotoButtonClick(view:View) {
         requestWritePermission()
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun onTakePhotoButtonClick(view:View){
+    fun onTakePhotoButtonClick(view:View) {
         requestWriteAndCameraPermission()
-    }
-
-    /***********************************Metrics monitoring***************************************/
-
-    override fun onValueChanged(view: CircularSlider, value: Int) {
-        updateElevation(value)
-    }
-
-    private fun updateMetricsSlider(currentValue:Int?){
-        this.metricsSlider.valueFormatter= ValueFormatters.AltitudeValueFormatter()
-        this.metricsSlider.setMaxValue(VALUE_MAX_ALTITUDE)
-        this.metricsSlider.setCurrentValue(currentValue?:0)
-    }
-
-    private fun updateElevation(elevation:Int?){
-        this.trailViewModel?.trailPointOfInterest?.value?.elevation=elevation
-        val elevationToDisplay=MetricsHelper.displayElevation(
-            context!!, elevation, true, true)
-        this.elevationText.text=elevationToDisplay
     }
 
     /*******************************Photos monitoring********************************************/
 
-    override fun addPhoto(filePath:String){
+    override fun addPhoto(filePath:String) {
         this.trailViewModel?.updateImagePathToUpload(true, filePath)
         this.trailViewModel?.trailPointOfInterest?.value?.photoUrl=filePath
         this.trailViewModel?.notifyDataChanged()
     }
 
-    override fun deletePhoto(){
+    override fun deletePhoto() {
         if(!this.trailViewModel?.trailPointOfInterest?.value?.photoUrl.isNullOrEmpty()) {
             this.trailViewModel?.updateImagePathToDelete(this.trailViewModel.trailPointOfInterest.value?.photoUrl!!)
             this.trailViewModel?.trailPointOfInterest?.value?.photoUrl = null
