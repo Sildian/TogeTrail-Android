@@ -109,7 +109,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/components_margin_medium"
-                            app:srcCompat="@{trailViewModel.trail.level==TrailLevel.EASY ? @drawable/ic_level_easy : trailViewModel.trail.level==TrailLevel.HARD ? @drawable/ic_level_hard : @drawable/ic_level_medium, default=@drawable/ic_level_medium}"
+                            app:srcCompat="@{trailViewModel.trail.level.drawableResId, default=@drawable/ic_level_medium}"
                             android:contentDescription="@string/example_image_content_description"/>
 
                         <TextView
@@ -119,7 +119,7 @@
                             android:layout_margin="@dimen/components_margin_medium"
                             android:gravity="center"
                             android:textColor="@color/colorWhite"
-                            android:text="@{trailViewModel.trail.level==TrailLevel.EASY ? @string/label_trail_level_easy : trailViewModel.trail.level==TrailLevel.MEDIUM ? @string/label_trail_level_medium : trailViewModel.trail.level==TrailLevel.HARD ? @string/label_trail_level_hard : @string/label_trail_level_unknown, default=@string/label_trail_level_medium}" />
+                            android:text="@{trailViewModel.trail.level.textResId, default=@string/label_trail_level_medium}" />
 
                     </LinearLayout>
 

@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.CompoundButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -22,6 +23,14 @@ object DataBindingAdapters {
     @BindingAdapter("app:srcCompat")
     fun bindSrcCompat(imageView: ImageView, drawable: Drawable?) {
         imageView.setImageDrawable(drawable)
+    }
+
+    @JvmStatic
+    @BindingAdapter("app:srcCompat")
+    fun bindSrcCompat(imageView: ImageView, @DrawableRes drawableResId: Int?) {
+        drawableResId?.let { resId ->
+            imageView.setImageResource(resId)
+        }
     }
 
     @JvmStatic
