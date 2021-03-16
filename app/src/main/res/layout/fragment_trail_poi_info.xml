@@ -127,7 +127,7 @@
                         android:layout_marginBottom="@dimen/components_margin_medium"
                         android:layout_marginStart="@dimen/components_margin_medium"
                         android:layout_marginEnd="@dimen/components_margin_medium"
-                        android:text="@{trailViewModel.trailPointOfInterest.description==null ? @string/message_no_description_available : trailViewModel.trailPointOfInterest.description, default=@string/example_trail_poi_description}"/>
+                        android:text="@{trailViewModel.trailPointOfInterest.description==null || trailViewModel.trailPointOfInterest.description.length()==0 ? @string/message_no_description_available : trailViewModel.trailPointOfInterest.description, default=@string/example_trail_poi_description}"/>
 
                 </LinearLayout>
 
@@ -136,6 +136,5 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
-
 
 </layout>
