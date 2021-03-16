@@ -1,121 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".event.list.EventsListFragment">
+<layout>
 
-    <LinearLayout
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".event.list.EventsListFragment">
 
-        <TextView
-            android:id="@+id/fragment_events_list_text_current_research"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/components_margin_medium"
-            android:layout_marginBottom="@dimen/components_margin_small"
-            android:layout_marginStart="@dimen/components_margin_medium"
-            android:layout_marginEnd="@dimen/components_margin_medium"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_size_title"
-            android:textColor="@color/colorSecondaryDark"
-            android:text="@string/label_event_list_current_research"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/fragment_events_list_recycler_view_current_research"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:reverseLayout="false"/>
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/fragment_events_list_text_i_attend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/components_margin_medium"
-            android:layout_marginBottom="@dimen/components_margin_small"
-            android:layout_marginStart="@dimen/components_margin_medium"
-            android:layout_marginEnd="@dimen/components_margin_medium"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_size_title"
-            android:textColor="@color/colorSecondaryDark"
-            android:text="@string/label_event_list_i_attend"/>
+            <TextView
+                android:id="@+id/fragment_events_list_text_current_research"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/components_margin_medium"
+                android:layout_marginBottom="@dimen/components_margin_small"
+                android:layout_marginStart="@dimen/components_margin_medium"
+                android:layout_marginEnd="@dimen/components_margin_medium"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_title"
+                android:textColor="@color/colorSecondaryDark"
+                android:text="@string/label_event_list_current_research"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/fragment_events_list_recycler_view_i_attend"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:reverseLayout="false"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fragment_events_list_recycler_view_current_research"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:reverseLayout="false"/>
 
-        <TextView
-            android:id="@+id/fragment_events_list_text_next_events"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/components_margin_medium"
-            android:layout_marginBottom="@dimen/components_margin_small"
-            android:layout_marginStart="@dimen/components_margin_medium"
-            android:layout_marginEnd="@dimen/components_margin_medium"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_size_title"
-            android:textColor="@color/colorSecondaryDark"
-            android:text="@string/label_event_list_next_events"/>
+            <TextView
+                android:id="@+id/fragment_events_list_text_i_attend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/components_margin_medium"
+                android:layout_marginBottom="@dimen/components_margin_small"
+                android:layout_marginStart="@dimen/components_margin_medium"
+                android:layout_marginEnd="@dimen/components_margin_medium"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_title"
+                android:textColor="@color/colorSecondaryDark"
+                android:text="@string/label_event_list_i_attend"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/fragment_events_list_recycler_view_next_events"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:reverseLayout="false"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fragment_events_list_recycler_view_i_attend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:reverseLayout="false"/>
 
-        <TextView
-            android:id="@+id/fragment_events_list_text_my_events"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/components_margin_medium"
-            android:layout_marginBottom="@dimen/components_margin_small"
-            android:layout_marginStart="@dimen/components_margin_medium"
-            android:layout_marginEnd="@dimen/components_margin_medium"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_size_title"
-            android:textColor="@color/colorSecondaryDark"
-            android:text="@string/label_event_list_my_events"/>
+            <TextView
+                android:id="@+id/fragment_events_list_text_next_events"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/components_margin_medium"
+                android:layout_marginBottom="@dimen/components_margin_small"
+                android:layout_marginStart="@dimen/components_margin_medium"
+                android:layout_marginEnd="@dimen/components_margin_medium"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_title"
+                android:textColor="@color/colorSecondaryDark"
+                android:text="@string/label_event_list_next_events"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/fragment_events_list_recycler_view_my_events"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:reverseLayout="false"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fragment_events_list_recycler_view_next_events"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:reverseLayout="false"/>
 
-        <TextView
-            android:id="@+id/fragment_events_list_text_nearby_home"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/components_margin_medium"
-            android:layout_marginBottom="@dimen/components_margin_small"
-            android:layout_marginStart="@dimen/components_margin_medium"
-            android:layout_marginEnd="@dimen/components_margin_medium"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_size_title"
-            android:textColor="@color/colorSecondaryDark"
-            android:text="@string/label_event_list_nearby_home"/>
+            <TextView
+                android:id="@+id/fragment_events_list_text_my_events"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/components_margin_medium"
+                android:layout_marginBottom="@dimen/components_margin_small"
+                android:layout_marginStart="@dimen/components_margin_medium"
+                android:layout_marginEnd="@dimen/components_margin_medium"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_title"
+                android:textColor="@color/colorSecondaryDark"
+                android:text="@string/label_event_list_my_events"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/fragment_events_list_recycler_view_nearby_home"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:reverseLayout="false"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fragment_events_list_recycler_view_my_events"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:reverseLayout="false"/>
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/fragment_events_list_text_nearby_home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/components_margin_medium"
+                android:layout_marginBottom="@dimen/components_margin_small"
+                android:layout_marginStart="@dimen/components_margin_medium"
+                android:layout_marginEnd="@dimen/components_margin_medium"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_title"
+                android:textColor="@color/colorSecondaryDark"
+                android:text="@string/label_event_list_nearby_home"/>
 
-</ScrollView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fragment_events_list_recycler_view_nearby_home"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:reverseLayout="false"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</layout>

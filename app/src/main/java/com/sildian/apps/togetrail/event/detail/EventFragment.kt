@@ -3,6 +3,7 @@ package com.sildian.apps.togetrail.event.detail
 import android.content.DialogInterface
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProviders
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.chat.model.core.Message
@@ -10,13 +11,13 @@ import com.sildian.apps.togetrail.chat.others.MessageWriteDialogFragment
 import com.sildian.apps.togetrail.chat.others.PublicMessageAdapter
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.databinding.FragmentEventBinding
 import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
 import com.sildian.apps.togetrail.event.model.support.EventViewModel
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
+import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.others.HikerPhotoAdapter
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.others.TrailHorizontalAdapter
@@ -41,6 +42,7 @@ class EventFragment(private val eventId: String?=null) :
     /*****************************************Data***********************************************/
 
     private lateinit var eventViewModel: EventViewModel
+    val isCurrentUserRegistered = MutableLiveData(false)
 
     /**********************************UI component**********************************************/
 
@@ -51,11 +53,6 @@ class EventFragment(private val eventId: String?=null) :
     private lateinit var attachedTrailsAdapter:TrailHorizontalAdapter
     private val messagesRecyclerView by lazy { layout.fragment_event_recycler_view_messages }
     private lateinit var messagesAdapter: PublicMessageAdapter
-    private val sendMessageButton by lazy { layout.fragment_event_button_send_message }
-    private val registrationLayout by lazy {layout.fragment_event_layout_registration}
-    private val registerUserButton by lazy {layout.fragment_event_button_register_user}
-    private val userRegisteredText by lazy {layout.fragment_event_text_user_registered}
-    private val unregisterUserButton by lazy {layout.fragment_event_button_unregister_user}
     private var messageWriteDialogFragment: MessageWriteDialogFragment? = null
 
     /***********************************Data monitoring******************************************/
@@ -71,7 +68,6 @@ class EventFragment(private val eventId: String?=null) :
         this.eventViewModel=ViewModelProviders
             .of(this, ViewModelFactory)
             .get(EventViewModel::class.java)
-        this.binding.lifecycleOwner = this
         (this.binding as FragmentEventBinding).eventFragment = this
         (this.binding as FragmentEventBinding).eventViewModel = this.eventViewModel
     }
@@ -102,12 +98,8 @@ class EventFragment(private val eventId: String?=null) :
 
     override fun getLayoutId(): Int = R.layout.fragment_event
 
-    override fun useDataBinding(): Boolean = true
-
     override fun initializeUI() {
         initializeToolbar()
-        initializeSendMessageButton()
-        initializeRegistrationLayout()
     }
 
     override fun refreshUI() {
@@ -125,18 +117,6 @@ class EventFragment(private val eventId: String?=null) :
     private fun updateToolbar() {
         if (this.eventViewModel.currentUserIsAuthor()) {
             (this.baseActivity as EventActivity).allowEditMenu()
-        }
-    }
-
-    private fun initializeSendMessageButton() {
-        if (AuthRepository().getCurrentUser()==null) {
-            this.sendMessageButton.visibility = View.GONE
-        }
-    }
-
-    private fun initializeRegistrationLayout(){
-        if(AuthRepository().getCurrentUser()==null){
-            this.registrationLayout.visibility=View.GONE
         }
     }
 
@@ -177,21 +157,6 @@ class EventFragment(private val eventId: String?=null) :
         this.messagesRecyclerView.adapter = this.messagesAdapter
     }
 
-    private fun updateUserRegisterItemsVisibility(){
-        val user=AuthRepository().getCurrentUser()
-        val userIsRegistered=
-            this.registeredHikersAdapter.snapshots.firstOrNull { it.id==user?.uid } !=null
-        if(userIsRegistered){
-            this.registerUserButton.visibility=View.GONE
-            this.userRegisteredText.visibility=View.VISIBLE
-            this.unregisterUserButton.visibility=View.VISIBLE
-        }else{
-            this.registerUserButton.visibility=View.VISIBLE
-            this.userRegisteredText.visibility=View.GONE
-            this.unregisterUserButton.visibility=View.GONE
-        }
-    }
-
     @Suppress("UNUSED_PARAMETER")
     fun onSendMessageButtonClick(view: View) {
         this.messageWriteDialogFragment = MessageWriteDialogFragment(this)
@@ -215,7 +180,8 @@ class EventFragment(private val eventId: String?=null) :
     }
 
     override fun onHikersChanged() {
-        updateUserRegisterItemsVisibility()
+        this.isCurrentUserRegistered.value =
+            this.registeredHikersAdapter.snapshots.firstOrNull { it.id == CurrentHikerInfo.currentHiker?.id } != null
     }
 
     /***********************************Trails monitoring****************************************/

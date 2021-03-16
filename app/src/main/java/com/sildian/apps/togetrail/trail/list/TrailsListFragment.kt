@@ -49,8 +49,6 @@ class TrailsListFragment (private val hikerViewModel: HikerViewModel?=null) :
 
     override fun getLayoutId(): Int = R.layout.fragment_trails_list
 
-    override fun useDataBinding(): Boolean = false
-
     override fun initializeUI() {
         updateCurrentResearchTrailsRecyclerView()
         initializeLastAddedTrailsRecyclerView()

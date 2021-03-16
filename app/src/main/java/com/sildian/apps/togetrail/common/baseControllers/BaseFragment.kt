@@ -30,14 +30,10 @@ abstract class BaseFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
-        if(useDataBinding()){
-            AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
-            this.binding= DataBindingUtil.inflate(inflater, getLayoutId(), container, false)
-            this.layout=this.binding.root
-        }
-        else{
-            this.layout= inflater.inflate(getLayoutId(), container, false)
-        }
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
+        this.binding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false)
+        this.binding.lifecycleOwner = this
+        this.layout = this.binding.root
         loadData()
         initializeUI()
         return this.layout
@@ -61,8 +57,6 @@ abstract class BaseFragment : Fragment() {
     /************************************UI monitoring*******************************************/
 
     abstract fun getLayoutId():Int
-
-    abstract fun useDataBinding():Boolean
 
     open fun initializeUI(){}
 

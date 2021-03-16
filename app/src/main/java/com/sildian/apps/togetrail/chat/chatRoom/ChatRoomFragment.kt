@@ -46,7 +46,6 @@ class ChatRoomFragment(private val interlocutorId: String? = null) :
         this.hikerViewModel = ViewModelProviders
             .of(this, ViewModelFactory)
             .get(HikerViewModel::class.java)
-        this.binding.lifecycleOwner = this
         (this.binding as FragmentChatRoomBinding).chatRoomFragment = this
     }
 
@@ -80,8 +79,6 @@ class ChatRoomFragment(private val interlocutorId: String? = null) :
     /***********************************UI monitoring********************************************/
 
     override fun getLayoutId(): Int = R.layout.fragment_chat_room
-
-    override fun useDataBinding(): Boolean = true
 
     override fun initializeUI() {
         initializeMessagesRecyclerView()

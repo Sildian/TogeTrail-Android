@@ -15,6 +15,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationException
 import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
+import com.sildian.apps.togetrail.databinding.FragmentTrailMapRecordBinding
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
 import kotlinx.android.synthetic.main.fragment_trail_map_record.view.*
@@ -32,7 +33,6 @@ class TrailMapRecordFragment(trailViewModel: TrailViewModel)
 
     /**********************************UI component**********************************************/
 
-    private val seeInfoButton by lazy {layout.fragment_trail_map_record_button_info_see}
     private val actionsButtonsLayout by lazy {layout.fragment_trail_map_record_layout_actions_buttons}
     private val addPoiButton by lazy {layout.fragment_trail_map_record_button_poi_add}
     private val playButton by lazy {layout.fragment_trail_map_record_button_play}
@@ -57,11 +57,19 @@ class TrailMapRecordFragment(trailViewModel: TrailViewModel)
         super.onDestroyView()
     }
 
+    /************************************Data monitoring*****************************************/
+
+    override fun loadData() {
+        initializeData()
+    }
+
+    private fun initializeData() {
+        (this.binding as FragmentTrailMapRecordBinding).trailMapRecordFragment = this
+    }
+
     /************************************UI monitoring*******************************************/
 
     override fun getLayoutId(): Int = R.layout.fragment_trail_map_record
-
-    override fun useDataBinding(): Boolean = false
 
     override fun getMapViewId(): Int = R.id.fragment_trail_map_record_map_view
 
@@ -71,52 +79,42 @@ class TrailMapRecordFragment(trailViewModel: TrailViewModel)
 
     override fun enableUI() {
         this.map?.uiSettings?.setAllGesturesEnabled(true)
-        this.addPoiButton.isEnabled=true
-        this.playButton.isEnabled=true
+        this.addPoiButton.isEnabled = true
+        this.playButton.isEnabled = true
     }
 
     override fun disableUI() {
         this.map?.uiSettings?.setAllGesturesEnabled(false)
-        this.addPoiButton.isEnabled=false
-        this.playButton.isEnabled=false
+        this.addPoiButton.isEnabled = false
+        this.playButton.isEnabled = false
     }
 
     override fun getMessageView(): View = this.messageView
 
     override fun getMessageAnchorView(): View? = this.playButton
 
-    override fun initializeUI() {
-        initializeSeeInfoButton()
-        initializeAddPoiButton()
-        initializePlayButton()
-        super.initializeUI()
+    @Suppress("UNUSED_PARAMETER")
+    fun onSeeInfoButtonClick(view: View) {
+        showTrailInfoFragment()
     }
 
-    private fun initializeSeeInfoButton(){
-        this.seeInfoButton.setOnClickListener {
-            showTrailInfoFragment()
-        }
+    @Suppress("UNUSED_PARAMETER")
+    fun onAddPoiButtonClick(view: View) {
+        addTrailPointOfInterest()
     }
 
-    private fun initializeAddPoiButton(){
-        this.addPoiButton.setOnClickListener {
-            addTrailPointOfInterest()
-        }
-    }
-
-    private fun initializePlayButton(){
-        this.playButton.setOnClickListener {
-            if (this.trailRecordService?.isRecording() == true) {
-                stopRecord()
-            } else {
-                startRecord()
-            }
+    @Suppress("UNUSED_PARAMETER")
+    fun onPlayButtonClick(view: View) {
+        if (this.trailRecordService?.isRecording() == true) {
+            stopRecord()
+        } else {
+            startRecord()
         }
     }
 
     override fun revealActionsButtons(){
-        this.actionsButtonsLayout.visibility=View.VISIBLE
-        this.actionsButtonsLayout.layoutAnimation=
+        this.actionsButtonsLayout.visibility = View.VISIBLE
+        this.actionsButtonsLayout.layoutAnimation =
             AnimationUtils.loadLayoutAnimation(context, R.anim.layout_appear_right)
         this.actionsButtonsLayout.animate()
     }

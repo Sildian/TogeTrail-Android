@@ -37,15 +37,12 @@ class ChatSelectionFragment :
     }
 
     private fun initializeData() {
-        this.binding.lifecycleOwner = this
         (this.binding as FragmentChatSelectionBinding).chatSelectionFragment = this
     }
 
     /***********************************UI monitoring********************************************/
 
     override fun getLayoutId(): Int = R.layout.fragment_chat_selection
-
-    override fun useDataBinding(): Boolean = true
 
     override fun initializeUI() {
         initializeChatsRecyclerView()

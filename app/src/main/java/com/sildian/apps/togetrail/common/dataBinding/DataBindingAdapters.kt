@@ -6,10 +6,12 @@ import android.view.View
 import android.widget.CompoundButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.ToggleButton
 import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.sildian.apps.circularsliderlibrary.CircularSlider
 import com.sildian.apps.circularsliderlibrary.ValueFormatter
 
@@ -58,6 +60,14 @@ object DataBindingAdapters {
     @BindingAdapter("onCheckedChanged")
     fun bindOnCheckedChanged(compoundButton: CompoundButton, listener: CompoundButton.OnCheckedChangeListener?) {
         compoundButton.setOnCheckedChangeListener(listener)
+    }
+
+    @JvmStatic
+    @BindingAdapter("onButtonChecked")
+    fun bindOnButtonChecked(toggleGroup: MaterialButtonToggleGroup, listener: MaterialButtonToggleGroup.OnButtonCheckedListener?) {
+        listener?.let {
+            toggleGroup.addOnButtonCheckedListener(listener)
+        }
     }
 
     @JvmStatic

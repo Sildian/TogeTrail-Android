@@ -64,7 +64,6 @@ class TrailPOIInfoEditFragment(
     }
 
     private fun initializeData() {
-        this.binding.lifecycleOwner = this
         (this.binding as FragmentTrailPoiInfoEditBinding).trailPOIInfoEditFragment=this
         (this.binding as FragmentTrailPoiInfoEditBinding).trailViewModel=this.trailViewModel
         this.currentValueFormatter.value = ValueFormatters.AltitudeValueFormatter()
@@ -139,8 +138,6 @@ class TrailPOIInfoEditFragment(
     /***********************************UI monitoring********************************************/
 
     override fun getLayoutId(): Int = R.layout.fragment_trail_poi_info_edit
-
-    override fun useDataBinding(): Boolean = true
 
     override fun getAddPhotoBottomSheetId(): Int = R.id.fragment_trail_poi_info_edit_bottom_sheet_add_photo
 

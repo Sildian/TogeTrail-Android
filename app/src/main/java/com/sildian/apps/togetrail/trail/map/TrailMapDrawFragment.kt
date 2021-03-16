@@ -6,6 +6,7 @@ import android.view.animation.AnimationUtils
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.databinding.FragmentTrailMapDrawBinding
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
 import kotlinx.android.synthetic.main.fragment_trail_map_draw.view.*
@@ -19,17 +20,24 @@ class TrailMapDrawFragment(trailViewModel: TrailViewModel)
 
     /**********************************UI component**********************************************/
 
-    private val seeInfoButton by lazy {layout.fragment_trail_map_draw_button_info_see}
     private val actionsButtonsLayout by lazy {layout.fragment_trail_map_draw_layout_actions_buttons}
     private val removePointButton by lazy {layout.fragment_trail_map_draw_button_point_remove}
     private val addPoiButton by lazy {layout.fragment_trail_map_draw_button_poi_add}
     private val messageView by lazy { layout.fragment_trail_map_draw_view_message }
 
+    /************************************Data monitoring*****************************************/
+
+    override fun loadData() {
+        initializeData()
+    }
+
+    private fun initializeData() {
+        (this.binding as FragmentTrailMapDrawBinding).trailMapDrawFragment = this
+    }
+
     /************************************UI monitoring*******************************************/
 
     override fun getLayoutId(): Int = R.layout.fragment_trail_map_draw
-
-    override fun useDataBinding(): Boolean = false
 
     override fun getMapViewId(): Int = R.id.fragment_trail_map_draw_map_view
 
@@ -39,53 +47,43 @@ class TrailMapDrawFragment(trailViewModel: TrailViewModel)
 
     override fun enableUI() {
         this.map?.uiSettings?.setAllGesturesEnabled(true)
-        this.removePointButton.isEnabled=true
-        this.addPoiButton.isEnabled=true
+        this.removePointButton.isEnabled = true
+        this.addPoiButton.isEnabled = true
     }
 
     override fun disableUI() {
         this.map?.uiSettings?.setAllGesturesEnabled(false)
-        this.removePointButton.isEnabled=false
-        this.addPoiButton.isEnabled=false
+        this.removePointButton.isEnabled = false
+        this.addPoiButton.isEnabled = false
     }
 
     override fun getMessageView(): View = this.messageView
 
     override fun getMessageAnchorView(): View? = null
 
-    override fun initializeUI() {
-        initializeSeeInfoButton()
-        initializeRemovePointButton()
-        initializeAddPoiButton()
-        super.initializeUI()
+    @Suppress("UNUSED_PARAMETER")
+    fun onSeeInfoButtonClick(view: View) {
+        showTrailInfoFragment()
     }
 
-    private fun initializeSeeInfoButton(){
-        this.seeInfoButton.setOnClickListener {
-            showTrailInfoFragment()
-        }
+    @Suppress("UNUSED_PARAMETER")
+    fun onRemovePointButtonClick(view: View) {
+        removeLastTrailPoint()
     }
 
-    private fun initializeRemovePointButton(){
-        this.removePointButton.setOnClickListener {
-            removeLastTrailPoint()
-        }
+    @Suppress("UNUSED_PARAMETER")
+    fun onAddPoiButtonClick(view: View) {
+        addTrailPointOfInterest()
     }
 
-    private fun initializeAddPoiButton(){
-        this.addPoiButton.setOnClickListener {
-            addTrailPointOfInterest()
-        }
-    }
-
-    override fun revealActionsButtons(){
-        this.actionsButtonsLayout.visibility=View.VISIBLE
-        this.actionsButtonsLayout.layoutAnimation=
+    override fun revealActionsButtons() {
+        this.actionsButtonsLayout.visibility = View.VISIBLE
+        this.actionsButtonsLayout.layoutAnimation =
             AnimationUtils.loadLayoutAnimation(context, R.anim.layout_appear_right)
         this.actionsButtonsLayout.animate()
     }
 
-    override fun hideActionsButtons(){
+    override fun hideActionsButtons() {
         val hideAnimation=AnimationUtils.loadAnimation(context, R.anim.vanish_down)
         hideAnimation.setAnimationListener(object:Animation.AnimationListener{
             override fun onAnimationRepeat(anim: Animation?) {

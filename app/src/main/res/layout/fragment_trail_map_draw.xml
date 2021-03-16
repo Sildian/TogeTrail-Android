@@ -1,92 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".trail.map.TrailMapDrawFragment">
+<layout>
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/fragment_trail_map_draw_map_view"
+    <data>
+        <variable
+            name="trailMapDrawFragment"
+            type="com.sildian.apps.togetrail.trail.map.TrailMapDrawFragment" />
+    </data>
+
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".trail.map.TrailMapDrawFragment">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="right"
-        tools:ignore="RtlHardcoded">
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/fragment_trail_map_draw_map_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/IconButtonStyle"
-            android:id="@+id/fragment_trail_map_draw_button_info_see"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/components_margin_small"
-            android:alpha="0.87"
-            app:icon="@drawable/ic_see_white"
-            app:backgroundTint="@color/colorPrimary" />
+            android:orientation="vertical"
+            android:layout_gravity="right"
+            tools:ignore="RtlHardcoded">
 
-    </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                style="@style/IconButtonStyle"
+                android:id="@+id/fragment_trail_map_draw_button_info_see"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/components_margin_small"
+                android:alpha="0.87"
+                app:icon="@drawable/ic_see_white"
+                app:backgroundTint="@color/colorPrimary"
+                android:onClick="@{trailMapDrawFragment::onSeeInfoButtonClick}"/>
 
-    <LinearLayout
-        android:id="@+id/fragment_trail_map_draw_layout_actions_buttons"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="left"
-        android:layoutAnimation="@anim/layout_appear_right"
-        android:visibility="gone"
-        tools:ignore="RtlHardcoded">
+        </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/MapButtonLeftStyle"
-            android:id="@+id/fragment_trail_map_draw_button_point_remove"
+        <LinearLayout
+            android:id="@+id/fragment_trail_map_draw_layout_actions_buttons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/components_margin_large"
-            android:layout_marginBottom="@dimen/components_margin_small"
-            app:icon="@drawable/ic_backspace_white"
-            android:text="@string/button_trail_point_remove" />
+            android:orientation="vertical"
+            android:layout_gravity="left"
+            android:layoutAnimation="@anim/layout_appear_right"
+            android:visibility="gone"
+            tools:ignore="RtlHardcoded">
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/MapButtonLeftStyle"
-            android:id="@+id/fragment_trail_map_draw_button_poi_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/components_margin_small"
-            android:layout_marginBottom="@dimen/components_margin_small"
-            app:icon="@drawable/ic_poi_add_white"
-            android:text="@string/button_trail_poi_add" />
+            <com.google.android.material.button.MaterialButton
+                style="@style/MapButtonLeftStyle"
+                android:id="@+id/fragment_trail_map_draw_button_point_remove"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/components_margin_large"
+                android:layout_marginBottom="@dimen/components_margin_small"
+                app:icon="@drawable/ic_backspace_white"
+                android:text="@string/button_trail_point_remove"
+                android:onClick="@{trailMapDrawFragment::onRemovePointButtonClick}"/>
 
-    </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                style="@style/MapButtonLeftStyle"
+                android:id="@+id/fragment_trail_map_draw_button_poi_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/components_margin_small"
+                android:layout_marginBottom="@dimen/components_margin_small"
+                app:icon="@drawable/ic_poi_add_white"
+                android:text="@string/button_trail_poi_add"
+                android:onClick="@{trailMapDrawFragment::onAddPoiButtonClick}"/>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/fragment_trail_map_draw_view_message"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom">
+        </LinearLayout>
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/fragment_trail_map_draw_bottom_sheet_info"
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/fragment_trail_map_draw_view_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            app:cardBackgroundColor="@color/colorPrimary"
-            app:cardElevation="@dimen/components_elevation"
-            app:cardCornerRadius="0dp"
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-            app:behavior_hideable="true">
+            android:layout_gravity="bottom">
 
-            <FrameLayout
-                android:id="@+id/fragment_trail_map_draw_fragment_info"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/fragment_trail_map_draw_bottom_sheet_info"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                app:cardBackgroundColor="@color/colorPrimary"
+                app:cardElevation="@dimen/components_elevation"
+                app:cardCornerRadius="0dp"
+                app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+                app:behavior_hideable="true">
 
-        </com.google.android.material.card.MaterialCardView>
+                <FrameLayout
+                    android:id="@+id/fragment_trail_map_draw_fragment_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-</FrameLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </FrameLayout>
+
+</layout>

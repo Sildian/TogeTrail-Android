@@ -55,7 +55,6 @@ class ProfileInfoEditFragment(private val hikerId: String?=null) : BaseImagePick
         this.hikerViewModel= ViewModelProviders
             .of(this, ViewModelFactory)
             .get(HikerViewModel::class.java)
-        this.binding.lifecycleOwner = this
         (this.binding as FragmentProfileInfoEditBinding).profileInfoEditFragment = this
         (this.binding as FragmentProfileInfoEditBinding).hikerViewModel = this.hikerViewModel
     }
@@ -116,8 +115,6 @@ class ProfileInfoEditFragment(private val hikerId: String?=null) : BaseImagePick
     /***********************************UI monitoring********************************************/
 
     override fun getLayoutId(): Int = R.layout.fragment_profile_info_edit
-
-    override fun useDataBinding(): Boolean = true
 
     override fun getAddPhotoBottomSheetId(): Int = R.id.fragment_profile_info_edit_bottom_sheet_add_photo
 

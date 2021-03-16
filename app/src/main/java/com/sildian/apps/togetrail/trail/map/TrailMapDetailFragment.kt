@@ -5,6 +5,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.databinding.FragmentTrailMapDetailBinding
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
@@ -20,14 +21,21 @@ class TrailMapDetailFragment(trailViewModel: TrailViewModel, isEditable:Boolean=
 
     /************************************UI components*******************************************/
 
-    private val seeInfoButton by lazy {layout.fragment_trail_map_detail_button_info_see}
     private val messageView by lazy { layout.fragment_trail_map_detail_view_message }
+
+    /************************************Data monitoring*****************************************/
+
+    override fun loadData() {
+        initializeData()
+    }
+
+    private fun initializeData() {
+        (this.binding as FragmentTrailMapDetailBinding).trailMapDetailFragment = this
+    }
 
     /************************************UI monitoring*******************************************/
 
     override fun getLayoutId(): Int = R.layout.fragment_trail_map_detail
-
-    override fun useDataBinding(): Boolean = false
 
     override fun getMapViewId(): Int = R.id.fragment_trail_map_detail_map_view
 
@@ -47,14 +55,9 @@ class TrailMapDetailFragment(trailViewModel: TrailViewModel, isEditable:Boolean=
 
     override fun getMessageAnchorView(): View? = null
 
-    override fun initializeUI() {
-        initializeSeeInfoButton()
-    }
-
-    private fun initializeSeeInfoButton(){
-        this.seeInfoButton.setOnClickListener {
-            showTrailInfoFragment()
-        }
+    @Suppress("UNUSED_PARAMETER")
+    fun onSeeInfoButtonClick(view: View) {
+        showTrailInfoFragment()
     }
 
     /***********************************Map monitoring*******************************************/

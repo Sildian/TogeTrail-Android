@@ -33,7 +33,6 @@ class TrailPOIInfoFragment (
         this.trailPointOfInterestPosition?.let { position ->
             this.trailViewModel?.watchPointOfInterest(position)
         }
-        this.binding.lifecycleOwner = this
         (this.binding as FragmentTrailPoiInfoBinding).trailPOIInfoFragment = this
         (this.binding as FragmentTrailPoiInfoBinding).trailViewModel = this.trailViewModel
         (this.binding as FragmentTrailPoiInfoBinding).isEditable = this.isEditable
@@ -58,8 +57,6 @@ class TrailPOIInfoFragment (
     /***********************************UI monitoring********************************************/
 
     override fun getLayoutId(): Int = R.layout.fragment_trail_poi_info
-
-    override fun useDataBinding(): Boolean = true
 
     override fun getTopViewId(): Int = R.id.fragment_trail_poi_info_image_view_photo
 

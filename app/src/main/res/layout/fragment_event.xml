@@ -6,6 +6,7 @@
         <import type="com.bumptech.glide.request.RequestOptions"/>
         <import type="com.sildian.apps.togetrail.common.utils.DateUtilities"/>
         <import type="com.sildian.apps.togetrail.common.utils.MetricsHelper"/>
+        <import type="com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo"/>
         <variable
             name="eventFragment"
             type="com.sildian.apps.togetrail.event.detail.EventFragment" />
@@ -255,6 +256,7 @@
                             app:icon="@drawable/ic_message_white"
                             app:iconGravity="textStart"
                             app:iconPadding="@dimen/components_margin_small"
+                            android:visibility="@{CurrentHikerInfo.INSTANCE.currentHiker==null ? View.GONE : View.VISIBLE}"
                             android:onClick="@{eventFragment::onSendMessageButtonClick}"/>
 
                     </LinearLayout>
@@ -271,7 +273,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:cardCornerRadius="0dp"
-                app:cardElevation="@dimen/components_elevation">
+                app:cardElevation="@dimen/components_elevation"
+                android:visibility="@{CurrentHikerInfo.INSTANCE.currentHiker==null ? View.GONE : View.VISIBLE}">
 
                 <com.google.android.material.button.MaterialButton
                     style="@style/ClassicButtonStyle"
@@ -283,6 +286,7 @@
                     android:layout_marginStart="@dimen/components_margin_medium"
                     android:layout_marginEnd="@dimen/components_margin_medium"
                     android:text="@string/button_event_register_user"
+                    android:visibility="@{eventFragment.isCurrentUserRegistered() ? View.GONE : View.VISIBLE}"
                     android:onClick="@{eventFragment::onRegisterUserButtonClick}"/>
 
                 <LinearLayout
@@ -303,7 +307,7 @@
                         android:drawablePadding="@dimen/components_margin_small"
                         android:textColor="@color/colorBlack"
                         android:text="@string/label_event_user_registered"
-                        android:visibility="gone"/>
+                        android:visibility="@{eventFragment.isCurrentUserRegistered() ? View.VISIBLE : View.GONE}"/>
 
                     <com.google.android.material.button.MaterialButton
                         style="@style/ClassicButtonStyle"
@@ -315,7 +319,7 @@
                         android:layout_marginStart="@dimen/components_margin_medium"
                         android:layout_marginEnd="@dimen/components_margin_medium"
                         android:text="@string/button_event_unregister_user"
-                        android:visibility="gone"
+                        android:visibility="@{eventFragment.isCurrentUserRegistered() ? View.VISIBLE : View.GONE}"
                         android:onClick="@{eventFragment::onUnregisterUserButtonClick}"/>
 
                 </LinearLayout>

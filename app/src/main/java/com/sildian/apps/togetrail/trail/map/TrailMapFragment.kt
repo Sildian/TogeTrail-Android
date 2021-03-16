@@ -16,11 +16,13 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.utils.MapMarkersUtilities
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
+import com.sildian.apps.togetrail.databinding.FragmentTrailMapBinding
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.support.EventsViewModel
 import com.sildian.apps.togetrail.main.MainActivity
@@ -80,6 +82,7 @@ class TrailMapFragment :
         this.eventsViewModel= ViewModelProviders
             .of(this, ViewModelFactory)
             .get(EventsViewModel::class.java)
+        (this.binding as FragmentTrailMapBinding).trailMapFragment = this
     }
 
     private fun observeTrails() {
@@ -146,8 +149,6 @@ class TrailMapFragment :
 
     override fun getLayoutId(): Int = R.layout.fragment_trail_map
 
-    override fun useDataBinding(): Boolean = false
-
     override fun getMapViewId(): Int = R.id.fragment_trail_map_map_view
 
     override fun getInfoBottomSheetId(): Int = R.id.fragment_trail_map_bottom_sheet_info
@@ -156,57 +157,49 @@ class TrailMapFragment :
 
     override fun enableUI() {
         this.map?.uiSettings?.setAllGesturesEnabled(true)
-        this.searchButton.isEnabled=true
-        this.filterToggle.isEnabled=true
+        this.searchButton.isEnabled = true
+        this.filterToggle.isEnabled = true
     }
 
     override fun disableUI() {
         this.map?.uiSettings?.setAllGesturesEnabled(false)
-        this.searchButton.isEnabled=false
-        this.filterToggle.isEnabled=false
+        this.searchButton.isEnabled = false
+        this.filterToggle.isEnabled = false
     }
 
     override fun getMessageView(): View = this.messageView
 
     override fun getMessageAnchorView(): View? = null
 
-    override fun initializeUI() {
-        initializeSearchButton()
-        initializeFilterToggle()
-    }
-
-    private fun initializeSearchButton(){
-        this.searchButton.setOnClickListener {
-            val point=this.map?.cameraPosition?.target
-            if(point!=null) {
-                (activity as MainActivity).setQueriesToSearchAroundPoint(point)
-                if(this.showTrails) {
-                    loadTrails()
-                }
-                if(this.showEvents) {
-                    loadEvents()
-                }
+    @Suppress("UNUSED_PARAMETER")
+    fun onSearchButtonClick(view: View) {
+        val point = this.map?.cameraPosition?.target
+        if (point != null) {
+            (activity as MainActivity).setQueriesToSearchAroundPoint(point)
+            if (this.showTrails) {
+                loadTrails()
+            }
+            if (this.showEvents) {
+                loadEvents()
             }
         }
     }
 
-    @Suppress("UNUSED_ANONYMOUS_PARAMETER")
-    private fun initializeFilterToggle(){
-        this.filterToggle.addOnButtonCheckedListener { group, checkedId, isChecked ->
-            when(checkedId){
-                R.id.fragment_trail_map_toggle_filter_trails ->
-                    if(isChecked) {
-                        this.showTrails=true
-                        this.showEvents=false
-                        loadTrails()
-                    }
-                R.id.fragment_trail_map_toggle_filter_events ->
-                    if(isChecked) {
-                        this.showTrails=false
-                        this.showEvents=true
-                        loadEvents()
-                    }
-            }
+    @Suppress("UNUSED_PARAMETER")
+    fun onFilterToggleButtonChecked(group: MaterialButtonToggleGroup, checkedId: Int, isChecked: Boolean) {
+        when (checkedId) {
+            R.id.fragment_trail_map_toggle_filter_trails ->
+                if (isChecked) {
+                    this.showTrails = true
+                    this.showEvents = false
+                    loadTrails()
+                }
+            R.id.fragment_trail_map_toggle_filter_events ->
+                if (isChecked) {
+                    this.showTrails = false
+                    this.showEvents = true
+                    loadEvents()
+                }
         }
     }
 

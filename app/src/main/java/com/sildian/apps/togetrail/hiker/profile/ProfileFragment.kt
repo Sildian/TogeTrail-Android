@@ -46,7 +46,6 @@ class ProfileFragment (private val hikerId: String?)
         this.hikerViewModel = ViewModelProviders
             .of(this, ViewModelFactory)
             .get(HikerViewModel::class.java)
-        this.binding.lifecycleOwner = this
         (this.binding as FragmentProfileBinding).hikerViewModel = this.hikerViewModel
     }
 
@@ -75,8 +74,6 @@ class ProfileFragment (private val hikerId: String?)
     /***********************************UI monitoring********************************************/
 
     override fun getLayoutId(): Int = R.layout.fragment_profile
-
-    override fun useDataBinding(): Boolean = true
 
     override fun initializeUI(){
         initializeToolbar()

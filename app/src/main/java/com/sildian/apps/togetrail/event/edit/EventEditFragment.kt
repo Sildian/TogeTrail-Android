@@ -73,7 +73,6 @@ class EventEditFragment(private val eventId: String?=null) :
         this.eventViewModel= ViewModelProviders
             .of(this, ViewModelFactory)
             .get(EventViewModel::class.java)
-        this.binding.lifecycleOwner = this
         (this.binding as FragmentEventEditBinding).eventEditFragment = this
         (this.binding as FragmentEventEditBinding).eventViewModel = this.eventViewModel
     }
@@ -189,8 +188,6 @@ class EventEditFragment(private val eventId: String?=null) :
     /***********************************UI monitoring********************************************/
 
     override fun getLayoutId(): Int = R.layout.fragment_event_edit
-
-    override fun useDataBinding(): Boolean = true
 
     override fun refreshUI() {
         updateBeginDateTextField()

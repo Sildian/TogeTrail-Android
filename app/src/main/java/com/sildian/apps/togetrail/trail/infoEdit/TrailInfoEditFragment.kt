@@ -83,7 +83,6 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel? = null)
     }
 
     private fun initializeData() {
-        this.binding.lifecycleOwner = this
         (this.binding as FragmentTrailInfoEditBinding).trailInfoEditFragment = this
         (this.binding as FragmentTrailInfoEditBinding).trailViewModel = this.trailViewModel
     }
@@ -266,8 +265,6 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel? = null)
     /***********************************UI monitoring********************************************/
 
     override fun getLayoutId(): Int = R.layout.fragment_trail_info_edit
-
-    override fun useDataBinding(): Boolean = true
 
     override fun getAddPhotoBottomSheetId(): Int = R.id.fragment_trail_info_edit_bottom_sheet_add_photo
 

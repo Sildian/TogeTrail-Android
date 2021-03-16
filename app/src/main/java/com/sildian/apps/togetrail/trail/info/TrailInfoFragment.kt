@@ -40,7 +40,6 @@ class TrailInfoFragment(
     }
 
     private fun initializeData() {
-        this.binding.lifecycleOwner = this
         (this.binding as FragmentTrailInfoBinding).trailInfoFragment = this
         (this.binding as FragmentTrailInfoBinding).trailViewModel = this.trailViewModel
         (this.binding as FragmentTrailInfoBinding).isEditable = this.isEditable
@@ -64,8 +63,6 @@ class TrailInfoFragment(
     /***********************************UI monitoring********************************************/
 
     override fun getLayoutId(): Int = R.layout.fragment_trail_info
-
-    override fun useDataBinding(): Boolean = true
 
     override fun getTopViewId(): Int = R.id.fragment_trail_info_image_view_photo
 

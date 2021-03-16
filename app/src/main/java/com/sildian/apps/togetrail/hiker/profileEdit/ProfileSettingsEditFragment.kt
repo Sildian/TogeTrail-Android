@@ -35,7 +35,6 @@ class ProfileSettingsEditFragment(private val hikerId: String?=null) : BaseFragm
         this.hikerViewModel= ViewModelProviders
             .of(this, ViewModelFactory)
             .get(HikerViewModel::class.java)
-        this.binding.lifecycleOwner = this
         (this.binding as FragmentProfileSettingsEditBinding).profileSettingsEditFragment = this
         (this.binding as FragmentProfileSettingsEditBinding).hikerViewModel = this.hikerViewModel
     }
@@ -65,8 +64,6 @@ class ProfileSettingsEditFragment(private val hikerId: String?=null) : BaseFragm
     /***********************************UI monitoring********************************************/
 
     override fun getLayoutId(): Int = R.layout.fragment_profile_settings_edit
-
-    override fun useDataBinding(): Boolean = true
 
     @Suppress("UNUSED_PARAMETER")
     fun onChangePasswordButtonClick(view: View){
