@@ -30,7 +30,7 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel? = null)
 
     /**********************************Static items**********************************************/
 
-    companion object{
+    companion object {
 
         /**Metrics to set with the slider**/
         private const val METRIC_DURATION = 0
@@ -48,10 +48,11 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel? = null)
 
     /***************************************Data*************************************************/
 
-    var currentMetricToSet = METRIC_DURATION
-    val currentValueFormatter = MutableLiveData<ValueFormatter>(ValueFormatters.DurationValueFormatter())
-    val currentMaxValue = MutableLiveData(VALUE_MAX_DURATION)
-    val currentValue = MutableLiveData<Int>(trailViewModel?.trail?.value?.duration)
+    private var isTrailAlreadyLoaded = false
+    var currentMetric = MutableLiveData<Int>()
+    val currentValueFormatter = MutableLiveData<ValueFormatter>()
+    val currentMaxValue = MutableLiveData<Int>()
+    val currentValue = MutableLiveData<Int?>()
 
     /**********************************UI component**********************************************/
 
@@ -90,7 +91,10 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel? = null)
     private fun observeTrail() {
         this.trailViewModel?.trail?.observe(this) { trail ->
             if (trail != null) {
-                setCurrentMetric(METRIC_DURATION)
+                if (!isTrailAlreadyLoaded) {
+                    setCurrentMetric(METRIC_DURATION)
+                    isTrailAlreadyLoaded = true
+                }
                 refreshUI()
             }
         }
@@ -120,8 +124,8 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel? = null)
     }
 
     private fun setCurrentMetric(metric: Int) {
-        this.currentMetricToSet = metric
-        when (this.currentMetricToSet) {
+        this.currentMetric.value = metric
+        when (this.currentMetric.value) {
             METRIC_DURATION -> {
                 this.currentValueFormatter.value = ValueFormatters.DurationValueFormatter()
                 this.currentMaxValue.value = VALUE_MAX_DURATION
@@ -156,7 +160,7 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel? = null)
     }
 
     private fun setCurrentValue(value: Int) {
-        when (this.currentMetricToSet) {
+        when (this.currentMetric.value) {
             METRIC_DURATION -> {
                 this.trailViewModel?.trail?.value?.duration = value
                 this.currentValue.value = this.trailViewModel?.trail?.value?.duration
@@ -186,7 +190,7 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel? = null)
     }
 
     private fun resetCurrentValue() {
-        when (this.currentMetricToSet) {
+        when (this.currentMetric.value) {
             METRIC_DURATION -> {
                 this.trailViewModel?.trail?.value?.autoCalculateDuration()
                 this.currentValue.value = this.trailViewModel?.trail?.value?.duration
