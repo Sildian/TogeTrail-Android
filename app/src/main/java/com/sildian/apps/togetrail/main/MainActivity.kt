@@ -4,17 +4,15 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.view.menu.MenuPopupHelper
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
-import androidx.databinding.Observable
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -22,6 +20,8 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
+import com.google.android.material.badge.BadgeDrawable
+import com.google.android.material.badge.BadgeUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.sildian.apps.togetrail.R
@@ -39,9 +39,8 @@ import com.sildian.apps.togetrail.event.edit.EventEditActivity
 import com.sildian.apps.togetrail.event.list.EventsListFragment
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
-import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
+import com.sildian.apps.togetrail.hiker.model.support.*
 import com.sildian.apps.togetrail.hiker.profileEdit.ProfileEditActivity
-import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
 import com.sildian.apps.togetrail.hiker.profile.ProfileActivity
 import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.location.search.LocationSearchActivity
@@ -90,7 +89,8 @@ class MainActivity :
 
     /****************************************Data************************************************/
 
-    private lateinit var hikerViewModel:HikerViewModel      //The current user connected to the app
+    private lateinit var hikerViewModel: HikerViewModel
+    private lateinit var hikerChatViewModel: HikerChatViewModel
 
     /*************************************Queries************************************************/
 
@@ -100,6 +100,7 @@ class MainActivity :
     /**********************************UI component**********************************************/
 
     private var fragment:BaseFragment?=null
+    private val nbUnreadMessagesBadge by lazy { BadgeDrawable.create(this) }
     private val toolbar by lazy {activity_main_toolbar}
     private val searchTextField by lazy {activity_main_text_field_research}
     private val clearResearchButton by lazy {activity_main_button_research_clear}
@@ -288,6 +289,7 @@ class MainActivity :
     override fun loadData() {
         initializeData()
         observeHiker()
+        observeHikerChats()
         observeRequestFailure()
         loginCurrentUser()
     }
@@ -296,16 +298,31 @@ class MainActivity :
         this.hikerViewModel = ViewModelProviders
             .of(this, ViewModelFactory)
             .get(HikerViewModel::class.java)
+        this.hikerChatViewModel = ViewModelProviders
+            .of(this, ViewModelFactory)
+            .get(HikerChatViewModel::class.java)
     }
 
     private fun observeHiker() {
         this.hikerViewModel.hiker.observe(this) { hiker ->
             this.progressbar.visibility = View.GONE
+            CurrentHikerInfo.currentHiker = hikerViewModel.hiker.value
             if (!this.hikerViewModel.isQueryRegistrationBusy() && hiker != null) {
                 loadHiker()
+                loadHikerChats()
             } else {
                 updateNavigationViewUserItems()
             }
+        }
+    }
+
+    private fun observeHikerChats() {
+        this.hikerChatViewModel.chats.observe(this) { chats ->
+        var nbUnreadMessages = 0
+            chats.forEach { chat ->
+                nbUnreadMessages+= chat.nbUnreadMessages
+            }
+            updateNbUnreadMessagesBadge(nbUnreadMessages)
         }
     }
 
@@ -327,6 +344,12 @@ class MainActivity :
     private fun loadHiker() {
         this.hikerViewModel.hiker.value?.id?.let { hikerId ->
             this.hikerViewModel.loadHikerFromDatabaseRealTime(hikerId)
+        }
+    }
+
+    private fun loadHikerChats() {
+        this.hikerViewModel.hiker.value?.id?.let { hikerId ->
+            this.hikerChatViewModel.loadChatsFromDatabaseRealTime(hikerId)
         }
     }
 
@@ -400,6 +423,7 @@ class MainActivity :
 
     override fun initializeUI() {
         initializeToolbar()
+        initializeNbUnreadMessagesBadge()
         initializeSearchTextField()
         initializeClearResearchButton()
         initializeNavigationView()
@@ -410,6 +434,13 @@ class MainActivity :
     private fun initializeToolbar(){
         setSupportActionBar(this.toolbar)
         supportActionBar?.title=""
+    }
+
+
+    @Suppress("UnsafeExperimentalUsageError")
+    private fun initializeNbUnreadMessagesBadge() {
+        nbUnreadMessagesBadge.maxCharacterCount = 2
+        BadgeUtils.attachBadgeDrawable(nbUnreadMessagesBadge, this.toolbar, R.id.menu_chat_chat)
     }
 
     private fun initializeSearchTextField(){
@@ -432,12 +463,6 @@ class MainActivity :
         toggle.syncState()
         this.navigationView.setNavigationItemSelectedListener(this)
         updateNavigationViewUserItems()
-        this.hikerViewModel.addOnPropertyChangedCallback(object:Observable.OnPropertyChangedCallback(){
-            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                CurrentHikerInfo.currentHiker = hikerViewModel.hiker.value
-                updateNavigationViewUserItems()
-            }
-        })
     }
 
     private fun initializeBottomNavigationView(){
@@ -468,6 +493,18 @@ class MainActivity :
                 .placeholder(R.drawable.ic_person_white)
                 .into(this.navigationHeaderUserImage)
             this.navigationHeaderUserNameText.text=this.hikerViewModel.hiker.value?.name
+        }
+    }
+
+    @Suppress("UnsafeExperimentalUsageError")
+    private fun updateNbUnreadMessagesBadge(nbUnreadMessages: Int) {
+        if (nbUnreadMessages > 0) {
+            nbUnreadMessagesBadge.number = nbUnreadMessages
+            nbUnreadMessagesBadge.backgroundColor = ContextCompat.getColor(this, android.R.color.holo_red_dark)
+        }
+        else {
+            nbUnreadMessagesBadge.clearNumber()
+            nbUnreadMessagesBadge.backgroundColor = Color.TRANSPARENT
         }
     }
 

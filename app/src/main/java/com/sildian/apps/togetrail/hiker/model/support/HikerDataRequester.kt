@@ -309,6 +309,7 @@ class HikerDataRequester {
                             chatUserToInterlocutor.lastMessage = message
                             chatUserToInterlocutor.lastMessageReadId = message.id
                             chatInterlocutorToUser.lastMessage = message
+                            chatInterlocutorToUser.nbUnreadMessages++
                             launch { hikerRepository.createOrUpdateHikerChat(user.uid, chatUserToInterlocutor) }.join()
                             launch { hikerRepository.createOrUpdateHikerChat(interlocutor.id, chatInterlocutorToUser) }.join()
 
@@ -346,6 +347,7 @@ class HikerDataRequester {
                         val chat = async { hikerRepository.getChatBetweenUsers(user.uid, interlocutor.id) }.await()
                         chat?.let {
                             chat.lastMessageReadId = chat.lastMessage?.id
+                            chat.nbUnreadMessages = 0
                             launch { hikerRepository.createOrUpdateHikerChat(user.uid, chat) }
                         }
                     }

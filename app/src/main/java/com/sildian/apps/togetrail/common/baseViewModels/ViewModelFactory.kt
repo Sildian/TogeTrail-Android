@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.sildian.apps.togetrail.event.model.support.EventViewModel
 import com.sildian.apps.togetrail.event.model.support.EventsViewModel
+import com.sildian.apps.togetrail.hiker.model.support.HikerChatViewModel
 import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
 import com.sildian.apps.togetrail.trail.model.support.TrailsViewModel
@@ -32,6 +33,7 @@ object ViewModelFactory : ViewModelProvider.Factory{
             modelClass.isAssignableFrom(TrailViewModel::class.java) -> TrailViewModel() as T
             modelClass.isAssignableFrom(EventsViewModel::class.java) -> EventsViewModel() as T
             modelClass.isAssignableFrom(EventViewModel::class.java) -> EventViewModel() as T
+            modelClass.isAssignableFrom(HikerChatViewModel::class.java) -> HikerChatViewModel() as T
             else -> throw IllegalArgumentException(EXCEPTION_MESSAGE_UNKNOWN_VIEWMODEL)
         }
     }

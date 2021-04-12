@@ -14,7 +14,8 @@ data class Duo (
     var interlocutorName: String? = null,
     var interlocutorPhotoUrl: String? = null,
     var lastMessage: Message? = null,
-    var lastMessageReadId: String? = null
+    var lastMessageReadId: String? = null,
+    var nbUnreadMessages: Int = 0
 )
     : Parcelable
 {
