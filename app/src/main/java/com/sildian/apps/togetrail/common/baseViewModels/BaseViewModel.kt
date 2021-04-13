@@ -25,7 +25,7 @@ abstract class BaseViewModel: ViewModel(), Observable {
 
     /**************************Query registration monitoring*************************************/
 
-    protected fun clearQueryRegistration() {
+    fun clearQueryRegistration() {
         this.queryRegistration?.remove()
         this.queryRegistration = null
     }

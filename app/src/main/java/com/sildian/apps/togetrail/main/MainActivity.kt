@@ -91,6 +91,7 @@ class MainActivity :
 
     private lateinit var hikerViewModel: HikerViewModel
     private lateinit var hikerChatViewModel: HikerChatViewModel
+    private var isNbUnreadMessagesBadgeShown = false
 
     /*************************************Queries************************************************/
 
@@ -307,18 +308,25 @@ class MainActivity :
         this.hikerViewModel.hiker.observe(this) { hiker ->
             this.progressbar.visibility = View.GONE
             CurrentHikerInfo.currentHiker = hikerViewModel.hiker.value
-            if (!this.hikerViewModel.isQueryRegistrationBusy() && hiker != null) {
-                loadHiker()
-                loadHikerChats()
-            } else {
-                updateNavigationViewUserItems()
+            when {
+                hiker == null -> {
+                    this.hikerViewModel.clearQueryRegistration()
+                    this.hikerChatViewModel.clearQueryRegistration()
+                    updateNavigationViewUserItems()
+                }
+                !this.hikerViewModel.isQueryRegistrationBusy() -> {
+                    loadHiker()
+                    loadHikerChats()
+                }
+                else ->
+                    updateNavigationViewUserItems()
             }
         }
     }
 
     private fun observeHikerChats() {
         this.hikerChatViewModel.chats.observe(this) { chats ->
-        var nbUnreadMessages = 0
+            var nbUnreadMessages = 0
             chats.forEach { chat ->
                 nbUnreadMessages+= chat.nbUnreadMessages
             }
@@ -328,6 +336,11 @@ class MainActivity :
 
     private fun observeRequestFailure() {
         this.hikerViewModel.requestFailure.observe(this) { e ->
+            if (e != null) {
+                onQueryError(e)
+            }
+        }
+        this.hikerChatViewModel.requestFailure.observe(this) { e ->
             if (e != null) {
                 onQueryError(e)
             }
@@ -423,7 +436,6 @@ class MainActivity :
 
     override fun initializeUI() {
         initializeToolbar()
-        initializeNbUnreadMessagesBadge()
         initializeSearchTextField()
         initializeClearResearchButton()
         initializeNavigationView()
@@ -434,13 +446,6 @@ class MainActivity :
     private fun initializeToolbar(){
         setSupportActionBar(this.toolbar)
         supportActionBar?.title=""
-    }
-
-
-    @Suppress("UnsafeExperimentalUsageError")
-    private fun initializeNbUnreadMessagesBadge() {
-        nbUnreadMessagesBadge.maxCharacterCount = 2
-        BadgeUtils.attachBadgeDrawable(nbUnreadMessagesBadge, this.toolbar, R.id.menu_chat_chat)
     }
 
     private fun initializeSearchTextField(){
@@ -501,6 +506,11 @@ class MainActivity :
         if (nbUnreadMessages > 0) {
             nbUnreadMessagesBadge.number = nbUnreadMessages
             nbUnreadMessagesBadge.backgroundColor = ContextCompat.getColor(this, android.R.color.holo_red_dark)
+            if (!isNbUnreadMessagesBadgeShown) {
+                nbUnreadMessagesBadge.maxCharacterCount = 2
+                BadgeUtils.attachBadgeDrawable(nbUnreadMessagesBadge, this.toolbar, R.id.menu_chat_chat)
+                isNbUnreadMessagesBadgeShown = true
+            }
         }
         else {
             nbUnreadMessagesBadge.clearNumber()
