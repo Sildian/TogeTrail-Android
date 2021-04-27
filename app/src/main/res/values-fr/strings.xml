@@ -97,6 +97,7 @@
     <string name="label_trail_distance_short">Dist</string>
     <string name="label_trail_max_elevation_short">Alt max</string>
     <string name="label_trail_min_elevation_short">Alt min</string>
+    <string name="label_trail_author">Créée par %s</string>
     <string name="label_trail_list_last_added">Dernières randos</string>
     <string name="label_trail_list_my_trails">Mes randos à moi</string>
     <string name="label_trail_list_nearby_home">Les randos proches de chez moi</string>
@@ -181,6 +182,7 @@
     <string name="example_trail_distance">10 km\nDist</string>
     <string name="example_trail_max_elevation">2000 m\nAlt max</string>
     <string name="example_trail_min_elevation">1500 m\nAlt min</string>
+    <string name="example_trail_author">Créée par Toto</string>
     <!-- TrailPointOfInterest -->
     <string name="example_trail_poi_name">La plus belle vue du monde</string>
     <string name="example_trail_poi_description">Je vous assure, c\'est la plus belle vue du monde!</string>

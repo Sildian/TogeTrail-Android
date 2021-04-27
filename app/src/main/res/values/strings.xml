@@ -98,6 +98,7 @@
     <string name="label_trail_distance_short">Dist</string>
     <string name="label_trail_max_elevation_short">Max elv</string>
     <string name="label_trail_min_elevation_short">Min elv</string>
+    <string name="label_trail_author">Created by %s</string>
     <string name="label_trail_list_last_added">Last trails</string>
     <string name="label_trail_list_my_trails">My own trails</string>
     <string name="label_trail_list_nearby_home">Trails near my home</string>
@@ -182,6 +183,7 @@
     <string name="example_trail_distance">10 km\nDist</string>
     <string name="example_trail_max_elevation">2000 m\nMax elv</string>
     <string name="example_trail_min_elevation">1500 m\nMin elv</string>
+    <string name="example_trail_author">Created by Toto</string>
     <!-- TrailPointOfInterest -->
     <string name="example_trail_poi_name">The best view in the world</string>
     <string name="example_trail_poi_description">I ensure you, this is the most beautiful view in the world!</string>

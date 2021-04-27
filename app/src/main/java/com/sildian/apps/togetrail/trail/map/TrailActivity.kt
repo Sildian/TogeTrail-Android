@@ -12,6 +12,7 @@ import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
+import com.sildian.apps.togetrail.hiker.profile.ProfileActivity
 import com.sildian.apps.togetrail.trail.infoEdit.TrailInfoEditActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.support.TrailBuildException
@@ -286,6 +287,10 @@ class TrailActivity : BaseActivity() {
         startTrailInfoEditActivity(TrailInfoEditActivity.ACTION_TRAIL_EDIT_POI_INFO, poiPosition)
     }
 
+    fun seeHikerProfile(hikerId: String) {
+        startProfileActivity(hikerId)
+    }
+
     /***********************************Navigation***********************************************/
 
     private fun startLoadGpx(){
@@ -293,6 +298,12 @@ class TrailActivity : BaseActivity() {
         loadGpxIntent.addCategory(Intent.CATEGORY_OPENABLE)
         loadGpxIntent.type="*/*"
         startActivityForResult(loadGpxIntent, KEY_REQUEST_LOAD_GPX)
+    }
+
+    private fun startProfileActivity(hikerId: String) {
+        val intent = Intent(this, ProfileActivity::class.java)
+        intent.putExtra(ProfileActivity.KEY_BUNDLE_HIKER_ID, hikerId)
+        startActivity(intent)
     }
 
     //TODO it the trail is too big, it may fail to pass to the intent. An other way needs to be found to edit a trail.

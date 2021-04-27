@@ -33,7 +33,9 @@ data class Trail (
     var descent:Int?=null,
     var maxElevation:Int?=null,
     var minElevation:Int?=null,
-    var authorId:String?=null
+    var authorId:String?=null,
+    var authorName:String?=null,
+    var authorPhotoUrl:String?=null
 )
     :Parcelable
 {
@@ -167,6 +169,8 @@ data class Trail (
             parcel.writeInt(this.maxElevation?:-1)
             parcel.writeInt(this.minElevation?:-1)
             parcel.writeString(this.authorId)
+            parcel.writeString(this.authorName)
+            parcel.writeString(this.authorPhotoUrl)
         }
 
         override fun create(parcel: Parcel): Trail {
@@ -189,6 +193,8 @@ data class Trail (
                 parcel.readInt(),
                 parcel.readInt(),
                 parcel.readInt(),
+                parcel.readString(),
+                parcel.readString(),
                 parcel.readString()
             )
             if(trail.position?.latitude==0.0 && trail.position?.longitude==0.0){

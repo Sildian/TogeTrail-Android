@@ -4,6 +4,7 @@ import android.view.View
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.databinding.FragmentTrailInfoBinding
 import com.sildian.apps.togetrail.trail.map.BaseTrailMapFragment
+import com.sildian.apps.togetrail.trail.map.TrailActivity
 import com.sildian.apps.togetrail.trail.model.support.ElevationChartGenerator
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
 import kotlinx.android.synthetic.main.fragment_trail_info.view.*
@@ -105,5 +106,12 @@ class TrailInfoFragment(
     @Suppress("UNUSED_PARAMETER")
     fun onEditButtonClick(view:View){
         (parentFragment as BaseTrailMapFragment).editTrailInfo()
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun onAuthorPhotoClick(view: View) {
+        this.trailViewModel?.trail?.value?.authorId?.let { authorId ->
+            (activity as TrailActivity).seeHikerProfile(authorId)
+        }
     }
 }

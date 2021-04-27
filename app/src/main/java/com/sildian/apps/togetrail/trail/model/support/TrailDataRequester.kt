@@ -130,6 +130,8 @@ class TrailDataRequester {
                     if (trail != null) {
 
                         trail.lastUpdate = Date()
+                        trail.authorName = hiker.name
+                        trail.authorPhotoUrl = hiker.photoUrl
 
                         /*Stores or deletes the image in the cloud if necessary*/
 
