@@ -145,6 +145,7 @@
     <string name="label_event_user_registered">Je participe</string>
     <string name="label_event_registered_hikers_sing">personne participe</string>
     <string name="label_event_registered_hikers_plur">personnes participent</string>
+    <string name="label_event_author">Animé par %s</string>
     <plurals name="label_event_nb_days">
         <item quantity="one">%d jour</item>
         <item quantity="other">%d jours</item>
@@ -203,6 +204,7 @@
     <string name="example_event_begin_date_full">Samedi 14 mars 2020 9:00</string>
     <string name="example_event_end_date_full">Dimanche 15 mars 2020 18:00</string>
     <string name="example_event_nb_days">2 jours</string>
+    <string name="example_event_author">Animé par Toto</string>
     <string name="example_event_registered_hikers">5 personnes participent</string>
 
     <!-- Messages to the user -->

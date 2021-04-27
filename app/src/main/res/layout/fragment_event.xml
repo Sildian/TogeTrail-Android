@@ -159,6 +159,39 @@
                             android:drawablePadding="@dimen/components_margin_small"
                             android:text="@{eventViewModel.event.meetingPoint.fullAddress, default=@string/example_location_fine}"/>
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <ImageView
+                                android:id="@+id/fragment_event_image_author_photo"
+                                android:layout_width="@dimen/image_size_mini"
+                                android:layout_height="@dimen/image_size_mini"
+                                android:layout_marginTop="@dimen/components_margin_small"
+                                android:layout_marginBottom="@dimen/components_margin_small"
+                                android:layout_marginStart="@dimen/components_margin_medium"
+                                android:layout_marginEnd="@dimen/components_margin_small"
+                                android:contentDescription="@string/example_image_content_description"
+                                app:srcCompat="@drawable/ic_person_black"
+                                app:imgUrl="@{eventViewModel.event.authorPhotoUrl}"
+                                app:imgPlaceHolder="@{@drawable/ic_person_black}"
+                                app:imgOptions="@{RequestOptions.circleCropTransform()}"
+                                android:onClick="@{eventFragment::onAuthorPhotoButtonClick}"/>
+
+                            <TextView
+                                android:id="@+id/fragment_event_text_author_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/components_margin_small"
+                                android:layout_marginBottom="@dimen/components_margin_small"
+                                android:layout_marginStart="@dimen/components_margin_small"
+                                android:layout_marginEnd="@dimen/components_margin_medium"
+                                android:text="@{@string/label_event_author(eventViewModel.event.authorName), default=@string/example_event_author}"/>
+
+                        </LinearLayout>
+
                         <TextView
                             android:id="@+id/fragment_event_text_registered_hikers"
                             android:layout_width="wrap_content"

@@ -83,6 +83,9 @@ class EventDataRequester {
 
                     if (event != null) {
 
+                        event.authorName = hiker.name
+                        event.authorPhotoUrl = hiker.photoUrl
+
                         /*If the event is new...*/
 
                         if (event.id == null) {

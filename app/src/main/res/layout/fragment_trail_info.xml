@@ -175,7 +175,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/components_margin_medium"
                         android:textColor="@color/colorWhite"
-                        android:text="@{@string/label_trail_author(trailViewModel.trail.authorName), default=@string/example_hiker_name}"/>
+                        android:text="@{@string/label_trail_author(trailViewModel.trail.authorName), default=@string/example_trail_author}"/>
 
                 </LinearLayout>
 

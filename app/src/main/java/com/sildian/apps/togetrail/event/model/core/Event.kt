@@ -27,6 +27,8 @@ data class Event(
     val creationDate:Date=Date(),
     var mainPhotoUrl:String?=null,
     var authorId:String?=null,
+    var authorName:String?=null,
+    var authorPhotoUrl:String?=null,
     /*Extra info*/
     var nbHikersRegistered:Int=0
 )
@@ -82,6 +84,8 @@ data class Event(
             parcel.writeLong(this.creationDate.time)
             parcel.writeString(this.mainPhotoUrl)
             parcel.writeString(this.authorId)
+            parcel.writeString(this.authorName)
+            parcel.writeString(this.authorPhotoUrl)
             parcel.writeInt(this.nbHikersRegistered)
         }
 
@@ -96,6 +100,8 @@ data class Event(
                 parcel.readString(),
                 parcel.readInt()==1,
                 Date(parcel.readLong()),
+                parcel.readString(),
+                parcel.readString(),
                 parcel.readString(),
                 parcel.readString(),
                 parcel.readInt()

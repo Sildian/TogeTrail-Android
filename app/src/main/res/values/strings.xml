@@ -146,6 +146,7 @@
     <string name="label_event_user_registered">I attend</string>
     <string name="label_event_registered_hikers_sing">person attend</string>
     <string name="label_event_registered_hikers_plur">persons attend</string>
+    <string name="label_event_author">Facilitated by %s</string>
     <plurals name="label_event_nb_days">
         <item quantity="one">%d day</item>
         <item quantity="other">%d days</item>
@@ -204,6 +205,7 @@
     <string name="example_event_begin_date_full">Saturday March 14th 9:00 AM</string>
     <string name="example_event_end_date_full">Sunday March 15th 6:00 PM</string>
     <string name="example_event_nb_days">2 days</string>
+    <string name="example_event_author">Facilitated by Toto</string>
     <string name="example_event_registered_hikers">5 persons attend</string>
 
     <!-- Messages to the user -->

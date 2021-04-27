@@ -158,6 +158,13 @@ class EventFragment(private val eventId: String?=null) :
     }
 
     @Suppress("UNUSED_PARAMETER")
+    fun onAuthorPhotoButtonClick(view: View) {
+        this.eventViewModel.event.value?.authorId?.let { authorId ->
+            (activity as EventActivity).seeHiker(authorId)
+        }
+    }
+
+    @Suppress("UNUSED_PARAMETER")
     fun onSendMessageButtonClick(view: View) {
         this.messageWriteDialogFragment = MessageWriteDialogFragment(this)
         this.messageWriteDialogFragment?.show(childFragmentManager, "EventMessageDialogFragment")
