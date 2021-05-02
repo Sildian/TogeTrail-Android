@@ -287,7 +287,7 @@ class TrailActivity : BaseActivity() {
         startTrailInfoEditActivity(TrailInfoEditActivity.ACTION_TRAIL_EDIT_POI_INFO, poiPosition)
     }
 
-    fun seeHikerProfile(hikerId: String) {
+    fun seeHiker(hikerId: String) {
         startProfileActivity(hikerId)
     }
 
@@ -301,9 +301,9 @@ class TrailActivity : BaseActivity() {
     }
 
     private fun startProfileActivity(hikerId: String) {
-        val intent = Intent(this, ProfileActivity::class.java)
-        intent.putExtra(ProfileActivity.KEY_BUNDLE_HIKER_ID, hikerId)
-        startActivity(intent)
+        val profileActivityIntent = Intent(this, ProfileActivity::class.java)
+        profileActivityIntent.putExtra(ProfileActivity.KEY_BUNDLE_HIKER_ID, hikerId)
+        startActivity(profileActivityIntent)
     }
 
     //TODO it the trail is too big, it may fail to pass to the intent. An other way needs to be found to edit a trail.

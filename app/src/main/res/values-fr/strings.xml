@@ -143,6 +143,7 @@
     <string name="label_event_description2">Quelques infos pour les participants</string>
     <string name="label_event_attached_trails">Randos au programme</string>
     <string name="label_event_user_registered">Je participe</string>
+    <string name="label_event_user_facilitate">J\'anime cet événement</string>
     <string name="label_event_registered_hikers_sing">personne participe</string>
     <string name="label_event_registered_hikers_plur">personnes participent</string>
     <string name="label_event_author">Animé par %s</string>

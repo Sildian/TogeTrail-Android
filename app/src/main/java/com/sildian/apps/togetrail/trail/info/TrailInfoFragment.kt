@@ -111,7 +111,7 @@ class TrailInfoFragment(
     @Suppress("UNUSED_PARAMETER")
     fun onAuthorPhotoClick(view: View) {
         this.trailViewModel?.trail?.value?.authorId?.let { authorId ->
-            (activity as TrailActivity).seeHikerProfile(authorId)
+            (activity as TrailActivity).seeHiker(authorId)
         }
     }
 }

@@ -144,6 +144,7 @@
     <string name="label_event_description2">Some information for the attendees</string>
     <string name="label_event_attached_trails">Trails on schedule</string>
     <string name="label_event_user_registered">I attend</string>
+    <string name="label_event_user_facilitate">I facilitate this event</string>
     <string name="label_event_registered_hikers_sing">person attend</string>
     <string name="label_event_registered_hikers_plur">persons attend</string>
     <string name="label_event_author">Facilitated by %s</string>

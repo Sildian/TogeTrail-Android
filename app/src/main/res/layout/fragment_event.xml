@@ -319,13 +319,14 @@
                     android:layout_marginStart="@dimen/components_margin_medium"
                     android:layout_marginEnd="@dimen/components_margin_medium"
                     android:text="@string/button_event_register_user"
-                    android:visibility="@{eventFragment.isCurrentUserRegistered() ? View.GONE : View.VISIBLE}"
+                    android:visibility="@{eventFragment.isCurrentUserAuthor() || eventFragment.isCurrentUserRegistered() ? View.GONE : View.VISIBLE}"
                     android:onClick="@{eventFragment::onRegisterUserButtonClick}"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="@{eventFragment.isCurrentUserAuthor() || !eventFragment.isCurrentUserRegistered() ? View.GONE : View.VISIBLE}">
 
                     <TextView
                         android:id="@+id/fragment_event_text_user_registered"
@@ -339,8 +340,7 @@
                         app:drawableStartCompat="@drawable/ic_check"
                         android:drawablePadding="@dimen/components_margin_small"
                         android:textColor="@color/colorBlack"
-                        android:text="@string/label_event_user_registered"
-                        android:visibility="@{eventFragment.isCurrentUserRegistered() ? View.VISIBLE : View.GONE}"/>
+                        android:text="@string/label_event_user_registered" />
 
                     <com.google.android.material.button.MaterialButton
                         style="@style/ClassicButtonStyle"
@@ -352,10 +352,22 @@
                         android:layout_marginStart="@dimen/components_margin_medium"
                         android:layout_marginEnd="@dimen/components_margin_medium"
                         android:text="@string/button_event_unregister_user"
-                        android:visibility="@{eventFragment.isCurrentUserRegistered() ? View.VISIBLE : View.GONE}"
                         android:onClick="@{eventFragment::onUnregisterUserButtonClick}"/>
 
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/fragment_event_text_user_facilitate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/components_margin_medium"
+                    android:layout_gravity="center"
+                    android:gravity="center_vertical"
+                    app:drawableStartCompat="@drawable/ic_check"
+                    android:drawablePadding="@dimen/components_margin_small"
+                    android:textColor="@color/colorBlack"
+                    android:text="@string/label_event_user_facilitate"
+                    android:visibility="@{eventFragment.isCurrentUserAuthor() ? View.VISIBLE : View.GONE}"/>
 
             </com.google.android.material.card.MaterialCardView>
 

@@ -43,6 +43,7 @@ class EventFragment(private val eventId: String?=null) :
 
     private lateinit var eventViewModel: EventViewModel
     val isCurrentUserRegistered = MutableLiveData(false)
+    val isCurrentUserAuthor = MutableLiveData(false)
 
     /**********************************UI component**********************************************/
 
@@ -75,6 +76,7 @@ class EventFragment(private val eventId: String?=null) :
     private fun observeEvent() {
         this.eventViewModel.event.observe(this) { event ->
             if (event != null) {
+                isCurrentUserAuthor.value = event.authorId == CurrentHikerInfo.currentHiker?.id
                 refreshUI()
             }
         }
