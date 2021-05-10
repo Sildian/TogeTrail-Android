@@ -1,7 +1,11 @@
 package com.sildian.apps.togetrail.trail.info
 
+import android.content.Intent
 import android.view.View
+import androidx.core.net.toUri
+import com.google.android.gms.maps.model.LatLng
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.common.utils.GoogleMapUrlHelper
 import com.sildian.apps.togetrail.databinding.FragmentTrailInfoBinding
 import com.sildian.apps.togetrail.trail.map.BaseTrailMapFragment
 import com.sildian.apps.togetrail.trail.map.TrailActivity
@@ -112,6 +116,15 @@ class TrailInfoFragment(
     fun onAuthorPhotoClick(view: View) {
         this.trailViewModel?.trail?.value?.authorId?.let { authorId ->
             (activity as TrailActivity).seeHiker(authorId)
+        }
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun onGoToDepartureButtonClick(view: View) {
+        this.trailViewModel?.trail?.value?.position?.let { position ->
+            val url = GoogleMapUrlHelper.generateWithLatLng(LatLng(position.latitude, position.longitude))
+            val googleMapIntent = Intent(Intent.ACTION_VIEW, url.toUri())
+            startActivity(googleMapIntent)
         }
     }
 }

@@ -99,7 +99,7 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="2"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
                         tools:ignore="UseCompoundDrawables">
@@ -126,7 +126,7 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="2"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
                         tools:ignore="UseCompoundDrawables">
@@ -148,6 +148,15 @@
                             android:text="@{MetricsHelper.displayDuration(trailInfoFragment.context, trailViewModel.trail.duration), default=@string/example_trail_duration}" />
 
                     </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/IconButtonStyle"
+                        android:id="@+id/fragment_trail_info_button_go_to_meetingPoint"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:icon="@drawable/ic_destination_black"
+                        android:onClick="@{trailInfoFragment::onGoToDepartureButtonClick}"/>
 
                 </LinearLayout>
 

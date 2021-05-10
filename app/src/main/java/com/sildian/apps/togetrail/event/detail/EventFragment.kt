@@ -1,8 +1,10 @@
 package com.sildian.apps.togetrail.event.detail
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProviders
 import com.sildian.apps.togetrail.R
@@ -11,6 +13,7 @@ import com.sildian.apps.togetrail.chat.others.MessageWriteDialogFragment
 import com.sildian.apps.togetrail.chat.others.PublicMessageAdapter
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
+import com.sildian.apps.togetrail.common.utils.GoogleMapUrlHelper
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.databinding.FragmentEventBinding
@@ -163,6 +166,15 @@ class EventFragment(private val eventId: String?=null) :
     fun onAuthorPhotoButtonClick(view: View) {
         this.eventViewModel.event.value?.authorId?.let { authorId ->
             (activity as EventActivity).seeHiker(authorId)
+        }
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun onGoToMeetingPointButtonClick(view: View) {
+        this.eventViewModel.event.value?.meetingPoint?.fullAddress?.let { fullAddress ->
+            val url = GoogleMapUrlHelper.generateWithFullAddress(fullAddress)
+            val googleMapIntent = Intent(Intent.ACTION_VIEW, url.toUri())
+            startActivity(googleMapIntent)
         }
     }
 

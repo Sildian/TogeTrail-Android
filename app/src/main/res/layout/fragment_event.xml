@@ -146,18 +146,38 @@
                             android:drawablePadding="@dimen/components_margin_small"
                             android:text="@{eventViewModel.event.beginDate==null ? `` : DateUtilities.displayDateAndTimeFull(eventViewModel.event.beginDate), default=@string/example_event_begin_date_full}"/>
 
-                        <TextView
-                            android:id="@+id/fragment_event_text_meeting_point"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/components_margin_small"
-                            android:layout_marginBottom="@dimen/components_margin_small"
-                            android:layout_marginStart="@dimen/components_margin_medium"
-                            android:layout_marginEnd="@dimen/components_margin_medium"
-                            android:gravity="center_vertical"
-                            app:drawableStartCompat="@drawable/ic_location_event"
-                            android:drawablePadding="@dimen/components_margin_small"
-                            android:text="@{eventViewModel.event.meetingPoint.fullAddress, default=@string/example_location_fine}"/>
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/fragment_event_text_meeting_point"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                android:layout_marginTop="@dimen/components_margin_small"
+                                android:layout_marginBottom="@dimen/components_margin_small"
+                                android:layout_marginStart="@dimen/components_margin_medium"
+                                android:layout_marginEnd="@dimen/components_margin_medium"
+                                android:gravity="center_vertical"
+                                app:drawableStartCompat="@drawable/ic_location_event"
+                                android:drawablePadding="@dimen/components_margin_small"
+                                android:text="@{eventViewModel.event.meetingPoint.fullAddress, default=@string/example_location_fine}"/>
+
+                            <com.google.android.material.button.MaterialButton
+                                style="@style/IconButtonStyle"
+                                android:id="@+id/fragment_event_button_go_to_meetingPoint"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_margin="@dimen/components_margin_medium"
+                                app:icon="@drawable/ic_destination_black"
+                                app:iconTint="@color/colorSecondaryDark"
+                                android:onClick="@{eventFragment::onGoToMeetingPointButtonClick}"/>
+
+                        </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
