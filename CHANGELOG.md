@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add chat space to event screen
 ### Changed
 - Enable trail record when app is on background
+- Add info on Trail and Event screens
 ### Fixed
 - Fix compatibility down to Android 4.4 (API 19)
 - Fix user location bug occurring when creating a new trail
