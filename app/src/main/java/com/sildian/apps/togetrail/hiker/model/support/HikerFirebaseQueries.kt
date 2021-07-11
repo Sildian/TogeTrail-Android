@@ -11,6 +11,7 @@ import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
+import com.sildian.apps.togetrail.trail.model.core.Trail
 
 /*************************************************************************************************
  * Provides with Firebase queries on Hiker
@@ -23,6 +24,8 @@ object HikerFirebaseQueries {
     private const val COLLECTION_NAME="hiker"
     private const val SUB_COLLECTION_HISTORY_ITEM="hikerHistoryItem"
     private const val SUB_COLLECTION_ATTENDED_EVENT_NAME="attendedEvent"
+    private const val SUB_COLLECTION_LIKED_TRAILS_NAME="likedTrails"
+    private const val SUB_COLLECTION_MARKED_TRAILS_NAME="markedTrails"
     private const val SUB_COLLECTION_CHAT_NAME = "chat"
     private const val SUB_COLLECTION_MESSAGE_NAME = "message"
     private fun getCollection() = FirebaseFirestore.getInstance().collection(COLLECTION_NAME)
@@ -30,6 +33,10 @@ object HikerFirebaseQueries {
         getCollection().document(hikerId).collection(SUB_COLLECTION_HISTORY_ITEM)
     private fun getAttendedEventSubCollection(hikerId:String) =
         getCollection().document(hikerId).collection(SUB_COLLECTION_ATTENDED_EVENT_NAME)
+    private fun getLikedTrailsSubCollection(hikerId: String) =
+        getCollection().document(hikerId).collection(SUB_COLLECTION_LIKED_TRAILS_NAME)
+    private fun getMarkedTrailsSubCollection(hikerId: String) =
+        getCollection().document(hikerId).collection(SUB_COLLECTION_MARKED_TRAILS_NAME)
     private fun getChatSubCollection(hikerId: String) =
         getCollection().document(hikerId).collection(SUB_COLLECTION_CHAT_NAME)
     private fun getMessageSubCollection(hikerId: String, interlocutorId: String) =
@@ -144,6 +151,64 @@ object HikerFirebaseQueries {
 
     fun deleteAttendedEvent(hikerId:String, eventId:String):Task<Void> =
         getAttendedEventSubCollection(hikerId).document(eventId).delete()
+
+    /**
+     * Gets all trails liked by the hiker
+     * @param hikerId : the id of the hiker
+     * @return a query
+     */
+
+    fun getLikedTrails(hikerId: String): Query =
+        getLikedTrailsSubCollection(hikerId)
+
+    /**
+     * Updates a trail liked by the hiker
+     * @param hikerId : the id of the hiker
+     * @param trail : the trail to update
+     * @return a task result
+     */
+
+    fun updateLikedTrail(hikerId: String, trail: Trail): Task<Void> =
+        getLikedTrailsSubCollection(hikerId).document(trail.id.toString()).set(trail)
+
+    /**
+     * Deletes a trail liked by the hiker
+     * @param hikerId : the id of the hiker
+     * @param trailId : the id of the trail
+     * @return a task result
+     */
+
+    fun deleteLikedTrail(hikerId: String, trailId: String): Task<Void> =
+        getLikedTrailsSubCollection(hikerId).document(trailId).delete()
+
+    /**
+     * Gets all trails marked by the hiker
+     * @param hikerId : the id of the hiker
+     * @return a query
+     */
+
+    fun getMarkedTrails(hikerId: String): Query =
+        getMarkedTrailsSubCollection(hikerId)
+
+    /**
+     * Updates a trail marked by the hiker
+     * @param hikerId : the id of the hiker
+     * @param trail : the trail to update
+     * @return a task result
+     */
+
+    fun updateMarkedTrail(hikerId: String, trail: Trail): Task<Void> =
+        getMarkedTrailsSubCollection(hikerId).document(trail.id.toString()).set(trail)
+
+    /**
+     * Deletes a trail marked by the hiker
+     * @param hikerId : the id of the hiker
+     * @param trailId : the id of the trail
+     * @return a task result
+     */
+
+    fun deleteMarkedTrail(hikerId: String, trailId: String): Task<Void> =
+        getMarkedTrailsSubCollection(hikerId).document(trailId).delete()
 
     /**
      * Gets the list of chats for the given user

@@ -32,6 +32,7 @@ class TrailDataRequester {
         /**Exceptions messages**/
         private const val EXCEPTION_MESSAGE_NULL_HIKER = "Cannot perform the requested operation with a null hiker"
         private const val EXCEPTION_MESSAGE_NULL_TRAIL = "Cannot perform the requested operation with a null trail"
+        private const val EXCEPTION_MESSAGE_NO_ID_TRAIL = "Cannot perform the requested operation with a trail without id"
     }
 
     /************************************Repositories********************************************/
@@ -194,6 +195,156 @@ class TrailDataRequester {
                         throw NullPointerException(EXCEPTION_MESSAGE_NULL_TRAIL)
                     }
                 } else {
+                    throw NullPointerException(EXCEPTION_MESSAGE_NULL_HIKER)
+                }
+            }
+            catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    /**
+     * Like a trail
+     * @param trail : the trail
+     * @throws IllegalArgumentException if the trail has no id
+     * @throws NullPointerException if the trail or the current hiker is null
+     * @throws Exception if the request fails
+     */
+
+    @Throws(Exception::class)
+    suspend fun likeTrail(trail: Trail?) {
+        withContext(Dispatchers.IO) {
+            try {
+                val hiker = CurrentHikerInfo.currentHiker
+                if (hiker != null) {
+                    if (trail != null) {
+                        if (trail.id != null) {
+                            trail.nbLikes++
+                            launch { hikerRepository.updateHikerLikedTrail(hiker.id, trail) }
+                            launch { trailRepository.updateTrail(trail) }
+                        }
+                        else {
+                            throw IllegalArgumentException(EXCEPTION_MESSAGE_NO_ID_TRAIL)
+                        }
+                    }
+                    else {
+                        throw NullPointerException(EXCEPTION_MESSAGE_NULL_TRAIL)
+                    }
+                }
+                else {
+                    throw NullPointerException(EXCEPTION_MESSAGE_NULL_HIKER)
+                }
+            }
+            catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    /**
+     * Unlike a trail
+     * @param trail : the trail
+     * @throws IllegalArgumentException if the trail has no id
+     * @throws NullPointerException if the trail or the current hiker is null
+     * @throws Exception if the request fails
+     */
+
+    @Throws(Exception::class)
+    suspend fun unlikeTrail(trail: Trail?) {
+        withContext(Dispatchers.IO) {
+            try {
+                val hiker = CurrentHikerInfo.currentHiker
+                if (hiker != null) {
+                    if (trail != null) {
+                        if (trail.id != null) {
+                            if (trail.nbLikes > 0) {
+                                trail.nbLikes--
+                            }
+                            launch { hikerRepository.deleteHikerLikedTrail(hiker.id, trail.id!!) }
+                            launch { trailRepository.updateTrail(trail) }
+                        }
+                        else {
+                            throw IllegalArgumentException(EXCEPTION_MESSAGE_NO_ID_TRAIL)
+                        }
+                    }
+                    else {
+                        throw NullPointerException(EXCEPTION_MESSAGE_NULL_TRAIL)
+                    }
+                }
+                else {
+                    throw NullPointerException(EXCEPTION_MESSAGE_NULL_HIKER)
+                }
+            }
+            catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    /**
+     * Mark a trail
+     * @param trail : the trail
+     * @throws IllegalArgumentException if the trail has no id
+     * @throws NullPointerException if the trail or the current hiker is null
+     * @throws Exception if the request fails
+     */
+
+    @Throws(Exception::class)
+    suspend fun markTrail(trail: Trail?) {
+        withContext(Dispatchers.IO) {
+            try {
+                val hiker = CurrentHikerInfo.currentHiker
+                if (hiker != null) {
+                    if (trail != null) {
+                        if (trail.id != null) {
+                            launch { hikerRepository.updateHikerMarkedTrail(hiker.id, trail) }
+                        }
+                        else {
+                            throw IllegalArgumentException(EXCEPTION_MESSAGE_NO_ID_TRAIL)
+                        }
+                    }
+                    else {
+                        throw NullPointerException(EXCEPTION_MESSAGE_NULL_TRAIL)
+                    }
+                }
+                else {
+                    throw NullPointerException(EXCEPTION_MESSAGE_NULL_HIKER)
+                }
+            }
+            catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    /**
+     * Unmark a trail
+     * @param trail : the trail
+     * @throws IllegalArgumentException if the trail has no id
+     * @throws NullPointerException if the trail or the current hiker is null
+     * @throws Exception if the request fails
+     */
+
+    @Throws(Exception::class)
+    suspend fun unmarkTrail(trail: Trail?) {
+        withContext(Dispatchers.IO) {
+            try {
+                val hiker = CurrentHikerInfo.currentHiker
+                if (hiker != null) {
+                    if (trail != null) {
+                        if (trail.id != null) {
+                            launch { hikerRepository.deleteHikerMarkedTrail(hiker.id, trail.id!!) }
+                        }
+                        else {
+                            throw IllegalArgumentException(EXCEPTION_MESSAGE_NO_ID_TRAIL)
+                        }
+                    }
+                    else {
+                        throw NullPointerException(EXCEPTION_MESSAGE_NULL_TRAIL)
+                    }
+                }
+                else {
                     throw NullPointerException(EXCEPTION_MESSAGE_NULL_HIKER)
                 }
             }

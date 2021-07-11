@@ -7,6 +7,7 @@ import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
+import com.sildian.apps.togetrail.trail.model.core.Trail
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -91,6 +92,20 @@ class HikerRepository {
                     .await()
                 attendedEvents.forEach { attendedEvent ->
                     HikerFirebaseQueries.deleteAttendedEvent(hiker.id, attendedEvent.id)
+                }
+                val likedTrails = HikerFirebaseQueries
+                    .getLikedTrails(hiker.id)
+                    .get()
+                    .await()
+                likedTrails.forEach { likedTrail ->
+                    HikerFirebaseQueries.deleteLikedTrail(hiker.id, likedTrail.id)
+                }
+                val markedTrails = HikerFirebaseQueries
+                    .getMarkedTrails(hiker.id)
+                    .get()
+                    .await()
+                markedTrails.forEach { markedTrail ->
+                    HikerFirebaseQueries.deleteMarkedTrail(hiker.id, markedTrail.id)
                 }
                 val chats = HikerFirebaseQueries
                     .getChats(hiker.id)
@@ -198,6 +213,90 @@ class HikerRepository {
             try {
                 HikerFirebaseQueries
                     .deleteAttendedEvent(hikerId, eventId)
+                    .await()
+            }
+            catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    /**
+     * Creates or updates a trail liked by the hiker
+     * @param hikerId : the hiker's id
+     * @param trail : the trail to create or update
+     * @throws Exception if the request fails
+     */
+
+    @Throws(Exception::class)
+    suspend fun updateHikerLikedTrail(hikerId:String, trail: Trail){
+        withContext(Dispatchers.IO) {
+            try {
+                HikerFirebaseQueries
+                    .updateLikedTrail(hikerId, trail)
+                    .await()
+            }
+            catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    /**
+     * Deletes a trail liked by the hiker
+     * @param hikerId : the hiker's id
+     * @param trailId : the trail's id to delete
+     * @throws Exception if the request fails
+     */
+
+    @Throws(Exception::class)
+    suspend fun deleteHikerLikedTrail(hikerId: String, trailId: String){
+        withContext(Dispatchers.IO) {
+            try {
+                HikerFirebaseQueries
+                    .deleteLikedTrail(hikerId, trailId)
+                    .await()
+            }
+            catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    /**
+     * Creates or updates a trail marked by the hiker
+     * @param hikerId : the hiker's id
+     * @param trail : the trail to create or update
+     * @throws Exception if the request fails
+     */
+
+    @Throws(Exception::class)
+    suspend fun updateHikerMarkedTrail(hikerId:String, trail: Trail){
+        withContext(Dispatchers.IO) {
+            try {
+                HikerFirebaseQueries
+                    .updateMarkedTrail(hikerId, trail)
+                    .await()
+            }
+            catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    /**
+     * Deletes a trail marked by the hiker
+     * @param hikerId : the hiker's id
+     * @param trailId : the trail's id to delete
+     * @throws Exception if the request fails
+     */
+
+    @Throws(Exception::class)
+    suspend fun deleteHikerMarkedTrail(hikerId: String, trailId: String){
+        withContext(Dispatchers.IO) {
+            try {
+                HikerFirebaseQueries
+                    .deleteMarkedTrail(hikerId, trailId)
                     .await()
             }
             catch (e: Exception) {

@@ -207,4 +207,72 @@ class TrailViewModel : BaseViewModel() {
             }
         }
     }
+
+    /**
+     * Like the trail
+     */
+
+    fun likeTrail() {
+        viewModelScope.launch(this.exceptionHandler) {
+            try {
+                launch { trailDataRequester.likeTrail(trail.value) }.join()
+                Log.d(TAG, "Successfully liked the trail")
+            }
+            catch (e:Exception) {
+                Log.e(TAG, "Failed to like the trail : ${e.message}")
+                requestFailure.postValue(e)
+            }
+        }
+    }
+
+    /**
+     * Unlike the trail
+     */
+
+    fun unlikeTrail() {
+        viewModelScope.launch(this.exceptionHandler) {
+            try {
+                launch { trailDataRequester.unlikeTrail(trail.value) }.join()
+                Log.d(TAG, "Successfully unliked the trail")
+            }
+            catch (e:Exception) {
+                Log.e(TAG, "Failed to unlike the trail : ${e.message}")
+                requestFailure.postValue(e)
+            }
+        }
+    }
+
+    /**
+     * Mark the trail
+     */
+
+    fun markTrail() {
+        viewModelScope.launch(this.exceptionHandler) {
+            try {
+                launch { trailDataRequester.markTrail(trail.value) }.join()
+                Log.d(TAG, "Successfully marked the trail")
+            }
+            catch (e:Exception) {
+                Log.e(TAG, "Failed to mark the trail : ${e.message}")
+                requestFailure.postValue(e)
+            }
+        }
+    }
+
+    /**
+     * Unmark the trail
+     */
+
+    fun unmarkTrail() {
+        viewModelScope.launch(this.exceptionHandler) {
+            try {
+                launch { trailDataRequester.unmarkTrail(trail.value) }.join()
+                Log.d(TAG, "Successfully unmarked the trail")
+            }
+            catch (e:Exception) {
+                Log.e(TAG, "Failed to unmark the trail : ${e.message}")
+                requestFailure.postValue(e)
+            }
+        }
+    }
 }
