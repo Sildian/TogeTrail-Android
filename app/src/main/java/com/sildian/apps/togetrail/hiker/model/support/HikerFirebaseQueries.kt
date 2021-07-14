@@ -12,7 +12,6 @@ import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.trail.model.core.Trail
-
 /*************************************************************************************************
  * Provides with Firebase queries on Hiker
  ************************************************************************************************/
@@ -24,8 +23,8 @@ object HikerFirebaseQueries {
     private const val COLLECTION_NAME="hiker"
     private const val SUB_COLLECTION_HISTORY_ITEM="hikerHistoryItem"
     private const val SUB_COLLECTION_ATTENDED_EVENT_NAME="attendedEvent"
-    private const val SUB_COLLECTION_LIKED_TRAILS_NAME="likedTrails"
-    private const val SUB_COLLECTION_MARKED_TRAILS_NAME="markedTrails"
+    private const val SUB_COLLECTION_LIKED_TRAIL_NAME="likedTrail"
+    private const val SUB_COLLECTION_MARKED_TRAIL_NAME="markedTrail"
     private const val SUB_COLLECTION_CHAT_NAME = "chat"
     private const val SUB_COLLECTION_MESSAGE_NAME = "message"
     private fun getCollection() = FirebaseFirestore.getInstance().collection(COLLECTION_NAME)
@@ -33,10 +32,10 @@ object HikerFirebaseQueries {
         getCollection().document(hikerId).collection(SUB_COLLECTION_HISTORY_ITEM)
     private fun getAttendedEventSubCollection(hikerId:String) =
         getCollection().document(hikerId).collection(SUB_COLLECTION_ATTENDED_EVENT_NAME)
-    private fun getLikedTrailsSubCollection(hikerId: String) =
-        getCollection().document(hikerId).collection(SUB_COLLECTION_LIKED_TRAILS_NAME)
-    private fun getMarkedTrailsSubCollection(hikerId: String) =
-        getCollection().document(hikerId).collection(SUB_COLLECTION_MARKED_TRAILS_NAME)
+    private fun getLikedTrailSubCollection(hikerId: String) =
+        getCollection().document(hikerId).collection(SUB_COLLECTION_LIKED_TRAIL_NAME)
+    private fun getMarkedTrailSubCollection(hikerId: String) =
+        getCollection().document(hikerId).collection(SUB_COLLECTION_MARKED_TRAIL_NAME)
     private fun getChatSubCollection(hikerId: String) =
         getCollection().document(hikerId).collection(SUB_COLLECTION_CHAT_NAME)
     private fun getMessageSubCollection(hikerId: String, interlocutorId: String) =
@@ -159,7 +158,7 @@ object HikerFirebaseQueries {
      */
 
     fun getLikedTrails(hikerId: String): Query =
-        getLikedTrailsSubCollection(hikerId)
+        getLikedTrailSubCollection(hikerId)
 
     /**
      * Updates a trail liked by the hiker
@@ -168,8 +167,17 @@ object HikerFirebaseQueries {
      * @return a task result
      */
 
-    fun updateLikedTrail(hikerId: String, trail: Trail): Task<Void> =
-        getLikedTrailsSubCollection(hikerId).document(trail.id.toString()).set(trail)
+    fun updateLikedTrail(hikerId: String, trail: Trail): Task<Void> {
+
+        /*Simplifies the trail stored : clears all the points and poi*/
+
+        trail.trailTrack.trailPoints.clear()
+        trail.trailTrack.trailPointsOfInterest.clear()
+
+        /*Then updates the trail*/
+
+        return getLikedTrailSubCollection(hikerId).document(trail.id.toString()).set(trail)
+    }
 
     /**
      * Deletes a trail liked by the hiker
@@ -179,7 +187,7 @@ object HikerFirebaseQueries {
      */
 
     fun deleteLikedTrail(hikerId: String, trailId: String): Task<Void> =
-        getLikedTrailsSubCollection(hikerId).document(trailId).delete()
+        getLikedTrailSubCollection(hikerId).document(trailId).delete()
 
     /**
      * Gets all trails marked by the hiker
@@ -188,7 +196,7 @@ object HikerFirebaseQueries {
      */
 
     fun getMarkedTrails(hikerId: String): Query =
-        getMarkedTrailsSubCollection(hikerId)
+        getMarkedTrailSubCollection(hikerId)
 
     /**
      * Updates a trail marked by the hiker
@@ -197,8 +205,17 @@ object HikerFirebaseQueries {
      * @return a task result
      */
 
-    fun updateMarkedTrail(hikerId: String, trail: Trail): Task<Void> =
-        getMarkedTrailsSubCollection(hikerId).document(trail.id.toString()).set(trail)
+    fun updateMarkedTrail(hikerId: String, trail: Trail): Task<Void> {
+
+        /*Simplifies the trail stored : clears all the points and poi*/
+
+        trail.trailTrack.trailPoints.clear()
+        trail.trailTrack.trailPointsOfInterest.clear()
+
+        /*Then updates the trail*/
+
+        return getMarkedTrailSubCollection(hikerId).document(trail.id.toString()).set(trail)
+    }
 
     /**
      * Deletes a trail marked by the hiker
@@ -208,7 +225,7 @@ object HikerFirebaseQueries {
      */
 
     fun deleteMarkedTrail(hikerId: String, trailId: String): Task<Void> =
-        getMarkedTrailsSubCollection(hikerId).document(trailId).delete()
+        getMarkedTrailSubCollection(hikerId).document(trailId).delete()
 
     /**
      * Gets the list of chats for the given user
@@ -295,3 +312,4 @@ object HikerFirebaseQueries {
     fun deleteMessage(hikerId: String, interlocutorId: String, messageId: String): Task<Void> =
         getMessageSubCollection(hikerId, interlocutorId).document(messageId).delete()
 }
+
