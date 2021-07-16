@@ -221,8 +221,8 @@ class TrailDataRequester {
                     if (trail != null) {
                         if (trail.id != null) {
                             trail.nbLikes++
+                            launch { trailRepository.updateTrail(trail) }.join()
                             launch { hikerRepository.updateHikerLikedTrail(hiker.id, trail) }
-                            launch { trailRepository.updateTrail(trail) }
                         }
                         else {
                             throw IllegalArgumentException(EXCEPTION_MESSAGE_NO_ID_TRAIL)
@@ -261,8 +261,8 @@ class TrailDataRequester {
                             if (trail.nbLikes > 0) {
                                 trail.nbLikes--
                             }
+                            launch { trailRepository.updateTrail(trail) }.join()
                             launch { hikerRepository.deleteHikerLikedTrail(hiker.id, trail.id!!) }
-                            launch { trailRepository.updateTrail(trail) }
                         }
                         else {
                             throw IllegalArgumentException(EXCEPTION_MESSAGE_NO_ID_TRAIL)

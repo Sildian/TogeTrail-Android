@@ -5,6 +5,9 @@
         <variable
             name="trailMapDetailFragment"
             type="com.sildian.apps.togetrail.trail.map.TrailMapDetailFragment" />
+        <variable
+            name="trailViewModel"
+            type="com.sildian.apps.togetrail.trail.model.support.TrailViewModel" />
     </data>
 
     <FrameLayout
@@ -24,7 +27,43 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_gravity="right"
+            android:layout_gravity="start"
+            tools:ignore="RtlHardcoded">
+
+            <com.google.android.material.button.MaterialButton
+                style="@style/RoundIconButtonsStyle"
+                android:id="@+id/fragment_trail_map_detail_button_like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/components_margin_small"
+                android:alpha="0.87"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/colorSecondary"
+                android:textStyle="bold"
+                android:text="@{String.valueOf(trailViewModel.trail.nbLikes), default = `0`}"
+                app:icon="@{trailMapDetailFragment.isTrailLikedByUser() ? @drawable/ic_like_black : @drawable/ic_like_border_black}"
+                app:iconPadding="@dimen/components_margin_small"
+                app:backgroundTint="@color/colorPrimary"
+                android:onClick="@{trailMapDetailFragment::onLikeButtonClick}"/>
+
+            <com.google.android.material.button.MaterialButton
+                style="@style/RoundIconButtonsStyle"
+                android:id="@+id/fragment_trail_map_detail_button_mark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/components_margin_small"
+                android:alpha="0.87"
+                app:icon="@{trailMapDetailFragment.isTrailMarkedByUser() ? @drawable/ic_mark_black : @drawable/ic_mark_border_black}"
+                app:backgroundTint="@color/colorPrimary"
+                android:onClick="@{trailMapDetailFragment::onMarkButtonClick}"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="end"
             tools:ignore="RtlHardcoded">
 
             <com.google.android.material.button.MaterialButton

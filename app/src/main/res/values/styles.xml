@@ -173,6 +173,10 @@
         <item name="iconTint">@color/colorSecondary</item>
     </style>
 
+    <style name="RoundIconButtonsStyle" parent="@style/IconButtonStyle">
+        <item name="cornerRadius">@dimen/components_corner_large</item>
+    </style>
+
     <!-- Toggle Icon buttons -->
     <style name="ToggleIconButtonStyle" parent="@style/IconButtonStyle">
         <item name="backgroundTint">@color/colorset_toggle_background</item>

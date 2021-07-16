@@ -55,8 +55,9 @@ class TrailActivity : BaseActivity() {
     /**************************************Data**************************************************/
 
     private var currentAction= ACTION_TRAIL_SEE                 //Action defining what the user is performing
-    private var isEditable = false                              //True if the trail is editable
-    private lateinit var trailViewModel: TrailViewModel         //Trail data
+    private var isEditable = false
+    private var isTrailLoaded = false
+    private lateinit var trailViewModel: TrailViewModel
 
     /**********************************UI component**********************************************/
 
@@ -121,8 +122,11 @@ class TrailActivity : BaseActivity() {
 
     private fun observeTrail() {
         this.trailViewModel.trail.observe(this) { trail ->
-            if (currentAction == ACTION_TRAIL_SEE && trail != null) {
-                startTrailAction()
+            if (!isTrailLoaded) {
+                isTrailLoaded = true
+                if (currentAction == ACTION_TRAIL_SEE && trail != null) {
+                    startTrailAction()
+                }
             }
         }
     }
@@ -144,7 +148,7 @@ class TrailActivity : BaseActivity() {
             if(intent.hasExtra(KEY_BUNDLE_TRAIL_ID)) {
                 val trailId = intent.getStringExtra(KEY_BUNDLE_TRAIL_ID)
                 trailId?.let { id ->
-                    this.trailViewModel.loadTrailFromDatabase(id)
+                    this.trailViewModel.loadTrailFromDatabaseRealTime(id)
                 }
             }
             else {
