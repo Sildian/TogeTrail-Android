@@ -6,6 +6,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.databinding.FragmentTrailMapDetailBinding
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
@@ -76,22 +77,42 @@ class TrailMapDetailFragment(trailViewModel: TrailViewModel, isEditable:Boolean=
 
     @Suppress("UNUSED_PARAMETER")
     fun onLikeButtonClick(view: View) {
-        if (this.isTrailLikedByUser.value == true) {
-            this.trailViewModel?.unlikeTrail()
+        if (CurrentHikerInfo.currentHiker != null) {
+            if (this.isTrailLikedByUser.value == true) {
+                this.trailViewModel?.unlikeTrail()
+            } else {
+                this.trailViewModel?.likeTrail()
+            }
+            this.isTrailLikedByUser.value = !this.isTrailLikedByUser.value!!
         } else {
-            this.trailViewModel?.likeTrail()
+            hideInfoBottomSheet()
+            SnackbarHelper
+                .createSimpleSnackbar(
+                    getMessageView(),
+                    null,
+                    R.string.message_account_necessary
+                ).show()
         }
-        this.isTrailLikedByUser.value = !this.isTrailLikedByUser.value!!
     }
 
     @Suppress("UNUSED_PARAMETER")
     fun onMarkButtonClick(view: View) {
-        if (this.isTrailMarkedByUser.value == true) {
-            this.trailViewModel?.unmarkTrail()
+        if (CurrentHikerInfo.currentHiker != null) {
+            if (this.isTrailMarkedByUser.value == true) {
+                this.trailViewModel?.unmarkTrail()
+            } else {
+                this.trailViewModel?.markTrail()
+            }
+            this.isTrailMarkedByUser.value = !this.isTrailMarkedByUser.value!!
         } else {
-            this.trailViewModel?.markTrail()
+            hideInfoBottomSheet()
+            SnackbarHelper
+                .createSimpleSnackbar(
+                    getMessageView(),
+                    null,
+                    R.string.message_account_necessary
+                ).show()
         }
-        this.isTrailMarkedByUser.value = !this.isTrailMarkedByUser.value!!
     }
 
     /***********************************Map monitoring*******************************************/
