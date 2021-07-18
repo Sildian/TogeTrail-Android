@@ -98,6 +98,48 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:reverseLayout="false"/>
 
+            <TextView
+                android:id="@+id/fragment_trails_list_text_liked"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/components_margin_medium"
+                android:layout_marginBottom="@dimen/components_margin_small"
+                android:layout_marginStart="@dimen/components_margin_medium"
+                android:layout_marginEnd="@dimen/components_margin_medium"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_title"
+                android:textColor="@color/colorSecondaryDark"
+                android:text="@string/label_trail_list_liked"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fragment_trails_list_recycler_view_liked"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:reverseLayout="false"/>
+
+            <TextView
+                android:id="@+id/fragment_trails_list_text_marked"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/components_margin_medium"
+                android:layout_marginBottom="@dimen/components_margin_small"
+                android:layout_marginStart="@dimen/components_margin_medium"
+                android:layout_marginEnd="@dimen/components_margin_medium"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_title"
+                android:textColor="@color/colorSecondaryDark"
+                android:text="@string/label_trail_list_marked"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fragment_trails_list_recycler_view_marked"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:reverseLayout="false"/>
+
         </LinearLayout>
 
     </ScrollView>

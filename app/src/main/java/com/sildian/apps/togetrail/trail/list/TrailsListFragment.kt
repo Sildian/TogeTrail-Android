@@ -6,6 +6,8 @@ import com.google.firebase.firestore.Query
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
+import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
+import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
 import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
 import com.sildian.apps.togetrail.main.MainActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
@@ -36,6 +38,12 @@ class TrailsListFragment (private val hikerViewModel: HikerViewModel?=null) :
     private val nearbyHomeTrailsText by lazy {layout.fragment_trails_list_text_nearby_home}
     private val nearbyHomeTrailsRecyclerView by lazy {layout.fragment_trails_list_recycler_view_nearby_home}
     private lateinit var nearbyHomeTrailsAdapter:TrailHorizontalAdapter
+    private val likedTrailsText by lazy {layout.fragment_trails_list_text_liked}
+    private val likedTrailsRecyclerView by lazy {layout.fragment_trails_list_recycler_view_liked}
+    private lateinit var likedTrailsAdapter:TrailHorizontalAdapter
+    private val markedTrailsText by lazy {layout.fragment_trails_list_text_marked}
+    private val markedTrailsRecyclerView by lazy {layout.fragment_trails_list_recycler_view_marked}
+    private lateinit var markedTrailsAdapter:TrailHorizontalAdapter
 
     /***********************************Data monitoring******************************************/
 
@@ -54,6 +62,8 @@ class TrailsListFragment (private val hikerViewModel: HikerViewModel?=null) :
         initializeLastAddedTrailsRecyclerView()
         initializeMyTrailsRecyclerView()
         initializeNearbyHomeTrailsRecyclerView()
+        initializeLikedTrailsRecyclerView()
+        initializeMarkedTrailsRecyclerView()
     }
 
     private fun updateCurrentResearchTrailsRecyclerView(){
@@ -107,6 +117,40 @@ class TrailsListFragment (private val hikerViewModel: HikerViewModel?=null) :
         else{
             this.nearbyHomeTrailsText.visibility= View.GONE
             this.nearbyHomeTrailsRecyclerView.visibility=View.GONE
+        }
+    }
+
+    private fun initializeLikedTrailsRecyclerView(){
+        if(CurrentHikerInfo.currentHiker != null) {
+            this.likedTrailsAdapter = TrailHorizontalAdapter(
+                DatabaseFirebaseHelper.generateOptionsForAdapter(
+                    Trail::class.java,
+                    HikerFirebaseQueries.getLikedTrails(CurrentHikerInfo.currentHiker?.id!!),
+                    activity as AppCompatActivity
+                ), this
+            )
+            this.likedTrailsRecyclerView.adapter = this.likedTrailsAdapter
+        }
+        else{
+            this.likedTrailsText.visibility= View.GONE
+            this.likedTrailsRecyclerView.visibility=View.GONE
+        }
+    }
+
+    private fun initializeMarkedTrailsRecyclerView(){
+        if(CurrentHikerInfo.currentHiker != null) {
+            this.markedTrailsAdapter = TrailHorizontalAdapter(
+                DatabaseFirebaseHelper.generateOptionsForAdapter(
+                    Trail::class.java,
+                    HikerFirebaseQueries.getMarkedTrails(CurrentHikerInfo.currentHiker?.id!!),
+                    activity as AppCompatActivity
+                ), this
+            )
+            this.markedTrailsRecyclerView.adapter = this.markedTrailsAdapter
+        }
+        else{
+            this.markedTrailsText.visibility= View.GONE
+            this.markedTrailsRecyclerView.visibility=View.GONE
         }
     }
 

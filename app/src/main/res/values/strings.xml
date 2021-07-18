@@ -102,6 +102,8 @@
     <string name="label_trail_list_last_added">Last trails</string>
     <string name="label_trail_list_my_trails">My own trails</string>
     <string name="label_trail_list_nearby_home">Trails near my home</string>
+    <string name="label_trail_list_liked">Trails I liked</string>
+    <string name="label_trail_list_marked">Trails I marked</string>
     <string name="label_trail_list_current_research">Current research</string>
     <!-- TrailPointOfInterest -->
     <string name="label_trail_poi_main_info">Main info</string>
