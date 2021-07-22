@@ -48,8 +48,8 @@ import com.sildian.apps.togetrail.trail.list.TrailsListFragment
 import com.sildian.apps.togetrail.trail.map.TrailActivity
 import com.sildian.apps.togetrail.trail.map.TrailMapFragment
 import com.sildian.apps.togetrail.trail.model.core.Trail
+import com.sildian.apps.togetrail.trail.model.support.HikerTrailsViewModel
 import com.sildian.apps.togetrail.trail.model.support.TrailFirebaseQueries
-import com.sildian.apps.togetrail.trail.model.support.TrailsViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.navigation_view_header.view.*
 import net.danlew.android.joda.JodaTimeAndroid
@@ -92,8 +92,7 @@ class MainActivity :
 
     private lateinit var hikerViewModel: HikerViewModel
     private lateinit var hikerChatViewModel: HikerChatViewModel
-    private lateinit var hikerLikedTrailsViewModel: TrailsViewModel
-    private lateinit var hikerMarkedTrailsViewModel: TrailsViewModel
+    private lateinit var hikerTrailsViewModel: HikerTrailsViewModel
     private var isNbUnreadMessagesBadgeShown = false
 
     /*************************************Queries************************************************/
@@ -307,12 +306,9 @@ class MainActivity :
         this.hikerChatViewModel = ViewModelProviders
             .of(this, ViewModelFactory)
             .get(HikerChatViewModel::class.java)
-        this.hikerLikedTrailsViewModel = ViewModelProviders
+        this.hikerTrailsViewModel = ViewModelProviders
             .of(this, ViewModelFactory)
-            .get(TrailsViewModel::class.java)
-        this.hikerMarkedTrailsViewModel = ViewModelProviders
-            .of(this, ViewModelFactory)
-            .get(TrailsViewModel::class.java)
+            .get(HikerTrailsViewModel::class.java)
     }
 
     private fun observeHiker() {
@@ -323,8 +319,7 @@ class MainActivity :
                 hiker == null -> {
                     this.hikerViewModel.clearQueryRegistration()
                     this.hikerChatViewModel.clearQueryRegistration()
-                    this.hikerLikedTrailsViewModel.clearQueryRegistration()
-                    this.hikerMarkedTrailsViewModel.clearQueryRegistration()
+                    this.hikerTrailsViewModel.clearQueryRegistration()
                     updateNavigationViewUserItems()
                 }
                 !this.hikerViewModel.isQueryRegistrationBusy() -> {
@@ -350,7 +345,7 @@ class MainActivity :
     }
 
     private fun observeHikerLikedTrails() {
-        this.hikerLikedTrailsViewModel.trails.observe(this) { trails ->
+        this.hikerTrailsViewModel.likedTrails.observe(this) { trails ->
             if (trails != null) {
                 CurrentHikerInfo.currentHikerLikedTrail.clear()
                 CurrentHikerInfo.currentHikerLikedTrail.addAll(trails)
@@ -359,7 +354,7 @@ class MainActivity :
     }
 
     private fun observeHikerMarkedTrails() {
-        this.hikerMarkedTrailsViewModel.trails.observe(this) { trails ->
+        this.hikerTrailsViewModel.markedTrails.observe(this) { trails ->
             if (trails != null) {
                 CurrentHikerInfo.currentHikerMarkedTrail.clear()
                 CurrentHikerInfo.currentHikerMarkedTrail.addAll(trails)
@@ -378,12 +373,7 @@ class MainActivity :
                 onQueryError(e)
             }
         }
-        this.hikerLikedTrailsViewModel.requestFailure.observe(this) { e ->
-            if (e != null) {
-                onQueryError(e)
-            }
-        }
-        this.hikerMarkedTrailsViewModel.requestFailure.observe(this) { e ->
+        this.hikerTrailsViewModel.requestFailure.observe(this) { e ->
             if (e != null) {
                 onQueryError(e)
             }
@@ -411,13 +401,13 @@ class MainActivity :
 
     private fun loadHikerLikedTrails() {
         this.hikerViewModel.hiker.value?.id?.let { hikerId ->
-            this.hikerLikedTrailsViewModel.loadTrailsFromDatabaseRealTime(HikerFirebaseQueries.getLikedTrails(hikerId))
+            this.hikerTrailsViewModel.loadLikedTrailsFromDatabaseRealTime(hikerId)
         }
     }
 
     private fun loadHikerMarkedTrails() {
         this.hikerViewModel.hiker.value?.id?.let { hikerId ->
-            this.hikerMarkedTrailsViewModel.loadTrailsFromDatabaseRealTime(HikerFirebaseQueries.getMarkedTrails(hikerId))
+            this.hikerTrailsViewModel.loadMarkedTrailsFromDatabaseRealTime(hikerId)
         }
     }
 

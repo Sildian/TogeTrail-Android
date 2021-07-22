@@ -25,12 +25,12 @@ abstract class BaseViewModel: ViewModel(), Observable {
 
     /**************************Query registration monitoring*************************************/
 
-    fun clearQueryRegistration() {
+    open fun clearQueryRegistration() {
         this.queryRegistration?.remove()
         this.queryRegistration = null
     }
 
-    fun isQueryRegistrationBusy(): Boolean = this.queryRegistration != null
+    open fun isQueryRegistrationBusy(): Boolean = this.queryRegistration != null
 
     /*****************************Callbacks monitoring*******************************************/
 
