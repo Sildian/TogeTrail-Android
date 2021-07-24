@@ -7,11 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Add possibility to chat with an other user in a private space
+- Enable liking or marking a trail
+- Enable chatting with an other user in a private space
 - Add chat space to event screen
 ### Changed
-- Enable trail record when app is on background
 - Add info on Trail and Event screens
+- Enable trail record when app is on background
 ### Fixed
 - Fix compatibility down to Android 4.4 (API 19)
 - Fix user location bug occurring when creating a new trail
