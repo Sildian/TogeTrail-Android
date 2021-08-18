@@ -5,14 +5,14 @@ import androidx.databinding.ViewDataBinding
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
+import com.sildian.apps.togetrail.databinding.ActivityChatBinding
 import com.sildian.apps.togetrail.hiker.profile.ProfileActivity
-import kotlinx.android.synthetic.main.activity_chat.*
 
 /*************************************************************************************************
  * This activity allows the user to chat with other hikers
  ************************************************************************************************/
 
-class ChatActivity : BaseActivity() {
+class ChatActivity : BaseActivity<ActivityChatBinding>() {
 
     /**********************************Static items**********************************************/
 
@@ -24,7 +24,6 @@ class ChatActivity : BaseActivity() {
 
     /**********************************UI component**********************************************/
 
-    private val toolbar by lazy { activity_chat_toolbar }
     private lateinit var fragment: BaseFragment<out ViewDataBinding>
 
     /********************************Navigation control******************************************/
@@ -75,7 +74,7 @@ class ChatActivity : BaseActivity() {
     }
 
     private fun initializeToolbar() {
-        setSupportActionBar(this.toolbar)
+        setSupportActionBar(this.binding.activityChatToolbar)
         supportActionBar?.setTitle(R.string.toolbar_chat)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }

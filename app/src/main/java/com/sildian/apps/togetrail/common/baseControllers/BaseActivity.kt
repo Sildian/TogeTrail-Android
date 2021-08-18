@@ -11,6 +11,8 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.permissionsHelpers.PermissionsCallback
 import com.sildian.apps.togetrail.common.utils.permissionsHelpers.PermissionsHelper
@@ -20,7 +22,7 @@ import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
  * Base for all activities
  ************************************************************************************************/
 
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity<T: ViewDataBinding> : AppCompatActivity() {
 
     /**********************************Static items**********************************************/
 
@@ -34,13 +36,14 @@ abstract class BaseActivity : AppCompatActivity() {
 
     /*********************************UI components**********************************************/
 
-    private var progressDialog: AlertDialog?=null
+    protected lateinit var binding: T
+    private var progressDialog: AlertDialog? = null
 
     /************************************Life cycle**********************************************/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(getLayoutId())
+        this.binding = DataBindingUtil.setContentView(this, getLayoutId())
         loadData()
         initializeUI()
     }

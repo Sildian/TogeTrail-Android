@@ -12,17 +12,17 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseImagePickerFragment
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
+import com.sildian.apps.togetrail.databinding.ActivityTrailInfoEditBinding
 import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.location.search.LocationSearchActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
-import kotlinx.android.synthetic.main.activity_trail_info_edit.*
 
 /*************************************************************************************************
  * This activity allows the user to edit information about a trail or a trailPointOfInterest
  ************************************************************************************************/
 
-class TrailInfoEditActivity : BaseActivity() {
+class TrailInfoEditActivity : BaseActivity<ActivityTrailInfoEditBinding>() {
 
     /**********************************Static items**********************************************/
 
@@ -53,7 +53,6 @@ class TrailInfoEditActivity : BaseActivity() {
 
     /**********************************UI component**********************************************/
 
-    private val toolbar by lazy {activity_trail_info_edit_toolbar}
     private var fragment: BaseImagePickerFragment<out ViewDataBinding>?=null
 
     /************************************Life cycle**********************************************/
@@ -138,7 +137,7 @@ class TrailInfoEditActivity : BaseActivity() {
     }
 
     private fun initializeToolbar(){
-        setSupportActionBar(this.toolbar)
+        setSupportActionBar(this.binding.activityTrailInfoEditToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         when(this.currentAction){
             ACTION_TRAIL_EDIT_INFO -> supportActionBar?.setTitle(R.string.toolbar_trail_info)

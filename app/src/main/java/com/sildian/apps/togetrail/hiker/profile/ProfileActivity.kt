@@ -9,6 +9,7 @@ import com.sildian.apps.togetrail.chat.chatRoom.ChatActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
+import com.sildian.apps.togetrail.databinding.ActivityProfileBinding
 import com.sildian.apps.togetrail.event.detail.EventActivity
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.profileEdit.ProfileEditActivity
@@ -18,7 +19,7 @@ import com.sildian.apps.togetrail.trail.map.TrailActivity
  * Allows to see a hiker's profile or related information
  ************************************************************************************************/
 
-class ProfileActivity : BaseActivity() {
+class ProfileActivity : BaseActivity<ActivityProfileBinding>() {
 
     /**********************************Static items**********************************************/
 

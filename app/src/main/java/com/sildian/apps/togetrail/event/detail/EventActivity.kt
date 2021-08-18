@@ -7,6 +7,7 @@ import androidx.databinding.ViewDataBinding
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
+import com.sildian.apps.togetrail.databinding.ActivityEventBinding
 import com.sildian.apps.togetrail.event.edit.EventEditActivity
 import com.sildian.apps.togetrail.hiker.profile.ProfileActivity
 import com.sildian.apps.togetrail.trail.map.TrailActivity
@@ -15,7 +16,7 @@ import com.sildian.apps.togetrail.trail.map.TrailActivity
  * Displays an event's detail info and allows a user to register on this event
  ************************************************************************************************/
 
-class EventActivity : BaseActivity() {
+class EventActivity : BaseActivity<ActivityEventBinding>() {
 
     /**********************************Static items**********************************************/
 

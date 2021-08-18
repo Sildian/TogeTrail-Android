@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.chat.model.core.Message
@@ -55,7 +56,7 @@ class MessageWriteDialogFragment(
     }
 
     override fun onDismiss(dialog: DialogInterface) {
-        (activity as BaseActivity).hideKeyboard()
+        (activity as BaseActivity<out ViewDataBinding>).hideKeyboard()
         super.onDismiss(dialog)
     }
 

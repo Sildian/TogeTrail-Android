@@ -14,15 +14,17 @@ import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRe
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
+import com.sildian.apps.togetrail.databinding.ActivityLocationSearchBinding
 import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.location.model.support.LocationBuilder
-import kotlinx.android.synthetic.main.activity_location_search.*
 
 /*************************************************************************************************
  * Lets the user search for a location using Google Places API
  ************************************************************************************************/
 
-class LocationSearchActivity : BaseActivity(), LocationPredictionAdapter.OnLocationClickListener {
+class LocationSearchActivity :
+    BaseActivity<ActivityLocationSearchBinding>(),
+    LocationPredictionAdapter.OnLocationClickListener {
 
     /**********************************Static items**********************************************/
 
@@ -43,14 +45,11 @@ class LocationSearchActivity : BaseActivity(), LocationPredictionAdapter.OnLocat
 
     /*************************************Data***************************************************/
 
-    private var fineResearch=false  //True if the research's precision level is an address. Otherwise it is locality's level.
-    private val locationsPredictions= arrayListOf<AutocompletePrediction>()     //The list of predictions given by Google Places API
+    private var fineResearch = false    //True if the research's precision level is an address. Otherwise it is locality's level.
+    private val locationsPredictions = arrayListOf<AutocompletePrediction>()     //The list of predictions given by Google Places API
 
     /**********************************UI component**********************************************/
 
-    private val toolbar by lazy {activity_location_search_toolbar}
-    private val researchTextField by lazy {activity_location_search_text_field_research}
-    private val locationsPredictionsRecyclerView by lazy {activity_location_search_recycler_view_locations_predictions}
     private lateinit var locationsPredictionsAdapter: LocationPredictionAdapter
 
     /********************************Navigation control******************************************/
@@ -91,15 +90,15 @@ class LocationSearchActivity : BaseActivity(), LocationPredictionAdapter.OnLocat
     }
 
     private fun initializeToolbar(){
-        setSupportActionBar(this.toolbar)
+        setSupportActionBar(this.binding.activityLocationSearchToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title=""
     }
 
     @Suppress("UNUSED_ANONYMOUS_PARAMETER")
     private fun initializeResearchTextField(){
-        this.researchTextField.doOnTextChanged { text, start, count, after ->
-            if(count>=1) {
+        this.binding.activityLocationSearchTextFieldResearch.doOnTextChanged { text, start, count, after ->
+            if (count >= 1) {
                 searchLocations()
             }
         }
@@ -111,7 +110,7 @@ class LocationSearchActivity : BaseActivity(), LocationPredictionAdapter.OnLocat
                 this.locationsPredictions,
                 this
             )
-        this.locationsPredictionsRecyclerView.adapter=this.locationsPredictionsAdapter
+        this.binding.activityLocationSearchRecyclerViewLocationsPredictions.adapter = this.locationsPredictionsAdapter
     }
 
     /**********************************Location research*****************************************/
@@ -126,7 +125,7 @@ class LocationSearchActivity : BaseActivity(), LocationPredictionAdapter.OnLocat
         val request=FindAutocompletePredictionsRequest.builder()
             .setSessionToken(this.autocompleteSessionToken)
             .setTypeFilter(typeFilter)
-            .setQuery(this.researchTextField.text.toString())
+            .setQuery(this.binding.activityLocationSearchTextFieldResearch.text.toString())
             .build()
 
         this.placesClient.findAutocompletePredictions(request)

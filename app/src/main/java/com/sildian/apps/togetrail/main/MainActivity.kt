@@ -35,6 +35,7 @@ import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.permissionsHelpers.PermissionsCallback
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
+import com.sildian.apps.togetrail.databinding.ActivityMainBinding
 import com.sildian.apps.togetrail.event.detail.EventActivity
 import com.sildian.apps.togetrail.event.edit.EventEditActivity
 import com.sildian.apps.togetrail.event.list.EventsListFragment
@@ -51,7 +52,6 @@ import com.sildian.apps.togetrail.trail.map.TrailMapFragment
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.support.HikerTrailsViewModel
 import com.sildian.apps.togetrail.trail.model.support.TrailFirebaseQueries
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.navigation_view_header.view.*
 import net.danlew.android.joda.JodaTimeAndroid
 
@@ -60,7 +60,7 @@ import net.danlew.android.joda.JodaTimeAndroid
  ************************************************************************************************/
 
 class MainActivity :
-    BaseActivity(),
+    BaseActivity<ActivityMainBinding>(),
     PermissionsCallback,
     NavigationView.OnNavigationItemSelectedListener,
     BottomNavigationView.OnNavigationItemSelectedListener
@@ -105,14 +105,8 @@ class MainActivity :
 
     private var fragment:BaseFragment<out ViewDataBinding>?=null
     private val nbUnreadMessagesBadge by lazy { BadgeDrawable.create(this) }
-    private val toolbar by lazy {activity_main_toolbar}
-    private val searchTextField by lazy {activity_main_text_field_research}
-    private val clearResearchButton by lazy {activity_main_button_research_clear}
-    private val progressbar by lazy {activity_main_progressbar}
-    private val drawerLayout by lazy {activity_main_drawer_layout}
-    private val navigationView by lazy {activity_main_navigation_view}
     private val navigationViewHeader by lazy {
-        layoutInflater.inflate(R.layout.navigation_view_header, this.navigationView)
+        layoutInflater.inflate(R.layout.navigation_view_header, this.binding.activityMainNavigationView)
     }
     private val navigationHeaderUserImage by lazy {
         navigationViewHeader.navigation_view_header_user_image
@@ -120,9 +114,6 @@ class MainActivity :
     private val navigationHeaderUserNameText by lazy {
         navigationViewHeader.navigation_view_header_text_user_name
     }
-    private val bottomNavigationView by lazy {activity_main_bottom_navigation_view}
-    private val addButton by lazy {activity_main_button_add}
-    private val messageView by lazy {activity_main_view_message}
 
     /************************************Life cycle**********************************************/
 
@@ -141,9 +132,9 @@ class MainActivity :
     /************************************Navigation control**************************************/
 
     override fun onBackPressed() {
-        if(this.drawerLayout.isDrawerOpen(GravityCompat.START)){
-            this.drawerLayout.closeDrawers()
-        }else {
+        if (this.binding.activityMainDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            this.binding.activityMainDrawerLayout.closeDrawers()
+        } else {
             super.onBackPressed()
         }
     }
@@ -199,7 +190,7 @@ class MainActivity :
             /*Navigation View*/
 
             R.id.menu_user -> {
-                this.drawerLayout.closeDrawer(GravityCompat.START)
+                this.binding.activityMainDrawerLayout.closeDrawer(GravityCompat.START)
                 when (item.itemId) {
                     R.id.menu_user_profile -> {
                         if(AuthFirebaseHelper.getCurrentUser()!=null){
@@ -215,9 +206,9 @@ class MainActivity :
                             showAccountNecessaryMessage()
                         }
                     R.id.menu_user_trails ->
-                        this.bottomNavigationView.selectedItemId = R.id.menu_main_trails
+                        this.binding.activityMainBottomNavigationView.selectedItemId = R.id.menu_main_trails
                     R.id.menu_user_events ->
-                        this.bottomNavigationView.selectedItemId = R.id.menu_main_events
+                        this.binding.activityMainBottomNavigationView.selectedItemId = R.id.menu_main_events
                     R.id.menu_user_login ->
                         startLogin()
                 }
@@ -283,7 +274,7 @@ class MainActivity :
 
         /*Creates the popup and shows it*/
 
-        val menuPopupHelper=MenuPopupHelper(this, menuBuilder, this.addButton)
+        val menuPopupHelper=MenuPopupHelper(this, menuBuilder, this.binding.activityMainButtonAdd)
         menuPopupHelper.setForceShowIcon(true)
         menuPopupHelper.show()
     }
@@ -314,7 +305,7 @@ class MainActivity :
 
     private fun observeHiker() {
         this.hikerViewModel.hiker.observe(this) { hiker ->
-            this.progressbar.visibility = View.GONE
+            this.binding.activityMainProgressbar.visibility = View.GONE
             CurrentHikerInfo.currentHiker = hikerViewModel.hiker.value
             when {
                 hiker == null -> {
@@ -383,7 +374,7 @@ class MainActivity :
 
     private fun loginCurrentUser() {
         if (AuthFirebaseHelper.getCurrentUser() != null) {
-            this.progressbar.visibility = View.VISIBLE
+            this.binding.activityMainProgressbar.visibility = View.VISIBLE
             this.hikerViewModel.loginUser()
         }
     }
@@ -414,24 +405,24 @@ class MainActivity :
 
     fun showQueryResultEmptyMessage(){
         SnackbarHelper
-            .createSimpleSnackbar(this.messageView, this.addButton, R.string.message_query_result_empty)
+            .createSimpleSnackbar(this.binding.activityMainViewMessage, this.binding.activityMainButtonAdd, R.string.message_query_result_empty)
             .show()
     }
 
     fun showAccountNecessaryMessage() {
         SnackbarHelper
-            .createSnackbarWithAction(this.messageView, this.addButton, R.string.message_account_necessary,
+            .createSnackbarWithAction(this.binding.activityMainViewMessage, this.binding.activityMainButtonAdd, R.string.message_account_necessary,
                 R.string.button_common_sign_in, this::startLogin)
             .show()
     }
 
     fun setQueriesToSearchAroundPoint(point: LatLng){
-        val latToDisplay=NumberUtilities.displayNumber(point.latitude, 4)
-        val lngToDisplay=NumberUtilities.displayNumber(point.longitude, 4)
-        val pointToDisplay="$latToDisplay ; $lngToDisplay"
-        this.searchTextField.setText(pointToDisplay)
-        this.trailsQuery=TrailFirebaseQueries.getTrailsAroundPoint(point)
-        this.eventsQuery=EventFirebaseQueries.getEventsAroundPoint(point)
+        val latToDisplay = NumberUtilities.displayNumber(point.latitude, 4)
+        val lngToDisplay = NumberUtilities.displayNumber(point.longitude, 4)
+        val pointToDisplay = "$latToDisplay ; $lngToDisplay"
+        this.binding.activityMainTextFieldResearch.setText(pointToDisplay)
+        this.trailsQuery = TrailFirebaseQueries.getTrailsAroundPoint(point)
+        this.eventsQuery = EventFirebaseQueries.getEventsAroundPoint(point)
         when (this.fragment) {
             is TrailMapFragment -> this.fragment?.updateData(null)
             is TrailsListFragment -> this.fragment?.updateData(this.trailsQuery)
@@ -442,7 +433,7 @@ class MainActivity :
     @Suppress("MemberVisibilityCanBePrivate")
     fun setQueriesToSearchAroundLocation(location:Location){
         if(location.country!=null) {
-            this.searchTextField.setText(location.toString())
+            this.binding.activityMainTextFieldResearch.setText(location.toString())
             this.trailsQuery = TrailFirebaseQueries.getTrailsNearbyLocation(location)!!
             this.eventsQuery = EventFirebaseQueries.getEventsNearbyLocation(location)!!
             when (this.fragment) {
@@ -454,9 +445,9 @@ class MainActivity :
     }
 
     fun resetQueries(){
-        this.searchTextField.text=null
-        this.trailsQuery=TrailFirebaseQueries.getLastTrails()
-        this.eventsQuery=EventFirebaseQueries.getNextEvents()
+        this.binding.activityMainTextFieldResearch.text = null
+        this.trailsQuery = TrailFirebaseQueries.getLastTrails()
+        this.eventsQuery = EventFirebaseQueries.getNextEvents()
         when (this.fragment) {
             is TrailMapFragment -> this.fragment?.updateData(null)
             is TrailsListFragment -> this.fragment?.updateData(this.trailsQuery)
@@ -490,38 +481,38 @@ class MainActivity :
     }
 
     private fun initializeToolbar(){
-        setSupportActionBar(this.toolbar)
+        setSupportActionBar(this.binding.activityMainToolbar)
         supportActionBar?.title=""
     }
 
     private fun initializeSearchTextField(){
-        this.searchTextField.setOnClickListener {
+        this.binding.activityMainTextFieldResearch.setOnClickListener {
             startLocationSearchActivity()
         }
     }
 
     private fun initializeClearResearchButton(){
-        this.clearResearchButton.setOnClickListener {
+        this.binding.activityMainButtonResearchClear.setOnClickListener {
             resetQueries()
         }
     }
 
     private fun initializeNavigationView(){
         val toggle = ActionBarDrawerToggle(
-            this, this.drawerLayout, this.toolbar,
+            this, this.binding.activityMainDrawerLayout, this.binding.activityMainToolbar,
             R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        this.drawerLayout.addDrawerListener(toggle)
+        this.binding.activityMainDrawerLayout.addDrawerListener(toggle)
         toggle.syncState()
-        this.navigationView.setNavigationItemSelectedListener(this)
+        this.binding.activityMainNavigationView.setNavigationItemSelectedListener(this)
         updateNavigationViewUserItems()
     }
 
     private fun initializeBottomNavigationView(){
-        this.bottomNavigationView.setOnNavigationItemSelectedListener(this)
+        this.binding.activityMainBottomNavigationView.setOnNavigationItemSelectedListener(this)
     }
 
     private fun initializeAddButton(){
-        this.addButton.setOnClickListener {
+        this.binding.activityMainButtonAdd.setOnClickListener {
             showAddMenuOptions()
         }
     }
@@ -554,7 +545,7 @@ class MainActivity :
             nbUnreadMessagesBadge.backgroundColor = ContextCompat.getColor(this, android.R.color.holo_red_dark)
             if (!isNbUnreadMessagesBadgeShown) {
                 nbUnreadMessagesBadge.maxCharacterCount = 2
-                BadgeUtils.attachBadgeDrawable(nbUnreadMessagesBadge, this.toolbar, R.id.menu_chat_chat)
+                BadgeUtils.attachBadgeDrawable(nbUnreadMessagesBadge, this.binding.activityMainToolbar, R.id.menu_chat_chat)
                 isNbUnreadMessagesBadgeShown = true
             }
         }

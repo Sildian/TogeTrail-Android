@@ -18,15 +18,15 @@ abstract class BaseFragment<T: ViewDataBinding> : Fragment() {
 
     /*********************************UI components**********************************************/
 
-    protected var baseActivity: BaseActivity? = null            //The activity reference
-    protected lateinit var layout: View                         //The fragment's layout
-    protected lateinit var binding: T                           //Item for data binding
+    protected var baseActivity: BaseActivity<out ViewDataBinding>? = null
+    protected lateinit var layout: View
+    protected lateinit var binding: T
 
     /************************************Life cycle**********************************************/
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        this.baseActivity = context as BaseActivity
+        this.baseActivity = context as BaseActivity<out ViewDataBinding>
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{

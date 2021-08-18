@@ -13,13 +13,13 @@ import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
+import com.sildian.apps.togetrail.databinding.ActivityTrailBinding
 import com.sildian.apps.togetrail.hiker.profile.ProfileActivity
 import com.sildian.apps.togetrail.trail.infoEdit.TrailInfoEditActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.support.TrailBuildException
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
 import io.ticofab.androidgpxparser.parser.GPXParser
-import kotlinx.android.synthetic.main.activity_trail.*
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 
@@ -27,7 +27,7 @@ import java.io.IOException
  * This activity monitors the trails and lets the user see or edit a trail
  ************************************************************************************************/
 
-class TrailActivity : BaseActivity() {
+class TrailActivity : BaseActivity<ActivityTrailBinding>() {
 
     /**********************************Static items**********************************************/
 
@@ -62,7 +62,6 @@ class TrailActivity : BaseActivity() {
 
     /**********************************UI component**********************************************/
 
-    private val toolbar by lazy {activity_trail_toolbar}
     private var fragment: BaseTrailMapFragment<out ViewDataBinding>?=null
 
     /********************************Navigation control******************************************/
@@ -229,7 +228,7 @@ class TrailActivity : BaseActivity() {
     }
 
     private fun initializeToolbar(){
-        setSupportActionBar(this.toolbar)
+        setSupportActionBar(this.binding.activityTrailToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         when(this.currentAction){
             ACTION_TRAIL_SEE -> supportActionBar?.setTitle(R.string.toolbar_trail)

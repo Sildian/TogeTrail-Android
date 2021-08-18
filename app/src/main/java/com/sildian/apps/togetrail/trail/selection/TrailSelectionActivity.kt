@@ -10,19 +10,19 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.firestore.Query
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
+import com.sildian.apps.togetrail.databinding.ActivityTrailSelectionBinding
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.location.search.LocationSearchActivity
 import com.sildian.apps.togetrail.trail.map.TrailActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.support.TrailFirebaseQueries
-import kotlinx.android.synthetic.main.activity_trail_selection.*
 
 /*************************************************************************************************
  * This activity displays different queries to select trails to attach to an event
  ************************************************************************************************/
 
-class TrailSelectionActivity : BaseActivity() {
+class TrailSelectionActivity : BaseActivity<ActivityTrailSelectionBinding>() {
 
     /**********************************Static items**********************************************/
 
@@ -45,15 +45,6 @@ class TrailSelectionActivity : BaseActivity() {
 
     private val trailsQueries: HashMap <String, Query> = hashMapOf()    //A hashMap with the trails queries to show (key=id (see above), entry=query)
     private var selectedTrails: ArrayList<Trail> = arrayListOf()        //The list of selected trails
-
-    /**********************************UI component**********************************************/
-
-    private val toolbar by lazy {activity_trail_selection_toolbar}
-    private val searchTextField by lazy {activity_trail_selection_text_field_research}
-    private val viewpagerLayout by lazy {activity_trail_selection_layout_viewpager}
-    private val tabs by lazy {activity_trail_selection_tabs}
-    private val pager by lazy {activity_trail_selection_pager}
-    private val validateButton by lazy {activity_trail_selection_button_validate}
 
     /********************************Navigation control******************************************/
 
@@ -118,9 +109,9 @@ class TrailSelectionActivity : BaseActivity() {
         if(location.country!=null) {
             this.trailsQueries[KEY_QUERY_CURRENT_RESEARCH] =
                 TrailFirebaseQueries.getTrailsNearbyLocation(location)!!
-            this.pager.adapter?.notifyDataSetChanged()
-            val index=this.trailsQueries.keys.toList().indexOf(KEY_QUERY_CURRENT_RESEARCH)
-            this.pager.setCurrentItem(index, true)
+            this.binding.activityTrailSelectionPager.adapter?.notifyDataSetChanged()
+            val index = this.trailsQueries.keys.toList().indexOf(KEY_QUERY_CURRENT_RESEARCH)
+            this.binding.activityTrailSelectionPager.setCurrentItem(index, true)
             showViewPager()
         }
     }
@@ -137,19 +128,19 @@ class TrailSelectionActivity : BaseActivity() {
     }
 
     private fun initializeToolbar(){
-        setSupportActionBar(this.toolbar)
+        setSupportActionBar(this.binding.activityTrailSelectionToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setTitle(R.string.toolbar_event_select_trails)
     }
 
     private fun initializeSearchTextField(){
-        this.searchTextField.setOnClickListener {
+        this.binding.activityTrailSelectionTextFieldResearch.setOnClickListener {
             startLocationSearchActivity()
         }
     }
 
     private fun initializeValidateButton(){
-        this.validateButton.setOnClickListener {
+        this.binding.activityTrailSelectionButtonValidate.setOnClickListener {
             finishOk()
         }
     }
@@ -157,14 +148,14 @@ class TrailSelectionActivity : BaseActivity() {
     /**********************************Trails monitoring******************************************/
 
     fun addSelectedTrail(trail:Trail){
-        if(this.selectedTrails.firstOrNull { it.id==trail.id } ==null){
+        if (this.selectedTrails.firstOrNull { it.id==trail.id } == null) {
             this.selectedTrails.add(trail)
         }
     }
 
     fun removeSelectedTrail(trail:Trail){
-        val trailToRemove= this.selectedTrails.firstOrNull { it.id==trail.id }
-        if(trailToRemove !=null) {
+        val trailToRemove = this.selectedTrails.firstOrNull { it.id==trail.id }
+        if (trailToRemove !=null) {
             this.selectedTrails.remove(trailToRemove)
         }
     }
@@ -176,10 +167,10 @@ class TrailSelectionActivity : BaseActivity() {
     /**********************************View pager monitoring**************************************/
 
     private fun showViewPager(){
-        this.viewpagerLayout.visibility= View.VISIBLE
-        this.pager.adapter=TrailSelectionAdapter(this as FragmentActivity)
-        TabLayoutMediator(this.tabs, this.pager) { tab, position ->
-            when(this.trailsQueries.keys.toList()[position]){
+        this.binding.activityTrailSelectionLayoutViewpager.visibility = View.VISIBLE
+        this.binding.activityTrailSelectionPager.adapter = TrailSelectionAdapter(this as FragmentActivity)
+        TabLayoutMediator(this.binding.activityTrailSelectionTabs, this.binding.activityTrailSelectionPager) { tab, position ->
+            when (this.trailsQueries.keys.toList()[position]) {
                 KEY_QUERY_LAST_TRAILS -> tab.setText(R.string.label_trail_list_last_added)
                 KEY_QUERY_MY_TRAILS -> tab.setText(R.string.label_trail_list_my_trails)
                 KEY_QUERY_TRAILS_NEARBY_HOME -> tab.setText(R.string.label_trail_list_nearby_home)
@@ -225,7 +216,7 @@ class TrailSelectionActivity : BaseActivity() {
             if(data!=null && data.hasExtra(LocationSearchActivity.KEY_BUNDLE_LOCATION)){
                 val location=data.getParcelableExtra<Location>(LocationSearchActivity.KEY_BUNDLE_LOCATION)
                 location?.let { loc ->
-                    this.searchTextField.setText(loc.toString())
+                    this.binding.activityTrailSelectionTextFieldResearch.setText(loc.toString())
                     setResearchQuery(loc)
                 }
             }

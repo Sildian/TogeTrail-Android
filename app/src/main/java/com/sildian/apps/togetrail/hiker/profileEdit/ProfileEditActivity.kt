@@ -10,15 +10,15 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.baseControllers.BaseImagePickerFragment
+import com.sildian.apps.togetrail.databinding.ActivityProfileEditBinding
 import com.sildian.apps.togetrail.location.search.LocationSearchActivity
 import com.sildian.apps.togetrail.location.model.core.Location
-import kotlinx.android.synthetic.main.activity_profile_edit.*
 
 /*************************************************************************************************
  * Lets a user see and edit his own profile
  ************************************************************************************************/
 
-class ProfileEditActivity : BaseActivity() {
+class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>() {
 
     /**********************************Static items**********************************************/
 
@@ -47,7 +47,6 @@ class ProfileEditActivity : BaseActivity() {
 
     /**********************************UI component**********************************************/
 
-    private val toolbar by lazy {activity_profile_edit_toolbar}
     private var fragment: BaseFragment<out ViewDataBinding>?=null
 
     /********************************Navigation control******************************************/
@@ -118,7 +117,7 @@ class ProfileEditActivity : BaseActivity() {
     }
 
     private fun initializeToolbar(){
-        setSupportActionBar(this.toolbar)
+        setSupportActionBar(this.binding.activityProfileEditToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         when(this.currentAction){
             ACTION_PROFILE_EDIT_INFO ->
