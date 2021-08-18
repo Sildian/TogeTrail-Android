@@ -7,8 +7,8 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputEditText
 import com.sildian.apps.togetrail.R
-import kotlinx.android.synthetic.main.dialog_request_info.view.*
 
 /*************************************************************************************************
  * Provides with some functions allowing to create dialogs
@@ -115,7 +115,7 @@ object DialogHelper {
                                 callback: (String?)->Unit): AlertDialog {
 
         val view = LayoutInflater.from(context).inflate(R.layout.dialog_request_info, null)
-        val infoTextField = view.dialog_request_info_text_field_info
+        val infoTextField = view.findViewById<TextInputEditText>(R.id.dialog_request_info_text_field_info)
 
         return MaterialAlertDialogBuilder(context)
             .setBackground(AppCompatResources.getDrawable(context, R.drawable.shape_corners_round_color_primary))

@@ -8,6 +8,8 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.view.menu.MenuPopupHelper
@@ -52,7 +54,6 @@ import com.sildian.apps.togetrail.trail.map.TrailMapFragment
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.support.HikerTrailsViewModel
 import com.sildian.apps.togetrail.trail.model.support.TrailFirebaseQueries
-import kotlinx.android.synthetic.main.navigation_view_header.view.*
 import net.danlew.android.joda.JodaTimeAndroid
 
 /*************************************************************************************************
@@ -98,8 +99,8 @@ class MainActivity :
 
     /*************************************Queries************************************************/
 
-    var trailsQuery=TrailFirebaseQueries.getLastTrails();private set
-    var eventsQuery=EventFirebaseQueries.getNextEvents();private set
+    var trailsQuery = TrailFirebaseQueries.getLastTrails(); private set
+    var eventsQuery = EventFirebaseQueries.getNextEvents(); private set
 
     /**********************************UI component**********************************************/
 
@@ -109,10 +110,10 @@ class MainActivity :
         layoutInflater.inflate(R.layout.navigation_view_header, this.binding.activityMainNavigationView)
     }
     private val navigationHeaderUserImage by lazy {
-        navigationViewHeader.navigation_view_header_user_image
+        navigationViewHeader.findViewById<ImageView>(R.id.navigation_view_header_user_image)
     }
     private val navigationHeaderUserNameText by lazy {
-        navigationViewHeader.navigation_view_header_text_user_name
+        navigationViewHeader.findViewById<TextView>(R.id.navigation_view_header_text_user_name)
     }
 
     /************************************Life cycle**********************************************/

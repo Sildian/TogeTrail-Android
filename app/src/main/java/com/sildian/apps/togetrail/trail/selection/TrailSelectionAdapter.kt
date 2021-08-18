@@ -6,16 +6,11 @@ import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.utils.MetricsHelper
 import com.sildian.apps.togetrail.databinding.ItemRecyclerViewTrailSelectionBinding
 import com.sildian.apps.togetrail.trail.model.core.Trail
-import com.sildian.apps.togetrail.trail.model.core.TrailLevel
-import kotlinx.android.synthetic.main.item_recycler_view_trail_selection.view.*
 
 /*************************************************************************************************
  * Displays a list of trails with a purpose to select some of them

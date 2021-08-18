@@ -4,6 +4,8 @@ import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -29,8 +31,6 @@ import com.sildian.apps.togetrail.main.MainActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailLevel
 import com.sildian.apps.togetrail.trail.model.support.TrailsViewModel
-import kotlinx.android.synthetic.main.map_info_window_event.view.*
-import kotlinx.android.synthetic.main.map_info_window_trail.view.*
 
 /*************************************************************************************************
  * Shows the list of trails on a map, and also the list of events
@@ -258,9 +258,15 @@ class TrailMapFragment :
     }
 
     private fun showTrailInfoWindow(marker:Marker?, trail:Trail):View?{
-        val view=layoutInflater.inflate(
+        val view = layoutInflater.inflate(
             R.layout.map_info_window_trail, this.layout as ViewGroup, false)
-        if(trail.getFirstPhotoUrl()!=null) {
+        val photoImageView = view.findViewById<ImageView>(R.id.map_info_window_trail_image_view_photo)
+        val nameText = view.findViewById<TextView>(R.id.map_info_window_trail_text_name)
+        val levelText = view.findViewById<TextView>(R.id.map_info_window_trail_text_level)
+        val durationText = view.findViewById<TextView>(R.id.map_info_window_trail_text_duration)
+        val ascentText = view.findViewById<TextView>(R.id.map_info_window_trail_text_ascent)
+        val locationText = view.findViewById<TextView>(R.id.map_info_window_trail_text_location)
+        if (trail.getFirstPhotoUrl() != null) {
             Glide.with(view)
                 .load(trail.getFirstPhotoUrl())
                 .apply(RequestOptions.centerCropTransform())
@@ -279,27 +285,32 @@ class TrailMapFragment :
                         return false
                     }
                 })
-                .into(view.map_info_window_trail_image_view_photo)
+                .into(photoImageView)
         }
-        view.map_info_window_trail_text_name.text=trail.name
+        nameText.text = trail.name
         when(trail.level){
-            TrailLevel.UNKNOWN -> view.map_info_window_trail_text_level.setText(R.string.label_trail_level_unknown)
-            TrailLevel.EASY -> view.map_info_window_trail_text_level.setText(R.string.label_trail_level_easy)
-            TrailLevel.MEDIUM -> view.map_info_window_trail_text_level.setText(R.string.label_trail_level_medium)
-            TrailLevel.HARD -> view.map_info_window_trail_text_level.setText(R.string.label_trail_level_hard)
+            TrailLevel.UNKNOWN -> levelText.setText(R.string.label_trail_level_unknown)
+            TrailLevel.EASY -> levelText.setText(R.string.label_trail_level_easy)
+            TrailLevel.MEDIUM -> levelText.setText(R.string.label_trail_level_medium)
+            TrailLevel.HARD -> levelText.setText(R.string.label_trail_level_hard)
         }
-        view.map_info_window_trail_text_duration.text=
+        durationText.text=
             MetricsHelper.displayDuration(context!!, trail.duration)
-        view.map_info_window_trail_text_ascent.text=
+        ascentText.text=
             MetricsHelper.displayAscent(context!!, trail.ascent, true, false)
-        view.map_info_window_trail_text_location.text=trail.location.toString()
+        locationText.text = trail.location.toString()
         return view
     }
 
     private fun showEventInfoWindow(marker:Marker?, event:Event):View?{
-        val view=layoutInflater.inflate(
+        val view = layoutInflater.inflate(
             R.layout.map_info_window_event, this.layout as ViewGroup, false)
-        if(event.mainPhotoUrl!=null) {
+        val photoImageView = view.findViewById<ImageView>(R.id.map_info_window_event_image_view_photo)
+        val nameText = view.findViewById<TextView>(R.id.map_info_window_event_text_name)
+        val beginDateText = view.findViewById<TextView>(R.id.map_info_window_event_text_begin_date)
+        val nbDaysText = view.findViewById<TextView>(R.id.map_info_window_event_text_nb_days)
+        val locationText = view.findViewById<TextView>(R.id.map_info_window_event_text_location)
+        if (event.mainPhotoUrl!=null) {
             Glide.with(view)
                 .load(event.mainPhotoUrl)
                 .apply(RequestOptions.centerCropTransform())
@@ -318,11 +329,11 @@ class TrailMapFragment :
                         return false
                     }
                 })
-                .into(view.map_info_window_event_image_view_photo)
+                .into(photoImageView)
         }
-        view.map_info_window_event_text_name.text=event.name
+        nameText.text=event.name
         event.beginDate?.let { beginDate ->
-            view.map_info_window_event_text_begin_date.text = DateUtilities.displayDateShort(beginDate)
+            beginDateText.text = DateUtilities.displayDateShort(beginDate)
         }
         event.getNbDays()?.let { nbDays ->
             val metric = if (nbDays > 1) {
@@ -331,9 +342,9 @@ class TrailMapFragment :
                 resources.getString(R.string.label_event_day)
             }
             val nbDaysToDisplay = "$nbDays $metric"
-            view.map_info_window_event_text_nb_days.text = nbDaysToDisplay
+            nbDaysText.text = nbDaysToDisplay
         }
-        view.map_info_window_event_text_location.text=event.meetingPoint.toString()
+        locationText.text=event.meetingPoint.toString()
         return view
     }
 
