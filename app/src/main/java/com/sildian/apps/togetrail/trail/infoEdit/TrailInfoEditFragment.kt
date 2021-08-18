@@ -16,8 +16,6 @@ import com.sildian.apps.togetrail.databinding.FragmentTrailInfoEditBinding
 import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.trail.model.core.TrailLevel
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
-import kotlinx.android.synthetic.main.fragment_trail_info_edit.*
-import kotlinx.android.synthetic.main.fragment_trail_info_edit.view.*
 
 /*************************************************************************************************
  * Allows to edit information about a trail
@@ -25,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_trail_info_edit.view.*
  ************************************************************************************************/
 
 class TrailInfoEditFragment(private val trailViewModel: TrailViewModel? = null)
-    : BaseImagePickerFragment()
+    : BaseImagePickerFragment<FragmentTrailInfoEditBinding>()
 {
 
     /**********************************Static items**********************************************/
@@ -54,19 +52,6 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel? = null)
     val currentMaxValue = MutableLiveData<Int>()
     val currentValue = MutableLiveData<Int?>()
 
-    /**********************************UI component**********************************************/
-
-    private val nameTextFieldLayout by lazy {layout.fragment_trail_info_edit_text_field_layout_name}
-    private val nameTextField by lazy {layout.fragment_trail_info_edit_text_field_name}
-    private val levelTextFieldDropDownLayout by lazy {layout.fragment_trail_info_edit_text_field_dropdown_layout_level}
-    private val levelTextFieldDropDown by lazy {layout.fragment_trail_info_edit_text_field_dropdown_level}
-    private val loopSwitch by lazy {layout.fragment_trail_info_edit_switch_loop}
-    private val locationTextFieldLayout by lazy {layout.fragment_trail_info_edit_text_field_layout_location}
-    private val locationTextField by lazy {layout.fragment_trail_info_edit_text_field_location}
-    private val descriptionTextField by lazy {layout.fragment_trail_info_edit_text_field_description}
-    private val messageView by lazy {layout.fragment_trail_info_edit_view_message}
-    private val messageAnchorView by lazy {layout.fragment_trail_info_edit_bottom_sheet_add_photo}
-
     /**************************************Life cycle********************************************/
 
     override fun onDestroy() {
@@ -84,8 +69,8 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel? = null)
     }
 
     private fun initializeData() {
-        (this.binding as FragmentTrailInfoEditBinding).trailInfoEditFragment = this
-        (this.binding as FragmentTrailInfoEditBinding).trailViewModel = this.trailViewModel
+        this.binding.trailInfoEditFragment = this
+        this.binding.trailViewModel = this.trailViewModel
     }
 
     private fun observeTrail() {
@@ -119,7 +104,7 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel? = null)
     override fun updateData(data:Any?) {
         if (data is Location) {
             this.trailViewModel?.trail?.value?.location = data
-            this.locationTextField.setText(data.fullAddress)
+            this.binding.fragmentTrailInfoEditTextFieldLocation.setText(data.fullAddress)
         }
     }
 
@@ -221,11 +206,11 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel? = null)
 
     override fun saveData() {
         if (checkDataIsValid()) {
-            this.trailViewModel?.trail?.value?.name = this.nameTextField.text.toString()
+            this.trailViewModel?.trail?.value?.name = this.binding.fragmentTrailInfoEditTextFieldName.text.toString()
             this.trailViewModel?.trail?.value?.level =
-                TrailLevel.fromValue(this.levelTextFieldDropDown.tag.toString().toInt())
-            this.trailViewModel?.trail?.value?.loop = this.loopSwitch.isChecked
-            this.trailViewModel?.trail?.value?.description = this.descriptionTextField.text.toString()
+                TrailLevel.fromValue(this.binding.fragmentTrailInfoEditTextFieldDropdownLevel.tag.toString().toInt())
+            this.trailViewModel?.trail?.value?.loop = this.binding.fragmentTrailInfoEditSwitchLoop.isChecked
+            this.trailViewModel?.trail?.value?.description = this.binding.fragmentTrailInfoEditTextFieldDescription.text.toString()
             this.trailViewModel?.trail?.value?.autoPopulatePosition()
             this.baseActivity?.showProgressDialog()
             this.trailViewModel?.saveTrailInDatabase(false)
@@ -238,12 +223,12 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel? = null)
                 return true
             } else {
                 SnackbarHelper
-                    .createSimpleSnackbar(this.messageView, this.messageAnchorView, R.string.message_trail_level_unknown)
+                    .createSimpleSnackbar(this.binding.fragmentTrailInfoEditViewMessage, this.binding.fragmentTrailInfoEditBottomSheetAddPhoto, R.string.message_trail_level_unknown)
                     .show()
             }
         } else {
             SnackbarHelper
-                .createSimpleSnackbar(this.messageView, this.messageAnchorView, R.string.message_text_fields_empty)
+                .createSimpleSnackbar(this.binding.fragmentTrailInfoEditViewMessage, this.binding.fragmentTrailInfoEditBottomSheetAddPhoto, R.string.message_text_fields_empty)
                 .show()
         }
         return false
@@ -251,17 +236,17 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel? = null)
 
     private fun checkTextFieldsAreNotEmpty():Boolean{
         val textFieldsAndLayouts: HashMap<TextInputEditText, TextInputLayout> = hashMapOf()
-        textFieldsAndLayouts[this.nameTextField] = this.nameTextFieldLayout
-        textFieldsAndLayouts[this.locationTextField] = this.locationTextFieldLayout
+        textFieldsAndLayouts[this.binding.fragmentTrailInfoEditTextFieldName] = this.binding.fragmentTrailInfoEditTextFieldLayoutName
+        textFieldsAndLayouts[this.binding.fragmentTrailInfoEditTextFieldLocation] = this.binding.fragmentTrailInfoEditTextFieldLayoutLocation
         return TextFieldHelper.checkAllTextFieldsAreNotEmpty(textFieldsAndLayouts)
     }
 
     private fun checkTextFieldsDropDownAreNotUnknown():Boolean{
-        return if (this.levelTextFieldDropDown.tag == 0) {
-            this.levelTextFieldDropDownLayout.error = getString(R.string.message_text_field_empty)
+        return if (this.binding.fragmentTrailInfoEditTextFieldDropdownLevel.tag == 0) {
+            this.binding.fragmentTrailInfoEditTextFieldDropdownLayoutLevel.error = getString(R.string.message_text_field_empty)
             false
         } else {
-            this.levelTextFieldDropDownLayout.error = null
+            this.binding.fragmentTrailInfoEditTextFieldDropdownLayoutLevel.error = null
             true
         }
     }
@@ -283,7 +268,7 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel? = null)
     private fun updateLevelTextFieldDropDown(){
         val choice=resources.getStringArray(R.array.array_trail_levels)
         val initialValue=(this.trailViewModel?.trail?.value?.level?.value?: TrailLevel.MEDIUM.value)
-        DropdownMenuHelper.populateDropdownMenu(this.levelTextFieldDropDown, choice, initialValue)
+        DropdownMenuHelper.populateDropdownMenu(this.binding.fragmentTrailInfoEditTextFieldDropdownLevel, choice, initialValue)
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -304,17 +289,17 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel? = null)
     @Suppress("UNUSED_PARAMETER")
     fun onValueClick(view: View) {
         when (view) {
-            fragment_trail_info_edit_text_duration ->
+            this.binding.fragmentTrailInfoEditTextDuration ->
                 setCurrentMetric(METRIC_DURATION)
-            fragment_trail_info_edit_text_ascent ->
+            this.binding.fragmentTrailInfoEditTextAscent ->
                 setCurrentMetric(METRIC_ASCENT)
-            fragment_trail_info_edit_text_descent ->
+            this.binding.fragmentTrailInfoEditTextDescent ->
                 setCurrentMetric(METRIC_DESCENT)
-            fragment_trail_info_edit_text_distance ->
+            this.binding.fragmentTrailInfoEditTextDistance ->
                 setCurrentMetric(METRIC_DISTANCE)
-            fragment_trail_info_edit_text_max_elevation ->
+            this.binding.fragmentTrailInfoEditTextMaxElevation ->
                 setCurrentMetric(METRIC_MAX_ELEVATION)
-            fragment_trail_info_edit_text_min_elevation ->
+            this.binding.fragmentTrailInfoEditTextMinElevation ->
                 setCurrentMetric(METRIC_MIN_ELEVATION)
         }
     }

@@ -9,14 +9,13 @@ import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelp
 import com.sildian.apps.togetrail.databinding.FragmentChatSelectionBinding
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
-import kotlinx.android.synthetic.main.fragment_chat_selection.view.*
 
 /*************************************************************************************************
  * Displays the current user's list of current chats
  ************************************************************************************************/
 
 class ChatSelectionFragment :
-    BaseFragment(),
+    BaseFragment<FragmentChatSelectionBinding>(),
     ChatAdapter.OnChatClickListener,
     ChatAdapter.OnChatsChangedListener
 {
@@ -27,7 +26,6 @@ class ChatSelectionFragment :
 
     /**********************************UI component**********************************************/
 
-    private val chatsRecyclerView by lazy { layout.fragment_chat_selection_recycler_view_chats }
     private lateinit var chatsAdapter: ChatAdapter
 
     /******************************Data monitoring***********************************************/
@@ -37,7 +35,7 @@ class ChatSelectionFragment :
     }
 
     private fun initializeData() {
-        (this.binding as FragmentChatSelectionBinding).chatSelectionFragment = this
+        this.binding.chatSelectionFragment = this
     }
 
     /***********************************UI monitoring********************************************/
@@ -57,7 +55,7 @@ class ChatSelectionFragment :
                     this
                 ), this, this
             )
-            this.chatsRecyclerView.adapter = chatsAdapter
+            this.binding.fragmentChatSelectionRecyclerViewChats.adapter = chatsAdapter
         }
     }
 

@@ -3,6 +3,7 @@ package com.sildian.apps.togetrail.trail.info
 import android.content.Intent
 import android.view.View
 import androidx.core.net.toUri
+import androidx.databinding.ViewDataBinding
 import com.google.android.gms.maps.model.LatLng
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.GoogleMapUrlHelper
@@ -11,7 +12,6 @@ import com.sildian.apps.togetrail.trail.map.BaseTrailMapFragment
 import com.sildian.apps.togetrail.trail.map.TrailActivity
 import com.sildian.apps.togetrail.trail.model.support.ElevationChartGenerator
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
-import kotlinx.android.synthetic.main.fragment_trail_info.view.*
 
 /*************************************************************************************************
  * Shows information about a trail
@@ -21,16 +21,11 @@ import kotlinx.android.synthetic.main.fragment_trail_info.view.*
  ************************************************************************************************/
 
 class TrailInfoFragment(
-    private val trailViewModel: TrailViewModel?=null,
-    private val isEditable:Boolean=false
+    private val trailViewModel: TrailViewModel? = null,
+    private val isEditable:Boolean = false
 )
-    : BaseInfoFragment()
+    : BaseInfoFragment<FragmentTrailInfoBinding>()
 {
-
-    /**********************************UI component**********************************************/
-
-    private val elevationChartLayout by lazy {layout.fragment_trail_info_layout_chart_elevation}
-    private val elevationChart by lazy { layout.fragment_trail_info_chart_elevation }
 
     /**********************************Support items*********************************************/
 
@@ -45,9 +40,9 @@ class TrailInfoFragment(
     }
 
     private fun initializeData() {
-        (this.binding as FragmentTrailInfoBinding).trailInfoFragment = this
-        (this.binding as FragmentTrailInfoBinding).trailViewModel = this.trailViewModel
-        (this.binding as FragmentTrailInfoBinding).isEditable = this.isEditable
+        this.binding.trailInfoFragment = this
+        this.binding.trailViewModel = this.trailViewModel
+        this.binding.isEditable = this.isEditable
         this.elevationChartGenerator = ElevationChartGenerator(context!!, this.trailViewModel?.trail?.value)
     }
 
@@ -83,33 +78,33 @@ class TrailInfoFragment(
     }
 
     private fun initializeElevationChart() {
-        this.elevationChart.setTouchEnabled(false)
-        this.elevationChart.description = null
-        this.elevationChart.legend.isEnabled = false
-        this.elevationChart.xAxis.setDrawLabels(false)
-        this.elevationChart.axisRight.setDrawLabels(false)
-        this.elevationChart.axisLeft.valueFormatter = ElevationChartGenerator.ElevationValueFormatter(context!!)
+        this.binding.fragmentTrailInfoChartElevation.setTouchEnabled(false)
+        this.binding.fragmentTrailInfoChartElevation.description = null
+        this.binding.fragmentTrailInfoChartElevation.legend.isEnabled = false
+        this.binding.fragmentTrailInfoChartElevation.xAxis.setDrawLabels(false)
+        this.binding.fragmentTrailInfoChartElevation.axisRight.setDrawLabels(false)
+        this.binding.fragmentTrailInfoChartElevation.axisLeft.valueFormatter = ElevationChartGenerator.ElevationValueFormatter(context!!)
     }
 
     private fun updateElevationChart() {
         this.elevationChartGenerator.generateChartData()
         if (this.elevationChartGenerator.chartData != null) {
-            this.elevationChartLayout.visibility = View.VISIBLE
-            this.elevationChart.data = this.elevationChartGenerator.chartData
-            this.elevationChart.invalidate()
+            this.binding.fragmentTrailInfoLayoutChartElevation.visibility = View.VISIBLE
+            this.binding.fragmentTrailInfoChartElevation.data = this.elevationChartGenerator.chartData
+            this.binding.fragmentTrailInfoChartElevation.invalidate()
         } else {
-            this.elevationChartLayout.visibility = View.GONE
+            this.binding.fragmentTrailInfoLayoutChartElevation.visibility = View.GONE
         }
     }
 
     @Suppress("UNUSED_PARAMETER")
     fun onSeeButtonClick(view:View) {
-        (parentFragment as BaseTrailMapFragment).expandInfoBottomSheet()
+        (parentFragment as BaseTrailMapFragment<out ViewDataBinding>).expandInfoBottomSheet()
     }
 
     @Suppress("UNUSED_PARAMETER")
     fun onEditButtonClick(view:View){
-        (parentFragment as BaseTrailMapFragment).editTrailInfo()
+        (parentFragment as BaseTrailMapFragment<out ViewDataBinding>).editTrailInfo()
     }
 
     @Suppress("UNUSED_PARAMETER")

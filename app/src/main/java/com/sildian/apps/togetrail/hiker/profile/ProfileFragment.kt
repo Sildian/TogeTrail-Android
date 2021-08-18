@@ -11,26 +11,23 @@ import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
 import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
-import kotlinx.android.synthetic.main.fragment_profile.view.*
 
 /*************************************************************************************************
  * Shows a hiker's profile
  * @param hikerId : the hiker's id
  ************************************************************************************************/
 
-class ProfileFragment (private val hikerId: String?)
-    : BaseFragment(),
+class ProfileFragment (private val hikerId: String?) :
+    BaseFragment<FragmentProfileBinding>(),
     HikerHistoryAdapter.OnHikerHistoryItemClick
 {
 
     /*****************************************Data***********************************************/
 
-    private lateinit var hikerViewModel:HikerViewModel
+    private lateinit var hikerViewModel: HikerViewModel
 
     /**********************************UI component**********************************************/
 
-    private val toolbar by lazy {layout.fragment_profile_toolbar}
-    private val historyItemsRecyclerView by lazy {layout.fragment_profile_recycler_view_history_items}
     private lateinit var historyItemAdapter: HikerHistoryAdapter
 
     /***********************************Data monitoring******************************************/
@@ -46,7 +43,7 @@ class ProfileFragment (private val hikerId: String?)
         this.hikerViewModel = ViewModelProviders
             .of(this, ViewModelFactory)
             .get(HikerViewModel::class.java)
-        (this.binding as FragmentProfileBinding).hikerViewModel = this.hikerViewModel
+        this.binding.hikerViewModel = this.hikerViewModel
     }
 
     private fun observeHiker() {
@@ -84,7 +81,7 @@ class ProfileFragment (private val hikerId: String?)
     }
 
     private fun initializeToolbar(){
-        (activity as ProfileActivity).setSupportActionBar(this.toolbar)
+        (activity as ProfileActivity).setSupportActionBar(this.binding.fragmentProfileToolbar)
         (activity as ProfileActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
@@ -99,7 +96,7 @@ class ProfileFragment (private val hikerId: String?)
                 hiker.name.toString(),
                 this
             )
-            this.historyItemsRecyclerView.adapter = this.historyItemAdapter
+            this.binding.fragmentProfileRecyclerViewHistoryItems.adapter = this.historyItemAdapter
         }
     }
 

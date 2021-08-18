@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -13,7 +12,6 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.databinding.DialogFragmentMessageWriteBinding
-import kotlinx.android.synthetic.main.dialog_fragment_message_write.view.*
 
 /*************************************************************************************************
  * Displays a BottomSheetDialogFragment allowing the user
@@ -31,8 +29,7 @@ class MessageWriteDialogFragment(
 
     /*****************************************UI items*******************************************/
 
-    private lateinit var layout: View
-    private lateinit var messageTextField: EditText
+    private lateinit var binding: DialogFragmentMessageWriteBinding
 
     /****************************************Callbacks*******************************************/
 
@@ -45,17 +42,15 @@ class MessageWriteDialogFragment(
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
-        val binding: DialogFragmentMessageWriteBinding = DataBindingUtil.inflate(inflater, R.layout.dialog_fragment_message_write, container, false)
-        binding.messageWriteDialogFragment = this
-        this.layout = binding.root
-        return this.layout
+        this.binding = DataBindingUtil.inflate(inflater, R.layout.dialog_fragment_message_write, container, false)
+        this.binding.messageWriteDialogFragment = this
+        return this.binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        this.messageTextField = this.layout.dialog_fragment_message_write_text_field_message
         if (this.messageToEdit != null) {
-            this.messageTextField.setText(this.messageToEdit.text)
+            this.binding.dialogFragmentMessageWriteTextFieldMessage.setText(this.messageToEdit.text)
         }
     }
 
@@ -68,21 +63,21 @@ class MessageWriteDialogFragment(
 
     @Suppress("UNUSED_PARAMETER")
     fun onCancelMessageButtonClick(view: View) {
-        this.messageTextField.setText("")
+        this.binding.dialogFragmentMessageWriteTextFieldMessage.setText("")
         dismiss()
     }
 
     @Suppress("UNUSED_PARAMETER")
     fun onValidateMessageButtonClick(view: View) {
-        val text = this.messageTextField.text.toString()
+        val text = this.binding.dialogFragmentMessageWriteTextFieldMessage.text.toString()
         if (text.isNotEmpty()) {
             if (this.messageToEdit == null) {
-                this.messageWriteCallback.sendMessage(this.messageTextField.text.toString())
+                this.messageWriteCallback.sendMessage(this.binding.dialogFragmentMessageWriteTextFieldMessage.text.toString())
             }
             else {
-                this.messageWriteCallback.editMessage(this.messageToEdit, this.messageTextField.text.toString())
+                this.messageWriteCallback.editMessage(this.messageToEdit, this.binding.dialogFragmentMessageWriteTextFieldMessage.text.toString())
             }
-            this.messageTextField.setText("")
+            this.binding.dialogFragmentMessageWriteTextFieldMessage.setText("")
             dismiss()
         }
     }

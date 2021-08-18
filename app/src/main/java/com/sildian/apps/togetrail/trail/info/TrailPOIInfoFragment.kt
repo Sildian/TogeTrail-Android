@@ -1,6 +1,7 @@
 package com.sildian.apps.togetrail.trail.info
 
 import android.view.View
+import androidx.databinding.ViewDataBinding
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.databinding.FragmentTrailPoiInfoBinding
 import com.sildian.apps.togetrail.trail.map.BaseTrailMapFragment
@@ -15,11 +16,11 @@ import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
  ************************************************************************************************/
 
 class TrailPOIInfoFragment (
-    private val trailViewModel: TrailViewModel?=null,
-    private val trailPointOfInterestPosition:Int?=null,
+    private val trailViewModel: TrailViewModel? = null,
+    private val trailPointOfInterestPosition:Int? = null,
     private val isEditable:Boolean=false
 )
-    : BaseInfoFragment() {
+    : BaseInfoFragment<FragmentTrailPoiInfoBinding>() {
 
     /*********************************Data monitoring********************************************/
 
@@ -33,9 +34,9 @@ class TrailPOIInfoFragment (
         this.trailPointOfInterestPosition?.let { position ->
             this.trailViewModel?.watchPointOfInterest(position)
         }
-        (this.binding as FragmentTrailPoiInfoBinding).trailPOIInfoFragment = this
-        (this.binding as FragmentTrailPoiInfoBinding).trailViewModel = this.trailViewModel
-        (this.binding as FragmentTrailPoiInfoBinding).isEditable = this.isEditable
+        this.binding.trailPOIInfoFragment = this
+        this.binding.trailViewModel = this.trailViewModel
+        this.binding.isEditable = this.isEditable
     }
 
     private fun observeTrailPOI() {
@@ -64,12 +65,12 @@ class TrailPOIInfoFragment (
 
     @Suppress("UNUSED_PARAMETER")
     fun onSeeButtonClick(view:View) {
-        (parentFragment as BaseTrailMapFragment).expandInfoBottomSheet()
+        (parentFragment as BaseTrailMapFragment<out ViewDataBinding>).expandInfoBottomSheet()
     }
 
     @Suppress("UNUSED_PARAMETER")
     fun onEditButtonClick(view:View) {
-        (parentFragment as BaseTrailMapFragment)
+        (parentFragment as BaseTrailMapFragment<out ViewDataBinding>)
             .editTrailPoiInfo(this.trailPointOfInterestPosition!!)
     }
 }

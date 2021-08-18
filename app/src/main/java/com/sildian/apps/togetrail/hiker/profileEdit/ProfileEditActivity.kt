@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
+import androidx.databinding.ViewDataBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
@@ -47,7 +48,7 @@ class ProfileEditActivity : BaseActivity() {
     /**********************************UI component**********************************************/
 
     private val toolbar by lazy {activity_profile_edit_toolbar}
-    private var fragment: BaseFragment?=null
+    private var fragment: BaseFragment<out ViewDataBinding>?=null
 
     /********************************Navigation control******************************************/
 

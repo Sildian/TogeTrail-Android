@@ -3,6 +3,7 @@ package com.sildian.apps.togetrail.event.detail
 import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
+import androidx.databinding.ViewDataBinding
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
@@ -34,7 +35,7 @@ class EventActivity : BaseActivity() {
 
     /**********************************UI component**********************************************/
 
-    private var fragment: BaseFragment?=null
+    private var fragment: BaseFragment<out ViewDataBinding>?=null
 
     /********************************Menu monitoring*********************************************/
 

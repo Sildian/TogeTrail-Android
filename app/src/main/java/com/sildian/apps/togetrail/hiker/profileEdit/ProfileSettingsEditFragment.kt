@@ -15,7 +15,8 @@ import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
  * @param hikerId : the hiker's id
  ************************************************************************************************/
 
-class ProfileSettingsEditFragment(private val hikerId: String?=null) : BaseFragment()
+class ProfileSettingsEditFragment(private val hikerId: String?=null) :
+    BaseFragment<FragmentProfileSettingsEditBinding>()
 {
 
     /*****************************************Data***********************************************/
@@ -35,8 +36,8 @@ class ProfileSettingsEditFragment(private val hikerId: String?=null) : BaseFragm
         this.hikerViewModel= ViewModelProviders
             .of(this, ViewModelFactory)
             .get(HikerViewModel::class.java)
-        (this.binding as FragmentProfileSettingsEditBinding).profileSettingsEditFragment = this
-        (this.binding as FragmentProfileSettingsEditBinding).hikerViewModel = this.hikerViewModel
+        this.binding.profileSettingsEditFragment = this
+        this.binding.hikerViewModel = this.hikerViewModel
     }
 
     private fun observeSaveRequestSuccess() {

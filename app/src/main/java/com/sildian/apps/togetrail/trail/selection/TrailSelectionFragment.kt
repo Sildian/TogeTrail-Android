@@ -5,8 +5,8 @@ import com.google.firebase.firestore.Query
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
+import com.sildian.apps.togetrail.databinding.FragmentTrailSelectionBinding
 import com.sildian.apps.togetrail.trail.model.core.Trail
-import kotlinx.android.synthetic.main.fragment_trail_selection.view.*
 
 /*************************************************************************************************
  * This fragment displays a query to let the user select a trail to attach to an event
@@ -15,14 +15,13 @@ import kotlinx.android.synthetic.main.fragment_trail_selection.view.*
  ************************************************************************************************/
 
 class TrailSelectionFragment(private val trailsQuery:Query, private val selectedTrails:List<Trail>) :
-    BaseFragment(),
+    BaseFragment<FragmentTrailSelectionBinding>(),
     TrailSelectionAdapter.OnTrailSelectListener,
     TrailSelectionAdapter.OnTrailClickListener
 {
 
     /**********************************UI component**********************************************/
 
-    private val trailsRecyclerView by lazy {layout.fragment_trail_selection_recycler_view_trails}
     private lateinit var trailsAdapter:TrailSelectionAdapter
 
     /*************************************UI monitoring******************************************/
@@ -44,7 +43,7 @@ class TrailSelectionFragment(private val trailsQuery:Query, private val selected
             this,
             this
         )
-        this.trailsRecyclerView.adapter=this.trailsAdapter
+        this.binding.fragmentTrailSelectionRecyclerViewTrails.adapter = this.trailsAdapter
     }
 
     /***********************************Trails monitoring****************************************/

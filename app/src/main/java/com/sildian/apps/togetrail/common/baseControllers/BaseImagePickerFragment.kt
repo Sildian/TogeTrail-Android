@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.ViewDataBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.permissionsHelpers.PermissionsCallback
@@ -17,7 +18,7 @@ import pl.aprilapps.easyphotopicker.*
  * Base fragment for all fragment aiming to pick images
  ************************************************************************************************/
 
-abstract class BaseImagePickerFragment : BaseFragment(), PermissionsCallback {
+abstract class BaseImagePickerFragment<T: ViewDataBinding> : BaseFragment<T>(), PermissionsCallback {
 
     /**********************************Static items**********************************************/
 

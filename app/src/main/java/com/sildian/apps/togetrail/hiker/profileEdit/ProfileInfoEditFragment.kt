@@ -12,27 +12,19 @@ import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.databinding.FragmentProfileInfoEditBinding
 import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
 import com.sildian.apps.togetrail.location.model.core.Location
-import kotlinx.android.synthetic.main.fragment_profile_info_edit.view.*
 
 /*************************************************************************************************
  * Lets the user edit its profile's information
  * @param hikerId : the hiker's id
  ************************************************************************************************/
 
-class ProfileInfoEditFragment(private val hikerId: String?=null) : BaseImagePickerFragment()
+class ProfileInfoEditFragment(private val hikerId: String?=null) :
+    BaseImagePickerFragment<FragmentProfileInfoEditBinding>()
 {
 
     /*****************************************Data***********************************************/
 
     private lateinit var hikerViewModel: HikerViewModel
-
-    /**********************************UI component**********************************************/
-
-    private val nameTextFieldLayout by lazy {layout.fragment_profile_info_edit_text_field_layout_name}
-    private val nameTextField by lazy {layout.fragment_profile_info_edit_text_field_name}
-    private val birthdayTextFieldDropdown by lazy {layout.fragment_profile_info_edit_text_field_dropdown_birthday}
-    private val liveLocationTextField by lazy {layout.fragment_profile_info_edit_text_field_live_location}
-    private val descriptionTextField by lazy {layout.fragment_profile_info_edit_text_field_description}
 
     /***********************************Life cycle***********************************************/
 
@@ -55,8 +47,8 @@ class ProfileInfoEditFragment(private val hikerId: String?=null) : BaseImagePick
         this.hikerViewModel= ViewModelProviders
             .of(this, ViewModelFactory)
             .get(HikerViewModel::class.java)
-        (this.binding as FragmentProfileInfoEditBinding).profileInfoEditFragment = this
-        (this.binding as FragmentProfileInfoEditBinding).hikerViewModel = this.hikerViewModel
+        this.binding.profileInfoEditFragment = this
+        this.binding.hikerViewModel = this.hikerViewModel
     }
 
     private fun observeHiker() {
@@ -92,25 +84,25 @@ class ProfileInfoEditFragment(private val hikerId: String?=null) : BaseImagePick
     override fun updateData(data:Any?) {
         if(data is Location){
             this.hikerViewModel.hiker.value?.liveLocation=data
-            this.liveLocationTextField.setText(data.fullAddress)
+            this.binding.fragmentProfileInfoEditTextFieldLiveLocation.setText(data.fullAddress)
         }
     }
 
     override fun saveData() {
         if(checkDataIsValid()) {
-            this.hikerViewModel.hiker.value?.name = this.nameTextField.text.toString()
+            this.hikerViewModel.hiker.value?.name = this.binding.fragmentProfileInfoEditTextFieldName.text.toString()
             this.hikerViewModel.hiker.value?.birthday =
-                if (!this.birthdayTextFieldDropdown.text.isNullOrEmpty())
-                    DateUtilities.getDateFromString(this.birthdayTextFieldDropdown.text.toString())
+                if (!this.binding.fragmentProfileInfoEditTextFieldDropdownBirthday.text.isNullOrEmpty())
+                    DateUtilities.getDateFromString(this.binding.fragmentProfileInfoEditTextFieldDropdownBirthday.text.toString())
                 else null
-            this.hikerViewModel.hiker.value?.description = this.descriptionTextField.text.toString()
+            this.hikerViewModel.hiker.value?.description = this.binding.fragmentProfileInfoEditTextFieldDescription.text.toString()
             this.baseActivity?.showProgressDialog()
             this.hikerViewModel.saveHikerInDatabase()
         }
     }
 
     override fun checkDataIsValid():Boolean =
-        TextFieldHelper.checkTextFieldIsNotEmpty(this.nameTextField, this.nameTextFieldLayout)
+        TextFieldHelper.checkTextFieldIsNotEmpty(this.binding.fragmentProfileInfoEditTextFieldName, this.binding.fragmentProfileInfoEditTextFieldLayoutName)
 
     /***********************************UI monitoring********************************************/
 
@@ -124,7 +116,7 @@ class ProfileInfoEditFragment(private val hikerId: String?=null) : BaseImagePick
 
     private fun updateBirthdayTextFieldDropdown(){
         PickerHelper.populateEditTextWithDatePicker(
-            this.birthdayTextFieldDropdown, activity as AppCompatActivity, this.hikerViewModel.hiker.value?.birthday)
+            this.binding.fragmentProfileInfoEditTextFieldDropdownBirthday, activity as AppCompatActivity, this.hikerViewModel.hiker.value?.birthday)
     }
 
     @Suppress("UNUSED_PARAMETER")

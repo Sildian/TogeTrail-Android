@@ -29,7 +29,6 @@ import com.sildian.apps.togetrail.main.MainActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailLevel
 import com.sildian.apps.togetrail.trail.model.support.TrailsViewModel
-import kotlinx.android.synthetic.main.fragment_trail_map.view.*
 import kotlinx.android.synthetic.main.map_info_window_event.view.*
 import kotlinx.android.synthetic.main.map_info_window_trail.view.*
 
@@ -38,7 +37,7 @@ import kotlinx.android.synthetic.main.map_info_window_trail.view.*
  ************************************************************************************************/
 
 class TrailMapFragment :
-    BaseTrailMapFragment(),
+    BaseTrailMapFragment<FragmentTrailMapBinding>(),
     GoogleMap.InfoWindowAdapter,
     GoogleMap.OnInfoWindowClickListener
 {
@@ -60,12 +59,6 @@ class TrailMapFragment :
     private var showTrails = true
     private var showEvents = false
 
-    /**********************************UI component**********************************************/
-
-    private val searchButton by lazy {layout.fragment_trail_map_button_search}
-    private val filterToggle by lazy {layout.fragment_trail_map_toggle_filter}
-    private val messageView by lazy { layout.fragment_trail_map_view_message }
-
     /**********************************Data monitoring*******************************************/
 
     override fun loadData() {
@@ -82,7 +75,7 @@ class TrailMapFragment :
         this.eventsViewModel= ViewModelProviders
             .of(this, ViewModelFactory)
             .get(EventsViewModel::class.java)
-        (this.binding as FragmentTrailMapBinding).trailMapFragment = this
+        this.binding.trailMapFragment = this
     }
 
     private fun observeTrails() {
@@ -157,17 +150,17 @@ class TrailMapFragment :
 
     override fun enableUI() {
         this.map?.uiSettings?.setAllGesturesEnabled(true)
-        this.searchButton.isEnabled = true
-        this.filterToggle.isEnabled = true
+        this.binding.fragmentTrailMapButtonSearch.isEnabled = true
+        this.binding.fragmentTrailMapToggleFilter.isEnabled = true
     }
 
     override fun disableUI() {
         this.map?.uiSettings?.setAllGesturesEnabled(false)
-        this.searchButton.isEnabled = false
-        this.filterToggle.isEnabled = false
+        this.binding.fragmentTrailMapButtonSearch.isEnabled = false
+        this.binding.fragmentTrailMapToggleFilter.isEnabled = false
     }
 
-    override fun getMessageView(): View = this.messageView
+    override fun getMessageView(): View = this.binding.fragmentTrailMapViewMessage
 
     override fun getMessageAnchorView(): View? = null
 

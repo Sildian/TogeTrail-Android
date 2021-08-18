@@ -13,6 +13,7 @@ import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
+import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -102,7 +103,7 @@ class MainActivity :
 
     /**********************************UI component**********************************************/
 
-    private var fragment:BaseFragment?=null
+    private var fragment:BaseFragment<out ViewDataBinding>?=null
     private val nbUnreadMessagesBadge by lazy { BadgeDrawable.create(this) }
     private val toolbar by lazy {activity_main_toolbar}
     private val searchTextField by lazy {activity_main_text_field_research}

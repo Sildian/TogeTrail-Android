@@ -12,14 +12,13 @@ import com.sildian.apps.togetrail.databinding.FragmentChatRoomBinding
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
 import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
-import kotlinx.android.synthetic.main.fragment_chat_room.view.*
 
 /*************************************************************************************************
  * Displays a chat's content and lets the user read and send messages in the room
  ************************************************************************************************/
 
 class ChatRoomFragment(private val interlocutorId: String? = null) :
-    BaseFragment(),
+    BaseFragment<FragmentChatRoomBinding>(),
     PrivateMessageAdapter.OnAuthorClickListener
 {
 
@@ -29,9 +28,7 @@ class ChatRoomFragment(private val interlocutorId: String? = null) :
 
     /**********************************UI component**********************************************/
 
-    private val messagesRecyclerView by lazy { layout.fragment_chat_room_recycler_view_messages }
     private lateinit var messagesAdapter: PrivateMessageAdapter
-    private val messageTextField by lazy { layout.fragment_chat_room_text_field_message }
 
     /******************************Data monitoring***********************************************/
 
@@ -46,7 +43,7 @@ class ChatRoomFragment(private val interlocutorId: String? = null) :
         this.hikerViewModel = ViewModelProviders
             .of(this, ViewModelFactory)
             .get(HikerViewModel::class.java)
-        (this.binding as FragmentChatRoomBinding).chatRoomFragment = this
+        this.binding.chatRoomFragment = this
     }
 
     private fun observeHiker() {
@@ -94,23 +91,23 @@ class ChatRoomFragment(private val interlocutorId: String? = null) :
                         this
                     ), this
                 )
-                this.messagesRecyclerView.adapter = this.messagesAdapter
+                this.binding.fragmentChatRoomRecyclerViewMessages.adapter = this.messagesAdapter
             }
         }
     }
 
     @Suppress("UNUSED_PARAMETER")
     fun onCancelMessageButtonClick(view: View) {
-        this.messageTextField.setText("")
+        this.binding.fragmentChatRoomTextFieldMessage.setText("")
     }
 
     @Suppress("UNUSED_PARAMETER")
     fun onValidateMessageButtonClick(view: View) {
         this.interlocutorId?.let { id ->
-            val text = this.messageTextField.text.toString()
+            val text = this.binding.fragmentChatRoomTextFieldMessage.text.toString()
             if (text.isNotEmpty()) {
                 this.hikerViewModel.sendMessage(text)
-                this.messageTextField.setText("")
+                this.binding.fragmentChatRoomTextFieldMessage.setText("")
             }
         }
     }

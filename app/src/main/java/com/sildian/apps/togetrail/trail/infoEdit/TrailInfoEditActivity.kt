@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
@@ -53,7 +54,7 @@ class TrailInfoEditActivity : BaseActivity() {
     /**********************************UI component**********************************************/
 
     private val toolbar by lazy {activity_trail_info_edit_toolbar}
-    private var fragment: BaseImagePickerFragment?=null
+    private var fragment: BaseImagePickerFragment<out ViewDataBinding>?=null
 
     /************************************Life cycle**********************************************/
 

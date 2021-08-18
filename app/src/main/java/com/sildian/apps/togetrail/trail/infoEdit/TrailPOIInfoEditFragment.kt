@@ -11,7 +11,6 @@ import com.sildian.apps.togetrail.common.utils.uiHelpers.TextFieldHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.ValueFormatters
 import com.sildian.apps.togetrail.databinding.FragmentTrailPoiInfoEditBinding
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
-import kotlinx.android.synthetic.main.fragment_trail_poi_info_edit.view.*
 
 /*************************************************************************************************
  * Allows to edit information about a trailPointOfInterest
@@ -22,7 +21,7 @@ class TrailPOIInfoEditFragment(
     private val trailViewModel: TrailViewModel? = null,
     private val trailPointOfInterestPosition:Int? = null
 )
-    : BaseImagePickerFragment()
+    : BaseImagePickerFragment<FragmentTrailPoiInfoEditBinding>()
 {
 
     /**********************************Static items**********************************************/
@@ -37,14 +36,6 @@ class TrailPOIInfoEditFragment(
 
     val currentValueFormatter = MutableLiveData<ValueFormatter>(ValueFormatters.AltitudeValueFormatter())
     val currentMaxValue = MutableLiveData(VALUE_MAX_ALTITUDE)
-
-    /**********************************UI component**********************************************/
-
-    private val nameTextFieldLayout by lazy {layout.fragment_trail_poi_info_edit_text_field_layout_name}
-    private val nameTextField by lazy {layout.fragment_trail_poi_info_edit_text_field_name}
-    private val descriptionTextField by lazy {layout.fragment_trail_poi_info_edit_text_field_description}
-    private val messageView by lazy {layout.fragment_trail_poi_info_edit_view_message}
-    private val messageAnchorView by lazy {layout.fragment_trail_poi_info_edit_bottom_sheet_add_photo}
 
     /**************************************Life cycle********************************************/
 
@@ -64,8 +55,8 @@ class TrailPOIInfoEditFragment(
     }
 
     private fun initializeData() {
-        (this.binding as FragmentTrailPoiInfoEditBinding).trailPOIInfoEditFragment=this
-        (this.binding as FragmentTrailPoiInfoEditBinding).trailViewModel=this.trailViewModel
+        this.binding.trailPOIInfoEditFragment = this
+        this.binding.trailViewModel = this.trailViewModel
         this.currentValueFormatter.value = ValueFormatters.AltitudeValueFormatter()
         this.currentMaxValue.value = VALUE_MAX_ALTITUDE
     }
@@ -112,8 +103,8 @@ class TrailPOIInfoEditFragment(
     override fun saveData() {
         if (checkDataIsValid()) {
             if (this.trailViewModel?.trailPointOfInterest?.value != null) {
-                this.trailViewModel.trailPointOfInterest.value?.name = this.nameTextField.text.toString()
-                this.trailViewModel.trailPointOfInterest.value?.description = this.descriptionTextField.text.toString()
+                this.trailViewModel.trailPointOfInterest.value?.name = this.binding.fragmentTrailPoiInfoEditTextFieldName.text.toString()
+                this.trailViewModel.trailPointOfInterest.value?.description = this.binding.fragmentTrailPoiInfoEditTextFieldDescription.text.toString()
                 this.baseActivity?.showProgressDialog()
                 this.trailViewModel.saveTrailInDatabase(true)
             }
@@ -125,14 +116,14 @@ class TrailPOIInfoEditFragment(
             return true
         } else {
             SnackbarHelper
-                .createSimpleSnackbar(this.messageView, this.messageAnchorView, R.string.message_text_fields_empty)
+                .createSimpleSnackbar(this.binding.fragmentTrailPoiInfoEditViewMessage, this.binding.fragmentTrailPoiInfoEditBottomSheetAddPhoto, R.string.message_text_fields_empty)
                 .show()
         }
         return false
     }
 
     private fun checkTextFieldsAreNotEmpty(): Boolean {
-        return TextFieldHelper.checkTextFieldIsNotEmpty(this.nameTextField, this.nameTextFieldLayout)
+        return TextFieldHelper.checkTextFieldIsNotEmpty(this.binding.fragmentTrailPoiInfoEditTextFieldName, this.binding.fragmentTrailPoiInfoEditTextFieldLayoutName)
     }
 
     /***********************************UI monitoring********************************************/

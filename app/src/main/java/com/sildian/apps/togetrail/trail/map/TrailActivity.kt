@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.view.Menu
 import android.view.MenuItem
+import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
@@ -62,7 +63,7 @@ class TrailActivity : BaseActivity() {
     /**********************************UI component**********************************************/
 
     private val toolbar by lazy {activity_trail_toolbar}
-    private var fragment: BaseTrailMapFragment?=null
+    private var fragment: BaseTrailMapFragment<out ViewDataBinding>?=null
 
     /********************************Navigation control******************************************/
 

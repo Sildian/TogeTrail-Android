@@ -9,21 +9,13 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.databinding.FragmentTrailMapDrawBinding
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
-import kotlinx.android.synthetic.main.fragment_trail_map_draw.view.*
 
 /*************************************************************************************************
  * Lets the user create a trail by drawing the track on the map and adding points of interest
  ************************************************************************************************/
 
 class TrailMapDrawFragment(trailViewModel: TrailViewModel)
-    : BaseTrailMapGenerateFragment(trailViewModel){
-
-    /**********************************UI component**********************************************/
-
-    private val actionsButtonsLayout by lazy {layout.fragment_trail_map_draw_layout_actions_buttons}
-    private val removePointButton by lazy {layout.fragment_trail_map_draw_button_point_remove}
-    private val addPoiButton by lazy {layout.fragment_trail_map_draw_button_poi_add}
-    private val messageView by lazy { layout.fragment_trail_map_draw_view_message }
+    : BaseTrailMapGenerateFragment<FragmentTrailMapDrawBinding>(trailViewModel){
 
     /************************************Data monitoring*****************************************/
 
@@ -32,7 +24,7 @@ class TrailMapDrawFragment(trailViewModel: TrailViewModel)
     }
 
     private fun initializeData() {
-        (this.binding as FragmentTrailMapDrawBinding).trailMapDrawFragment = this
+        this.binding.trailMapDrawFragment = this
     }
 
     /************************************UI monitoring*******************************************/
@@ -47,17 +39,17 @@ class TrailMapDrawFragment(trailViewModel: TrailViewModel)
 
     override fun enableUI() {
         this.map?.uiSettings?.setAllGesturesEnabled(true)
-        this.removePointButton.isEnabled = true
-        this.addPoiButton.isEnabled = true
+        this.binding.fragmentTrailMapDrawButtonPointRemove.isEnabled = true
+        this.binding.fragmentTrailMapDrawButtonPoiAdd.isEnabled = true
     }
 
     override fun disableUI() {
         this.map?.uiSettings?.setAllGesturesEnabled(false)
-        this.removePointButton.isEnabled = false
-        this.addPoiButton.isEnabled = false
+        this.binding.fragmentTrailMapDrawButtonPointRemove.isEnabled = false
+        this.binding.fragmentTrailMapDrawButtonPoiAdd.isEnabled = false
     }
 
-    override fun getMessageView(): View = this.messageView
+    override fun getMessageView(): View = this.binding.fragmentTrailMapDrawViewMessage
 
     override fun getMessageAnchorView(): View? = null
 
@@ -77,10 +69,10 @@ class TrailMapDrawFragment(trailViewModel: TrailViewModel)
     }
 
     override fun revealActionsButtons() {
-        this.actionsButtonsLayout.visibility = View.VISIBLE
-        this.actionsButtonsLayout.layoutAnimation =
+        this.binding.fragmentTrailMapDrawLayoutActionsButtons.visibility = View.VISIBLE
+        this.binding.fragmentTrailMapDrawLayoutActionsButtons.layoutAnimation =
             AnimationUtils.loadLayoutAnimation(context, R.anim.layout_appear_right)
-        this.actionsButtonsLayout.animate()
+        this.binding.fragmentTrailMapDrawLayoutActionsButtons.animate()
     }
 
     override fun hideActionsButtons() {
@@ -91,14 +83,14 @@ class TrailMapDrawFragment(trailViewModel: TrailViewModel)
             }
 
             override fun onAnimationEnd(anim: Animation?) {
-                actionsButtonsLayout.visibility=View.GONE
+                binding.fragmentTrailMapDrawLayoutActionsButtons.visibility=View.GONE
             }
 
             override fun onAnimationStart(anim: Animation?) {
 
             }
         })
-        this.actionsButtonsLayout.startAnimation(hideAnimation)
+        this.binding.fragmentTrailMapDrawLayoutActionsButtons.startAnimation(hideAnimation)
     }
 
     /***********************************Map monitoring*******************************************/

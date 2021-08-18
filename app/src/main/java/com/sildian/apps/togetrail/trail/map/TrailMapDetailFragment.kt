@@ -12,24 +12,19 @@ import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
-import kotlinx.android.synthetic.main.fragment_trail_map_detail.view.*
 
 /*************************************************************************************************
  * Shows a specific trail on the map and allows to see all its detail information
  ************************************************************************************************/
 
 class TrailMapDetailFragment(trailViewModel: TrailViewModel, isEditable:Boolean=false)
-    : BaseTrailMapFragment(trailViewModel, isEditable)
+    : BaseTrailMapFragment<FragmentTrailMapDetailBinding>(trailViewModel, isEditable)
 {
 
     /***************************************Data*************************************************/
 
     val isTrailLikedByUser = MutableLiveData(false)
     val isTrailMarkedByUser = MutableLiveData(false)
-
-    /************************************UI components*******************************************/
-
-    private val messageView by lazy { layout.fragment_trail_map_detail_view_message }
 
     /************************************Data monitoring*****************************************/
 
@@ -38,8 +33,8 @@ class TrailMapDetailFragment(trailViewModel: TrailViewModel, isEditable:Boolean=
     }
 
     private fun initializeData() {
-        (this.binding as FragmentTrailMapDetailBinding).trailMapDetailFragment = this
-        (this.binding as FragmentTrailMapDetailBinding).trailViewModel = this.trailViewModel
+        this.binding.trailMapDetailFragment = this
+        this.binding.trailViewModel = this.trailViewModel
         this.isTrailLikedByUser.value = CurrentHikerInfo.currentHikerLikedTrail.firstOrNull { trail ->
             trail.id == this.trailViewModel?.trail?.value?.id
         } != null
@@ -66,7 +61,7 @@ class TrailMapDetailFragment(trailViewModel: TrailViewModel, isEditable:Boolean=
         this.map?.uiSettings?.setAllGesturesEnabled(false)
     }
 
-    override fun getMessageView(): View = this.messageView
+    override fun getMessageView(): View = this.binding.fragmentTrailMapDetailViewMessage
 
     override fun getMessageAnchorView(): View? = null
 

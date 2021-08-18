@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -39,11 +40,11 @@ import kotlinx.coroutines.withContext
  * @param isEditable : true if the trail is editable
  ************************************************************************************************/
 
-abstract class BaseTrailMapFragment (
-    protected var trailViewModel: TrailViewModel?=null,
-    protected var isEditable:Boolean=false
+abstract class BaseTrailMapFragment<T: ViewDataBinding> (
+    protected var trailViewModel: TrailViewModel? = null,
+    protected var isEditable: Boolean = false
 ) :
-    BaseFragment(),
+    BaseFragment<T>(),
     OnMapReadyCallback,
     GoogleMap.OnMapClickListener,
     GoogleMap.OnMarkerClickListener
@@ -62,9 +63,9 @@ abstract class BaseTrailMapFragment (
 
     /**********************************UI component**********************************************/
 
-    protected lateinit var mapView:MapView                              //The map view
-    protected lateinit var infoBottomSheet:BottomSheetBehavior<View>    //Bottom sheet with additional info
-    protected lateinit var infoFragment:BaseInfoFragment                //Nested fragment allowing to see info about the trail
+    protected lateinit var mapView: MapView                                     //The map view
+    protected lateinit var infoBottomSheet: BottomSheetBehavior<View>           //Bottom sheet with additional info
+    protected lateinit var infoFragment: BaseInfoFragment<out ViewDataBinding>  //Nested fragment allowing to see info about the trail
 
     /**************************************Map support*******************************************/
 

@@ -2,6 +2,7 @@ package com.sildian.apps.togetrail.trail.map
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.ViewDataBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
@@ -16,8 +17,8 @@ import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
  * Base for all Trail fragments using a map and allowing to generate a new Trail with the app
  ************************************************************************************************/
 
-abstract class BaseTrailMapGenerateFragment(trailViewModel: TrailViewModel) :
-    BaseTrailMapFragment(trailViewModel, isEditable = true),
+abstract class BaseTrailMapGenerateFragment<T: ViewDataBinding>(trailViewModel: TrailViewModel) :
+    BaseTrailMapFragment<T>(trailViewModel, isEditable = true),
     GoogleMap.InfoWindowAdapter,
     GoogleMap.OnInfoWindowClickListener
 {

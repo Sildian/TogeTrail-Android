@@ -21,7 +21,6 @@ import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.others.TrailHorizontalAdapter
 import com.sildian.apps.togetrail.trail.others.TrailHorizontalAdapterOffline
 import com.sildian.apps.togetrail.trail.others.TrailHorizontalViewHolder
-import kotlinx.android.synthetic.main.fragment_event_edit.view.*
 
 /*************************************************************************************************
  * Allows to edit an event
@@ -29,7 +28,7 @@ import kotlinx.android.synthetic.main.fragment_event_edit.view.*
  ************************************************************************************************/
 
 class EventEditFragment(private val eventId: String?=null) :
-    BaseFragment(),
+    BaseFragment<FragmentEventEditBinding>(),
     TrailHorizontalViewHolder.OnTrailClickListener,
     TrailHorizontalViewHolder.OnTrailRemovedListener
 {
@@ -40,24 +39,8 @@ class EventEditFragment(private val eventId: String?=null) :
 
     /**********************************UI component**********************************************/
 
-    private val nameTextFieldLayout by lazy {layout.fragment_event_edit_text_field_layout_name}
-    private val nameTextField by lazy {layout.fragment_event_edit_text_field_name}
-    private val beginDateTextFieldLayout by lazy {layout.fragment_event_edit_text_field_layout_begin_date}
-    private val beginDateTextField by lazy {layout.fragment_event_edit_text_field_begin_date}
-    private val beginTimeTextFieldLayout by lazy {layout.fragment_event_edit_text_field_layout_begin_time}
-    private val beginTimeTextField by lazy {layout.fragment_event_edit_text_field_begin_time}
-    private val endDateTextFieldLayout by lazy {layout.fragment_event_edit_text_field_layout_end_date}
-    private val endDateTextField by lazy {layout.fragment_event_edit_text_field_end_date}
-    private val endTimeTextFieldLayout by lazy {layout.fragment_event_edit_text_field_layout_end_time}
-    private val endTimeTextField by lazy {layout.fragment_event_edit_text_field_end_time}
-    private val attachedTrailsRecyclerView by lazy {layout.fragment_event_edit_recycler_view_attached_trails}
-    private lateinit var attachedTrailsAdapter:TrailHorizontalAdapter
-    private lateinit var attachedTrailsAdapterOffline:TrailHorizontalAdapterOffline
-    private val meetingPointTextFieldLayout by lazy {layout.fragment_event_edit_text_field_layout_meeting_point}
-    private val meetingPointTextField by lazy {layout.fragment_event_edit_text_field_meeting_point}
-    private val descriptionTextFieldLayout by lazy {layout.fragment_event_edit_text_field_layout_description}
-    private val descriptionTextField by lazy {layout.fragment_event_edit_text_field_description}
-    private val messageView by lazy {layout.fragment_event_edit_view_message}
+    private lateinit var attachedTrailsAdapter: TrailHorizontalAdapter
+    private lateinit var attachedTrailsAdapterOffline: TrailHorizontalAdapterOffline
 
     /*********************************Data monitoring********************************************/
 
@@ -73,8 +56,8 @@ class EventEditFragment(private val eventId: String?=null) :
         this.eventViewModel= ViewModelProviders
             .of(this, ViewModelFactory)
             .get(EventViewModel::class.java)
-        (this.binding as FragmentEventEditBinding).eventEditFragment = this
-        (this.binding as FragmentEventEditBinding).eventViewModel = this.eventViewModel
+        this.binding.eventEditFragment = this
+        this.binding.eventViewModel = this.eventViewModel
     }
 
     private fun observeEvent() {
@@ -112,7 +95,7 @@ class EventEditFragment(private val eventId: String?=null) :
     override fun updateData(data:Any?) {
         if(data is Location){
             this.eventViewModel.event.value?.meetingPoint=data
-            this.meetingPointTextField.setText(data.fullAddress)
+            this.binding.fragmentEventEditTextFieldMeetingPoint.setText(data.fullAddress)
         }
         else if(data is List<*>){
             if(data.firstOrNull() is Trail){
@@ -124,8 +107,8 @@ class EventEditFragment(private val eventId: String?=null) :
     override fun saveData() {
         updateDates()
         if(checkDataIsValid()) {
-            this.eventViewModel.event.value?.name = this.nameTextField.text.toString()
-            this.eventViewModel.event.value?.description = this.descriptionTextField.text.toString()
+            this.eventViewModel.event.value?.name = this.binding.fragmentEventEditTextFieldName.text.toString()
+            this.eventViewModel.event.value?.description = this.binding.fragmentEventEditTextFieldDescription.text.toString()
             this.baseActivity?.showProgressDialog()
             this.eventViewModel.saveEventInDatabase()
         }
@@ -138,18 +121,18 @@ class EventEditFragment(private val eventId: String?=null) :
                     return true
                 }else{
                     SnackbarHelper
-                        .createSimpleSnackbar(this.messageView, null, R.string.message_event_no_trail_attached)
+                        .createSimpleSnackbar(this.binding.fragmentEventEditViewMessage, null, R.string.message_event_no_trail_attached)
                         .show()
                 }
             }else{
                 SnackbarHelper
-                    .createSimpleSnackbar(this.messageView, null, R.string.message_event_dates_issue)
+                    .createSimpleSnackbar(this.binding.fragmentEventEditViewMessage, null, R.string.message_event_dates_issue)
                     .show()
             }
         }
         else{
             SnackbarHelper
-                .createSimpleSnackbar(this.messageView, null, R.string.message_text_fields_empty)
+                .createSimpleSnackbar(this.binding.fragmentEventEditViewMessage, null, R.string.message_text_fields_empty)
                 .show()
         }
         return false
@@ -157,13 +140,13 @@ class EventEditFragment(private val eventId: String?=null) :
 
     private fun checkTextFieldsAreNotEmpty():Boolean{
         val textFieldsAndLayouts= hashMapOf<TextInputEditText, TextInputLayout>()
-        textFieldsAndLayouts[this.nameTextField]=this.nameTextFieldLayout
-        textFieldsAndLayouts[this.beginDateTextField]=this.beginDateTextFieldLayout
-        textFieldsAndLayouts[this.beginTimeTextField]=this.beginTimeTextFieldLayout
-        textFieldsAndLayouts[this.endDateTextField]=this.endDateTextFieldLayout
-        textFieldsAndLayouts[this.endTimeTextField]=this.endTimeTextFieldLayout
-        textFieldsAndLayouts[this.meetingPointTextField]=this.meetingPointTextFieldLayout
-        textFieldsAndLayouts[this.descriptionTextField]=this.descriptionTextFieldLayout
+        textFieldsAndLayouts[this.binding.fragmentEventEditTextFieldName] = this.binding.fragmentEventEditTextFieldLayoutName
+        textFieldsAndLayouts[this.binding.fragmentEventEditTextFieldBeginDate] = this.binding.fragmentEventEditTextFieldLayoutBeginDate
+        textFieldsAndLayouts[this.binding.fragmentEventEditTextFieldBeginTime] = this.binding.fragmentEventEditTextFieldLayoutBeginTime
+        textFieldsAndLayouts[this.binding.fragmentEventEditTextFieldEndDate] = this.binding.fragmentEventEditTextFieldLayoutEndDate
+        textFieldsAndLayouts[this.binding.fragmentEventEditTextFieldEndTime] = this.binding.fragmentEventEditTextFieldLayoutEndTime
+        textFieldsAndLayouts[this.binding.fragmentEventEditTextFieldMeetingPoint] = this.binding.fragmentEventEditTextFieldLayoutMeetingPoint
+        textFieldsAndLayouts[this.binding.fragmentEventEditTextFieldDescription] = this.binding.fragmentEventEditTextFieldLayoutDescription
         return TextFieldHelper.checkAllTextFieldsAreNotEmpty(textFieldsAndLayouts)
     }
 
@@ -199,25 +182,25 @@ class EventEditFragment(private val eventId: String?=null) :
 
     private fun updateBeginDateTextField(){
         PickerHelper.populateEditTextWithDatePicker(
-            this.beginDateTextField, activity as AppCompatActivity, this.eventViewModel.event.value?.beginDate
+            this.binding.fragmentEventEditTextFieldBeginDate, activity as AppCompatActivity, this.eventViewModel.event.value?.beginDate
         )
     }
 
     private fun updateBeginTimeTextField(){
         PickerHelper.populateEditTextWithTimePicker(
-            this.beginTimeTextField, activity as AppCompatActivity, this.eventViewModel.event.value?.beginDate
+            this.binding.fragmentEventEditTextFieldBeginTime, activity as AppCompatActivity, this.eventViewModel.event.value?.beginDate
         )
     }
 
     private fun updateEndDateTextField(){
         PickerHelper.populateEditTextWithDatePicker(
-            this.endDateTextField, activity as AppCompatActivity, this.eventViewModel.event.value?.endDate
+            this.binding.fragmentEventEditTextFieldEndDate, activity as AppCompatActivity, this.eventViewModel.event.value?.endDate
         )
     }
 
     private fun updateEndTimeTextField(){
         PickerHelper.populateEditTextWithTimePicker(
-            this.endTimeTextField, activity as AppCompatActivity, this.eventViewModel.event.value?.endDate
+            this.binding.fragmentEventEditTextFieldEndTime, activity as AppCompatActivity, this.eventViewModel.event.value?.endDate
         )
     }
 
@@ -225,14 +208,14 @@ class EventEditFragment(private val eventId: String?=null) :
 
         /*If the event is not created in the database yet, then sets an offline adapter*/
 
-        if(this.eventViewModel.event.value?.id==null){
+        if (this.eventViewModel.event.value?.id==null) {
             this.attachedTrailsAdapterOffline=
                 TrailHorizontalAdapterOffline(this.eventViewModel.attachedTrails, this, true, this)
-            this.attachedTrailsRecyclerView.adapter=this.attachedTrailsAdapterOffline
+            this.binding.fragmentEventEditRecyclerViewAttachedTrails.adapter = this.attachedTrailsAdapterOffline
 
             /*Else sets an online adapter*/
 
-        }else {
+        } else {
             this.attachedTrailsAdapter=
                 TrailHorizontalAdapter(
                     DatabaseFirebaseHelper.generateOptionsForAdapter(
@@ -241,7 +224,7 @@ class EventEditFragment(private val eventId: String?=null) :
                         activity as AppCompatActivity
                 ), this, true, this
             )
-            this.attachedTrailsRecyclerView.adapter=this.attachedTrailsAdapter
+            this.binding.fragmentEventEditRecyclerViewAttachedTrails.adapter = this.attachedTrailsAdapter
         }
     }
 
@@ -264,17 +247,17 @@ class EventEditFragment(private val eventId: String?=null) :
 
         /*If the dates and times fields are not empty, refreshes the event's dates*/
 
-        if(!(this.beginDateTextField.text.isNullOrEmpty()
-            ||this.beginTimeTextField.text.isNullOrEmpty()
-            ||this.endDateTextField.text.isNullOrEmpty()
-            ||this.endTimeTextField.text.isNullOrEmpty()))
+        if(!(this.binding.fragmentEventEditTextFieldBeginDate.text.isNullOrEmpty()
+            ||this.binding.fragmentEventEditTextFieldBeginTime.text.isNullOrEmpty()
+            ||this.binding.fragmentEventEditTextFieldEndDate.text.isNullOrEmpty()
+            ||this.binding.fragmentEventEditTextFieldEndTime.text.isNullOrEmpty()))
         {
-            val beginDate=DateUtilities.getDateFromString(this.beginDateTextField.text.toString())
-            val beginTime=DateUtilities.getTimeFromString(this.beginTimeTextField.text.toString())
-            val endDate=DateUtilities.getDateFromString(this.endDateTextField.text.toString())
-            val endTime=DateUtilities.getTimeFromString(this.endTimeTextField.text.toString())
-            this.eventViewModel.event.value?.beginDate=DateUtilities.mergeDateAndTime(beginDate!!, beginTime!!)
-            this.eventViewModel.event.value?.endDate=DateUtilities.mergeDateAndTime(endDate!!, endTime!!)
+            val beginDate = DateUtilities.getDateFromString(this.binding.fragmentEventEditTextFieldBeginDate.text.toString())
+            val beginTime = DateUtilities.getTimeFromString(this.binding.fragmentEventEditTextFieldBeginTime.text.toString())
+            val endDate = DateUtilities.getDateFromString(this.binding.fragmentEventEditTextFieldEndDate.text.toString())
+            val endTime = DateUtilities.getTimeFromString(this.binding.fragmentEventEditTextFieldEndTime.text.toString())
+            this.eventViewModel.event.value?.beginDate = DateUtilities.mergeDateAndTime(beginDate!!, beginTime!!)
+            this.eventViewModel.event.value?.endDate = DateUtilities.mergeDateAndTime(endDate!!, endTime!!)
         }
     }
 

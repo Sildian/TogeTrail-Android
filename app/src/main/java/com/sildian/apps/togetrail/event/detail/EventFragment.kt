@@ -25,7 +25,6 @@ import com.sildian.apps.togetrail.hiker.others.HikerPhotoAdapter
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.others.TrailHorizontalAdapter
 import com.sildian.apps.togetrail.trail.others.TrailHorizontalViewHolder
-import kotlinx.android.synthetic.main.fragment_event.view.*
 
 /*************************************************************************************************
  * Displays an event's detail info and allows a user to register on this event
@@ -33,7 +32,7 @@ import kotlinx.android.synthetic.main.fragment_event.view.*
  ************************************************************************************************/
 
 class EventFragment(private val eventId: String?=null) :
-    BaseFragment(),
+    BaseFragment<FragmentEventBinding>(),
     HikerPhotoAdapter.OnHikerClickListener,
     HikerPhotoAdapter.OnHikersChangedListener,
     TrailHorizontalViewHolder.OnTrailClickListener,
@@ -50,12 +49,8 @@ class EventFragment(private val eventId: String?=null) :
 
     /**********************************UI component**********************************************/
 
-    private val toolbar by lazy {layout.fragment_event_toolbar}
-    private val registeredHikersRecyclerView by lazy {layout.fragment_event_recycler_view_registered_hikers}
     private lateinit var registeredHikersAdapter:HikerPhotoAdapter
-    private val attachedTrailsRecyclerView by lazy {layout.fragment_event_recycler_view_attached_trails}
     private lateinit var attachedTrailsAdapter:TrailHorizontalAdapter
-    private val messagesRecyclerView by lazy { layout.fragment_event_recycler_view_messages }
     private lateinit var messagesAdapter: PublicMessageAdapter
     private var messageWriteDialogFragment: MessageWriteDialogFragment? = null
 
@@ -72,8 +67,8 @@ class EventFragment(private val eventId: String?=null) :
         this.eventViewModel=ViewModelProviders
             .of(this, ViewModelFactory)
             .get(EventViewModel::class.java)
-        (this.binding as FragmentEventBinding).eventFragment = this
-        (this.binding as FragmentEventBinding).eventViewModel = this.eventViewModel
+        this.binding.eventFragment = this
+        this.binding.eventViewModel = this.eventViewModel
     }
 
     private fun observeEvent() {
@@ -115,7 +110,7 @@ class EventFragment(private val eventId: String?=null) :
     }
 
     private fun initializeToolbar() {
-        (activity as EventActivity).setSupportActionBar(this.toolbar)
+        (activity as EventActivity).setSupportActionBar(this.binding.fragmentEventToolbar)
         (activity as EventActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
@@ -135,7 +130,7 @@ class EventFragment(private val eventId: String?=null) :
             this,
             this
         )
-        this.registeredHikersRecyclerView.adapter=this.registeredHikersAdapter
+        this.binding.fragmentEventRecyclerViewRegisteredHikers.adapter = this.registeredHikersAdapter
     }
 
     private fun updateAttachedTrailsRecyclerView(){
@@ -147,7 +142,7 @@ class EventFragment(private val eventId: String?=null) :
             ),
             this
         )
-        this.attachedTrailsRecyclerView.adapter=this.attachedTrailsAdapter
+        this.binding.fragmentEventRecyclerViewAttachedTrails.adapter = this.attachedTrailsAdapter
     }
 
     private fun updateMessagesRecyclerView() {
@@ -159,7 +154,7 @@ class EventFragment(private val eventId: String?=null) :
             ),
             this, this
         )
-        this.messagesRecyclerView.adapter = this.messagesAdapter
+        this.binding.fragmentEventRecyclerViewMessages.adapter = this.messagesAdapter
     }
 
     @Suppress("UNUSED_PARAMETER")

@@ -1,6 +1,7 @@
 package com.sildian.apps.togetrail.chat.chatRoom
 
 import android.content.Intent
+import androidx.databinding.ViewDataBinding
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
@@ -24,7 +25,7 @@ class ChatActivity : BaseActivity() {
     /**********************************UI component**********************************************/
 
     private val toolbar by lazy { activity_chat_toolbar }
-    private lateinit var fragment: BaseFragment
+    private lateinit var fragment: BaseFragment<out ViewDataBinding>
 
     /********************************Navigation control******************************************/
 

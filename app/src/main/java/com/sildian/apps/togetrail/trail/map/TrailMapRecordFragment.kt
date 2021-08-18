@@ -18,25 +18,17 @@ import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.databinding.FragmentTrailMapRecordBinding
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
-import kotlinx.android.synthetic.main.fragment_trail_map_record.view.*
 
 /*************************************************************************************************
  * Lets the user record a trail in real time
  ************************************************************************************************/
 
 class TrailMapRecordFragment(trailViewModel: TrailViewModel)
-    : BaseTrailMapGenerateFragment(trailViewModel) {
+    : BaseTrailMapGenerateFragment<FragmentTrailMapRecordBinding>(trailViewModel) {
 
     /*************************************Service************************************************/
 
     private var trailRecordService: TrailRecordService? = null
-
-    /**********************************UI component**********************************************/
-
-    private val actionsButtonsLayout by lazy {layout.fragment_trail_map_record_layout_actions_buttons}
-    private val addPoiButton by lazy {layout.fragment_trail_map_record_button_poi_add}
-    private val playButton by lazy {layout.fragment_trail_map_record_button_play}
-    private val messageView by lazy {layout.fragment_trail_map_record_view_message}
 
     /************************************Life cycle**********************************************/
 
@@ -64,7 +56,7 @@ class TrailMapRecordFragment(trailViewModel: TrailViewModel)
     }
 
     private fun initializeData() {
-        (this.binding as FragmentTrailMapRecordBinding).trailMapRecordFragment = this
+        this.binding.trailMapRecordFragment = this
     }
 
     /************************************UI monitoring*******************************************/
@@ -79,19 +71,19 @@ class TrailMapRecordFragment(trailViewModel: TrailViewModel)
 
     override fun enableUI() {
         this.map?.uiSettings?.setAllGesturesEnabled(true)
-        this.addPoiButton.isEnabled = true
-        this.playButton.isEnabled = true
+        this.binding.fragmentTrailMapRecordButtonPoiAdd.isEnabled = true
+        this.binding.fragmentTrailMapRecordButtonPlay.isEnabled = true
     }
 
     override fun disableUI() {
         this.map?.uiSettings?.setAllGesturesEnabled(false)
-        this.addPoiButton.isEnabled = false
-        this.playButton.isEnabled = false
+        this.binding.fragmentTrailMapRecordButtonPoiAdd.isEnabled = false
+        this.binding.fragmentTrailMapRecordButtonPlay.isEnabled = false
     }
 
-    override fun getMessageView(): View = this.messageView
+    override fun getMessageView(): View = this.binding.fragmentTrailMapRecordViewMessage
 
-    override fun getMessageAnchorView(): View? = this.playButton
+    override fun getMessageAnchorView(): View? = this.binding.fragmentTrailMapRecordButtonPlay
 
     @Suppress("UNUSED_PARAMETER")
     fun onSeeInfoButtonClick(view: View) {
@@ -113,10 +105,10 @@ class TrailMapRecordFragment(trailViewModel: TrailViewModel)
     }
 
     override fun revealActionsButtons(){
-        this.actionsButtonsLayout.visibility = View.VISIBLE
-        this.actionsButtonsLayout.layoutAnimation =
+        this.binding.fragmentTrailMapRecordLayoutActionsButtons.visibility = View.VISIBLE
+        this.binding.fragmentTrailMapRecordLayoutActionsButtons.layoutAnimation =
             AnimationUtils.loadLayoutAnimation(context, R.anim.layout_appear_right)
-        this.actionsButtonsLayout.animate()
+        this.binding.fragmentTrailMapRecordLayoutActionsButtons.animate()
     }
 
     override fun hideActionsButtons() {
@@ -169,13 +161,13 @@ class TrailMapRecordFragment(trailViewModel: TrailViewModel)
     /*************************************Record actions*****************************************/
 
     private fun startRecord() {
-        playButton.setImageResource(R.drawable.ic_record_pause_white)
-        trailRecordService?.startRecord(this, this::updateTrailTrack, this::handleUserLocationError)
+        this.binding.fragmentTrailMapRecordButtonPlay.setImageResource(R.drawable.ic_record_pause_white)
+        this.trailRecordService?.startRecord(this, this::updateTrailTrack, this::handleUserLocationError)
     }
 
     private fun stopRecord() {
-        playButton.setImageResource(R.drawable.ic_record_play_white)
-        trailRecordService?.stopRecord(this)
+        this.binding.fragmentTrailMapRecordButtonPlay.setImageResource(R.drawable.ic_record_play_white)
+        this.trailRecordService?.stopRecord(this)
     }
 
     private fun handleUserLocationError(e: UserLocationException?) {
@@ -186,15 +178,15 @@ class TrailMapRecordFragment(trailViewModel: TrailViewModel)
                     //TODO prompt an appropriate action ?
                     SnackbarHelper
                         .createSimpleSnackbar(
-                            this.messageView,
-                            this.playButton,
+                            this.binding.fragmentTrailMapRecordViewMessage,
+                            this.binding.fragmentTrailMapRecordButtonPlay,
                             R.string.message_user_location_failure
                         ).show()
                 }
                 UserLocationException.ErrorCode.GPS_UNAVAILABLE -> {
                     SnackbarHelper.createSnackbarWithAction(
-                        this.messageView,
-                        this.playButton,
+                        this.binding.fragmentTrailMapRecordViewMessage,
+                        this.binding.fragmentTrailMapRecordButtonPlay,
                         R.string.message_device_gps_unavailable,
                         R.string.button_common_activate
                     ) {
@@ -204,8 +196,8 @@ class TrailMapRecordFragment(trailViewModel: TrailViewModel)
                 UserLocationException.ErrorCode.ERROR_UNKNOWN -> {
                     SnackbarHelper
                         .createSimpleSnackbar(
-                            this.messageView,
-                            this.playButton,
+                            this.binding.fragmentTrailMapRecordViewMessage,
+                            this.binding.fragmentTrailMapRecordButtonPlay,
                             R.string.message_user_location_failure
                         ).show()
                 }

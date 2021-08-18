@@ -14,13 +14,13 @@ import androidx.fragment.app.Fragment
  * Base for all fragments
  ************************************************************************************************/
 
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment<T: ViewDataBinding> : Fragment() {
 
     /*********************************UI components**********************************************/
 
     protected var baseActivity: BaseActivity? = null            //The activity reference
     protected lateinit var layout: View                         //The fragment's layout
-    protected lateinit var binding: ViewDataBinding             //Item for data binding
+    protected lateinit var binding: T                           //Item for data binding
 
     /************************************Life cycle**********************************************/
 

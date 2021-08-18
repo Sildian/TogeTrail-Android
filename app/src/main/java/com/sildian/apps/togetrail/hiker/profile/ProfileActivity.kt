@@ -3,6 +3,7 @@ package com.sildian.apps.togetrail.hiker.profile
 import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
+import androidx.databinding.ViewDataBinding
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.chat.chatRoom.ChatActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
@@ -33,7 +34,7 @@ class ProfileActivity : BaseActivity() {
 
     /**********************************UI component**********************************************/
 
-    private var fragment: BaseFragment?=null
+    private var fragment: BaseFragment<out ViewDataBinding>?=null
 
     /********************************Menu monitoring*********************************************/
 
