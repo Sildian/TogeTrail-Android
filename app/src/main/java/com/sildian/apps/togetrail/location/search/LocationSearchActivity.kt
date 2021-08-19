@@ -52,6 +52,13 @@ class LocationSearchActivity :
 
     private lateinit var locationsPredictionsAdapter: LocationPredictionAdapter
 
+    /*********************************Life cycle*************************************************/
+
+    override fun onResume() {
+        super.onResume()
+        this.binding.activityLocationSearchTextFieldResearch.requestFocus()
+    }
+
     /********************************Navigation control******************************************/
 
     override fun onBackPressed() {
