@@ -121,7 +121,7 @@ data class TrailTrack(
 
     fun getMaxElevation():Int?{
         return if (this.trailPoints.find { it.elevation==null } ==null){
-            this.trailPoints.maxBy { it.elevation!! }?.elevation
+            this.trailPoints.maxByOrNull { it.elevation!! }?.elevation
         }else{
             null
         }
@@ -134,7 +134,7 @@ data class TrailTrack(
 
     fun getMinElevation():Int?{
         return if (this.trailPoints.find { it.elevation==null } ==null){
-            this.trailPoints.minBy { it.elevation!! }?.elevation
+            this.trailPoints.minByOrNull { it.elevation!! }?.elevation
         }else{
             null
         }
