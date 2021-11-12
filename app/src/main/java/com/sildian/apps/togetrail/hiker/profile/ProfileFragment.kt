@@ -17,7 +17,7 @@ import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
  * @param hikerId : the hiker's id
  ************************************************************************************************/
 
-class ProfileFragment (private val hikerId: String?) :
+class ProfileFragment(private val hikerId: String? = null) :
     BaseFragment<FragmentProfileBinding>(),
     HikerHistoryAdapter.OnHikerHistoryItemClick
 {

@@ -17,7 +17,7 @@ import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
  * Shows a specific trail on the map and allows to see all its detail information
  ************************************************************************************************/
 
-class TrailMapDetailFragment(trailViewModel: TrailViewModel, isEditable:Boolean=false)
+class TrailMapDetailFragment(trailViewModel: TrailViewModel? = null, isEditable:Boolean=false)
     : BaseTrailMapFragment<FragmentTrailMapDetailBinding>(trailViewModel, isEditable)
 {
 
@@ -116,25 +116,27 @@ class TrailMapDetailFragment(trailViewModel: TrailViewModel, isEditable:Boolean=
         showTrailTrackOnMap()
     }
 
-    override fun onMapClick(point: LatLng?) {
+    override fun onMapClick(point: LatLng) {
         hideInfoBottomSheet()
     }
 
-    override fun onMarkerClick(marker: Marker?): Boolean {
+    override fun onMarkerClick(marker: Marker): Boolean {
 
         /*Shows an info nested fragment depending on the tag of the marker*/
 
-        return when(marker?.tag){
-            is TrailPointOfInterest ->{
-                val trailPoiPosition=marker.snippet.toInt()
-                showTrailPOIInfoFragment(trailPoiPosition)
-                true
+        return when (marker.tag) {
+            is TrailPointOfInterest -> {
+                marker.snippet?.let { poiPosition ->
+                    showTrailPOIInfoFragment(poiPosition.toInt())
+                    true
+                }
+                false
             }
-            is TrailPoint ->{
+            is TrailPoint -> {
                 showTrailInfoFragment()
                 true
             }
-            else-> {
+            else -> {
                 false
             }
         }
@@ -144,7 +146,7 @@ class TrailMapDetailFragment(trailViewModel: TrailViewModel, isEditable:Boolean=
 
     override fun showTrailTrackOnMap() {
 
-        if(this.trailViewModel?.trail?.value != null) {
+        if (this.trailViewModel?.trail?.value != null) {
 
             super.showTrailTrackOnMap()
 
@@ -154,7 +156,7 @@ class TrailMapDetailFragment(trailViewModel: TrailViewModel, isEditable:Boolean=
 
             /*Moves the camera to the first point and zoom in*/
 
-            if(firstPoint!=null) {
+            if (firstPoint!=null) {
                 this.map?.animateCamera(
                     CameraUpdateFactory.newLatLngZoom(
                         LatLng(firstPoint.latitude, firstPoint.longitude), 14.0f))

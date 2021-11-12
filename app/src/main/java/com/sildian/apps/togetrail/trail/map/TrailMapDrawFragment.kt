@@ -14,7 +14,7 @@ import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
  * Lets the user create a trail by drawing the track on the map and adding points of interest
  ************************************************************************************************/
 
-class TrailMapDrawFragment(trailViewModel: TrailViewModel)
+class TrailMapDrawFragment(trailViewModel: TrailViewModel? = null)
     : BaseTrailMapGenerateFragment<FragmentTrailMapDrawBinding>(trailViewModel){
 
     /************************************Data monitoring*****************************************/
@@ -95,17 +95,11 @@ class TrailMapDrawFragment(trailViewModel: TrailViewModel)
 
     /***********************************Map monitoring*******************************************/
 
-    override fun onMapClick(point: LatLng?) {
+    override fun onMapClick (point: LatLng) {
         if (this.infoBottomSheet.state != BottomSheetBehavior.STATE_HIDDEN) {
             hideInfoBottomSheet()
         }
-        if (point != null) {
-            val trailPoint =
-                TrailPoint(
-                    point.latitude,
-                    point.longitude
-                )
-            addTrailPoint(trailPoint)
-        }
+        val trailPoint = TrailPoint(point.latitude, point.longitude)
+        addTrailPoint(trailPoint)
     }
 }

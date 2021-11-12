@@ -23,7 +23,7 @@ import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
  * Lets the user record a trail in real time
  ************************************************************************************************/
 
-class TrailMapRecordFragment(trailViewModel: TrailViewModel)
+class TrailMapRecordFragment(trailViewModel: TrailViewModel? = null)
     : BaseTrailMapGenerateFragment<FragmentTrailMapRecordBinding>(trailViewModel) {
 
     /*************************************Service************************************************/
@@ -117,7 +117,7 @@ class TrailMapRecordFragment(trailViewModel: TrailViewModel)
 
     /***********************************Map monitoring*******************************************/
 
-    override fun onMapClick(point: LatLng?) {
+    override fun onMapClick(point: LatLng) {
         hideInfoBottomSheet()
     }
 
@@ -128,7 +128,7 @@ class TrailMapRecordFragment(trailViewModel: TrailViewModel)
             this.trailViewModel?.trail?.value?.trailTrack?.trailPoints?.clear()
             this.trailViewModel?.trail?.value?.trailTrack?.trailPoints?.addAll(trailPoints)
             showTrailTrackOnMap()
-            if(this.trailViewModel?.trail?.value?.trailTrack?.trailPoints?.size==1) {
+            if (this.trailViewModel?.trail?.value?.trailTrack?.trailPoints?.size == 1) {
                 revealActionsButtons()
             }
         }

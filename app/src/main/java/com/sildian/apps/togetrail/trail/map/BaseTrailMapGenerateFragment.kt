@@ -17,7 +17,7 @@ import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
  * Base for all Trail fragments using a map and allowing to generate a new Trail with the app
  ************************************************************************************************/
 
-abstract class BaseTrailMapGenerateFragment<T: ViewDataBinding>(trailViewModel: TrailViewModel) :
+abstract class BaseTrailMapGenerateFragment<T: ViewDataBinding>(trailViewModel: TrailViewModel? = null) :
     BaseTrailMapFragment<T>(trailViewModel, isEditable = true),
     GoogleMap.InfoWindowAdapter,
     GoogleMap.OnInfoWindowClickListener
@@ -34,14 +34,16 @@ abstract class BaseTrailMapGenerateFragment<T: ViewDataBinding>(trailViewModel: 
     }
 
     private fun showRequestTrailNameDialog() {
-        DialogHelper.createRequestInfoDialog(context!!, R.string.message_trail_info_request_title) { answer ->
-            if (!answer.isNullOrEmpty()) {
-                this.trailViewModel?.trail?.value?.name = answer
-                this.trailViewModel?.notifyDataChanged()
-            } else {
-                showRequestTrailNameDialog()
-            }
-        }.show()
+        context?.let { context ->
+            DialogHelper.createRequestInfoDialog(context, R.string.message_trail_info_request_title) { answer ->
+                if (!answer.isNullOrEmpty()) {
+                    this.trailViewModel?.trail?.value?.name = answer
+                    this.trailViewModel?.notifyDataChanged()
+                } else {
+                    showRequestTrailNameDialog()
+                }
+            }.show()
+        }
     }
 
     /***********************************Map monitoring*******************************************/
@@ -52,18 +54,20 @@ abstract class BaseTrailMapGenerateFragment<T: ViewDataBinding>(trailViewModel: 
         zoomToUserLocation()
     }
 
-    override fun onMarkerClick(marker: Marker?): Boolean {
+    override fun onMarkerClick(marker: Marker): Boolean {
 
         /*Shows an info nested fragment depending on the tag of the marker*/
 
-        return when(marker?.tag){
-            is TrailPointOfInterest ->{
-                val trailPoiPosition=marker.snippet.toInt()
-                showTrailPOIInfoFragment(trailPoiPosition)
-                marker.showInfoWindow()
-                true
+        return when (marker.tag){
+            is TrailPointOfInterest -> {
+                marker.snippet?.let { poiPosition ->
+                    showTrailPOIInfoFragment(poiPosition.toInt())
+                    marker.showInfoWindow()
+                    true
+                }
+                false
             }
-            is TrailPoint ->{
+            is TrailPoint -> {
                 showTrailInfoFragment()
                 true
             }
@@ -73,17 +77,17 @@ abstract class BaseTrailMapGenerateFragment<T: ViewDataBinding>(trailViewModel: 
         }
     }
 
-    override fun getInfoWindow(marker: Marker?): View? {
+    override fun getInfoWindow(marker: Marker): View? {
         return layoutInflater.inflate(R.layout.map_info_window_poi_remove, this.layout as ViewGroup, false)
     }
 
-    override fun getInfoContents(marker: Marker?): View? {
+    override fun getInfoContents(marker: Marker): View? {
         return null
     }
 
-    override fun onInfoWindowClick(marker: Marker?) {
-        if(marker?.tag is TrailPointOfInterest) {
-            val trailPointOfInterest=marker.tag as TrailPointOfInterest
+    override fun onInfoWindowClick(marker: Marker) {
+        if (marker.tag is TrailPointOfInterest) {
+            val trailPointOfInterest = marker.tag as TrailPointOfInterest
             removeTrailPointOfInterest(trailPointOfInterest)
         }
     }
@@ -92,7 +96,7 @@ abstract class BaseTrailMapGenerateFragment<T: ViewDataBinding>(trailViewModel: 
 
     override fun showTrailTrackOnMap() {
 
-        if(this.trailViewModel?.trail?.value!=null) {
+        if (this.trailViewModel?.trail?.value != null) {
 
             super.showTrailTrackOnMap()
 

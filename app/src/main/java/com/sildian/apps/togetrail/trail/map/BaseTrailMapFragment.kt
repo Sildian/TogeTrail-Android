@@ -23,7 +23,6 @@ import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationExcep
 import com.sildian.apps.togetrail.common.utils.MapMarkersUtilities
 import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationHelper
 import com.sildian.apps.togetrail.common.utils.permissionsHelpers.PermissionsHelper
-import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.trail.info.BaseInfoFragment
 import com.sildian.apps.togetrail.trail.info.TrailInfoFragment
@@ -255,29 +254,23 @@ abstract class BaseTrailMapFragment<T: ViewDataBinding> (
     }
 
     @Suppress("MissingPermission")
-    override fun onMapReady(map: GoogleMap?) {
-        if(map!=null) {
-            Log.d(TAG, "Map is ready in '${this.javaClass.simpleName}'")
-            this.map = map
-            this.map?.mapType= GoogleMap.MAP_TYPE_TERRAIN
-            this.map?.setOnMapClickListener(this)
-            this.map?.setOnMarkerClickListener(this)
-            baseActivity?.let { baseActivity ->
-                if (PermissionsHelper.isPermissionGranted(baseActivity, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                    this.map?.isMyLocationEnabled = true
-                }
+    override fun onMapReady(map: GoogleMap) {
+        Log.d(TAG, "Map is ready in '${this.javaClass.simpleName}'")
+        this.map = map
+        this.map?.mapType = GoogleMap.MAP_TYPE_TERRAIN
+        this.map?.setOnMapClickListener(this)
+        this.map?.setOnMarkerClickListener(this)
+        baseActivity?.let { baseActivity ->
+            if (PermissionsHelper.isPermissionGranted(
+                    baseActivity,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+            ) {
+                this.map?.isMyLocationEnabled = true
             }
-            this.map?.uiSettings?.isMyLocationButtonEnabled = false
-            onMapReadyActionsFinished()
         }
-        else{
-            Log.w(TAG, "Map couldn't be loaded in '${this.javaClass.simpleName}'")
-            DialogHelper.createInfoDialog(
-                context!!,
-                R.string.message_map_failure_title,
-                R.string.message_map_failure_message
-            ).show()
-        }
+        this.map?.uiSettings?.isMyLocationButtonEnabled = false
+        onMapReadyActionsFinished()
     }
 
     abstract fun onMapReadyActionsFinished()
@@ -285,7 +278,9 @@ abstract class BaseTrailMapFragment<T: ViewDataBinding> (
     /********************************Location monitoring*****************************************/
 
     private fun initializeUserLocation(){
-        this.userLocationProvider=LocationServices.getFusedLocationProviderClient(context!!)
+        context?.let { context ->
+            this.userLocationProvider = LocationServices.getFusedLocationProviderClient(context)
+        }
     }
 
     protected fun zoomToUserLocation() {
@@ -324,54 +319,57 @@ abstract class BaseTrailMapFragment<T: ViewDataBinding> (
 
     protected open fun showTrailTrackOnMap(){
 
-        if(this.trailViewModel?.trail?.value != null){
+        context?.let { context ->
 
-            /*Creates and shows the polyline from the trailPoints*/
+            if (this.trailViewModel?.trail?.value != null) {
 
-            val polylineOption=PolylineOptions()
-            this.trailViewModel?.trail?.value?.trailTrack?.trailPoints?.forEach { trailPoint->
-                polylineOption.add(LatLng(trailPoint.latitude, trailPoint.longitude))
-            }
-            polylineOption.color(ContextCompat.getColor(context!!, R.color.colorSecondaryDark))
-            this.map?.addPolyline(polylineOption)
+                /*Creates and shows the polyline from the trailPoints*/
 
-            /*Gets the first and the last trailPoints*/
+                val polylineOption=PolylineOptions()
+                this.trailViewModel?.trail?.value?.trailTrack?.trailPoints?.forEach { trailPoint->
+                    polylineOption.add(LatLng(trailPoint.latitude, trailPoint.longitude))
+                }
+                polylineOption.color(ContextCompat.getColor(context, R.color.colorSecondaryDark))
+                this.map?.addPolyline(polylineOption)
 
-            val firstPoint=this.trailViewModel?.trail?.value?.trailTrack?.getFirstTrailPoint()
-            val lastPoint=this.trailViewModel?.trail?.value?.trailTrack?.getLastTrailPoint()
+                /*Gets the first and the last trailPoints*/
 
-            /*Adds markers on the first and the last trailPoints*/
+                val firstPoint = this.trailViewModel?.trail?.value?.trailTrack?.getFirstTrailPoint()
+                val lastPoint = this.trailViewModel?.trail?.value?.trailTrack?.getLastTrailPoint()
 
-            if(firstPoint!=null) {
-                this.map?.addMarker(
-                    MarkerOptions()
-                        .position(LatLng(firstPoint.latitude, firstPoint.longitude))
-                        .icon(
-                            MapMarkersUtilities.createMapMarkerFromVector(
-                                context, R.drawable.ic_location_trail_map)))
-                    ?.tag = firstPoint
-            }
+                /*Adds markers on the first and the last trailPoints*/
 
-            if(lastPoint!=null && this.trailViewModel?.trail?.value?.loop==false) {
-                this.map?.addMarker(
-                    MarkerOptions()
-                        .position(LatLng(lastPoint.latitude, lastPoint.longitude))
-                        .icon(
-                            MapMarkersUtilities.createMapMarkerFromVector(
-                                context, R.drawable.ic_flag_map)))
-                    ?.tag = lastPoint
-            }
+                if (firstPoint!=null) {
+                    this.map?.addMarker(
+                        MarkerOptions()
+                            .position(LatLng(firstPoint.latitude, firstPoint.longitude))
+                            .icon(
+                                MapMarkersUtilities.createMapMarkerFromVector(
+                                    context, R.drawable.ic_location_trail_map)))
+                        ?.tag = firstPoint
+                }
 
-            /*Adds a marker for each trailPointOfInterest including its number*/
+                if (lastPoint!=null && this.trailViewModel?.trail?.value?.loop==false) {
+                    this.map?.addMarker(
+                        MarkerOptions()
+                            .position(LatLng(lastPoint.latitude, lastPoint.longitude))
+                            .icon(
+                                MapMarkersUtilities.createMapMarkerFromVector(
+                                    context, R.drawable.ic_flag_map)))
+                        ?.tag = lastPoint
+                }
 
-            for(i in this.trailViewModel?.trail?.value?.trailTrack?.trailPointsOfInterest!!.indices){
-                val trailPointOfInterest=this.trailViewModel?.trail?.value?.trailTrack?.trailPointsOfInterest!![i]
-                this.map?.addMarker(MarkerOptions()
-                    .position(LatLng(trailPointOfInterest.latitude, trailPointOfInterest.longitude))
-                    .icon(MapMarkersUtilities.createMapMarkerFromVector(
-                        context, R.drawable.ic_location_trail_poi_map, (i+1).toString()))
-                    .snippet(i.toString()))
-                    ?.tag=trailPointOfInterest
+                /*Adds a marker for each trailPointOfInterest including its number*/
+
+                for (i in this.trailViewModel?.trail?.value?.trailTrack?.trailPointsOfInterest!!.indices) {
+                    val trailPointOfInterest=this.trailViewModel?.trail?.value?.trailTrack?.trailPointsOfInterest!![i]
+                    this.map?.addMarker(MarkerOptions()
+                        .position(LatLng(trailPointOfInterest.latitude, trailPointOfInterest.longitude))
+                        .icon(MapMarkersUtilities.createMapMarkerFromVector(
+                            context, R.drawable.ic_location_trail_poi_map, (i+1).toString()))
+                        .snippet(i.toString()))
+                        ?.tag=trailPointOfInterest
+                }
             }
         }
     }

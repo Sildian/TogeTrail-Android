@@ -217,13 +217,13 @@ class TrailMapFragment :
         }
     }
 
-    override fun onMapClick(point: LatLng?) {
+    override fun onMapClick(point: LatLng) {
         hideInfoBottomSheet()
     }
 
-    override fun onMarkerClick(marker: Marker?): Boolean {
-        this.map?.animateCamera(CameraUpdateFactory.newLatLng(marker?.position))
-        return when(marker?.tag){
+    override fun onMarkerClick(marker: Marker): Boolean {
+        this.map?.animateCamera(CameraUpdateFactory.newLatLng(marker.position))
+        return when(marker.tag) {
             is Trail -> {
                 marker.showInfoWindow()
                 true
@@ -238,71 +238,74 @@ class TrailMapFragment :
         }
     }
 
-    override fun getInfoWindow(marker: Marker?): View? {
-        return when(marker?.tag){
+    override fun getInfoWindow(marker: Marker): View? {
+        return when(marker.tag) {
             is Trail -> showTrailInfoWindow(marker, marker.tag as Trail)
             is Event -> showEventInfoWindow(marker, marker.tag as Event)
             else -> null
         }
     }
 
-    override fun getInfoContents(marker: Marker?): View? {
+    override fun getInfoContents(marker: Marker): View? {
         return null
     }
 
-    override fun onInfoWindowClick(marker: Marker?) {
-        when(marker?.tag){
+    override fun onInfoWindowClick(marker: Marker) {
+        when(marker.tag) {
             is Trail -> (activity as MainActivity).seeTrail(marker.tag as Trail)
             is Event -> (activity as MainActivity).seeEvent(marker.tag as Event)
         }
     }
 
-    private fun showTrailInfoWindow(marker:Marker?, trail:Trail):View?{
-        val view = layoutInflater.inflate(
-            R.layout.map_info_window_trail, this.layout as ViewGroup, false)
-        val photoImageView = view.findViewById<ImageView>(R.id.map_info_window_trail_image_view_photo)
-        val nameText = view.findViewById<TextView>(R.id.map_info_window_trail_text_name)
-        val levelText = view.findViewById<TextView>(R.id.map_info_window_trail_text_level)
-        val durationText = view.findViewById<TextView>(R.id.map_info_window_trail_text_duration)
-        val ascentText = view.findViewById<TextView>(R.id.map_info_window_trail_text_ascent)
-        val locationText = view.findViewById<TextView>(R.id.map_info_window_trail_text_location)
-        if (trail.getFirstPhotoUrl() != null) {
-            Glide.with(view)
-                .load(trail.getFirstPhotoUrl())
-                .apply(RequestOptions.centerCropTransform())
-                .placeholder(R.drawable.ic_trail_black)
-                .listener(object : RequestListener<Drawable>{
-                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                        Log.w(TAG, e?.message.toString())
-                        return false
-                    }
-                    override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                        dataSource?.let {
-                            if (dataSource != DataSource.MEMORY_CACHE) {
-                                marker?.showInfoWindow()
-                            }
+    private fun showTrailInfoWindow(marker:Marker?, trail:Trail):View? {
+        context?.let { context ->
+            val view = layoutInflater.inflate(
+                R.layout.map_info_window_trail, this.layout as ViewGroup, false)
+            val photoImageView = view.findViewById<ImageView>(R.id.map_info_window_trail_image_view_photo)
+            val nameText = view.findViewById<TextView>(R.id.map_info_window_trail_text_name)
+            val levelText = view.findViewById<TextView>(R.id.map_info_window_trail_text_level)
+            val durationText = view.findViewById<TextView>(R.id.map_info_window_trail_text_duration)
+            val ascentText = view.findViewById<TextView>(R.id.map_info_window_trail_text_ascent)
+            val locationText = view.findViewById<TextView>(R.id.map_info_window_trail_text_location)
+            if (trail.getFirstPhotoUrl() != null) {
+                Glide.with(view)
+                    .load(trail.getFirstPhotoUrl())
+                    .apply(RequestOptions.centerCropTransform())
+                    .placeholder(R.drawable.ic_trail_black)
+                    .listener(object : RequestListener<Drawable>{
+                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                            Log.w(TAG, e?.message.toString())
+                            return false
                         }
-                        return false
-                    }
-                })
-                .into(photoImageView)
+                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                            dataSource?.let {
+                                if (dataSource != DataSource.MEMORY_CACHE) {
+                                    marker?.showInfoWindow()
+                                }
+                            }
+                            return false
+                        }
+                    })
+                    .into(photoImageView)
+            }
+            nameText.text = trail.name
+            when(trail.level){
+                TrailLevel.UNKNOWN -> levelText.setText(R.string.label_trail_level_unknown)
+                TrailLevel.EASY -> levelText.setText(R.string.label_trail_level_easy)
+                TrailLevel.MEDIUM -> levelText.setText(R.string.label_trail_level_medium)
+                TrailLevel.HARD -> levelText.setText(R.string.label_trail_level_hard)
+            }
+            durationText.text=
+                MetricsHelper.displayDuration(context, trail.duration)
+            ascentText.text=
+                MetricsHelper.displayAscent(context, trail.ascent, true, false)
+            locationText.text = trail.location.toString()
+            return view
         }
-        nameText.text = trail.name
-        when(trail.level){
-            TrailLevel.UNKNOWN -> levelText.setText(R.string.label_trail_level_unknown)
-            TrailLevel.EASY -> levelText.setText(R.string.label_trail_level_easy)
-            TrailLevel.MEDIUM -> levelText.setText(R.string.label_trail_level_medium)
-            TrailLevel.HARD -> levelText.setText(R.string.label_trail_level_hard)
-        }
-        durationText.text=
-            MetricsHelper.displayDuration(context!!, trail.duration)
-        ascentText.text=
-            MetricsHelper.displayAscent(context!!, trail.ascent, true, false)
-        locationText.text = trail.location.toString()
-        return view
+        return null
     }
 
-    private fun showEventInfoWindow(marker:Marker?, event:Event):View?{
+    private fun showEventInfoWindow(marker:Marker?, event:Event):View? {
         val view = layoutInflater.inflate(
             R.layout.map_info_window_event, this.layout as ViewGroup, false)
         val photoImageView = view.findViewById<ImageView>(R.id.map_info_window_event_image_view_photo)
@@ -357,7 +360,7 @@ class TrailMapFragment :
         /*For each trail in the list, shows a marker*/
 
         this.trailsViewModel.trails.value?.forEach { trail ->
-            if(trail.position!=null) {
+            if (trail.position!=null) {
                 this.map?.addMarker(
                     MarkerOptions()
                         .position(LatLng(trail.position!!.latitude, trail.position!!.longitude))
@@ -378,7 +381,7 @@ class TrailMapFragment :
         /*For each event in the list, shows a marker*/
 
         this.eventsViewModel.events.value?.forEach { event ->
-            if(event.position!=null) {
+            if (event.position!=null) {
                 this.map?.addMarker(
                     MarkerOptions()
                         .position(LatLng(event.position!!.latitude, event.position!!.longitude))

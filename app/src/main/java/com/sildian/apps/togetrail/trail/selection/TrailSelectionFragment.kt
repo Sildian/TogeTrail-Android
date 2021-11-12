@@ -14,7 +14,7 @@ import com.sildian.apps.togetrail.trail.model.core.Trail
  * @param selectedTrails : the list of selected trails
  ************************************************************************************************/
 
-class TrailSelectionFragment(private val trailsQuery:Query, private val selectedTrails:List<Trail>) :
+class TrailSelectionFragment(private val trailsQuery:Query? = null, private val selectedTrails:List<Trail>? = null) :
     BaseFragment<FragmentTrailSelectionBinding>(),
     TrailSelectionAdapter.OnTrailSelectListener,
     TrailSelectionAdapter.OnTrailClickListener
@@ -32,18 +32,20 @@ class TrailSelectionFragment(private val trailsQuery:Query, private val selected
         initializeTrailsRecyclerView()
     }
 
-    private fun initializeTrailsRecyclerView(){
-        this.trailsAdapter= TrailSelectionAdapter(
-            DatabaseFirebaseHelper.generateOptionsForAdapter(
-            Trail::class.java,
-            this.trailsQuery,
-            activity as AppCompatActivity
-            ),
-            this.selectedTrails,
-            this,
-            this
-        )
-        this.binding.fragmentTrailSelectionRecyclerViewTrails.adapter = this.trailsAdapter
+    private fun initializeTrailsRecyclerView() {
+        if (this.trailsQuery != null && this.selectedTrails != null) {
+            this.trailsAdapter = TrailSelectionAdapter(
+                DatabaseFirebaseHelper.generateOptionsForAdapter(
+                    Trail::class.java,
+                    this.trailsQuery,
+                    activity as AppCompatActivity
+                ),
+                this.selectedTrails,
+                this,
+                this
+            )
+            this.binding.fragmentTrailSelectionRecyclerViewTrails.adapter = this.trailsAdapter
+        }
     }
 
     /***********************************Trails monitoring****************************************/
