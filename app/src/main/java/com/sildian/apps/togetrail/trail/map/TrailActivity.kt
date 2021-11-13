@@ -122,9 +122,9 @@ class TrailActivity : BaseActivity<ActivityTrailBinding>() {
 
     private fun observeTrail() {
         this.trailViewModel.trail.observe(this) { trail ->
-            if (!isTrailLoaded) {
-                isTrailLoaded = true
-                if (currentAction == ACTION_TRAIL_SEE && trail != null) {
+            if (!this.isTrailLoaded && trail != null) {
+                this.isTrailLoaded = true
+                if (this.currentAction == ACTION_TRAIL_SEE || this.currentAction == ACTION_TRAIL_CREATE_FROM_GPX) {
                     startTrailAction()
                 }
             }
@@ -133,26 +133,29 @@ class TrailActivity : BaseActivity<ActivityTrailBinding>() {
 
     private fun observeRequestFailure() {
         this.trailViewModel.requestFailure.observe(this) { e ->
-            if (currentAction == ACTION_TRAIL_SEE && e != null) {
+            if ((this.currentAction == ACTION_TRAIL_SEE || this.currentAction == ACTION_TRAIL_CREATE_FROM_GPX) && e != null) {
                 onQueryError(e)
             }
         }
     }
 
     private fun readDataFromIntent(){
-        if(intent!=null){
-            if(intent.hasExtra(KEY_BUNDLE_TRAIL_ACTION)){
-                this.currentAction=
+        if (intent != null) {
+            if (intent.hasExtra(KEY_BUNDLE_TRAIL_ACTION)) {
+                this.currentAction =
                     intent.getIntExtra(KEY_BUNDLE_TRAIL_ACTION, ACTION_TRAIL_SEE)
             }
-            if(intent.hasExtra(KEY_BUNDLE_TRAIL_ID)) {
-                val trailId = intent.getStringExtra(KEY_BUNDLE_TRAIL_ID)
-                trailId?.let { id ->
-                    this.trailViewModel.loadTrailFromDatabaseRealTime(id)
+            when {
+                this.currentAction == ACTION_TRAIL_CREATE_FROM_GPX ->
+                    startLoadGpx()
+                intent.hasExtra(KEY_BUNDLE_TRAIL_ID) -> {
+                    val trailId = intent.getStringExtra(KEY_BUNDLE_TRAIL_ID)
+                    trailId?.let { id ->
+                        this.trailViewModel.loadTrailFromDatabaseRealTime(id)
+                    }
                 }
-            }
-            else {
-                startTrailAction()
+                else ->
+                    startTrailAction()
             }
         }
     }
@@ -257,8 +260,8 @@ class TrailActivity : BaseActivity<ActivityTrailBinding>() {
 
     /***********************************Trail actions********************************************/
 
-    private fun startTrailAction(){
-        when(this.currentAction){
+    private fun startTrailAction() {
+        when(this.currentAction) {
             ACTION_TRAIL_SEE -> {
                 this.isEditable=AuthFirebaseHelper.getCurrentUser()?.uid==this.trailViewModel.trail.value?.authorId
                 showFragment(ID_FRAGMENT_TRAIL_DETAIL)
@@ -266,7 +269,6 @@ class TrailActivity : BaseActivity<ActivityTrailBinding>() {
             ACTION_TRAIL_CREATE_FROM_GPX ->{
                 this.isEditable=true
                 showFragment(ID_FRAGMENT_TRAIL_DETAIL)
-                startLoadGpx()
             }
             ACTION_TRAIL_DRAW -> {
                 this.isEditable=true
@@ -281,12 +283,12 @@ class TrailActivity : BaseActivity<ActivityTrailBinding>() {
         }
     }
 
-    fun updateTrailAndEditInfo(trail: Trail){
+    fun updateTrailAndEditInfo(trail: Trail) {
         updateData(trail)
         startTrailInfoEditActivity(TrailInfoEditActivity.ACTION_TRAIL_EDIT_INFO, null)
     }
 
-    fun updateTrailAndEditPoiInfo(trail: Trail, poiPosition:Int){
+    fun updateTrailAndEditPoiInfo(trail: Trail, poiPosition:Int) {
         updateData(trail)
         startTrailInfoEditActivity(TrailInfoEditActivity.ACTION_TRAIL_EDIT_POI_INFO, poiPosition)
     }
@@ -297,7 +299,7 @@ class TrailActivity : BaseActivity<ActivityTrailBinding>() {
 
     /***********************************Navigation***********************************************/
 
-    private fun startLoadGpx(){
+    private fun startLoadGpx() {
         val loadGpxIntent=Intent(Intent.ACTION_OPEN_DOCUMENT)
         loadGpxIntent.addCategory(Intent.CATEGORY_OPENABLE)
         loadGpxIntent.type="*/*"

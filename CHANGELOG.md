@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Fixed
+- Fix an issue preventing a track to be properly drawn on the map when loading a GPX
+
 ## [0.1.0-beta] - 2021-08-19
 ### Added
 - Enable liking or marking a trail
