@@ -8,7 +8,7 @@ import kotlinx.coroutines.*
 
 /**Base interface for all data requests**/
 
-private interface DataRequest {
+interface DataRequest {
     suspend fun execute()
     suspend fun cancel()
 }
