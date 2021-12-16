@@ -70,9 +70,9 @@ object FirebaseSimulator {
         eventMessages.clear()
     }
 
-    fun setCurrentUser(email: String, displayName: String, photoUrl: String?) {
+    fun setCurrentUser(uid: String, email: String, displayName: String, photoUrl: String?) {
         val user = Mockito.mock(FirebaseUser::class.java)
-        Mockito.`when`(user?.uid).thenReturn("UID")
+        Mockito.`when`(user?.uid).thenReturn(uid)
         Mockito.`when`(user?.email).thenReturn(email)
         Mockito.`when`(user?.displayName).thenReturn(displayName)
         Mockito.`when`(user?.photoUrl).thenReturn(photoUrl?.toUri())

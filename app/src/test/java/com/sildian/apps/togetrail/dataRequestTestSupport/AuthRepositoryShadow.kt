@@ -41,8 +41,10 @@ class AuthRepositoryShadow {
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
         }
-        FirebaseSimulator.currentUser?.email?.let { email ->
-            FirebaseSimulator.setCurrentUser(email, displayName, photoUri)
+        FirebaseSimulator.currentUser?.uid?.let { uid ->
+            FirebaseSimulator.currentUser?.email?.let { email ->
+                FirebaseSimulator.setCurrentUser(uid, email, displayName, photoUri)
+            }
         }
     }
 
