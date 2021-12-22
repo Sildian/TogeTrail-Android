@@ -32,7 +32,7 @@ class TrailRepositoryShadow {
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
         }
-        trail.id = "ID"
+        trail.id = "TNEW"
         FirebaseSimulator.trails.add(trail)
         return trail.id
     }

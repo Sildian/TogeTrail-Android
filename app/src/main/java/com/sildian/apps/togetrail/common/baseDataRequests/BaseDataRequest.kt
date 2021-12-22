@@ -36,7 +36,7 @@ abstract class LoadDataRequest<T: Any>: DataRequest {
 
 /**Base for all data requests aiming to save data matching the given type T**/
 
-abstract class SaveDataRequest<T: Any>(data: T?): DataRequest {
+abstract class SaveDataRequest<T: Any>(protected val data: T?): DataRequest {
 
     private var job: Job? = null
 

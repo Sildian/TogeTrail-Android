@@ -35,7 +35,7 @@ class EventRepositoryShadow {
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
         }
-        event.id = "ID"
+        event.id = "ENEW"
         FirebaseSimulator.events.add(event)
         return event.id
     }
