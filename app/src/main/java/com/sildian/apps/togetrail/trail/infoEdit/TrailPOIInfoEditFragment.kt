@@ -10,6 +10,7 @@ import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.TextFieldHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.ValueFormatters
 import com.sildian.apps.togetrail.databinding.FragmentTrailPoiInfoEditBinding
+import com.sildian.apps.togetrail.trail.model.dataRequests.TrailSaveDataRequest
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
 
 /*************************************************************************************************
@@ -50,7 +51,7 @@ class TrailPOIInfoEditFragment(
         initializeData()
         observeTrail()
         observeTrailPOI()
-        observeSaveRequestSuccess()
+        observeRequestSuccess()
         observeRequestFailure()
     }
 
@@ -62,7 +63,7 @@ class TrailPOIInfoEditFragment(
     }
 
     private fun observeTrail() {
-        this.trailViewModel?.trail?.observe(this) { trail ->
+        this.trailViewModel?.data?.observe(this) { trail ->
             if (trail != null) {
                 this.trailPointOfInterestPosition?.let { position ->
                     this.trailViewModel.watchPointOfInterest(position)
@@ -79,16 +80,16 @@ class TrailPOIInfoEditFragment(
         }
     }
 
-    private fun observeSaveRequestSuccess() {
-        this.trailViewModel?.saveRequestSuccess?.observe(this) { success ->
-            if (success) {
-                onSaveSuccess()
+    private fun observeRequestSuccess() {
+        this.trailViewModel?.success?.observe(this) { success ->
+            if (success != null && success is TrailSaveDataRequest) {
+                onQuerySuccess()
             }
         }
     }
 
     private fun observeRequestFailure() {
-        this.trailViewModel?.requestFailure?.observe(this) { e ->
+        this.trailViewModel?.error?.observe(this) { e ->
             if (e != null) {
                 onQueryError(e)
             }
@@ -97,7 +98,7 @@ class TrailPOIInfoEditFragment(
 
     private fun setValue(value: Int?) {
         this.trailViewModel?.trailPointOfInterest?.value?.elevation = value
-        this.trailViewModel?.trailPointOfInterest?.value = this.trailViewModel?.trailPointOfInterest?.value
+        this.trailViewModel?.notifyDataObserver()
     }
 
     override fun saveData() {
@@ -106,7 +107,7 @@ class TrailPOIInfoEditFragment(
                 this.trailViewModel.trailPointOfInterest.value?.name = this.binding.fragmentTrailPoiInfoEditTextFieldName.text.toString()
                 this.trailViewModel.trailPointOfInterest.value?.description = this.binding.fragmentTrailPoiInfoEditTextFieldDescription.text.toString()
                 this.baseActivity?.showProgressDialog()
-                this.trailViewModel.saveTrailInDatabase(true)
+                this.trailViewModel.saveTrail(true)
             }
         }
     }

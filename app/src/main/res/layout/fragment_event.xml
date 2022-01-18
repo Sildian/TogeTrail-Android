@@ -27,12 +27,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="@{eventViewModel.event==null ? View.VISIBLE : View.GONE}"/>
+            android:visibility="@{eventViewModel.data==null ? View.VISIBLE : View.GONE}"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{eventViewModel.event==null ? View.GONE : View.VISIBLE}">
+            android:visibility="@{eventViewModel.data==null ? View.GONE : View.VISIBLE}">
 
             <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:layout_width="0dp"
@@ -62,7 +62,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/image_size_large"
                                 app:srcCompat="@drawable/ic_trail_white"
-                                app:imgUrl="@{eventViewModel.event.mainPhotoUrl}"
+                                app:imgUrl="@{eventViewModel.data.mainPhotoUrl}"
                                 app:imgPlaceHolder="@{@drawable/ic_trail_white}"
                                 app:imgOptions="@{RequestOptions.centerCropTransform()}"
                                 android:contentDescription="@string/example_image_content_description" />
@@ -108,7 +108,7 @@
                             android:textStyle="bold"
                             android:textSize="@dimen/text_size_very_important"
                             android:textColor="@color/colorBlack"
-                            android:text="@{eventViewModel.event.name, default=@string/example_event_name}"/>
+                            android:text="@{eventViewModel.data.name, default=@string/example_event_name}"/>
 
                         <TextView
                             android:id="@+id/fragment_event_text_nb_days"
@@ -119,7 +119,7 @@
                             android:layout_marginStart="@dimen/components_margin_medium"
                             android:layout_marginEnd="@dimen/components_margin_medium"
                             android:textSize="@dimen/text_size_title"
-                            android:text="@{MetricsHelper.displayNbDays(eventFragment.context, eventViewModel.event.nbDays), default=@string/example_event_nb_days}"/>
+                            android:text="@{MetricsHelper.displayNbDays(eventFragment.context, eventViewModel.data.nbDays), default=@string/example_event_nb_days}"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -144,7 +144,7 @@
                             android:gravity="center_vertical"
                             app:drawableStartCompat="@drawable/ic_date_black"
                             android:drawablePadding="@dimen/components_margin_small"
-                            android:text="@{eventViewModel.event.beginDate==null ? `` : DateUtilities.displayDateAndTimeFull(eventViewModel.event.beginDate), default=@string/example_event_begin_date_full}"/>
+                            android:text="@{eventViewModel.data.beginDate==null ? `` : DateUtilities.displayDateAndTimeFull(eventViewModel.data.beginDate), default=@string/example_event_begin_date_full}"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -164,7 +164,7 @@
                                 android:gravity="center_vertical"
                                 app:drawableStartCompat="@drawable/ic_location_event"
                                 android:drawablePadding="@dimen/components_margin_small"
-                                android:text="@{eventViewModel.event.meetingPoint.fullAddress, default=@string/example_location_fine}"/>
+                                android:text="@{eventViewModel.data.meetingPoint.fullAddress, default=@string/example_location_fine}"/>
 
                             <com.google.android.material.button.MaterialButton
                                 style="@style/IconButtonStyle"
@@ -195,7 +195,7 @@
                                 android:layout_marginEnd="@dimen/components_margin_small"
                                 android:contentDescription="@string/example_image_content_description"
                                 app:srcCompat="@drawable/ic_person_black"
-                                app:imgUrl="@{eventViewModel.event.authorPhotoUrl}"
+                                app:imgUrl="@{eventViewModel.data.authorPhotoUrl}"
                                 app:imgPlaceHolder="@{@drawable/ic_person_black}"
                                 app:imgOptions="@{RequestOptions.circleCropTransform()}"
                                 android:onClick="@{eventFragment::onAuthorPhotoButtonClick}"/>
@@ -208,7 +208,7 @@
                                 android:layout_marginBottom="@dimen/components_margin_small"
                                 android:layout_marginStart="@dimen/components_margin_small"
                                 android:layout_marginEnd="@dimen/components_margin_medium"
-                                android:text="@{@string/label_event_author(eventViewModel.event.authorName), default=@string/example_event_author}"/>
+                                android:text="@{@string/label_event_author(eventViewModel.data.authorName), default=@string/example_event_author}"/>
 
                         </LinearLayout>
 
@@ -225,7 +225,7 @@
                             android:drawablePadding="@dimen/components_margin_small"
                             android:textSize="@dimen/text_size_title"
                             android:textColor="@color/colorBlack"
-                            android:text="@{MetricsHelper.displayNbRegisteredHikers(eventFragment.context, eventViewModel.event.nbHikersRegistered), default=@string/example_event_registered_hikers}"/>
+                            android:text="@{MetricsHelper.displayNbRegisteredHikers(eventFragment.context, eventViewModel.data.nbHikersRegistered), default=@string/example_event_registered_hikers}"/>
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/fragment_event_recycler_view_registered_hikers"
@@ -275,7 +275,7 @@
                             android:layout_marginBottom="@dimen/components_margin_small"
                             android:layout_marginStart="@dimen/components_margin_medium"
                             android:layout_marginEnd="@dimen/components_margin_medium"
-                            android:text="@{eventViewModel.event.description, default=@string/example_event_description}"/>
+                            android:text="@{eventViewModel.data.description, default=@string/example_event_description}"/>
 
                         <TextView
                             android:layout_width="wrap_content"

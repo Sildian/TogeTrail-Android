@@ -47,7 +47,7 @@ class ProfileFragment(private val hikerId: String? = null) :
     }
 
     private fun observeHiker() {
-        this.hikerViewModel.hiker.observe(this, { hiker ->
+        this.hikerViewModel.data.observe(this, { hiker ->
             if (hiker != null) {
                 refreshUI()
             }
@@ -55,7 +55,7 @@ class ProfileFragment(private val hikerId: String? = null) :
     }
 
     private fun observeRequestFailure() {
-        this.hikerViewModel.requestFailure.observe(this) { e ->
+        this.hikerViewModel.error.observe(this) { e ->
             if (e != null) {
                 onQueryError(e)
             }
@@ -64,7 +64,7 @@ class ProfileFragment(private val hikerId: String? = null) :
 
     private fun loadHiker() {
         this.hikerId?.let { hikerId ->
-            this.hikerViewModel.loadHikerFromDatabaseRealTime(hikerId)
+            this.hikerViewModel.loadHikerRealTime(hikerId)
         }
     }
 
@@ -86,7 +86,7 @@ class ProfileFragment(private val hikerId: String? = null) :
     }
 
     private fun updateHistoryItemsRecyclerView(){
-        this.hikerViewModel.hiker.value?.let { hiker ->
+        this.hikerViewModel.data.value?.let { hiker ->
             this.historyItemAdapter = HikerHistoryAdapter(
                 DatabaseFirebaseHelper.generateOptionsForAdapter(
                     HikerHistoryItem::class.java,

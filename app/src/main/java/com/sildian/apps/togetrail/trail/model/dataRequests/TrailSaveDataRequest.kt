@@ -32,8 +32,12 @@ class TrailSaveDataRequest(
 
     private var trailPOI: TrailPointOfInterest? = null
 
-    fun editPOI(poiIndex: Int): TrailSaveDataRequest {
-        this.trailPOI = this.data?.trailTrack?.trailPointsOfInterest?.getOrNull(poiIndex)
+    fun editPOI(poi: TrailPointOfInterest?): TrailSaveDataRequest {
+        poi?.let {
+            if (this.data?.trailTrack?.trailPointsOfInterest?.contains(poi) == true) {
+                this.trailPOI = poi
+            }
+        }
         return this
     }
 

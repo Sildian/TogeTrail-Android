@@ -8,6 +8,8 @@ import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.databinding.FragmentProfileSettingsEditBinding
+import com.sildian.apps.togetrail.hiker.model.dataRequests.HikerDeleteAccountDataRequest
+import com.sildian.apps.togetrail.hiker.model.dataRequests.HikerResetPasswordDataRequest
 import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
 
 /*************************************************************************************************
@@ -27,7 +29,7 @@ class ProfileSettingsEditFragment(private val hikerId: String?=null) :
 
     override fun loadData() {
         initializeData()
-        observeSaveRequestSuccess()
+        observeRequestSuccess()
         observeRequestFailure()
         loadHiker()
     }
@@ -40,16 +42,16 @@ class ProfileSettingsEditFragment(private val hikerId: String?=null) :
         this.binding.hikerViewModel = this.hikerViewModel
     }
 
-    private fun observeSaveRequestSuccess() {
-        this.hikerViewModel.saveRequestSuccess.observe(this) { success ->
-            if (success) {
+    private fun observeRequestSuccess() {
+        this.hikerViewModel.success.observe(this) { success ->
+            if (success != null && (success is HikerResetPasswordDataRequest || success is HikerDeleteAccountDataRequest)) {
                 handleSaveDataSuccess()
             }
         }
     }
 
     private fun observeRequestFailure() {
-        this.hikerViewModel.requestFailure.observe(this) { e ->
+        this.hikerViewModel.error.observe(this) { e ->
             if (e != null) {
                 onQueryError(e)
             }
@@ -58,7 +60,7 @@ class ProfileSettingsEditFragment(private val hikerId: String?=null) :
 
     private fun loadHiker() {
         this.hikerId?.let { hikerId ->
-            this.hikerViewModel.loadHikerFromDatabase(hikerId)
+            this.hikerViewModel.loadHiker(hikerId)
         }
     }
 
@@ -79,33 +81,37 @@ class ProfileSettingsEditFragment(private val hikerId: String?=null) :
     /******************************Profile settings actions**************************************/
 
     @Suppress("UNUSED_ANONYMOUS_PARAMETER")
-    private fun requestResetUserPasswordConfirmation(){
-        val dialog=DialogHelper.createYesNoDialog(
-            context!!,
-            R.string.message_password_reset_confirmation_title,
-            R.string.message_password_reset_confirmation_message
-        ) { dialog, which ->
-            if (which == DialogInterface.BUTTON_POSITIVE) {
-                this.baseActivity?.showProgressDialog()
-                this.hikerViewModel.resetUserPassword()
+    private fun requestResetUserPasswordConfirmation() {
+        context?.let { context ->
+            val dialog = DialogHelper.createYesNoDialog(
+                context,
+                R.string.message_password_reset_confirmation_title,
+                R.string.message_password_reset_confirmation_message
+            ) { dialog, which ->
+                if (which == DialogInterface.BUTTON_POSITIVE) {
+                    this.baseActivity?.showProgressDialog()
+                    this.hikerViewModel.resetUserPassword()
+                }
             }
+            dialog.show()
         }
-        dialog.show()
     }
 
     @Suppress("UNUSED_ANONYMOUS_PARAMETER")
-    private fun requestDeleteUserAccountConfirmation(){
-        val dialog=DialogHelper.createYesNoCriticalDialog(
-            context!!,
-            R.string.message_account_delete_confirmation_title,
-            R.string.message_account_delete_confirmation_message
-        ) { dialog, which ->
-            if (which == DialogInterface.BUTTON_POSITIVE) {
-                this.baseActivity?.showProgressDialog()
-                this.hikerViewModel.deleteUserAccount()
+    private fun requestDeleteUserAccountConfirmation() {
+        context?.let { context ->
+            val dialog = DialogHelper.createYesNoCriticalDialog(
+                context,
+                R.string.message_account_delete_confirmation_title,
+                R.string.message_account_delete_confirmation_message
+            ) { dialog, which ->
+                if (which == DialogInterface.BUTTON_POSITIVE) {
+                    this.baseActivity?.showProgressDialog()
+                    this.hikerViewModel.deleteUserAccount()
+                }
             }
+            dialog.show()
         }
-        dialog.show()
     }
 
     private fun handleSaveDataSuccess(){

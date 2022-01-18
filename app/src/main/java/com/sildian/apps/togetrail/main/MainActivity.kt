@@ -52,7 +52,8 @@ import com.sildian.apps.togetrail.trail.list.TrailsListFragment
 import com.sildian.apps.togetrail.trail.map.TrailActivity
 import com.sildian.apps.togetrail.trail.map.TrailMapFragment
 import com.sildian.apps.togetrail.trail.model.core.Trail
-import com.sildian.apps.togetrail.trail.model.support.HikerTrailsViewModel
+import com.sildian.apps.togetrail.trail.model.support.HikerLikedTrailsViewModel
+import com.sildian.apps.togetrail.trail.model.support.HikerMarkedTrailsViewModel
 import com.sildian.apps.togetrail.trail.model.support.TrailFirebaseQueries
 import net.danlew.android.joda.JodaTimeAndroid
 
@@ -94,7 +95,8 @@ class MainActivity :
 
     private lateinit var hikerViewModel: HikerViewModel
     private lateinit var hikerChatViewModel: HikerChatViewModel
-    private lateinit var hikerTrailsViewModel: HikerTrailsViewModel
+    private lateinit var hikerLikedTrailsViewModel: HikerLikedTrailsViewModel
+    private lateinit var hikerMarkedTrailsViewModel: HikerMarkedTrailsViewModel
     private var isNbUnreadMessagesBadgeShown = false
 
     /*************************************Queries************************************************/
@@ -299,20 +301,23 @@ class MainActivity :
         this.hikerChatViewModel = ViewModelProviders
             .of(this, ViewModelFactory)
             .get(HikerChatViewModel::class.java)
-        this.hikerTrailsViewModel = ViewModelProviders
+        this.hikerLikedTrailsViewModel = ViewModelProviders
             .of(this, ViewModelFactory)
-            .get(HikerTrailsViewModel::class.java)
+            .get(HikerLikedTrailsViewModel::class.java)
+        this.hikerMarkedTrailsViewModel = ViewModelProviders
+            .of(this, ViewModelFactory)
+            .get(HikerMarkedTrailsViewModel::class.java)
     }
 
     private fun observeHiker() {
-        this.hikerViewModel.hiker.observe(this) { hiker ->
+        this.hikerViewModel.data.observe(this) { hiker ->
             this.binding.activityMainProgressbar.visibility = View.GONE
-            CurrentHikerInfo.currentHiker = hikerViewModel.hiker.value
+            CurrentHikerInfo.currentHiker = hikerViewModel.data.value
             when {
                 hiker == null -> {
                     this.hikerViewModel.clearQueryRegistration()
                     this.hikerChatViewModel.clearQueryRegistration()
-                    this.hikerTrailsViewModel.clearQueryRegistration()
+                    this.hikerLikedTrailsViewModel.clearQueryRegistration()
                     updateNavigationViewUserItems()
                 }
                 !this.hikerViewModel.isQueryRegistrationBusy() -> {
@@ -328,7 +333,7 @@ class MainActivity :
     }
 
     private fun observeHikerChats() {
-        this.hikerChatViewModel.chats.observe(this) { chats ->
+        this.hikerChatViewModel.data.observe(this) { chats ->
             var nbUnreadMessages = 0
             chats.forEach { chat ->
                 nbUnreadMessages+= chat.nbUnreadMessages
@@ -338,7 +343,7 @@ class MainActivity :
     }
 
     private fun observeHikerLikedTrails() {
-        this.hikerTrailsViewModel.likedTrails.observe(this) { trails ->
+        this.hikerLikedTrailsViewModel.data.observe(this) { trails ->
             if (trails != null) {
                 CurrentHikerInfo.currentHikerLikedTrail.clear()
                 CurrentHikerInfo.currentHikerLikedTrail.addAll(trails)
@@ -347,7 +352,7 @@ class MainActivity :
     }
 
     private fun observeHikerMarkedTrails() {
-        this.hikerTrailsViewModel.markedTrails.observe(this) { trails ->
+        this.hikerMarkedTrailsViewModel.data.observe(this) { trails ->
             if (trails != null) {
                 CurrentHikerInfo.currentHikerMarkedTrail.clear()
                 CurrentHikerInfo.currentHikerMarkedTrail.addAll(trails)
@@ -356,17 +361,22 @@ class MainActivity :
     }
 
     private fun observeRequestFailure() {
-        this.hikerViewModel.requestFailure.observe(this) { e ->
+        this.hikerViewModel.error.observe(this) { e ->
             if (e != null) {
                 onQueryError(e)
             }
         }
-        this.hikerChatViewModel.requestFailure.observe(this) { e ->
+        this.hikerChatViewModel.error.observe(this) { e ->
             if (e != null) {
                 onQueryError(e)
             }
         }
-        this.hikerTrailsViewModel.requestFailure.observe(this) { e ->
+        this.hikerLikedTrailsViewModel.error.observe(this) { e ->
+            if (e != null) {
+                onQueryError(e)
+            }
+        }
+        this.hikerMarkedTrailsViewModel.error.observe(this) { e ->
             if (e != null) {
                 onQueryError(e)
             }
@@ -381,26 +391,26 @@ class MainActivity :
     }
 
     private fun loadHiker() {
-        this.hikerViewModel.hiker.value?.id?.let { hikerId ->
-            this.hikerViewModel.loadHikerFromDatabaseRealTime(hikerId)
+        this.hikerViewModel.data.value?.id?.let { hikerId ->
+            this.hikerViewModel.loadHikerRealTime(hikerId)
         }
     }
 
     private fun loadHikerChats() {
-        this.hikerViewModel.hiker.value?.id?.let { hikerId ->
-            this.hikerChatViewModel.loadChatsFromDatabaseRealTime(hikerId)
+        this.hikerViewModel.data.value?.id?.let { hikerId ->
+            this.hikerChatViewModel.loadChatsRealTime(hikerId)
         }
     }
 
     private fun loadHikerLikedTrails() {
-        this.hikerViewModel.hiker.value?.id?.let { hikerId ->
-            this.hikerTrailsViewModel.loadLikedTrailsFromDatabaseRealTime(hikerId)
+        this.hikerViewModel.data.value?.id?.let { hikerId ->
+            this.hikerLikedTrailsViewModel.loadLikedTrailsRealTime(hikerId)
         }
     }
 
     private fun loadHikerMarkedTrails() {
-        this.hikerViewModel.hiker.value?.id?.let { hikerId ->
-            this.hikerTrailsViewModel.loadMarkedTrailsFromDatabaseRealTime(hikerId)
+        this.hikerViewModel.data.value?.id?.let { hikerId ->
+            this.hikerMarkedTrailsViewModel.loadMarkedTrailsRealTime(hikerId)
         }
     }
 
@@ -522,20 +532,20 @@ class MainActivity :
 
         /*If the user is null, then shows default info*/
 
-        if(this.hikerViewModel.hiker.value == null){
+        if (this.hikerViewModel.data.value == null) {
             this.navigationHeaderUserImage.setImageResource(R.drawable.ic_person_white)
             this.navigationHeaderUserNameText.setText(R.string.message_user_unknown)
         }
 
         /*Else shows the user's info*/
 
-        else{
+        else {
             Glide.with(this)
-                .load(this.hikerViewModel.hiker.value?.photoUrl)
+                .load(this.hikerViewModel.data.value?.photoUrl)
                 .apply(RequestOptions.circleCropTransform())
                 .placeholder(R.drawable.ic_person_white)
                 .into(this.navigationHeaderUserImage)
-            this.navigationHeaderUserNameText.text=this.hikerViewModel.hiker.value?.name
+            this.navigationHeaderUserNameText.text = this.hikerViewModel.data.value?.name
         }
     }
 
@@ -558,11 +568,11 @@ class MainActivity :
 
     /******************************Login / Logout************************************************/
 
-    private fun startLogin(){
+    private fun startLogin() {
         val user=AuthFirebaseHelper.getCurrentUser()
-        if(user==null){
+        if (user == null) {
             startLoginActivity()
-        }else{
+        } else {
             this.hikerViewModel.logoutUser()
         }
     }
@@ -628,14 +638,14 @@ class MainActivity :
 
     private fun startProfileActivity(){
         val profileActivityIntent=Intent(this, ProfileActivity::class.java)
-        profileActivityIntent.putExtra(ProfileActivity.KEY_BUNDLE_HIKER_ID, this.hikerViewModel.hiker.value?.id)
+        profileActivityIntent.putExtra(ProfileActivity.KEY_BUNDLE_HIKER_ID, this.hikerViewModel.data.value?.id)
         startActivity(profileActivityIntent)
     }
 
     private fun startProfileEditActivity(){
         val profileEditActivityIntent=Intent(this, ProfileEditActivity::class.java)
         profileEditActivityIntent.putExtra(ProfileEditActivity.KEY_BUNDLE_PROFILE_ACTION, ProfileEditActivity.ACTION_PROFILE_EDIT_SETTINGS)
-        profileEditActivityIntent.putExtra(ProfileEditActivity.KEY_BUNDLE_HIKER_ID, this.hikerViewModel.hiker.value?.id)
+        profileEditActivityIntent.putExtra(ProfileEditActivity.KEY_BUNDLE_HIKER_ID, this.hikerViewModel.data.value?.id)
         startActivity(profileEditActivityIntent)
     }
 

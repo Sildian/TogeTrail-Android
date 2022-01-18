@@ -48,7 +48,7 @@ class TrailPOIInfoFragment (
     }
 
     private fun observeRequestFailure() {
-        this.trailViewModel?.requestFailure?.observe(this) { e ->
+        this.trailViewModel?.error?.observe(this) { e ->
             if (e != null) {
                 onQueryError(e)
             }

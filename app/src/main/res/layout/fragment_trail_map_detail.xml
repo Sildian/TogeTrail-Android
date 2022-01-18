@@ -40,7 +40,7 @@
                 android:textSize="@dimen/text_size_small"
                 android:textColor="@color/colorSecondary"
                 android:textStyle="bold"
-                android:text="@{String.valueOf(trailViewModel.trail.nbLikes), default = `0`}"
+                android:text="@{String.valueOf(trailViewModel.data.nbLikes), default = `0`}"
                 app:icon="@{trailMapDetailFragment.isTrailLikedByUser() ? @drawable/ic_like_black : @drawable/ic_like_border_black}"
                 app:iconPadding="@dimen/components_margin_small"
                 app:backgroundTint="@color/colorPrimary"

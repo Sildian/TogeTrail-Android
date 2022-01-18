@@ -43,17 +43,19 @@ class TrailInfoFragment(
         this.binding.trailInfoFragment = this
         this.binding.trailViewModel = this.trailViewModel
         this.binding.isEditable = this.isEditable
-        this.elevationChartGenerator = ElevationChartGenerator(context!!, this.trailViewModel?.trail?.value)
+        context?.let { context ->
+            this.elevationChartGenerator = ElevationChartGenerator(context, this.trailViewModel?.data?.value)
+        }
     }
 
     private fun observeTrail() {
-        this.trailViewModel?.trail?.observe(this) { trail ->
+        this.trailViewModel?.data?.observe(this) { trail ->
             refreshUI()
         }
     }
 
     private fun observeRequestFailure() {
-        this.trailViewModel?.requestFailure?.observe(this) { e ->
+        this.trailViewModel?.error?.observe(this) { e ->
             if (e != null) {
                 onQueryError(e)
             }
@@ -78,12 +80,14 @@ class TrailInfoFragment(
     }
 
     private fun initializeElevationChart() {
-        this.binding.fragmentTrailInfoChartElevation.setTouchEnabled(false)
-        this.binding.fragmentTrailInfoChartElevation.description = null
-        this.binding.fragmentTrailInfoChartElevation.legend.isEnabled = false
-        this.binding.fragmentTrailInfoChartElevation.xAxis.setDrawLabels(false)
-        this.binding.fragmentTrailInfoChartElevation.axisRight.setDrawLabels(false)
-        this.binding.fragmentTrailInfoChartElevation.axisLeft.valueFormatter = ElevationChartGenerator.ElevationValueFormatter(context!!)
+        context?.let { context ->
+            this.binding.fragmentTrailInfoChartElevation.setTouchEnabled(false)
+            this.binding.fragmentTrailInfoChartElevation.description = null
+            this.binding.fragmentTrailInfoChartElevation.legend.isEnabled = false
+            this.binding.fragmentTrailInfoChartElevation.xAxis.setDrawLabels(false)
+            this.binding.fragmentTrailInfoChartElevation.axisRight.setDrawLabels(false)
+            this.binding.fragmentTrailInfoChartElevation.axisLeft.valueFormatter = ElevationChartGenerator.ElevationValueFormatter(context)
+        }
     }
 
     private fun updateElevationChart() {
@@ -109,14 +113,14 @@ class TrailInfoFragment(
 
     @Suppress("UNUSED_PARAMETER")
     fun onAuthorPhotoClick(view: View) {
-        this.trailViewModel?.trail?.value?.authorId?.let { authorId ->
+        this.trailViewModel?.data?.value?.authorId?.let { authorId ->
             (activity as TrailActivity).seeHiker(authorId)
         }
     }
 
     @Suppress("UNUSED_PARAMETER")
     fun onGoToDepartureButtonClick(view: View) {
-        this.trailViewModel?.trail?.value?.position?.let { position ->
+        this.trailViewModel?.data?.value?.position?.let { position ->
             val url = GoogleMapUrlHelper.generateWithLatLng(LatLng(position.latitude, position.longitude))
             val googleMapIntent = Intent(Intent.ACTION_VIEW, url.toUri())
             startActivity(googleMapIntent)

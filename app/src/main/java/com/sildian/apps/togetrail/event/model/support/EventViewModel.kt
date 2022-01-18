@@ -1,243 +1,107 @@
 package com.sildian.apps.togetrail.event.model.support
 
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.sildian.apps.togetrail.chat.model.core.Message
-import com.sildian.apps.togetrail.common.baseViewModels.BaseViewModel
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
+import com.sildian.apps.togetrail.common.baseViewModels.SingleDataViewModel
 import com.sildian.apps.togetrail.event.model.core.Event
+import com.sildian.apps.togetrail.event.model.dataRequests.*
+import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
+import com.sildian.apps.togetrail.hiker.model.support.HikerRepository
 import com.sildian.apps.togetrail.trail.model.core.Trail
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 
 /*************************************************************************************************
  * This viewModel observes a single Event related data
  ************************************************************************************************/
 
-class EventViewModel : BaseViewModel() {
+class EventViewModel : SingleDataViewModel<Event>(Event::class.java) {
 
-    /************************************Static items********************************************/
+    /***********************************Repositories*********************************************/
 
-    companion object{
+    private val hikerRepository = HikerRepository()
+    private val eventRepository = EventRepository()
 
-        /**Logs**/
-        private const val TAG = "EventViewModel"
-    }
+    /***************************************Extra data*******************************************/
 
-    /***********************************Exception handler***************************************/
-
-    private val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
-        Log.e(TAG, throwable.message.toString())
-    }
-
-    /***********************************Data requester******************************************/
-
-    private val eventDataRequester = EventDataRequester()
-
-    /*********************************Monitoring info*******************************************/
-
-    val attachedTrails= arrayListOf<Trail>()        //The list of attached trails (useful only when the event has no id yet)
-
-    /********************************LiveData to be observed*************************************/
-
-    val event = MutableLiveData<Event?>()
-    val saveRequestSuccess = MutableLiveData<Boolean>()
-    val requestFailure = MutableLiveData<Exception?>()
+    val attachedTrails = arrayListOf<Trail>()   //Useful only when the event has no id yet
 
     /************************************Data monitoring*****************************************/
 
-    /**Initializes a new event**/
-
-    fun initNewEvent(){
-        this.event.postValue(Event())
-    }
-
-    /**
-     * Checks that the current user is the event's author
-     * @return a boolean
-     */
-
     fun currentUserIsAuthor(): Boolean =
-        AuthRepository().getCurrentUser()?.uid == this.event.value?.authorId
+        CurrentHikerInfo.currentHiker?.id == this.mutableData.value?.authorId
 
-    /**
-     * Loads an event from the database in real time
-     * @param eventId : the event's id
-     */
-
-    fun loadEventFromDatabaseRealTime(eventId:String) {
-        this.queryRegistration?.remove()
-        this.queryRegistration = eventDataRequester.loadEventFromDatabaseRealTime(eventId)
-            .addSnapshotListener { snapshot, e ->
-                if (snapshot != null) {
-                    val result = snapshot.toObject(Event::class.java)
-                    Log.d(TAG, "Successfully loaded event from database")
-                    event.postValue(result)
-                }
-                else if (e != null) {
-                    Log.e(TAG, "Failed to load event from database : ${e.message}")
-                    requestFailure.postValue(e)
-                }
-            }
+    fun initNewEvent() {
+        this.mutableData.postValue(Event())
     }
 
-    /**
-     * Loads an event from the database
-     * @param eventId : the event's id
-     */
-
-    fun loadEventFromDatabase(eventId:String) {
-        viewModelScope.launch(this.exceptionHandler) {
-            try {
-                val result = async { eventDataRequester.loadEventFromDatabase(eventId) }.await()
-                Log.d(TAG, "Successfully loaded event from database")
-                event.postValue(result)
-            }
-            catch (e: Exception) {
-                Log.e(TAG, "Failed to load event from database : ${e.message}")
-                requestFailure.postValue(e)
-            }
-        }
+    fun loadEventRealTime(eventId:String) {
+        loadDataRealTime(this.eventRepository.getEventReference(eventId))
     }
 
-    /**
-     * Saves the event within the database
-     */
-
-    fun saveEventInDatabase() {
-        viewModelScope.launch(this.exceptionHandler) {
-            try {
-                launch { eventDataRequester.saveEventInDatabase(event.value, attachedTrails) }.join()
-                Log.d(TAG, "Successfully saved event in database")
-                saveRequestSuccess.postValue(true)
-            }
-            catch (e: Exception) {
-                Log.e(TAG, "Failed to save event in database : ${e.message}")
-                requestFailure.postValue(e)
-            }
-        }
+    fun loadEvent(eventId:String) {
+        loadData(EventLoadDataRequest(eventId, this.eventRepository))
     }
 
-    /**
-     * Attaches a trail to the event
-     * @param trail : the trail to attach
-     */
+    fun saveEvent() {
+        saveData(EventSaveDataRequest(
+            this.mutableData.value,
+            this.hikerRepository,
+            this.eventRepository
+        ))
+    }
 
     fun attachTrail(trail: Trail) {
-        viewModelScope.launch(this.exceptionHandler) {
-            try {
-                launch { eventDataRequester.attachTrail(event.value, trail) }.join()
-                Log.d(TAG, "Successfully attached new trail to the event")
-            }
-            catch (e:Exception) {
-                Log.e(TAG, "Failed to attach new trail to the event : ${e.message}")
-                requestFailure.postValue(e)
-            }
-        }
+        runSpecificRequest(EventAttachTrailDataRequest(
+            this.mutableData.value,
+            trail,
+            this.eventRepository
+        ))
     }
-
-    /**
-     * Detaches a trail from the event
-     * @param trail : the trail to detach
-     */
 
     fun detachTrail(trail: Trail) {
-        viewModelScope.launch(this.exceptionHandler) {
-            try {
-                launch { eventDataRequester.detachTrail(event.value, trail) }.join()
-                Log.d(TAG, "Successfully detached trail from the event")
-            }
-            catch (e:Exception) {
-                Log.e(TAG, "Failed to detach trail from the event : ${e.message}")
-                requestFailure.postValue(e)
-            }
-        }
+        runSpecificRequest(EventDetachTrailDataRequest(
+            this.mutableData.value,
+            trail,
+            this.eventRepository
+        ))
     }
-
-    /**
-     * Registers the current user to the event
-     */
 
     fun registerUserToEvent() {
-        viewModelScope.launch(this.exceptionHandler) {
-            try {
-                launch { eventDataRequester.registerUserToEvent(event.value) }.join()
-                Log.d(TAG, "Successfully registered new user to the event")
-            }
-            catch (e:Exception) {
-                Log.e(TAG, "Failed to register new user to the event : ${e.message}")
-                requestFailure.postValue(e)
-            }
-        }
+        runSpecificRequest(EventRegisterDataRequest(
+            this.mutableData.value,
+            this.eventRepository,
+            this.hikerRepository
+        ))
     }
-
-    /**
-     * Unregisters the current user from the event
-     */
 
     fun unregisterUserFromEvent() {
-        viewModelScope.launch(this.exceptionHandler) {
-            try {
-                launch { eventDataRequester.unregisterUserFromEvent(event.value) }.join()
-                Log.d(TAG, "Successfully unregistered user from the event")
-            }
-            catch (e:Exception) {
-                Log.e(TAG, "Failed to unregister user from the event : ${e.message}")
-                requestFailure.postValue(e)
-            }
-        }
+        runSpecificRequest(EventUnregisterDataRequest(
+            this.mutableData.value,
+            this.eventRepository,
+            this.hikerRepository
+        ))
     }
-
-    /**
-     * Sends a message to the event's chat
-     */
 
     fun sendMessage(text: String) {
-        viewModelScope.launch(this.exceptionHandler) {
-            try {
-                launch { eventDataRequester.sendMessage(event.value, text) }.join()
-                Log.d(TAG, "Successfully sent the message")
-            }
-            catch (e:Exception) {
-                Log.e(TAG, "Failed to send the message : ${e.message}")
-                requestFailure.postValue(e)
-            }
-        }
+        runSpecificRequest(EventSendMessageDataRequest(
+            this.mutableData.value,
+            text,
+            this.eventRepository
+        ))
     }
-
-    /**
-     * Updates a message with a new text in the event's chat
-     */
 
     fun updateMessage(message: Message, newText: String) {
-        viewModelScope.launch(this.exceptionHandler) {
-            try {
-                launch { eventDataRequester.updateMessage(event.value, message, newText) }.join()
-                Log.d(TAG, "Successfully updated the message")
-            }
-            catch (e:Exception) {
-                Log.e(TAG, "Failed to update the message : ${e.message}")
-                requestFailure.postValue(e)
-            }
-        }
+        runSpecificRequest(EventUpdateMessageDataRequest(
+            this.mutableData.value,
+            message,
+            newText,
+            this.eventRepository
+        ))
     }
 
-    /**
-     * Deletes a message from the event's chat
-     */
-
     fun deleteMessage(message: Message) {
-        viewModelScope.launch(this.exceptionHandler) {
-            try {
-                launch { eventDataRequester.deleteMessage(event.value, message) }.join()
-                Log.d(TAG, "Successfully deleted the message")
-            }
-            catch (e:Exception) {
-                Log.e(TAG, "Failed to delete the message : ${e.message}")
-                requestFailure.postValue(e)
-            }
-        }
+        runSpecificRequest(EventDeleteMessageDataRequest(
+            this.mutableData.value,
+            message,
+            this.eventRepository
+        ))
     }
 }

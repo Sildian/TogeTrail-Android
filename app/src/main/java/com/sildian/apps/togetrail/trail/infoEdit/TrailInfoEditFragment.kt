@@ -15,6 +15,7 @@ import com.sildian.apps.togetrail.common.utils.uiHelpers.ValueFormatters
 import com.sildian.apps.togetrail.databinding.FragmentTrailInfoEditBinding
 import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.trail.model.core.TrailLevel
+import com.sildian.apps.togetrail.trail.model.dataRequests.TrailSaveDataRequest
 import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
 
 /*************************************************************************************************
@@ -64,7 +65,7 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel? = null)
     override fun loadData() {
         initializeData()
         observeTrail()
-        observeSaveRequestSuccess()
+        observeRequestSuccess()
         observeRequestFailure()
     }
 
@@ -74,7 +75,7 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel? = null)
     }
 
     private fun observeTrail() {
-        this.trailViewModel?.trail?.observe(this) { trail ->
+        this.trailViewModel?.data?.observe(this) { trail ->
             if (trail != null) {
                 if (!isTrailAlreadyLoaded) {
                     setCurrentMetric(METRIC_DURATION)
@@ -85,16 +86,16 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel? = null)
         }
     }
 
-    private fun observeSaveRequestSuccess() {
-        this.trailViewModel?.saveRequestSuccess?.observe(this) { success ->
-            if (success) {
-                onSaveSuccess()
+    private fun observeRequestSuccess() {
+        this.trailViewModel?.success?.observe(this) { success ->
+            if (success != null && success is TrailSaveDataRequest) {
+                onQuerySuccess()
             }
         }
     }
 
     private fun observeRequestFailure() {
-        this.trailViewModel?.requestFailure?.observe(this) { e ->
+        this.trailViewModel?.error?.observe(this) { e ->
             if (e != null) {
                 onQueryError(e)
             }
@@ -103,7 +104,7 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel? = null)
 
     override fun updateData(data:Any?) {
         if (data is Location) {
-            this.trailViewModel?.trail?.value?.location = data
+            this.trailViewModel?.data?.value?.location = data
             this.binding.fragmentTrailInfoEditTextFieldLocation.setText(data.fullAddress)
         }
     }
@@ -114,32 +115,32 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel? = null)
             METRIC_DURATION -> {
                 this.currentValueFormatter.value = ValueFormatters.DurationValueFormatter()
                 this.currentMaxValue.value = VALUE_MAX_DURATION
-                this.currentValue.value = trailViewModel?.trail?.value?.duration
+                this.currentValue.value = trailViewModel?.data?.value?.duration
             }
             METRIC_ASCENT -> {
                 this.currentValueFormatter.value = ValueFormatters.AltitudeValueFormatter()
                 this.currentMaxValue.value = VALUE_MAX_ALTITUDE
-                this.currentValue.value = trailViewModel?.trail?.value?.ascent
+                this.currentValue.value = trailViewModel?.data?.value?.ascent
             }
             METRIC_DESCENT -> {
                 this.currentValueFormatter.value = ValueFormatters.AltitudeValueFormatter()
                 this.currentMaxValue.value = VALUE_MAX_ALTITUDE
-                this.currentValue.value = trailViewModel?.trail?.value?.descent
+                this.currentValue.value = trailViewModel?.data?.value?.descent
             }
             METRIC_DISTANCE -> {
                 this.currentValueFormatter.value = ValueFormatters.DistanceValueFormatter()
                 this.currentMaxValue.value = VALUE_MAX_DISTANCE
-                this.currentValue.value = trailViewModel?.trail?.value?.distance
+                this.currentValue.value = trailViewModel?.data?.value?.distance
             }
             METRIC_MAX_ELEVATION -> {
                 this.currentValueFormatter.value = ValueFormatters.AltitudeValueFormatter()
                 this.currentMaxValue.value = VALUE_MAX_ALTITUDE
-                this.currentValue.value = trailViewModel?.trail?.value?.maxElevation
+                this.currentValue.value = trailViewModel?.data?.value?.maxElevation
             }
             METRIC_MIN_ELEVATION -> {
                 this.currentValueFormatter.value = ValueFormatters.AltitudeValueFormatter()
                 this.currentMaxValue.value = VALUE_MAX_ALTITUDE
-                this.currentValue.value = trailViewModel?.trail?.value?.minElevation
+                this.currentValue.value = trailViewModel?.data?.value?.minElevation
             }
         }
     }
@@ -147,73 +148,73 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel? = null)
     private fun setCurrentValue(value: Int) {
         when (this.currentMetric.value) {
             METRIC_DURATION -> {
-                this.trailViewModel?.trail?.value?.duration = value
-                this.currentValue.value = this.trailViewModel?.trail?.value?.duration
+                this.trailViewModel?.data?.value?.duration = value
+                this.currentValue.value = this.trailViewModel?.data?.value?.duration
             }
             METRIC_ASCENT -> {
-                this.trailViewModel?.trail?.value?.ascent = value
-                this.currentValue.value = this.trailViewModel?.trail?.value?.ascent
+                this.trailViewModel?.data?.value?.ascent = value
+                this.currentValue.value = this.trailViewModel?.data?.value?.ascent
             }
             METRIC_DESCENT -> {
-                this.trailViewModel?.trail?.value?.descent = value
-                this.currentValue.value = this.trailViewModel?.trail?.value?.descent
+                this.trailViewModel?.data?.value?.descent = value
+                this.currentValue.value = this.trailViewModel?.data?.value?.descent
             }
             METRIC_DISTANCE -> {
-                this.trailViewModel?.trail?.value?.distance = value
-                this.currentValue.value = this.trailViewModel?.trail?.value?.distance
+                this.trailViewModel?.data?.value?.distance = value
+                this.currentValue.value = this.trailViewModel?.data?.value?.distance
             }
             METRIC_MAX_ELEVATION -> {
-                this.trailViewModel?.trail?.value?.maxElevation = value
-                this.currentValue.value = this.trailViewModel?.trail?.value?.maxElevation
+                this.trailViewModel?.data?.value?.maxElevation = value
+                this.currentValue.value = this.trailViewModel?.data?.value?.maxElevation
             }
             METRIC_MIN_ELEVATION -> {
-                this.trailViewModel?.trail?.value?.minElevation = value
-                this.currentValue.value = this.trailViewModel?.trail?.value?.minElevation
+                this.trailViewModel?.data?.value?.minElevation = value
+                this.currentValue.value = this.trailViewModel?.data?.value?.minElevation
             }
         }
-        this.trailViewModel?.trail?.value = this.trailViewModel?.trail?.value
+        this.trailViewModel?.notifyDataObserver()
     }
 
     private fun resetCurrentValue() {
         when (this.currentMetric.value) {
             METRIC_DURATION -> {
-                this.trailViewModel?.trail?.value?.autoCalculateDuration()
-                this.currentValue.value = this.trailViewModel?.trail?.value?.duration
+                this.trailViewModel?.data?.value?.autoCalculateDuration()
+                this.currentValue.value = this.trailViewModel?.data?.value?.duration
             }
             METRIC_ASCENT -> {
-                this.trailViewModel?.trail?.value?.autoCalculateAscent()
-                this.currentValue.value = this.trailViewModel?.trail?.value?.ascent
+                this.trailViewModel?.data?.value?.autoCalculateAscent()
+                this.currentValue.value = this.trailViewModel?.data?.value?.ascent
             }
             METRIC_DESCENT -> {
-                this.trailViewModel?.trail?.value?.autoCalculateDescent()
-                this.currentValue.value = this.trailViewModel?.trail?.value?.descent
+                this.trailViewModel?.data?.value?.autoCalculateDescent()
+                this.currentValue.value = this.trailViewModel?.data?.value?.descent
             }
             METRIC_DISTANCE -> {
-                this.trailViewModel?.trail?.value?.autoCalculateDistance()
-                this.currentValue.value = this.trailViewModel?.trail?.value?.distance
+                this.trailViewModel?.data?.value?.autoCalculateDistance()
+                this.currentValue.value = this.trailViewModel?.data?.value?.distance
             }
             METRIC_MAX_ELEVATION -> {
-                this.trailViewModel?.trail?.value?.autoCalculateMaxElevation()
-                this.currentValue.value = this.trailViewModel?.trail?.value?.maxElevation
+                this.trailViewModel?.data?.value?.autoCalculateMaxElevation()
+                this.currentValue.value = this.trailViewModel?.data?.value?.maxElevation
             }
             METRIC_MIN_ELEVATION -> {
-                this.trailViewModel?.trail?.value?.autoCalculateMinElevation()
-                this.currentValue.value = this.trailViewModel?.trail?.value?.minElevation
+                this.trailViewModel?.data?.value?.autoCalculateMinElevation()
+                this.currentValue.value = this.trailViewModel?.data?.value?.minElevation
             }
         }
-        this.trailViewModel?.trail?.value = this.trailViewModel?.trail?.value
+        this.trailViewModel?.notifyDataObserver()
     }
 
     override fun saveData() {
         if (checkDataIsValid()) {
-            this.trailViewModel?.trail?.value?.name = this.binding.fragmentTrailInfoEditTextFieldName.text.toString()
-            this.trailViewModel?.trail?.value?.level =
+            this.trailViewModel?.data?.value?.name = this.binding.fragmentTrailInfoEditTextFieldName.text.toString()
+            this.trailViewModel?.data?.value?.level =
                 TrailLevel.fromValue(this.binding.fragmentTrailInfoEditTextFieldDropdownLevel.tag.toString().toInt())
-            this.trailViewModel?.trail?.value?.loop = this.binding.fragmentTrailInfoEditSwitchLoop.isChecked
-            this.trailViewModel?.trail?.value?.description = this.binding.fragmentTrailInfoEditTextFieldDescription.text.toString()
-            this.trailViewModel?.trail?.value?.autoPopulatePosition()
+            this.trailViewModel?.data?.value?.loop = this.binding.fragmentTrailInfoEditSwitchLoop.isChecked
+            this.trailViewModel?.data?.value?.description = this.binding.fragmentTrailInfoEditTextFieldDescription.text.toString()
+            this.trailViewModel?.data?.value?.autoPopulatePosition()
             this.baseActivity?.showProgressDialog()
-            this.trailViewModel?.saveTrailInDatabase(false)
+            this.trailViewModel?.saveTrail(false)
         }
     }
 
@@ -266,8 +267,8 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel? = null)
     }
 
     private fun updateLevelTextFieldDropDown(){
-        val choice=resources.getStringArray(R.array.array_trail_levels)
-        val initialValue=(this.trailViewModel?.trail?.value?.level?.value?: TrailLevel.MEDIUM.value)
+        val choice = resources.getStringArray(R.array.array_trail_levels)
+        val initialValue = (this.trailViewModel?.data?.value?.level?.value?: TrailLevel.MEDIUM.value)
         DropdownMenuHelper.populateDropdownMenu(this.binding.fragmentTrailInfoEditTextFieldDropdownLevel, choice, initialValue)
     }
 
@@ -328,14 +329,14 @@ class TrailInfoEditFragment(private val trailViewModel: TrailViewModel? = null)
 
     override fun addPhoto(filePath:String) {
         this.trailViewModel?.updateImagePathToUpload(false, filePath)
-        this.trailViewModel?.trail?.value?.mainPhotoUrl=filePath
+        this.trailViewModel?.data?.value?.mainPhotoUrl = filePath
         this.trailViewModel?.notifyDataChanged()
     }
 
     override fun deletePhoto() {
-        if (!this.trailViewModel?.trail?.value?.mainPhotoUrl.isNullOrEmpty()) {
-            this.trailViewModel?.updateImagePathToDelete(this.trailViewModel.trail.value?.mainPhotoUrl!!)
-            this.trailViewModel?.trail?.value?.mainPhotoUrl = null
+        if (!this.trailViewModel?.data?.value?.mainPhotoUrl.isNullOrEmpty()) {
+            this.trailViewModel?.updateImagePathToDelete(this.trailViewModel.data.value?.mainPhotoUrl!!)
+            this.trailViewModel?.data?.value?.mainPhotoUrl = null
             this.trailViewModel?.notifyDataChanged()
         }
     }

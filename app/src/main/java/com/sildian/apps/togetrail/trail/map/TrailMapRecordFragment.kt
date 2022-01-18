@@ -125,10 +125,10 @@ class TrailMapRecordFragment(trailViewModel: TrailViewModel? = null)
 
     private fun updateTrailTrack(trailPoints: List<TrailPoint>?) {
         if (!trailPoints.isNullOrEmpty()) {
-            this.trailViewModel?.trail?.value?.trailTrack?.trailPoints?.clear()
-            this.trailViewModel?.trail?.value?.trailTrack?.trailPoints?.addAll(trailPoints)
+            this.trailViewModel?.data?.value?.trailTrack?.trailPoints?.clear()
+            this.trailViewModel?.data?.value?.trailTrack?.trailPoints?.addAll(trailPoints)
             showTrailTrackOnMap()
-            if (this.trailViewModel?.trail?.value?.trailTrack?.trailPoints?.size == 1) {
+            if (this.trailViewModel?.data?.value?.trailTrack?.trailPoints?.size == 1) {
                 revealActionsButtons()
             }
         }

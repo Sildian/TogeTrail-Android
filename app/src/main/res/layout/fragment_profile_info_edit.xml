@@ -24,12 +24,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="@{hikerViewModel.hiker==null ? View.VISIBLE : View.GONE}"/>
+            android:visibility="@{hikerViewModel.data==null ? View.VISIBLE : View.GONE}"/>
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{hikerViewModel.hiker==null ? View.GONE : View.VISIBLE}">
+            android:visibility="@{hikerViewModel.data==null ? View.GONE : View.VISIBLE}">
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -67,7 +67,7 @@
                             android:layout_marginEnd="@dimen/components_margin_medium"
                             android:contentDescription="@string/example_image_content_description"
                             app:srcCompat="@drawable/ic_person_black"
-                            app:imgUrl="@{hikerViewModel.hiker.photoUrl}"
+                            app:imgUrl="@{hikerViewModel.data.photoUrl}"
                             app:imgPlaceHolder="@{@drawable/ic_person_black}"
                             app:imgOptions="@{RequestOptions.circleCropTransform()}"/>
 
@@ -106,7 +106,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="textCapSentences"
-                                android:text="@{hikerViewModel.hiker.name}"/>
+                                android:text="@{hikerViewModel.data.name}"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
 
@@ -161,7 +161,7 @@
                             android:layout_height="wrap_content"
                             android:inputType="textCapSentences|textMultiLine"
                             android:focusable="false"
-                            android:text="@{hikerViewModel.hiker.liveLocation.fullAddress}"
+                            android:text="@{hikerViewModel.data.liveLocation.fullAddress}"
                             android:onClick="@{profileInfoEditFragment::onLiveLocationTextFieldClick}"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -193,7 +193,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textCapSentences|textMultiLine"
-                            android:text="@{hikerViewModel.hiker.description}"/>
+                            android:text="@{hikerViewModel.data.description}"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 

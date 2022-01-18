@@ -164,12 +164,12 @@ abstract class BaseActivity<T: ViewDataBinding> : AppCompatActivity() {
 
     /**********************************Query results handling************************************/
 
-    fun onSaveSuccess() {
+    fun onQuerySuccess() {
         dismissProgressDialog()
         finishOk()
     }
 
-    fun onQueryError(e: Exception) {
+    fun onQueryError(e: Throwable) {
         dismissProgressDialog()
         DialogHelper.createInfoDialog(
             this,

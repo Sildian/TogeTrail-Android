@@ -11,6 +11,16 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.13632246376811594" />
         <entry key="app/src/main/res/layout/fragment_chat_room.xml" value="0.13632246376811594" />
         <entry key="app/src/main/res/layout/fragment_chat_selection.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_event.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_event_edit.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_profile_info_edit.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_profile_settings_edit.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_trail_info.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_trail_info_edit.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_trail_map_detail.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_trail_poi_info.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_trail_poi_info_edit.xml" value="0.1" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.19166666666666668" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.19166666666666668" />
       </map>

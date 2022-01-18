@@ -64,11 +64,11 @@ abstract class BaseFragment<T: ViewDataBinding> : Fragment() {
 
     /**********************************Query results handling************************************/
 
-    fun onSaveSuccess() {
-        this.baseActivity?.onSaveSuccess()
+    fun onQuerySuccess() {
+        this.baseActivity?.onQuerySuccess()
     }
 
-    fun onQueryError(e: Exception) {
+    fun onQueryError(e: Throwable) {
         this.baseActivity?.onQueryError(e)
     }
 }

@@ -79,7 +79,7 @@ class TrailMapFragment :
     }
 
     private fun observeTrails() {
-        this.trailsViewModel.trails.observe(this) { trails ->
+        this.trailsViewModel.data.observe(this) { trails ->
             if (trails != null) {
                 if (trails.isNotEmpty()) {
                         showTrailsOnMap()
@@ -92,7 +92,7 @@ class TrailMapFragment :
     }
 
     private fun observeEvents() {
-        this.eventsViewModel.events.observe(this) { events ->
+        this.eventsViewModel.data.observe(this) { events ->
             if (events != null) {
                 if (events.isNotEmpty()) {
                     showEventsOnMap()
@@ -105,12 +105,12 @@ class TrailMapFragment :
     }
 
     private fun observeRequestFailure() {
-        this.trailsViewModel.requestFailure.observe(this) { e ->
+        this.trailsViewModel.error.observe(this) { e ->
             if (e != null) {
                 onQueryError(e)
             }
         }
-        this.eventsViewModel.requestFailure.observe(this) { e ->
+        this.eventsViewModel.error.observe(this) { e ->
             if (e != null) {
                 onQueryError(e)
             }
@@ -130,12 +130,12 @@ class TrailMapFragment :
 
     private fun loadTrails(){
         val trailsQuery=(activity as MainActivity).trailsQuery
-        this.trailsViewModel.loadTrailsFromDatabaseRealTime(trailsQuery)
+        this.trailsViewModel.loadTrailsRealTime(trailsQuery)
     }
 
     private fun loadEvents(){
         val eventsQuery=(activity as MainActivity).eventsQuery
-        this.eventsViewModel.loadEventsFromDatabaseRealTime(eventsQuery)
+        this.eventsViewModel.loadEventsRealTime(eventsQuery)
     }
 
     /************************************UI monitoring*******************************************/
@@ -203,13 +203,13 @@ class TrailMapFragment :
         this.map?.setOnInfoWindowClickListener(this)
         when{
             this.showTrails ->
-                if (this.trailsViewModel.trails.value.isNullOrEmpty()) {
+                if (this.trailsViewModel.data.value.isNullOrEmpty()) {
                     loadTrails()
                 } else {
                     showTrailsOnMap()
                 }
             this.showEvents ->
-                if(this.eventsViewModel.events.value.isNullOrEmpty()){
+                if (this.eventsViewModel.data.value.isNullOrEmpty()) {
                     loadEvents()
                 } else {
                     showEventsOnMap()
@@ -359,8 +359,8 @@ class TrailMapFragment :
 
         /*For each trail in the list, shows a marker*/
 
-        this.trailsViewModel.trails.value?.forEach { trail ->
-            if (trail.position!=null) {
+        this.trailsViewModel.data.value?.forEach { trail ->
+            if (trail.position != null) {
                 this.map?.addMarker(
                     MarkerOptions()
                         .position(LatLng(trail.position!!.latitude, trail.position!!.longitude))
@@ -380,7 +380,7 @@ class TrailMapFragment :
 
         /*For each event in the list, shows a marker*/
 
-        this.eventsViewModel.events.value?.forEach { event ->
+        this.eventsViewModel.data.value?.forEach { event ->
             if (event.position!=null) {
                 this.map?.addMarker(
                     MarkerOptions()

@@ -24,12 +24,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="@{hikerViewModel.hiker==null ? View.VISIBLE : View.GONE}"/>
+            android:visibility="@{hikerViewModel.data==null ? View.VISIBLE : View.GONE}"/>
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{hikerViewModel.hiker==null ? View.GONE : View.VISIBLE}">
+            android:visibility="@{hikerViewModel.data==null ? View.GONE : View.VISIBLE}">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -61,7 +61,7 @@
                         android:layout_marginStart="@dimen/components_margin_small"
                         android:layout_marginEnd="@dimen/components_margin_medium"
                         android:textColor="@color/colorBlack"
-                        android:text="@{hikerViewModel.hiker.email, default=@string/example_hiker_email}"/>
+                        android:text="@{hikerViewModel.data.email, default=@string/example_hiker_email}"/>
 
                 </LinearLayout>
 
@@ -90,7 +90,7 @@
                         android:layout_marginStart="@dimen/components_margin_small"
                         android:layout_marginEnd="@dimen/components_margin_medium"
                         android:textColor="@color/colorBlack"
-                        android:text="@{hikerViewModel.hiker.registrationDate==null ? `` : DateUtilities.displayDateShort(hikerViewModel.hiker.registrationDate), default=@string/example_hiker_registration_date}"/>
+                        android:text="@{hikerViewModel.data.registrationDate==null ? `` : DateUtilities.displayDateShort(hikerViewModel.data.registrationDate), default=@string/example_hiker_registration_date}"/>
 
                 </LinearLayout>
 

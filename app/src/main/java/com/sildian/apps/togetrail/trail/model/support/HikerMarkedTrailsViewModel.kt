@@ -1,16 +1,16 @@
 package com.sildian.apps.togetrail.trail.model.support
 
-import com.google.firebase.firestore.Query
 import com.sildian.apps.togetrail.common.baseViewModels.ListDataViewModel
+import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
 import com.sildian.apps.togetrail.trail.model.core.Trail
 
 /*************************************************************************************************
- * This viewModel observes a list of trails
+ * This viewModel observes the list of marked trails related to a hiker
  ************************************************************************************************/
 
-class TrailsViewModel: ListDataViewModel<Trail>(Trail::class.java) {
+class HikerMarkedTrailsViewModel: ListDataViewModel<Trail>(Trail::class.java) {
 
-    fun loadTrailsRealTime(query: Query) {
-        loadDataRealTime(query)
+    fun loadMarkedTrailsRealTime(hikerId: String) {
+        loadDataRealTime(HikerFirebaseQueries.getMarkedTrails(hikerId))
     }
 }

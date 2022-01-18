@@ -1,60 +1,32 @@
 package com.sildian.apps.togetrail.hiker.model.support
 
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.sildian.apps.togetrail.chat.model.core.Message
-import com.sildian.apps.togetrail.common.baseViewModels.BaseViewModel
+import com.sildian.apps.togetrail.common.baseViewModels.SingleDataViewModel
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import com.sildian.apps.togetrail.hiker.model.dataRequests.*
 
 /*************************************************************************************************
  * This viewModel observes a single Hiker related data
  ************************************************************************************************/
 
-class HikerViewModel : BaseViewModel() {
+class HikerViewModel : SingleDataViewModel<Hiker>(Hiker::class.java) {
 
-    /************************************Static items********************************************/
+    /***********************************Repositories*********************************************/
 
-    companion object{
+    private val authRepository = AuthRepository()
+    private val storageRepository = StorageRepository()
+    private val hikerRepository = HikerRepository()
 
-        /**Logs**/
-        private const val TAG = "HikerViewModel"
-    }
-
-    /***********************************Exception handler***************************************/
-
-    private val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
-        Log.e(TAG, throwable.message.toString())
-    }
-
-    /**********************************Data requester*******************************************/
-
-    private val hikerDataRequester = HikerDataRequester()
-
-    /*********************************Monitoring info*******************************************/
+    /***********************************Extra data********************************************/
 
     private var imagePathToUpload: String? = null
     private var imagePathToDelete: String? = null
 
-    /********************************LiveData to be observed*************************************/
-
-    val hiker = MutableLiveData<Hiker?>()
-    val saveRequestSuccess = MutableLiveData<Boolean>()
-    val requestFailure = MutableLiveData<Exception?>()
-
-    /************************************Data monitoring*****************************************/
-
-    /**
-     * Gives an image to be stored on the cloud before running saveHikerInDatabase
-     * If the hiker already has a photo, it will be deleted
-     * @param imagePath : the temporary image's uri
-     */
+    /********************************Extra data monitoring************************************/
 
     fun updateImagePathToUpload(imagePath:String) {
-        this.hiker.value?.photoUrl?.let { photoUrl ->
+        this.mutableData.value?.photoUrl?.let { photoUrl ->
             if (photoUrl.startsWith("https://")) {
                 this.imagePathToDelete = photoUrl
             }
@@ -62,211 +34,74 @@ class HikerViewModel : BaseViewModel() {
         this.imagePathToUpload = imagePath
     }
 
-    /**
-     * Gives an image to be deleted from the cloud before running saveHikerInDatabase
-     * @param imagePath : the image's url
-     */
-
     fun updateImagePathToDelete(imagePath:String) {
-        this.imagePathToUpload=null
+        this.imagePathToUpload = null
         if (imagePath.startsWith("https://")) {
-            this.imagePathToDelete=imagePath
+            this.imagePathToDelete = imagePath
         }
     }
-
-    /**Clears images paths**/
 
     fun clearImagePaths() {
         this.imagePathToUpload = null
         this.imagePathToDelete = null
     }
 
-    /**
-     * Loads an hiker from the database in real time
-     * @param hikerId : the hiker's id
-     */
+    /***********************************Data monitoring***************************************/
 
-    fun loadHikerFromDatabaseRealTime(hikerId:String) {
-        this.queryRegistration?.remove()
-        this.queryRegistration = hikerDataRequester.loadHikerFromDatabaseRealTime(hikerId)
-            .addSnapshotListener { snapshot, e ->
-                if (snapshot != null) {
-                    val result = snapshot.toObject(Hiker::class.java)
-                    Log.d(TAG, "Successfully loaded hiker from database")
-                    hiker.postValue(result)
-                }
-                else if(e != null) {
-                    Log.e(TAG, "Failed to load hiker from database : ${e.message}")
-                    requestFailure.postValue(e)
-                }
-            }
+    fun loadHikerRealTime(hikerId: String) {
+        loadDataRealTime(this.hikerRepository.getHikerReference(hikerId))
     }
 
-    /**
-     * Loads an hiker from the database
-     * @param hikerId : the hiker's id
-     */
-
-    fun loadHikerFromDatabase(hikerId:String) {
-        viewModelScope.launch(this.exceptionHandler) {
-            try {
-                val result = async { hikerDataRequester.loadHikerFromDatabase(hikerId) }.await()
-                Log.d(TAG, "Successfully loaded hiker from database")
-                hiker.postValue(result)
-            }
-            catch(e:Exception) {
-                Log.e(TAG, "Failed to load hiker from database : ${e.message}")
-                requestFailure.postValue(e)
-            }
-        }
+    fun loadHiker(hikerId: String) {
+        loadData(HikerLoadDataRequest(hikerId, this.hikerRepository))
     }
 
-    /**
-     * Saves the hiker within the database, after uploading or deleting the profile's image
-     */
-
-    fun saveHikerInDatabase() {
-        viewModelScope.launch(this.exceptionHandler) {
-            try {
-                launch { hikerDataRequester.saveHikerInDatabase(hiker.value, imagePathToDelete, imagePathToUpload) }.join()
-                Log.d(TAG, "Successfully saved hiker in database")
-                saveRequestSuccess.postValue(true)
-            }
-            catch(e:Exception) {
-                Log.e(TAG, "Failed to save hiker in database : ${e.message}")
-                requestFailure.postValue(e)
-            }
-        }
+    fun saveHiker() {
+        saveData(HikerSaveDataRequest(
+            this.mutableData.value,
+            this.imagePathToDelete,
+            this.imagePathToUpload,
+            this.authRepository,
+            this.storageRepository,
+            this.hikerRepository
+        ))
     }
-
-    /**
-     * Logs the user in and if this is a new user, creates a new Hiker
-     */
 
     fun loginUser() {
-        viewModelScope.launch(this.exceptionHandler) {
-            try {
-                val result = async { hikerDataRequester.loginUser() }.await()
-                Log.d(TAG, "Successfully logged the user in")
-                hiker.postValue(result)
-            }
-            catch(e:Exception) {
-                Log.e(TAG, "Failed to log the user in : ${e.message}")
-                requestFailure.postValue(e)
-            }
-        }
+        loadData(HikerLoginDataRequest(this.authRepository, this.hikerRepository))
     }
-
-    /**Logs the user out**/
 
     fun logoutUser() {
         clearQueryRegistration()
-        hikerDataRequester.logoutUser()
-        this.hiker.postValue(null)
+        this.mutableData.postValue(null)
+        runSpecificRequest(HikerLogoutDataRequest(this.authRepository))
     }
-
-    /**
-     * Resets the user's password
-     */
 
     fun resetUserPassword() {
-        viewModelScope.launch(this.exceptionHandler) {
-            try {
-                launch { hikerDataRequester.resetUserPassword() }.join()
-                Log.d(TAG, "Successfully reset the user password")
-                saveRequestSuccess.postValue(true)
-            }
-            catch(e:Exception){
-                Log.e(TAG, "Failed to reset the user password : ${e.message}")
-                requestFailure.postValue(e)
-            }
-        }
+        runSpecificRequest(HikerResetPasswordDataRequest(this.authRepository))
     }
-
-    /**
-     * Deletes the user's account as well as all related hiker data and the profile's image
-     */
 
     fun deleteUserAccount() {
-        viewModelScope.launch(this.exceptionHandler) {
-            try {
-                clearQueryRegistration()
-                launch { hikerDataRequester.deleteUserAccount() }.join()
-                Log.d(TAG, "Successfully deleted the user account")
-                saveRequestSuccess.postValue(true)
-            }
-            catch(e:Exception) {
-                Log.e(TAG, "Failed to delete the user account : ${e.message}")
-                requestFailure.postValue(e)
-            }
-        }
+        clearQueryRegistration()
+        runSpecificRequest(HikerDeleteAccountDataRequest(
+            this.authRepository,
+            this.storageRepository,
+            this.hikerRepository
+        ))
     }
-
-    /**
-     * Sends a message to the hiker
-     */
 
     fun sendMessage(text: String) {
-        viewModelScope.launch(this.exceptionHandler) {
-            try {
-                launch { hikerDataRequester.sendMessage(hiker.value, text) }.join()
-                Log.d(TAG, "Successfully sent the message")
-            }
-            catch (e:Exception) {
-                Log.e(TAG, "Failed to send the message : ${e.message}")
-                requestFailure.postValue(e)
-            }
-        }
+        runSpecificRequest(HikerSendMessageDataRequest(
+            this.mutableData.value,
+            text,
+            this.hikerRepository
+        ))
     }
-
-    /**
-     * Marks the last message as read
-     */
 
     fun markLastMessageAsRead() {
-        viewModelScope.launch(this.exceptionHandler) {
-            try {
-                launch { hikerDataRequester.markLastMessageAsRead(hiker.value) }.join()
-                Log.d(TAG, "Successfully marked the last message as read")
-            }
-            catch (e: Exception) {
-                Log.e(TAG, "Failed to mark the last message as read : ${e.message}")
-                requestFailure.postValue(e)
-            }
-        }
-    }
-
-    /**
-     * Deletes a message with the hiker
-     */
-
-    fun deleteMessage(message: Message) {
-        viewModelScope.launch(this.exceptionHandler) {
-            try {
-                launch { hikerDataRequester.deleteMessage(hiker.value, message) }.join()
-                Log.d(TAG, "Successfully deleted the message")
-            }
-            catch (e:Exception) {
-                Log.e(TAG, "Failed to delete the message : ${e.message}")
-                requestFailure.postValue(e)
-            }
-        }
-    }
-
-    /**
-     * Deletes the existing chat between the user and the hiker
-     */
-
-    fun deleteChat() {
-        viewModelScope.launch(this.exceptionHandler) {
-            try {
-                launch { hikerDataRequester.deleteChat(hiker.value) }.join()
-                Log.d(TAG, "Successfully deleted the chat")
-            }
-            catch (e:Exception) {
-                Log.e(TAG, "Failed to delete the chat : ${e.message}")
-                requestFailure.postValue(e)
-            }
-        }
+        runSpecificRequest(HikerReadMessageDataRequest(
+            this.mutableData.value,
+            this.hikerRepository
+        ))
     }
 }

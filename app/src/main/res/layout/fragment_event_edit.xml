@@ -23,12 +23,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="@{eventViewModel.event==null ? View.VISIBLE : View.GONE}"/>
+            android:visibility="@{eventViewModel.data==null ? View.VISIBLE : View.GONE}"/>
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{eventViewModel.event==null ? View.GONE : View.VISIBLE}">
+            android:visibility="@{eventViewModel.data==null ? View.GONE : View.VISIBLE}">
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -68,7 +68,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textCapSentences"
-                            android:text="@{eventViewModel.event.name}"/>
+                            android:text="@{eventViewModel.data.name}"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -266,7 +266,7 @@
                             android:layout_height="wrap_content"
                             android:inputType="textCapSentences|textMultiLine"
                             android:focusable="false"
-                            android:text="@{eventViewModel.event.meetingPoint.fullAddress}"
+                            android:text="@{eventViewModel.data.meetingPoint.fullAddress}"
                             android:onClick="@{eventEditFragment::onMeetingPointTextFieldClick}"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -300,7 +300,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textCapSentences|textMultiLine"
-                            android:text="@{eventViewModel.event.description}"/>
+                            android:text="@{eventViewModel.data.description}"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 

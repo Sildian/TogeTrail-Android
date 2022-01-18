@@ -36,10 +36,10 @@ class TrailMapDetailFragment(trailViewModel: TrailViewModel? = null, isEditable:
         this.binding.trailMapDetailFragment = this
         this.binding.trailViewModel = this.trailViewModel
         this.isTrailLikedByUser.value = CurrentHikerInfo.currentHikerLikedTrail.firstOrNull { trail ->
-            trail.id == this.trailViewModel?.trail?.value?.id
+            trail.id == this.trailViewModel?.data?.value?.id
         } != null
         this.isTrailMarkedByUser.value = CurrentHikerInfo.currentHikerMarkedTrail.firstOrNull { trail ->
-            trail.id == this.trailViewModel?.trail?.value?.id
+            trail.id == this.trailViewModel?.data?.value?.id
         } != null
     }
 
@@ -146,13 +146,13 @@ class TrailMapDetailFragment(trailViewModel: TrailViewModel? = null, isEditable:
 
     override fun showTrailTrackOnMap() {
 
-        if (this.trailViewModel?.trail?.value != null) {
+        if (this.trailViewModel?.data?.value != null) {
 
             super.showTrailTrackOnMap()
 
             /*Gets the first trailPoint*/
 
-            val firstPoint = this.trailViewModel?.trail?.value?.trailTrack?.getFirstTrailPoint()
+            val firstPoint = this.trailViewModel?.data?.value?.trailTrack?.getFirstTrailPoint()
 
             /*Moves the camera to the first point and zoom in*/
 

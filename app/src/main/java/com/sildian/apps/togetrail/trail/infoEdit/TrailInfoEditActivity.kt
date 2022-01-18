@@ -204,7 +204,7 @@ class TrailInfoEditActivity : BaseActivity<ActivityTrailInfoEditBinding>() {
 
     override fun finishOk(){
         val resultIntent=Intent()
-        resultIntent.putExtra(KEY_BUNDLE_TRAIL, this.trailViewModel.trail.value)
+        resultIntent.putExtra(KEY_BUNDLE_TRAIL, this.trailViewModel.data.value)
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
     }
