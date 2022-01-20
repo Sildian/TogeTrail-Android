@@ -1,11 +1,12 @@
-package com.sildian.apps.togetrail.event.model.support
+package com.sildian.apps.togetrail.event.model.viewModels
 
 import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.common.baseViewModels.SingleDataViewModel
 import com.sildian.apps.togetrail.event.model.core.Event
+import com.sildian.apps.togetrail.event.model.dataRepository.EventRepository
 import com.sildian.apps.togetrail.event.model.dataRequests.*
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
-import com.sildian.apps.togetrail.hiker.model.support.HikerRepository
+import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
 import com.sildian.apps.togetrail.trail.model.core.Trail
 
 /*************************************************************************************************

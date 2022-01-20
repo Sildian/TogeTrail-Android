@@ -12,7 +12,7 @@
             type="com.sildian.apps.togetrail.event.detail.EventFragment" />
         <variable
             name="eventViewModel"
-            type="com.sildian.apps.togetrail.event.model.support.EventViewModel" />
+            type="com.sildian.apps.togetrail.event.model.viewModels.EventViewModel" />
     </data>
 
     <FrameLayout

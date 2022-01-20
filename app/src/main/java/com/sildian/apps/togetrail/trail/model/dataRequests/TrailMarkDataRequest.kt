@@ -2,7 +2,7 @@ package com.sildian.apps.togetrail.trail.model.dataRequests
 
 import com.sildian.apps.togetrail.common.baseDataRequests.SpecificDataRequest
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
-import com.sildian.apps.togetrail.hiker.model.support.HikerRepository
+import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
 import com.sildian.apps.togetrail.trail.model.core.Trail
 
 /*************************************************************************************************

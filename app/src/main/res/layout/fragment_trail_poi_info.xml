@@ -11,7 +11,7 @@
             type="com.sildian.apps.togetrail.trail.info.TrailPOIInfoFragment" />
         <variable
             name="trailViewModel"
-            type="com.sildian.apps.togetrail.trail.model.support.TrailViewModel" />
+            type="com.sildian.apps.togetrail.trail.model.viewModels.TrailViewModel" />
         <variable
             name="isEditable"
             type="Boolean" />

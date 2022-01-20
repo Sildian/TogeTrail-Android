@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.event.model.support
+package com.sildian.apps.togetrail.event.model.dataRepository
 
 import com.google.firebase.firestore.DocumentReference
 import com.sildian.apps.togetrail.event.model.core.Event

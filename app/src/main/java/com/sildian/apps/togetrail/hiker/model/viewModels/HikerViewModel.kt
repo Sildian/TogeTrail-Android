@@ -1,9 +1,10 @@
-package com.sildian.apps.togetrail.hiker.model.support
+package com.sildian.apps.togetrail.hiker.model.viewModels
 
 import com.sildian.apps.togetrail.common.baseViewModels.SingleDataViewModel
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
+import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
 import com.sildian.apps.togetrail.hiker.model.dataRequests.*
 
 /*************************************************************************************************

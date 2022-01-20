@@ -11,7 +11,7 @@ import com.sildian.apps.togetrail.common.utils.uiHelpers.TextFieldHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.ValueFormatters
 import com.sildian.apps.togetrail.databinding.FragmentTrailPoiInfoEditBinding
 import com.sildian.apps.togetrail.trail.model.dataRequests.TrailSaveDataRequest
-import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
+import com.sildian.apps.togetrail.trail.model.viewModels.TrailViewModel
 
 /*************************************************************************************************
  * Allows to edit information about a trailPointOfInterest

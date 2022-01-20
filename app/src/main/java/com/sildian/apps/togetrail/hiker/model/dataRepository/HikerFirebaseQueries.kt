@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.hiker.model.support
+package com.sildian.apps.togetrail.hiker.model.dataRepository
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
@@ -39,7 +39,9 @@ object HikerFirebaseQueries {
     private fun getChatSubCollection(hikerId: String) =
         getCollection().document(hikerId).collection(SUB_COLLECTION_CHAT_NAME)
     private fun getMessageSubCollection(hikerId: String, interlocutorId: String) =
-        getChatSubCollection(hikerId).document(interlocutorId).collection(SUB_COLLECTION_MESSAGE_NAME)
+        getChatSubCollection(hikerId).document(interlocutorId).collection(
+            SUB_COLLECTION_MESSAGE_NAME
+        )
 
     /*************************************Queries************************************************/
 

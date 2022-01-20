@@ -16,7 +16,7 @@ import com.sildian.apps.togetrail.databinding.ActivityTrailInfoEditBinding
 import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.location.search.LocationSearchActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
-import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
+import com.sildian.apps.togetrail.trail.model.viewModels.TrailViewModel
 
 /*************************************************************************************************
  * This activity allows the user to edit information about a trail or a trailPointOfInterest

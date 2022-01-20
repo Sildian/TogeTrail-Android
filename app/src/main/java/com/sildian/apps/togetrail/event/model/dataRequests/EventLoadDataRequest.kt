@@ -2,7 +2,7 @@ package com.sildian.apps.togetrail.event.model.dataRequests
 
 import com.sildian.apps.togetrail.common.baseDataRequests.LoadDataRequest
 import com.sildian.apps.togetrail.event.model.core.Event
-import com.sildian.apps.togetrail.event.model.support.EventRepository
+import com.sildian.apps.togetrail.event.model.dataRepository.EventRepository
 
 /*************************************************************************************************
  * Loads an event from the database

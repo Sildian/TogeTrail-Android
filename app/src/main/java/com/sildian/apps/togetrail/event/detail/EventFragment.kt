@@ -17,8 +17,8 @@ import com.sildian.apps.togetrail.common.utils.GoogleMapUrlHelper
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.databinding.FragmentEventBinding
-import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
-import com.sildian.apps.togetrail.event.model.support.EventViewModel
+import com.sildian.apps.togetrail.event.model.dataRepository.EventFirebaseQueries
+import com.sildian.apps.togetrail.event.model.viewModels.EventViewModel
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.others.HikerPhotoAdapter

@@ -2,7 +2,7 @@ package com.sildian.apps.togetrail.hiker.model.dataRequests
 
 import com.sildian.apps.togetrail.common.baseDataRequests.LoadDataRequest
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
-import com.sildian.apps.togetrail.hiker.model.support.HikerRepository
+import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
 
 /*************************************************************************************************
  * Loads a hiker from the database

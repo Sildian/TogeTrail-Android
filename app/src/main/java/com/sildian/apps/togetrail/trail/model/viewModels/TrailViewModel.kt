@@ -1,13 +1,15 @@
-package com.sildian.apps.togetrail.trail.model.support
+package com.sildian.apps.togetrail.trail.model.viewModels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.sildian.apps.togetrail.common.baseViewModels.SingleDataViewModel
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
-import com.sildian.apps.togetrail.hiker.model.support.HikerRepository
+import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
+import com.sildian.apps.togetrail.trail.model.dataRepository.TrailRepository
 import com.sildian.apps.togetrail.trail.model.dataRequests.*
+import com.sildian.apps.togetrail.trail.model.support.TrailBuilder
 import io.ticofab.androidgpxparser.parser.domain.Gpx
 
 /*************************************************************************************************

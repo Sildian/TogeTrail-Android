@@ -7,7 +7,7 @@ import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.model.support.HikerBuilder
-import com.sildian.apps.togetrail.hiker.model.support.HikerRepository
+import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
 
 /*************************************************************************************************
  * Logs a hiker in using the current user authentication

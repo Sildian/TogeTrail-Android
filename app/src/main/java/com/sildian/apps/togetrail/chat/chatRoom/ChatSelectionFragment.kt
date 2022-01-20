@@ -8,7 +8,7 @@ import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.databinding.FragmentChatSelectionBinding
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
-import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
+import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerFirebaseQueries
 
 /*************************************************************************************************
  * Displays the current user's list of current chats

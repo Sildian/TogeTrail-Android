@@ -5,7 +5,7 @@ import com.sildian.apps.togetrail.common.baseDataRequests.SaveDataRequest
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
-import com.sildian.apps.togetrail.hiker.model.support.HikerRepository
+import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
 
 /*************************************************************************************************
  * Saves a hiker within the database

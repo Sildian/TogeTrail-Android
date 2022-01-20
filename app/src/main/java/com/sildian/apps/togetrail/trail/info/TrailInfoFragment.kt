@@ -11,7 +11,7 @@ import com.sildian.apps.togetrail.databinding.FragmentTrailInfoBinding
 import com.sildian.apps.togetrail.trail.map.BaseTrailMapFragment
 import com.sildian.apps.togetrail.trail.map.TrailActivity
 import com.sildian.apps.togetrail.trail.model.support.ElevationChartGenerator
-import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
+import com.sildian.apps.togetrail.trail.model.viewModels.TrailViewModel
 
 /*************************************************************************************************
  * Shows information about a trail

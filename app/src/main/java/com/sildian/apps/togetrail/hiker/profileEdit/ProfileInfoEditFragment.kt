@@ -11,7 +11,7 @@ import com.sildian.apps.togetrail.common.utils.uiHelpers.TextFieldHelper
 import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.databinding.FragmentProfileInfoEditBinding
 import com.sildian.apps.togetrail.hiker.model.dataRequests.HikerSaveDataRequest
-import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
+import com.sildian.apps.togetrail.hiker.model.viewModels.HikerViewModel
 import com.sildian.apps.togetrail.location.model.core.Location
 
 /*************************************************************************************************

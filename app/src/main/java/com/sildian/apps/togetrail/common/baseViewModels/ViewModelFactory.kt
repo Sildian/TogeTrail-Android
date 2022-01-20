@@ -2,14 +2,14 @@ package com.sildian.apps.togetrail.common.baseViewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.sildian.apps.togetrail.event.model.support.EventViewModel
-import com.sildian.apps.togetrail.event.model.support.EventsViewModel
-import com.sildian.apps.togetrail.hiker.model.support.HikerChatViewModel
-import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
-import com.sildian.apps.togetrail.trail.model.support.HikerLikedTrailsViewModel
-import com.sildian.apps.togetrail.trail.model.support.HikerMarkedTrailsViewModel
-import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
-import com.sildian.apps.togetrail.trail.model.support.TrailsViewModel
+import com.sildian.apps.togetrail.event.model.viewModels.EventViewModel
+import com.sildian.apps.togetrail.event.model.viewModels.EventsViewModel
+import com.sildian.apps.togetrail.hiker.model.viewModels.HikerChatViewModel
+import com.sildian.apps.togetrail.hiker.model.viewModels.HikerViewModel
+import com.sildian.apps.togetrail.trail.model.viewModels.HikerLikedTrailsViewModel
+import com.sildian.apps.togetrail.trail.model.viewModels.HikerMarkedTrailsViewModel
+import com.sildian.apps.togetrail.trail.model.viewModels.TrailViewModel
+import com.sildian.apps.togetrail.trail.model.viewModels.TrailsViewModel
 
 /*************************************************************************************************
  * Factory allowing to create ViewModel classes

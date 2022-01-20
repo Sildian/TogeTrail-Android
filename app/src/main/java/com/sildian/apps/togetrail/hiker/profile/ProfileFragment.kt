@@ -9,8 +9,8 @@ import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.databinding.FragmentProfileBinding
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
-import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
-import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
+import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerFirebaseQueries
+import com.sildian.apps.togetrail.hiker.model.viewModels.HikerViewModel
 
 /*************************************************************************************************
  * Shows a hiker's profile

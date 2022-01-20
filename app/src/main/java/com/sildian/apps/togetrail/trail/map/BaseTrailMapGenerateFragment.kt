@@ -11,7 +11,7 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
-import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
+import com.sildian.apps.togetrail.trail.model.viewModels.TrailViewModel
 
 /*************************************************************************************************
  * Base for all Trail fragments using a map and allowing to generate a new Trail with the app

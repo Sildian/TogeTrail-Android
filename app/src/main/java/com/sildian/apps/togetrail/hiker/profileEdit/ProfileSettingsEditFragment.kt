@@ -10,7 +10,7 @@ import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.databinding.FragmentProfileSettingsEditBinding
 import com.sildian.apps.togetrail.hiker.model.dataRequests.HikerDeleteAccountDataRequest
 import com.sildian.apps.togetrail.hiker.model.dataRequests.HikerResetPasswordDataRequest
-import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
+import com.sildian.apps.togetrail.hiker.model.viewModels.HikerViewModel
 
 /*************************************************************************************************
  * Lets the user edit its profile's settings

@@ -42,8 +42,10 @@ import com.sildian.apps.togetrail.event.detail.EventActivity
 import com.sildian.apps.togetrail.event.edit.EventEditActivity
 import com.sildian.apps.togetrail.event.list.EventsListFragment
 import com.sildian.apps.togetrail.event.model.core.Event
-import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
+import com.sildian.apps.togetrail.event.model.dataRepository.EventFirebaseQueries
 import com.sildian.apps.togetrail.hiker.model.support.*
+import com.sildian.apps.togetrail.hiker.model.viewModels.HikerChatViewModel
+import com.sildian.apps.togetrail.hiker.model.viewModels.HikerViewModel
 import com.sildian.apps.togetrail.hiker.profileEdit.ProfileEditActivity
 import com.sildian.apps.togetrail.hiker.profile.ProfileActivity
 import com.sildian.apps.togetrail.location.model.core.Location
@@ -52,9 +54,9 @@ import com.sildian.apps.togetrail.trail.list.TrailsListFragment
 import com.sildian.apps.togetrail.trail.map.TrailActivity
 import com.sildian.apps.togetrail.trail.map.TrailMapFragment
 import com.sildian.apps.togetrail.trail.model.core.Trail
-import com.sildian.apps.togetrail.trail.model.support.HikerLikedTrailsViewModel
-import com.sildian.apps.togetrail.trail.model.support.HikerMarkedTrailsViewModel
-import com.sildian.apps.togetrail.trail.model.support.TrailFirebaseQueries
+import com.sildian.apps.togetrail.trail.model.viewModels.HikerLikedTrailsViewModel
+import com.sildian.apps.togetrail.trail.model.viewModels.HikerMarkedTrailsViewModel
+import com.sildian.apps.togetrail.trail.model.dataRepository.TrailFirebaseQueries
 import net.danlew.android.joda.JodaTimeAndroid
 
 /*************************************************************************************************

@@ -3,7 +3,7 @@ package com.sildian.apps.togetrail.event.model.dataRequests
 import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.common.baseDataRequests.SpecificDataRequest
 import com.sildian.apps.togetrail.event.model.core.Event
-import com.sildian.apps.togetrail.event.model.support.EventRepository
+import com.sildian.apps.togetrail.event.model.dataRepository.EventRepository
 
 /*************************************************************************************************
  * Updates an existing message within an event's chat room

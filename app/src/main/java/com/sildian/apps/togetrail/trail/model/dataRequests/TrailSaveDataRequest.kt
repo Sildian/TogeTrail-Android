@@ -6,10 +6,10 @@ import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
-import com.sildian.apps.togetrail.hiker.model.support.HikerRepository
+import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
-import com.sildian.apps.togetrail.trail.model.support.TrailRepository
+import com.sildian.apps.togetrail.trail.model.dataRepository.TrailRepository
 import java.util.*
 
 /*************************************************************************************************

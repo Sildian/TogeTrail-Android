@@ -17,7 +17,7 @@ import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationExcep
 import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.databinding.FragmentTrailMapRecordBinding
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
-import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
+import com.sildian.apps.togetrail.trail.model.viewModels.TrailViewModel
 
 /*************************************************************************************************
  * Lets the user record a trail in real time

@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.trail.model.support
+package com.sildian.apps.togetrail.trail.model.dataRepository
 
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task

@@ -11,7 +11,7 @@ import com.sildian.apps.togetrail.databinding.FragmentTrailMapDetailBinding
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
-import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
+import com.sildian.apps.togetrail.trail.model.viewModels.TrailViewModel
 
 /*************************************************************************************************
  * Shows a specific trail on the map and allows to see all its detail information

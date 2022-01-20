@@ -8,10 +8,10 @@ import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.databinding.FragmentEventsListBinding
 import com.sildian.apps.togetrail.event.model.core.Event
-import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
+import com.sildian.apps.togetrail.event.model.dataRepository.EventFirebaseQueries
 import com.sildian.apps.togetrail.event.others.EventHorizontalAdapter
-import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
-import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
+import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerFirebaseQueries
+import com.sildian.apps.togetrail.hiker.model.viewModels.HikerViewModel
 import com.sildian.apps.togetrail.main.MainActivity
 
 /*************************************************************************************************

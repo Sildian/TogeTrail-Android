@@ -18,7 +18,7 @@ import com.sildian.apps.togetrail.hiker.profile.ProfileActivity
 import com.sildian.apps.togetrail.trail.infoEdit.TrailInfoEditActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.support.TrailBuildException
-import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
+import com.sildian.apps.togetrail.trail.model.viewModels.TrailViewModel
 import io.ticofab.androidgpxparser.parser.GPXParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException

@@ -8,11 +8,11 @@ import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.databinding.FragmentTrailsListBinding
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
-import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
-import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
+import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerFirebaseQueries
+import com.sildian.apps.togetrail.hiker.model.viewModels.HikerViewModel
 import com.sildian.apps.togetrail.main.MainActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
-import com.sildian.apps.togetrail.trail.model.support.TrailFirebaseQueries
+import com.sildian.apps.togetrail.trail.model.dataRepository.TrailFirebaseQueries
 import com.sildian.apps.togetrail.trail.others.TrailHorizontalAdapter
 import com.sildian.apps.togetrail.trail.others.TrailHorizontalViewHolder
 

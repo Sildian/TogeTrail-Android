@@ -26,11 +26,11 @@ import com.sildian.apps.togetrail.common.utils.MapMarkersUtilities
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
 import com.sildian.apps.togetrail.databinding.FragmentTrailMapBinding
 import com.sildian.apps.togetrail.event.model.core.Event
-import com.sildian.apps.togetrail.event.model.support.EventsViewModel
+import com.sildian.apps.togetrail.event.model.viewModels.EventsViewModel
 import com.sildian.apps.togetrail.main.MainActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailLevel
-import com.sildian.apps.togetrail.trail.model.support.TrailsViewModel
+import com.sildian.apps.togetrail.trail.model.viewModels.TrailsViewModel
 
 /*************************************************************************************************
  * Shows the list of trails on a map, and also the list of events

@@ -2,10 +2,10 @@ package com.sildian.apps.togetrail.event.model.dataRequests
 
 import com.sildian.apps.togetrail.common.baseDataRequests.SpecificDataRequest
 import com.sildian.apps.togetrail.event.model.core.Event
-import com.sildian.apps.togetrail.event.model.support.EventRepository
+import com.sildian.apps.togetrail.event.model.dataRepository.EventRepository
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
-import com.sildian.apps.togetrail.hiker.model.support.HikerRepository
+import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
 
 /*************************************************************************************************
  * Unregisters the current hiker from an event

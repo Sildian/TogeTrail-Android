@@ -15,8 +15,8 @@ import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.TextFieldHelper
 import com.sildian.apps.togetrail.databinding.FragmentEventEditBinding
 import com.sildian.apps.togetrail.event.model.dataRequests.EventSaveDataRequest
-import com.sildian.apps.togetrail.event.model.support.EventFirebaseQueries
-import com.sildian.apps.togetrail.event.model.support.EventViewModel
+import com.sildian.apps.togetrail.event.model.dataRepository.EventFirebaseQueries
+import com.sildian.apps.togetrail.event.model.viewModels.EventViewModel
 import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.others.TrailHorizontalAdapter

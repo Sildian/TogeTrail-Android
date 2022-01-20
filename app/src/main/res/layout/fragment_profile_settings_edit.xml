@@ -9,7 +9,7 @@
             type="com.sildian.apps.togetrail.hiker.profileEdit.ProfileSettingsEditFragment" />
         <variable
             name="hikerViewModel"
-            type="com.sildian.apps.togetrail.hiker.model.support.HikerViewModel" />
+            type="com.sildian.apps.togetrail.hiker.model.viewModels.HikerViewModel" />
     </data>
 
     <FrameLayout

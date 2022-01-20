@@ -10,8 +10,8 @@ import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.databinding.FragmentChatRoomBinding
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
-import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
-import com.sildian.apps.togetrail.hiker.model.support.HikerViewModel
+import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerFirebaseQueries
+import com.sildian.apps.togetrail.hiker.model.viewModels.HikerViewModel
 
 /*************************************************************************************************
  * Displays a chat's content and lets the user read and send messages in the room

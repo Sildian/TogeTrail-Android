@@ -10,7 +10,7 @@
             type="com.sildian.apps.togetrail.hiker.profileEdit.ProfileInfoEditFragment" />
         <variable
             name="hikerViewModel"
-            type="com.sildian.apps.togetrail.hiker.model.support.HikerViewModel" />
+            type="com.sildian.apps.togetrail.hiker.model.viewModels.HikerViewModel" />
     </data>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"

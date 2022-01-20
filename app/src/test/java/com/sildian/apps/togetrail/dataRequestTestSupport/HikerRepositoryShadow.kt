@@ -7,7 +7,7 @@ import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
-import com.sildian.apps.togetrail.hiker.model.support.HikerRepository
+import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
 import org.robolectric.annotation.Implementation
 import org.robolectric.annotation.Implements
 

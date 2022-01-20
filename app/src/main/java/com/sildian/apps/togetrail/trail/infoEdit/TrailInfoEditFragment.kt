@@ -16,7 +16,7 @@ import com.sildian.apps.togetrail.databinding.FragmentTrailInfoEditBinding
 import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.trail.model.core.TrailLevel
 import com.sildian.apps.togetrail.trail.model.dataRequests.TrailSaveDataRequest
-import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
+import com.sildian.apps.togetrail.trail.model.viewModels.TrailViewModel
 
 /*************************************************************************************************
  * Allows to edit information about a trail

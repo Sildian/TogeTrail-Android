@@ -16,7 +16,7 @@ import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.location.search.LocationSearchActivity
 import com.sildian.apps.togetrail.trail.map.TrailActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
-import com.sildian.apps.togetrail.trail.model.support.TrailFirebaseQueries
+import com.sildian.apps.togetrail.trail.model.dataRepository.TrailFirebaseQueries
 
 /*************************************************************************************************
  * This activity displays different queries to select trails to attach to an event

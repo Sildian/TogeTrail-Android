@@ -4,7 +4,7 @@ import com.google.firebase.FirebaseException
 import com.sildian.apps.togetrail.dataRequestTestSupport.BaseDataRequestTest
 import com.sildian.apps.togetrail.dataRequestTestSupport.FirebaseSimulator
 import com.sildian.apps.togetrail.trail.model.core.Trail
-import com.sildian.apps.togetrail.trail.model.support.TrailRepository
+import com.sildian.apps.togetrail.trail.model.dataRepository.TrailRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test

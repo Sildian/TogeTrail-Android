@@ -1,16 +1,16 @@
-package com.sildian.apps.togetrail.trail.model.support
+package com.sildian.apps.togetrail.event.model.viewModels
 
 import com.google.firebase.firestore.Query
 import com.sildian.apps.togetrail.common.baseViewModels.ListDataViewModel
-import com.sildian.apps.togetrail.trail.model.core.Trail
+import com.sildian.apps.togetrail.event.model.core.Event
 
 /*************************************************************************************************
- * This viewModel observes a list of trails
+ * This viewModel observes a list of events
  ************************************************************************************************/
 
-class TrailsViewModel: ListDataViewModel<Trail>(Trail::class.java) {
+class EventsViewModel: ListDataViewModel<Event>(Event::class.java) {
 
-    fun loadTrailsRealTime(query: Query) {
+    fun loadEventsRealTime(query: Query) {
         loadDataRealTime(query)
     }
 }

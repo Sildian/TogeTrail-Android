@@ -5,7 +5,7 @@ import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.common.baseDataRequests.SpecificDataRequest
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
-import com.sildian.apps.togetrail.hiker.model.support.HikerRepository
+import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
 
 /*************************************************************************************************
  * Sends a message from the sender (current hiker) to the given recipient

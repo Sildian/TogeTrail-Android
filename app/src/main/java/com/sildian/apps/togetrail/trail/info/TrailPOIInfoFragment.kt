@@ -5,7 +5,7 @@ import androidx.databinding.ViewDataBinding
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.databinding.FragmentTrailPoiInfoBinding
 import com.sildian.apps.togetrail.trail.map.BaseTrailMapFragment
-import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
+import com.sildian.apps.togetrail.trail.model.viewModels.TrailViewModel
 
 /*************************************************************************************************
  * Shows information about a point of interest

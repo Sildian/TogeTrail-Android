@@ -1,7 +1,7 @@
-package com.sildian.apps.togetrail.trail.model.support
+package com.sildian.apps.togetrail.trail.model.viewModels
 
 import com.sildian.apps.togetrail.common.baseViewModels.ListDataViewModel
-import com.sildian.apps.togetrail.hiker.model.support.HikerFirebaseQueries
+import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerFirebaseQueries
 import com.sildian.apps.togetrail.trail.model.core.Trail
 
 /*************************************************************************************************

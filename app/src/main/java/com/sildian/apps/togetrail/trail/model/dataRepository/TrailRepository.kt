@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.trail.model.support
+package com.sildian.apps.togetrail.trail.model.dataRepository
 
 import com.google.firebase.firestore.DocumentReference
 import com.sildian.apps.togetrail.trail.model.core.Trail

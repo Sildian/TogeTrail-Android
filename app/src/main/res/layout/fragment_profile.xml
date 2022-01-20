@@ -6,7 +6,7 @@
         <import type="com.bumptech.glide.request.RequestOptions"/>
         <variable
             name="hikerViewModel"
-            type="com.sildian.apps.togetrail.hiker.model.support.HikerViewModel" />
+            type="com.sildian.apps.togetrail.hiker.model.viewModels.HikerViewModel" />
     </data>
 
     <FrameLayout

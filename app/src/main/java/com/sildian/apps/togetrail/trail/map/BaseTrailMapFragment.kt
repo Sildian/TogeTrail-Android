@@ -28,7 +28,7 @@ import com.sildian.apps.togetrail.trail.info.BaseInfoFragment
 import com.sildian.apps.togetrail.trail.info.TrailInfoFragment
 import com.sildian.apps.togetrail.trail.info.TrailPOIInfoFragment
 import com.sildian.apps.togetrail.trail.model.dataRequests.TrailSaveDataRequest
-import com.sildian.apps.togetrail.trail.model.support.TrailViewModel
+import com.sildian.apps.togetrail.trail.model.viewModels.TrailViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch

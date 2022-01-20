@@ -2,7 +2,7 @@ package com.sildian.apps.togetrail.dataRequestTestSupport
 
 import com.google.firebase.FirebaseException
 import com.sildian.apps.togetrail.event.model.core.Event
-import com.sildian.apps.togetrail.event.model.support.EventRepository
+import com.sildian.apps.togetrail.event.model.dataRepository.EventRepository
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.trail.model.core.Trail

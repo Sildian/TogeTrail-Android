@@ -4,12 +4,12 @@ import com.google.firebase.FirebaseException
 import com.sildian.apps.togetrail.dataRequestTestSupport.BaseDataRequestTest
 import com.sildian.apps.togetrail.dataRequestTestSupport.FirebaseSimulator
 import com.sildian.apps.togetrail.event.model.core.Event
-import com.sildian.apps.togetrail.event.model.support.EventRepository
+import com.sildian.apps.togetrail.event.model.dataRepository.EventRepository
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
-import com.sildian.apps.togetrail.hiker.model.support.HikerRepository
+import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test

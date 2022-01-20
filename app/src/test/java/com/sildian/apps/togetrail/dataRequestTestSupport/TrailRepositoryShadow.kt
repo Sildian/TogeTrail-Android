@@ -2,7 +2,7 @@ package com.sildian.apps.togetrail.dataRequestTestSupport
 
 import com.google.firebase.FirebaseException
 import com.sildian.apps.togetrail.trail.model.core.Trail
-import com.sildian.apps.togetrail.trail.model.support.TrailRepository
+import com.sildian.apps.togetrail.trail.model.dataRepository.TrailRepository
 import org.robolectric.annotation.Implementation
 import org.robolectric.annotation.Implements
 
