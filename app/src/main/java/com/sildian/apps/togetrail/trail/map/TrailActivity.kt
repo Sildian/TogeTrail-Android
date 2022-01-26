@@ -5,12 +5,11 @@ import android.content.Intent
 import android.net.Uri
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
-import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.databinding.ActivityTrailBinding
@@ -19,6 +18,7 @@ import com.sildian.apps.togetrail.trail.infoEdit.TrailInfoEditActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.support.TrailBuildException
 import com.sildian.apps.togetrail.trail.model.viewModels.TrailViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import io.ticofab.androidgpxparser.parser.GPXParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
@@ -27,6 +27,7 @@ import java.io.IOException
  * This activity monitors the trails and lets the user see or edit a trail
  ************************************************************************************************/
 
+@AndroidEntryPoint
 class TrailActivity : BaseActivity<ActivityTrailBinding>() {
 
     /**********************************Static items**********************************************/
@@ -58,7 +59,7 @@ class TrailActivity : BaseActivity<ActivityTrailBinding>() {
     private var currentAction= ACTION_TRAIL_SEE                 //Action defining what the user is performing
     private var isEditable = false
     private var isTrailLoaded = false
-    private lateinit var trailViewModel: TrailViewModel
+    private val trailViewModel: TrailViewModel by viewModels()
 
     /**********************************UI component**********************************************/
 
@@ -108,16 +109,9 @@ class TrailActivity : BaseActivity<ActivityTrailBinding>() {
     /***********************************Data monitoring******************************************/
 
     override fun loadData() {
-        initializeData()
         observeTrail()
         observeRequestFailure()
         readDataFromIntent()
-    }
-
-    private fun initializeData() {
-        this.trailViewModel= ViewModelProviders
-            .of(this, ViewModelFactory)
-            .get(TrailViewModel::class.java)
     }
 
     private fun observeTrail() {
@@ -246,11 +240,13 @@ class TrailActivity : BaseActivity<ActivityTrailBinding>() {
     private fun showFragment(fragmentId:Int){
         when(fragmentId){
             ID_FRAGMENT_TRAIL_DETAIL ->
-                this.fragment= TrailMapDetailFragment(this.trailViewModel, this.isEditable)
+                this.fragment= TrailMapDetailFragment().apply {
+                    this.isEditable = this@TrailActivity.isEditable
+                }
             ID_FRAGMENT_TRAIL_DRAW ->
-                this.fragment = TrailMapDrawFragment(this.trailViewModel)
+                this.fragment = TrailMapDrawFragment()
             ID_FRAGMENT_TRAIL_RECORD ->
-                this.fragment = TrailMapRecordFragment(this.trailViewModel)
+                this.fragment = TrailMapRecordFragment()
         }
         this.fragment?.let { fragment ->
             supportFragmentManager.beginTransaction()

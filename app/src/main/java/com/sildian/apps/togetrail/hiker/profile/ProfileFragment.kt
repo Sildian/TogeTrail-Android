@@ -1,22 +1,23 @@
 package com.sildian.apps.togetrail.hiker.profile
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
-import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.databinding.FragmentProfileBinding
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerFirebaseQueries
 import com.sildian.apps.togetrail.hiker.model.viewModels.HikerViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************
  * Shows a hiker's profile
  * @param hikerId : the hiker's id
  ************************************************************************************************/
 
+@AndroidEntryPoint
 class ProfileFragment(private val hikerId: String? = null) :
     BaseFragment<FragmentProfileBinding>(),
     HikerHistoryAdapter.OnHikerHistoryItemClick
@@ -24,7 +25,7 @@ class ProfileFragment(private val hikerId: String? = null) :
 
     /*****************************************Data***********************************************/
 
-    private lateinit var hikerViewModel: HikerViewModel
+    private val hikerViewModel: HikerViewModel by viewModels()
 
     /**********************************UI component**********************************************/
 
@@ -40,9 +41,6 @@ class ProfileFragment(private val hikerId: String? = null) :
     }
 
     private fun initializeData() {
-        this.hikerViewModel = ViewModelProviders
-            .of(this, ViewModelFactory)
-            .get(HikerViewModel::class.java)
         this.binding.hikerViewModel = this.hikerViewModel
     }
 

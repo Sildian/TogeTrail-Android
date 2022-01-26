@@ -2,15 +2,18 @@ package com.sildian.apps.togetrail.trail.model.dataRepository
 
 import com.google.firebase.firestore.DocumentReference
 import com.sildian.apps.togetrail.trail.model.core.Trail
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 /*************************************************************************************************
  * Repository for Trail
  ************************************************************************************************/
 
-class TrailRepository {
+@ViewModelScoped
+class TrailRepository @Inject constructor() {
 
     /**
      * Gets a trail reference

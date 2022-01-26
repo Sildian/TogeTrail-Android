@@ -6,18 +6,21 @@ import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
 import com.sildian.apps.togetrail.hiker.model.dataRequests.*
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 /*************************************************************************************************
  * This viewModel observes a single Hiker related data
  ************************************************************************************************/
 
-class HikerViewModel : SingleDataViewModel<Hiker>(Hiker::class.java) {
+@HiltViewModel
+class HikerViewModel @Inject constructor() : SingleDataViewModel<Hiker>(Hiker::class.java) {
 
     /***********************************Repositories*********************************************/
 
-    private val authRepository = AuthRepository()
-    private val storageRepository = StorageRepository()
-    private val hikerRepository = HikerRepository()
+    @Inject lateinit var authRepository: AuthRepository
+    @Inject lateinit var storageRepository: StorageRepository
+    @Inject lateinit var hikerRepository: HikerRepository
 
     /***********************************Extra data********************************************/
 

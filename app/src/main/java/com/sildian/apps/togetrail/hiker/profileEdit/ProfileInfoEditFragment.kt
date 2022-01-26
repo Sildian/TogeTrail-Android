@@ -2,30 +2,31 @@ package com.sildian.apps.togetrail.hiker.profileEdit
 
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseImagePickerFragment
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.utils.uiHelpers.PickerHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.TextFieldHelper
-import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.databinding.FragmentProfileInfoEditBinding
 import com.sildian.apps.togetrail.hiker.model.dataRequests.HikerSaveDataRequest
 import com.sildian.apps.togetrail.hiker.model.viewModels.HikerViewModel
 import com.sildian.apps.togetrail.location.model.core.Location
+import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************
  * Lets the user edit its profile's information
  * @param hikerId : the hiker's id
  ************************************************************************************************/
 
+@AndroidEntryPoint
 class ProfileInfoEditFragment(private val hikerId: String?=null) :
     BaseImagePickerFragment<FragmentProfileInfoEditBinding>()
 {
 
     /*****************************************Data***********************************************/
 
-    private lateinit var hikerViewModel: HikerViewModel
+    private val hikerViewModel: HikerViewModel by viewModels()
 
     /***********************************Life cycle***********************************************/
 
@@ -45,9 +46,6 @@ class ProfileInfoEditFragment(private val hikerId: String?=null) :
     }
 
     private fun initializeData() {
-        this.hikerViewModel= ViewModelProviders
-            .of(this, ViewModelFactory)
-            .get(HikerViewModel::class.java)
         this.binding.profileInfoEditFragment = this
         this.binding.hikerViewModel = this.hikerViewModel
     }

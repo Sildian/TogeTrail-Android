@@ -8,15 +8,18 @@ import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.trail.model.core.Trail
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 /*************************************************************************************************
  * Repository for Hiker
  ************************************************************************************************/
 
-class HikerRepository {
+@ViewModelScoped
+class HikerRepository @Inject constructor() {
 
     /**
      * Gets an hiker reference

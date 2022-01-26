@@ -8,17 +8,20 @@ import com.sildian.apps.togetrail.event.model.dataRequests.*
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
 import com.sildian.apps.togetrail.trail.model.core.Trail
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 /*************************************************************************************************
  * This viewModel observes a single Event related data
  ************************************************************************************************/
 
-class EventViewModel : SingleDataViewModel<Event>(Event::class.java) {
+@HiltViewModel
+class EventViewModel @Inject constructor() : SingleDataViewModel<Event>(Event::class.java) {
 
     /***********************************Repositories*********************************************/
 
-    private val hikerRepository = HikerRepository()
-    private val eventRepository = EventRepository()
+    @Inject lateinit var hikerRepository: HikerRepository
+    @Inject lateinit var eventRepository: EventRepository
 
     /***************************************Extra data*******************************************/
 

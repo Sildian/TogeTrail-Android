@@ -17,14 +17,12 @@ import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationExcep
 import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.databinding.FragmentTrailMapRecordBinding
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
-import com.sildian.apps.togetrail.trail.model.viewModels.TrailViewModel
 
 /*************************************************************************************************
  * Lets the user record a trail in real time
  ************************************************************************************************/
 
-class TrailMapRecordFragment(trailViewModel: TrailViewModel? = null)
-    : BaseTrailMapGenerateFragment<FragmentTrailMapRecordBinding>(trailViewModel) {
+class TrailMapRecordFragment: BaseTrailMapGenerateFragment<FragmentTrailMapRecordBinding>() {
 
     /*************************************Service************************************************/
 
@@ -52,6 +50,7 @@ class TrailMapRecordFragment(trailViewModel: TrailViewModel? = null)
     /************************************Data monitoring*****************************************/
 
     override fun loadData() {
+        super.loadData()
         initializeData()
     }
 

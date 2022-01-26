@@ -5,15 +5,18 @@ import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.trail.model.core.Trail
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 /*************************************************************************************************
  * Repository for Event
  ************************************************************************************************/
 
-class EventRepository {
+@ViewModelScoped
+class EventRepository @Inject constructor() {
 
     /**
      * Gets an event reference

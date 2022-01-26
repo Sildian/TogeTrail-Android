@@ -7,11 +7,13 @@ import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.databinding.ActivityChatBinding
 import com.sildian.apps.togetrail.hiker.profile.ProfileActivity
+import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************
  * This activity allows the user to chat with other hikers
  ************************************************************************************************/
 
+@AndroidEntryPoint
 class ChatActivity : BaseActivity<ActivityChatBinding>() {
 
     /**********************************Static items**********************************************/

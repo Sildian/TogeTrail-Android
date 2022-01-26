@@ -5,14 +5,13 @@ import android.content.Intent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProviders
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.chat.others.MessageWriteDialogFragment
 import com.sildian.apps.togetrail.chat.others.PublicMessageAdapter
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
-import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.common.utils.GoogleMapUrlHelper
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
@@ -25,12 +24,14 @@ import com.sildian.apps.togetrail.hiker.others.HikerPhotoAdapter
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.others.TrailHorizontalAdapter
 import com.sildian.apps.togetrail.trail.others.TrailHorizontalViewHolder
+import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************
  * Displays an event's detail info and allows a user to register on this event
  * @param eventId : the event's id
  ************************************************************************************************/
 
+@AndroidEntryPoint
 class EventFragment(private val eventId: String?=null) :
     BaseFragment<FragmentEventBinding>(),
     HikerPhotoAdapter.OnHikerClickListener,
@@ -43,7 +44,7 @@ class EventFragment(private val eventId: String?=null) :
 
     /*****************************************Data***********************************************/
 
-    private lateinit var eventViewModel: EventViewModel
+    private val eventViewModel: EventViewModel by viewModels()
     val isCurrentUserRegistered = MutableLiveData(false)
     val isCurrentUserAuthor = MutableLiveData(false)
 
@@ -64,9 +65,6 @@ class EventFragment(private val eventId: String?=null) :
     }
 
     private fun initializeData() {
-        this.eventViewModel=ViewModelProviders
-            .of(this, ViewModelFactory)
-            .get(EventViewModel::class.java)
         this.binding.eventFragment = this
         this.binding.eventViewModel = this.eventViewModel
     }

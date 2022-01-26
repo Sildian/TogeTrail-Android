@@ -5,23 +5,24 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseImagePickerFragment
-import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.databinding.ActivityTrailInfoEditBinding
 import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.location.search.LocationSearchActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.viewModels.TrailViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************
  * This activity allows the user to edit information about a trail or a trailPointOfInterest
  ************************************************************************************************/
 
+@AndroidEntryPoint
 class TrailInfoEditActivity : BaseActivity<ActivityTrailInfoEditBinding>() {
 
     /**********************************Static items**********************************************/
@@ -48,7 +49,7 @@ class TrailInfoEditActivity : BaseActivity<ActivityTrailInfoEditBinding>() {
     /**************************************Data**************************************************/
 
     private var currentAction= ACTION_TRAIL_EDIT_INFO               //Action defining what the user is performing
-    private lateinit var trailViewModel: TrailViewModel             //Trail data
+    private val trailViewModel: TrailViewModel by viewModels()      //Trail data
     private var trailPOIPosition: Int? = null                       //The trail POI position if needed
 
     /**********************************UI component**********************************************/
@@ -100,9 +101,6 @@ class TrailInfoEditActivity : BaseActivity<ActivityTrailInfoEditBinding>() {
     /***********************************Data monitoring******************************************/
 
     override fun loadData() {
-        this.trailViewModel= ViewModelProviders
-            .of(this, ViewModelFactory)
-            .get(TrailViewModel::class.java)
         readDataFromIntent()
     }
 

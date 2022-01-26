@@ -6,6 +6,7 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.databinding.FragmentTrailPoiInfoBinding
 import com.sildian.apps.togetrail.trail.map.BaseTrailMapFragment
 import com.sildian.apps.togetrail.trail.model.viewModels.TrailViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************
  * Shows information about a point of interest
@@ -15,6 +16,7 @@ import com.sildian.apps.togetrail.trail.model.viewModels.TrailViewModel
  * @param isEditable : true if the info can be edited
  ************************************************************************************************/
 
+@AndroidEntryPoint
 class TrailPOIInfoFragment (
     private val trailViewModel: TrailViewModel? = null,
     private val trailPointOfInterestPosition:Int? = null,

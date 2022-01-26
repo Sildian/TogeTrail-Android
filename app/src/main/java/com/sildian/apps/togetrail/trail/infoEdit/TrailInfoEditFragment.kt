@@ -17,12 +17,14 @@ import com.sildian.apps.togetrail.location.model.core.Location
 import com.sildian.apps.togetrail.trail.model.core.TrailLevel
 import com.sildian.apps.togetrail.trail.model.dataRequests.TrailSaveDataRequest
 import com.sildian.apps.togetrail.trail.model.viewModels.TrailViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************
  * Allows to edit information about a trail
  * @param trailViewModel : the trail data
  ************************************************************************************************/
 
+@AndroidEntryPoint
 class TrailInfoEditFragment(private val trailViewModel: TrailViewModel? = null)
     : BaseImagePickerFragment<FragmentTrailInfoEditBinding>()
 {

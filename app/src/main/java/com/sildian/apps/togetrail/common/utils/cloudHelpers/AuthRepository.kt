@@ -1,15 +1,18 @@
 package com.sildian.apps.togetrail.common.utils.cloudHelpers
 
 import com.google.firebase.auth.FirebaseUser
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 /*************************************************************************************************
  * Repository for Authentication
  ************************************************************************************************/
 
-class AuthRepository {
+@ViewModelScoped
+class AuthRepository @Inject constructor() {
 
     /**
      * Gets the current user connected to the app

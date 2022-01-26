@@ -11,15 +11,16 @@ import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.dataRepository.EventFirebaseQueries
 import com.sildian.apps.togetrail.event.others.EventHorizontalAdapter
 import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerFirebaseQueries
-import com.sildian.apps.togetrail.hiker.model.viewModels.HikerViewModel
+import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.main.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************
  * Shows the lists of events on the screen, using different queries to populate it
- * @param hikerViewModel : the current user
  ************************************************************************************************/
 
-class EventsListFragment (private val hikerViewModel: HikerViewModel?=null) :
+@AndroidEntryPoint
+class EventsListFragment:
     BaseFragment<FragmentEventsListBinding>(),
     EventHorizontalAdapter.OnEventClickListener
 {
@@ -35,7 +36,7 @@ class EventsListFragment (private val hikerViewModel: HikerViewModel?=null) :
     /***********************************Data monitoring******************************************/
 
     override fun updateData(data: Any?) {
-        if(data is Query){
+        if (data is Query) {
             updateCurrentResearchEventsRecyclerView()
         }
     }
@@ -64,16 +65,16 @@ class EventsListFragment (private val hikerViewModel: HikerViewModel?=null) :
     }
 
     private fun initializeIAttendEventsRecyclerView() {
-        if (this.hikerViewModel?.data?.value != null && this.hikerViewModel.data.value?.nbEventsAttended!! > 0) {
+        CurrentHikerInfo.currentHiker?.takeIf { it.nbEventsAttended > 0 }?.let { currentHiker ->
             this.iAttendEventsAdapter = EventHorizontalAdapter(
                 DatabaseFirebaseHelper.generateOptionsForAdapter(
                     Event::class.java,
-                    HikerFirebaseQueries.getAttendedEvents(this.hikerViewModel.data.value?.id!!),
+                    HikerFirebaseQueries.getAttendedEvents(currentHiker.id),
                     activity as AppCompatActivity
                 ), this
             )
             this.binding.fragmentEventsListRecyclerViewIAttend.adapter = this.iAttendEventsAdapter
-        } else {
+        } ?: run {
             this.binding.fragmentEventsListTextIAttend.visibility = View.GONE
             this.binding.fragmentEventsListRecyclerViewIAttend.visibility = View.GONE
         }
@@ -91,32 +92,32 @@ class EventsListFragment (private val hikerViewModel: HikerViewModel?=null) :
     }
 
     private fun initializeMyEventsRecyclerView() {
-        if (this.hikerViewModel?.data?.value != null && this.hikerViewModel.data.value?.nbEventsCreated!! > 0) {
+        CurrentHikerInfo.currentHiker?.takeIf { it.nbEventsCreated > 0 }?.let { currentHiker ->
             this.myEventsAdapter = EventHorizontalAdapter(
                 DatabaseFirebaseHelper.generateOptionsForAdapter(
                     Event::class.java,
-                    EventFirebaseQueries.getMyEvents(this.hikerViewModel.data.value?.id!!),
+                    EventFirebaseQueries.getMyEvents(currentHiker.id),
                     activity as AppCompatActivity
                 ), this
             )
             this.binding.fragmentEventsListRecyclerViewMyEvents.adapter = this.myEventsAdapter
-        } else {
+        } ?: run {
             this.binding.fragmentEventsListTextMyEvents.visibility = View.GONE
             this.binding.fragmentEventsListRecyclerViewMyEvents.visibility = View.GONE
         }
     }
 
     private fun initializeNearbyHomeEventsRecyclerView() {
-        if (this.hikerViewModel?.data?.value?.liveLocation?.country!=null) {
+        CurrentHikerInfo.currentHiker?.takeIf { it.liveLocation.country != null }?.let { currentHiker ->
             this.nearbyHomeEventsAdapter = EventHorizontalAdapter(
                 DatabaseFirebaseHelper.generateOptionsForAdapter(
                     Event::class.java,
-                    EventFirebaseQueries.getEventsNearbyLocation(this.hikerViewModel.data.value?.liveLocation!!)!!,
+                    EventFirebaseQueries.getEventsNearbyLocation(currentHiker.liveLocation)!!,
                     activity as AppCompatActivity
                 ), this
             )
             this.binding.fragmentEventsListRecyclerViewNearbyHome.adapter = this.nearbyHomeEventsAdapter
-        } else {
+        } ?: run {
             this.binding.fragmentEventsListTextNearbyHome.visibility = View.GONE
             this.binding.fragmentEventsListRecyclerViewNearbyHome.visibility = View.GONE
         }

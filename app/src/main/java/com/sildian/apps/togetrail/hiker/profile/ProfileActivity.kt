@@ -14,11 +14,13 @@ import com.sildian.apps.togetrail.event.detail.EventActivity
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.profileEdit.ProfileEditActivity
 import com.sildian.apps.togetrail.trail.map.TrailActivity
+import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************
  * Allows to see a hiker's profile or related information
  ************************************************************************************************/
 
+@AndroidEntryPoint
 class ProfileActivity : BaseActivity<ActivityProfileBinding>() {
 
     /**********************************Static items**********************************************/

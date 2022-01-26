@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -36,14 +37,9 @@ import kotlinx.coroutines.withContext
 
 /*************************************************************************************************
  * Base for all Trail fragments using a map
- * @param trailViewModel : the trail data
- * @param isEditable : true if the trail is editable
  ************************************************************************************************/
 
-abstract class BaseTrailMapFragment<T: ViewDataBinding> (
-    protected var trailViewModel: TrailViewModel? = null,
-    protected var isEditable: Boolean = false
-) :
+abstract class BaseTrailMapFragment<T: ViewDataBinding>:
     BaseFragment<T>(),
     OnMapReadyCallback,
     GoogleMap.OnMapClickListener,
@@ -60,6 +56,11 @@ abstract class BaseTrailMapFragment<T: ViewDataBinding> (
         /**Bundles keys**/
         const val KEY_BUNDLE_MAP_VIEW="KEY_BUNDLE_MAP_VIEW"
     }
+
+    /*************************************Data***************************************************/
+
+    protected lateinit var trailViewModel: TrailViewModel
+    var isEditable = false
 
     /**********************************UI component**********************************************/
 
@@ -140,9 +141,14 @@ abstract class BaseTrailMapFragment<T: ViewDataBinding> (
     /**********************************Data monitoring*******************************************/
 
     override fun loadData() {
+        initializeData()
         observeTrail()
         observeRequestSuccess()
         observeRequestFailure()
+    }
+
+    private fun initializeData() {
+        this.trailViewModel = ViewModelProvider(requireActivity()).get(TrailViewModel::class.java)
     }
 
     private fun observeTrail() {

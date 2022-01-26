@@ -13,11 +13,13 @@ import com.sildian.apps.togetrail.common.baseControllers.BaseImagePickerFragment
 import com.sildian.apps.togetrail.databinding.ActivityProfileEditBinding
 import com.sildian.apps.togetrail.location.search.LocationSearchActivity
 import com.sildian.apps.togetrail.location.model.core.Location
+import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************
  * Lets a user see and edit his own profile
  ************************************************************************************************/
 
+@AndroidEntryPoint
 class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>() {
 
     /**********************************Static items**********************************************/

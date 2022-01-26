@@ -8,18 +8,17 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.databinding.FragmentTrailMapDrawBinding
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
-import com.sildian.apps.togetrail.trail.model.viewModels.TrailViewModel
 
 /*************************************************************************************************
  * Lets the user create a trail by drawing the track on the map and adding points of interest
  ************************************************************************************************/
 
-class TrailMapDrawFragment(trailViewModel: TrailViewModel? = null)
-    : BaseTrailMapGenerateFragment<FragmentTrailMapDrawBinding>(trailViewModel){
+class TrailMapDrawFragment : BaseTrailMapGenerateFragment<FragmentTrailMapDrawBinding>() {
 
     /************************************Data monitoring*****************************************/
 
     override fun loadData() {
+        super.loadData()
         initializeData()
     }
 

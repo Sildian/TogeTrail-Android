@@ -12,12 +12,14 @@ import com.sildian.apps.togetrail.common.utils.uiHelpers.ValueFormatters
 import com.sildian.apps.togetrail.databinding.FragmentTrailPoiInfoEditBinding
 import com.sildian.apps.togetrail.trail.model.dataRequests.TrailSaveDataRequest
 import com.sildian.apps.togetrail.trail.model.viewModels.TrailViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************
  * Allows to edit information about a trailPointOfInterest
  * @param trailViewModel : the trail data
  ************************************************************************************************/
 
+@AndroidEntryPoint
 class TrailPOIInfoEditFragment(
     private val trailViewModel: TrailViewModel? = null,
     private val trailPointOfInterestPosition:Int? = null

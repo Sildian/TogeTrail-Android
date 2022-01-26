@@ -9,19 +9,19 @@ import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelp
 import com.sildian.apps.togetrail.databinding.FragmentTrailsListBinding
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerFirebaseQueries
-import com.sildian.apps.togetrail.hiker.model.viewModels.HikerViewModel
 import com.sildian.apps.togetrail.main.MainActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.dataRepository.TrailFirebaseQueries
 import com.sildian.apps.togetrail.trail.others.TrailHorizontalAdapter
 import com.sildian.apps.togetrail.trail.others.TrailHorizontalViewHolder
+import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************
  * Shows the lists of trails on the screen, using different queries to populate it
- * @param hikerViewModel : the current user
  ************************************************************************************************/
 
-class TrailsListFragment (private val hikerViewModel: HikerViewModel?=null) :
+@AndroidEntryPoint
+class TrailsListFragment:
     BaseFragment<FragmentTrailsListBinding>(),
     TrailHorizontalViewHolder.OnTrailClickListener
 {
@@ -38,7 +38,7 @@ class TrailsListFragment (private val hikerViewModel: HikerViewModel?=null) :
     /***********************************Data monitoring******************************************/
 
     override fun updateData(data: Any?) {
-        if(data is Query){
+        if (data is Query) {
             updateCurrentResearchTrailsRecyclerView()
         }
     }
@@ -56,7 +56,7 @@ class TrailsListFragment (private val hikerViewModel: HikerViewModel?=null) :
         initializeMarkedTrailsRecyclerView()
     }
 
-    private fun updateCurrentResearchTrailsRecyclerView(){
+    private fun updateCurrentResearchTrailsRecyclerView() {
         this.currentResearchTrailsAdapter= TrailHorizontalAdapter(
             DatabaseFirebaseHelper.generateOptionsForAdapter(
                 Trail::class.java,
@@ -66,7 +66,7 @@ class TrailsListFragment (private val hikerViewModel: HikerViewModel?=null) :
         this.binding.fragmentTrailsListRecyclerViewCurrentResearch.adapter = this.currentResearchTrailsAdapter
     }
 
-    private fun initializeLastAddedTrailsRecyclerView(){
+    private fun initializeLastAddedTrailsRecyclerView() {
         this.lastAddedTrailsAdapter= TrailHorizontalAdapter(
             DatabaseFirebaseHelper.generateOptionsForAdapter(
                 Trail::class.java,
@@ -76,69 +76,65 @@ class TrailsListFragment (private val hikerViewModel: HikerViewModel?=null) :
         this.binding.fragmentTrailsListRecyclerViewLastAddedTrails.adapter = this.lastAddedTrailsAdapter
     }
 
-    private fun initializeMyTrailsRecyclerView(){
-        if (this.hikerViewModel?.data?.value != null && this.hikerViewModel.data.value?.nbTrailsCreated!! > 0) {
+    private fun initializeMyTrailsRecyclerView() {
+        CurrentHikerInfo.currentHiker?.takeIf { it.nbTrailsCreated > 0 }?.let { currentHiker ->
             this.myTrailsAdapter = TrailHorizontalAdapter(
                 DatabaseFirebaseHelper.generateOptionsForAdapter(
                     Trail::class.java,
-                    TrailFirebaseQueries.getMyTrails(this.hikerViewModel.data.value?.id!!),
+                    TrailFirebaseQueries.getMyTrails(currentHiker.id),
                     activity as AppCompatActivity
                 ), this
             )
             this.binding.fragmentTrailsListRecyclerViewMyTrails.adapter = this.myTrailsAdapter
-        }
-        else {
+        } ?: run {
             this.binding.fragmentTrailsListTextMyTrails.visibility = View.GONE
             this.binding.fragmentTrailsListRecyclerViewMyTrails.visibility = View.GONE
         }
     }
 
-    private fun initializeNearbyHomeTrailsRecyclerView(){
-        if (this.hikerViewModel?.data?.value?.liveLocation?.country!=null) {
+    private fun initializeNearbyHomeTrailsRecyclerView() {
+        CurrentHikerInfo.currentHiker?.takeIf { it.liveLocation.country != null }?.let { currentHiker ->
             this.nearbyHomeTrailsAdapter = TrailHorizontalAdapter(
                 DatabaseFirebaseHelper.generateOptionsForAdapter(
                     Trail::class.java,
-                    TrailFirebaseQueries.getTrailsNearbyLocation(this.hikerViewModel.data.value?.liveLocation!!)!!,
+                    TrailFirebaseQueries.getTrailsNearbyLocation(currentHiker.liveLocation)!!,
                     activity as AppCompatActivity
                 ), this
             )
             this.binding.fragmentTrailsListRecyclerViewNearbyHome.adapter = this.nearbyHomeTrailsAdapter
-        }
-        else {
+        } ?: run {
             this.binding.fragmentTrailsListTextNearbyHome.visibility = View.GONE
             this.binding.fragmentTrailsListRecyclerViewNearbyHome.visibility = View.GONE
         }
     }
 
-    private fun initializeLikedTrailsRecyclerView(){
-        if (CurrentHikerInfo.currentHiker != null) {
+    private fun initializeLikedTrailsRecyclerView() {
+        CurrentHikerInfo.currentHiker?.let { currentHiker ->
             this.likedTrailsAdapter = TrailHorizontalAdapter(
                 DatabaseFirebaseHelper.generateOptionsForAdapter(
                     Trail::class.java,
-                    HikerFirebaseQueries.getLikedTrails(CurrentHikerInfo.currentHiker?.id!!),
+                    HikerFirebaseQueries.getLikedTrails(currentHiker.id),
                     activity as AppCompatActivity
                 ), this
             )
             this.binding.fragmentTrailsListRecyclerViewLiked.adapter = this.likedTrailsAdapter
-        }
-        else {
+        } ?: run {
             this.binding.fragmentTrailsListTextLiked.visibility = View.GONE
             this.binding.fragmentTrailsListRecyclerViewLiked.visibility = View.GONE
         }
     }
 
-    private fun initializeMarkedTrailsRecyclerView(){
-        if (CurrentHikerInfo.currentHiker != null) {
+    private fun initializeMarkedTrailsRecyclerView() {
+        CurrentHikerInfo.currentHiker?.let { currentHiker ->
             this.markedTrailsAdapter = TrailHorizontalAdapter(
                 DatabaseFirebaseHelper.generateOptionsForAdapter(
                     Trail::class.java,
-                    HikerFirebaseQueries.getMarkedTrails(CurrentHikerInfo.currentHiker?.id!!),
+                    HikerFirebaseQueries.getMarkedTrails(currentHiker.id),
                     activity as AppCompatActivity
                 ), this
             )
             this.binding.fragmentTrailsListRecyclerViewMarked.adapter = this.markedTrailsAdapter
-        }
-        else {
+        } ?: run {
             this.binding.fragmentTrailsListTextMarked.visibility = View.GONE
             this.binding.fragmentTrailsListRecyclerViewMarked.visibility = View.GONE
         }

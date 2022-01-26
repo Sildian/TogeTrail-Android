@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -20,7 +20,6 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.utils.MapMarkersUtilities
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
@@ -31,11 +30,13 @@ import com.sildian.apps.togetrail.main.MainActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailLevel
 import com.sildian.apps.togetrail.trail.model.viewModels.TrailsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************
  * Shows the list of trails on a map, and also the list of events
  ************************************************************************************************/
 
+@AndroidEntryPoint
 class TrailMapFragment :
     BaseTrailMapFragment<FragmentTrailMapBinding>(),
     GoogleMap.InfoWindowAdapter,
@@ -54,8 +55,8 @@ class TrailMapFragment :
 
     /**************************************Data**************************************************/
 
-    private lateinit var trailsViewModel: TrailsViewModel
-    private lateinit var eventsViewModel: EventsViewModel
+    private val trailsViewModel: TrailsViewModel by viewModels()
+    private val eventsViewModel: EventsViewModel by viewModels()
     private var showTrails = true
     private var showEvents = false
 
@@ -69,12 +70,6 @@ class TrailMapFragment :
     }
 
     private fun initializeData() {
-        this.trailsViewModel= ViewModelProviders
-            .of(this, ViewModelFactory)
-            .get(TrailsViewModel::class.java)
-        this.eventsViewModel= ViewModelProviders
-            .of(this, ViewModelFactory)
-            .get(EventsViewModel::class.java)
         this.binding.trailMapFragment = this
     }
 

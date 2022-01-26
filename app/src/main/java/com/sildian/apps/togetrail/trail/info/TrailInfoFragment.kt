@@ -12,6 +12,7 @@ import com.sildian.apps.togetrail.trail.map.BaseTrailMapFragment
 import com.sildian.apps.togetrail.trail.map.TrailActivity
 import com.sildian.apps.togetrail.trail.model.support.ElevationChartGenerator
 import com.sildian.apps.togetrail.trail.model.viewModels.TrailViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************
  * Shows information about a trail
@@ -20,6 +21,7 @@ import com.sildian.apps.togetrail.trail.model.viewModels.TrailViewModel
  * @param isEditable : true if the info can be edited
  ************************************************************************************************/
 
+@AndroidEntryPoint
 class TrailInfoFragment(
     private val trailViewModel: TrailViewModel? = null,
     private val isEditable:Boolean = false

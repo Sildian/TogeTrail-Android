@@ -2,28 +2,29 @@ package com.sildian.apps.togetrail.hiker.profileEdit
 
 import android.content.DialogInterface
 import android.view.View
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
-import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.databinding.FragmentProfileSettingsEditBinding
 import com.sildian.apps.togetrail.hiker.model.dataRequests.HikerDeleteAccountDataRequest
 import com.sildian.apps.togetrail.hiker.model.dataRequests.HikerResetPasswordDataRequest
 import com.sildian.apps.togetrail.hiker.model.viewModels.HikerViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************
  * Lets the user edit its profile's settings
  * @param hikerId : the hiker's id
  ************************************************************************************************/
 
+@AndroidEntryPoint
 class ProfileSettingsEditFragment(private val hikerId: String?=null) :
     BaseFragment<FragmentProfileSettingsEditBinding>()
 {
 
     /*****************************************Data***********************************************/
 
-    private lateinit var hikerViewModel: HikerViewModel
+    private val hikerViewModel: HikerViewModel by viewModels()
 
     /***********************************Data monitoring******************************************/
 
@@ -35,9 +36,6 @@ class ProfileSettingsEditFragment(private val hikerId: String?=null) :
     }
 
     private fun initializeData() {
-        this.hikerViewModel= ViewModelProviders
-            .of(this, ViewModelFactory)
-            .get(HikerViewModel::class.java)
         this.binding.profileSettingsEditFragment = this
         this.binding.hikerViewModel = this.hikerViewModel
     }

@@ -11,11 +11,13 @@ import com.sildian.apps.togetrail.databinding.ActivityEventBinding
 import com.sildian.apps.togetrail.event.edit.EventEditActivity
 import com.sildian.apps.togetrail.hiker.profile.ProfileActivity
 import com.sildian.apps.togetrail.trail.map.TrailActivity
+import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************
  * Displays an event's detail info and allows a user to register on this event
  ************************************************************************************************/
 
+@AndroidEntryPoint
 class EventActivity : BaseActivity<ActivityEventBinding>() {
 
     /**********************************Static items**********************************************/

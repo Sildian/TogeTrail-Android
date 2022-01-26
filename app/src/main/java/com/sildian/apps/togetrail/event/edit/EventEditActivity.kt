@@ -14,11 +14,13 @@ import com.sildian.apps.togetrail.location.search.LocationSearchActivity
 import com.sildian.apps.togetrail.trail.map.TrailActivity
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.selection.TrailSelectionActivity
+import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************
  * Allows a user to create or edit an event
  ************************************************************************************************/
 
+@AndroidEntryPoint
 class EventEditActivity : BaseActivity<ActivityEventEditBinding>() {
 
     /**********************************Static items**********************************************/

@@ -2,12 +2,11 @@ package com.sildian.apps.togetrail.event.edit
 
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
-import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.PickerHelper
@@ -22,12 +21,14 @@ import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.others.TrailHorizontalAdapter
 import com.sildian.apps.togetrail.trail.others.TrailHorizontalAdapterOffline
 import com.sildian.apps.togetrail.trail.others.TrailHorizontalViewHolder
+import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************
  * Allows to edit an event
  * @param eventId : the event's id
  ************************************************************************************************/
 
+@AndroidEntryPoint
 class EventEditFragment(private val eventId: String?=null) :
     BaseFragment<FragmentEventEditBinding>(),
     TrailHorizontalViewHolder.OnTrailClickListener,
@@ -36,7 +37,7 @@ class EventEditFragment(private val eventId: String?=null) :
 
     /**************************************Data**************************************************/
 
-    private lateinit var eventViewModel: EventViewModel
+    private val eventViewModel: EventViewModel by viewModels()
 
     /**********************************UI component**********************************************/
 
@@ -54,9 +55,6 @@ class EventEditFragment(private val eventId: String?=null) :
     }
 
     private fun initializeData() {
-        this.eventViewModel= ViewModelProviders
-            .of(this, ViewModelFactory)
-            .get(EventViewModel::class.java)
         this.binding.eventEditFragment = this
         this.binding.eventViewModel = this.eventViewModel
     }

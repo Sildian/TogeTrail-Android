@@ -10,13 +10,13 @@ import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.firebase.ui.auth.AuthUI
@@ -31,7 +31,6 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.chat.chatRoom.ChatActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
-import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.common.utils.NumberUtilities
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.permissionsHelpers.PermissionsCallback
@@ -57,12 +56,14 @@ import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.viewModels.HikerLikedTrailsViewModel
 import com.sildian.apps.togetrail.trail.model.viewModels.HikerMarkedTrailsViewModel
 import com.sildian.apps.togetrail.trail.model.dataRepository.TrailFirebaseQueries
+import dagger.hilt.android.AndroidEntryPoint
 import net.danlew.android.joda.JodaTimeAndroid
 
 /*************************************************************************************************
  * Lets the user navigate between the main screens
  ************************************************************************************************/
 
+@AndroidEntryPoint
 class MainActivity :
     BaseActivity<ActivityMainBinding>(),
     PermissionsCallback,
@@ -95,10 +96,10 @@ class MainActivity :
 
     /****************************************Data************************************************/
 
-    private lateinit var hikerViewModel: HikerViewModel
-    private lateinit var hikerChatViewModel: HikerChatViewModel
-    private lateinit var hikerLikedTrailsViewModel: HikerLikedTrailsViewModel
-    private lateinit var hikerMarkedTrailsViewModel: HikerMarkedTrailsViewModel
+    private val hikerViewModel: HikerViewModel by viewModels()
+    private val hikerChatViewModel: HikerChatViewModel by viewModels()
+    private val hikerLikedTrailsViewModel: HikerLikedTrailsViewModel by viewModels()
+    private val hikerMarkedTrailsViewModel: HikerMarkedTrailsViewModel by viewModels()
     private var isNbUnreadMessagesBadgeShown = false
 
     /*************************************Queries************************************************/
@@ -287,28 +288,12 @@ class MainActivity :
     /****************************Data monitoring**************************************************/
 
     override fun loadData() {
-        initializeData()
         observeHiker()
         observeHikerChats()
         observeHikerLikedTrails()
         observeHikerMarkedTrails()
         observeRequestFailure()
         loginCurrentUser()
-    }
-
-    private fun initializeData() {
-        this.hikerViewModel = ViewModelProviders
-            .of(this, ViewModelFactory)
-            .get(HikerViewModel::class.java)
-        this.hikerChatViewModel = ViewModelProviders
-            .of(this, ViewModelFactory)
-            .get(HikerChatViewModel::class.java)
-        this.hikerLikedTrailsViewModel = ViewModelProviders
-            .of(this, ViewModelFactory)
-            .get(HikerLikedTrailsViewModel::class.java)
-        this.hikerMarkedTrailsViewModel = ViewModelProviders
-            .of(this, ViewModelFactory)
-            .get(HikerMarkedTrailsViewModel::class.java)
     }
 
     private fun observeHiker() {
@@ -581,14 +566,14 @@ class MainActivity :
 
     /******************************Fragments monitoring******************************************/
 
-    private fun showFragment(fragmentId:Int){
-        when(fragmentId){
+    private fun showFragment(fragmentId:Int) {
+        when(fragmentId) {
             ID_FRAGMENT_MAP->
-                this.fragment= TrailMapFragment()
+                this.fragment = TrailMapFragment()
             ID_FRAGMENT_TRAILS->
-                this.fragment=TrailsListFragment(this.hikerViewModel)
+                this.fragment = TrailsListFragment()
             ID_FRAGMENT_EVENTS->
-                this.fragment= EventsListFragment(this.hikerViewModel)
+                this.fragment = EventsListFragment()
         }
         this.fragment?.let { fragment ->
             supportFragmentManager.beginTransaction()

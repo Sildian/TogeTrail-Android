@@ -11,17 +11,27 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
-import com.sildian.apps.togetrail.trail.model.viewModels.TrailViewModel
 
 /*************************************************************************************************
  * Base for all Trail fragments using a map and allowing to generate a new Trail with the app
  ************************************************************************************************/
 
-abstract class BaseTrailMapGenerateFragment<T: ViewDataBinding>(trailViewModel: TrailViewModel? = null) :
-    BaseTrailMapFragment<T>(trailViewModel, isEditable = true),
+abstract class BaseTrailMapGenerateFragment<T: ViewDataBinding>:
+    BaseTrailMapFragment<T>(),
     GoogleMap.InfoWindowAdapter,
     GoogleMap.OnInfoWindowClickListener
 {
+
+    /************************************Data monitoring*****************************************/
+
+    override fun loadData() {
+        super.loadData()
+        initializeData()
+    }
+
+    private fun initializeData() {
+        this.isEditable = true
+    }
 
     /************************************UI monitoring*******************************************/
 

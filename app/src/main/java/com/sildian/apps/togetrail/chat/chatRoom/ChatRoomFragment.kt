@@ -1,22 +1,23 @@
 package com.sildian.apps.togetrail.chat.chatRoom
 
 import android.view.View
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.chat.others.PrivateMessageAdapter
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
-import com.sildian.apps.togetrail.common.baseViewModels.ViewModelFactory
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.databinding.FragmentChatRoomBinding
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerFirebaseQueries
 import com.sildian.apps.togetrail.hiker.model.viewModels.HikerViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************
  * Displays a chat's content and lets the user read and send messages in the room
  ************************************************************************************************/
 
+@AndroidEntryPoint
 class ChatRoomFragment(private val interlocutorId: String? = null) :
     BaseFragment<FragmentChatRoomBinding>(),
     PrivateMessageAdapter.OnAuthorClickListener
@@ -24,7 +25,7 @@ class ChatRoomFragment(private val interlocutorId: String? = null) :
 
     /*****************************************Data***********************************************/
 
-    private lateinit var hikerViewModel: HikerViewModel
+    private val hikerViewModel: HikerViewModel by viewModels()
 
     /**********************************UI component**********************************************/
 
@@ -40,9 +41,6 @@ class ChatRoomFragment(private val interlocutorId: String? = null) :
     }
 
     private fun initializeData() {
-        this.hikerViewModel = ViewModelProviders
-            .of(this, ViewModelFactory)
-            .get(HikerViewModel::class.java)
         this.binding.chatRoomFragment = this
     }
 

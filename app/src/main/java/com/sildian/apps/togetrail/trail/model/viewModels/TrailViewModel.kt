@@ -10,19 +10,22 @@ import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 import com.sildian.apps.togetrail.trail.model.dataRepository.TrailRepository
 import com.sildian.apps.togetrail.trail.model.dataRequests.*
 import com.sildian.apps.togetrail.trail.model.support.TrailBuilder
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ticofab.androidgpxparser.parser.domain.Gpx
+import javax.inject.Inject
 
 /*************************************************************************************************
  * This viewModel observes a single Trail related data
  ************************************************************************************************/
 
-class TrailViewModel : SingleDataViewModel<Trail>(Trail::class.java) {
+@HiltViewModel
+class TrailViewModel @Inject constructor() : SingleDataViewModel<Trail>(Trail::class.java) {
 
     /***********************************Repositories*********************************************/
 
-    private val storageRepository = StorageRepository()
-    private val hikerRepository = HikerRepository()
-    private val trailRepository = TrailRepository()
+    @Inject lateinit var storageRepository: StorageRepository
+    @Inject lateinit var hikerRepository: HikerRepository
+    @Inject lateinit var trailRepository: TrailRepository
 
     /************************************Extra data*********************************************/
 

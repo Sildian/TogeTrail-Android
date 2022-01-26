@@ -1,14 +1,17 @@
 package com.sildian.apps.togetrail.common.utils.cloudHelpers
 
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 /*************************************************************************************************
  * Repository for Storage
  ************************************************************************************************/
 
-class StorageRepository {
+@ViewModelScoped
+class StorageRepository @Inject constructor() {
 
     /**
      * Uploads an image into the cloud
