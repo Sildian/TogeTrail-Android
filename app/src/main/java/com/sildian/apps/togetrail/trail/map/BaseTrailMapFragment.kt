@@ -10,8 +10,6 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -22,7 +20,7 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationException
 import com.sildian.apps.togetrail.common.utils.MapMarkersUtilities
-import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationHelper
+import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationFinder
 import com.sildian.apps.togetrail.common.utils.permissionsHelpers.PermissionsHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.trail.info.BaseInfoFragment
@@ -34,6 +32,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 /*************************************************************************************************
  * Base for all Trail fragments using a map
@@ -74,7 +73,7 @@ abstract class BaseTrailMapFragment<T: ViewDataBinding>:
 
     /************************************Location support****************************************/
 
-    protected lateinit var userLocationProvider: FusedLocationProviderClient
+    @Inject lateinit var userLocationFinder: UserLocationFinder
 
     /************************************Life cycle**********************************************/
 
@@ -82,7 +81,6 @@ abstract class BaseTrailMapFragment<T: ViewDataBinding>:
         super.onCreateView(inflater, container, savedInstanceState)
         initializeInfoBottomSheet()
         initializeMap(savedInstanceState)
-        initializeUserLocation()
         return this.layout
     }
 
@@ -284,12 +282,6 @@ abstract class BaseTrailMapFragment<T: ViewDataBinding>:
 
     /********************************Location monitoring*****************************************/
 
-    private fun initializeUserLocation(){
-        context?.let { context ->
-            this.userLocationProvider = LocationServices.getFusedLocationProviderClient(context)
-        }
-    }
-
     protected fun zoomToUserLocation() {
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
@@ -299,7 +291,7 @@ abstract class BaseTrailMapFragment<T: ViewDataBinding>:
 
                         val userLocation = async {
                             try {
-                                UserLocationHelper.getLastUserLocation(userLocationProvider)
+                                userLocationFinder.findLastLocation()
                             }
                             catch (e: UserLocationException) {
                                 e.printStackTrace()

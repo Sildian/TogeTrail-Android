@@ -1,25 +1,27 @@
 package com.sildian.apps.togetrail.trail.map
 
-import android.content.Context
 import android.location.Location
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationException
 import com.sildian.apps.togetrail.common.utils.GeoUtilities
-import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationHelper
+import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationContinuousFinder
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
 import java.util.*
+import javax.inject.Inject
 
 /*************************************************************************************************
  * Records a Trail in real time using the user location
- * @param context : the context
  ************************************************************************************************/
 
-class TrailRecordExecutor(private val context: Context): LocationCallback() {
+class TrailRecordExecutor @Inject constructor(
+    private val userLocationContinuousFinder: UserLocationContinuousFinder
+)
+    : LocationCallback()
+{
 
     companion object {
 
@@ -32,10 +34,6 @@ class TrailRecordExecutor(private val context: Context): LocationCallback() {
         //The minimum required distance between two points to check before register (in meters)
         private const val VALUE_RECORD_MIN_DISTANCE = 2
     }
-
-    /*******************************Location provider*******************************************/
-
-    private val userLocationProvider = LocationServices.getFusedLocationProviderClient(context)
 
     /*************************************Data**************************************************/
 
@@ -56,11 +54,7 @@ class TrailRecordExecutor(private val context: Context): LocationCallback() {
     fun start() {
         try {
             isRecording = true
-            UserLocationHelper.startUserLocationUpdates(
-                userLocationProvider,
-                VALUE_RECORD_TIME_INTERVAL.toLong(),
-                this
-            )
+            this.userLocationContinuousFinder.startLocationUpdates(VALUE_RECORD_TIME_INTERVAL.toLong(), this)
         }
         catch (e: UserLocationException) {
             stop()
@@ -73,7 +67,7 @@ class TrailRecordExecutor(private val context: Context): LocationCallback() {
 
     fun stop() {
         isRecording = false
-        UserLocationHelper.stopUserLocationUpdates(userLocationProvider, this)
+        this.userLocationContinuousFinder.stopLocationUpdates(this)
     }
 
     /***********************************Trail recording*******************************************/

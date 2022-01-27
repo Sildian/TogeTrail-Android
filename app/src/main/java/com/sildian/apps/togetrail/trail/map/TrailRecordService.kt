@@ -11,7 +11,14 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationException
 import com.sildian.apps.togetrail.common.utils.uiHelpers.NotificationHelper
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+/*************************************************************************************************
+ * This Service aims to record a Trail in real time using the user location
+ ************************************************************************************************/
+
+@AndroidEntryPoint
 class TrailRecordService : Service() {
 
     companion object {
@@ -35,7 +42,7 @@ class TrailRecordService : Service() {
 
     /*************************************Executor***********************************************/
 
-    private lateinit var trailRecordExecutor: TrailRecordExecutor
+    @Inject lateinit var trailRecordExecutor: TrailRecordExecutor
 
     /***********************************Life cycle***********************************************/
 
@@ -49,7 +56,6 @@ class TrailRecordService : Service() {
             R.string.message_trail_recording_message,
             NOTIFICATION_CHANNEL_ID
         )
-        this.trailRecordExecutor = TrailRecordExecutor(this)
     }
 
     /*************************************Record actions*****************************************/

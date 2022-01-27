@@ -4,8 +4,10 @@ import android.Manifest
 import android.content.Context
 import android.location.Location
 import android.location.LocationManager
-import com.sildian.apps.togetrail.UserLocationHelperShadow
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationException
+import com.sildian.apps.togetrail.userLocationTestSupport.UserLocationContinuousFinderShadow
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -19,13 +21,15 @@ import org.robolectric.shadows.ShadowApplication
 import org.robolectric.shadows.ShadowLocationManager
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [28], shadows = [UserLocationHelperShadow::class])
+@Config(sdk = [28])
 class TrailRecordExecutorTest {
 
     private lateinit var context: Context
     private lateinit var applicationShadow: ShadowApplication
     private lateinit var locationManager: LocationManager
     private lateinit var locationManagerShadow: ShadowLocationManager
+    private lateinit var locationProviderClient: FusedLocationProviderClient
+    private lateinit var userLocationContinuousFinderShadow: UserLocationContinuousFinderShadow
     private lateinit var trailRecordExecutor: TrailRecordExecutor
     private lateinit var location1: Location
     private lateinit var location2: Location
@@ -38,7 +42,9 @@ class TrailRecordExecutorTest {
         this.applicationShadow = Shadows.shadowOf(RuntimeEnvironment.application)
         this.locationManager = this.context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         this.locationManagerShadow = Shadows.shadowOf(this.locationManager)
-        this.trailRecordExecutor = TrailRecordExecutor(this.context)
+        this.locationProviderClient = LocationServices.getFusedLocationProviderClient(this.context)
+        this.userLocationContinuousFinderShadow = UserLocationContinuousFinderShadow(this.locationProviderClient)
+        this.trailRecordExecutor = TrailRecordExecutor(this.userLocationContinuousFinderShadow)
         initLocation1()
         initLocation2()
         initLocation3()
@@ -47,7 +53,7 @@ class TrailRecordExecutorTest {
     @After
     fun finish() {
         this.trailRecordExecutor.stop()
-        UserLocationHelperShadow.lastUserLocation = null
+        this.userLocationContinuousFinderShadow.lastUserLocation = null
     }
 
     private fun initLocation1() {
@@ -97,7 +103,7 @@ class TrailRecordExecutorTest {
     fun given_nullLocation_when_fetchUserLocation_then_checkFailureIsRaised() {
         this.applicationShadow.grantPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
         this.locationManagerShadow.setLocationEnabled(true)
-        UserLocationHelperShadow.lastUserLocation = null
+        this.userLocationContinuousFinderShadow.lastUserLocation = null
         this.trailRecordExecutor.start()
         assertTrue(this.trailRecordExecutor.trailPointsRegistered.isEmpty())
         assertEquals(
@@ -113,7 +119,7 @@ class TrailRecordExecutorTest {
 
         /*Step 1 : record a first location*/
         this.locationManagerShadow.setLocationEnabled(true)
-        UserLocationHelperShadow.lastUserLocation = location1
+        this.userLocationContinuousFinderShadow.lastUserLocation = location1
         this.trailRecordExecutor.start()
         assertEquals(this.location1.latitude, this.trailRecordExecutor.trailPointsRegistered.last().latitude, 0.0)
         assertEquals(this.location1.longitude, this.trailRecordExecutor.trailPointsRegistered.last().longitude, 0.0)
@@ -122,7 +128,7 @@ class TrailRecordExecutorTest {
 
         /*Step 2 : the location is unavailable*/
         locationManagerShadow.setLocationEnabled(false)
-        UserLocationHelperShadow.lastUserLocation = null
+        this.userLocationContinuousFinderShadow.lastUserLocation = null
         this.trailRecordExecutor.start()
         assertEquals(this.location1.latitude, this.trailRecordExecutor.trailPointsRegistered.last().latitude, 0.0)
         assertEquals(this.location1.longitude, this.trailRecordExecutor.trailPointsRegistered.last().longitude, 0.0)
@@ -131,7 +137,7 @@ class TrailRecordExecutorTest {
 
         /*Step 3 : the next location is too closed to be recorded*/
         locationManagerShadow.setLocationEnabled(true)
-        UserLocationHelperShadow.lastUserLocation = location2
+        this.userLocationContinuousFinderShadow.lastUserLocation = location2
         this.trailRecordExecutor.start()
         assertEquals(this.location1.latitude, this.trailRecordExecutor.trailPointsRegistered.last().latitude, 0.0)
         assertEquals(this.location1.longitude, this.trailRecordExecutor.trailPointsRegistered.last().longitude, 0.0)
@@ -140,7 +146,7 @@ class TrailRecordExecutorTest {
 
         /*Step 4 : the next location is far enough to be recorded*/
         locationManagerShadow.setLocationEnabled(true)
-        UserLocationHelperShadow.lastUserLocation = location3
+        this.userLocationContinuousFinderShadow.lastUserLocation = location3
         this.trailRecordExecutor.start()
         assertEquals(this.location3.latitude, this.trailRecordExecutor.trailPointsRegistered.last().latitude, 0.0)
         assertEquals(this.location3.longitude, this.trailRecordExecutor.trailPointsRegistered.last().longitude, 0.0)

@@ -17,11 +17,13 @@ import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationExcep
 import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.databinding.FragmentTrailMapRecordBinding
 import com.sildian.apps.togetrail.trail.model.core.TrailPoint
+import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************
  * Lets the user record a trail in real time
  ************************************************************************************************/
 
+@AndroidEntryPoint
 class TrailMapRecordFragment: BaseTrailMapGenerateFragment<FragmentTrailMapRecordBinding>() {
 
     /*************************************Service************************************************/
