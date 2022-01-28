@@ -36,10 +36,10 @@ class TrailMapDetailFragment: BaseTrailMapFragment<FragmentTrailMapDetailBinding
         this.binding.trailMapDetailFragment = this
         this.binding.trailViewModel = this.trailViewModel
         this.isTrailLikedByUser.value = CurrentHikerInfo.currentHikerLikedTrail.firstOrNull { trail ->
-            trail.id == this.trailViewModel?.data?.value?.id
+            trail.id == this.trailViewModel.data.value?.id
         } != null
         this.isTrailMarkedByUser.value = CurrentHikerInfo.currentHikerMarkedTrail.firstOrNull { trail ->
-            trail.id == this.trailViewModel?.data?.value?.id
+            trail.id == this.trailViewModel.data.value?.id
         } != null
     }
 
@@ -74,9 +74,9 @@ class TrailMapDetailFragment: BaseTrailMapFragment<FragmentTrailMapDetailBinding
     fun onLikeButtonClick(view: View) {
         if (CurrentHikerInfo.currentHiker != null) {
             if (this.isTrailLikedByUser.value == true) {
-                this.trailViewModel?.unlikeTrail()
+                this.trailViewModel.unlikeTrail()
             } else {
-                this.trailViewModel?.likeTrail()
+                this.trailViewModel.likeTrail()
             }
             this.isTrailLikedByUser.value = !this.isTrailLikedByUser.value!!
         } else {
@@ -94,9 +94,9 @@ class TrailMapDetailFragment: BaseTrailMapFragment<FragmentTrailMapDetailBinding
     fun onMarkButtonClick(view: View) {
         if (CurrentHikerInfo.currentHiker != null) {
             if (this.isTrailMarkedByUser.value == true) {
-                this.trailViewModel?.unmarkTrail()
+                this.trailViewModel.unmarkTrail()
             } else {
-                this.trailViewModel?.markTrail()
+                this.trailViewModel.markTrail()
             }
             this.isTrailMarkedByUser.value = !this.isTrailMarkedByUser.value!!
         } else {
@@ -146,13 +146,13 @@ class TrailMapDetailFragment: BaseTrailMapFragment<FragmentTrailMapDetailBinding
 
     override fun showTrailTrackOnMap() {
 
-        if (this.trailViewModel?.data?.value != null) {
+        if (this.trailViewModel.data.value != null) {
 
             super.showTrailTrackOnMap()
 
             /*Gets the first trailPoint*/
 
-            val firstPoint = this.trailViewModel?.data?.value?.trailTrack?.getFirstTrailPoint()
+            val firstPoint = this.trailViewModel.data.value?.trailTrack?.getFirstTrailPoint()
 
             /*Moves the camera to the first point and zoom in*/
 
