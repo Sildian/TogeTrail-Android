@@ -14,10 +14,10 @@ class TrailBuilder {
 
     /**********************************Trail fields**********************************************/
 
-    private var name:String?=null
-    private var source:String="TogeTrail"
-    private var description:String?=null
-    private var trailTrack:TrailTrack=TrailTrack()
+    private var name: String? = null
+    private var source: String = "TogeTrail"
+    private var description: String? = null
+    private var trailTrack: TrailTrack = TrailTrack()
 
     /********************************Build steps*************************************************/
 
@@ -26,11 +26,11 @@ class TrailBuilder {
      * @return an instance of TrailBuilder
      */
 
-    fun withDefault():TrailBuilder{
-        this.name=null
-        this.source="TogeTrail"
-        this.description=null
-        this.trailTrack=TrailTrack()
+    fun withDefault(): TrailBuilder {
+        this.name = null
+        this.source = "TogeTrail"
+        this.description = null
+        this.trailTrack = TrailTrack()
         return this
     }
 
@@ -42,7 +42,7 @@ class TrailBuilder {
      */
 
     @Throws(TrailBuildException::class)
-    fun withGpx(gpx:Gpx): TrailBuilder {
+    fun withGpx(gpx: Gpx): TrailBuilder {
 
         /*If no track is available in the gpx, raises an exception*/
 
@@ -55,50 +55,45 @@ class TrailBuilder {
 
         /*If more than 1 track are available in the fpx, raises an exception*/
 
-        if(gpx.tracks.size>1){
+        if (gpx.tracks.size > 1) {
             throw TrailBuildException(TrailBuildException.ErrorCode.TOO_MANY_TRACKS)
         }
 
         /*Name, source and description are populated by the metadata or by the track.
         * If both are null, then sets ""*/
 
-        val name =
-            if (gpx.metadata.name != null) gpx.metadata.name
-            else if (gpx.tracks[0].trackName != null) gpx.tracks[0].trackName
-            else ""
-        val source =
-            if (gpx.creator != null) gpx.creator
-            else ""
-        val description =
-            if (gpx.metadata.desc != null) gpx.metadata.desc
-            else if (gpx.tracks[0].trackDesc != null) gpx.tracks[0].trackDesc
-            else ""
-
+        val name = gpx.metadata?.name ?: gpx.tracks[0]?.trackName ?: ""
+        val source = gpx.creator ?: ""
+        val description = gpx.metadata?.desc?: gpx.tracks[0]?.trackDesc ?: ""
         val trailTrack = TrailTrack()
 
         /*The trailPoints are populated by each trackPoint in the gpx*/
 
-        gpx.tracks[0].trackSegments.forEach { segment ->
-            segment.trackPoints.forEach { point ->
-                trailTrack.trailPoints.add(
-                    TrailPoint(
-                        point.latitude, point.longitude,
-                        point.elevation.toInt(), point.time.toDate()
+        gpx.tracks[0]?.trackSegments?.forEach { segment ->
+            segment?.trackPoints?.forEach { point ->
+                if (point.latitude != null && point.longitude != null) {
+                    trailTrack.trailPoints.add(
+                        TrailPoint(
+                            point.latitude, point.longitude,
+                            point.elevation?.toInt(), point.time?.toDate()
+                        )
                     )
-                )
+                }
             }
         }
 
         /*The trailPointsOfInterest are populated by each wayPoint in the gpx*/
 
-        gpx.wayPoints.forEach { point ->
-            trailTrack.trailPointsOfInterest.add(
-                TrailPointOfInterest(
-                    point.latitude, point.longitude,
-                    point.elevation.toInt(), point.time.toDate(),
-                    point.name, point.desc
+        gpx.wayPoints?.forEach { point ->
+            if (point.latitude != null && point.longitude != null) {
+                trailTrack.trailPointsOfInterest.add(
+                    TrailPointOfInterest(
+                        point.latitude, point.longitude,
+                        point.elevation?.toInt(), point.time?.toDate(),
+                        point.name, point.desc
+                    )
                 )
-            )
+            }
         }
 
         /*Sets the fields*/
@@ -116,9 +111,9 @@ class TrailBuilder {
      * @return a Trail
      */
 
-    fun build():Trail{
+    fun build(): Trail {
 
-        val trail=Trail(
+        val trail = Trail(
             name = this.name,
             source = this.source,
             description = this.description,
