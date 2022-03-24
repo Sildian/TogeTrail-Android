@@ -44,13 +44,14 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding>() {
     /**Generates the menu within the toolbar**/
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        return if (this.hikerId == AuthFirebaseHelper.getCurrentUser()?.uid) {
-            menuInflater.inflate(R.menu.menu_edit, menu)
-            true
-        } else {
-            menuInflater.inflate(R.menu.menu_chat, menu)
-            true
+        when {
+            this.hikerId == AuthFirebaseHelper.getCurrentUser()?.uid ->
+                menuInflater.inflate(R.menu.menu_edit, menu)
+            AuthFirebaseHelper.getCurrentUser() != null ->
+                menuInflater.inflate(R.menu.menu_chat, menu)
+            else -> { }
         }
+        return true
     }
 
     /**Click on menu item from toolbar**/
