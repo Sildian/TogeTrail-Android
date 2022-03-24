@@ -238,6 +238,8 @@
     <string name="message_map_failure_message">Oh no, the map could n\'t be loaded. Please try again later.</string>
     <string name="message_query_failure_title">Query failure</string>
     <string name="message_query_failure_message">Oh no, the query could n\'t work! You should try again later.</string>
+    <string name="message_query_answer_no_result_title">No result</string>
+    <string name="message_query_answer_no_result_message_hiker">It seems this hiker no longer exist.</string>
     <string name="message_log_failure_title">Connection failure</string>
     <string name="message_log_failure_message">Oops, it seems the connection could n\'t work. You should try again later.</string>
     <string name="message_password_reset_confirmation_title">Password reset</string>

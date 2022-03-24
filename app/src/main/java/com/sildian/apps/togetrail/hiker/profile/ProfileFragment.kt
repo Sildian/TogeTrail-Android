@@ -5,6 +5,7 @@ import androidx.fragment.app.viewModels
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
+import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.databinding.FragmentProfileBinding
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
@@ -45,11 +46,13 @@ class ProfileFragment(private val hikerId: String? = null) :
     }
 
     private fun observeHiker() {
-        this.hikerViewModel.data.observe(this, { hiker ->
+        this.hikerViewModel.data.observe(this) { hiker ->
             if (hiker != null) {
                 refreshUI()
+            } else {
+                showNoHikerDialog()
             }
-        })
+        }
     }
 
     private fun observeRequestFailure() {
@@ -95,6 +98,18 @@ class ProfileFragment(private val hikerId: String? = null) :
                 this
             )
             this.binding.fragmentProfileRecyclerViewHistoryItems.adapter = this.historyItemAdapter
+        }
+    }
+
+    private fun showNoHikerDialog() {
+        context?.let { context ->
+            DialogHelper.createInfoDialog(context,
+                R.string.message_query_answer_no_result_title,
+                R.string.message_query_answer_no_result_message_hiker)
+            {
+                baseActivity?.finishCancel()
+            }
+                .show()
         }
     }
 
