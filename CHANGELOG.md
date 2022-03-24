@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
+- Fix some display issues
 - Fix an issue occurring when trying to load a GPX with some missing fields
 
 ## [0.1.1-beta] - 2021-11-14
