@@ -72,16 +72,14 @@ class TrailRecordExecutor @Inject constructor(
 
     /***********************************Trail recording*******************************************/
 
-    override fun onLocationResult(locationResult: LocationResult?) {
-        if (locationResult != null) {
-            for (location in locationResult.locations) {
-                if (location != null) {
-                    handleUserLocation(location)
-                }
-                else {
-                    userLocationFailure = UserLocationException(UserLocationException.ErrorCode.ERROR_UNKNOWN)
-                    userLocationFailureLiveData.postValue(userLocationFailure)
-                }
+    override fun onLocationResult(locationResult: LocationResult) {
+        for (location in locationResult.locations) {
+            if (location != null) {
+                handleUserLocation(location)
+            } else {
+                userLocationFailure =
+                    UserLocationException(UserLocationException.ErrorCode.ERROR_UNKNOWN)
+                userLocationFailureLiveData.postValue(userLocationFailure)
             }
         }
     }
