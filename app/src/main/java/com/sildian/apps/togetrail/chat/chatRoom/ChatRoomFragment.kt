@@ -36,7 +36,6 @@ class ChatRoomFragment(private val interlocutorId: String? = null) :
     override fun loadData() {
         initializeData()
         observeHiker()
-        observeRequestFailure()
         loadHiker()
     }
 
@@ -45,18 +44,13 @@ class ChatRoomFragment(private val interlocutorId: String? = null) :
     }
 
     private fun observeHiker() {
-        this.hikerViewModel.data.observe(this) { hiker ->
-            hiker?.name?.let { hikerName ->
+        this.hikerViewModel.data.observe(this) { hikerData ->
+            hikerData?.error?.let { e ->
+                onQueryError(e)
+            } ?:
+            hikerData?.data?.name?.let { hikerName ->
                 (baseActivity as ChatActivity).setToolbarTitle(hikerName)
                 markLastMessageAsRead()
-            }
-        }
-    }
-
-    private fun observeRequestFailure() {
-        this.hikerViewModel.error.observe(this) { e ->
-            if (e != null) {
-                onQueryError(e)
             }
         }
     }

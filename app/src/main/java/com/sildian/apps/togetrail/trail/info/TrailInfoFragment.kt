@@ -38,7 +38,6 @@ class TrailInfoFragment(
     override fun loadData() {
         initializeData()
         observeTrail()
-        observeRequestFailure()
     }
 
     private fun initializeData() {
@@ -46,20 +45,17 @@ class TrailInfoFragment(
         this.binding.trailViewModel = this.trailViewModel
         this.binding.isEditable = this.isEditable
         context?.let { context ->
-            this.elevationChartGenerator = ElevationChartGenerator(context, this.trailViewModel?.data?.value)
+            this.elevationChartGenerator = ElevationChartGenerator(context, this.trailViewModel?.data?.value?.data)
         }
     }
 
     private fun observeTrail() {
-        this.trailViewModel?.data?.observe(this) { trail ->
-            refreshUI()
-        }
-    }
-
-    private fun observeRequestFailure() {
-        this.trailViewModel?.error?.observe(this) { e ->
-            if (e != null) {
+        this.trailViewModel?.data?.observe(this) { trailData ->
+            trailData?.error?.let { e ->
                 onQueryError(e)
+            } ?:
+            trailData?.data?.let { trail ->
+                refreshUI()
             }
         }
     }
@@ -115,14 +111,14 @@ class TrailInfoFragment(
 
     @Suppress("UNUSED_PARAMETER")
     fun onAuthorPhotoClick(view: View) {
-        this.trailViewModel?.data?.value?.authorId?.let { authorId ->
+        this.trailViewModel?.data?.value?.data?.authorId?.let { authorId ->
             (activity as TrailActivity).seeHiker(authorId)
         }
     }
 
     @Suppress("UNUSED_PARAMETER")
     fun onGoToDepartureButtonClick(view: View) {
-        this.trailViewModel?.data?.value?.position?.let { position ->
+        this.trailViewModel?.data?.value?.data?.position?.let { position ->
             val url = GoogleMapUrlHelper.generateWithLatLng(LatLng(position.latitude, position.longitude))
             val googleMapIntent = Intent(Intent.ACTION_VIEW, url.toUri())
             startActivity(googleMapIntent)

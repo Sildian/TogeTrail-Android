@@ -66,7 +66,6 @@ class TrailMapFragment :
         initializeData()
         observeTrails()
         observeEvents()
-        observeRequestFailure()
     }
 
     private fun initializeData() {
@@ -74,11 +73,14 @@ class TrailMapFragment :
     }
 
     private fun observeTrails() {
-        this.trailsViewModel.data.observe(this) { trails ->
-            if (trails != null) {
+        this.trailsViewModel.data.observe(this) { trailsData ->
+            trailsData?.error?.let { e ->
+                onQueryError(e)
+            } ?:
+            trailsData?.data?.let { trails ->
                 if (trails.isNotEmpty()) {
-                        showTrailsOnMap()
-                    }
+                    showTrailsOnMap()
+                }
                 else {
                     (baseActivity as MainActivity).showQueryResultEmptyMessage()
                 }
@@ -87,33 +89,22 @@ class TrailMapFragment :
     }
 
     private fun observeEvents() {
-        this.eventsViewModel.data.observe(this) { events ->
-            if (events != null) {
+        this.eventsViewModel.data.observe(this) { eventsData ->
+            eventsData?.error?.let { e ->
+                onQueryError(e)
+            } ?:
+            eventsData?.data?.let { events ->
                 if (events.isNotEmpty()) {
                     showEventsOnMap()
-                }
-                else {
+                } else {
                     (baseActivity as MainActivity).showQueryResultEmptyMessage()
                 }
             }
         }
     }
 
-    private fun observeRequestFailure() {
-        this.trailsViewModel.error.observe(this) { e ->
-            if (e != null) {
-                onQueryError(e)
-            }
-        }
-        this.eventsViewModel.error.observe(this) { e ->
-            if (e != null) {
-                onQueryError(e)
-            }
-        }
-    }
-
     override fun updateData(data:Any?) {
-        if(data==null) {
+        if (data == null) {
             if (this.showTrails) {
                 loadTrails()
             }
@@ -124,12 +115,12 @@ class TrailMapFragment :
     }
 
     private fun loadTrails(){
-        val trailsQuery=(activity as MainActivity).trailsQuery
+        val trailsQuery = (activity as MainActivity).trailsQuery
         this.trailsViewModel.loadTrailsRealTime(trailsQuery)
     }
 
     private fun loadEvents(){
-        val eventsQuery=(activity as MainActivity).eventsQuery
+        val eventsQuery = (activity as MainActivity).eventsQuery
         this.eventsViewModel.loadEventsRealTime(eventsQuery)
     }
 
@@ -196,15 +187,15 @@ class TrailMapFragment :
     override fun onMapReadyActionsFinished() {
         this.map?.setInfoWindowAdapter(this)
         this.map?.setOnInfoWindowClickListener(this)
-        when{
+        when {
             this.showTrails ->
-                if (this.trailsViewModel.data.value.isNullOrEmpty()) {
+                if (this.trailsViewModel.data.value?.data.isNullOrEmpty()) {
                     loadTrails()
                 } else {
                     showTrailsOnMap()
                 }
             this.showEvents ->
-                if (this.eventsViewModel.data.value.isNullOrEmpty()) {
+                if (this.eventsViewModel.data.value?.data.isNullOrEmpty()) {
                     loadEvents()
                 } else {
                     showEventsOnMap()
@@ -348,13 +339,13 @@ class TrailMapFragment :
 
     /***********************************Trails monitoring****************************************/
 
-    private fun showTrailsOnMap(){
+    private fun showTrailsOnMap() {
 
         this.map?.clear()
 
         /*For each trail in the list, shows a marker*/
 
-        this.trailsViewModel.data.value?.forEach { trail ->
+        this.trailsViewModel.data.value?.data?.forEach { trail ->
             if (trail.position != null) {
                 this.map?.addMarker(
                     MarkerOptions()
@@ -369,13 +360,13 @@ class TrailMapFragment :
 
     /***********************************Events monitoring****************************************/
 
-    private fun showEventsOnMap(){
+    private fun showEventsOnMap() {
 
         this.map?.clear()
 
         /*For each event in the list, shows a marker*/
 
-        this.eventsViewModel.data.value?.forEach { event ->
+        this.eventsViewModel.data.value?.data?.forEach { event ->
             if (event.position!=null) {
                 this.map?.addMarker(
                     MarkerOptions()

@@ -61,7 +61,7 @@
                         android:layout_marginStart="@dimen/components_margin_small"
                         android:layout_marginEnd="@dimen/components_margin_medium"
                         android:textColor="@color/colorBlack"
-                        android:text="@{hikerViewModel.data.email, default=@string/example_hiker_email}"/>
+                        android:text="@{hikerViewModel.data.data.email, default=@string/example_hiker_email}"/>
 
                 </LinearLayout>
 
@@ -90,7 +90,7 @@
                         android:layout_marginStart="@dimen/components_margin_small"
                         android:layout_marginEnd="@dimen/components_margin_medium"
                         android:textColor="@color/colorBlack"
-                        android:text="@{hikerViewModel.data.registrationDate==null ? `` : DateUtilities.displayDateShort(hikerViewModel.data.registrationDate), default=@string/example_hiker_registration_date}"/>
+                        android:text="@{hikerViewModel.data.data.registrationDate == null ? `` : DateUtilities.displayDateShort(hikerViewModel.data.data.registrationDate), default=@string/example_hiker_registration_date}"/>
 
                 </LinearLayout>
 

@@ -38,7 +38,7 @@
                 android:background="@color/colorWhite"
                 android:contentDescription="@string/example_image_content_description"
                 app:srcCompat="@drawable/ic_trail_black"
-                app:imgUrl="@{trailViewModel.data.mainPhotoUrl}"
+                app:imgUrl="@{trailViewModel.data.data.mainPhotoUrl}"
                 app:imgPlaceHolder="@{@drawable/ic_trail_black}"
                 app:imgOptions="@{RequestOptions.centerCropTransform()}"/>
 
@@ -64,7 +64,7 @@
                         android:textColor="@color/colorSecondary"
                         android:textAllCaps="true"
                         android:textStyle="bold"
-                        android:text="@{trailViewModel.data.name, default=@string/example_trail_name}"/>
+                        android:text="@{trailViewModel.data.data.name, default=@string/example_trail_name}"/>
 
                     <com.google.android.material.button.MaterialButton
                         style="@style/IconButtonStyle"
@@ -109,7 +109,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/components_margin_medium"
-                            app:srcCompat="@{trailViewModel.data.level.drawableResId, default=@drawable/ic_level_medium}"
+                            app:srcCompat="@{trailViewModel.data.data.level.drawableResId, default=@drawable/ic_level_medium}"
                             android:contentDescription="@string/example_image_content_description"/>
 
                         <TextView
@@ -119,7 +119,7 @@
                             android:layout_margin="@dimen/components_margin_medium"
                             android:gravity="center"
                             android:textColor="@color/colorWhite"
-                            android:text="@{trailViewModel.data.level.textResId, default=@string/label_trail_level_medium}" />
+                            android:text="@{trailViewModel.data.data.level.textResId, default=@string/label_trail_level_medium}" />
 
                     </LinearLayout>
 
@@ -145,7 +145,7 @@
                             android:layout_margin="@dimen/components_margin_medium"
                             android:gravity="center"
                             android:textColor="@color/colorWhite"
-                            android:text="@{MetricsHelper.displayDuration(trailInfoFragment.context, trailViewModel.data.duration), default=@string/example_trail_duration}" />
+                            android:text="@{MetricsHelper.displayDuration(trailInfoFragment.context, trailViewModel.data.data.duration), default=@string/example_trail_duration}" />
 
                     </LinearLayout>
 
@@ -173,7 +173,7 @@
                         android:layout_margin="@dimen/components_margin_medium"
                         android:contentDescription="@string/example_image_content_description"
                         app:srcCompat="@drawable/ic_person_white"
-                        app:imgUrl="@{trailViewModel.data.authorPhotoUrl}"
+                        app:imgUrl="@{trailViewModel.data.data.authorPhotoUrl}"
                         app:imgPlaceHolder="@{@drawable/ic_person_white}"
                         app:imgOptions="@{RequestOptions.circleCropTransform()}"
                         android:onClick="@{trailInfoFragment::onAuthorPhotoClick}"/>
@@ -184,7 +184,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/components_margin_medium"
                         android:textColor="@color/colorWhite"
-                        android:text="@{@string/label_trail_author(trailViewModel.data.authorName), default=@string/example_trail_author}"/>
+                        android:text="@{@string/label_trail_author(trailViewModel.data.data.authorName), default=@string/example_trail_author}"/>
 
                 </LinearLayout>
 
@@ -208,7 +208,7 @@
                             android:layout_margin="@dimen/components_margin_small"
                             android:gravity="center"
                             android:textSize="@dimen/text_size_small"
-                            android:text="@{MetricsHelper.displayAscent(trailInfoFragment.context, trailViewModel.data.ascent, true, true), default=@string/example_trail_ascent}"
+                            android:text="@{MetricsHelper.displayAscent(trailInfoFragment.context, trailViewModel.data.data.ascent, true, true), default=@string/example_trail_ascent}"
                             app:drawableTopCompat="@drawable/ic_ascent"
                             android:drawablePadding="@dimen/components_margin_small"/>
 
@@ -220,7 +220,7 @@
                             android:layout_margin="@dimen/components_margin_small"
                             android:gravity="center"
                             android:textSize="@dimen/text_size_small"
-                            android:text="@{MetricsHelper.displayDescent(trailInfoFragment.context, trailViewModel.data.descent, true, true), default=@string/example_trail_descent}"
+                            android:text="@{MetricsHelper.displayDescent(trailInfoFragment.context, trailViewModel.data.data.descent, true, true), default=@string/example_trail_descent}"
                             app:drawableTopCompat="@drawable/ic_descent"
                             android:drawablePadding="@dimen/components_margin_small"/>
 
@@ -232,7 +232,7 @@
                             android:layout_margin="@dimen/components_margin_small"
                             android:gravity="center"
                             android:textSize="@dimen/text_size_small"
-                            android:text="@{MetricsHelper.displayDistance(trailInfoFragment.context, trailViewModel.data.distance, true, true), default=@string/example_trail_distance}"
+                            android:text="@{MetricsHelper.displayDistance(trailInfoFragment.context, trailViewModel.data.data.distance, true, true), default=@string/example_trail_distance}"
                             app:drawableTopCompat="@drawable/ic_distance"
                             android:drawablePadding="@dimen/components_margin_small"/>
 
@@ -244,7 +244,7 @@
                             android:layout_margin="@dimen/components_margin_small"
                             android:gravity="center"
                             android:textSize="@dimen/text_size_small"
-                            android:text="@{MetricsHelper.displayMaxElevation(trailInfoFragment.context, trailViewModel.data.maxElevation, true, true), default=@string/example_trail_max_elevation}"
+                            android:text="@{MetricsHelper.displayMaxElevation(trailInfoFragment.context, trailViewModel.data.data.maxElevation, true, true), default=@string/example_trail_max_elevation}"
                             app:drawableTopCompat="@drawable/ic_max_elevation"
                             android:drawablePadding="@dimen/components_margin_small"/>
 
@@ -256,7 +256,7 @@
                             android:layout_margin="@dimen/components_margin_small"
                             android:gravity="center"
                             android:textSize="@dimen/text_size_small"
-                            android:text="@{MetricsHelper.displayMinElevation(trailInfoFragment.context, trailViewModel.data.minElevation, true, true), default=@string/example_trail_min_elevation}"
+                            android:text="@{MetricsHelper.displayMinElevation(trailInfoFragment.context, trailViewModel.data.data.minElevation, true, true), default=@string/example_trail_min_elevation}"
                             app:drawableTopCompat="@drawable/ic_min_elevation"
                             android:drawablePadding="@dimen/components_margin_small"/>
 
@@ -284,7 +284,7 @@
                         android:layout_margin="@dimen/components_margin_small"
                         android:orientation="vertical"
                         android:background="@drawable/shape_corners_round_color_white"
-                        android:visibility="@{trailViewModel.data.loop ? View.VISIBLE : View.GONE}">
+                        android:visibility="@{trailViewModel.data.data.loop ? View.VISIBLE : View.GONE}">
 
                         <TextView
                             android:id="@+id/fragment_trail_info_text_loop"
@@ -313,7 +313,7 @@
                             android:layout_margin="@dimen/components_margin_medium"
                             android:gravity="center_vertical"
                             android:textSize="@dimen/text_size_body"
-                            android:text="@{trailViewModel.data.location.fullAddress == null ? @string/message_no_location_available : trailViewModel.data.location.fullAddress, default=@string/example_location}"
+                            android:text="@{trailViewModel.data.data.location.fullAddress == null ? @string/message_no_location_available : trailViewModel.data.data.location.fullAddress, default=@string/example_location}"
                             app:drawableStartCompat="@drawable/ic_location_trail"
                             android:drawablePadding="@dimen/components_margin_small"/>
 
@@ -343,7 +343,7 @@
                             android:layout_marginBottom="@dimen/components_margin_medium"
                             android:layout_marginStart="@dimen/components_margin_medium"
                             android:layout_marginEnd="@dimen/components_margin_medium"
-                            android:text="@{trailViewModel.data.description==null || trailViewModel.data.description.length()==0 ? @string/message_no_description_available : trailViewModel.data.description, default=@string/example_trail_description}"/>
+                            android:text="@{trailViewModel.data.data.description == null || trailViewModel.data.data.description.length() == 0 ? @string/message_no_description_available : trailViewModel.data.data.description, default=@string/example_trail_description}"/>
 
                     </LinearLayout>
 

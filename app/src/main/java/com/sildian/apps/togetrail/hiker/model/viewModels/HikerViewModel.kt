@@ -30,7 +30,7 @@ class HikerViewModel @Inject constructor() : SingleDataViewModel<Hiker>(Hiker::c
     /********************************Extra data monitoring************************************/
 
     fun updateImagePathToUpload(imagePath:String) {
-        this.mutableData.value?.photoUrl?.let { photoUrl ->
+        this.mutableData.value?.data?.photoUrl?.let { photoUrl ->
             if (photoUrl.startsWith("https://")) {
                 this.imagePathToDelete = photoUrl
             }
@@ -62,7 +62,7 @@ class HikerViewModel @Inject constructor() : SingleDataViewModel<Hiker>(Hiker::c
 
     fun saveHiker() {
         saveData(HikerSaveDataRequest(
-            this.mutableData.value,
+            this.mutableData.value?.data,
             this.imagePathToDelete,
             this.imagePathToUpload,
             this.authRepository,
@@ -96,7 +96,7 @@ class HikerViewModel @Inject constructor() : SingleDataViewModel<Hiker>(Hiker::c
 
     fun sendMessage(text: String) {
         runSpecificRequest(HikerSendMessageDataRequest(
-            this.mutableData.value,
+            this.mutableData.value?.data,
             text,
             this.hikerRepository
         ))
@@ -104,7 +104,7 @@ class HikerViewModel @Inject constructor() : SingleDataViewModel<Hiker>(Hiker::c
 
     fun markLastMessageAsRead() {
         runSpecificRequest(HikerReadMessageDataRequest(
-            this.mutableData.value,
+            this.mutableData.value?.data,
             this.hikerRepository
         ))
     }

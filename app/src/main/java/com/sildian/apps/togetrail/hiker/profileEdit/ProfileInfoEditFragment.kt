@@ -40,8 +40,7 @@ class ProfileInfoEditFragment(private val hikerId: String?=null) :
     override fun loadData() {
         initializeData()
         observeHiker()
-        observeRequestSuccess()
-        observeRequestFailure()
+        observeDataRequestState()
         loadHiker()
     }
 
@@ -51,25 +50,22 @@ class ProfileInfoEditFragment(private val hikerId: String?=null) :
     }
 
     private fun observeHiker() {
-        this.hikerViewModel.data.observe(this) { hiker ->
-            if (hiker != null) {
+        this.hikerViewModel.data.observe(this) { hikerData ->
+            hikerData?.error?.let { e ->
+                onQueryError(e)
+            } ?:
+            hikerData?.data?.let { hiker ->
                 refreshUI()
             }
         }
     }
 
-    private fun observeRequestSuccess() {
-        this.hikerViewModel.success.observe(this) { success ->
-            if (success != null && success is HikerSaveDataRequest) {
-                onQuerySuccess()
-            }
-        }
-    }
-
-    private fun observeRequestFailure() {
-        this.hikerViewModel.error.observe(this) { e ->
-            if (e != null) {
-                onQueryError(e)
+    private fun observeDataRequestState() {
+        this.hikerViewModel.dataRequestState.observe(this) { dataRequestState ->
+            if (dataRequestState?.dataRequest is HikerSaveDataRequest) {
+                dataRequestState.error?.let { e ->
+                    onQueryError(e)
+                } ?: onQuerySuccess()
             }
         }
     }
@@ -82,19 +78,19 @@ class ProfileInfoEditFragment(private val hikerId: String?=null) :
 
     override fun updateData(data:Any?) {
         if (data is Location) {
-            this.hikerViewModel.data.value?.liveLocation = data
+            this.hikerViewModel.data.value?.data?.liveLocation = data
             this.binding.fragmentProfileInfoEditTextFieldLiveLocation.setText(data.fullAddress)
         }
     }
 
     override fun saveData() {
         if(checkDataIsValid()) {
-            this.hikerViewModel.data.value?.name = this.binding.fragmentProfileInfoEditTextFieldName.text.toString()
-            this.hikerViewModel.data.value?.birthday =
+            this.hikerViewModel.data.value?.data?.name = this.binding.fragmentProfileInfoEditTextFieldName.text.toString()
+            this.hikerViewModel.data.value?.data?.birthday =
                 if (!this.binding.fragmentProfileInfoEditTextFieldDropdownBirthday.text.isNullOrEmpty())
                     DateUtilities.getDateFromString(this.binding.fragmentProfileInfoEditTextFieldDropdownBirthday.text.toString())
                 else null
-            this.hikerViewModel.data.value?.description = this.binding.fragmentProfileInfoEditTextFieldDescription.text.toString()
+            this.hikerViewModel.data.value?.data?.description = this.binding.fragmentProfileInfoEditTextFieldDescription.text.toString()
             this.baseActivity?.showProgressDialog()
             this.hikerViewModel.saveHiker()
         }
@@ -115,7 +111,7 @@ class ProfileInfoEditFragment(private val hikerId: String?=null) :
 
     private fun updateBirthdayTextFieldDropdown() {
         PickerHelper.populateEditTextWithDatePicker(
-            this.binding.fragmentProfileInfoEditTextFieldDropdownBirthday, activity as AppCompatActivity, this.hikerViewModel.data.value?.birthday)
+            this.binding.fragmentProfileInfoEditTextFieldDropdownBirthday, activity as AppCompatActivity, this.hikerViewModel.data.value?.data?.birthday)
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -142,7 +138,7 @@ class ProfileInfoEditFragment(private val hikerId: String?=null) :
 
     override fun addPhoto(filePath:String) {
         this.hikerViewModel.updateImagePathToUpload(filePath)
-        this.hikerViewModel.data.value?.photoUrl = filePath
+        this.hikerViewModel.data.value?.data?.photoUrl = filePath
         this.hikerViewModel.notifyDataChanged()
     }
 }

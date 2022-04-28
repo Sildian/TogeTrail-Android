@@ -185,24 +185,24 @@ class TrailInfoEditActivity : BaseActivity<ActivityTrailInfoEditBinding>() {
 
     /*************************************Navigation*********************************************/
 
-    private fun startLocationSearchActivity(){
+    private fun startLocationSearchActivity() {
         val locationSearchActivityIntent=Intent(this, LocationSearchActivity::class.java)
         startActivityForResult(locationSearchActivityIntent, KEY_REQUEST_LOCATION_SEARCH)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode== KEY_REQUEST_LOCATION_SEARCH){
-            if(data!=null&&data.hasExtra(LocationSearchActivity.KEY_BUNDLE_LOCATION)){
+        if (requestCode== KEY_REQUEST_LOCATION_SEARCH) {
+            if (data!=null&&data.hasExtra(LocationSearchActivity.KEY_BUNDLE_LOCATION)) {
                 val location=data.getParcelableExtra<Location>(LocationSearchActivity.KEY_BUNDLE_LOCATION)
                 location?.let { loc -> updateLocation(loc) }
             }
         }
     }
 
-    override fun finishOk(){
-        val resultIntent=Intent()
-        resultIntent.putExtra(KEY_BUNDLE_TRAIL, this.trailViewModel.data.value)
+    override fun finishOk() {
+        val resultIntent = Intent()
+        resultIntent.putExtra(KEY_BUNDLE_TRAIL, this.trailViewModel.data.value?.data)
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
     }

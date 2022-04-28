@@ -60,7 +60,6 @@ class EventFragment(private val eventId: String?=null) :
     override fun loadData() {
         initializeData()
         observeEvent()
-        observeRequestFailure()
         loadEvent()
     }
 
@@ -70,18 +69,13 @@ class EventFragment(private val eventId: String?=null) :
     }
 
     private fun observeEvent() {
-        this.eventViewModel.data.observe(this) { event ->
-            if (event != null) {
+        this.eventViewModel.data.observe(this) { eventData ->
+            eventData?.error?.let { e ->
+                onQueryError(e)
+            } ?:
+            eventData?.data?.let { event ->
                 isCurrentUserAuthor.value = event.authorId == CurrentHikerInfo.currentHiker?.id
                 refreshUI()
-            }
-        }
-    }
-
-    private fun observeRequestFailure() {
-        this.eventViewModel.error.observe(this) { e ->
-            if (e != null) {
-                onQueryError(e)
             }
         }
     }
@@ -122,7 +116,7 @@ class EventFragment(private val eventId: String?=null) :
         this.registeredHikersAdapter= HikerPhotoAdapter(
             DatabaseFirebaseHelper.generateOptionsForAdapter(
                 Hiker::class.java,
-                EventFirebaseQueries.getRegisteredHikers(this.eventViewModel.data.value?.id!!),
+                EventFirebaseQueries.getRegisteredHikers(this.eventViewModel.data.value?.data?.id!!),
                 activity as AppCompatActivity
             ),
             this,
@@ -135,7 +129,7 @@ class EventFragment(private val eventId: String?=null) :
         this.attachedTrailsAdapter= TrailHorizontalAdapter(
             DatabaseFirebaseHelper.generateOptionsForAdapter(
                 Trail::class.java,
-                EventFirebaseQueries.getAttachedTrails(this.eventViewModel.data.value?.id!!),
+                EventFirebaseQueries.getAttachedTrails(this.eventViewModel.data.value?.data?.id!!),
                 activity as AppCompatActivity
             ),
             this
@@ -147,7 +141,7 @@ class EventFragment(private val eventId: String?=null) :
         this.messagesAdapter = PublicMessageAdapter(
             DatabaseFirebaseHelper.generateOptionsForAdapter(
                 Message::class.java,
-                EventFirebaseQueries.getMessages(this.eventViewModel.data.value?.id!!),
+                EventFirebaseQueries.getMessages(this.eventViewModel.data.value?.data?.id!!),
                 activity as AppCompatActivity
             ),
             this, this
@@ -157,14 +151,14 @@ class EventFragment(private val eventId: String?=null) :
 
     @Suppress("UNUSED_PARAMETER")
     fun onAuthorPhotoButtonClick(view: View) {
-        this.eventViewModel.data.value?.authorId?.let { authorId ->
+        this.eventViewModel.data.value?.data?.authorId?.let { authorId ->
             (activity as EventActivity).seeHiker(authorId)
         }
     }
 
     @Suppress("UNUSED_PARAMETER")
     fun onGoToMeetingPointButtonClick(view: View) {
-        this.eventViewModel.data.value?.meetingPoint?.fullAddress?.let { fullAddress ->
+        this.eventViewModel.data.value?.data?.meetingPoint?.fullAddress?.let { fullAddress ->
             val url = GoogleMapUrlHelper.generateWithFullAddress(fullAddress)
             val googleMapIntent = Intent(Intent.ACTION_VIEW, url.toUri())
             startActivity(googleMapIntent)

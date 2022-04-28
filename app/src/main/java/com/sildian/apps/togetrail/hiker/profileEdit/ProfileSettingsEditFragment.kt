@@ -30,8 +30,7 @@ class ProfileSettingsEditFragment(private val hikerId: String?=null) :
 
     override fun loadData() {
         initializeData()
-        observeRequestSuccess()
-        observeRequestFailure()
+        observeDataRequestState()
         loadHiker()
     }
 
@@ -40,18 +39,12 @@ class ProfileSettingsEditFragment(private val hikerId: String?=null) :
         this.binding.hikerViewModel = this.hikerViewModel
     }
 
-    private fun observeRequestSuccess() {
-        this.hikerViewModel.success.observe(this) { success ->
-            if (success != null && (success is HikerResetPasswordDataRequest || success is HikerDeleteAccountDataRequest)) {
-                handleSaveDataSuccess()
-            }
-        }
-    }
-
-    private fun observeRequestFailure() {
-        this.hikerViewModel.error.observe(this) { e ->
-            if (e != null) {
-                onQueryError(e)
+    private fun observeDataRequestState() {
+        this.hikerViewModel.dataRequestState.observe(this) { dataRequestState ->
+            if (dataRequestState?.dataRequest is HikerResetPasswordDataRequest || dataRequestState?.dataRequest is HikerDeleteAccountDataRequest) {
+                dataRequestState.error?.let { e ->
+                    onQueryError(e)
+                } ?: handleSaveDataSuccess()
             }
         }
     }

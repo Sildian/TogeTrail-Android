@@ -2,6 +2,7 @@ package com.sildian.apps.togetrail.trail.model.viewModels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.sildian.apps.togetrail.common.baseViewModels.SingleDataHolder
 import com.sildian.apps.togetrail.common.baseViewModels.SingleDataViewModel
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
 import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
@@ -44,7 +45,7 @@ class TrailViewModel @Inject constructor() : SingleDataViewModel<Trail>(Trail::c
                 }
             }
         } else {
-            this.mutableData.value?.mainPhotoUrl?.let { photoUrl ->
+            this.mutableData.value?.data?.mainPhotoUrl?.let { photoUrl ->
                 if (photoUrl.startsWith("https://")) {
                     this.imagePathToDelete = photoUrl
                 }
@@ -66,7 +67,7 @@ class TrailViewModel @Inject constructor() : SingleDataViewModel<Trail>(Trail::c
     }
 
     fun watchPointOfInterest(position:Int) {
-        this.mutableData.value?.trailTrack?.trailPointsOfInterest?.let { trailPoiList ->
+        this.mutableData.value?.data?.trailTrack?.trailPointsOfInterest?.let { trailPoiList ->
             if (position <= trailPoiList.size - 1) {
                 this.mutableTrailPointOfInterest.postValue(trailPoiList[position])
             }
@@ -82,22 +83,26 @@ class TrailViewModel @Inject constructor() : SingleDataViewModel<Trail>(Trail::c
 
     fun initNewTrail() {
         this.mutableData.postValue(
-            TrailBuilder()
+            SingleDataHolder(
+                TrailBuilder()
                 .withDefault()
                 .build()
+            )
         )
     }
 
     fun initNewTrail(gpx: Gpx) {
         this.mutableData.postValue(
-            TrailBuilder()
-                .withGpx(gpx)
-                .build()
+            SingleDataHolder(
+                TrailBuilder()
+                    .withGpx(gpx)
+                    .build()
+            )
         )
     }
 
     fun initWithTrail(trail: Trail) {
-        this.mutableData.postValue(trail)
+        this.mutableData.postValue(SingleDataHolder(trail))
     }
 
     fun loadTrailRealTime(trailId: String) {
@@ -110,7 +115,7 @@ class TrailViewModel @Inject constructor() : SingleDataViewModel<Trail>(Trail::c
 
     fun saveTrail(savePOI: Boolean) {
         val dataRequest = TrailSaveDataRequest(
-                this.mutableData.value,
+                this.mutableData.value?.data,
                 this.imagePathToDelete,
                 this.imagePathToUpload,
                 this.storageRepository,
@@ -125,7 +130,7 @@ class TrailViewModel @Inject constructor() : SingleDataViewModel<Trail>(Trail::c
 
     fun likeTrail() {
         runSpecificRequest(TrailLikeDataRequest(
-            this.mutableData.value,
+            this.mutableData.value?.data,
             this.trailRepository,
             this.hikerRepository
         ))
@@ -133,17 +138,17 @@ class TrailViewModel @Inject constructor() : SingleDataViewModel<Trail>(Trail::c
 
     fun unlikeTrail() {
         runSpecificRequest(TrailUnlikeDataRequest(
-            this.mutableData.value,
+            this.mutableData.value?.data,
             this.trailRepository,
             this.hikerRepository
         ))
     }
 
     fun markTrail() {
-        runSpecificRequest(TrailMarkDataRequest(this.mutableData.value, this.hikerRepository))
+        runSpecificRequest(TrailMarkDataRequest(this.mutableData.value?.data, this.hikerRepository))
     }
 
     fun unmarkTrail() {
-        runSpecificRequest(TrailUnmarkDataRequest(this.mutableData.value, this.hikerRepository))
+        runSpecificRequest(TrailUnmarkDataRequest(this.mutableData.value?.data, this.hikerRepository))
     }
 }

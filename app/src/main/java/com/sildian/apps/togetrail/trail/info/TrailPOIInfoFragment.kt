@@ -29,7 +29,6 @@ class TrailPOIInfoFragment (
     override fun loadData() {
         initializeData()
         observeTrailPOI()
-        observeRequestFailure()
     }
 
     private fun initializeData() {
@@ -45,14 +44,6 @@ class TrailPOIInfoFragment (
         this.trailViewModel?.trailPointOfInterest?.observe(this) { trailPOI ->
             if (trailPOI != null) {
                 refreshUI()
-            }
-        }
-    }
-
-    private fun observeRequestFailure() {
-        this.trailViewModel?.error?.observe(this) { e ->
-            if (e != null) {
-                onQueryError(e)
             }
         }
     }

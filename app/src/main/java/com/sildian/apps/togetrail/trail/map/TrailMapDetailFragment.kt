@@ -36,10 +36,10 @@ class TrailMapDetailFragment: BaseTrailMapFragment<FragmentTrailMapDetailBinding
         this.binding.trailMapDetailFragment = this
         this.binding.trailViewModel = this.trailViewModel
         this.isTrailLikedByUser.value = CurrentHikerInfo.currentHikerLikedTrail.firstOrNull { trail ->
-            trail.id == this.trailViewModel.data.value?.id
+            trail.id == this.trailViewModel.data.value?.data?.id
         } != null
         this.isTrailMarkedByUser.value = CurrentHikerInfo.currentHikerMarkedTrail.firstOrNull { trail ->
-            trail.id == this.trailViewModel.data.value?.id
+            trail.id == this.trailViewModel.data.value?.data?.id
         } != null
     }
 
@@ -152,7 +152,7 @@ class TrailMapDetailFragment: BaseTrailMapFragment<FragmentTrailMapDetailBinding
 
             /*Gets the first trailPoint*/
 
-            val firstPoint = this.trailViewModel.data.value?.trailTrack?.getFirstTrailPoint()
+            val firstPoint = this.trailViewModel.data.value?.data?.trailTrack?.getFirstTrailPoint()
 
             /*Moves the camera to the first point and zoom in*/
 

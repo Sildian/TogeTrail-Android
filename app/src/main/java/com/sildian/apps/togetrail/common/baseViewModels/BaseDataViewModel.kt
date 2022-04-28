@@ -34,12 +34,6 @@ abstract class DataViewModel<T: Any>(protected val dataModelClass: Class<T>) : V
     /**Data**/
 
     protected var currentDataRequest: DataRequest? = null
-    //Success is only used to report save and specific requests. Load requests result is reported within specific data fields.
-    protected val mutableSuccess = MutableLiveData<DataRequest?>()
-    val success: LiveData<DataRequest?> = mutableSuccess
-    //Error is used to report any request error
-    protected val mutableError = MutableLiveData<Throwable?>()
-    val error: LiveData<Throwable?> = mutableError
 
     /**Coroutines**/
 
@@ -88,8 +82,8 @@ abstract class ListDataViewModel<T: Any>(dataModelClass: Class<T>): DataViewMode
 
     /**Data**/
 
-    protected val mutableData = MutableLiveData<List<T>>()
-    val data: LiveData<List<T>> = mutableData
+    protected val mutableData = MutableLiveData<ListDataHolder<T>>()
+    val data: LiveData<ListDataHolder<T>> = mutableData
 
     /**Data monitoring**/
 
@@ -104,11 +98,10 @@ abstract class ListDataViewModel<T: Any>(dataModelClass: Class<T>): DataViewMode
                 if (querySnapshot != null) {
                     val results = querySnapshot.toObjects(this.dataModelClass)
                     Log.d(TAG, "Successfully loaded ${results.size} ${dataModelClass.simpleName} from database")
-                    this.mutableData.postValue(results)
-                    this.mutableError.postValue(null)
+                    this.mutableData.postValue(ListDataHolder(results))
                 } else if (e != null) {
                     Log.e(TAG, "Failed to load ${dataModelClass.simpleName} from database : ${e.message}")
-                    this.mutableError.postValue(e)
+                    this.mutableData.postValue(ListDataHolder(this.mutableData.value?.data?: emptyList(), e))
                 }
             }
     }
@@ -120,8 +113,11 @@ abstract class SingleDataViewModel<T: Any>(dataModelClass: Class<T>): DataViewMo
 
     /**Data**/
 
-    protected val mutableData = MutableLiveData<T?>()
-    val data: LiveData<T?> = mutableData
+    protected val mutableData = MutableLiveData<SingleDataHolder<T?>>()
+    val data: LiveData<SingleDataHolder<T?>> = mutableData
+    /*Some data requests doesn't return any data so a state holder is used to watch success state*/
+    protected val mutableDataRequestState = MutableLiveData<DataRequestStateHolder>()
+    val dataRequestState: LiveData<DataRequestStateHolder> = mutableDataRequestState
 
     /**Data monitoring**/
 
@@ -136,12 +132,11 @@ abstract class SingleDataViewModel<T: Any>(dataModelClass: Class<T>): DataViewMo
                 if (snapshot != null) {
                     val result = snapshot.toObject(this.dataModelClass)
                     Log.d(TAG, "Successfully loaded ${dataModelClass.simpleName} from database")
-                    this.mutableData.postValue(result)
-                    this.mutableError.postValue(null)
+                    this.mutableData.postValue(SingleDataHolder(result))
                 }
                 else if (e != null) {
                     Log.e(TAG, "Failed to load ${dataModelClass.simpleName} from database : ${e.message}")
-                    this.mutableError.postValue(e)
+                    this.mutableData.postValue(SingleDataHolder(this.mutableData.value?.data, e))
                 }
             }
     }
@@ -155,16 +150,15 @@ abstract class SingleDataViewModel<T: Any>(dataModelClass: Class<T>): DataViewMo
                     dataRequest.execute()
                     dataRequest.data?.let { result ->
                         Log.d(TAG, "Successfully loaded ${dataModelClass.simpleName} from database")
-                        mutableData.postValue(result)
-                        mutableError.postValue(null)
+                        mutableData.postValue(SingleDataHolder(result))
                     } ?: run {
                         val e = Exception("Unknown error")
                         Log.e(TAG, "Failed to load ${dataModelClass.simpleName} from database : ${e.message}")
-                        mutableError.postValue(e)
+                        mutableData.postValue(SingleDataHolder(mutableData.value?.data, e))
                     }
                 } catch (e: Throwable) {
                     Log.e(TAG, "Failed to load ${dataModelClass.simpleName} from database : ${e.message}")
-                    mutableError.postValue(e)
+                    mutableData.postValue(SingleDataHolder(mutableData.value?.data, e))
                 }
             }
         }
@@ -178,12 +172,10 @@ abstract class SingleDataViewModel<T: Any>(dataModelClass: Class<T>): DataViewMo
                     currentDataRequest = dataRequest
                     dataRequest.execute()
                     Log.d(TAG, "Successfully saved ${dataModelClass.simpleName} in database")
-                    mutableSuccess.postValue(dataRequest)
-                    mutableError.postValue(null)
+                    mutableDataRequestState.postValue(DataRequestStateHolder(dataRequest, null))
                 } catch (e: Throwable) {
                     Log.e(TAG, "Failed to save ${dataModelClass.simpleName} in database : ${e.message}")
-                    mutableSuccess.postValue(null)
-                    mutableError.postValue(e)
+                    mutableDataRequestState.postValue(DataRequestStateHolder(dataRequest, e))
                 }
             }
         }
@@ -197,12 +189,10 @@ abstract class SingleDataViewModel<T: Any>(dataModelClass: Class<T>): DataViewMo
                     currentDataRequest = dataRequest
                     dataRequest.execute()
                     Log.d(TAG, "Successfully finished running request ${dataRequest.javaClass.simpleName}")
-                    mutableSuccess.postValue(dataRequest)
-                    mutableError.postValue(null)
+                    mutableDataRequestState.postValue(DataRequestStateHolder(dataRequest, null))
                 } catch (e: Throwable) {
                     Log.e(TAG, "Failed to run request ${dataRequest.javaClass.simpleName} : ${e.message}")
-                    mutableSuccess.postValue(null)
-                    mutableError.postValue(e)
+                    mutableDataRequestState.postValue(DataRequestStateHolder(dataRequest, e))
                 }
             }
         }

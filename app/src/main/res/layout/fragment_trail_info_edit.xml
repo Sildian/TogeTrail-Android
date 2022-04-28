@@ -59,7 +59,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textCapSentences"
-                        android:text="@{trailViewModel.data.name}"/>
+                        android:text="@{trailViewModel.data.data.name}"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -101,7 +101,7 @@
                         android:layout_marginStart="@dimen/components_margin_medium"
                         android:layout_marginEnd="@dimen/components_margin_small"
                         android:text="@string/label_trail_loop"
-                        android:checked="@{trailViewModel.data.loop ? true : false}"/>
+                        android:checked="@{trailViewModel.data.data.loop ? true : false}"/>
 
                 </LinearLayout>
 
@@ -124,7 +124,7 @@
                         android:text="@string/message_no_photo_available"
                         app:drawableStartCompat="@drawable/ic_trail_black"
                         android:drawablePadding="@dimen/components_margin_small"
-                        android:visibility="@{trailViewModel.data.mainPhotoUrl==null ? View.VISIBLE : View.INVISIBLE}"/>
+                        android:visibility="@{trailViewModel.data.data.mainPhotoUrl==null ? View.VISIBLE : View.INVISIBLE}"/>
 
                     <ImageView
                         android:id="@+id/fragment_trail_info_edit_image_view_photo"
@@ -132,10 +132,10 @@
                         android:layout_height="@dimen/image_size_large"
                         android:contentDescription="@string/example_image_content_description"
                         app:srcCompat="@drawable/ic_trail_black"
-                        app:imgUrl="@{trailViewModel.data.mainPhotoUrl}"
+                        app:imgUrl="@{trailViewModel.data.data.mainPhotoUrl}"
                         app:imgPlaceHolder="@{@drawable/ic_trail_black}"
                         app:imgOptions="@{RequestOptions.centerCropTransform()}"
-                        android:visibility="@{trailViewModel.data.mainPhotoUrl==null ? View.INVISIBLE : View.VISIBLE}"/>
+                        android:visibility="@{trailViewModel.data.data.mainPhotoUrl==null ? View.INVISIBLE : View.VISIBLE}"/>
 
                     <ImageButton
                         android:id="@+id/fragment_trail_info_edit_button_delete_photo"
@@ -145,7 +145,7 @@
                         android:layout_gravity="top|end"
                         android:contentDescription="@string/example_image_content_description"
                         app:srcCompat="@drawable/ic_delete_black"
-                        android:visibility="@{trailViewModel.data.mainPhotoUrl==null ? View.INVISIBLE : View.VISIBLE}"
+                        android:visibility="@{trailViewModel.data.data.mainPhotoUrl==null ? View.INVISIBLE : View.VISIBLE}"
                         android:onClick="@{trailInfoEditFragment::onDeletePhotoButtonClick}"/>
 
                     <ImageButton
@@ -204,7 +204,7 @@
                         app:drawableTopCompat="@drawable/ic_watch_black"
                         android:textSize="@dimen/text_size_small"
                         android:textColor="@{trailInfoEditFragment.currentMetric==0 ? @color/colorSecondaryDark : @color/colorBlack}"
-                        android:text="@{MetricsHelper.displayDuration(trailInfoEditFragment.context, trailViewModel.data.duration), default=@string/example_trail_duration}"
+                        android:text="@{MetricsHelper.displayDuration(trailInfoEditFragment.context, trailViewModel.data.data.duration), default=@string/example_trail_duration}"
                         android:onClick="@{trailInfoEditFragment::onValueClick}"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -222,7 +222,7 @@
                         app:drawableTopCompat="@drawable/ic_ascent"
                         android:textSize="@dimen/text_size_small"
                         android:textColor="@{trailInfoEditFragment.currentMetric==1 ? @color/colorSecondaryDark : @color/colorBlack}"
-                        android:text="@{MetricsHelper.displayAscent(trailInfoEditFragment.context, trailViewModel.data.ascent, true, true), default=@string/example_trail_ascent}"
+                        android:text="@{MetricsHelper.displayAscent(trailInfoEditFragment.context, trailViewModel.data.data.ascent, true, true), default=@string/example_trail_ascent}"
                         android:onClick="@{trailInfoEditFragment::onValueClick}"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -240,7 +240,7 @@
                         app:drawableTopCompat="@drawable/ic_descent"
                         android:textSize="@dimen/text_size_small"
                         android:textColor="@{trailInfoEditFragment.currentMetric==2 ? @color/colorSecondaryDark : @color/colorBlack}"
-                        android:text="@{MetricsHelper.displayDescent(trailInfoEditFragment.context, trailViewModel.data.descent, true, true), default=@string/example_trail_descent}"
+                        android:text="@{MetricsHelper.displayDescent(trailInfoEditFragment.context, trailViewModel.data.data.descent, true, true), default=@string/example_trail_descent}"
                         android:onClick="@{trailInfoEditFragment::onValueClick}"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -258,7 +258,7 @@
                         app:drawableTopCompat="@drawable/ic_distance"
                         android:textSize="@dimen/text_size_small"
                         android:textColor="@{trailInfoEditFragment.currentMetric==3 ? @color/colorSecondaryDark : @color/colorBlack}"
-                        android:text="@{MetricsHelper.displayDistance(trailInfoEditFragment.context, trailViewModel.data.distance, true, true), default=@string/example_trail_distance}"
+                        android:text="@{MetricsHelper.displayDistance(trailInfoEditFragment.context, trailViewModel.data.data.distance, true, true), default=@string/example_trail_distance}"
                         android:onClick="@{trailInfoEditFragment::onValueClick}"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -276,7 +276,7 @@
                         app:drawableTopCompat="@drawable/ic_max_elevation"
                         android:textSize="@dimen/text_size_small"
                         android:textColor="@{trailInfoEditFragment.currentMetric==4 ? @color/colorSecondaryDark : @color/colorBlack}"
-                        android:text="@{MetricsHelper.displayMaxElevation(trailInfoEditFragment.context, trailViewModel.data.maxElevation, true, true), default=@string/example_trail_max_elevation}"
+                        android:text="@{MetricsHelper.displayMaxElevation(trailInfoEditFragment.context, trailViewModel.data.data.maxElevation, true, true), default=@string/example_trail_max_elevation}"
                         android:onClick="@{trailInfoEditFragment::onValueClick}"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -294,7 +294,7 @@
                         app:drawableTopCompat="@drawable/ic_min_elevation"
                         android:textSize="@dimen/text_size_small"
                         android:textColor="@{trailInfoEditFragment.currentMetric==5 ? @color/colorSecondaryDark : @color/colorBlack}"
-                        android:text="@{MetricsHelper.displayMinElevation(trailInfoEditFragment.context, trailViewModel.data.minElevation, true, true), default=@string/example_trail_min_elevation}"
+                        android:text="@{MetricsHelper.displayMinElevation(trailInfoEditFragment.context, trailViewModel.data.data.minElevation, true, true), default=@string/example_trail_min_elevation}"
                         android:onClick="@{trailInfoEditFragment::onValueClick}"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -346,7 +346,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="textCapSentences|textMultiLine"
                         android:focusable="false"
-                        android:text="@{trailViewModel.data.location.fullAddress}"
+                        android:text="@{trailViewModel.data.data.location.fullAddress}"
                         android:onClick="@{trailInfoEditFragment::onLocationTextFieldClick}"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -378,7 +378,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textCapSentences|textMultiLine"
-                        android:text="@{trailViewModel.data.description}"/>
+                        android:text="@{trailViewModel.data.data.description}"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 

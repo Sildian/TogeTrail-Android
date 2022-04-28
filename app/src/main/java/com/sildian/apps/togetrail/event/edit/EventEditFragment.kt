@@ -49,8 +49,7 @@ class EventEditFragment(private val eventId: String?=null) :
     override fun loadData() {
         initializeData()
         observeEvent()
-        observeRequestSuccess()
-        observeRequestFailure()
+        observeDataRequestState()
         loadEvent()
     }
 
@@ -60,25 +59,22 @@ class EventEditFragment(private val eventId: String?=null) :
     }
 
     private fun observeEvent() {
-        this.eventViewModel.data.observe(this) { event ->
-            if (event != null) {
+        this.eventViewModel.data.observe(this) { eventData ->
+            eventData?.error?.let { e ->
+                onQueryError(e)
+            } ?:
+            eventData?.data?.let { event ->
                 refreshUI()
             }
         }
     }
 
-    private fun observeRequestSuccess() {
-        this.eventViewModel.success.observe(this) { success ->
-            if (success != null && success is EventSaveDataRequest) {
-                onQuerySuccess()
-            }
-        }
-    }
-
-    private fun observeRequestFailure() {
-        this.eventViewModel.error.observe(this) { e ->
-            if (e != null) {
-                onQueryError(e)
+    private fun observeDataRequestState() {
+        this.eventViewModel.dataRequestState.observe(this) { dataRequestState ->
+            if (dataRequestState?.dataRequest is EventSaveDataRequest) {
+                dataRequestState.error?.let { e ->
+                    onQueryError(e)
+                } ?: onQuerySuccess()
             }
         }
     }
@@ -93,7 +89,7 @@ class EventEditFragment(private val eventId: String?=null) :
 
     override fun updateData(data:Any?) {
         if(data is Location){
-            this.eventViewModel.data.value?.meetingPoint = data
+            this.eventViewModel.data.value?.data?.meetingPoint = data
             this.binding.fragmentEventEditTextFieldMeetingPoint.setText(data.fullAddress)
         }
         else if (data is List<*>) {
@@ -106,8 +102,8 @@ class EventEditFragment(private val eventId: String?=null) :
     override fun saveData() {
         updateDates()
         if(checkDataIsValid()) {
-            this.eventViewModel.data.value?.name = this.binding.fragmentEventEditTextFieldName.text.toString()
-            this.eventViewModel.data.value?.description = this.binding.fragmentEventEditTextFieldDescription.text.toString()
+            this.eventViewModel.data.value?.data?.name = this.binding.fragmentEventEditTextFieldName.text.toString()
+            this.eventViewModel.data.value?.data?.description = this.binding.fragmentEventEditTextFieldDescription.text.toString()
             this.baseActivity?.showProgressDialog()
             this.eventViewModel.saveEvent()
         }
@@ -150,8 +146,8 @@ class EventEditFragment(private val eventId: String?=null) :
     }
 
     private fun checkBeginDateIsBeforeEndDate():Boolean {
-        this.eventViewModel.data.value?.beginDate?.let { beginDate ->
-            this.eventViewModel.data.value?.endDate?.let { endDate ->
+        this.eventViewModel.data.value?.data?.beginDate?.let { beginDate ->
+            this.eventViewModel.data.value?.data?.endDate?.let { endDate ->
                 return beginDate.time < endDate.time
             }
         }
@@ -159,7 +155,7 @@ class EventEditFragment(private val eventId: String?=null) :
     }
 
     private fun checkTrailsAreAttached():Boolean {
-        val trails = if (this.eventViewModel.data.value?.id == null) {
+        val trails = if (this.eventViewModel.data.value?.data?.id == null) {
             this.eventViewModel.attachedTrails
         } else {
             this.attachedTrailsAdapter.snapshots
@@ -181,25 +177,25 @@ class EventEditFragment(private val eventId: String?=null) :
 
     private fun updateBeginDateTextField() {
         PickerHelper.populateEditTextWithDatePicker(
-            this.binding.fragmentEventEditTextFieldBeginDate, activity as AppCompatActivity, this.eventViewModel.data.value?.beginDate
+            this.binding.fragmentEventEditTextFieldBeginDate, activity as AppCompatActivity, this.eventViewModel.data.value?.data?.beginDate
         )
     }
 
     private fun updateBeginTimeTextField() {
         PickerHelper.populateEditTextWithTimePicker(
-            this.binding.fragmentEventEditTextFieldBeginTime, activity as AppCompatActivity, this.eventViewModel.data.value?.beginDate
+            this.binding.fragmentEventEditTextFieldBeginTime, activity as AppCompatActivity, this.eventViewModel.data.value?.data?.beginDate
         )
     }
 
     private fun updateEndDateTextField() {
         PickerHelper.populateEditTextWithDatePicker(
-            this.binding.fragmentEventEditTextFieldEndDate, activity as AppCompatActivity, this.eventViewModel.data.value?.endDate
+            this.binding.fragmentEventEditTextFieldEndDate, activity as AppCompatActivity, this.eventViewModel.data.value?.data?.endDate
         )
     }
 
     private fun updateEndTimeTextField() {
         PickerHelper.populateEditTextWithTimePicker(
-            this.binding.fragmentEventEditTextFieldEndTime, activity as AppCompatActivity, this.eventViewModel.data.value?.endDate
+            this.binding.fragmentEventEditTextFieldEndTime, activity as AppCompatActivity, this.eventViewModel.data.value?.data?.endDate
         )
     }
 
@@ -207,7 +203,7 @@ class EventEditFragment(private val eventId: String?=null) :
 
         /*If the event is not created in the database yet, then sets an offline adapter*/
 
-        if (this.eventViewModel.data.value?.id == null) {
+        if (this.eventViewModel.data.value?.data?.id == null) {
             this.attachedTrailsAdapterOffline=
                 TrailHorizontalAdapterOffline(this.eventViewModel.attachedTrails, this, true, this)
             this.binding.fragmentEventEditRecyclerViewAttachedTrails.adapter = this.attachedTrailsAdapterOffline
@@ -219,7 +215,7 @@ class EventEditFragment(private val eventId: String?=null) :
                 TrailHorizontalAdapter(
                     DatabaseFirebaseHelper.generateOptionsForAdapter(
                         Trail::class.java,
-                        EventFirebaseQueries.getAttachedTrails(this.eventViewModel.data.value?.id.toString()),
+                        EventFirebaseQueries.getAttachedTrails(this.eventViewModel.data.value?.data?.id.toString()),
                         activity as AppCompatActivity
                 ), this, true, this
             )
@@ -229,7 +225,7 @@ class EventEditFragment(private val eventId: String?=null) :
 
     @Suppress("UNUSED_PARAMETER")
     fun onAddTrailsButtonClick(view: View){
-        if (this.eventViewModel.data.value?.id != null) {
+        if (this.eventViewModel.data.value?.data?.id != null) {
             this.eventViewModel.attachedTrails.addAll(this.attachedTrailsAdapter.snapshots)
         }
         (activity as EventEditActivity).selectTrail(this.eventViewModel.attachedTrails)
@@ -255,8 +251,8 @@ class EventEditFragment(private val eventId: String?=null) :
             val beginTime = DateUtilities.getTimeFromString(this.binding.fragmentEventEditTextFieldBeginTime.text.toString())
             val endDate = DateUtilities.getDateFromString(this.binding.fragmentEventEditTextFieldEndDate.text.toString())
             val endTime = DateUtilities.getTimeFromString(this.binding.fragmentEventEditTextFieldEndTime.text.toString())
-            this.eventViewModel.data.value?.beginDate = DateUtilities.mergeDateAndTime(beginDate!!, beginTime!!)
-            this.eventViewModel.data.value?.endDate = DateUtilities.mergeDateAndTime(endDate!!, endTime!!)
+            this.eventViewModel.data.value?.data?.beginDate = DateUtilities.mergeDateAndTime(beginDate!!, beginTime!!)
+            this.eventViewModel.data.value?.data?.endDate = DateUtilities.mergeDateAndTime(endDate!!, endTime!!)
         }
     }
 
@@ -269,7 +265,7 @@ class EventEditFragment(private val eventId: String?=null) :
 
         /*If the event has no id yet, updates the offline adapter*/
 
-        if (this.eventViewModel.data.value?.id == null) {
+        if (this.eventViewModel.data.value?.data?.id == null) {
             this.eventViewModel.attachedTrails.clear()
             this.eventViewModel.attachedTrails.addAll(trails)
             this.attachedTrailsAdapterOffline.notifyDataSetChanged()
@@ -302,7 +298,7 @@ class EventEditFragment(private val eventId: String?=null) :
 
         /*If the event has no id yet, updates the offline adapter. Else updates the attached trail in the database*/
 
-        if (this.eventViewModel.data.value?.id == null) {
+        if (this.eventViewModel.data.value?.data?.id == null) {
             this.eventViewModel.attachedTrails.removeAll { it.id==trail.id }
             this.attachedTrailsAdapterOffline.notifyDataSetChanged()
         }
@@ -312,10 +308,10 @@ class EventEditFragment(private val eventId: String?=null) :
     }
 
     private fun updateEventPosition(trail: Trail) {
-        this.eventViewModel.data.value?.position = trail.position
+        this.eventViewModel.data.value?.data?.position = trail.position
     }
 
     private fun updateEventMainPhotoUrl(trail: Trail) {
-        this.eventViewModel.data.value?.mainPhotoUrl = trail.getFirstPhotoUrl()
+        this.eventViewModel.data.value?.data?.mainPhotoUrl = trail.getFirstPhotoUrl()
     }
 }

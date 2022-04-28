@@ -53,8 +53,7 @@ class TrailPOIInfoEditFragment(
         initializeData()
         observeTrail()
         observeTrailPOI()
-        observeRequestSuccess()
-        observeRequestFailure()
+        observeDataRequestState()
     }
 
     private fun initializeData() {
@@ -65,8 +64,11 @@ class TrailPOIInfoEditFragment(
     }
 
     private fun observeTrail() {
-        this.trailViewModel?.data?.observe(this) { trail ->
-            if (trail != null) {
+        this.trailViewModel?.data?.observe(this) { trailData ->
+            trailData?.error?.let { e ->
+                onQueryError(e)
+            } ?:
+            trailData?.data?.let { trail ->
                 this.trailPointOfInterestPosition?.let { position ->
                     this.trailViewModel.watchPointOfInterest(position)
                 }
@@ -82,18 +84,12 @@ class TrailPOIInfoEditFragment(
         }
     }
 
-    private fun observeRequestSuccess() {
-        this.trailViewModel?.success?.observe(this) { success ->
-            if (success != null && success is TrailSaveDataRequest) {
-                onQuerySuccess()
-            }
-        }
-    }
-
-    private fun observeRequestFailure() {
-        this.trailViewModel?.error?.observe(this) { e ->
-            if (e != null) {
-                onQueryError(e)
+    private fun observeDataRequestState() {
+        this.trailViewModel?.dataRequestState?.observe(this) { dataRequestState ->
+            if (dataRequestState?.dataRequest is TrailSaveDataRequest) {
+                dataRequestState.error?.let { e ->
+                    onQueryError(e)
+                } ?: onQuerySuccess()
             }
         }
     }

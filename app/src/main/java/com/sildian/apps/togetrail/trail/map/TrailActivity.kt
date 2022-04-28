@@ -110,25 +110,21 @@ class TrailActivity : BaseActivity<ActivityTrailBinding>() {
 
     override fun loadData() {
         observeTrail()
-        observeRequestFailure()
         readDataFromIntent()
     }
 
     private fun observeTrail() {
-        this.trailViewModel.data.observe(this) { trail ->
-            if (!this.isTrailLoaded && trail != null) {
-                this.isTrailLoaded = true
-                if (this.currentAction == ACTION_TRAIL_SEE || this.currentAction == ACTION_TRAIL_CREATE_FROM_GPX) {
-                    startTrailAction()
-                }
-            }
-        }
-    }
-
-    private fun observeRequestFailure() {
-        this.trailViewModel.error.observe(this) { e ->
-            if ((this.currentAction == ACTION_TRAIL_SEE || this.currentAction == ACTION_TRAIL_CREATE_FROM_GPX) && e != null) {
+        this.trailViewModel.data.observe(this) { trailData ->
+            trailData?.error?.let { e ->
                 onQueryError(e)
+            } ?:
+            trailData?.data?.let { trail ->
+                if (!this.isTrailLoaded) {
+                    this.isTrailLoaded = true
+                    if (this.currentAction == ACTION_TRAIL_SEE || this.currentAction == ACTION_TRAIL_CREATE_FROM_GPX) {
+                        startTrailAction()
+                    }
+                }
             }
         }
     }
@@ -259,7 +255,7 @@ class TrailActivity : BaseActivity<ActivityTrailBinding>() {
     private fun startTrailAction() {
         when (this.currentAction) {
             ACTION_TRAIL_SEE -> {
-                this.isEditable=AuthFirebaseHelper.getCurrentUser()?.uid == this.trailViewModel.data.value?.authorId
+                this.isEditable=AuthFirebaseHelper.getCurrentUser()?.uid == this.trailViewModel.data.value?.data?.authorId
                 showFragment(ID_FRAGMENT_TRAIL_DETAIL)
             }
             ACTION_TRAIL_CREATE_FROM_GPX ->{
@@ -313,7 +309,7 @@ class TrailActivity : BaseActivity<ActivityTrailBinding>() {
     private fun startTrailInfoEditActivity(trailEditActionId:Int, trailPointOfInterestPosition:Int?){
         val trailInfoEditActivityIntent=Intent(this, TrailInfoEditActivity::class.java)
         trailInfoEditActivityIntent.putExtra(TrailInfoEditActivity.KEY_BUNDLE_TRAIL_ACTION, trailEditActionId)
-        trailInfoEditActivityIntent.putExtra(TrailInfoEditActivity.KEY_BUNDLE_TRAIL, this.trailViewModel.data.value)
+        trailInfoEditActivityIntent.putExtra(TrailInfoEditActivity.KEY_BUNDLE_TRAIL, this.trailViewModel.data.value?.data)
         if(trailPointOfInterestPosition!=null) {
             trailInfoEditActivityIntent
                 .putExtra(TrailInfoEditActivity.KEY_BUNDLE_TRAIL_POI_POSITION, trailPointOfInterestPosition)

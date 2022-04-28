@@ -1,6 +1,7 @@
 package com.sildian.apps.togetrail.event.model.viewModels
 
 import com.sildian.apps.togetrail.chat.model.core.Message
+import com.sildian.apps.togetrail.common.baseViewModels.SingleDataHolder
 import com.sildian.apps.togetrail.common.baseViewModels.SingleDataViewModel
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.dataRepository.EventRepository
@@ -30,10 +31,10 @@ class EventViewModel @Inject constructor() : SingleDataViewModel<Event>(Event::c
     /************************************Data monitoring*****************************************/
 
     fun currentUserIsAuthor(): Boolean =
-        CurrentHikerInfo.currentHiker?.id == this.mutableData.value?.authorId
+        CurrentHikerInfo.currentHiker?.id == this.mutableData.value?.data?.authorId
 
     fun initNewEvent() {
-        this.mutableData.postValue(Event())
+        this.mutableData.postValue(SingleDataHolder(Event()))
     }
 
     fun loadEventRealTime(eventId:String) {
@@ -46,7 +47,7 @@ class EventViewModel @Inject constructor() : SingleDataViewModel<Event>(Event::c
 
     fun saveEvent() {
         saveData(EventSaveDataRequest(
-            this.mutableData.value,
+            this.mutableData.value?.data,
             this.hikerRepository,
             this.eventRepository
         ))
@@ -54,7 +55,7 @@ class EventViewModel @Inject constructor() : SingleDataViewModel<Event>(Event::c
 
     fun attachTrail(trail: Trail) {
         runSpecificRequest(EventAttachTrailDataRequest(
-            this.mutableData.value,
+            this.mutableData.value?.data,
             trail,
             this.eventRepository
         ))
@@ -62,7 +63,7 @@ class EventViewModel @Inject constructor() : SingleDataViewModel<Event>(Event::c
 
     fun detachTrail(trail: Trail) {
         runSpecificRequest(EventDetachTrailDataRequest(
-            this.mutableData.value,
+            this.mutableData.value?.data,
             trail,
             this.eventRepository
         ))
@@ -70,7 +71,7 @@ class EventViewModel @Inject constructor() : SingleDataViewModel<Event>(Event::c
 
     fun registerUserToEvent() {
         runSpecificRequest(EventRegisterDataRequest(
-            this.mutableData.value,
+            this.mutableData.value?.data,
             this.eventRepository,
             this.hikerRepository
         ))
@@ -78,7 +79,7 @@ class EventViewModel @Inject constructor() : SingleDataViewModel<Event>(Event::c
 
     fun unregisterUserFromEvent() {
         runSpecificRequest(EventUnregisterDataRequest(
-            this.mutableData.value,
+            this.mutableData.value?.data,
             this.eventRepository,
             this.hikerRepository
         ))
@@ -86,7 +87,7 @@ class EventViewModel @Inject constructor() : SingleDataViewModel<Event>(Event::c
 
     fun sendMessage(text: String) {
         runSpecificRequest(EventSendMessageDataRequest(
-            this.mutableData.value,
+            this.mutableData.value?.data,
             text,
             this.eventRepository
         ))
@@ -94,7 +95,7 @@ class EventViewModel @Inject constructor() : SingleDataViewModel<Event>(Event::c
 
     fun updateMessage(message: Message, newText: String) {
         runSpecificRequest(EventUpdateMessageDataRequest(
-            this.mutableData.value,
+            this.mutableData.value?.data,
             message,
             newText,
             this.eventRepository
@@ -103,7 +104,7 @@ class EventViewModel @Inject constructor() : SingleDataViewModel<Event>(Event::c
 
     fun deleteMessage(message: Message) {
         runSpecificRequest(EventDeleteMessageDataRequest(
-            this.mutableData.value,
+            this.mutableData.value?.data,
             message,
             this.eventRepository
         ))
