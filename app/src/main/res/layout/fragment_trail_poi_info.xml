@@ -38,7 +38,7 @@
                 android:background="@color/colorWhite"
                 android:contentDescription="@string/example_image_content_description"
                 app:srcCompat="@drawable/ic_trail_black"
-                app:imgUrl="@{trailViewModel.trailPointOfInterest.photoUrl}"
+                app:imgUrl="@{trailViewModel.trailPointOfInterest.data.photoUrl}"
                 app:imgPlaceHolder="@{@drawable/ic_trail_black}"
                 app:imgOptions="@{RequestOptions.centerCropTransform()}"/>
 
@@ -64,7 +64,7 @@
                         android:textColor="@color/colorSecondary"
                         android:textAllCaps="true"
                         android:textStyle="bold"
-                        android:text="@{trailViewModel.trailPointOfInterest.name, default=@string/example_trail_poi_name}"/>
+                        android:text="@{trailViewModel.trailPointOfInterest.data.name, default=@string/example_trail_poi_name}"/>
 
                     <com.google.android.material.button.MaterialButton
                         style="@style/IconButtonStyle"
@@ -96,7 +96,7 @@
                     android:layout_margin="@dimen/components_margin_medium"
                     android:gravity="center_vertical"
                     android:textColor="@color/colorWhite"
-                    android:text="@{MetricsHelper.displayElevation(trailPOIInfoFragment.context, trailViewModel.trailPointOfInterest.elevation, true, false), default=@string/example_trail_poi_elevation}"
+                    android:text="@{MetricsHelper.displayElevation(trailPOIInfoFragment.context, trailViewModel.trailPointOfInterest.data.elevation, true, false), default=@string/example_trail_poi_elevation}"
                     app:drawableStartCompat="@drawable/ic_trail_white"
                     android:drawablePadding="@dimen/components_margin_small"/>
 
@@ -127,7 +127,7 @@
                         android:layout_marginBottom="@dimen/components_margin_medium"
                         android:layout_marginStart="@dimen/components_margin_medium"
                         android:layout_marginEnd="@dimen/components_margin_medium"
-                        android:text="@{trailViewModel.trailPointOfInterest.description==null || trailViewModel.trailPointOfInterest.description.length()==0 ? @string/message_no_description_available : trailViewModel.trailPointOfInterest.description, default=@string/example_trail_poi_description}"/>
+                        android:text="@{trailViewModel.trailPointOfInterest.data.description == null || trailViewModel.trailPointOfInterest.data.description.length() == 0 ? @string/message_no_description_available : trailViewModel.trailPointOfInterest.data.description, default=@string/example_trail_poi_description}"/>
 
                 </LinearLayout>
 

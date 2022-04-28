@@ -41,8 +41,11 @@ class TrailPOIInfoFragment (
     }
 
     private fun observeTrailPOI() {
-        this.trailViewModel?.trailPointOfInterest?.observe(this) { trailPOI ->
-            if (trailPOI != null) {
+        this.trailViewModel?.trailPointOfInterest?.observe(this) { trailPOIData ->
+            trailPOIData?.error?.let { e ->
+                onQueryError(e)
+            } ?:
+            trailPOIData?.data?.let { trailPOI ->
                 refreshUI()
             }
         }

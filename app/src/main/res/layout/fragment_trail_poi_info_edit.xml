@@ -59,7 +59,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textCapSentences"
-                        android:text="@{trailViewModel.trailPointOfInterest.name}"/>
+                        android:text="@{trailViewModel.trailPointOfInterest.data.name}"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -82,7 +82,7 @@
                         android:text="@string/message_no_photo_available"
                         app:drawableStartCompat="@drawable/ic_trail_black"
                         android:drawablePadding="@dimen/components_margin_small"
-                        android:visibility="@{trailViewModel.trailPointOfInterest.photoUrl==null ? View.VISIBLE : View.INVISIBLE}"/>
+                        android:visibility="@{trailViewModel.trailPointOfInterest.data.photoUrl==null ? View.VISIBLE : View.INVISIBLE}"/>
 
                     <ImageView
                         android:id="@+id/fragment_trail_poi_info_edit_image_view_photo"
@@ -90,10 +90,10 @@
                         android:layout_height="@dimen/image_size_large"
                         android:contentDescription="@string/example_image_content_description"
                         app:srcCompat="@drawable/ic_trail_black"
-                        app:imgUrl="@{trailViewModel.trailPointOfInterest.photoUrl}"
+                        app:imgUrl="@{trailViewModel.trailPointOfInterest.data.photoUrl}"
                         app:imgPlaceHolder="@{@drawable/ic_trail_black}"
                         app:imgOptions="@{RequestOptions.centerCropTransform()}"
-                        android:visibility="@{trailViewModel.trailPointOfInterest.photoUrl==null ? View.INVISIBLE : View.VISIBLE}"/>
+                        android:visibility="@{trailViewModel.trailPointOfInterest.data.photoUrl==null ? View.INVISIBLE : View.VISIBLE}"/>
 
                     <ImageButton
                         android:id="@+id/fragment_trail_poi_info_edit_button_delete_photo"
@@ -103,7 +103,7 @@
                         android:layout_gravity="top|end"
                         android:contentDescription="@string/example_image_content_description"
                         app:srcCompat="@drawable/ic_delete_black"
-                        android:visibility="@{trailViewModel.trailPointOfInterest.photoUrl==null ? View.INVISIBLE : View.VISIBLE}"
+                        android:visibility="@{trailViewModel.trailPointOfInterest.data.photoUrl==null ? View.INVISIBLE : View.VISIBLE}"
                         android:onClick="@{trailPOIInfoEditFragment::onDeletePhotoButtonClick}"/>
 
                     <ImageButton
@@ -142,7 +142,7 @@
                         app:minValue="0"
                         app:maxValue="@{trailPOIInfoEditFragment.currentMaxValue}"
                         app:stepValue="10"
-                        app:currentValue="@{trailViewModel.trailPointOfInterest.elevation ?? 0}"
+                        app:currentValue="@{trailViewModel.trailPointOfInterest.data.elevation ?? 0}"
                         app:sliderColor="@color/colorSecondaryDark"
                         app:valueTextSize="@dimen/text_size_title"
                         app:valueTextColor="@color/colorSecondaryDark"
@@ -162,7 +162,7 @@
                         android:gravity="center_horizontal"
                         app:drawableTopCompat="@drawable/ic_trail_black"
                         android:textSize="@dimen/text_size_small"
-                        android:text="@{MetricsHelper.displayElevation(trailPOIInfoEditFragment.context, trailViewModel.trailPointOfInterest.elevation, true, true), default=@string/example_trail_poi_elevation}"
+                        android:text="@{MetricsHelper.displayElevation(trailPOIInfoEditFragment.context, trailViewModel.trailPointOfInterest.data.elevation, true, true), default=@string/example_trail_poi_elevation}"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintCircle="@id/fragment_trail_poi_info_edit_slider_metrics"
@@ -210,7 +210,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textCapSentences|textMultiLine"
-                        android:text="@{trailViewModel.trailPointOfInterest.description}"/>
+                        android:text="@{trailViewModel.trailPointOfInterest.data.description}"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 

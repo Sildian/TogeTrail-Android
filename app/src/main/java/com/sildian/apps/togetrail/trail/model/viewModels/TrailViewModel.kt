@@ -32,14 +32,14 @@ class TrailViewModel @Inject constructor() : SingleDataViewModel<Trail>(Trail::c
 
     private var imagePathToUpload: String? = null
     private var imagePathToDelete: String? = null
-    private val mutableTrailPointOfInterest = MutableLiveData<TrailPointOfInterest?>()
-    val trailPointOfInterest: LiveData<TrailPointOfInterest?> = mutableTrailPointOfInterest
+    private val mutableTrailPointOfInterest = MutableLiveData<SingleDataHolder<TrailPointOfInterest?>>()
+    val trailPointOfInterest: LiveData<SingleDataHolder<TrailPointOfInterest?>> = mutableTrailPointOfInterest
 
     /**********************************Extra data monitoring*************************************/
 
     fun updateImagePathToUpload(isPOIImage: Boolean, imagePath: String) {
         if (isPOIImage) {
-            this.trailPointOfInterest.value?.photoUrl?.let { photoUrl ->
+            this.trailPointOfInterest.value?.data?.photoUrl?.let { photoUrl ->
                 if (photoUrl.startsWith("https://")) {
                     this.imagePathToDelete = photoUrl
                 }
@@ -69,7 +69,7 @@ class TrailViewModel @Inject constructor() : SingleDataViewModel<Trail>(Trail::c
     fun watchPointOfInterest(position:Int) {
         this.mutableData.value?.data?.trailTrack?.trailPointsOfInterest?.let { trailPoiList ->
             if (position <= trailPoiList.size - 1) {
-                this.mutableTrailPointOfInterest.postValue(trailPoiList[position])
+                this.mutableTrailPointOfInterest.postValue(SingleDataHolder(trailPoiList[position]))
             }
         }
     }
@@ -123,7 +123,7 @@ class TrailViewModel @Inject constructor() : SingleDataViewModel<Trail>(Trail::c
                 this.trailRepository
             )
         if (savePOI) {
-            dataRequest.editPOI(this.mutableTrailPointOfInterest.value)
+            dataRequest.editPOI(this.mutableTrailPointOfInterest.value?.data)
         }
         saveData(dataRequest)
     }

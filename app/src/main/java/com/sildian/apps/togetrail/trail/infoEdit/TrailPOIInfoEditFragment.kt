@@ -77,8 +77,11 @@ class TrailPOIInfoEditFragment(
     }
 
     private fun observeTrailPOI() {
-        this.trailViewModel?.trailPointOfInterest?.observe(this) { trailPOI ->
-            if (trailPOI != null) {
+        this.trailViewModel?.trailPointOfInterest?.observe(this) { trailPOIData ->
+            trailPOIData?.error?.let { e ->
+                onQueryError(e)
+            } ?:
+            trailPOIData?.data?.let { trailPOI ->
                 refreshUI()
             }
         }
@@ -95,15 +98,15 @@ class TrailPOIInfoEditFragment(
     }
 
     private fun setValue(value: Int?) {
-        this.trailViewModel?.trailPointOfInterest?.value?.elevation = value
+        this.trailViewModel?.trailPointOfInterest?.value?.data?.elevation = value
         this.trailViewModel?.notifyDataObserver()
     }
 
     override fun saveData() {
         if (checkDataIsValid()) {
             if (this.trailViewModel?.trailPointOfInterest?.value != null) {
-                this.trailViewModel.trailPointOfInterest.value?.name = this.binding.fragmentTrailPoiInfoEditTextFieldName.text.toString()
-                this.trailViewModel.trailPointOfInterest.value?.description = this.binding.fragmentTrailPoiInfoEditTextFieldDescription.text.toString()
+                this.trailViewModel.trailPointOfInterest.value?.data?.name = this.binding.fragmentTrailPoiInfoEditTextFieldName.text.toString()
+                this.trailViewModel.trailPointOfInterest.value?.data?.description = this.binding.fragmentTrailPoiInfoEditTextFieldDescription.text.toString()
                 this.baseActivity?.showProgressDialog()
                 this.trailViewModel.saveTrail(true)
             }
@@ -165,14 +168,14 @@ class TrailPOIInfoEditFragment(
 
     override fun addPhoto(filePath:String) {
         this.trailViewModel?.updateImagePathToUpload(true, filePath)
-        this.trailViewModel?.trailPointOfInterest?.value?.photoUrl=filePath
+        this.trailViewModel?.trailPointOfInterest?.value?.data?.photoUrl = filePath
         this.trailViewModel?.notifyDataChanged()
     }
 
     override fun deletePhoto() {
-        if(!this.trailViewModel?.trailPointOfInterest?.value?.photoUrl.isNullOrEmpty()) {
-            this.trailViewModel?.updateImagePathToDelete(this.trailViewModel.trailPointOfInterest.value?.photoUrl!!)
-            this.trailViewModel?.trailPointOfInterest?.value?.photoUrl = null
+        if (!this.trailViewModel?.trailPointOfInterest?.value?.data?.photoUrl.isNullOrEmpty()) {
+            this.trailViewModel?.updateImagePathToDelete(this.trailViewModel.trailPointOfInterest.value?.data?.photoUrl!!)
+            this.trailViewModel?.trailPointOfInterest?.value?.data?.photoUrl = null
             this.trailViewModel?.notifyDataChanged()
         }
     }
