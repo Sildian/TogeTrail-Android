@@ -6,12 +6,14 @@ import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
+import kotlinx.coroutines.CoroutineDispatcher
 
 /*************************************************************************************************
  * Saves a hiker within the database
  ************************************************************************************************/
 
 class HikerSaveDataRequest(
+    dispatcher: CoroutineDispatcher,
     hiker: Hiker?,
     private val imagePathToDelete: String?,
     private val imagePathToUpload: String?,
@@ -19,7 +21,7 @@ class HikerSaveDataRequest(
     private val storageRepository: StorageRepository,
     private val hikerRepository: HikerRepository
 )
-    : SaveDataRequest<Hiker>(hiker) {
+    : SaveDataRequest<Hiker>(dispatcher, hiker) {
 
     companion object {
         private const val TAG = "HikerSaveDataRequest"

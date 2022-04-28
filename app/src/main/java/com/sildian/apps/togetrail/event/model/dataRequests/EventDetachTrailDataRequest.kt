@@ -4,17 +4,19 @@ import com.sildian.apps.togetrail.common.baseDataRequests.SpecificDataRequest
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.dataRepository.EventRepository
 import com.sildian.apps.togetrail.trail.model.core.Trail
+import kotlinx.coroutines.CoroutineDispatcher
 
 /*************************************************************************************************
  * Detaches a trail from an event
  ************************************************************************************************/
 
 class EventDetachTrailDataRequest(
+    dispatcher: CoroutineDispatcher,
     private val event: Event?,
     private val trail: Trail,
     private val eventRepository: EventRepository
 ):
-    SpecificDataRequest()
+    SpecificDataRequest(dispatcher)
 {
 
     override suspend fun run() {

@@ -8,17 +8,19 @@ import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
 import com.sildian.apps.togetrail.trail.model.core.Trail
+import kotlinx.coroutines.CoroutineDispatcher
 
 /*************************************************************************************************
  * Saves an event within the database
  ************************************************************************************************/
 
 class EventSaveDataRequest(
+    dispatcher: CoroutineDispatcher,
     event: Event?,
     private val hikerRepository: HikerRepository,
     private val eventRepository: EventRepository
 )
-    : SaveDataRequest<Event>(event)
+    : SaveDataRequest<Event>(dispatcher, event)
 {
 
     private val attachedTrails = arrayListOf<Trail>()

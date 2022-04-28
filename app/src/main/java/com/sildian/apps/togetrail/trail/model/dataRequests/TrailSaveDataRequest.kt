@@ -10,6 +10,7 @@ import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
 import com.sildian.apps.togetrail.trail.model.dataRepository.TrailRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import java.util.*
 
 /*************************************************************************************************
@@ -17,6 +18,7 @@ import java.util.*
  ************************************************************************************************/
 
 class TrailSaveDataRequest(
+    dispatcher: CoroutineDispatcher,
     trail: Trail?,
     private val imagePathToDelete: String?,
     private val imagePathToUpload: String?,
@@ -24,7 +26,7 @@ class TrailSaveDataRequest(
     private val hikerRepository: HikerRepository,
     private val trailRepository: TrailRepository
 )
-    : SaveDataRequest<Trail>(trail) {
+    : SaveDataRequest<Trail>(dispatcher, trail) {
 
     companion object {
         private const val TAG = "TrailSaveDataRequest"

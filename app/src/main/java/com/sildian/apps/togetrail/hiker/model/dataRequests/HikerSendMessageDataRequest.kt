@@ -6,6 +6,7 @@ import com.sildian.apps.togetrail.common.baseDataRequests.SpecificDataRequest
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
+import kotlinx.coroutines.CoroutineDispatcher
 
 /*************************************************************************************************
  * Sends a message from the sender (current hiker) to the given recipient
@@ -13,11 +14,12 @@ import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
  ************************************************************************************************/
 
 class HikerSendMessageDataRequest(
+    dispatcher: CoroutineDispatcher,
     private val recipient: Hiker?,
     private val text: String,
     private val hikerRepository: HikerRepository
 )
-    : SpecificDataRequest() {
+    : SpecificDataRequest(dispatcher) {
 
     override suspend fun run() {
         CurrentHikerInfo.currentHiker?.let { sender ->

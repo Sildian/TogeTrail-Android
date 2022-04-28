@@ -7,6 +7,7 @@ import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
 import com.sildian.apps.togetrail.hiker.model.dataRequests.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 
 /*************************************************************************************************
@@ -57,11 +58,12 @@ class HikerViewModel @Inject constructor() : SingleDataViewModel<Hiker>(Hiker::c
     }
 
     fun loadHiker(hikerId: String) {
-        loadData(HikerLoadDataRequest(hikerId, this.hikerRepository))
+        loadData(HikerLoadDataRequest(Dispatchers.IO, hikerId, this.hikerRepository))
     }
 
     fun saveHiker() {
         saveData(HikerSaveDataRequest(
+            Dispatchers.IO,
             this.mutableData.value?.data,
             this.imagePathToDelete,
             this.imagePathToUpload,
@@ -72,22 +74,23 @@ class HikerViewModel @Inject constructor() : SingleDataViewModel<Hiker>(Hiker::c
     }
 
     fun loginUser() {
-        loadData(HikerLoginDataRequest(this.authRepository, this.hikerRepository))
+        loadData(HikerLoginDataRequest(Dispatchers.IO, this.authRepository, this.hikerRepository))
     }
 
     fun logoutUser() {
         clearQueryRegistration()
         this.mutableData.postValue(null)
-        runSpecificRequest(HikerLogoutDataRequest(this.authRepository))
+        runSpecificRequest(HikerLogoutDataRequest(Dispatchers.IO, this.authRepository))
     }
 
     fun resetUserPassword() {
-        runSpecificRequest(HikerResetPasswordDataRequest(this.authRepository))
+        runSpecificRequest(HikerResetPasswordDataRequest(Dispatchers.IO, this.authRepository))
     }
 
     fun deleteUserAccount() {
         clearQueryRegistration()
         runSpecificRequest(HikerDeleteAccountDataRequest(
+            Dispatchers.IO,
             this.authRepository,
             this.storageRepository,
             this.hikerRepository
@@ -96,6 +99,7 @@ class HikerViewModel @Inject constructor() : SingleDataViewModel<Hiker>(Hiker::c
 
     fun sendMessage(text: String) {
         runSpecificRequest(HikerSendMessageDataRequest(
+            Dispatchers.IO,
             this.mutableData.value?.data,
             text,
             this.hikerRepository
@@ -104,6 +108,7 @@ class HikerViewModel @Inject constructor() : SingleDataViewModel<Hiker>(Hiker::c
 
     fun markLastMessageAsRead() {
         runSpecificRequest(HikerReadMessageDataRequest(
+            Dispatchers.IO,
             this.mutableData.value?.data,
             this.hikerRepository
         ))

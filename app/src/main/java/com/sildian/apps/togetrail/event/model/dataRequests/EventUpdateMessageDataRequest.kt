@@ -4,18 +4,20 @@ import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.common.baseDataRequests.SpecificDataRequest
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.dataRepository.EventRepository
+import kotlinx.coroutines.CoroutineDispatcher
 
 /*************************************************************************************************
  * Updates an existing message within an event's chat room
  ************************************************************************************************/
 
 class EventUpdateMessageDataRequest(
+    dispatcher: CoroutineDispatcher,
     private val event: Event?,
     private val message: Message,
     private val newText: String,
     private val eventRepository: EventRepository
 )
-    : SpecificDataRequest() {
+    : SpecificDataRequest(dispatcher) {
 
     override suspend fun run() {
         event?.let { event ->

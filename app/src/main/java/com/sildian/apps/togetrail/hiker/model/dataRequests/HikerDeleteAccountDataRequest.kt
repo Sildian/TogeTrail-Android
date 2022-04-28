@@ -6,17 +6,19 @@ import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
+import kotlinx.coroutines.CoroutineDispatcher
 
 /*************************************************************************************************
  * Deletes a user account as well as the related hiker profile
  ************************************************************************************************/
 
 class HikerDeleteAccountDataRequest(
+    dispatcher: CoroutineDispatcher,
     private val authRepository: AuthRepository,
     private val storageRepository: StorageRepository,
     private val hikerRepository: HikerRepository
 )
-    : SpecificDataRequest() {
+    : SpecificDataRequest(dispatcher) {
 
     companion object {
         private const val TAG = "HikerDeleteDataRequest"

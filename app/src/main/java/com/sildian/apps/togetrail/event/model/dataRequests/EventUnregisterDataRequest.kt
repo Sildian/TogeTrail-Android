@@ -6,17 +6,19 @@ import com.sildian.apps.togetrail.event.model.dataRepository.EventRepository
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
+import kotlinx.coroutines.CoroutineDispatcher
 
 /*************************************************************************************************
  * Unregisters the current hiker from an event
  ************************************************************************************************/
 
 class EventUnregisterDataRequest(
+    dispatcher: CoroutineDispatcher,
     private val event: Event?,
     private val eventRepository: EventRepository,
     private val hikerRepository: HikerRepository
 )
-    : SpecificDataRequest()
+    : SpecificDataRequest(dispatcher)
 {
 
     override suspend fun run() {

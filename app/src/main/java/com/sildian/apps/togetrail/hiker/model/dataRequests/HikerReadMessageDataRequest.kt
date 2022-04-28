@@ -4,6 +4,7 @@ import com.sildian.apps.togetrail.common.baseDataRequests.SpecificDataRequest
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
+import kotlinx.coroutines.CoroutineDispatcher
 
 /*************************************************************************************************
  * Marks the last message as read
@@ -11,10 +12,11 @@ import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
  ************************************************************************************************/
 
 class HikerReadMessageDataRequest(
+    dispatcher: CoroutineDispatcher,
     private val interlocutor: Hiker?,
     private val hikerRepository: HikerRepository
 )
-    : SpecificDataRequest() {
+    : SpecificDataRequest(dispatcher) {
 
     override suspend fun run() {
         CurrentHikerInfo.currentHiker?.let { chatHolder ->

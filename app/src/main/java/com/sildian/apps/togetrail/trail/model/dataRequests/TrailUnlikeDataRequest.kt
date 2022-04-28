@@ -5,17 +5,19 @@ import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.dataRepository.TrailRepository
+import kotlinx.coroutines.CoroutineDispatcher
 
 /*************************************************************************************************
  * Unlikes a trail if it was previously liked by the user
  ************************************************************************************************/
 
 class TrailUnlikeDataRequest(
+    dispatcher: CoroutineDispatcher,
     private val trail: Trail?,
     private val trailRepository: TrailRepository,
     private val hikerRepository: HikerRepository
 )
-    : SpecificDataRequest()
+    : SpecificDataRequest(dispatcher)
 {
 
     override suspend fun run() {

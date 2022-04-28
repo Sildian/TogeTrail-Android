@@ -8,6 +8,7 @@ import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.model.support.HikerBuilder
 import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
+import kotlinx.coroutines.CoroutineDispatcher
 
 /*************************************************************************************************
  * Logs a hiker in using the current user authentication
@@ -15,10 +16,11 @@ import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
  ************************************************************************************************/
 
 class HikerLoginDataRequest(
+    dispatcher: CoroutineDispatcher,
     private val authRepository: AuthRepository,
     private val hikerRepository: HikerRepository
 )
-    : LoadDataRequest<Hiker>() {
+    : LoadDataRequest<Hiker>(dispatcher) {
 
     override suspend fun load(): Hiker? {
         return authRepository.getCurrentUser()?.let { user ->

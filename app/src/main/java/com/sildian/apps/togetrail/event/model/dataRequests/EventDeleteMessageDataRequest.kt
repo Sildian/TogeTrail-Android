@@ -4,17 +4,19 @@ import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.common.baseDataRequests.SpecificDataRequest
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.dataRepository.EventRepository
+import kotlinx.coroutines.CoroutineDispatcher
 
 /*************************************************************************************************
  * Deletes a message from an event's chat room
  ************************************************************************************************/
 
 class EventDeleteMessageDataRequest(
+    dispatcher: CoroutineDispatcher,
     private val event: Event?,
     private val message: Message,
     private val eventRepository: EventRepository
 )
-    : SpecificDataRequest()
+    : SpecificDataRequest(dispatcher)
 {
 
     override suspend fun run() {

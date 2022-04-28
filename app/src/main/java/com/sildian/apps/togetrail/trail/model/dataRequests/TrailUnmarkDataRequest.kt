@@ -4,16 +4,18 @@ import com.sildian.apps.togetrail.common.baseDataRequests.SpecificDataRequest
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
 import com.sildian.apps.togetrail.trail.model.core.Trail
+import kotlinx.coroutines.CoroutineDispatcher
 
 /*************************************************************************************************
  * Unmarks a trail if it was previously marked by the user
  ************************************************************************************************/
 
 class TrailUnmarkDataRequest(
+    dispatcher: CoroutineDispatcher,
     private val trail: Trail?,
     private val hikerRepository: HikerRepository
 )
-    : SpecificDataRequest()
+    : SpecificDataRequest(dispatcher)
 {
 
     override suspend fun run() {
