@@ -3,11 +3,12 @@ package com.sildian.apps.togetrail.hiker.model.viewModels
 import com.sildian.apps.togetrail.common.baseViewModels.SingleDataViewModel
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
+import com.sildian.apps.togetrail.common.utils.coroutinesHelpers.CoroutineIODispatcher
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
 import com.sildian.apps.togetrail.hiker.model.dataRequests.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 /*************************************************************************************************
@@ -15,13 +16,13 @@ import javax.inject.Inject
  ************************************************************************************************/
 
 @HiltViewModel
-class HikerViewModel @Inject constructor() : SingleDataViewModel<Hiker>(Hiker::class.java) {
-
-    /***********************************Repositories*********************************************/
-
-    @Inject lateinit var authRepository: AuthRepository
-    @Inject lateinit var storageRepository: StorageRepository
-    @Inject lateinit var hikerRepository: HikerRepository
+class HikerViewModel @Inject constructor(
+    @CoroutineIODispatcher dispatcher: CoroutineDispatcher,
+    val authRepository: AuthRepository,
+    val storageRepository: StorageRepository,
+    val hikerRepository: HikerRepository
+)
+    : SingleDataViewModel<Hiker>(Hiker::class.java, dispatcher) {
 
     /***********************************Extra data********************************************/
 
@@ -58,12 +59,12 @@ class HikerViewModel @Inject constructor() : SingleDataViewModel<Hiker>(Hiker::c
     }
 
     fun loadHiker(hikerId: String) {
-        loadData(HikerLoadDataRequest(Dispatchers.IO, hikerId, this.hikerRepository))
+        loadData(HikerLoadDataRequest(this.dispatcher, hikerId, this.hikerRepository))
     }
 
     fun saveHiker() {
         saveData(HikerSaveDataRequest(
-            Dispatchers.IO,
+            this.dispatcher,
             this.mutableData.value?.data,
             this.imagePathToDelete,
             this.imagePathToUpload,
@@ -74,23 +75,23 @@ class HikerViewModel @Inject constructor() : SingleDataViewModel<Hiker>(Hiker::c
     }
 
     fun loginUser() {
-        loadData(HikerLoginDataRequest(Dispatchers.IO, this.authRepository, this.hikerRepository))
+        loadData(HikerLoginDataRequest(this.dispatcher, this.authRepository, this.hikerRepository))
     }
 
     fun logoutUser() {
         clearQueryRegistration()
         this.mutableData.postValue(null)
-        runSpecificRequest(HikerLogoutDataRequest(Dispatchers.IO, this.authRepository))
+        runSpecificRequest(HikerLogoutDataRequest(this.dispatcher, this.authRepository))
     }
 
     fun resetUserPassword() {
-        runSpecificRequest(HikerResetPasswordDataRequest(Dispatchers.IO, this.authRepository))
+        runSpecificRequest(HikerResetPasswordDataRequest(this.dispatcher, this.authRepository))
     }
 
     fun deleteUserAccount() {
         clearQueryRegistration()
         runSpecificRequest(HikerDeleteAccountDataRequest(
-            Dispatchers.IO,
+            this.dispatcher,
             this.authRepository,
             this.storageRepository,
             this.hikerRepository
@@ -99,7 +100,7 @@ class HikerViewModel @Inject constructor() : SingleDataViewModel<Hiker>(Hiker::c
 
     fun sendMessage(text: String) {
         runSpecificRequest(HikerSendMessageDataRequest(
-            Dispatchers.IO,
+            this.dispatcher,
             this.mutableData.value?.data,
             text,
             this.hikerRepository
@@ -108,7 +109,7 @@ class HikerViewModel @Inject constructor() : SingleDataViewModel<Hiker>(Hiker::c
 
     fun markLastMessageAsRead() {
         runSpecificRequest(HikerReadMessageDataRequest(
-            Dispatchers.IO,
+            this.dispatcher,
             this.mutableData.value?.data,
             this.hikerRepository
         ))

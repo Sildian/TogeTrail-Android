@@ -109,7 +109,7 @@ abstract class ListDataViewModel<T: Any>(dataModelClass: Class<T>): DataViewMode
 
 /**************************Monitors a single data of the given type T****************************/
 
-abstract class SingleDataViewModel<T: Any>(dataModelClass: Class<T>): DataViewModel<T>(dataModelClass) {
+abstract class SingleDataViewModel<T: Any>(dataModelClass: Class<T>, protected val dispatcher: CoroutineDispatcher): DataViewModel<T>(dataModelClass) {
 
     /**Data**/
 
@@ -143,57 +143,51 @@ abstract class SingleDataViewModel<T: Any>(dataModelClass: Class<T>): DataViewMo
 
     protected fun loadData(dataRequest: LoadDataRequest<T>) {
         viewModelScope.launch(this.exceptionHandler) {
-            withContext(Dispatchers.Main) {
-                try {
-                    currentDataRequest?.cancel()
-                    currentDataRequest = dataRequest
-                    dataRequest.execute()
-                    dataRequest.data?.let { result ->
-                        Log.d(TAG, "Successfully loaded ${dataModelClass.simpleName} from database")
-                        mutableData.postValue(SingleDataHolder(result))
-                    } ?: run {
-                        val e = Exception("Unknown error")
-                        Log.e(TAG, "Failed to load ${dataModelClass.simpleName} from database : ${e.message}")
-                        mutableData.postValue(SingleDataHolder(mutableData.value?.data, e))
-                    }
-                } catch (e: Throwable) {
+            try {
+                currentDataRequest?.cancel()
+                currentDataRequest = dataRequest
+                dataRequest.execute()
+                dataRequest.data?.let { result ->
+                    Log.d(TAG, "Successfully loaded ${dataModelClass.simpleName} from database")
+                    mutableData.postValue(SingleDataHolder(result))
+                } ?: run {
+                    val e = Exception("Unknown error")
                     Log.e(TAG, "Failed to load ${dataModelClass.simpleName} from database : ${e.message}")
                     mutableData.postValue(SingleDataHolder(mutableData.value?.data, e))
                 }
+            } catch (e: Throwable) {
+                Log.e(TAG, "Failed to load ${dataModelClass.simpleName} from database : ${e.message}")
+                mutableData.postValue(SingleDataHolder(mutableData.value?.data, e))
             }
         }
     }
 
     protected fun saveData(dataRequest: SaveDataRequest<T>) {
         viewModelScope.launch(this.exceptionHandler) {
-            withContext(Dispatchers.Main) {
-                try {
-                    currentDataRequest?.cancel()
-                    currentDataRequest = dataRequest
-                    dataRequest.execute()
-                    Log.d(TAG, "Successfully saved ${dataModelClass.simpleName} in database")
-                    mutableDataRequestState.postValue(DataRequestStateHolder(dataRequest, null))
-                } catch (e: Throwable) {
-                    Log.e(TAG, "Failed to save ${dataModelClass.simpleName} in database : ${e.message}")
-                    mutableDataRequestState.postValue(DataRequestStateHolder(dataRequest, e))
-                }
+            try {
+                currentDataRequest?.cancel()
+                currentDataRequest = dataRequest
+                dataRequest.execute()
+                Log.d(TAG, "Successfully saved ${dataModelClass.simpleName} in database")
+                mutableDataRequestState.postValue(DataRequestStateHolder(dataRequest, null))
+            } catch (e: Throwable) {
+                Log.e(TAG, "Failed to save ${dataModelClass.simpleName} in database : ${e.message}")
+                mutableDataRequestState.postValue(DataRequestStateHolder(dataRequest, e))
             }
         }
     }
 
     protected fun runSpecificRequest(dataRequest: SpecificDataRequest) {
         viewModelScope.launch(this.exceptionHandler) {
-            withContext(Dispatchers.Main) {
-                try {
-                    currentDataRequest?.cancel()
-                    currentDataRequest = dataRequest
-                    dataRequest.execute()
-                    Log.d(TAG, "Successfully finished running request ${dataRequest.javaClass.simpleName}")
-                    mutableDataRequestState.postValue(DataRequestStateHolder(dataRequest, null))
-                } catch (e: Throwable) {
-                    Log.e(TAG, "Failed to run request ${dataRequest.javaClass.simpleName} : ${e.message}")
-                    mutableDataRequestState.postValue(DataRequestStateHolder(dataRequest, e))
-                }
+            try {
+                currentDataRequest?.cancel()
+                currentDataRequest = dataRequest
+                dataRequest.execute()
+                Log.d(TAG, "Successfully finished running request ${dataRequest.javaClass.simpleName}")
+                mutableDataRequestState.postValue(DataRequestStateHolder(dataRequest, null))
+            } catch (e: Throwable) {
+                Log.e(TAG, "Failed to run request ${dataRequest.javaClass.simpleName} : ${e.message}")
+                mutableDataRequestState.postValue(DataRequestStateHolder(dataRequest, e))
             }
         }
     }

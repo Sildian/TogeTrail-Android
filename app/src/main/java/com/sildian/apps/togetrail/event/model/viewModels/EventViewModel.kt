@@ -3,6 +3,7 @@ package com.sildian.apps.togetrail.event.model.viewModels
 import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.common.baseViewModels.SingleDataHolder
 import com.sildian.apps.togetrail.common.baseViewModels.SingleDataViewModel
+import com.sildian.apps.togetrail.common.utils.coroutinesHelpers.CoroutineIODispatcher
 import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.event.model.dataRepository.EventRepository
 import com.sildian.apps.togetrail.event.model.dataRequests.*
@@ -10,7 +11,7 @@ import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 /*************************************************************************************************
@@ -18,12 +19,12 @@ import javax.inject.Inject
  ************************************************************************************************/
 
 @HiltViewModel
-class EventViewModel @Inject constructor() : SingleDataViewModel<Event>(Event::class.java) {
-
-    /***********************************Repositories*********************************************/
-
-    @Inject lateinit var hikerRepository: HikerRepository
-    @Inject lateinit var eventRepository: EventRepository
+class EventViewModel @Inject constructor(
+    @CoroutineIODispatcher dispatcher: CoroutineDispatcher,
+    val hikerRepository: HikerRepository,
+    val eventRepository: EventRepository
+)
+    : SingleDataViewModel<Event>(Event::class.java, dispatcher) {
 
     /***************************************Extra data*******************************************/
 
@@ -43,12 +44,12 @@ class EventViewModel @Inject constructor() : SingleDataViewModel<Event>(Event::c
     }
 
     fun loadEvent(eventId:String) {
-        loadData(EventLoadDataRequest(Dispatchers.IO, eventId, this.eventRepository))
+        loadData(EventLoadDataRequest(this.dispatcher, eventId, this.eventRepository))
     }
 
     fun saveEvent() {
         saveData(EventSaveDataRequest(
-            Dispatchers.IO,
+            this.dispatcher,
             this.mutableData.value?.data,
             this.hikerRepository,
             this.eventRepository
@@ -57,7 +58,7 @@ class EventViewModel @Inject constructor() : SingleDataViewModel<Event>(Event::c
 
     fun attachTrail(trail: Trail) {
         runSpecificRequest(EventAttachTrailDataRequest(
-            Dispatchers.IO,
+            this.dispatcher,
             this.mutableData.value?.data,
             trail,
             this.eventRepository
@@ -66,7 +67,7 @@ class EventViewModel @Inject constructor() : SingleDataViewModel<Event>(Event::c
 
     fun detachTrail(trail: Trail) {
         runSpecificRequest(EventDetachTrailDataRequest(
-            Dispatchers.IO,
+            this.dispatcher,
             this.mutableData.value?.data,
             trail,
             this.eventRepository
@@ -75,7 +76,7 @@ class EventViewModel @Inject constructor() : SingleDataViewModel<Event>(Event::c
 
     fun registerUserToEvent() {
         runSpecificRequest(EventRegisterDataRequest(
-            Dispatchers.IO,
+            this.dispatcher,
             this.mutableData.value?.data,
             this.eventRepository,
             this.hikerRepository
@@ -84,7 +85,7 @@ class EventViewModel @Inject constructor() : SingleDataViewModel<Event>(Event::c
 
     fun unregisterUserFromEvent() {
         runSpecificRequest(EventUnregisterDataRequest(
-            Dispatchers.IO,
+            this.dispatcher,
             this.mutableData.value?.data,
             this.eventRepository,
             this.hikerRepository
@@ -93,7 +94,7 @@ class EventViewModel @Inject constructor() : SingleDataViewModel<Event>(Event::c
 
     fun sendMessage(text: String) {
         runSpecificRequest(EventSendMessageDataRequest(
-            Dispatchers.IO,
+            this.dispatcher,
             this.mutableData.value?.data,
             text,
             this.eventRepository
@@ -102,7 +103,7 @@ class EventViewModel @Inject constructor() : SingleDataViewModel<Event>(Event::c
 
     fun updateMessage(message: Message, newText: String) {
         runSpecificRequest(EventUpdateMessageDataRequest(
-            Dispatchers.IO,
+            this.dispatcher,
             this.mutableData.value?.data,
             message,
             newText,
@@ -112,7 +113,7 @@ class EventViewModel @Inject constructor() : SingleDataViewModel<Event>(Event::c
 
     fun deleteMessage(message: Message) {
         runSpecificRequest(EventDeleteMessageDataRequest(
-            Dispatchers.IO,
+            this.dispatcher,
             this.mutableData.value?.data,
             message,
             this.eventRepository

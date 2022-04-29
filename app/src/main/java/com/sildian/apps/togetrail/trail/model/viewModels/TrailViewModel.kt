@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.sildian.apps.togetrail.common.baseViewModels.SingleDataHolder
 import com.sildian.apps.togetrail.common.baseViewModels.SingleDataViewModel
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
+import com.sildian.apps.togetrail.common.utils.coroutinesHelpers.CoroutineIODispatcher
 import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.core.TrailPointOfInterest
@@ -13,7 +14,7 @@ import com.sildian.apps.togetrail.trail.model.dataRequests.*
 import com.sildian.apps.togetrail.trail.model.support.TrailBuilder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ticofab.androidgpxparser.parser.domain.Gpx
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 /*************************************************************************************************
@@ -21,13 +22,13 @@ import javax.inject.Inject
  ************************************************************************************************/
 
 @HiltViewModel
-class TrailViewModel @Inject constructor() : SingleDataViewModel<Trail>(Trail::class.java) {
-
-    /***********************************Repositories*********************************************/
-
-    @Inject lateinit var storageRepository: StorageRepository
-    @Inject lateinit var hikerRepository: HikerRepository
-    @Inject lateinit var trailRepository: TrailRepository
+class TrailViewModel @Inject constructor(
+    @CoroutineIODispatcher dispatcher: CoroutineDispatcher,
+    val storageRepository: StorageRepository,
+    val hikerRepository: HikerRepository,
+    val trailRepository: TrailRepository
+)
+    : SingleDataViewModel<Trail>(Trail::class.java, dispatcher) {
 
     /************************************Extra data*********************************************/
 
@@ -111,12 +112,12 @@ class TrailViewModel @Inject constructor() : SingleDataViewModel<Trail>(Trail::c
     }
 
     fun loadTrail(trailId: String) {
-        loadData(TrailLoadDataRequest(Dispatchers.IO, trailId, this.trailRepository))
+        loadData(TrailLoadDataRequest(this.dispatcher, trailId, this.trailRepository))
     }
 
     fun saveTrail(savePOI: Boolean) {
         val dataRequest = TrailSaveDataRequest(
-            Dispatchers.IO,
+            this.dispatcher,
             this.mutableData.value?.data,
             this.imagePathToDelete,
             this.imagePathToUpload,
@@ -132,7 +133,7 @@ class TrailViewModel @Inject constructor() : SingleDataViewModel<Trail>(Trail::c
 
     fun likeTrail() {
         runSpecificRequest(TrailLikeDataRequest(
-            Dispatchers.IO,
+            this.dispatcher,
             this.mutableData.value?.data,
             this.trailRepository,
             this.hikerRepository
@@ -141,7 +142,7 @@ class TrailViewModel @Inject constructor() : SingleDataViewModel<Trail>(Trail::c
 
     fun unlikeTrail() {
         runSpecificRequest(TrailUnlikeDataRequest(
-            Dispatchers.IO,
+            this.dispatcher,
             this.mutableData.value?.data,
             this.trailRepository,
             this.hikerRepository
@@ -149,10 +150,10 @@ class TrailViewModel @Inject constructor() : SingleDataViewModel<Trail>(Trail::c
     }
 
     fun markTrail() {
-        runSpecificRequest(TrailMarkDataRequest(Dispatchers.IO, this.mutableData.value?.data, this.hikerRepository))
+        runSpecificRequest(TrailMarkDataRequest(this.dispatcher, this.mutableData.value?.data, this.hikerRepository))
     }
 
     fun unmarkTrail() {
-        runSpecificRequest(TrailUnmarkDataRequest(Dispatchers.IO, this.mutableData.value?.data, this.hikerRepository))
+        runSpecificRequest(TrailUnmarkDataRequest(this.dispatcher, this.mutableData.value?.data, this.hikerRepository))
     }
 }
