@@ -4,12 +4,12 @@ import com.google.firebase.FirebaseException
 import com.sildian.apps.togetrail.dataRequestTestSupport.BaseDataRequestTest
 import com.sildian.apps.togetrail.dataRequestTestSupport.FirebaseSimulator
 import com.sildian.apps.togetrail.event.model.core.Event
-import com.sildian.apps.togetrail.event.model.dataRepository.EventRepository
+import com.sildian.apps.togetrail.event.model.dataRepository.RealEventRepository
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
-import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
+import com.sildian.apps.togetrail.hiker.model.dataRepository.RealHikerRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test
@@ -29,8 +29,8 @@ class EventUnregisterDataRequestTest: BaseDataRequestTest() {
             try {
                 EventUnregisterDataRequest(
                     FirebaseSimulator.events[0].copy(),
-                    EventRepository(),
-                    HikerRepository()
+                    RealEventRepository(),
+                    RealHikerRepository()
                 ).execute()
                 assertEquals("TRUE", "FALSE")
             } catch (e: FirebaseException) {
@@ -57,8 +57,8 @@ class EventUnregisterDataRequestTest: BaseDataRequestTest() {
             try {
                 EventUnregisterDataRequest(
                     FirebaseSimulator.events[0].copy(),
-                    EventRepository(),
-                    HikerRepository()
+                    RealEventRepository(),
+                    RealHikerRepository()
                 ).execute()
                 assertEquals("TRUE", "FALSE")
             } catch (e: NullPointerException) {
@@ -86,8 +86,8 @@ class EventUnregisterDataRequestTest: BaseDataRequestTest() {
             try {
                 EventUnregisterDataRequest(
                     null,
-                    EventRepository(),
-                    HikerRepository()
+                    RealEventRepository(),
+                    RealHikerRepository()
                 ).execute()
                 assertEquals("TRUE", "FALSE")
             } catch (e: NullPointerException) {
@@ -115,8 +115,8 @@ class EventUnregisterDataRequestTest: BaseDataRequestTest() {
             try {
                 EventUnregisterDataRequest(
                     FirebaseSimulator.events[0].copy(),
-                    EventRepository(),
-                    HikerRepository()
+                    RealEventRepository(),
+                    RealHikerRepository()
                 ).execute()
                 assertEquals("TRUE", "FALSE")
             } catch (e: IllegalArgumentException) {
@@ -143,8 +143,8 @@ class EventUnregisterDataRequestTest: BaseDataRequestTest() {
             CurrentHikerInfo.currentHiker = FirebaseSimulator.hikers[0].copy()
             EventUnregisterDataRequest(
                 FirebaseSimulator.events[0].copy(),
-                EventRepository(),
-                HikerRepository()
+                RealEventRepository(),
+                RealHikerRepository()
             ).execute()
             val event = FirebaseSimulator.events[0]
             assertEquals(0, event.nbHikersRegistered)

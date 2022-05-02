@@ -2,22 +2,18 @@ package com.sildian.apps.togetrail.dataRequestTestSupport
 
 import com.google.firebase.FirebaseException
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
-import org.robolectric.annotation.Implementation
-import org.robolectric.annotation.Implements
 
 /*************************************************************************************************
- * Shadow used to avoid requests to the server during data request tests
+ * Fake repository for Storage
  ************************************************************************************************/
 
-@Implements(StorageRepository::class)
-class StorageRepositoryShadow {
+class FakeStorageRepository: StorageRepository {
 
     companion object {
         private const val EXCEPTION_MESSAGE_REQUEST_FAILURE = "FAKE StorageRepository : Request failure"
     }
 
-    @Implementation
-    suspend fun uploadImage(filePath: String): String? {
+    override suspend fun uploadImage(filePath: String): String? {
         println("FAKE StorageRepository : Upload image")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
@@ -26,8 +22,7 @@ class StorageRepositoryShadow {
         return filePath
     }
 
-    @Implementation
-    suspend fun deleteImage(url: String) {
+    override suspend fun deleteImage(url: String) {
         println("FAKE StorageRepository : Delete image")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)

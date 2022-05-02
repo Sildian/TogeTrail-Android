@@ -5,6 +5,10 @@ import com.sildian.apps.togetrail.event.model.core.Event
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.trail.model.core.Trail
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -15,8 +19,9 @@ import javax.inject.Inject
  * Repository for Event
  ************************************************************************************************/
 
-@ViewModelScoped
-class EventRepository @Inject constructor() {
+/***************************************Definition***********************************************/
+
+interface EventRepository {
 
     /**
      * Gets an event reference
@@ -24,8 +29,7 @@ class EventRepository @Inject constructor() {
      * @return the document reference
      */
 
-    fun getEventReference(eventId:String): DocumentReference =
-        EventFirebaseQueries.getEvent(eventId)
+    fun getEventReference(eventId:String): DocumentReference
 
     /**
      * Gets an event
@@ -34,8 +38,100 @@ class EventRepository @Inject constructor() {
      * @throws Exception if the request fails
      */
 
+    suspend fun getEvent(eventId:String): Event?
+
+    /**
+     * Adds an event
+     * @param event : the event to add
+     * @return the event's id
+     * @throws Exception if the request fails
+     */
+
+    suspend fun addEvent(event:Event): String?
+
+    /**
+     * Updates an event
+     * @param event : the event to update
+     * @throws Exception if the request fails
+     */
+
+    suspend fun updateEvent(event:Event)
+
+    /**
+     * Updates an event's attached trail
+     * @param eventId : the event's id
+     * @param trail : the trail to attach
+     * @throws Exception if the request fails
+     */
+
+    suspend fun updateEventAttachedTrail(eventId:String, trail:Trail)
+
+    /**
+     * Deletes an event's attached trail
+     * @param eventId : the event's id
+     * @param trailId : the trail's id
+     * @throws Exception if the request fails
+     */
+
+    suspend fun deleteEventAttachedTrail(eventId:String, trailId:String)
+
+    /**
+     * Updates an event's registered hiker
+     * @param eventId : the event's id
+     * @param hiker : the hiker to register
+     * @throws Exception if the request fails
+     */
+
+    suspend fun updateEventRegisteredHiker(eventId:String, hiker:Hiker)
+
+    /**
+     * Deletes an event's registered hiker
+     * @param eventId : the event's id
+     * @param hikerId : the hiker's id
+     * @throws Exception if the request fails
+     */
+
+    suspend fun deleteEventRegisteredHiker(eventId:String, hikerId:String)
+
+    /**
+     * Creates or updates a message in the event's chat
+     * @param eventId : the event's id
+     * @param message : the message
+     * @throws Exception if the request fails
+     */
+
+    suspend fun createOrUpdateEventMessage(eventId:String, message: Message)
+
+    /**
+     * Deletes a message from the event's chat
+     * @param eventId : the event's id
+     * @param messageId : the message's id
+     * @throws Exception if the request fails
+     */
+
+    suspend fun deleteEventMessage(eventId:String, messageId: String)
+}
+
+/************************************Injection module********************************************/
+
+@Module
+@InstallIn(ViewModelComponent::class)
+object EventRepositoryModule {
+
+    @Provides
+    fun provideRealEventRepository(): EventRepository = RealEventRepository()
+}
+
+/*********************************Real implementation*******************************************/
+
+@ViewModelScoped
+class RealEventRepository @Inject constructor(): EventRepository {
+
+    override fun getEventReference(eventId:String): DocumentReference =
+        EventFirebaseQueries.getEvent(eventId)
+
     @Throws(Exception::class)
-    suspend fun getEvent(eventId:String): Event? =
+    override suspend fun getEvent(eventId:String): Event? =
         withContext(Dispatchers.IO) {
             try {
                 EventFirebaseQueries
@@ -49,15 +145,8 @@ class EventRepository @Inject constructor() {
             }
         }
 
-    /**
-     * Adds an event
-     * @param event : the event to add
-     * @return the event's id
-     * @throws Exception if the request fails
-     */
-
     @Throws(Exception::class)
-    suspend fun addEvent(event:Event): String? =
+    override suspend fun addEvent(event:Event): String? =
         withContext(Dispatchers.IO){
             try{
                 EventFirebaseQueries
@@ -70,14 +159,8 @@ class EventRepository @Inject constructor() {
             }
         }
 
-    /**
-     * Updates an event
-     * @param event : the event to update
-     * @throws Exception if the request fails
-     */
-
     @Throws(Exception::class)
-    suspend fun updateEvent(event:Event) {
+    override suspend fun updateEvent(event:Event) {
         withContext(Dispatchers.IO) {
             try {
                 EventFirebaseQueries
@@ -90,15 +173,8 @@ class EventRepository @Inject constructor() {
         }
     }
 
-    /**
-     * Updates an event's attached trail
-     * @param eventId : the event's id
-     * @param trail : the trail to attach
-     * @throws Exception if the request fails
-     */
-
     @Throws(Exception::class)
-    suspend fun updateEventAttachedTrail(eventId:String, trail:Trail) {
+    override suspend fun updateEventAttachedTrail(eventId:String, trail:Trail) {
         withContext(Dispatchers.IO) {
             try {
                 EventFirebaseQueries
@@ -111,15 +187,8 @@ class EventRepository @Inject constructor() {
         }
     }
 
-    /**
-     * Deletes an event's attached trail
-     * @param eventId : the event's id
-     * @param trailId : the trail's id
-     * @throws Exception if the request fails
-     */
-
     @Throws(Exception::class)
-    suspend fun deleteEventAttachedTrail(eventId:String, trailId:String) {
+    override suspend fun deleteEventAttachedTrail(eventId:String, trailId:String) {
         withContext(Dispatchers.IO) {
             try {
                 EventFirebaseQueries
@@ -132,15 +201,8 @@ class EventRepository @Inject constructor() {
         }
     }
 
-    /**
-     * Updates an event's registered hiker
-     * @param eventId : the event's id
-     * @param hiker : the hiker to register
-     * @throws Exception if the request fails
-     */
-
     @Throws(Exception::class)
-    suspend fun updateEventRegisteredHiker(eventId:String, hiker:Hiker) {
+    override suspend fun updateEventRegisteredHiker(eventId:String, hiker:Hiker) {
         withContext(Dispatchers.IO) {
             try {
                 EventFirebaseQueries
@@ -153,15 +215,8 @@ class EventRepository @Inject constructor() {
         }
     }
 
-    /**
-     * Deletes an event's registered hiker
-     * @param eventId : the event's id
-     * @param hikerId : the hiker's id
-     * @throws Exception if the request fails
-     */
-
     @Throws(Exception::class)
-    suspend fun deleteEventRegisteredHiker(eventId:String, hikerId:String) {
+    override suspend fun deleteEventRegisteredHiker(eventId:String, hikerId:String) {
         withContext(Dispatchers.IO) {
             try {
                 EventFirebaseQueries
@@ -174,15 +229,8 @@ class EventRepository @Inject constructor() {
         }
     }
 
-    /**
-     * Creates or updates a message in the event's chat
-     * @param eventId : the event's id
-     * @param message : the message
-     * @throws Exception if the request fails
-     */
-
     @Throws(Exception::class)
-    suspend fun createOrUpdateEventMessage(eventId:String, message: Message) {
+    override suspend fun createOrUpdateEventMessage(eventId:String, message: Message) {
         withContext(Dispatchers.IO) {
             try {
                 EventFirebaseQueries
@@ -195,15 +243,8 @@ class EventRepository @Inject constructor() {
         }
     }
 
-    /**
-     * Deletes a message from the event's chat
-     * @param eventId : the event's id
-     * @param messageId : the message's id
-     * @throws Exception if the request fails
-     */
-
     @Throws(Exception::class)
-    suspend fun deleteEventMessage(eventId:String, messageId: String) {
+    override suspend fun deleteEventMessage(eventId:String, messageId: String) {
         withContext(Dispatchers.IO) {
             try {
                 EventFirebaseQueries

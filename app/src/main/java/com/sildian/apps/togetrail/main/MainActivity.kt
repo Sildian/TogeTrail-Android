@@ -32,7 +32,7 @@ import com.sildian.apps.togetrail.chat.chatRoom.ChatActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.NumberUtilities
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseQueries
 import com.sildian.apps.togetrail.common.utils.permissionsHelpers.PermissionsCallback
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
@@ -199,14 +199,14 @@ class MainActivity :
                 this.binding.activityMainDrawerLayout.closeDrawer(GravityCompat.START)
                 when (item.itemId) {
                     R.id.menu_user_profile -> {
-                        if(AuthFirebaseHelper.getCurrentUser()!=null){
+                        if(AuthFirebaseQueries.getCurrentUser()!=null){
                             startProfileActivity()
                         }else{
                             showAccountNecessaryMessage()
                         }
                     }
                     R.id.menu_user_settings ->
-                        if(AuthFirebaseHelper.getCurrentUser()!=null){
+                        if(AuthFirebaseQueries.getCurrentUser()!=null){
                             startProfileEditActivity()
                         }else{
                             showAccountNecessaryMessage()
@@ -233,7 +233,7 @@ class MainActivity :
             R.id.menu_add -> {
                 when (item.itemId) {
                     R.id.menu_add_event -> {
-                        if (AuthFirebaseHelper.getCurrentUser() != null) {
+                        if (AuthFirebaseQueries.getCurrentUser() != null) {
                             startEventEditActivity()
                         } else {
                             showAccountNecessaryMessage()
@@ -242,7 +242,7 @@ class MainActivity :
                 }
             }
             R.id.menu_add_new_trail -> {
-                if (AuthFirebaseHelper.getCurrentUser() != null) {
+                if (AuthFirebaseQueries.getCurrentUser() != null) {
                     when (item.itemId) {
                         R.id.menu_add_trail_load_gpx ->
                             startTrailActivity(TrailActivity.ACTION_TRAIL_CREATE_FROM_GPX)
@@ -361,7 +361,7 @@ class MainActivity :
     }
 
     private fun loginCurrentUser() {
-        if (AuthFirebaseHelper.getCurrentUser() != null) {
+        if (AuthFirebaseQueries.getCurrentUser() != null) {
             this.binding.activityMainProgressbar.visibility = View.VISIBLE
             this.hikerViewModel.loginUser()
         }
@@ -546,7 +546,7 @@ class MainActivity :
     /******************************Login / Logout************************************************/
 
     private fun startLogin() {
-        val user=AuthFirebaseHelper.getCurrentUser()
+        val user=AuthFirebaseQueries.getCurrentUser()
         if (user == null) {
             startLoginActivity()
         } else {

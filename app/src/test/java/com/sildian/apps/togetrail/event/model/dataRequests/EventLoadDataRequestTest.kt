@@ -4,7 +4,7 @@ import com.google.firebase.FirebaseException
 import com.sildian.apps.togetrail.dataRequestTestSupport.BaseDataRequestTest
 import com.sildian.apps.togetrail.dataRequestTestSupport.FirebaseSimulator
 import com.sildian.apps.togetrail.event.model.core.Event
-import com.sildian.apps.togetrail.event.model.dataRepository.EventRepository
+import com.sildian.apps.togetrail.event.model.dataRepository.RealEventRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test
@@ -17,7 +17,7 @@ class EventLoadDataRequestTest: BaseDataRequestTest() {
             FirebaseSimulator.requestShouldFail = true
             FirebaseSimulator.events.add(Event(id = "EA", name = "Event A"))
             val event: Event? = try {
-                val dataRequest = EventLoadDataRequest("EA", EventRepository())
+                val dataRequest = EventLoadDataRequest("EA", RealEventRepository())
                 dataRequest.execute()
                 assertEquals("TRUE", "FALSE")
                 dataRequest.data
@@ -33,7 +33,7 @@ class EventLoadDataRequestTest: BaseDataRequestTest() {
     fun given_eventId_when_loadEventFromDatabase_then_checkEventName() {
         runBlocking {
             FirebaseSimulator.events.add(Event(id = "EA", name = "Event A"))
-            val dataRequest = EventLoadDataRequest("EA", EventRepository())
+            val dataRequest = EventLoadDataRequest("EA", RealEventRepository())
             dataRequest.execute()
             val event = dataRequest.data
             assertEquals("Event A", event?.name)

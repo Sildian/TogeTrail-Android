@@ -2,6 +2,10 @@ package com.sildian.apps.togetrail.trail.model.dataRepository
 
 import com.google.firebase.firestore.DocumentReference
 import com.sildian.apps.togetrail.trail.model.core.Trail
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -12,8 +16,9 @@ import javax.inject.Inject
  * Repository for Trail
  ************************************************************************************************/
 
-@ViewModelScoped
-class TrailRepository @Inject constructor() {
+/***************************************Definition***********************************************/
+
+interface TrailRepository {
 
     /**
      * Gets a trail reference
@@ -21,8 +26,7 @@ class TrailRepository @Inject constructor() {
      * @return the document reference
      */
 
-    fun getTrailReference(trailId:String): DocumentReference =
-        TrailFirebaseQueries.getTrail(trailId)
+    fun getTrailReference(trailId:String): DocumentReference
 
     /**
      * Gets a trail
@@ -31,8 +35,46 @@ class TrailRepository @Inject constructor() {
      * @throws Exception if the request fails
      */
 
+    suspend fun getTrail(trailId:String): Trail?
+
+    /**
+     * Adds a trail
+     * @param trail : the trail to add
+     * @return the created trail's id
+     * @throws Exception if the request fails
+     */
+
+    suspend fun addTrail(trail:Trail): String?
+
+    /**
+     * Updates a trail
+     * @param trail : the trail to update
+     * @throws Exception if the request fails
+     */
+
+    suspend fun updateTrail(trail:Trail)
+}
+
+/************************************Injection module********************************************/
+
+@Module
+@InstallIn(ViewModelComponent::class)
+object TrailRepositoryModule {
+
+    @Provides
+    fun provideRealTrailRepository(): TrailRepository = RealTrailRepository()
+}
+
+/*********************************Real implementation*******************************************/
+
+@ViewModelScoped
+class RealTrailRepository @Inject constructor(): TrailRepository {
+
+    override fun getTrailReference(trailId:String): DocumentReference =
+        TrailFirebaseQueries.getTrail(trailId)
+
     @Throws(Exception::class)
-    suspend fun getTrail(trailId:String): Trail? =
+    override suspend fun getTrail(trailId:String): Trail? =
         withContext(Dispatchers.IO) {
             try {
                 TrailFirebaseQueries
@@ -46,15 +88,8 @@ class TrailRepository @Inject constructor() {
             }
         }
 
-    /**
-     * Adds a trail
-     * @param trail : the trail to add
-     * @return the created trail's id
-     * @throws Exception if the request fails
-     */
-
     @Throws(Exception::class)
-    suspend fun addTrail(trail:Trail): String? =
+    override suspend fun addTrail(trail:Trail): String? =
         withContext(Dispatchers.IO) {
             try {
                 TrailFirebaseQueries
@@ -67,14 +102,8 @@ class TrailRepository @Inject constructor() {
             }
         }
 
-    /**
-     * Updates a trail
-     * @param trail : the trail to update
-     * @throws Exception if the request fails
-     */
-
     @Throws(Exception::class)
-    suspend fun updateTrail(trail:Trail) {
+    override suspend fun updateTrail(trail:Trail) {
         withContext(Dispatchers.IO) {
             try {
                 TrailFirebaseQueries

@@ -6,7 +6,7 @@ import com.sildian.apps.togetrail.dataRequestTestSupport.BaseDataRequestTest
 import com.sildian.apps.togetrail.dataRequestTestSupport.FirebaseSimulator
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
-import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
+import com.sildian.apps.togetrail.hiker.model.dataRepository.RealHikerRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test
@@ -24,7 +24,7 @@ class HikerSendMessageDataRequestTest: BaseDataRequestTest() {
                 HikerSendMessageDataRequest(
                     FirebaseSimulator.hikers[1],
                     "Hello",
-                    HikerRepository()
+                    RealHikerRepository()
                 ).execute()
                 assertEquals("TRUE", "FALSE")
             } catch (e: FirebaseException) {
@@ -44,7 +44,7 @@ class HikerSendMessageDataRequestTest: BaseDataRequestTest() {
                 HikerSendMessageDataRequest(
                     FirebaseSimulator.hikers[1],
                     "Hello",
-                    HikerRepository()
+                    RealHikerRepository()
                 ).execute()
                 assertEquals("TRUE", "FALSE")
             } catch (e: NullPointerException) {
@@ -65,7 +65,7 @@ class HikerSendMessageDataRequestTest: BaseDataRequestTest() {
                 HikerSendMessageDataRequest(
                     null,
                     "Hello",
-                    HikerRepository()
+                    RealHikerRepository()
                 ).execute()
                 assertEquals("TRUE", "FALSE")
             } catch (e: NullPointerException) {
@@ -86,7 +86,7 @@ class HikerSendMessageDataRequestTest: BaseDataRequestTest() {
                 HikerSendMessageDataRequest(
                     FirebaseSimulator.hikers[1],
                     "",
-                    HikerRepository()
+                    RealHikerRepository()
                 ).execute()
                 assertEquals("TRUE", "FALSE")
             } catch (e: IllegalArgumentException) {
@@ -108,7 +108,7 @@ class HikerSendMessageDataRequestTest: BaseDataRequestTest() {
             HikerSendMessageDataRequest(
                 FirebaseSimulator.hikers[1],
                 "Hello",
-                HikerRepository()
+                RealHikerRepository()
             ).execute()
             assertEquals(1, FirebaseSimulator.hikerChats["HA"]?.size)
             assertEquals(1, FirebaseSimulator.hikerChats["HB"]?.size)
@@ -140,7 +140,7 @@ class HikerSendMessageDataRequestTest: BaseDataRequestTest() {
             HikerSendMessageDataRequest(
                 FirebaseSimulator.hikers[1],
                 "Hello",
-                HikerRepository()
+                RealHikerRepository()
             ).execute()
             assertEquals(1, FirebaseSimulator.hikerChats["HA"]?.size)
             assertEquals(1, FirebaseSimulator.hikerChats["HB"]?.size)

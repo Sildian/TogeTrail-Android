@@ -1,17 +1,20 @@
 package com.sildian.apps.togetrail.common.utils.cloudHelpers
 
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /*************************************************************************************************
  * Repository for Storage
  ************************************************************************************************/
 
-@ViewModelScoped
-class StorageRepository @Inject constructor() {
+/***************************************Definition***********************************************/
+
+interface StorageRepository {
 
     /**
      * Uploads an image into the cloud
@@ -20,21 +23,7 @@ class StorageRepository @Inject constructor() {
      * @throws Exception if the request fails
      */
 
-    @Throws(Exception::class)
-    suspend fun uploadImage(filePath: String): String? =
-        withContext(Dispatchers.IO) {
-            try {
-                StorageFirebaseHelper.uploadImage(filePath)
-                    .await()
-                    .storage
-                    .downloadUrl
-                    .await()
-                    .toString()
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
+    suspend fun uploadImage(filePath: String): String?
 
     /**
      * Deletes an image from the cloud
@@ -42,16 +31,44 @@ class StorageRepository @Inject constructor() {
      * @throws Exception if the request fails
      */
 
+    suspend fun deleteImage(url: String)
+}
+
+/************************************Injection module********************************************/
+
+@Module
+@InstallIn(ViewModelComponent::class)
+object StorageRepositoryModule {
+
+    @Provides
+    fun provideRealStorageRepository(): StorageRepository = RealStorageRepository()
+}
+
+/*********************************Real implementation*******************************************/
+
+@ViewModelScoped
+class RealStorageRepository @Inject constructor(): StorageRepository {
+
     @Throws(Exception::class)
-    suspend fun deleteImage(url: String) {
-        withContext(Dispatchers.IO){
-            try {
-                StorageFirebaseHelper.deleteImage(url)
-                    .await()
-            }
-            catch (e: Exception) {
-                throw e
-            }
+    override suspend fun uploadImage(filePath: String): String? =
+        try {
+            StorageFirebaseQueries.uploadImage(filePath)
+                .await()
+                .storage
+                .downloadUrl
+                .await()
+                .toString()
+        } catch (e: Exception) {
+            throw e
+        }
+
+    @Throws(Exception::class)
+    override suspend fun deleteImage(url: String) {
+        try {
+            StorageFirebaseQueries.deleteImage(url)
+                .await()
+        } catch (e: Exception) {
+            throw e
         }
     }
 }

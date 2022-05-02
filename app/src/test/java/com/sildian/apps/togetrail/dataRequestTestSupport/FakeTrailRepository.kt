@@ -1,24 +1,25 @@
 package com.sildian.apps.togetrail.dataRequestTestSupport
 
 import com.google.firebase.FirebaseException
+import com.google.firebase.firestore.DocumentReference
 import com.sildian.apps.togetrail.trail.model.core.Trail
 import com.sildian.apps.togetrail.trail.model.dataRepository.TrailRepository
-import org.robolectric.annotation.Implementation
-import org.robolectric.annotation.Implements
+import org.mockito.Mockito
 
 /*************************************************************************************************
- * Shadow used to avoid requests to the server during data request tests
+ * Fake repository for Trail
  ************************************************************************************************/
 
-@Implements(TrailRepository::class)
-class TrailRepositoryShadow {
+class FakeTrailRepository: TrailRepository {
 
     companion object {
         private const val EXCEPTION_MESSAGE_REQUEST_FAILURE = "FAKE TrailRepository : Request failure"
     }
 
-    @Implementation
-    suspend fun getTrail(trailId: String): Trail? {
+    override fun getTrailReference(trailId: String): DocumentReference =
+        Mockito.mock(DocumentReference::class.java)
+
+    override suspend fun getTrail(trailId: String): Trail? {
         println("FAKE TrailRepository : Get trail")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
@@ -26,8 +27,7 @@ class TrailRepositoryShadow {
         return FirebaseSimulator.trails.firstOrNull { it.id == trailId }
     }
 
-    @Implementation
-    suspend fun addTrail(trail: Trail): String? {
+    override suspend fun addTrail(trail: Trail): String? {
         println("FAKE TrailRepository : Add trail")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
@@ -37,8 +37,7 @@ class TrailRepositoryShadow {
         return trail.id
     }
 
-    @Implementation
-    suspend fun updateTrail(trail: Trail) {
+    override suspend fun updateTrail(trail: Trail) {
         println("FAKE TrailRepository : Update trail")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)

@@ -1,27 +1,28 @@
 package com.sildian.apps.togetrail.dataRequestTestSupport
 
 import com.google.firebase.FirebaseException
+import com.google.firebase.firestore.DocumentReference
 import com.sildian.apps.togetrail.event.model.core.Event
-import com.sildian.apps.togetrail.event.model.dataRepository.EventRepository
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.chat.model.core.Message
+import com.sildian.apps.togetrail.event.model.dataRepository.EventRepository
 import com.sildian.apps.togetrail.trail.model.core.Trail
-import org.robolectric.annotation.Implementation
-import org.robolectric.annotation.Implements
+import org.mockito.Mockito
 
 /*************************************************************************************************
- * Shadow used to avoid requests to the server during data request tests
+ * Fake repository for Event
  ************************************************************************************************/
 
-@Implements(EventRepository::class)
-class EventRepositoryShadow {
+class FakeEventRepository: EventRepository {
 
     companion object {
         private const val EXCEPTION_MESSAGE_REQUEST_FAILURE = "FAKE EventRepository : Request failure"
     }
 
-    @Implementation
-    suspend fun getEvent(eventId:String): Event? {
+    override fun getEventReference(eventId: String): DocumentReference =
+        Mockito.mock(DocumentReference::class.java)
+
+    override suspend fun getEvent(eventId:String): Event? {
         println("FAKE EventRepository : Get event")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
@@ -29,8 +30,7 @@ class EventRepositoryShadow {
         return FirebaseSimulator.events.firstOrNull { it.id == eventId }
     }
 
-    @Implementation
-    suspend fun addEvent(event:Event): String? {
+    override suspend fun addEvent(event:Event): String? {
         println("FAKE EventRepository : Add event")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
@@ -40,8 +40,7 @@ class EventRepositoryShadow {
         return event.id
     }
 
-    @Implementation
-    suspend fun updateEvent(event:Event) {
+    override suspend fun updateEvent(event:Event) {
         println("FAKE EventRepository : Update event")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
@@ -52,8 +51,7 @@ class EventRepositoryShadow {
         }
     }
 
-    @Implementation
-    suspend fun updateEventAttachedTrail(eventId:String, trail: Trail) {
+    override suspend fun updateEventAttachedTrail(eventId:String, trail: Trail) {
         println("FAKE EventRepository : Update attached trail")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
@@ -67,8 +65,7 @@ class EventRepositoryShadow {
         }
     }
 
-    @Implementation
-    suspend fun deleteEventAttachedTrail(eventId:String, trailId:String) {
+    override suspend fun deleteEventAttachedTrail(eventId:String, trailId:String) {
         println("FAKE EventRepository : Delete attached trail")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
@@ -78,8 +75,7 @@ class EventRepositoryShadow {
         }
     }
 
-    @Implementation
-    suspend fun updateEventRegisteredHiker(eventId:String, hiker: Hiker) {
+    override suspend fun updateEventRegisteredHiker(eventId:String, hiker: Hiker) {
         println("FAKE EventRepository : Update registered hiker")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
@@ -93,8 +89,7 @@ class EventRepositoryShadow {
         }
     }
 
-    @Implementation
-    suspend fun deleteEventRegisteredHiker(eventId:String, hikerId:String) {
+    override suspend fun deleteEventRegisteredHiker(eventId:String, hikerId:String) {
         println("FAKE EventRepository : Delete registered hiker")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
@@ -104,8 +99,7 @@ class EventRepositoryShadow {
         }
     }
 
-    @Implementation
-    suspend fun createOrUpdateEventMessage(eventId:String, message: Message) {
+    override suspend fun createOrUpdateEventMessage(eventId:String, message: Message) {
         println("FAKE EventRepository : Create or update message")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
@@ -119,8 +113,7 @@ class EventRepositoryShadow {
         }
     }
 
-    @Implementation
-    suspend fun deleteEventMessage(eventId:String, messageId: String) {
+    override suspend fun deleteEventMessage(eventId:String, messageId: String) {
         println("FAKE EventRepository : Delete message")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)

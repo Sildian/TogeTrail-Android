@@ -11,7 +11,7 @@ import java.util.*
  * Provides with Firebase queries allowing to store files within cloud
  ************************************************************************************************/
 
-object StorageFirebaseHelper {
+object StorageFirebaseQueries {
 
     /**
      * Uploads an image into Firebase

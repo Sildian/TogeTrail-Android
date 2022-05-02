@@ -1,6 +1,7 @@
 package com.sildian.apps.togetrail.dataRequestTestSupport
 
 import com.google.firebase.FirebaseException
+import com.google.firebase.firestore.DocumentReference
 import com.sildian.apps.togetrail.chat.model.core.Duo
 import com.sildian.apps.togetrail.chat.model.core.Message
 import com.sildian.apps.togetrail.event.model.core.Event
@@ -8,22 +9,23 @@ import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
-import org.robolectric.annotation.Implementation
-import org.robolectric.annotation.Implements
+import com.sildian.apps.togetrail.trail.model.core.Trail
+import org.mockito.Mockito
 
 /*************************************************************************************************
- * Shadow used to avoid requests to the server during data request tests
+ * Fake repository for Hiker
  ************************************************************************************************/
 
-@Implements(HikerRepository::class)
-class HikerRepositoryShadow {
+class FakeHikerRepository: HikerRepository {
 
     companion object {
         private const val EXCEPTION_MESSAGE_REQUEST_FAILURE = "FAKE HikerRepository : Request failure"
     }
 
-    @Implementation
-    suspend fun getHiker(hikerId: String): Hiker? {
+    override fun getHikerReference(hikerId: String): DocumentReference =
+        Mockito.mock(DocumentReference::class.java)
+
+    override suspend fun getHiker(hikerId: String): Hiker? {
         println("FAKE HikerRepository : Get hiker")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
@@ -31,8 +33,7 @@ class HikerRepositoryShadow {
         return FirebaseSimulator.hikers.firstOrNull { it.id == hikerId }
     }
 
-    @Implementation
-    suspend fun updateHiker(hiker: Hiker) {
+    override suspend fun updateHiker(hiker: Hiker) {
         println("FAKE HikerRepository : Update hiker")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
@@ -41,8 +42,7 @@ class HikerRepositoryShadow {
         FirebaseSimulator.hikers.add(hiker)
     }
 
-    @Implementation
-    suspend fun deleteHiker(hiker: Hiker) {
+    override suspend fun deleteHiker(hiker: Hiker) {
         println("FAKE HikerRepository : Delete hiker")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
@@ -50,8 +50,7 @@ class HikerRepositoryShadow {
         FirebaseSimulator.hikers.removeIf { it.id == hiker.id }
     }
 
-    @Implementation
-    suspend fun addHikerHistoryItem(hikerId: String, historyItem: HikerHistoryItem) {
+    override suspend fun addHikerHistoryItem(hikerId: String, historyItem: HikerHistoryItem) {
         println("FAKE HikerRepository : Add history item")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
@@ -62,8 +61,7 @@ class HikerRepositoryShadow {
         FirebaseSimulator.hikerHistoryItems[hikerId]?.add(historyItem)
     }
 
-    @Implementation
-    suspend fun deleteHikerHistoryItems(hikerId: String, type: HikerHistoryType, relatedItemId: String) {
+    override suspend fun deleteHikerHistoryItems(hikerId: String, type: HikerHistoryType, relatedItemId: String) {
         println("FAKE HikerRepository : Delete history item")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
@@ -73,8 +71,7 @@ class HikerRepositoryShadow {
         }
     }
 
-    @Implementation
-    suspend fun updateHikerAttendedEvent(hikerId:String, event: Event) {
+    override suspend fun updateHikerAttendedEvent(hikerId:String, event: Event) {
         println("FAKE HikerRepository : Update attended event")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
@@ -86,8 +83,7 @@ class HikerRepositoryShadow {
         FirebaseSimulator.hikerAttendedEvents[hikerId]?.add(event)
     }
 
-    @Implementation
-    suspend fun deleteHikerAttendedEvent(hikerId: String, eventId: String) {
+    override suspend fun deleteHikerAttendedEvent(hikerId: String, eventId: String) {
         println("FAKE HikerRepository : Delete attended event")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
@@ -95,8 +91,47 @@ class HikerRepositoryShadow {
         FirebaseSimulator.hikerAttendedEvents[hikerId]?.removeIf { it.id == eventId }
     }
 
-    @Implementation
-    suspend fun getChatBetweenUsers(hikerId: String, interlocutorId: String): Duo? {
+    override suspend fun updateHikerLikedTrail(hikerId: String, trail: Trail) {
+        println("FAKE HikerRepository : Update liked trail")
+        if (FirebaseSimulator.requestShouldFail) {
+            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
+        }
+        if (FirebaseSimulator.hikerLikedTrails[hikerId] == null) {
+            FirebaseSimulator.hikerLikedTrails[hikerId] = arrayListOf()
+        }
+        FirebaseSimulator.hikerLikedTrails[hikerId]?.removeIf { it.id == trail.id }
+        FirebaseSimulator.hikerLikedTrails[hikerId]?.add(trail)
+    }
+
+    override suspend fun deleteHikerLikedTrail(hikerId: String, trailId: String) {
+        println("FAKE HikerRepository : Delete liked trail")
+        if (FirebaseSimulator.requestShouldFail) {
+            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
+        }
+        FirebaseSimulator.hikerLikedTrails[hikerId]?.removeIf { it.id == trailId }
+    }
+
+    override suspend fun updateHikerMarkedTrail(hikerId: String, trail: Trail) {
+        println("FAKE HikerRepository : Update marked trail")
+        if (FirebaseSimulator.requestShouldFail) {
+            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
+        }
+        if (FirebaseSimulator.hikerMarkedTrails[hikerId] == null) {
+            FirebaseSimulator.hikerMarkedTrails[hikerId] = arrayListOf()
+        }
+        FirebaseSimulator.hikerMarkedTrails[hikerId]?.removeIf { it.id == trail.id }
+        FirebaseSimulator.hikerMarkedTrails[hikerId]?.add(trail)
+    }
+
+    override suspend fun deleteHikerMarkedTrail(hikerId: String, trailId: String) {
+        println("FAKE HikerRepository : Delete marked trail")
+        if (FirebaseSimulator.requestShouldFail) {
+            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
+        }
+        FirebaseSimulator.hikerMarkedTrails[hikerId]?.removeIf { it.id == trailId }
+    }
+
+    override suspend fun getChatBetweenUsers(hikerId: String, interlocutorId: String): Duo? {
         println("FAKE HikerRepository : Get chat between users")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
@@ -106,8 +141,7 @@ class HikerRepositoryShadow {
         }
     }
 
-    @Implementation
-    suspend fun createOrUpdateHikerChat(hikerId: String, duo: Duo) {
+    override suspend fun createOrUpdateHikerChat(hikerId: String, duo: Duo) {
         println("FAKE HikerRepository : Create or update chat")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
@@ -119,8 +153,7 @@ class HikerRepositoryShadow {
         FirebaseSimulator.hikerChats[hikerId]?.add(duo)
     }
 
-    @Implementation
-    suspend fun deleteHikerChat(hikerId: String, interlocutorId: String) {
+    override suspend fun deleteHikerChat(hikerId: String, interlocutorId: String) {
         println("FAKE HikerRepository : Delete chat")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
@@ -128,8 +161,7 @@ class HikerRepositoryShadow {
         FirebaseSimulator.hikerChats[hikerId]?.removeIf { it.interlocutorId == interlocutorId }
     }
 
-    @Implementation
-    suspend fun getLastHikerMessage(hikerId: String, interlocutorId: String): Message? {
+    override suspend fun getLastHikerMessage(hikerId: String, interlocutorId: String): Message? {
         println("FAKE HikerRepository : Get last hiker message")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
@@ -137,8 +169,7 @@ class HikerRepositoryShadow {
         return FirebaseSimulator.hikerChatMessages[hikerId]?.get(interlocutorId)?.last()
     }
 
-    @Implementation
-    suspend fun createOrUpdateHikerMessage(hikerId: String, interlocutorId: String, message: Message) {
+    override suspend fun createOrUpdateHikerMessage(hikerId: String, interlocutorId: String, message: Message) {
         println("FAKE HikerRepository : Create of update message")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
@@ -155,8 +186,7 @@ class HikerRepositoryShadow {
         }
     }
 
-    @Implementation
-    suspend fun deleteHikerMessage(hikerId: String, interlocutorId: String, messageId: String) {
+    override suspend fun deleteHikerMessage(hikerId: String, interlocutorId: String, messageId: String) {
         println("FAKE HikerRepository : Delete message")
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)

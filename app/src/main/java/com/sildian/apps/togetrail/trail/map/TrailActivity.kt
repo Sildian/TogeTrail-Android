@@ -10,7 +10,7 @@ import androidx.databinding.ViewDataBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseQueries
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.databinding.ActivityTrailBinding
 import com.sildian.apps.togetrail.hiker.profile.ProfileActivity
@@ -255,7 +255,7 @@ class TrailActivity : BaseActivity<ActivityTrailBinding>() {
     private fun startTrailAction() {
         when (this.currentAction) {
             ACTION_TRAIL_SEE -> {
-                this.isEditable=AuthFirebaseHelper.getCurrentUser()?.uid == this.trailViewModel.data.value?.data?.authorId
+                this.isEditable=AuthFirebaseQueries.getCurrentUser()?.uid == this.trailViewModel.data.value?.data?.authorId
                 showFragment(ID_FRAGMENT_TRAIL_DETAIL)
             }
             ACTION_TRAIL_CREATE_FROM_GPX ->{

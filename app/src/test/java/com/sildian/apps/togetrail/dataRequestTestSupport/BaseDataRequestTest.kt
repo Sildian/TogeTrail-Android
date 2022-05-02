@@ -16,11 +16,11 @@ import org.robolectric.annotation.Config
 @Config(
     sdk = [28],
     shadows = [
-        AuthRepositoryShadow::class,
-        StorageRepositoryShadow::class,
-        HikerRepositoryShadow::class,
-        TrailRepositoryShadow::class,
-        EventRepositoryShadow::class
+        FakeAuthRepository::class,
+        FakeStorageRepository::class,
+        FakeHikerRepository::class,
+        FakeTrailRepository::class,
+        FakeEventRepository::class
     ]
 )
 abstract class BaseDataRequestTest {

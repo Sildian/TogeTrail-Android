@@ -4,7 +4,7 @@ import com.google.firebase.FirebaseException
 import com.sildian.apps.togetrail.dataRequestTestSupport.BaseDataRequestTest
 import com.sildian.apps.togetrail.dataRequestTestSupport.FirebaseSimulator
 import com.sildian.apps.togetrail.trail.model.core.Trail
-import com.sildian.apps.togetrail.trail.model.dataRepository.TrailRepository
+import com.sildian.apps.togetrail.trail.model.dataRepository.RealTrailRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test
@@ -17,7 +17,7 @@ class TrailLoadDataRequestTest: BaseDataRequestTest() {
             FirebaseSimulator.requestShouldFail = true
             FirebaseSimulator.trails.add(Trail(id = "TA", name = "Trail A"))
             val trail: Trail? = try {
-                val dataRequest = TrailLoadDataRequest("TA", TrailRepository())
+                val dataRequest = TrailLoadDataRequest("TA", RealTrailRepository())
                 dataRequest.execute()
                 assertEquals("TRUE", "FALSE")
                 dataRequest.data
@@ -33,7 +33,7 @@ class TrailLoadDataRequestTest: BaseDataRequestTest() {
     fun given_trailId_when_loadTrailFromDatabase_then_checkTrailName() {
         runBlocking {
             FirebaseSimulator.trails.add(Trail(id = "TA", name = "Trail A"))
-            val dataRequest = TrailLoadDataRequest("TA", TrailRepository())
+            val dataRequest = TrailLoadDataRequest("TA", RealTrailRepository())
             dataRequest.execute()
             val trail = dataRequest.data
             assertEquals("Trail A", trail?.name)

@@ -8,7 +8,7 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.chat.chatRoom.ChatActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseHelper
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseQueries
 import com.sildian.apps.togetrail.databinding.ActivityProfileBinding
 import com.sildian.apps.togetrail.event.detail.EventActivity
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
@@ -45,9 +45,9 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding>() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         when {
-            this.hikerId == AuthFirebaseHelper.getCurrentUser()?.uid ->
+            this.hikerId == AuthFirebaseQueries.getCurrentUser()?.uid ->
                 menuInflater.inflate(R.menu.menu_edit, menu)
-            AuthFirebaseHelper.getCurrentUser() != null ->
+            AuthFirebaseQueries.getCurrentUser() != null ->
                 menuInflater.inflate(R.menu.menu_chat, menu)
             else -> { }
         }
