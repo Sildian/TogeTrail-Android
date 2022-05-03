@@ -1,5 +1,6 @@
 package com.sildian.apps.togetrail.dataRequestTestSupport
 
+import android.net.Uri
 import androidx.core.net.toUri
 import com.google.firebase.auth.FirebaseUser
 import com.sildian.apps.togetrail.chat.model.core.Duo
@@ -75,7 +76,7 @@ object FirebaseSimulator {
         Mockito.`when`(user?.uid).thenReturn(uid)
         Mockito.`when`(user?.email).thenReturn(email)
         Mockito.`when`(user?.displayName).thenReturn(displayName)
-        Mockito.`when`(user?.photoUrl).thenReturn(photoUrl?.toUri())
+        Mockito.`when`(user?.photoUrl).thenReturn(Uri.parse(photoUrl?: ""))
         currentUser = user
     }
 }

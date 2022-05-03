@@ -2,19 +2,21 @@ package com.sildian.apps.togetrail.event.model.dataRequests
 
 import com.google.firebase.FirebaseException
 import com.sildian.apps.togetrail.dataRequestTestSupport.BaseDataRequestTest
+import com.sildian.apps.togetrail.dataRequestTestSupport.FakeEventRepository
+import com.sildian.apps.togetrail.dataRequestTestSupport.FakeHikerRepository
 import com.sildian.apps.togetrail.dataRequestTestSupport.FirebaseSimulator
 import com.sildian.apps.togetrail.event.model.core.Event
-import com.sildian.apps.togetrail.event.model.dataRepository.RealEventRepository
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
-import com.sildian.apps.togetrail.hiker.model.dataRepository.RealHikerRepository
 import com.sildian.apps.togetrail.trail.model.core.Trail
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 class EventSaveDataRequestTest: BaseDataRequestTest() {
 
     @Test
@@ -26,9 +28,10 @@ class EventSaveDataRequestTest: BaseDataRequestTest() {
             try {
                 val event = Event(id = "EA", name = "Event A")
                 val dataRequest = EventSaveDataRequest(
+                    dispatcher,
                     event,
-                    RealHikerRepository(),
-                    RealEventRepository()
+                    FakeHikerRepository(),
+                    FakeEventRepository()
                 )
                 dataRequest.execute()
                 assertEquals("TRUE", "FALSE")
@@ -48,9 +51,10 @@ class EventSaveDataRequestTest: BaseDataRequestTest() {
             try {
                 val event = Event(id = "EA", name = "Event A")
                 val dataRequest = EventSaveDataRequest(
+                    dispatcher,
                     event,
-                    RealHikerRepository(),
-                    RealEventRepository()
+                    FakeHikerRepository(),
+                    FakeEventRepository()
                 )
                 dataRequest.execute()
                 assertEquals("TRUE", "FALSE")
@@ -70,9 +74,10 @@ class EventSaveDataRequestTest: BaseDataRequestTest() {
             launch {
                 try {
                     val dataRequest = EventSaveDataRequest(
+                        dispatcher,
                         null,
-                        RealHikerRepository(),
-                        RealEventRepository()
+                        FakeHikerRepository(),
+                        FakeEventRepository()
                     )
                     dataRequest.execute()
                     assertEquals("TRUE", "FALSE")
@@ -95,9 +100,10 @@ class EventSaveDataRequestTest: BaseDataRequestTest() {
             FirebaseSimulator.events.add(Event(id = "EA", name = "Event A"))
             val event = Event(id = "EA", name = "Event A", description = "Super event")
             val dataRequest = EventSaveDataRequest(
+                dispatcher,
                 event,
-                RealHikerRepository(),
-                RealEventRepository()
+                FakeHikerRepository(),
+                FakeEventRepository()
             )
             dataRequest.execute()
             val eventFromDb = FirebaseSimulator.events.firstOrNull { it.id == "EA" }
@@ -117,9 +123,10 @@ class EventSaveDataRequestTest: BaseDataRequestTest() {
             CurrentHikerInfo.currentHiker = FirebaseSimulator.hikers.first()
             val event = Event(name = "Event New", description = "Super event")
             val dataRequest = EventSaveDataRequest(
+                dispatcher,
                 event,
-                RealHikerRepository(),
-                RealEventRepository()
+                FakeHikerRepository(),
+                FakeEventRepository()
             )
             dataRequest.execute()
             val eventFromDb = FirebaseSimulator.events.firstOrNull { it.id == "ENEW" }
@@ -143,9 +150,10 @@ class EventSaveDataRequestTest: BaseDataRequestTest() {
             val event = Event(name = "Event New", description = "Super event")
             val trails = arrayListOf(FirebaseSimulator.trails[0], FirebaseSimulator.trails[1])
             val dataRequest = EventSaveDataRequest(
+                dispatcher,
                 event,
-                RealHikerRepository(),
-                RealEventRepository()
+                FakeHikerRepository(),
+                FakeEventRepository()
             )
                 .addAttachedTrails(trails)
             dataRequest.execute()

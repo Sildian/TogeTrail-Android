@@ -1,19 +1,17 @@
 package com.sildian.apps.togetrail.trail.model.dataRequests
 
 import com.google.firebase.FirebaseException
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.RealStorageRepository
-import com.sildian.apps.togetrail.dataRequestTestSupport.BaseDataRequestTest
-import com.sildian.apps.togetrail.dataRequestTestSupport.FirebaseSimulator
+import com.sildian.apps.togetrail.dataRequestTestSupport.*
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
-import com.sildian.apps.togetrail.hiker.model.dataRepository.RealHikerRepository
 import com.sildian.apps.togetrail.trail.model.core.Trail
-import com.sildian.apps.togetrail.trail.model.dataRepository.RealTrailRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 class TrailSaveDataRequestTest: BaseDataRequestTest() {
 
     @Test
@@ -25,12 +23,13 @@ class TrailSaveDataRequestTest: BaseDataRequestTest() {
             try {
                 val trail = Trail(id = "TA", name = "Trail A")
                 val dataRequest = TrailSaveDataRequest(
+                    dispatcher,
                     trail,
                     null,
                     null,
-                    RealStorageRepository(),
-                    RealHikerRepository(),
-                    RealTrailRepository()
+                    FakeStorageRepository(),
+                    FakeHikerRepository(),
+                    FakeTrailRepository()
                 )
                 dataRequest.execute()
                 assertEquals("TRUE", "FALSE")
@@ -50,12 +49,13 @@ class TrailSaveDataRequestTest: BaseDataRequestTest() {
                 try {
                     val trail = Trail(id = "TA", name = "Trail A")
                     val dataRequest = TrailSaveDataRequest(
+                        dispatcher,
                         trail,
                         null,
                         null,
-                        RealStorageRepository(),
-                        RealHikerRepository(),
-                        RealTrailRepository()
+                        FakeStorageRepository(),
+                        FakeHikerRepository(),
+                        FakeTrailRepository()
                     )
                     dataRequest.execute()
                     assertEquals("TRUE", "FALSE")
@@ -75,12 +75,13 @@ class TrailSaveDataRequestTest: BaseDataRequestTest() {
             CurrentHikerInfo.currentHiker = FirebaseSimulator.hikers.first()
             try {
                 val dataRequest = TrailSaveDataRequest(
+                    dispatcher,
                     null,
                     null,
                     null,
-                    RealStorageRepository(),
-                    RealHikerRepository(),
-                    RealTrailRepository()
+                    FakeStorageRepository(),
+                    FakeHikerRepository(),
+                    FakeTrailRepository()
                 )
                 dataRequest.execute()
                 assertEquals("TRUE", "FALSE")
@@ -101,12 +102,13 @@ class TrailSaveDataRequestTest: BaseDataRequestTest() {
             FirebaseSimulator.trails.add(Trail("TA", "Trail A"))
             val trail = Trail(id = "TA", name = "Trail A", distance = 50)
             val dataRequest = TrailSaveDataRequest(
+                dispatcher,
                 trail,
                 null,
                 null,
-                RealStorageRepository(),
-                RealHikerRepository(),
-                RealTrailRepository()
+                FakeStorageRepository(),
+                FakeHikerRepository(),
+                FakeTrailRepository()
             )
             dataRequest.execute()
             val trailFromDb = FirebaseSimulator.trails.firstOrNull { it.id == "TA" }
@@ -126,12 +128,13 @@ class TrailSaveDataRequestTest: BaseDataRequestTest() {
             CurrentHikerInfo.currentHiker = FirebaseSimulator.hikers.first()
             val trail = Trail(name = "Trail New", distance = 50)
             val dataRequest = TrailSaveDataRequest(
+                dispatcher,
                 trail,
                 null,
                 null,
-                RealStorageRepository(),
-                RealHikerRepository(),
-                RealTrailRepository()
+                FakeStorageRepository(),
+                FakeHikerRepository(),
+                FakeTrailRepository()
             )
             dataRequest.execute()
             val trailFromDb = FirebaseSimulator.trails.firstOrNull { it.id == "TNEW" }
@@ -154,12 +157,13 @@ class TrailSaveDataRequestTest: BaseDataRequestTest() {
             FirebaseSimulator.trails.add(Trail("TA", "Trail A"))
             val trail = Trail(id = "TA", name = "Trail A", mainPhotoUrl = "Old image")
             val dataRequest = TrailSaveDataRequest(
+                dispatcher,
                 trail,
                 "Old image",
                 "New image",
-                RealStorageRepository(),
-                RealHikerRepository(),
-                RealTrailRepository()
+                FakeStorageRepository(),
+                FakeHikerRepository(),
+                FakeTrailRepository()
             )
             dataRequest.execute()
             val trailFromDb = FirebaseSimulator.trails.firstOrNull { it.id == "TA" }

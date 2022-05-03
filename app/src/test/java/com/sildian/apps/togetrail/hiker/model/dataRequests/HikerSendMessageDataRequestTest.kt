@@ -3,14 +3,16 @@ package com.sildian.apps.togetrail.hiker.model.dataRequests
 import com.google.firebase.FirebaseException
 import com.sildian.apps.togetrail.chat.model.core.Duo
 import com.sildian.apps.togetrail.dataRequestTestSupport.BaseDataRequestTest
+import com.sildian.apps.togetrail.dataRequestTestSupport.FakeHikerRepository
 import com.sildian.apps.togetrail.dataRequestTestSupport.FirebaseSimulator
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
-import com.sildian.apps.togetrail.hiker.model.dataRepository.RealHikerRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 class HikerSendMessageDataRequestTest: BaseDataRequestTest() {
 
     @Test
@@ -22,9 +24,10 @@ class HikerSendMessageDataRequestTest: BaseDataRequestTest() {
             CurrentHikerInfo.currentHiker = FirebaseSimulator.hikers[0]
             try {
                 HikerSendMessageDataRequest(
+                    dispatcher,
                     FirebaseSimulator.hikers[1],
                     "Hello",
-                    RealHikerRepository()
+                    FakeHikerRepository()
                 ).execute()
                 assertEquals("TRUE", "FALSE")
             } catch (e: FirebaseException) {
@@ -42,9 +45,10 @@ class HikerSendMessageDataRequestTest: BaseDataRequestTest() {
             FirebaseSimulator.hikers.add(Hiker(id = "HB", name = "Hiker B"))
             try {
                 HikerSendMessageDataRequest(
+                    dispatcher,
                     FirebaseSimulator.hikers[1],
                     "Hello",
-                    RealHikerRepository()
+                    FakeHikerRepository()
                 ).execute()
                 assertEquals("TRUE", "FALSE")
             } catch (e: NullPointerException) {
@@ -63,9 +67,10 @@ class HikerSendMessageDataRequestTest: BaseDataRequestTest() {
             CurrentHikerInfo.currentHiker = FirebaseSimulator.hikers[0]
             try {
                 HikerSendMessageDataRequest(
+                    dispatcher,
                     null,
                     "Hello",
-                    RealHikerRepository()
+                    FakeHikerRepository()
                 ).execute()
                 assertEquals("TRUE", "FALSE")
             } catch (e: NullPointerException) {
@@ -84,9 +89,10 @@ class HikerSendMessageDataRequestTest: BaseDataRequestTest() {
             CurrentHikerInfo.currentHiker = FirebaseSimulator.hikers[0]
             try {
                 HikerSendMessageDataRequest(
+                    dispatcher,
                     FirebaseSimulator.hikers[1],
                     "",
-                    RealHikerRepository()
+                    FakeHikerRepository()
                 ).execute()
                 assertEquals("TRUE", "FALSE")
             } catch (e: IllegalArgumentException) {
@@ -106,9 +112,10 @@ class HikerSendMessageDataRequestTest: BaseDataRequestTest() {
             FirebaseSimulator.hikerChats["HB"] = arrayListOf(Duo("HA", "HB", "?"))
             CurrentHikerInfo.currentHiker = FirebaseSimulator.hikers[0]
             HikerSendMessageDataRequest(
+                dispatcher,
                 FirebaseSimulator.hikers[1],
                 "Hello",
-                RealHikerRepository()
+                FakeHikerRepository()
             ).execute()
             assertEquals(1, FirebaseSimulator.hikerChats["HA"]?.size)
             assertEquals(1, FirebaseSimulator.hikerChats["HB"]?.size)
@@ -138,9 +145,10 @@ class HikerSendMessageDataRequestTest: BaseDataRequestTest() {
             FirebaseSimulator.hikers.add(Hiker(id = "HB", name = "Hiker B"))
             CurrentHikerInfo.currentHiker = FirebaseSimulator.hikers[0]
             HikerSendMessageDataRequest(
+                dispatcher,
                 FirebaseSimulator.hikers[1],
                 "Hello",
-                RealHikerRepository()
+                FakeHikerRepository()
             ).execute()
             assertEquals(1, FirebaseSimulator.hikerChats["HA"]?.size)
             assertEquals(1, FirebaseSimulator.hikerChats["HB"]?.size)

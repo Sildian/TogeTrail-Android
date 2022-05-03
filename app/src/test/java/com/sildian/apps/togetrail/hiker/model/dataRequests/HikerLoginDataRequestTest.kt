@@ -1,17 +1,19 @@
 package com.sildian.apps.togetrail.hiker.model.dataRequests
 
 import com.google.firebase.FirebaseException
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.RealAuthRepository
 import com.sildian.apps.togetrail.dataRequestTestSupport.BaseDataRequestTest
+import com.sildian.apps.togetrail.dataRequestTestSupport.FakeAuthRepository
+import com.sildian.apps.togetrail.dataRequestTestSupport.FakeHikerRepository
 import com.sildian.apps.togetrail.dataRequestTestSupport.FirebaseSimulator
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
-import com.sildian.apps.togetrail.hiker.model.dataRepository.RealHikerRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 class HikerLoginDataRequestTest: BaseDataRequestTest() {
 
     @Test
@@ -21,7 +23,7 @@ class HikerLoginDataRequestTest: BaseDataRequestTest() {
             FirebaseSimulator.setCurrentUser("HA", "ha@togetrail.com", "Hiker A", null)
             FirebaseSimulator.hikers.add(Hiker(id = "HA", name = "Hiker A"))
             val hiker = try {
-                val dataRequest = HikerLoginDataRequest(RealAuthRepository(), RealHikerRepository())
+                val dataRequest = HikerLoginDataRequest(dispatcher, FakeAuthRepository(), FakeHikerRepository())
                 dataRequest.execute()
                 assertEquals("TRUE", "FALSE")
                 dataRequest.data
@@ -40,7 +42,7 @@ class HikerLoginDataRequestTest: BaseDataRequestTest() {
         runBlocking {
             FirebaseSimulator.hikers.add(Hiker(id = "HA", name = "Hiker A"))
             val hiker = try {
-                val dataRequest = HikerLoginDataRequest(RealAuthRepository(), RealHikerRepository())
+                val dataRequest = HikerLoginDataRequest(dispatcher, FakeAuthRepository(), FakeHikerRepository())
                 dataRequest.execute()
                 assertEquals("TRUE", "FALSE")
                 dataRequest.data
@@ -59,7 +61,7 @@ class HikerLoginDataRequestTest: BaseDataRequestTest() {
         runBlocking {
             FirebaseSimulator.setCurrentUser("HA", "ha@togetrail.com", "Hiker A", null)
             FirebaseSimulator.hikers.add(Hiker(id = "HA", name = "Hiker A"))
-            val dataRequest = HikerLoginDataRequest(RealAuthRepository(), RealHikerRepository())
+            val dataRequest = HikerLoginDataRequest(dispatcher, FakeAuthRepository(), FakeHikerRepository())
             dataRequest.execute()
             val hiker = dataRequest.data
             assertEquals("HA", CurrentHikerInfo.currentHiker?.id)
@@ -74,7 +76,7 @@ class HikerLoginDataRequestTest: BaseDataRequestTest() {
     fun given_newUser_when_loginHiker_then_checkHikerProfileIsCreated() {
         runBlocking {
             FirebaseSimulator.setCurrentUser("HA", "ha@togetrail.com", "Hiker A", null)
-            val dataRequest = HikerLoginDataRequest(RealAuthRepository(), RealHikerRepository())
+            val dataRequest = HikerLoginDataRequest(dispatcher, FakeAuthRepository(), FakeHikerRepository())
             dataRequest.execute()
             val hiker = dataRequest.data
             val hikerFromDB = FirebaseSimulator.hikers[0]

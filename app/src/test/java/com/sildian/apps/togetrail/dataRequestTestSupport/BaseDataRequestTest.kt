@@ -1,33 +1,32 @@
 package com.sildian.apps.togetrail.dataRequestTestSupport
 
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
+import org.junit.Before
 
 /*************************************************************************************************
  * Base for all data request tests
- * Use Shadows in order to avoid requests to the server
- * The aim of these tests is to check the business logic, not the queries
  ************************************************************************************************/
 
-@RunWith(RobolectricTestRunner::class)
-@Config(
-    sdk = [28],
-    shadows = [
-        FakeAuthRepository::class,
-        FakeStorageRepository::class,
-        FakeHikerRepository::class,
-        FakeTrailRepository::class,
-        FakeEventRepository::class
-    ]
-)
+@ExperimentalCoroutinesApi
 abstract class BaseDataRequestTest {
-    
+
+    protected val dispatcher = TestCoroutineDispatcher()
+
+    @Before
+    fun init() {
+        Dispatchers.setMain(this.dispatcher)
+    }
+
     @After
     fun finish() {
         CurrentHikerInfo.currentHiker = null
         FirebaseSimulator.reset()
+        Dispatchers.resetMain()
     }
 }

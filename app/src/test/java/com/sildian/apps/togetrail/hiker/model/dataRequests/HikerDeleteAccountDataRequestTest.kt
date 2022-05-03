@@ -1,17 +1,15 @@
 package com.sildian.apps.togetrail.hiker.model.dataRequests
 
 import com.google.firebase.FirebaseException
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.RealAuthRepository
-import com.sildian.apps.togetrail.common.utils.cloudHelpers.RealStorageRepository
-import com.sildian.apps.togetrail.dataRequestTestSupport.BaseDataRequestTest
-import com.sildian.apps.togetrail.dataRequestTestSupport.FirebaseSimulator
+import com.sildian.apps.togetrail.dataRequestTestSupport.*
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
-import com.sildian.apps.togetrail.hiker.model.dataRepository.RealHikerRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 class HikerDeleteAccountDataRequestTest: BaseDataRequestTest() {
 
     @Test
@@ -24,9 +22,10 @@ class HikerDeleteAccountDataRequestTest: BaseDataRequestTest() {
             CurrentHikerInfo.currentHiker = FirebaseSimulator.hikers[0]
             try {
                 HikerDeleteAccountDataRequest(
-                    RealAuthRepository(),
-                    RealStorageRepository(),
-                    RealHikerRepository()
+                    dispatcher,
+                    FakeAuthRepository(),
+                    FakeStorageRepository(),
+                    FakeHikerRepository()
                 ).execute()
                 assertEquals("TRUE", "FALSE")
             } catch (e: FirebaseException) {
@@ -47,9 +46,10 @@ class HikerDeleteAccountDataRequestTest: BaseDataRequestTest() {
             CurrentHikerInfo.currentHiker = FirebaseSimulator.hikers[0]
             try {
                 HikerDeleteAccountDataRequest(
-                    RealAuthRepository(),
-                    RealStorageRepository(),
-                    RealHikerRepository()
+                    dispatcher,
+                    FakeAuthRepository(),
+                    FakeStorageRepository(),
+                    FakeHikerRepository()
                 ).execute()
                 assertEquals("TRUE", "FALSE")
             } catch (e: NullPointerException) {
@@ -70,9 +70,10 @@ class HikerDeleteAccountDataRequestTest: BaseDataRequestTest() {
             FirebaseSimulator.setCurrentUser("HA", "ha@togetrail.com", "Hiker A", "hikerAPhoto")
             try {
                 HikerDeleteAccountDataRequest(
-                    RealAuthRepository(),
-                    RealStorageRepository(),
-                    RealHikerRepository()
+                    dispatcher,
+                    FakeAuthRepository(),
+                    FakeStorageRepository(),
+                    FakeHikerRepository()
                 ).execute()
                 assertEquals("TRUE", "FALSE")
             } catch (e: NullPointerException) {
@@ -93,9 +94,10 @@ class HikerDeleteAccountDataRequestTest: BaseDataRequestTest() {
             FirebaseSimulator.setCurrentUser("HA", "ha@togetrail.com", "Hiker A", "hikerAPhoto")
             CurrentHikerInfo.currentHiker = FirebaseSimulator.hikers[0]
             HikerDeleteAccountDataRequest(
-                RealAuthRepository(),
-                RealStorageRepository(),
-                RealHikerRepository()
+                dispatcher,
+                FakeAuthRepository(),
+                FakeStorageRepository(),
+                FakeHikerRepository()
             ).execute()
             assertNull(FirebaseSimulator.currentUser)
             assertNull(CurrentHikerInfo.currentHiker)

@@ -2,17 +2,19 @@ package com.sildian.apps.togetrail.event.model.dataRequests
 
 import com.google.firebase.FirebaseException
 import com.sildian.apps.togetrail.dataRequestTestSupport.BaseDataRequestTest
+import com.sildian.apps.togetrail.dataRequestTestSupport.FakeEventRepository
+import com.sildian.apps.togetrail.dataRequestTestSupport.FakeHikerRepository
 import com.sildian.apps.togetrail.dataRequestTestSupport.FirebaseSimulator
 import com.sildian.apps.togetrail.event.model.core.Event
-import com.sildian.apps.togetrail.event.model.dataRepository.RealEventRepository
 import com.sildian.apps.togetrail.hiker.model.core.Hiker
 import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
-import com.sildian.apps.togetrail.hiker.model.dataRepository.RealHikerRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 class EventRegisterDataRequestTest: BaseDataRequestTest() {
 
     @Test
@@ -24,9 +26,10 @@ class EventRegisterDataRequestTest: BaseDataRequestTest() {
             CurrentHikerInfo.currentHiker = FirebaseSimulator.hikers[0].copy()
             try {
                 EventRegisterDataRequest(
+                    dispatcher,
                     FirebaseSimulator.events[0].copy(),
-                    RealEventRepository(),
-                    RealHikerRepository()
+                    FakeEventRepository(),
+                    FakeHikerRepository()
                 ).execute()
                 assertEquals("TRUE", "FALSE")
             } catch (e: FirebaseException) {
@@ -49,9 +52,10 @@ class EventRegisterDataRequestTest: BaseDataRequestTest() {
             FirebaseSimulator.events.add(Event(id = "EA", name = "Event A"))
             try {
                 EventRegisterDataRequest(
+                    dispatcher,
                     FirebaseSimulator.events[0].copy(),
-                    RealEventRepository(),
-                    RealHikerRepository()
+                    FakeEventRepository(),
+                    FakeHikerRepository()
                 ).execute()
                 assertEquals("TRUE", "FALSE")
             } catch (e: NullPointerException) {
@@ -75,9 +79,10 @@ class EventRegisterDataRequestTest: BaseDataRequestTest() {
             CurrentHikerInfo.currentHiker = FirebaseSimulator.hikers[0].copy()
             try {
                 EventRegisterDataRequest(
+                    dispatcher,
                     null,
-                    RealEventRepository(),
-                    RealHikerRepository()
+                    FakeEventRepository(),
+                    FakeHikerRepository()
                 ).execute()
                 assertEquals("TRUE", "FALSE")
             } catch (e: NullPointerException) {
@@ -101,9 +106,10 @@ class EventRegisterDataRequestTest: BaseDataRequestTest() {
             CurrentHikerInfo.currentHiker = FirebaseSimulator.hikers[0].copy()
             try {
                 EventRegisterDataRequest(
+                    dispatcher,
                     FirebaseSimulator.events[0].copy(),
-                    RealEventRepository(),
-                    RealHikerRepository()
+                    FakeEventRepository(),
+                    FakeHikerRepository()
                 ).execute()
                 assertEquals("TRUE", "FALSE")
             } catch (e: IllegalArgumentException) {
@@ -126,9 +132,10 @@ class EventRegisterDataRequestTest: BaseDataRequestTest() {
             FirebaseSimulator.events.add(Event(id = "EA", name = "Event A"))
             CurrentHikerInfo.currentHiker = FirebaseSimulator.hikers[0].copy()
             EventRegisterDataRequest(
+                dispatcher,
                 FirebaseSimulator.events[0].copy(),
-                RealEventRepository(),
-                RealHikerRepository()
+                FakeEventRepository(),
+                FakeHikerRepository()
             ).execute()
             val event = FirebaseSimulator.events[0]
             assertEquals(1, event.nbHikersRegistered)
