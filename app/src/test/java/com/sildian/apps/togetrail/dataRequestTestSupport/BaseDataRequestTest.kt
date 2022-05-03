@@ -1,13 +1,18 @@
 package com.sildian.apps.togetrail.dataRequestTestSupport
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
+import org.junit.rules.TestWatcher
+import org.junit.runner.Description
 
 /*************************************************************************************************
  * Base for all data request tests
@@ -16,11 +21,34 @@ import org.junit.Before
 @ExperimentalCoroutinesApi
 abstract class BaseDataRequestTest {
 
-    protected val dispatcher = TestCoroutineDispatcher()
+    class TestCoroutineRule(val dispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()):
+        TestWatcher(),
+        TestCoroutineScope by TestCoroutineScope(dispatcher) {
+
+        override fun starting(description: Description?) {
+            super.starting(description)
+            Dispatchers.setMain(dispatcher)
+        }
+
+        override fun finished(description: Description?) {
+            super.finished(description)
+            cleanupTestCoroutines()
+            Dispatchers.resetMain()
+        }
+    }
+
+    protected lateinit var dispatcher: TestCoroutineDispatcher
+
+    @get:Rule
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    @get:Rule
+    val testCoroutineRule = TestCoroutineRule()
 
     @Before
     fun init() {
-        Dispatchers.setMain(this.dispatcher)
+        this.dispatcher = testCoroutineRule.dispatcher
+        Dispatchers.setMain(this.testCoroutineRule.dispatcher)
     }
 
     @After
