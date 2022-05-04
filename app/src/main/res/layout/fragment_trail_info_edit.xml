@@ -7,10 +7,10 @@
         <import type="com.sildian.apps.togetrail.common.utils.MetricsHelper"/>
         <variable
             name="trailInfoEditFragment"
-            type="com.sildian.apps.togetrail.trail.infoEdit.TrailInfoEditFragment" />
+            type="com.sildian.apps.togetrail.trail.ui.infoEdit.TrailInfoEditFragment" />
         <variable
             name="trailViewModel"
-            type="com.sildian.apps.togetrail.trail.model.viewModels.TrailViewModel" />
+            type="com.sildian.apps.togetrail.trail.data.viewModels.TrailViewModel" />
     </data>
 
     <FrameLayout
@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context=".trail.infoEdit.TrailInfoEditFragment">
+        tools:context=".trail.ui.infoEdit.TrailInfoEditFragment">
 
         <ScrollView
             android:layout_width="match_parent"

@@ -5,7 +5,7 @@
         <import type="android.text.style.CharacterStyle"/>
         <variable
             name="locationPredictionViewHolder"
-            type="com.sildian.apps.togetrail.location.search.LocationPredictionAdapter.LocationPredictionViewHolder" />
+            type="com.sildian.apps.togetrail.location.ui.search.LocationPredictionAdapter.LocationPredictionViewHolder" />
         <variable
             name="locationName"
             type="String" />

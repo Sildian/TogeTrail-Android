@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".event.edit.EventEditActivity">
+        tools:context=".event.ui.edit.EventEditActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"

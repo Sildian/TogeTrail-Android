@@ -5,10 +5,10 @@
         <import type="com.sildian.apps.togetrail.common.utils.DateUtilities"/>
         <variable
             name="eventHorizontalViewHolder"
-            type="com.sildian.apps.togetrail.event.others.EventHorizontalAdapter.EventHorizontalViewHolder" />
+            type="com.sildian.apps.togetrail.event.ui.others.EventHorizontalAdapter.EventHorizontalViewHolder" />
         <variable
             name="event"
-            type="com.sildian.apps.togetrail.event.model.core.Event" />
+            type="com.sildian.apps.togetrail.event.data.core.Event" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

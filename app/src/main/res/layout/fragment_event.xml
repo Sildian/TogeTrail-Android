@@ -6,13 +6,13 @@
         <import type="com.bumptech.glide.request.RequestOptions"/>
         <import type="com.sildian.apps.togetrail.common.utils.DateUtilities"/>
         <import type="com.sildian.apps.togetrail.common.utils.MetricsHelper"/>
-        <import type="com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo"/>
+        <import type="com.sildian.apps.togetrail.hiker.data.helpers.CurrentHikerInfo"/>
         <variable
             name="eventFragment"
-            type="com.sildian.apps.togetrail.event.detail.EventFragment" />
+            type="com.sildian.apps.togetrail.event.ui.detail.EventFragment" />
         <variable
             name="eventViewModel"
-            type="com.sildian.apps.togetrail.event.model.viewModels.EventViewModel" />
+            type="com.sildian.apps.togetrail.event.data.viewModels.EventViewModel" />
     </data>
 
     <FrameLayout
@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context=".event.detail.EventFragment">
+        tools:context=".event.ui.detail.EventFragment">
 
         <ProgressBar
             android:layout_width="wrap_content"

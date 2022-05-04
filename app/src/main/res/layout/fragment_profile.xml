@@ -6,7 +6,7 @@
         <import type="com.bumptech.glide.request.RequestOptions"/>
         <variable
             name="hikerViewModel"
-            type="com.sildian.apps.togetrail.hiker.model.viewModels.HikerViewModel" />
+            type="com.sildian.apps.togetrail.hiker.data.viewModels.HikerViewModel" />
     </data>
 
     <FrameLayout
@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context=".hiker.profile.ProfileFragment">
+        tools:context=".hiker.ui.profile.ProfileFragment">
 
         <ProgressBar
             android:layout_width="wrap_content"

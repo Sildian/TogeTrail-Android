@@ -6,10 +6,10 @@
         <import type="com.sildian.apps.togetrail.common.utils.DateUtilities"/>
         <variable
             name="eventEditFragment"
-            type="com.sildian.apps.togetrail.event.edit.EventEditFragment" />
+            type="com.sildian.apps.togetrail.event.ui.edit.EventEditFragment" />
         <variable
             name="eventViewModel"
-            type="com.sildian.apps.togetrail.event.model.viewModels.EventViewModel" />
+            type="com.sildian.apps.togetrail.event.data.viewModels.EventViewModel" />
     </data>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context=".event.edit.EventEditFragment">
+        tools:context=".event.ui.edit.EventEditFragment">
 
         <ProgressBar
             android:layout_width="wrap_content"

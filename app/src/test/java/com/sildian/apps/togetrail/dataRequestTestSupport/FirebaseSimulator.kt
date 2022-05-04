@@ -1,14 +1,13 @@
 package com.sildian.apps.togetrail.dataRequestTestSupport
 
 import android.net.Uri
-import androidx.core.net.toUri
 import com.google.firebase.auth.FirebaseUser
-import com.sildian.apps.togetrail.chat.model.core.Duo
-import com.sildian.apps.togetrail.chat.model.core.Message
-import com.sildian.apps.togetrail.event.model.core.Event
-import com.sildian.apps.togetrail.hiker.model.core.Hiker
-import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
-import com.sildian.apps.togetrail.trail.model.core.Trail
+import com.sildian.apps.togetrail.chat.data.core.Duo
+import com.sildian.apps.togetrail.chat.data.core.Message
+import com.sildian.apps.togetrail.event.data.core.Event
+import com.sildian.apps.togetrail.hiker.data.core.Hiker
+import com.sildian.apps.togetrail.hiker.data.core.HikerHistoryItem
+import com.sildian.apps.togetrail.trail.data.core.Trail
 import org.mockito.Mockito
 
 /*************************************************************************************************

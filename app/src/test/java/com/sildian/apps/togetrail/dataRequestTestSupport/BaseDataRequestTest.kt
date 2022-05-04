@@ -1,7 +1,7 @@
 package com.sildian.apps.togetrail.dataRequestTestSupport
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.sildian.apps.togetrail.hiker.model.support.CurrentHikerInfo
+import com.sildian.apps.togetrail.hiker.data.helpers.CurrentHikerInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher

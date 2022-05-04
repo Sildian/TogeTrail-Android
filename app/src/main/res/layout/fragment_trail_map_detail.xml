@@ -5,10 +5,10 @@
         <import type="android.view.View"/>
         <variable
             name="trailMapDetailFragment"
-            type="com.sildian.apps.togetrail.trail.map.TrailMapDetailFragment" />
+            type="com.sildian.apps.togetrail.trail.ui.map.TrailMapDetailFragment" />
         <variable
             name="trailViewModel"
-            type="com.sildian.apps.togetrail.trail.model.viewModels.TrailViewModel" />
+            type="com.sildian.apps.togetrail.trail.data.viewModels.TrailViewModel" />
     </data>
 
     <FrameLayout
@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context=".trail.map.TrailMapDetailFragment">
+        tools:context="com.sildian.apps.togetrail.trail.ui.map.TrailMapDetailFragment">
 
         <com.google.android.gms.maps.MapView
             android:id="@+id/fragment_trail_map_detail_map_view"

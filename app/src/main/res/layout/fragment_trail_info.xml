@@ -5,13 +5,13 @@
         <import type="android.view.View"/>
         <import type="com.bumptech.glide.request.RequestOptions"/>
         <import type="com.sildian.apps.togetrail.common.utils.MetricsHelper"/>
-        <import type="com.sildian.apps.togetrail.trail.model.core.TrailLevel"/>
+        <import type="com.sildian.apps.togetrail.trail.data.core.TrailLevel"/>
         <variable
             name="trailInfoFragment"
-            type="com.sildian.apps.togetrail.trail.info.TrailInfoFragment" />
+            type="com.sildian.apps.togetrail.trail.ui.info.TrailInfoFragment" />
         <variable
             name="trailViewModel"
-            type="com.sildian.apps.togetrail.trail.model.viewModels.TrailViewModel" />
+            type="com.sildian.apps.togetrail.trail.data.viewModels.TrailViewModel" />
         <variable
             name="isEditable"
             type="Boolean" />
@@ -24,7 +24,7 @@
         android:layout_height="match_parent"
         android:background="@color/colorPrimary"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context=".trail.info.TrailInfoFragment">
+        tools:context=".trail.ui.info.TrailInfoFragment">
 
         <LinearLayout
             android:layout_width="match_parent"

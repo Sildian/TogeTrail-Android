@@ -6,10 +6,10 @@
         <import type="com.sildian.apps.togetrail.common.utils.MetricsHelper"/>
         <variable
             name="trailSelectionViewHolder"
-            type="com.sildian.apps.togetrail.trail.selection.TrailSelectionAdapter.TrailSelectionViewHolder" />
+            type="com.sildian.apps.togetrail.trail.ui.selection.TrailSelectionAdapter.TrailSelectionViewHolder" />
         <variable
             name="trail"
-            type="com.sildian.apps.togetrail.trail.model.core.Trail" />
+            type="com.sildian.apps.togetrail.trail.data.core.Trail" />
         <variable
             name="isSelected"
             type="Boolean" />

@@ -4,7 +4,7 @@
     <data>
         <variable
             name="trailMapRecordFragment"
-            type="com.sildian.apps.togetrail.trail.map.TrailMapRecordFragment" />
+            type="com.sildian.apps.togetrail.trail.ui.map.TrailMapRecordFragment" />
     </data>
 
     <FrameLayout
@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context=".trail.map.TrailMapRecordFragment">
+        tools:context="com.sildian.apps.togetrail.trail.ui.map.TrailMapRecordFragment">
 
         <com.google.android.gms.maps.MapView
             android:id="@+id/fragment_trail_map_record_map_view"

@@ -6,13 +6,13 @@
         <import type="com.sildian.apps.togetrail.common.utils.DateUtilities"/>
         <variable
             name="hikerHistoryViewHolder"
-            type="com.sildian.apps.togetrail.hiker.profile.HikerHistoryAdapter.HikerHistoryViewHolder" />
+            type="com.sildian.apps.togetrail.hiker.ui.profile.HikerHistoryAdapter.HikerHistoryViewHolder" />
         <variable
             name="hikerName"
             type="String" />
         <variable
             name="historyItem"
-            type="com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem" />
+            type="com.sildian.apps.togetrail.hiker.data.core.HikerHistoryItem" />
     </data>
 
     <LinearLayout

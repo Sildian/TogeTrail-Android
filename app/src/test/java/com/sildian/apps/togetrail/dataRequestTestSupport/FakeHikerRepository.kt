@@ -2,14 +2,14 @@ package com.sildian.apps.togetrail.dataRequestTestSupport
 
 import com.google.firebase.FirebaseException
 import com.google.firebase.firestore.DocumentReference
-import com.sildian.apps.togetrail.chat.model.core.Duo
-import com.sildian.apps.togetrail.chat.model.core.Message
-import com.sildian.apps.togetrail.event.model.core.Event
-import com.sildian.apps.togetrail.hiker.model.core.Hiker
-import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryItem
-import com.sildian.apps.togetrail.hiker.model.core.HikerHistoryType
-import com.sildian.apps.togetrail.hiker.model.dataRepository.HikerRepository
-import com.sildian.apps.togetrail.trail.model.core.Trail
+import com.sildian.apps.togetrail.chat.data.core.Duo
+import com.sildian.apps.togetrail.chat.data.core.Message
+import com.sildian.apps.togetrail.event.data.core.Event
+import com.sildian.apps.togetrail.hiker.data.core.Hiker
+import com.sildian.apps.togetrail.hiker.data.core.HikerHistoryItem
+import com.sildian.apps.togetrail.hiker.data.core.HikerHistoryType
+import com.sildian.apps.togetrail.hiker.data.source.HikerRepository
+import com.sildian.apps.togetrail.trail.data.core.Trail
 import org.mockito.Mockito
 
 /*************************************************************************************************

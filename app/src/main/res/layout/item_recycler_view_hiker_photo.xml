@@ -5,10 +5,10 @@
         <import type="com.bumptech.glide.request.RequestOptions"/>
         <variable
             name="hikerPhotoViewHolder"
-            type="com.sildian.apps.togetrail.hiker.others.HikerPhotoAdapter.HikerPhotoViewHolder" />
+            type="com.sildian.apps.togetrail.hiker.ui.others.HikerPhotoAdapter.HikerPhotoViewHolder" />
         <variable
             name="hiker"
-            type="com.sildian.apps.togetrail.hiker.model.core.Hiker" />
+            type="com.sildian.apps.togetrail.hiker.data.core.Hiker" />
     </data>
 
     <ImageView

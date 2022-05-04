@@ -7,10 +7,10 @@
         <import type="com.sildian.apps.togetrail.common.utils.MetricsHelper"/>
         <variable
             name="trailHorizontalViewHolder"
-            type="com.sildian.apps.togetrail.trail.others.TrailHorizontalViewHolder" />
+            type="com.sildian.apps.togetrail.trail.ui.others.TrailHorizontalViewHolder" />
         <variable
             name="trail"
-            type="com.sildian.apps.togetrail.trail.model.core.Trail" />
+            type="com.sildian.apps.togetrail.trail.data.core.Trail" />
         <variable
             name="isEditable"
             type="Boolean" />

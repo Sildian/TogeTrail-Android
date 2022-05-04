@@ -2,8 +2,8 @@ package com.sildian.apps.togetrail.dataRequestTestSupport
 
 import com.google.firebase.FirebaseException
 import com.google.firebase.firestore.DocumentReference
-import com.sildian.apps.togetrail.trail.model.core.Trail
-import com.sildian.apps.togetrail.trail.model.dataRepository.TrailRepository
+import com.sildian.apps.togetrail.trail.data.core.Trail
+import com.sildian.apps.togetrail.trail.data.source.TrailRepository
 import org.mockito.Mockito
 
 /*************************************************************************************************

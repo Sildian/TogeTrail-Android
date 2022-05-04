@@ -4,7 +4,7 @@
     <data>
         <variable
             name="messageWriteDialogFragment"
-            type="com.sildian.apps.togetrail.chat.others.MessageWriteDialogFragment" />
+            type="com.sildian.apps.togetrail.chat.ui.others.MessageWriteDialogFragment" />
     </data>
 
     <LinearLayout

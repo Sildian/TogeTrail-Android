@@ -7,10 +7,10 @@
         <import type="com.sildian.apps.togetrail.common.utils.DateUtilities"/>
         <variable
             name="chatViewHolder"
-            type="com.sildian.apps.togetrail.chat.others.ChatAdapter.ChatViewHolder" />
+            type="com.sildian.apps.togetrail.chat.ui.others.ChatAdapter.ChatViewHolder" />
         <variable
             name="chat"
-            type="com.sildian.apps.togetrail.chat.model.core.Duo" />
+            type="com.sildian.apps.togetrail.chat.data.core.Duo" />
         <variable
             name="date"
             type="java.util.Date" />

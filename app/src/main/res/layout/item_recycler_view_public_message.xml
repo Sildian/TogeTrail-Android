@@ -6,10 +6,10 @@
         <import type="com.bumptech.glide.request.RequestOptions"/>
         <variable
             name="publicMessageViewHolder"
-            type="com.sildian.apps.togetrail.chat.others.PublicMessageAdapter.PublicMessageViewHolder" />
+            type="com.sildian.apps.togetrail.chat.ui.others.PublicMessageAdapter.PublicMessageViewHolder" />
         <variable
             name="message"
-            type="com.sildian.apps.togetrail.chat.model.core.Message" />
+            type="com.sildian.apps.togetrail.chat.data.core.Message" />
         <variable
             name="messageAuthorIsCurrentUser"
             type="Boolean" />
