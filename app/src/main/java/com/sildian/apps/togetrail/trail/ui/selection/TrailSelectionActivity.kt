@@ -59,16 +59,16 @@ class TrailSelectionActivity : BaseActivity<ActivityTrailSelectionBinding>() {
 
     /***********************************Data monitoring******************************************/
 
-    override fun loadData() {
+    override fun initializeData() {
         readDataFromIntent()
         defineTrailsQueries()
     }
 
-    private fun readDataFromIntent(){
-        if(intent!=null){
-            if(intent.hasExtra(KEY_BUNDLE_SELECTED_TRAILS)){
+    private fun readDataFromIntent() {
+        if (intent != null) {
+            if (intent.hasExtra(KEY_BUNDLE_SELECTED_TRAILS)) {
                 val trails=intent.getParcelableArrayListExtra<Trail>(KEY_BUNDLE_SELECTED_TRAILS)
-                if(trails!=null) {
+                if (trails != null) {
                     this.selectedTrails = trails
                 }
             }

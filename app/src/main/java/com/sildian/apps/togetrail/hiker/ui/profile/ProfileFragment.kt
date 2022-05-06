@@ -2,6 +2,7 @@ package com.sildian.apps.togetrail.hiker.ui.profile
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
@@ -34,14 +35,15 @@ class ProfileFragment(private val hikerId: String? = null) :
 
     /***********************************Data monitoring******************************************/
 
-    override fun loadData() {
-        initializeData()
+    override fun initializeData() {
+        this.binding.hikerViewModel = this.hikerViewModel
         observeHiker()
-        loadHiker()
     }
 
-    private fun initializeData() {
-        this.binding.hikerViewModel = this.hikerViewModel
+    override fun loadData() {
+        lifecycleScope.launchWhenStarted {
+            loadHiker()
+        }
     }
 
     private fun observeHiker() {

@@ -17,6 +17,7 @@ import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.firebase.ui.auth.AuthUI
@@ -287,12 +288,17 @@ class MainActivity :
 
     /****************************Data monitoring**************************************************/
 
-    override fun loadData() {
+    override fun initializeData() {
         observeHiker()
         observeHikerChats()
         observeHikerLikedTrails()
         observeHikerMarkedTrails()
-        loginCurrentUser()
+    }
+
+    override fun loadData() {
+        lifecycleScope.launchWhenStarted {
+            loginCurrentUser()
+        }
     }
 
     private fun observeHiker() {

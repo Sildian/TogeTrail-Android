@@ -2,6 +2,7 @@ package com.sildian.apps.togetrail.chat.ui.chatRoom
 
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.chat.data.core.Message
 import com.sildian.apps.togetrail.chat.ui.others.PrivateMessageAdapter
@@ -33,14 +34,15 @@ class ChatRoomFragment(private val interlocutorId: String? = null) :
 
     /******************************Data monitoring***********************************************/
 
-    override fun loadData() {
-        initializeData()
+    override fun initializeData() {
+        this.binding.chatRoomFragment = this
         observeHiker()
-        loadHiker()
     }
 
-    private fun initializeData() {
-        this.binding.chatRoomFragment = this
+    override fun loadData() {
+        lifecycleScope.launchWhenStarted {
+            loadHiker()
+        }
     }
 
     private fun observeHiker() {

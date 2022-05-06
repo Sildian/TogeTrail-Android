@@ -76,7 +76,7 @@ class EventEditActivity : BaseActivity<ActivityEventEditBinding>() {
 
     /******************************Data monitoring************************************************/
 
-    override fun loadData() {
+    override fun initializeData() {
         readDataFromIntent()
     }
 

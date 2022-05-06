@@ -27,12 +27,8 @@ class TrailMapDetailFragment: BaseTrailMapFragment<FragmentTrailMapDetailBinding
 
     /************************************Data monitoring*****************************************/
 
-    override fun loadData() {
-        super.loadData()
-        initializeData()
-    }
-
-    private fun initializeData() {
+    override fun initializeData() {
+        super.initializeData()
         this.binding.trailMapDetailFragment = this
         this.binding.trailViewModel = this.trailViewModel
         this.isTrailLikedByUser.value = CurrentHikerInfo.currentHikerLikedTrail.firstOrNull { trail ->

@@ -82,7 +82,7 @@ class EventActivity : BaseActivity<ActivityEventBinding>() {
 
     /******************************Data monitoring************************************************/
 
-    override fun loadData() {
+    override fun initializeData() {
         readDataFromIntent()
     }
 

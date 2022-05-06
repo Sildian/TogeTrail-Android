@@ -62,14 +62,10 @@ class TrailMapFragment :
 
     /**********************************Data monitoring*******************************************/
 
-    override fun loadData() {
-        initializeData()
+    override fun initializeData() {
+        this.binding.trailMapFragment = this
         observeTrails()
         observeEvents()
-    }
-
-    private fun initializeData() {
-        this.binding.trailMapFragment = this
     }
 
     private fun observeTrails() {

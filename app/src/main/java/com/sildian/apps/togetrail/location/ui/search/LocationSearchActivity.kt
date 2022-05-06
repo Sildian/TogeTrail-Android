@@ -72,9 +72,9 @@ class LocationSearchActivity :
 
     /******************************Data monitoring************************************************/
 
-    override fun loadData() {
-        this.placesClient= Places.createClient(this)
-        this.autocompleteSessionToken= AutocompleteSessionToken.newInstance()
+    override fun initializeData() {
+        this.placesClient = Places.createClient(this)
+        this.autocompleteSessionToken = AutocompleteSessionToken.newInstance()
         readDataFromIntent()
     }
 

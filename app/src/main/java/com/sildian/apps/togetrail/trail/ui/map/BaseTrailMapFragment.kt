@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -58,7 +58,7 @@ abstract class BaseTrailMapFragment<T: ViewDataBinding>:
 
     /*************************************Data***************************************************/
 
-    protected lateinit var trailViewModel: TrailViewModel
+    protected val trailViewModel: TrailViewModel by activityViewModels()
     var isEditable = false
 
     /**********************************UI component**********************************************/
@@ -138,14 +138,9 @@ abstract class BaseTrailMapFragment<T: ViewDataBinding>:
 
     /**********************************Data monitoring*******************************************/
 
-    override fun loadData() {
-        initializeData()
+    override fun initializeData() {
         observeTrail()
         observeDataRequestState()
-    }
-
-    private fun initializeData() {
-        this.trailViewModel = ViewModelProvider(requireActivity()).get(TrailViewModel::class.java)
     }
 
     private fun observeTrail() {
@@ -420,8 +415,7 @@ abstract class BaseTrailMapFragment<T: ViewDataBinding>:
     /**************************Nested Fragments monitoring***************************************/
 
     fun showTrailInfoFragment(){
-        this.infoFragment =
-            TrailInfoFragment(this.trailViewModel, this.isEditable)
+        this.infoFragment = TrailInfoFragment(this.isEditable)
         childFragmentManager.beginTransaction()
             .replace(getInfoFragmentId(), this.infoFragment).commit()
         collapseInfoBottomSheet()
@@ -429,10 +423,7 @@ abstract class BaseTrailMapFragment<T: ViewDataBinding>:
 
     fun showTrailPOIInfoFragment(trailPointOfInterestPosition:Int){
         val poiIsEditable = this.isEditable && this.trailViewModel.data.value?.data?.name != null
-        this.infoFragment=
-            TrailPOIInfoFragment(
-                this.trailViewModel, trailPointOfInterestPosition, poiIsEditable
-            )
+        this.infoFragment = TrailPOIInfoFragment(trailPointOfInterestPosition, poiIsEditable)
         childFragmentManager.beginTransaction()
             .replace(getInfoFragmentId(), this.infoFragment).commit()
         collapseInfoBottomSheet()

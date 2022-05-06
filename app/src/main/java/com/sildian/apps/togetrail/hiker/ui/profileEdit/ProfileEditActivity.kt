@@ -90,7 +90,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>() {
 
     /******************************Data monitoring************************************************/
 
-    override fun loadData() {
+    override fun initializeData() {
         readDataFromIntent()
     }
 

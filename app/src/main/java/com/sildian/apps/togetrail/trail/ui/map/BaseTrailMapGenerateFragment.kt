@@ -24,12 +24,8 @@ abstract class BaseTrailMapGenerateFragment<T: ViewDataBinding>:
 
     /************************************Data monitoring*****************************************/
 
-    override fun loadData() {
-        super.loadData()
-        initializeData()
-    }
-
-    private fun initializeData() {
+    override fun initializeData() {
+        super.initializeData()
         this.isEditable = true
     }
 

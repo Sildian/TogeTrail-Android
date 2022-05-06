@@ -51,7 +51,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding>() {
 
     /***********************************Data monitoring******************************************/
 
-    override fun loadData() {
+    override fun initializeData() {
         readDataFromIntent()
     }
 

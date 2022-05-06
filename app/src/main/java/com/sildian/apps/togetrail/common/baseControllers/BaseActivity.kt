@@ -44,11 +44,14 @@ abstract class BaseActivity<T: ViewDataBinding> : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.binding = DataBindingUtil.setContentView(this, getLayoutId())
+        initializeData()
         loadData()
         initializeUI()
     }
 
     /*********************************Data monitoring*******************************************/
+
+    open fun initializeData(){}
 
     open fun loadData(){}
 
@@ -139,6 +142,7 @@ abstract class BaseActivity<T: ViewDataBinding> : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         var allPermissionsGranted = true
         for (i in grantResults.indices) {
             when(grantResults[i]) {

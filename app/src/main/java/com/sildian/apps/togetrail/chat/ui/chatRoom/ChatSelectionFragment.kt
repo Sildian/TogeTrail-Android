@@ -30,11 +30,7 @@ class ChatSelectionFragment :
 
     /******************************Data monitoring***********************************************/
 
-    override fun loadData() {
-        initializeData()
-    }
-
-    private fun initializeData() {
+    override fun initializeData() {
         this.binding.chatSelectionFragment = this
     }
 

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.chat.data.core.Message
 import com.sildian.apps.togetrail.chat.ui.others.MessageWriteDialogFragment
@@ -57,15 +58,16 @@ class EventFragment(private val eventId: String?=null) :
 
     /***********************************Data monitoring******************************************/
 
-    override fun loadData() {
-        initializeData()
-        observeEvent()
-        loadEvent()
-    }
-
-    private fun initializeData() {
+    override fun initializeData() {
         this.binding.eventFragment = this
         this.binding.eventViewModel = this.eventViewModel
+        observeEvent()
+    }
+
+    override fun loadData() {
+        lifecycleScope.launchWhenStarted {
+            loadEvent()
+        }
     }
 
     private fun observeEvent() {

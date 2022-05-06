@@ -89,7 +89,7 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding>() {
 
     /******************************Data monitoring************************************************/
 
-    override fun loadData() {
+    override fun initializeData() {
         readDataFromIntent()
     }
 

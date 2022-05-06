@@ -34,6 +34,7 @@ abstract class BaseFragment<T: ViewDataBinding> : Fragment() {
         this.binding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false)
         this.binding.lifecycleOwner = this
         this.layout = this.binding.root
+        initializeData()
         loadData()
         initializeUI()
         return this.layout
@@ -45,6 +46,8 @@ abstract class BaseFragment<T: ViewDataBinding> : Fragment() {
     }
 
     /*********************************Data monitoring*******************************************/
+
+    open fun initializeData(){}
 
     open fun loadData(){}
 

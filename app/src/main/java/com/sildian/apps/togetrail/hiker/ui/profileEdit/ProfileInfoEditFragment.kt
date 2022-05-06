@@ -3,6 +3,7 @@ package com.sildian.apps.togetrail.hiker.ui.profileEdit
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseImagePickerFragment
 import com.sildian.apps.togetrail.common.utils.DateUtilities
@@ -37,16 +38,17 @@ class ProfileInfoEditFragment(private val hikerId: String?=null) :
 
     /******************************Data monitoring***********************************************/
 
-    override fun loadData() {
-        initializeData()
-        observeHiker()
-        observeDataRequestState()
-        loadHiker()
-    }
-
-    private fun initializeData() {
+    override fun initializeData() {
         this.binding.profileInfoEditFragment = this
         this.binding.hikerViewModel = this.hikerViewModel
+        observeHiker()
+        observeDataRequestState()
+    }
+
+    override fun loadData() {
+        lifecycleScope.launchWhenStarted {
+            loadHiker()
+        }
     }
 
     private fun observeHiker() {

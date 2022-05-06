@@ -4,6 +4,7 @@ import android.content.Intent
 import android.view.View
 import androidx.core.net.toUri
 import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.activityViewModels
 import com.google.android.gms.maps.model.LatLng
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.GoogleMapUrlHelper
@@ -17,17 +18,15 @@ import dagger.hilt.android.AndroidEntryPoint
 /*************************************************************************************************
  * Shows information about a trail
  * This fragment should be used as a nested fragment within a BottomSheet
- * @param trailViewModel : the trail data
  * @param isEditable : true if the info can be edited
  ************************************************************************************************/
 
 @AndroidEntryPoint
-class TrailInfoFragment(
-    private val trailViewModel: TrailViewModel? = null,
-    private val isEditable:Boolean = false
-)
-    : BaseInfoFragment<FragmentTrailInfoBinding>()
-{
+class TrailInfoFragment(private val isEditable:Boolean = false) : BaseInfoFragment<FragmentTrailInfoBinding>() {
+
+    /***************************************Data*************************************************/
+
+    private val trailViewModel: TrailViewModel by activityViewModels()
 
     /**********************************Support items*********************************************/
 
@@ -35,22 +34,18 @@ class TrailInfoFragment(
 
     /*********************************Data monitoring********************************************/
 
-    override fun loadData() {
-        initializeData()
-        observeTrail()
-    }
-
-    private fun initializeData() {
+    override fun initializeData() {
         this.binding.trailInfoFragment = this
         this.binding.trailViewModel = this.trailViewModel
         this.binding.isEditable = this.isEditable
         context?.let { context ->
-            this.elevationChartGenerator = ElevationChartGenerator(context, this.trailViewModel?.data?.value?.data)
+            this.elevationChartGenerator = ElevationChartGenerator(context, this.trailViewModel.data.value?.data)
         }
+        observeTrail()
     }
 
     private fun observeTrail() {
-        this.trailViewModel?.data?.observe(this) { trailData ->
+        this.trailViewModel.data.observe(this) { trailData ->
             trailData?.error?.let { e ->
                 onQueryError(e)
             } ?:
@@ -111,14 +106,14 @@ class TrailInfoFragment(
 
     @Suppress("UNUSED_PARAMETER")
     fun onAuthorPhotoClick(view: View) {
-        this.trailViewModel?.data?.value?.data?.authorId?.let { authorId ->
+        this.trailViewModel.data.value?.data?.authorId?.let { authorId ->
             (activity as TrailActivity).seeHiker(authorId)
         }
     }
 
     @Suppress("UNUSED_PARAMETER")
     fun onGoToDepartureButtonClick(view: View) {
-        this.trailViewModel?.data?.value?.data?.position?.let { position ->
+        this.trailViewModel.data.value?.data?.position?.let { position ->
             val url = GoogleMapUrlHelper.generateWithLatLng(LatLng(position.latitude, position.longitude))
             val googleMapIntent = Intent(Intent.ACTION_VIEW, url.toUri())
             startActivity(googleMapIntent)

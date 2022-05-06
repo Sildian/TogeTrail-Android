@@ -1,6 +1,7 @@
 package com.sildian.apps.togetrail.trail.ui.infoEdit
 
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
 import com.sildian.apps.circularsliderlibrary.CircularSlider
 import com.sildian.apps.circularsliderlibrary.ValueFormatter
@@ -16,14 +17,10 @@ import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************
  * Allows to edit information about a trailPointOfInterest
- * @param trailViewModel : the trail data
  ************************************************************************************************/
 
 @AndroidEntryPoint
-class TrailPOIInfoEditFragment(
-    private val trailViewModel: TrailViewModel? = null,
-    private val trailPointOfInterestPosition:Int? = null
-)
+class TrailPOIInfoEditFragment(private val trailPointOfInterestPosition:Int? = null)
     : BaseImagePickerFragment<FragmentTrailPoiInfoEditBinding>()
 {
 
@@ -37,34 +34,31 @@ class TrailPOIInfoEditFragment(
 
     /**************************************Data**************************************************/
 
+    private val trailViewModel: TrailViewModel by activityViewModels()
     val currentValueFormatter = MutableLiveData<ValueFormatter>(ValueFormatters.AltitudeValueFormatter())
     val currentMaxValue = MutableLiveData(VALUE_MAX_ALTITUDE)
 
     /**************************************Life cycle********************************************/
 
     override fun onDestroy() {
-        this.trailViewModel?.clearImagePaths()
+        this.trailViewModel.clearImagePaths()
         super.onDestroy()
     }
 
     /*********************************Data monitoring********************************************/
 
-    override fun loadData() {
-        initializeData()
+    override fun initializeData() {
+        this.binding.trailPOIInfoEditFragment = this
+        this.binding.trailViewModel = this.trailViewModel
+        this.currentValueFormatter.value = ValueFormatters.AltitudeValueFormatter()
+        this.currentMaxValue.value = VALUE_MAX_ALTITUDE
         observeTrail()
         observeTrailPOI()
         observeDataRequestState()
     }
 
-    private fun initializeData() {
-        this.binding.trailPOIInfoEditFragment = this
-        this.binding.trailViewModel = this.trailViewModel
-        this.currentValueFormatter.value = ValueFormatters.AltitudeValueFormatter()
-        this.currentMaxValue.value = VALUE_MAX_ALTITUDE
-    }
-
     private fun observeTrail() {
-        this.trailViewModel?.data?.observe(this) { trailData ->
+        this.trailViewModel.data.observe(this) { trailData ->
             trailData?.error?.let { e ->
                 onQueryError(e)
             } ?:
@@ -77,7 +71,7 @@ class TrailPOIInfoEditFragment(
     }
 
     private fun observeTrailPOI() {
-        this.trailViewModel?.trailPointOfInterest?.observe(this) { trailPOIData ->
+        this.trailViewModel.trailPointOfInterest.observe(this) { trailPOIData ->
             trailPOIData?.error?.let { e ->
                 onQueryError(e)
             } ?:
@@ -88,7 +82,7 @@ class TrailPOIInfoEditFragment(
     }
 
     private fun observeDataRequestState() {
-        this.trailViewModel?.dataRequestState?.observe(this) { dataRequestState ->
+        this.trailViewModel.dataRequestState.observe(this) { dataRequestState ->
             if (dataRequestState?.dataRequest is TrailSaveDataRequest) {
                 dataRequestState.error?.let { e ->
                     onQueryError(e)
@@ -98,13 +92,13 @@ class TrailPOIInfoEditFragment(
     }
 
     private fun setValue(value: Int?) {
-        this.trailViewModel?.trailPointOfInterest?.value?.data?.elevation = value
-        this.trailViewModel?.notifyDataObserver()
+        this.trailViewModel.trailPointOfInterest.value?.data?.elevation = value
+        this.trailViewModel.notifyDataObserver()
     }
 
     override fun saveData() {
         if (checkDataIsValid()) {
-            if (this.trailViewModel?.trailPointOfInterest?.value != null) {
+            if (this.trailViewModel.trailPointOfInterest.value != null) {
                 this.trailViewModel.trailPointOfInterest.value?.data?.name = this.binding.fragmentTrailPoiInfoEditTextFieldName.text.toString()
                 this.trailViewModel.trailPointOfInterest.value?.data?.description = this.binding.fragmentTrailPoiInfoEditTextFieldDescription.text.toString()
                 this.baseActivity?.showProgressDialog()
@@ -167,16 +161,16 @@ class TrailPOIInfoEditFragment(
     /*******************************Photos monitoring********************************************/
 
     override fun addPhoto(filePath:String) {
-        this.trailViewModel?.updateImagePathToUpload(true, filePath)
-        this.trailViewModel?.trailPointOfInterest?.value?.data?.photoUrl = filePath
-        this.trailViewModel?.notifyDataChanged()
+        this.trailViewModel.updateImagePathToUpload(true, filePath)
+        this.trailViewModel.trailPointOfInterest.value?.data?.photoUrl = filePath
+        this.trailViewModel.notifyDataChanged()
     }
 
     override fun deletePhoto() {
-        if (!this.trailViewModel?.trailPointOfInterest?.value?.data?.photoUrl.isNullOrEmpty()) {
-            this.trailViewModel?.updateImagePathToDelete(this.trailViewModel.trailPointOfInterest.value?.data?.photoUrl!!)
-            this.trailViewModel?.trailPointOfInterest?.value?.data?.photoUrl = null
-            this.trailViewModel?.notifyDataChanged()
+        if (!this.trailViewModel.trailPointOfInterest.value?.data?.photoUrl.isNullOrEmpty()) {
+            this.trailViewModel.updateImagePathToDelete(this.trailViewModel.trailPointOfInterest.value?.data?.photoUrl!!)
+            this.trailViewModel.trailPointOfInterest.value?.data?.photoUrl = null
+            this.trailViewModel.notifyDataChanged()
         }
     }
 }

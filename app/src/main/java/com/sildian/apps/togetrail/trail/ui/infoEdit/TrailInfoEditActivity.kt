@@ -100,7 +100,7 @@ class TrailInfoEditActivity : BaseActivity<ActivityTrailInfoEditBinding>() {
 
     /***********************************Data monitoring******************************************/
 
-    override fun loadData() {
+    override fun initializeData() {
         readDataFromIntent()
     }
 
@@ -165,17 +165,11 @@ class TrailInfoEditActivity : BaseActivity<ActivityTrailInfoEditBinding>() {
     /******************************Fragments monitoring******************************************/
 
     private fun showFragment(fragmentId:Int){
-        when(fragmentId){
+        when (fragmentId) {
             ID_FRAGMENT_TRAIL_INFO_EDIT ->
-                this.fragment=
-                    TrailInfoEditFragment(
-                        this.trailViewModel
-                    )
+                this.fragment = TrailInfoEditFragment()
             ID_FRAGMENT_TRAIL_POI_INFO_EDIT ->
-                this.fragment =
-                    TrailPOIInfoEditFragment(
-                        this.trailViewModel, this.trailPOIPosition
-                    )
+                this.fragment = TrailPOIInfoEditFragment(this.trailPOIPosition)
         }
         this.fragment?.let { fragment ->
             supportFragmentManager.beginTransaction()

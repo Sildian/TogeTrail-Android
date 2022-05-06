@@ -51,12 +51,8 @@ class TrailMapRecordFragment: BaseTrailMapGenerateFragment<FragmentTrailMapRecor
 
     /************************************Data monitoring*****************************************/
 
-    override fun loadData() {
-        super.loadData()
-        initializeData()
-    }
-
-    private fun initializeData() {
+    override fun initializeData() {
+        super.initializeData()
         this.binding.trailMapRecordFragment = this
     }
 

@@ -3,6 +3,7 @@ package com.sildian.apps.togetrail.event.ui.edit
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.sildian.apps.togetrail.R
@@ -46,16 +47,17 @@ class EventEditFragment(private val eventId: String?=null) :
 
     /*********************************Data monitoring********************************************/
 
-    override fun loadData() {
-        initializeData()
-        observeEvent()
-        observeDataRequestState()
-        loadEvent()
-    }
-
-    private fun initializeData() {
+    override fun initializeData() {
         this.binding.eventEditFragment = this
         this.binding.eventViewModel = this.eventViewModel
+        observeEvent()
+        observeDataRequestState()
+    }
+
+    override fun loadData() {
+        lifecycleScope.launchWhenStarted {
+            loadEvent()
+        }
     }
 
     private fun observeEvent() {

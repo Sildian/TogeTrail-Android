@@ -108,7 +108,7 @@ class TrailActivity : BaseActivity<ActivityTrailBinding>() {
 
     /***********************************Data monitoring******************************************/
 
-    override fun loadData() {
+    override fun initializeData() {
         observeTrail()
         readDataFromIntent()
     }
