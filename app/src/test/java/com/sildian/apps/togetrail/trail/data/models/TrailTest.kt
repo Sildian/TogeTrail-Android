@@ -1,10 +1,10 @@
-package com.sildian.apps.togetrail.trail.data.core
+package com.sildian.apps.togetrail.trail.data.models
 
 import android.os.Parcel
 import com.google.firebase.firestore.GeoPoint
-import com.sildian.apps.togetrail.location.data.core.Country
-import com.sildian.apps.togetrail.location.data.core.Location
-import com.sildian.apps.togetrail.location.data.core.Region
+import com.sildian.apps.togetrail.location.data.models.Country
+import com.sildian.apps.togetrail.location.data.models.Location
+import com.sildian.apps.togetrail.location.data.models.Region
 import org.junit.Test
 
 import org.junit.Assert.*

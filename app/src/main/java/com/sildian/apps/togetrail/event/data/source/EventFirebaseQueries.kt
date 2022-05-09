@@ -3,12 +3,12 @@ package com.sildian.apps.togetrail.event.data.source
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
-import com.sildian.apps.togetrail.location.data.core.Location
+import com.sildian.apps.togetrail.location.data.models.Location
 import com.sildian.apps.togetrail.common.utils.GeoUtilities
-import com.sildian.apps.togetrail.event.data.core.Event
-import com.sildian.apps.togetrail.hiker.data.core.Hiker
-import com.sildian.apps.togetrail.chat.data.core.Message
-import com.sildian.apps.togetrail.trail.data.core.Trail
+import com.sildian.apps.togetrail.event.data.models.Event
+import com.sildian.apps.togetrail.hiker.data.models.Hiker
+import com.sildian.apps.togetrail.chat.data.models.Message
+import com.sildian.apps.togetrail.trail.data.models.Trail
 import java.util.*
 
 /*************************************************************************************************

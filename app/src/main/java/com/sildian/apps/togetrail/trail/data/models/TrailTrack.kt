@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.trail.data.core
+package com.sildian.apps.togetrail.trail.data.models
 
 import android.os.Parcelable
 import com.google.android.gms.maps.model.LatLng

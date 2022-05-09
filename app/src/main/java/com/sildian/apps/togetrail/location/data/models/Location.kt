@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.location.data.core
+package com.sildian.apps.togetrail.location.data.models
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

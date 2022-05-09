@@ -1,7 +1,7 @@
 package com.sildian.apps.togetrail.trail.data.dataRequests
 
 import com.sildian.apps.togetrail.common.baseDataRequests.LoadDataRequest
-import com.sildian.apps.togetrail.trail.data.core.Trail
+import com.sildian.apps.togetrail.trail.data.models.Trail
 import com.sildian.apps.togetrail.trail.data.source.TrailRepository
 import kotlinx.coroutines.CoroutineDispatcher
 

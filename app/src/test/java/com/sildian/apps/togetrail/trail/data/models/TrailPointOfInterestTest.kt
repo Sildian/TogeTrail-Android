@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.trail.data.core
+package com.sildian.apps.togetrail.trail.data.models
 
 import org.junit.Test
 

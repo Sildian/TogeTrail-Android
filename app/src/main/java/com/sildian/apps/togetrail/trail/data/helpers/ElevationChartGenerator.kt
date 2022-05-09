@@ -8,7 +8,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.GeoUtilities
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
-import com.sildian.apps.togetrail.trail.data.core.Trail
+import com.sildian.apps.togetrail.trail.data.models.Trail
 
 /*************************************************************************************************
  * Allows to generate a chart representing a trail's elevation

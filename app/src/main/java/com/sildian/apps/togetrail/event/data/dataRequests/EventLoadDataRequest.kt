@@ -1,7 +1,7 @@
 package com.sildian.apps.togetrail.event.data.dataRequests
 
 import com.sildian.apps.togetrail.common.baseDataRequests.LoadDataRequest
-import com.sildian.apps.togetrail.event.data.core.Event
+import com.sildian.apps.togetrail.event.data.models.Event
 import com.sildian.apps.togetrail.event.data.source.EventRepository
 import kotlinx.coroutines.CoroutineDispatcher
 

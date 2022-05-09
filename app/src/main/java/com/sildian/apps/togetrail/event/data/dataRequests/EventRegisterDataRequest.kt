@@ -1,10 +1,10 @@
 package com.sildian.apps.togetrail.event.data.dataRequests
 
 import com.sildian.apps.togetrail.common.baseDataRequests.SpecificDataRequest
-import com.sildian.apps.togetrail.event.data.core.Event
+import com.sildian.apps.togetrail.event.data.models.Event
 import com.sildian.apps.togetrail.event.data.source.EventRepository
-import com.sildian.apps.togetrail.hiker.data.core.HikerHistoryItem
-import com.sildian.apps.togetrail.hiker.data.core.HikerHistoryType
+import com.sildian.apps.togetrail.hiker.data.models.HikerHistoryItem
+import com.sildian.apps.togetrail.hiker.data.models.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.data.helpers.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.data.source.HikerRepository
 import kotlinx.coroutines.CoroutineDispatcher

@@ -14,8 +14,8 @@ import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.TextFieldHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.ValueFormatters
 import com.sildian.apps.togetrail.databinding.FragmentTrailInfoEditBinding
-import com.sildian.apps.togetrail.location.data.core.Location
-import com.sildian.apps.togetrail.trail.data.core.TrailLevel
+import com.sildian.apps.togetrail.location.data.models.Location
+import com.sildian.apps.togetrail.trail.data.models.TrailLevel
 import com.sildian.apps.togetrail.trail.data.dataRequests.TrailSaveDataRequest
 import com.sildian.apps.togetrail.trail.data.viewModels.TrailViewModel
 import dagger.hilt.android.AndroidEntryPoint

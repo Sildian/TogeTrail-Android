@@ -16,7 +16,7 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationException
 import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.databinding.FragmentTrailMapRecordBinding
-import com.sildian.apps.togetrail.trail.data.core.TrailPoint
+import com.sildian.apps.togetrail.trail.data.models.TrailPoint
 import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************

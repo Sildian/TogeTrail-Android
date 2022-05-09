@@ -8,7 +8,7 @@
             type="com.sildian.apps.togetrail.hiker.ui.others.HikerPhotoAdapter.HikerPhotoViewHolder" />
         <variable
             name="hiker"
-            type="com.sildian.apps.togetrail.hiker.data.core.Hiker" />
+            type="com.sildian.apps.togetrail.hiker.data.models.Hiker" />
     </data>
 
     <ImageView

@@ -1,8 +1,8 @@
 package com.sildian.apps.togetrail.trail.data.helpers
 
 import android.content.Context
-import com.sildian.apps.togetrail.trail.data.core.Trail
-import com.sildian.apps.togetrail.trail.data.core.TrailPoint
+import com.sildian.apps.togetrail.trail.data.models.Trail
+import com.sildian.apps.togetrail.trail.data.models.TrailPoint
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test

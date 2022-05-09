@@ -12,7 +12,7 @@
             type="String" />
         <variable
             name="historyItem"
-            type="com.sildian.apps.togetrail.hiker.data.core.HikerHistoryItem" />
+            type="com.sildian.apps.togetrail.hiker.data.models.HikerHistoryItem" />
     </data>
 
     <LinearLayout

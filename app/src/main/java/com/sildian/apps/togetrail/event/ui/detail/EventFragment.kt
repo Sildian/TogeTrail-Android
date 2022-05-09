@@ -9,7 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.chat.data.core.Message
+import com.sildian.apps.togetrail.chat.data.models.Message
 import com.sildian.apps.togetrail.chat.ui.others.MessageWriteDialogFragment
 import com.sildian.apps.togetrail.chat.ui.others.PublicMessageAdapter
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
@@ -19,10 +19,10 @@ import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.databinding.FragmentEventBinding
 import com.sildian.apps.togetrail.event.data.source.EventFirebaseQueries
 import com.sildian.apps.togetrail.event.data.viewModels.EventViewModel
-import com.sildian.apps.togetrail.hiker.data.core.Hiker
+import com.sildian.apps.togetrail.hiker.data.models.Hiker
 import com.sildian.apps.togetrail.hiker.data.helpers.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.ui.others.HikerPhotoAdapter
-import com.sildian.apps.togetrail.trail.data.core.Trail
+import com.sildian.apps.togetrail.trail.data.models.Trail
 import com.sildian.apps.togetrail.trail.ui.others.TrailHorizontalAdapter
 import com.sildian.apps.togetrail.trail.ui.others.TrailHorizontalViewHolder
 import dagger.hilt.android.AndroidEntryPoint

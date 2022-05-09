@@ -1,10 +1,10 @@
 package com.sildian.apps.togetrail.event.data.source
 
 import com.google.firebase.firestore.DocumentReference
-import com.sildian.apps.togetrail.event.data.core.Event
-import com.sildian.apps.togetrail.hiker.data.core.Hiker
-import com.sildian.apps.togetrail.chat.data.core.Message
-import com.sildian.apps.togetrail.trail.data.core.Trail
+import com.sildian.apps.togetrail.event.data.models.Event
+import com.sildian.apps.togetrail.hiker.data.models.Hiker
+import com.sildian.apps.togetrail.chat.data.models.Message
+import com.sildian.apps.togetrail.trail.data.models.Trail
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

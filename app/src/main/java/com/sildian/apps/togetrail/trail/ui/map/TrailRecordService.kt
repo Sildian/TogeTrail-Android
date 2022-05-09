@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationException
 import com.sildian.apps.togetrail.common.utils.uiHelpers.NotificationHelper
-import com.sildian.apps.togetrail.trail.data.core.TrailPoint
+import com.sildian.apps.togetrail.trail.data.models.TrailPoint
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

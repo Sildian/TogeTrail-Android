@@ -17,8 +17,8 @@ import com.sildian.apps.togetrail.databinding.FragmentEventEditBinding
 import com.sildian.apps.togetrail.event.data.dataRequests.EventSaveDataRequest
 import com.sildian.apps.togetrail.event.data.source.EventFirebaseQueries
 import com.sildian.apps.togetrail.event.data.viewModels.EventViewModel
-import com.sildian.apps.togetrail.location.data.core.Location
-import com.sildian.apps.togetrail.trail.data.core.Trail
+import com.sildian.apps.togetrail.location.data.models.Location
+import com.sildian.apps.togetrail.trail.data.models.Trail
 import com.sildian.apps.togetrail.trail.ui.others.TrailHorizontalAdapter
 import com.sildian.apps.togetrail.trail.ui.others.TrailHorizontalAdapterOffline
 import com.sildian.apps.togetrail.trail.ui.others.TrailHorizontalViewHolder

@@ -1,7 +1,7 @@
 package com.sildian.apps.togetrail.hiker.data.dataRequests
 
 import com.sildian.apps.togetrail.common.baseDataRequests.SpecificDataRequest
-import com.sildian.apps.togetrail.hiker.data.core.Hiker
+import com.sildian.apps.togetrail.hiker.data.models.Hiker
 import com.sildian.apps.togetrail.hiker.data.helpers.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.data.source.HikerRepository
 import kotlinx.coroutines.CoroutineDispatcher

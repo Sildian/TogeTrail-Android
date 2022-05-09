@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.hiker.data.core
+package com.sildian.apps.togetrail.hiker.data.models
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

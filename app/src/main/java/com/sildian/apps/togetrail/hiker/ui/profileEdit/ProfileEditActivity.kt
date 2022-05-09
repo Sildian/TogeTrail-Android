@@ -12,7 +12,7 @@ import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.baseControllers.BaseImagePickerFragment
 import com.sildian.apps.togetrail.databinding.ActivityProfileEditBinding
 import com.sildian.apps.togetrail.location.ui.search.LocationSearchActivity
-import com.sildian.apps.togetrail.location.data.core.Location
+import com.sildian.apps.togetrail.location.data.models.Location
 import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************

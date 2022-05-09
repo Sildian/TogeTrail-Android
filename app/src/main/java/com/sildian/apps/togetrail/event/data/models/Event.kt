@@ -1,9 +1,9 @@
-package com.sildian.apps.togetrail.event.data.core
+package com.sildian.apps.togetrail.event.data.models
 
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.firebase.firestore.GeoPoint
-import com.sildian.apps.togetrail.location.data.core.Location
+import com.sildian.apps.togetrail.location.data.models.Location
 import kotlinx.android.parcel.Parceler
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.parcel.RawValue

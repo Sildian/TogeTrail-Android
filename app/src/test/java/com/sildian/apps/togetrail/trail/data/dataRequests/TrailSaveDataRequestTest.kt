@@ -2,10 +2,10 @@ package com.sildian.apps.togetrail.trail.data.dataRequests
 
 import com.google.firebase.FirebaseException
 import com.sildian.apps.togetrail.dataRequestTestSupport.*
-import com.sildian.apps.togetrail.hiker.data.core.Hiker
-import com.sildian.apps.togetrail.hiker.data.core.HikerHistoryType
+import com.sildian.apps.togetrail.hiker.data.models.Hiker
+import com.sildian.apps.togetrail.hiker.data.models.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.data.helpers.CurrentHikerInfo
-import com.sildian.apps.togetrail.trail.data.core.Trail
+import com.sildian.apps.togetrail.trail.data.models.Trail
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*

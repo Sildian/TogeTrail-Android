@@ -2,7 +2,7 @@ package com.sildian.apps.togetrail.chat.ui.chatRoom
 
 import androidx.lifecycle.MutableLiveData
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.chat.data.core.Duo
+import com.sildian.apps.togetrail.chat.data.models.Duo
 import com.sildian.apps.togetrail.chat.ui.others.ChatAdapter
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper

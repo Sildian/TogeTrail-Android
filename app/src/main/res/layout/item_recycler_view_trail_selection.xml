@@ -9,7 +9,7 @@
             type="com.sildian.apps.togetrail.trail.ui.selection.TrailSelectionAdapter.TrailSelectionViewHolder" />
         <variable
             name="trail"
-            type="com.sildian.apps.togetrail.trail.data.core.Trail" />
+            type="com.sildian.apps.togetrail.trail.data.models.Trail" />
         <variable
             name="isSelected"
             type="Boolean" />

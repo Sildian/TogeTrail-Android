@@ -7,8 +7,8 @@ import com.sildian.apps.togetrail.common.baseViewModels.SingleDataViewModel
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
 import com.sildian.apps.togetrail.common.utils.coroutinesHelpers.CoroutineIODispatcher
 import com.sildian.apps.togetrail.hiker.data.source.HikerRepository
-import com.sildian.apps.togetrail.trail.data.core.Trail
-import com.sildian.apps.togetrail.trail.data.core.TrailPointOfInterest
+import com.sildian.apps.togetrail.trail.data.models.Trail
+import com.sildian.apps.togetrail.trail.data.models.TrailPointOfInterest
 import com.sildian.apps.togetrail.trail.data.source.TrailRepository
 import com.sildian.apps.togetrail.trail.data.dataRequests.*
 import com.sildian.apps.togetrail.trail.data.helpers.TrailBuilder

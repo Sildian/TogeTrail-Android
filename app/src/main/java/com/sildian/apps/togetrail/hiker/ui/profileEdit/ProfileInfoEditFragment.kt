@@ -12,7 +12,7 @@ import com.sildian.apps.togetrail.common.utils.uiHelpers.TextFieldHelper
 import com.sildian.apps.togetrail.databinding.FragmentProfileInfoEditBinding
 import com.sildian.apps.togetrail.hiker.data.dataRequests.HikerSaveDataRequest
 import com.sildian.apps.togetrail.hiker.data.viewModels.HikerViewModel
-import com.sildian.apps.togetrail.location.data.core.Location
+import com.sildian.apps.togetrail.location.data.models.Location
 import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************

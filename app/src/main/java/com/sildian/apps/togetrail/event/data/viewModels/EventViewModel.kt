@@ -1,15 +1,15 @@
 package com.sildian.apps.togetrail.event.data.viewModels
 
-import com.sildian.apps.togetrail.chat.data.core.Message
+import com.sildian.apps.togetrail.chat.data.models.Message
 import com.sildian.apps.togetrail.common.baseViewModels.SingleDataHolder
 import com.sildian.apps.togetrail.common.baseViewModels.SingleDataViewModel
 import com.sildian.apps.togetrail.common.utils.coroutinesHelpers.CoroutineIODispatcher
-import com.sildian.apps.togetrail.event.data.core.Event
+import com.sildian.apps.togetrail.event.data.models.Event
 import com.sildian.apps.togetrail.event.data.source.EventRepository
 import com.sildian.apps.togetrail.event.data.dataRequests.*
 import com.sildian.apps.togetrail.hiker.data.helpers.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.data.source.HikerRepository
-import com.sildian.apps.togetrail.trail.data.core.Trail
+import com.sildian.apps.togetrail.trail.data.models.Trail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject

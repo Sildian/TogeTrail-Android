@@ -3,7 +3,7 @@ package com.sildian.apps.togetrail.trail.data.dataRequests
 import com.sildian.apps.togetrail.common.baseDataRequests.SpecificDataRequest
 import com.sildian.apps.togetrail.hiker.data.helpers.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.data.source.HikerRepository
-import com.sildian.apps.togetrail.trail.data.core.Trail
+import com.sildian.apps.togetrail.trail.data.models.Trail
 import kotlinx.coroutines.CoroutineDispatcher
 
 /*************************************************************************************************

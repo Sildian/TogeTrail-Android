@@ -15,7 +15,7 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.databinding.ActivityLocationSearchBinding
-import com.sildian.apps.togetrail.location.data.core.Location
+import com.sildian.apps.togetrail.location.data.models.Location
 import com.sildian.apps.togetrail.location.data.helpers.LocationBuilder
 
 /*************************************************************************************************

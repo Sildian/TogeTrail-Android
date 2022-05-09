@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.chat.data.core.Message
+import com.sildian.apps.togetrail.chat.data.models.Message
 import com.sildian.apps.togetrail.databinding.ItemRecyclerViewPrivateMessageBinding
 import com.sildian.apps.togetrail.hiker.data.helpers.CurrentHikerInfo
 

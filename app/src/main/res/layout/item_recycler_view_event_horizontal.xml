@@ -8,7 +8,7 @@
             type="com.sildian.apps.togetrail.event.ui.others.EventHorizontalAdapter.EventHorizontalViewHolder" />
         <variable
             name="event"
-            type="com.sildian.apps.togetrail.event.data.core.Event" />
+            type="com.sildian.apps.togetrail.event.data.models.Event" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

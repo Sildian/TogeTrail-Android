@@ -1,7 +1,7 @@
 package com.sildian.apps.togetrail.trail.data.viewModels
 
 import com.sildian.apps.togetrail.dataRequestTestSupport.*
-import com.sildian.apps.togetrail.trail.data.core.Trail
+import com.sildian.apps.togetrail.trail.data.models.Trail
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*

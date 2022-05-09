@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.chat.data.core
+package com.sildian.apps.togetrail.chat.data.models
 
 import android.os.Parcelable
 import com.sildian.apps.togetrail.common.utils.DateUtilities

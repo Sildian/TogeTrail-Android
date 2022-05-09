@@ -1,9 +1,9 @@
 package com.sildian.apps.togetrail.event.data.dataRequests
 
 import com.sildian.apps.togetrail.common.baseDataRequests.SpecificDataRequest
-import com.sildian.apps.togetrail.event.data.core.Event
+import com.sildian.apps.togetrail.event.data.models.Event
 import com.sildian.apps.togetrail.event.data.source.EventRepository
-import com.sildian.apps.togetrail.trail.data.core.Trail
+import com.sildian.apps.togetrail.trail.data.models.Trail
 import kotlinx.coroutines.CoroutineDispatcher
 
 /*************************************************************************************************

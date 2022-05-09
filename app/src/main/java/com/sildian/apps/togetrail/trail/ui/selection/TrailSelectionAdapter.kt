@@ -10,7 +10,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.databinding.ItemRecyclerViewTrailSelectionBinding
-import com.sildian.apps.togetrail.trail.data.core.Trail
+import com.sildian.apps.togetrail.trail.data.models.Trail
 
 /*************************************************************************************************
  * Displays a list of trails with a purpose to select some of them

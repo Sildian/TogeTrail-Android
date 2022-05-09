@@ -3,9 +3,9 @@ package com.sildian.apps.togetrail.trail.data.source
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
-import com.sildian.apps.togetrail.location.data.core.Location
+import com.sildian.apps.togetrail.location.data.models.Location
 import com.sildian.apps.togetrail.common.utils.GeoUtilities
-import com.sildian.apps.togetrail.trail.data.core.Trail
+import com.sildian.apps.togetrail.trail.data.models.Trail
 
 /*************************************************************************************************
  * Provides with Firebase queries on Trail

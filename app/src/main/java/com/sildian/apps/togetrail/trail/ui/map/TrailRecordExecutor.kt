@@ -9,7 +9,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationException
 import com.sildian.apps.togetrail.common.utils.GeoUtilities
 import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationContinuousFinder
-import com.sildian.apps.togetrail.trail.data.core.TrailPoint
+import com.sildian.apps.togetrail.trail.data.models.TrailPoint
 import java.util.*
 import javax.inject.Inject
 

@@ -3,12 +3,12 @@ package com.sildian.apps.togetrail.trail.data.dataRequests
 import android.util.Log
 import com.sildian.apps.togetrail.common.baseDataRequests.SaveDataRequest
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
-import com.sildian.apps.togetrail.hiker.data.core.HikerHistoryItem
-import com.sildian.apps.togetrail.hiker.data.core.HikerHistoryType
+import com.sildian.apps.togetrail.hiker.data.models.HikerHistoryItem
+import com.sildian.apps.togetrail.hiker.data.models.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.data.helpers.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.data.source.HikerRepository
-import com.sildian.apps.togetrail.trail.data.core.Trail
-import com.sildian.apps.togetrail.trail.data.core.TrailPointOfInterest
+import com.sildian.apps.togetrail.trail.data.models.Trail
+import com.sildian.apps.togetrail.trail.data.models.TrailPointOfInterest
 import com.sildian.apps.togetrail.trail.data.source.TrailRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import java.util.*

@@ -7,7 +7,7 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.databinding.FragmentEventsListBinding
-import com.sildian.apps.togetrail.event.data.core.Event
+import com.sildian.apps.togetrail.event.data.models.Event
 import com.sildian.apps.togetrail.event.data.source.EventFirebaseQueries
 import com.sildian.apps.togetrail.event.ui.others.EventHorizontalAdapter
 import com.sildian.apps.togetrail.hiker.data.source.HikerFirebaseQueries

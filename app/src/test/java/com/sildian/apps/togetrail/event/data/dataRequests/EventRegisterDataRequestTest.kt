@@ -5,9 +5,9 @@ import com.sildian.apps.togetrail.dataRequestTestSupport.BaseDataRequestTest
 import com.sildian.apps.togetrail.dataRequestTestSupport.FakeEventRepository
 import com.sildian.apps.togetrail.dataRequestTestSupport.FakeHikerRepository
 import com.sildian.apps.togetrail.dataRequestTestSupport.FirebaseSimulator
-import com.sildian.apps.togetrail.event.data.core.Event
-import com.sildian.apps.togetrail.hiker.data.core.Hiker
-import com.sildian.apps.togetrail.hiker.data.core.HikerHistoryType
+import com.sildian.apps.togetrail.event.data.models.Event
+import com.sildian.apps.togetrail.hiker.data.models.Hiker
+import com.sildian.apps.togetrail.hiker.data.models.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.data.helpers.CurrentHikerInfo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking

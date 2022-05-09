@@ -9,7 +9,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.databinding.ItemRecyclerViewHikerHistoryBinding
-import com.sildian.apps.togetrail.hiker.data.core.HikerHistoryItem
+import com.sildian.apps.togetrail.hiker.data.models.HikerHistoryItem
 
 /*************************************************************************************************
  * Displays an hiker's history

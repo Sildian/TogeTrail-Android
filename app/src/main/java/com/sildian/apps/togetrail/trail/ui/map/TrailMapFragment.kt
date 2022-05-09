@@ -24,11 +24,11 @@ import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.utils.MapMarkersUtilities
 import com.sildian.apps.togetrail.common.utils.MetricsHelper
 import com.sildian.apps.togetrail.databinding.FragmentTrailMapBinding
-import com.sildian.apps.togetrail.event.data.core.Event
+import com.sildian.apps.togetrail.event.data.models.Event
 import com.sildian.apps.togetrail.event.data.viewModels.EventsViewModel
 import com.sildian.apps.togetrail.main.MainActivity
-import com.sildian.apps.togetrail.trail.data.core.Trail
-import com.sildian.apps.togetrail.trail.data.core.TrailLevel
+import com.sildian.apps.togetrail.trail.data.models.Trail
+import com.sildian.apps.togetrail.trail.data.models.TrailLevel
 import com.sildian.apps.togetrail.trail.data.viewModels.TrailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 

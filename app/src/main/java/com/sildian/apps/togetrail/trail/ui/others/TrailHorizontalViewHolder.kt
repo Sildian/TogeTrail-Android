@@ -3,7 +3,7 @@ package com.sildian.apps.togetrail.trail.ui.others
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.sildian.apps.togetrail.databinding.ItemRecyclerViewTrailHorizontalBinding
-import com.sildian.apps.togetrail.trail.data.core.Trail
+import com.sildian.apps.togetrail.trail.data.models.Trail
 
 /*************************************************************************************************
  * Displays a trail's main info within an horizontal RecyclerView

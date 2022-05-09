@@ -8,8 +8,8 @@ import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.databinding.FragmentProfileBinding
-import com.sildian.apps.togetrail.hiker.data.core.HikerHistoryItem
-import com.sildian.apps.togetrail.hiker.data.core.HikerHistoryType
+import com.sildian.apps.togetrail.hiker.data.models.HikerHistoryItem
+import com.sildian.apps.togetrail.hiker.data.models.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.data.source.HikerFirebaseQueries
 import com.sildian.apps.togetrail.hiker.data.viewModels.HikerViewModel
 import dagger.hilt.android.AndroidEntryPoint

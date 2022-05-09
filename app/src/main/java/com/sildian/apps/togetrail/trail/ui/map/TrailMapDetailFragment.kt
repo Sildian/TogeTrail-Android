@@ -9,8 +9,8 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.databinding.FragmentTrailMapDetailBinding
 import com.sildian.apps.togetrail.hiker.data.helpers.CurrentHikerInfo
-import com.sildian.apps.togetrail.trail.data.core.TrailPoint
-import com.sildian.apps.togetrail.trail.data.core.TrailPointOfInterest
+import com.sildian.apps.togetrail.trail.data.models.TrailPoint
+import com.sildian.apps.togetrail.trail.data.models.TrailPointOfInterest
 import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************

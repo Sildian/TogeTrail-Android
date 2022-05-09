@@ -1,9 +1,9 @@
 package com.sildian.apps.togetrail.location.data.helpers
 
 import com.google.android.libraries.places.api.model.Place
-import com.sildian.apps.togetrail.location.data.core.Country
-import com.sildian.apps.togetrail.location.data.core.Location
-import com.sildian.apps.togetrail.location.data.core.Region
+import com.sildian.apps.togetrail.location.data.models.Country
+import com.sildian.apps.togetrail.location.data.models.Location
+import com.sildian.apps.togetrail.location.data.models.Region
 import java.util.*
 
 /*************************************************************************************************

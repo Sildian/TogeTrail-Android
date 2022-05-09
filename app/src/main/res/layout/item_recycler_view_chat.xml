@@ -10,7 +10,7 @@
             type="com.sildian.apps.togetrail.chat.ui.others.ChatAdapter.ChatViewHolder" />
         <variable
             name="chat"
-            type="com.sildian.apps.togetrail.chat.data.core.Duo" />
+            type="com.sildian.apps.togetrail.chat.data.models.Duo" />
         <variable
             name="date"
             type="java.util.Date" />

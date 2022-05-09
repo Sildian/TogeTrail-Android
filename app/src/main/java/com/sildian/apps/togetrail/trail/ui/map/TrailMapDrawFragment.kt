@@ -7,7 +7,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.databinding.FragmentTrailMapDrawBinding
-import com.sildian.apps.togetrail.trail.data.core.TrailPoint
+import com.sildian.apps.togetrail.trail.data.models.TrailPoint
 import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************

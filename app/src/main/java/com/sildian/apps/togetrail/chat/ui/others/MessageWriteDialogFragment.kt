@@ -10,7 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.chat.data.core.Message
+import com.sildian.apps.togetrail.chat.data.models.Message
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.databinding.DialogFragmentMessageWriteBinding
 

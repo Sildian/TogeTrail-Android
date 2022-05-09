@@ -1,6 +1,6 @@
 package com.sildian.apps.togetrail.hiker.data.viewModels
 
-import com.sildian.apps.togetrail.chat.data.core.Duo
+import com.sildian.apps.togetrail.chat.data.models.Duo
 import com.sildian.apps.togetrail.common.baseViewModels.ListDataViewModel
 import com.sildian.apps.togetrail.hiker.data.source.HikerFirebaseQueries
 import dagger.hilt.android.lifecycle.HiltViewModel

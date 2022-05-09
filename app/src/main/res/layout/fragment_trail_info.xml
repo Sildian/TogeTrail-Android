@@ -5,7 +5,7 @@
         <import type="android.view.View"/>
         <import type="com.bumptech.glide.request.RequestOptions"/>
         <import type="com.sildian.apps.togetrail.common.utils.MetricsHelper"/>
-        <import type="com.sildian.apps.togetrail.trail.data.core.TrailLevel"/>
+        <import type="com.sildian.apps.togetrail.trail.data.models.TrailLevel"/>
         <variable
             name="trailInfoFragment"
             type="com.sildian.apps.togetrail.trail.ui.info.TrailInfoFragment" />

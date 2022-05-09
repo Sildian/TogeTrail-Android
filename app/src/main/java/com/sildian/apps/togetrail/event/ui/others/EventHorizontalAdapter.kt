@@ -9,7 +9,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.databinding.ItemRecyclerViewEventHorizontalBinding
-import com.sildian.apps.togetrail.event.data.core.Event
+import com.sildian.apps.togetrail.event.data.models.Event
 
 /*************************************************************************************************
  * Displays a list of events within an horizontal RecyclerView

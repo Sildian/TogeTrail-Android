@@ -1,7 +1,7 @@
 package com.sildian.apps.togetrail.trail.data.source
 
 import com.google.firebase.firestore.DocumentReference
-import com.sildian.apps.togetrail.trail.data.core.Trail
+import com.sildian.apps.togetrail.trail.data.models.Trail
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

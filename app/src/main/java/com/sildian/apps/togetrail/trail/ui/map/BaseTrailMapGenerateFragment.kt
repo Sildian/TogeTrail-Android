@@ -9,8 +9,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
-import com.sildian.apps.togetrail.trail.data.core.TrailPoint
-import com.sildian.apps.togetrail.trail.data.core.TrailPointOfInterest
+import com.sildian.apps.togetrail.trail.data.models.TrailPoint
+import com.sildian.apps.togetrail.trail.data.models.TrailPointOfInterest
 
 /*************************************************************************************************
  * Base for all Trail fragments using a map and allowing to generate a new Trail with the app

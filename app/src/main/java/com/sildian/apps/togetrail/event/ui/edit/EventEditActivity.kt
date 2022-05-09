@@ -9,10 +9,10 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.databinding.ActivityEventEditBinding
-import com.sildian.apps.togetrail.location.data.core.Location
+import com.sildian.apps.togetrail.location.data.models.Location
 import com.sildian.apps.togetrail.location.ui.search.LocationSearchActivity
 import com.sildian.apps.togetrail.trail.ui.map.TrailActivity
-import com.sildian.apps.togetrail.trail.data.core.Trail
+import com.sildian.apps.togetrail.trail.data.models.Trail
 import com.sildian.apps.togetrail.trail.ui.selection.TrailSelectionActivity
 import dagger.hilt.android.AndroidEntryPoint
 

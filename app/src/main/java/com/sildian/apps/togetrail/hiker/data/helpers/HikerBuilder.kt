@@ -1,7 +1,7 @@
 package com.sildian.apps.togetrail.hiker.data.helpers
 
 import com.google.firebase.auth.FirebaseUser
-import com.sildian.apps.togetrail.hiker.data.core.Hiker
+import com.sildian.apps.togetrail.hiker.data.models.Hiker
 
 /*************************************************************************************************
  * Provides with functions allowing to build a Hiker

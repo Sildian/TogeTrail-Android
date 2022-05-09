@@ -1,9 +1,9 @@
 package com.sildian.apps.togetrail.trail.data.helpers
 
-import com.sildian.apps.togetrail.trail.data.core.Trail
-import com.sildian.apps.togetrail.trail.data.core.TrailPoint
-import com.sildian.apps.togetrail.trail.data.core.TrailPointOfInterest
-import com.sildian.apps.togetrail.trail.data.core.TrailTrack
+import com.sildian.apps.togetrail.trail.data.models.Trail
+import com.sildian.apps.togetrail.trail.data.models.TrailPoint
+import com.sildian.apps.togetrail.trail.data.models.TrailPointOfInterest
+import com.sildian.apps.togetrail.trail.data.models.TrailTrack
 import io.ticofab.androidgpxparser.parser.domain.Gpx
 
 /*************************************************************************************************

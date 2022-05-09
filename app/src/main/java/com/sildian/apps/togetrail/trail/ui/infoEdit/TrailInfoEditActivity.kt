@@ -12,9 +12,9 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseImagePickerFragment
 import com.sildian.apps.togetrail.databinding.ActivityTrailInfoEditBinding
-import com.sildian.apps.togetrail.location.data.core.Location
+import com.sildian.apps.togetrail.location.data.models.Location
 import com.sildian.apps.togetrail.location.ui.search.LocationSearchActivity
-import com.sildian.apps.togetrail.trail.data.core.Trail
+import com.sildian.apps.togetrail.trail.data.models.Trail
 import com.sildian.apps.togetrail.trail.data.viewModels.TrailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 

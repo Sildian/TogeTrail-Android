@@ -4,7 +4,7 @@ import android.util.Log
 import com.sildian.apps.togetrail.common.baseDataRequests.SaveDataRequest
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
-import com.sildian.apps.togetrail.hiker.data.core.Hiker
+import com.sildian.apps.togetrail.hiker.data.models.Hiker
 import com.sildian.apps.togetrail.hiker.data.source.HikerRepository
 import kotlinx.coroutines.CoroutineDispatcher
 

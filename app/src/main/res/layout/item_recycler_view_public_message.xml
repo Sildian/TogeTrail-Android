@@ -9,7 +9,7 @@
             type="com.sildian.apps.togetrail.chat.ui.others.PublicMessageAdapter.PublicMessageViewHolder" />
         <variable
             name="message"
-            type="com.sildian.apps.togetrail.chat.data.core.Message" />
+            type="com.sildian.apps.togetrail.chat.data.models.Message" />
         <variable
             name="messageAuthorIsCurrentUser"
             type="Boolean" />

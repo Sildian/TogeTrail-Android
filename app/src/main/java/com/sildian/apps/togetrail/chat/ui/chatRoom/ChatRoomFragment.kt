@@ -4,7 +4,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.chat.data.core.Message
+import com.sildian.apps.togetrail.chat.data.models.Message
 import com.sildian.apps.togetrail.chat.ui.others.PrivateMessageAdapter
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper

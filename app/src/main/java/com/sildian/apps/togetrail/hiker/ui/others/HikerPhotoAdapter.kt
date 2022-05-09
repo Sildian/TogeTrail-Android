@@ -9,7 +9,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.databinding.ItemRecyclerViewHikerPhotoBinding
-import com.sildian.apps.togetrail.hiker.data.core.Hiker
+import com.sildian.apps.togetrail.hiker.data.models.Hiker
 
 /*************************************************************************************************
  * Displays hikers's photo within a recyclerView

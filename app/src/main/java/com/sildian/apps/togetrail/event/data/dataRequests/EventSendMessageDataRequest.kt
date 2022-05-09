@@ -1,8 +1,8 @@
 package com.sildian.apps.togetrail.event.data.dataRequests
 
-import com.sildian.apps.togetrail.chat.data.core.Message
+import com.sildian.apps.togetrail.chat.data.models.Message
 import com.sildian.apps.togetrail.common.baseDataRequests.SpecificDataRequest
-import com.sildian.apps.togetrail.event.data.core.Event
+import com.sildian.apps.togetrail.event.data.models.Event
 import com.sildian.apps.togetrail.event.data.source.EventRepository
 import com.sildian.apps.togetrail.hiker.data.helpers.CurrentHikerInfo
 import kotlinx.coroutines.CoroutineDispatcher

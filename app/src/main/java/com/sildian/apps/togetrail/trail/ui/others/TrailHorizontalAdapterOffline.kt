@@ -6,7 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.databinding.ItemRecyclerViewTrailHorizontalBinding
-import com.sildian.apps.togetrail.trail.data.core.Trail
+import com.sildian.apps.togetrail.trail.data.models.Trail
 
 /*************************************************************************************************
  * Displays a list of trails within an horizontal RecyclerView (with offline data)

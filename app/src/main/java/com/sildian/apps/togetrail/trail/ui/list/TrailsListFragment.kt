@@ -10,7 +10,7 @@ import com.sildian.apps.togetrail.databinding.FragmentTrailsListBinding
 import com.sildian.apps.togetrail.hiker.data.helpers.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.data.source.HikerFirebaseQueries
 import com.sildian.apps.togetrail.main.MainActivity
-import com.sildian.apps.togetrail.trail.data.core.Trail
+import com.sildian.apps.togetrail.trail.data.models.Trail
 import com.sildian.apps.togetrail.trail.data.source.TrailFirebaseQueries
 import com.sildian.apps.togetrail.trail.ui.others.TrailHorizontalAdapter
 import com.sildian.apps.togetrail.trail.ui.others.TrailHorizontalViewHolder

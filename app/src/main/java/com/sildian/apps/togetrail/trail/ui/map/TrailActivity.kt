@@ -15,7 +15,7 @@ import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.databinding.ActivityTrailBinding
 import com.sildian.apps.togetrail.hiker.ui.profile.ProfileActivity
 import com.sildian.apps.togetrail.trail.ui.infoEdit.TrailInfoEditActivity
-import com.sildian.apps.togetrail.trail.data.core.Trail
+import com.sildian.apps.togetrail.trail.data.models.Trail
 import com.sildian.apps.togetrail.trail.data.helpers.TrailBuildException
 import com.sildian.apps.togetrail.trail.data.viewModels.TrailViewModel
 import dagger.hilt.android.AndroidEntryPoint
