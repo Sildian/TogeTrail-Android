@@ -35,6 +35,7 @@ class TrailBuilderTest {
         val gpxParser= GPXParser()
         val inputStream = this.context.assets.open("gpx_sample_test_1")
         val gpx = gpxParser.parse(inputStream)
+        inputStream.close()
         assertNotNull(gpx)
 
         val trail= TrailBuilder()
@@ -55,6 +56,7 @@ class TrailBuilderTest {
         val gpxParser= GPXParser()
         val inputStream = this.context.assets.open("gpx_sample_test_2")
         val gpx = gpxParser.parse(inputStream)
+        inputStream.close()
         assertNotNull(gpx)
 
         try {
@@ -73,6 +75,7 @@ class TrailBuilderTest {
         val gpxParser= GPXParser()
         val inputStream = this.context.assets.open("gpx_sample_test_3")
         val gpx = gpxParser.parse(inputStream)
+        inputStream.close()
         assertNotNull(gpx)
 
         try {

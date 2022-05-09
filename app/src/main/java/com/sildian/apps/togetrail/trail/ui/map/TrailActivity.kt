@@ -116,7 +116,9 @@ class TrailActivity : BaseActivity<ActivityTrailBinding>() {
     private fun observeTrail() {
         this.trailViewModel.data.observe(this) { trailData ->
             trailData?.error?.let { e ->
-                onQueryError(e)
+                if (!onGpxError(e)) {
+                    onQueryError(e)
+                }
             } ?:
             trailData?.data?.let { trail ->
                 if (!this.isTrailLoaded) {
@@ -150,39 +152,40 @@ class TrailActivity : BaseActivity<ActivityTrailBinding>() {
         }
     }
 
-    private fun createTrailFromGpx(uri:Uri?){
-
-        if(uri!=null){
-
-            /*Parses the gpx from the given uri, then updates the current trail*/
-
-            val gpxParser= GPXParser()
-            val inputStream = contentResolver.openInputStream(uri)
-            try {
-                val gpx = gpxParser.parse(inputStream)
-                this.trailViewModel.initNewTrail(gpx)
+    private fun loadTrailFromGpx(uri:Uri?) {
+        uri?.let {
+            contentResolver.openInputStream(uri)?.let { inputStream ->
+                this.trailViewModel.loadTrailFromGpx(inputStream, GPXParser())
+                return
             }
+        }
+        DialogHelper.createInfoDialog(
+            this,
+            R.string.message_file_failure,
+            R.string.message_file_failure_gpx_other_reason
+        ).show()
+    }
 
-            /*Handles exceptions*/
+    override fun saveData() {
+        this.fragment?.saveData()
+    }
 
-            catch(e:IOException){
-                e.printStackTrace()
+    private fun onGpxError(e: Throwable): Boolean {
+        e.printStackTrace()
+        when (e) {
+            is IOException ->
                 DialogHelper.createInfoDialog(
                     this,
                     R.string.message_file_failure,
                     R.string.message_file_failure_gpx_other_reason
                 ).show()
-            }
-            catch(e:XmlPullParserException){
-                e.printStackTrace()
+            is XmlPullParserException ->
                 DialogHelper.createInfoDialog(
                     this,
                     R.string.message_file_failure,
                     R.string.message_file_failure_gpx_other_reason
                 ).show()
-            }
-            catch(e: TrailBuildException) {
-                e.printStackTrace()
+            is TrailBuildException ->
                 when (e.errorCode) {
                     TrailBuildException.ErrorCode.NO_TRACK ->
                         DialogHelper.createInfoDialog(
@@ -197,19 +200,9 @@ class TrailActivity : BaseActivity<ActivityTrailBinding>() {
                             R.string.message_file_failure_gpx_too_many_tracks
                         ).show()
                 }
-            }
+            else -> return false
         }
-        else{
-            DialogHelper.createInfoDialog(
-                this,
-                R.string.message_file_failure,
-                R.string.message_file_failure_gpx_no_track
-            ).show()
-        }
-    }
-
-    override fun saveData() {
-        this.fragment?.saveData()
+        return true
     }
 
     /*************************************UI monitoring******************************************/
@@ -329,7 +322,7 @@ class TrailActivity : BaseActivity<ActivityTrailBinding>() {
         when (resultCode) {
             Activity.RESULT_OK -> {
                 val uri = data?.data
-                createTrailFromGpx(uri)
+                loadTrailFromGpx(uri)
             }
             Activity.RESULT_CANCELED ->
                 finishCancel()

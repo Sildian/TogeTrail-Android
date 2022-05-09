@@ -13,8 +13,9 @@ import com.sildian.apps.togetrail.trail.data.source.TrailRepository
 import com.sildian.apps.togetrail.trail.data.dataRequests.*
 import com.sildian.apps.togetrail.trail.data.helpers.TrailBuilder
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.ticofab.androidgpxparser.parser.domain.Gpx
+import io.ticofab.androidgpxparser.parser.GPXParser
 import kotlinx.coroutines.CoroutineDispatcher
+import java.io.InputStream
 import javax.inject.Inject
 
 /*************************************************************************************************
@@ -93,16 +94,6 @@ class TrailViewModel @Inject constructor(
         )
     }
 
-    fun initNewTrail(gpx: Gpx) {
-        this.mutableData.postValue(
-            SingleDataHolder(
-                TrailBuilder()
-                    .withGpx(gpx)
-                    .build()
-            )
-        )
-    }
-
     fun initWithTrail(trail: Trail) {
         this.mutableData.postValue(SingleDataHolder(trail))
     }
@@ -113,6 +104,10 @@ class TrailViewModel @Inject constructor(
 
     fun loadTrail(trailId: String) {
         loadData(TrailLoadDataRequest(this.dispatcher, trailId, this.trailRepository))
+    }
+
+    fun loadTrailFromGpx(inputStream: InputStream, parser: GPXParser) {
+        loadData(TrailLoadGpxDataRequest(this.dispatcher, inputStream, parser))
     }
 
     fun saveTrail(savePOI: Boolean) {
