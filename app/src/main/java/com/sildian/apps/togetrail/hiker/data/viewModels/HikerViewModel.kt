@@ -1,5 +1,6 @@
 package com.sildian.apps.togetrail.hiker.data.viewModels
 
+import com.sildian.apps.togetrail.common.baseDataRequests.FirebaseDocumentDataFlowRequest
 import com.sildian.apps.togetrail.common.baseViewModels.SingleDataViewModel
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
@@ -55,7 +56,7 @@ class HikerViewModel @Inject constructor(
     /***********************************Data monitoring***************************************/
 
     fun loadHikerRealTime(hikerId: String) {
-        loadDataRealTime(this.hikerRepository.getHikerReference(hikerId))
+        loadDataRealTime(FirebaseDocumentDataFlowRequest(this.dataModelClass, this.hikerRepository.getHikerReference(hikerId)))
     }
 
     fun loadHiker(hikerId: String) {
@@ -79,7 +80,7 @@ class HikerViewModel @Inject constructor(
     }
 
     fun logoutUser() {
-        clearQueryRegistration()
+        cancelCurrentDataRequest()
         this.mutableData.postValue(null)
         runSpecificRequest(HikerLogoutDataRequest(this.dispatcher, this.authRepository))
     }
@@ -89,7 +90,7 @@ class HikerViewModel @Inject constructor(
     }
 
     fun deleteUserAccount() {
-        clearQueryRegistration()
+        cancelCurrentDataRequest()
         runSpecificRequest(HikerDeleteAccountDataRequest(
             this.dispatcher,
             this.authRepository,

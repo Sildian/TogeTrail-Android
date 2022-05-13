@@ -2,6 +2,7 @@ package com.sildian.apps.togetrail.trail.data.viewModels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.sildian.apps.togetrail.common.baseDataRequests.FirebaseDocumentDataFlowRequest
 import com.sildian.apps.togetrail.common.baseViewModels.SingleDataHolder
 import com.sildian.apps.togetrail.common.baseViewModels.SingleDataViewModel
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
@@ -99,7 +100,7 @@ class TrailViewModel @Inject constructor(
     }
 
     fun loadTrailRealTime(trailId: String) {
-        loadDataRealTime(this.trailRepository.getTrailReference(trailId))
+        loadDataRealTime(FirebaseDocumentDataFlowRequest(this.dataModelClass, this.trailRepository.getTrailReference(trailId)))
     }
 
     fun loadTrail(trailId: String) {

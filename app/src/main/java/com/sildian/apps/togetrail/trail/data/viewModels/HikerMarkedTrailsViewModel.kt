@@ -1,5 +1,6 @@
 package com.sildian.apps.togetrail.trail.data.viewModels
 
+import com.sildian.apps.togetrail.common.baseDataRequests.FirebaseQueryDataFlowRequest
 import com.sildian.apps.togetrail.common.baseViewModels.ListDataViewModel
 import com.sildian.apps.togetrail.hiker.data.source.HikerFirebaseQueries
 import com.sildian.apps.togetrail.trail.data.models.Trail
@@ -14,6 +15,6 @@ import javax.inject.Inject
 class HikerMarkedTrailsViewModel @Inject constructor(): ListDataViewModel<Trail>(Trail::class.java) {
 
     fun loadMarkedTrailsRealTime(hikerId: String) {
-        loadDataRealTime(HikerFirebaseQueries.getMarkedTrails(hikerId))
+        loadDataRealTime(FirebaseQueryDataFlowRequest(this.dataModelClass, HikerFirebaseQueries.getMarkedTrails(hikerId)))
     }
 }

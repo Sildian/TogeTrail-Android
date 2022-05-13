@@ -11,6 +11,7 @@ import kotlinx.coroutines.*
 interface DataRequest {
     suspend fun execute()
     suspend fun cancel()
+    fun isRunning(): Boolean
 }
 
 /**Base for all data requests aiming to load data matching the given type T**/
@@ -18,7 +19,7 @@ interface DataRequest {
 abstract class LoadDataRequest<T: Any>(private val dispatcher: CoroutineDispatcher) : DataRequest {
 
     private var job: Deferred<T?>? = null
-    var data: T? = null
+    var data: T? = null ; protected set
 
     final override suspend fun execute() {
         withContext(this.dispatcher) {
@@ -28,8 +29,10 @@ abstract class LoadDataRequest<T: Any>(private val dispatcher: CoroutineDispatch
     }
 
     final override suspend fun cancel() {
-        job?.cancel()
+        this.job?.cancel()
     }
+
+    final override fun isRunning(): Boolean = this.job?.isActive == true
 
     protected abstract suspend fun load(): T?
 }
@@ -53,8 +56,10 @@ abstract class SaveDataRequest<T: Any>(
     }
 
     final override suspend fun cancel() {
-        job?.cancel()
+        this.job?.cancel()
     }
+
+    final override fun isRunning(): Boolean = this.job?.isActive == true
 
     protected abstract suspend fun save()
 }
@@ -73,8 +78,10 @@ abstract class SpecificDataRequest(private val dispatcher: CoroutineDispatcher) 
     }
 
     final override suspend fun cancel() {
-        job?.cancel()
+        this.job?.cancel()
     }
+
+    final override fun isRunning(): Boolean = this.job?.isActive == true
 
     protected abstract suspend fun run()
 }

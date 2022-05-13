@@ -1,6 +1,7 @@
 package com.sildian.apps.togetrail.event.data.viewModels
 
 import com.sildian.apps.togetrail.chat.data.models.Message
+import com.sildian.apps.togetrail.common.baseDataRequests.FirebaseDocumentDataFlowRequest
 import com.sildian.apps.togetrail.common.baseViewModels.SingleDataHolder
 import com.sildian.apps.togetrail.common.baseViewModels.SingleDataViewModel
 import com.sildian.apps.togetrail.common.utils.coroutinesHelpers.CoroutineIODispatcher
@@ -40,7 +41,7 @@ class EventViewModel @Inject constructor(
     }
 
     fun loadEventRealTime(eventId:String) {
-        loadDataRealTime(this.eventRepository.getEventReference(eventId))
+        loadDataRealTime(FirebaseDocumentDataFlowRequest(this.dataModelClass, this.eventRepository.getEventReference(eventId)))
     }
 
     fun loadEvent(eventId:String) {

@@ -7,14 +7,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.Query
-import com.sildian.apps.togetrail.common.baseDataRequests.DataRequest
-import com.sildian.apps.togetrail.common.baseDataRequests.LoadDataRequest
-import com.sildian.apps.togetrail.common.baseDataRequests.SaveDataRequest
-import com.sildian.apps.togetrail.common.baseDataRequests.SpecificDataRequest
+import com.sildian.apps.togetrail.common.baseDataRequests.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 
 /*************************************************************************************************
  * This file provides with base abstract classes for data viewModels
@@ -26,10 +22,9 @@ private const val TAG = "DataViewModel"
 
 abstract class DataViewModel<T: Any>(protected val dataModelClass: Class<T>) : ViewModel(), Observable {
 
-    /**Callbacks and registration**/
+    /**Callbacks**/
 
     protected val callbacks = PropertyChangeRegistry()                  //Observable callbacks
-    protected var queryRegistration: ListenerRegistration? = null       //Listener for database queries
 
     /**Data**/
 
@@ -45,17 +40,8 @@ abstract class DataViewModel<T: Any>(protected val dataModelClass: Class<T>) : V
 
     override fun onCleared() {
         removeAllOnPropertyChangedCallbacks()
-        clearQueryRegistration()
+        cancelCurrentDataRequest()
     }
-
-    /**Query registration monitoring**/
-
-    fun clearQueryRegistration() {
-        this.queryRegistration?.remove()
-        this.queryRegistration = null
-    }
-
-    fun isQueryRegistrationBusy(): Boolean = this.queryRegistration != null
 
     /**Callbacks monitoring**/
 
@@ -74,6 +60,16 @@ abstract class DataViewModel<T: Any>(protected val dataModelClass: Class<T>) : V
     fun removeAllOnPropertyChangedCallbacks() {
         this.callbacks.clear()
     }
+
+    /**Data request monitoring**/
+
+    fun cancelCurrentDataRequest() {
+        viewModelScope.launch(this.exceptionHandler) {
+            currentDataRequest?.cancel()
+        }
+    }
+
+    fun isDataRequestRunning(): Boolean = this.currentDataRequest?.isRunning() == true
 }
 
 /***************************Monitors a data list of the given type T****************************/
@@ -91,19 +87,27 @@ abstract class ListDataViewModel<T: Any>(dataModelClass: Class<T>): DataViewMode
         this.mutableData.value = this.mutableData.value
     }
 
-    protected fun loadDataRealTime(query: Query) {
-        this.queryRegistration?.remove()
-        this.queryRegistration = query
-            .addSnapshotListener { querySnapshot, e ->
-                if (querySnapshot != null) {
-                    val results = querySnapshot.toObjects(this.dataModelClass)
-                    Log.d(TAG, "Successfully loaded ${results.size} ${dataModelClass.simpleName} from database")
-                    this.mutableData.postValue(ListDataHolder(results))
-                } else if (e != null) {
+    protected fun loadDataRealTime(dataRequest: FirebaseQueryDataFlowRequest<T>) {
+        viewModelScope.launch(this.exceptionHandler) {
+            currentDataRequest?.cancel()
+            currentDataRequest = dataRequest
+            dataRequest.execute()
+            dataRequest.flow
+                ?.catch { e ->
                     Log.e(TAG, "Failed to load ${dataModelClass.simpleName} from database : ${e.message}")
-                    this.mutableData.postValue(ListDataHolder(this.mutableData.value?.data?: emptyList(), e))
+                    mutableData.postValue(ListDataHolder(mutableData.value?.data?: emptyList(), e))
                 }
-            }
+                ?.collect { results ->
+                    results?.let {
+                        Log.d(TAG, "Successfully loaded ${results.size} ${dataModelClass.simpleName} from database")
+                        mutableData.postValue(ListDataHolder(results))
+                    } ?: run {
+                        val e = Exception("Unknown error")
+                        Log.e(TAG, "Failed to load ${dataModelClass.simpleName} from database : ${e.message}")
+                        mutableData.postValue(ListDataHolder(mutableData.value?.data?: emptyList(), e))
+                    }
+                }
+        }
     }
 }
 
@@ -125,20 +129,27 @@ abstract class SingleDataViewModel<T: Any>(dataModelClass: Class<T>, protected v
         this.mutableData.value = this.mutableData.value
     }
 
-    protected fun loadDataRealTime(documentReference: DocumentReference) {
-        this.queryRegistration?.remove()
-        this.queryRegistration = documentReference
-            .addSnapshotListener { snapshot, e ->
-                if (snapshot != null) {
-                    val result = snapshot.toObject(this.dataModelClass)
-                    Log.d(TAG, "Successfully loaded ${dataModelClass.simpleName} from database")
-                    this.mutableData.postValue(SingleDataHolder(result))
-                }
-                else if (e != null) {
+    protected fun loadDataRealTime(dataRequest: FirebaseDocumentDataFlowRequest<T>) {
+        viewModelScope.launch(this.exceptionHandler) {
+            currentDataRequest?.cancel()
+            currentDataRequest = dataRequest
+            dataRequest.execute()
+            dataRequest.flow
+                ?.catch { e ->
                     Log.e(TAG, "Failed to load ${dataModelClass.simpleName} from database : ${e.message}")
-                    this.mutableData.postValue(SingleDataHolder(this.mutableData.value?.data, e))
+                    mutableData.postValue(SingleDataHolder(mutableData.value?.data, e))
                 }
-            }
+                ?.collect { result ->
+                    result?.let {
+                        Log.d(TAG, "Successfully loaded ${dataModelClass.simpleName} from database")
+                        mutableData.postValue(SingleDataHolder(result))
+                    } ?: run {
+                        val e = Exception("Unknown error")
+                        Log.e(TAG, "Failed to load ${dataModelClass.simpleName} from database : ${e.message}")
+                        mutableData.postValue(SingleDataHolder(mutableData.value?.data, e))
+                    }
+                }
+        }
     }
 
     protected fun loadData(dataRequest: LoadDataRequest<T>) {

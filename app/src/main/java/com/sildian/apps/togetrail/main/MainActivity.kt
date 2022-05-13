@@ -310,12 +310,12 @@ class MainActivity :
             }
             when {
                 hikerData?.data == null -> {
-                    this.hikerViewModel.clearQueryRegistration()
-                    this.hikerChatViewModel.clearQueryRegistration()
-                    this.hikerLikedTrailsViewModel.clearQueryRegistration()
+                    this.hikerViewModel.cancelCurrentDataRequest()
+                    this.hikerChatViewModel.cancelCurrentDataRequest()
+                    this.hikerLikedTrailsViewModel.cancelCurrentDataRequest()
                     updateNavigationViewUserItems()
                 }
-                !this.hikerViewModel.isQueryRegistrationBusy() -> {
+                !this.hikerViewModel.isDataRequestRunning() -> {
                     loadHiker()
                     loadHikerChats()
                     loadHikerLikedTrails()
