@@ -60,7 +60,7 @@ class ProfileFragment(private val hikerId: String? = null) :
 
     private fun loadHiker() {
         this.hikerId?.let { hikerId ->
-            this.hikerViewModel.loadHikerRealTime(hikerId)
+            this.hikerViewModel.loadHikerFlow(hikerId)
         }
     }
 

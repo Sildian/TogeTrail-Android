@@ -87,7 +87,7 @@ class TrailInfoEditFragment : BaseImagePickerFragment<FragmentTrailInfoEditBindi
 
     private fun observeDataRequestState() {
         this.trailViewModel.dataRequestState.observe(this) { dataRequestState ->
-            if (dataRequestState?.dataRequest is TrailSaveDataRequest) {
+            if (dataRequestState?.data is TrailSaveDataRequest) {
                 dataRequestState.error?.let { e ->
                     onQueryError(e)
                 } ?: onQuerySuccess()

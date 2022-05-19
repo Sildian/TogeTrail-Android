@@ -84,7 +84,7 @@ class EventFragment(private val eventId: String?=null) :
 
     private fun loadEvent() {
         this.eventId?.let { eventId ->
-            this.eventViewModel.loadEventRealTime(eventId)
+            this.eventViewModel.loadEventFlow(eventId)
         }
     }
 

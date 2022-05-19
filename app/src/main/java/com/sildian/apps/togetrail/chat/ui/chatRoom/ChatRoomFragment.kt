@@ -59,7 +59,7 @@ class ChatRoomFragment(private val interlocutorId: String? = null) :
 
     private fun loadHiker() {
         this.interlocutorId?.let { interlocutorId ->
-            this.hikerViewModel.loadHikerRealTime(interlocutorId)
+            this.hikerViewModel.loadHikerFlow(interlocutorId)
         }
     }
 

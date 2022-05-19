@@ -375,25 +375,25 @@ class MainActivity :
 
     private fun loadHiker() {
         this.hikerViewModel.data.value?.data?.id?.let { hikerId ->
-            this.hikerViewModel.loadHikerRealTime(hikerId)
+            this.hikerViewModel.loadHikerFlow(hikerId)
         }
     }
 
     private fun loadHikerChats() {
         this.hikerViewModel.data.value?.data?.id?.let { hikerId ->
-            this.hikerChatViewModel.loadChatsRealTime(hikerId)
+            this.hikerChatViewModel.loadChatsFlow(hikerId)
         }
     }
 
     private fun loadHikerLikedTrails() {
         this.hikerViewModel.data.value?.data?.id?.let { hikerId ->
-            this.hikerLikedTrailsViewModel.loadLikedTrailsRealTime(hikerId)
+            this.hikerLikedTrailsViewModel.loadLikedTrailsFlow(hikerId)
         }
     }
 
     private fun loadHikerMarkedTrails() {
         this.hikerViewModel.data.value?.data?.id?.let { hikerId ->
-            this.hikerMarkedTrailsViewModel.loadMarkedTrailsRealTime(hikerId)
+            this.hikerMarkedTrailsViewModel.loadMarkedTrailsFlow(hikerId)
         }
     }
 

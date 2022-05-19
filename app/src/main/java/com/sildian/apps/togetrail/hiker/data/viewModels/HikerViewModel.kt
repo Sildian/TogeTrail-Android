@@ -55,8 +55,12 @@ class HikerViewModel @Inject constructor(
 
     /***********************************Data monitoring***************************************/
 
-    fun loadHikerRealTime(hikerId: String) {
-        loadDataRealTime(FirebaseDocumentDataFlowRequest(this.dataModelClass, this.hikerRepository.getHikerReference(hikerId)))
+    fun loadHikerFlow(hikerId: String) {
+        loadDataFlow(FirebaseDocumentDataFlowRequest(
+            this.dispatcher,
+            this.dataModelClass,
+            this.hikerRepository.getHikerReference(hikerId))
+        )
     }
 
     fun loadHiker(hikerId: String) {

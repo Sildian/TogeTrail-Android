@@ -40,8 +40,12 @@ class EventViewModel @Inject constructor(
         this.mutableData.postValue(SingleDataHolder(Event()))
     }
 
-    fun loadEventRealTime(eventId:String) {
-        loadDataRealTime(FirebaseDocumentDataFlowRequest(this.dataModelClass, this.eventRepository.getEventReference(eventId)))
+    fun loadEventFlow(eventId:String) {
+        loadDataFlow(FirebaseDocumentDataFlowRequest(
+            this.dispatcher,
+            this.dataModelClass,
+            this.eventRepository.getEventReference(eventId))
+        )
     }
 
     fun loadEvent(eventId:String) {

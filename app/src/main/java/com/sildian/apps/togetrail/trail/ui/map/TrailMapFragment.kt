@@ -112,12 +112,12 @@ class TrailMapFragment :
 
     private fun loadTrails(){
         val trailsQuery = (activity as MainActivity).trailsQuery
-        this.trailsViewModel.loadTrailsRealTime(trailsQuery)
+        this.trailsViewModel.loadTrailsFlow(trailsQuery)
     }
 
     private fun loadEvents(){
         val eventsQuery = (activity as MainActivity).eventsQuery
-        this.eventsViewModel.loadEventsRealTime(eventsQuery)
+        this.eventsViewModel.loadEventsFlow(eventsQuery)
     }
 
     /************************************UI monitoring*******************************************/

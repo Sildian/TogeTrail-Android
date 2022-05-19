@@ -99,8 +99,12 @@ class TrailViewModel @Inject constructor(
         this.mutableData.postValue(SingleDataHolder(trail))
     }
 
-    fun loadTrailRealTime(trailId: String) {
-        loadDataRealTime(FirebaseDocumentDataFlowRequest(this.dataModelClass, this.trailRepository.getTrailReference(trailId)))
+    fun loadTrailFlow(trailId: String) {
+        loadDataFlow(FirebaseDocumentDataFlowRequest(
+            this.dispatcher,
+            this.dataModelClass,
+            this.trailRepository.getTrailReference(trailId))
+        )
     }
 
     fun loadTrail(trailId: String) {

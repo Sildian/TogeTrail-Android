@@ -3,8 +3,10 @@ package com.sildian.apps.togetrail.hiker.data.viewModels
 import com.sildian.apps.togetrail.chat.data.models.Duo
 import com.sildian.apps.togetrail.common.baseDataRequests.FirebaseQueryDataFlowRequest
 import com.sildian.apps.togetrail.common.baseViewModels.ListDataViewModel
+import com.sildian.apps.togetrail.common.utils.coroutinesHelpers.CoroutineIODispatcher
 import com.sildian.apps.togetrail.hiker.data.source.HikerFirebaseQueries
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 /*************************************************************************************************
@@ -12,9 +14,9 @@ import javax.inject.Inject
  ************************************************************************************************/
 
 @HiltViewModel
-class HikerChatViewModel @Inject constructor(): ListDataViewModel<Duo>(Duo::class.java) {
+class HikerChatViewModel @Inject constructor(@CoroutineIODispatcher dispatcher: CoroutineDispatcher): ListDataViewModel<Duo>(Duo::class.java, dispatcher) {
 
-    fun loadChatsRealTime(hikerId: String) {
-        loadDataRealTime(FirebaseQueryDataFlowRequest(this.dataModelClass, HikerFirebaseQueries.getChats(hikerId)))
+    fun loadChatsFlow(hikerId: String) {
+        loadDataFlow(FirebaseQueryDataFlowRequest(this.dispatcher, this.dataModelClass, HikerFirebaseQueries.getChats(hikerId)))
     }
 }

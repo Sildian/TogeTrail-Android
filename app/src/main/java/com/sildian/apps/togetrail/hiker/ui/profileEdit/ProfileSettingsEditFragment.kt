@@ -43,7 +43,7 @@ class ProfileSettingsEditFragment(private val hikerId: String?=null) :
 
     private fun observeDataRequestState() {
         this.hikerViewModel.dataRequestState.observe(this) { dataRequestState ->
-            if (dataRequestState?.dataRequest is HikerResetPasswordDataRequest || dataRequestState?.dataRequest is HikerDeleteAccountDataRequest) {
+            if (dataRequestState?.data is HikerResetPasswordDataRequest || dataRequestState?.data is HikerDeleteAccountDataRequest) {
                 dataRequestState.error?.let { e ->
                     onQueryError(e)
                 } ?: handleSaveDataSuccess()

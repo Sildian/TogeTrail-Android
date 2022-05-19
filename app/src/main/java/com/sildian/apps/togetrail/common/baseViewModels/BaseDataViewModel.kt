@@ -20,7 +20,7 @@ private const val TAG = "DataViewModel"
 
 /*****************************Base for all data viewModels***************************************/
 
-abstract class DataViewModel<T: Any>(protected val dataModelClass: Class<T>) : ViewModel(), Observable {
+abstract class DataViewModel<T: Any>(protected val dataModelClass: Class<T>, protected val dispatcher: CoroutineDispatcher) : ViewModel(), Observable {
 
     /**Callbacks**/
 
@@ -74,7 +74,7 @@ abstract class DataViewModel<T: Any>(protected val dataModelClass: Class<T>) : V
 
 /***************************Monitors a data list of the given type T****************************/
 
-abstract class ListDataViewModel<T: Any>(dataModelClass: Class<T>): DataViewModel<T>(dataModelClass) {
+abstract class ListDataViewModel<T: Any>(dataModelClass: Class<T>, dispatcher: CoroutineDispatcher): DataViewModel<T>(dataModelClass, dispatcher) {
 
     /**Data**/
 
@@ -87,23 +87,24 @@ abstract class ListDataViewModel<T: Any>(dataModelClass: Class<T>): DataViewMode
         this.mutableData.value = this.mutableData.value
     }
 
-    protected fun loadDataRealTime(dataRequest: FirebaseQueryDataFlowRequest<T>) {
+    @ExperimentalCoroutinesApi
+    protected fun loadDataFlow(dataRequest: DataFlowRequest<List<T>>) {
         viewModelScope.launch(this.exceptionHandler) {
             currentDataRequest?.cancel()
             currentDataRequest = dataRequest
             dataRequest.execute()
             dataRequest.flow
                 ?.catch { e ->
-                    Log.e(TAG, "Failed to load ${dataModelClass.simpleName} from database : ${e.message}")
+                    Log.e(TAG, "Failed to load ${dataModelClass.simpleName} : ${e.message}")
                     mutableData.postValue(ListDataHolder(mutableData.value?.data?: emptyList(), e))
                 }
                 ?.collect { results ->
                     results?.let {
-                        Log.d(TAG, "Successfully loaded ${results.size} ${dataModelClass.simpleName} from database")
+                        Log.d(TAG, "Successfully loaded ${results.size} ${dataModelClass.simpleName}")
                         mutableData.postValue(ListDataHolder(results))
                     } ?: run {
                         val e = Exception("Unknown error")
-                        Log.e(TAG, "Failed to load ${dataModelClass.simpleName} from database : ${e.message}")
+                        Log.e(TAG, "Failed to load ${dataModelClass.simpleName} : ${e.message}")
                         mutableData.postValue(ListDataHolder(mutableData.value?.data?: emptyList(), e))
                     }
                 }
@@ -113,7 +114,7 @@ abstract class ListDataViewModel<T: Any>(dataModelClass: Class<T>): DataViewMode
 
 /**************************Monitors a single data of the given type T****************************/
 
-abstract class SingleDataViewModel<T: Any>(dataModelClass: Class<T>, protected val dispatcher: CoroutineDispatcher): DataViewModel<T>(dataModelClass) {
+abstract class SingleDataViewModel<T: Any>(dataModelClass: Class<T>, dispatcher: CoroutineDispatcher): DataViewModel<T>(dataModelClass, dispatcher) {
 
     /**Data**/
 
@@ -129,23 +130,24 @@ abstract class SingleDataViewModel<T: Any>(dataModelClass: Class<T>, protected v
         this.mutableData.value = this.mutableData.value
     }
 
-    protected fun loadDataRealTime(dataRequest: FirebaseDocumentDataFlowRequest<T>) {
+    @ExperimentalCoroutinesApi
+    protected fun loadDataFlow(dataRequest: DataFlowRequest<T>) {
         viewModelScope.launch(this.exceptionHandler) {
             currentDataRequest?.cancel()
             currentDataRequest = dataRequest
             dataRequest.execute()
             dataRequest.flow
                 ?.catch { e ->
-                    Log.e(TAG, "Failed to load ${dataModelClass.simpleName} from database : ${e.message}")
+                    Log.e(TAG, "Failed to load ${dataModelClass.simpleName} : ${e.message}")
                     mutableData.postValue(SingleDataHolder(mutableData.value?.data, e))
                 }
                 ?.collect { result ->
                     result?.let {
-                        Log.d(TAG, "Successfully loaded ${dataModelClass.simpleName} from database")
+                        Log.d(TAG, "Successfully loaded ${dataModelClass.simpleName}")
                         mutableData.postValue(SingleDataHolder(result))
                     } ?: run {
                         val e = Exception("Unknown error")
-                        Log.e(TAG, "Failed to load ${dataModelClass.simpleName} from database : ${e.message}")
+                        Log.e(TAG, "Failed to load ${dataModelClass.simpleName} : ${e.message}")
                         mutableData.postValue(SingleDataHolder(mutableData.value?.data, e))
                     }
                 }
@@ -159,15 +161,15 @@ abstract class SingleDataViewModel<T: Any>(dataModelClass: Class<T>, protected v
                 currentDataRequest = dataRequest
                 dataRequest.execute()
                 dataRequest.data?.let { result ->
-                    Log.d(TAG, "Successfully loaded ${dataModelClass.simpleName} from database")
+                    Log.d(TAG, "Successfully loaded ${dataModelClass.simpleName}")
                     mutableData.postValue(SingleDataHolder(result))
                 } ?: run {
                     val e = Exception("Unknown error")
-                    Log.e(TAG, "Failed to load ${dataModelClass.simpleName} from database : ${e.message}")
+                    Log.e(TAG, "Failed to load ${dataModelClass.simpleName} : ${e.message}")
                     mutableData.postValue(SingleDataHolder(mutableData.value?.data, e))
                 }
             } catch (e: Throwable) {
-                Log.e(TAG, "Failed to load ${dataModelClass.simpleName} from database : ${e.message}")
+                Log.e(TAG, "Failed to load ${dataModelClass.simpleName} : ${e.message}")
                 mutableData.postValue(SingleDataHolder(mutableData.value?.data, e))
             }
         }
@@ -179,10 +181,10 @@ abstract class SingleDataViewModel<T: Any>(dataModelClass: Class<T>, protected v
                 currentDataRequest?.cancel()
                 currentDataRequest = dataRequest
                 dataRequest.execute()
-                Log.d(TAG, "Successfully saved ${dataModelClass.simpleName} in database")
+                Log.d(TAG, "Successfully saved ${dataModelClass.simpleName}")
                 mutableDataRequestState.postValue(DataRequestStateHolder(dataRequest, null))
             } catch (e: Throwable) {
-                Log.e(TAG, "Failed to save ${dataModelClass.simpleName} in database : ${e.message}")
+                Log.e(TAG, "Failed to save ${dataModelClass.simpleName} : ${e.message}")
                 mutableDataRequestState.postValue(DataRequestStateHolder(dataRequest, e))
             }
         }

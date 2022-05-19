@@ -83,7 +83,7 @@ class TrailPOIInfoEditFragment(private val trailPointOfInterestPosition:Int? = n
 
     private fun observeDataRequestState() {
         this.trailViewModel.dataRequestState.observe(this) { dataRequestState ->
-            if (dataRequestState?.dataRequest is TrailSaveDataRequest) {
+            if (dataRequestState?.data is TrailSaveDataRequest) {
                 dataRequestState.error?.let { e ->
                     onQueryError(e)
                 } ?: onQuerySuccess()

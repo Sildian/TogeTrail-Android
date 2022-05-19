@@ -73,7 +73,7 @@ class EventEditFragment(private val eventId: String?=null) :
 
     private fun observeDataRequestState() {
         this.eventViewModel.dataRequestState.observe(this) { dataRequestState ->
-            if (dataRequestState?.dataRequest is EventSaveDataRequest) {
+            if (dataRequestState?.data is EventSaveDataRequest) {
                 dataRequestState.error?.let { e ->
                     onQueryError(e)
                 } ?: onQuerySuccess()

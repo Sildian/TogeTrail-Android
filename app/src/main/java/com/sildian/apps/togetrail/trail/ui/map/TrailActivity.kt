@@ -143,7 +143,7 @@ class TrailActivity : BaseActivity<ActivityTrailBinding>() {
                 intent.hasExtra(KEY_BUNDLE_TRAIL_ID) -> {
                     val trailId = intent.getStringExtra(KEY_BUNDLE_TRAIL_ID)
                     trailId?.let { id ->
-                        this.trailViewModel.loadTrailRealTime(id)
+                        this.trailViewModel.loadTrailFlow(id)
                     }
                 }
                 else ->

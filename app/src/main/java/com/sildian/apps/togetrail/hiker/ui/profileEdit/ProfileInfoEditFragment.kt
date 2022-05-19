@@ -64,7 +64,7 @@ class ProfileInfoEditFragment(private val hikerId: String?=null) :
 
     private fun observeDataRequestState() {
         this.hikerViewModel.dataRequestState.observe(this) { dataRequestState ->
-            if (dataRequestState?.dataRequest is HikerSaveDataRequest) {
+            if (dataRequestState?.data is HikerSaveDataRequest) {
                 dataRequestState.error?.let { e ->
                     onQueryError(e)
                 } ?: onQuerySuccess()
