@@ -45,6 +45,7 @@ class TrailMapRecordFragment: BaseTrailMapGenerateFragment<FragmentTrailMapRecor
 
     override fun onDestroyView() {
         stopRecord()
+        stopObservingTrailPointsRegistered()
         stopTrailRecordService()
         super.onDestroyView()
     }
@@ -147,6 +148,7 @@ class TrailMapRecordFragment: BaseTrailMapGenerateFragment<FragmentTrailMapRecor
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             if (service != null && service is TrailRecordService.TrailRecordServiceBinder) {
                 trailRecordService = service.getService()
+                startObservingTrailPointsRegistered()
             }
         }
 
@@ -157,14 +159,31 @@ class TrailMapRecordFragment: BaseTrailMapGenerateFragment<FragmentTrailMapRecor
 
     /*************************************Record actions*****************************************/
 
+    private fun startObservingTrailPointsRegistered() {
+        this.trailRecordService?.startObservingTrailPointsRegistered(this) { dataHolder ->
+            dataHolder.error?.let { e ->
+                if (e is UserLocationException) {
+                    handleUserLocationError(e)
+                } else {
+                    onQueryError(e)
+                }
+            } ?:
+            updateTrailTrack(dataHolder.data)
+        }
+    }
+
+    private fun stopObservingTrailPointsRegistered() {
+        this.trailRecordService?.stopObservingTrailPointsRegistered(this)
+    }
+
     private fun startRecord() {
         this.binding.fragmentTrailMapRecordButtonPlay.setImageResource(R.drawable.ic_record_pause_white)
-        this.trailRecordService?.startRecord(this, this::updateTrailTrack, this::handleUserLocationError)
+        this.trailRecordService?.startRecord()
     }
 
     private fun stopRecord() {
         this.binding.fragmentTrailMapRecordButtonPlay.setImageResource(R.drawable.ic_record_play_white)
-        this.trailRecordService?.stopRecord(this)
+        this.trailRecordService?.stopRecord()
     }
 
     private fun handleUserLocationError(e: UserLocationException?) {

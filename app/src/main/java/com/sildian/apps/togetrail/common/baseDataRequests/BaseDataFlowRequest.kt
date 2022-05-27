@@ -15,21 +15,27 @@ import kotlinx.coroutines.flow.*
 @ExperimentalCoroutinesApi
 abstract class DataFlowRequest<T: Any>(private val dispatcher: CoroutineDispatcher): DataRequest {
 
-    protected var job: Job? = null
+    private var isRunning = false
     var flow: Flow<T?>? = null ; protected set
 
     final override suspend fun execute() {
         withContext(this.dispatcher) {
-            job = launch { flow = provideFlow() }
-            job?.join()
+            isRunning = true
+            flow = provideFlow()
+                .flowOn(dispatcher)
+                .takeWhile { isRunning }
+                .catch { e ->
+                    isRunning = false
+                    throw e
+                }
         }
     }
 
     final override suspend fun cancel() {
-        this.job?.cancel()
+        this.isRunning = false
     }
 
-    final override fun isRunning(): Boolean = this.job?.isCancelled == false
+    final override fun isRunning(): Boolean = this.isRunning
 
     abstract fun provideFlow(): Flow<T?>
 }
@@ -50,7 +56,7 @@ class FirebaseDocumentDataFlowRequest<T: Any>(
             val listenerRegistration = documentReference
                 .addSnapshotListener { snapshot, e ->
                     e?.let {
-                        throw e
+                        close(e)
                     } ?: snapshot?.let {
                         trySend(snapshot.toObject(dataModelClass))
                     }
@@ -75,7 +81,7 @@ class FirebaseQueryDataFlowRequest<T: Any>(
             val listenerRegistration = query
                 .addSnapshotListener { querySnapshot, e ->
                     e?.let {
-                        throw e
+                        close(e)
                     } ?: querySnapshot?.let {
                         trySend(querySnapshot.toObjects(dataModelClass))
                     }

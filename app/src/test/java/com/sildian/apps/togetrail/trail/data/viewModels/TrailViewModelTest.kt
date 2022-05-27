@@ -1,6 +1,10 @@
 package com.sildian.apps.togetrail.trail.data.viewModels
 
 import com.sildian.apps.togetrail.dataRequestTestSupport.*
+import com.sildian.apps.togetrail.firebaseTestSupport.FakeHikerRepository
+import com.sildian.apps.togetrail.firebaseTestSupport.FakeStorageRepository
+import com.sildian.apps.togetrail.firebaseTestSupport.FakeTrailRepository
+import com.sildian.apps.togetrail.firebaseTestSupport.FirebaseSimulator
 import com.sildian.apps.togetrail.trail.data.models.Trail
 import io.ticofab.androidgpxparser.parser.GPXParser
 import kotlinx.coroutines.ExperimentalCoroutinesApi

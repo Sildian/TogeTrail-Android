@@ -175,6 +175,13 @@ abstract class SingleDataViewModel<T: Any>(dataModelClass: Class<T>, dispatcher:
         }
     }
 
+    protected suspend fun loadDataResult(dataRequest: LoadDataRequest<T>): T? {
+        currentDataRequest?.cancel()
+        currentDataRequest = dataRequest
+        dataRequest.execute()
+        return dataRequest.data
+    }
+
     protected fun saveData(dataRequest: SaveDataRequest<T>) {
         viewModelScope.launch(this.exceptionHandler) {
             try {

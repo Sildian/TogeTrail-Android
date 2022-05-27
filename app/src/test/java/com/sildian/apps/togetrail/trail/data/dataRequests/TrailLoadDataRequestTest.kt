@@ -2,8 +2,8 @@ package com.sildian.apps.togetrail.trail.data.dataRequests
 
 import com.google.firebase.FirebaseException
 import com.sildian.apps.togetrail.dataRequestTestSupport.BaseDataRequestTest
-import com.sildian.apps.togetrail.dataRequestTestSupport.FakeTrailRepository
-import com.sildian.apps.togetrail.dataRequestTestSupport.FirebaseSimulator
+import com.sildian.apps.togetrail.firebaseTestSupport.FakeTrailRepository
+import com.sildian.apps.togetrail.firebaseTestSupport.FirebaseSimulator
 import com.sildian.apps.togetrail.trail.data.models.Trail
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking

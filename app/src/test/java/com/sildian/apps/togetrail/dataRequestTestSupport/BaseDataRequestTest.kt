@@ -1,6 +1,7 @@
 package com.sildian.apps.togetrail.dataRequestTestSupport
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.sildian.apps.togetrail.firebaseTestSupport.FirebaseSimulator
 import com.sildian.apps.togetrail.hiker.data.helpers.CurrentHikerInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -25,12 +26,12 @@ abstract class BaseDataRequestTest {
         TestWatcher(),
         TestCoroutineScope by TestCoroutineScope(dispatcher) {
 
-        override fun starting(description: Description?) {
+        override fun starting(description: Description) {
             super.starting(description)
             Dispatchers.setMain(dispatcher)
         }
 
-        override fun finished(description: Description?) {
+        override fun finished(description: Description) {
             super.finished(description)
             cleanupTestCoroutines()
             Dispatchers.resetMain()
@@ -46,13 +47,13 @@ abstract class BaseDataRequestTest {
     val testCoroutineRule = TestCoroutineRule()
 
     @Before
-    fun init() {
+    open fun init() {
         this.dispatcher = testCoroutineRule.dispatcher
         Dispatchers.setMain(this.testCoroutineRule.dispatcher)
     }
 
     @After
-    fun finish() {
+    open fun finish() {
         CurrentHikerInfo.currentHiker = null
         FirebaseSimulator.reset()
         Dispatchers.resetMain()

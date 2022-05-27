@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.dataRequestTestSupport
+package com.sildian.apps.togetrail.firebaseTestSupport
 
 import com.google.firebase.FirebaseException
 import com.google.firebase.firestore.DocumentReference

@@ -1,6 +1,10 @@
 package com.sildian.apps.togetrail.hiker.data.viewModels
 
 import com.sildian.apps.togetrail.dataRequestTestSupport.*
+import com.sildian.apps.togetrail.firebaseTestSupport.FakeAuthRepository
+import com.sildian.apps.togetrail.firebaseTestSupport.FakeHikerRepository
+import com.sildian.apps.togetrail.firebaseTestSupport.FakeStorageRepository
+import com.sildian.apps.togetrail.firebaseTestSupport.FirebaseSimulator
 import com.sildian.apps.togetrail.hiker.data.models.Hiker
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking

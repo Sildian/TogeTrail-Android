@@ -3,8 +3,8 @@ package com.sildian.apps.togetrail.hiker.data.dataRequests
 import com.google.firebase.FirebaseException
 import com.sildian.apps.togetrail.chat.data.models.Duo
 import com.sildian.apps.togetrail.dataRequestTestSupport.BaseDataRequestTest
-import com.sildian.apps.togetrail.dataRequestTestSupport.FakeHikerRepository
-import com.sildian.apps.togetrail.dataRequestTestSupport.FirebaseSimulator
+import com.sildian.apps.togetrail.firebaseTestSupport.FakeHikerRepository
+import com.sildian.apps.togetrail.firebaseTestSupport.FirebaseSimulator
 import com.sildian.apps.togetrail.hiker.data.models.Hiker
 import com.sildian.apps.togetrail.hiker.data.helpers.CurrentHikerInfo
 import kotlinx.coroutines.ExperimentalCoroutinesApi

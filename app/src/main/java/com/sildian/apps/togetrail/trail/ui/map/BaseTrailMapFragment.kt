@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -20,7 +21,7 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationException
 import com.sildian.apps.togetrail.common.utils.MapMarkersUtilities
-import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationFinder
+import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationViewModel
 import com.sildian.apps.togetrail.common.utils.permissionsHelpers.PermissionsHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.trail.ui.info.BaseInfoFragment
@@ -29,10 +30,8 @@ import com.sildian.apps.togetrail.trail.ui.info.TrailPOIInfoFragment
 import com.sildian.apps.togetrail.trail.data.dataRequests.TrailSaveDataRequest
 import com.sildian.apps.togetrail.trail.data.viewModels.TrailViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
 /*************************************************************************************************
  * Base for all Trail fragments using a map
@@ -47,18 +46,19 @@ abstract class BaseTrailMapFragment<T: ViewDataBinding>:
 
     /**********************************Static items**********************************************/
 
-    companion object{
+    companion object {
 
         /**Logs**/
-        private const val TAG="BaseTrailMapFragment"
+        private const val TAG = "BaseTrailMapFragment"
 
         /**Bundles keys**/
-        const val KEY_BUNDLE_MAP_VIEW="KEY_BUNDLE_MAP_VIEW"
+        const val KEY_BUNDLE_MAP_VIEW = "KEY_BUNDLE_MAP_VIEW"
     }
 
     /*************************************Data***************************************************/
 
     protected val trailViewModel: TrailViewModel by activityViewModels()
+    protected val userLocationViewModel: UserLocationViewModel by viewModels()
     var isEditable = false
 
     /**********************************UI component**********************************************/
@@ -69,11 +69,7 @@ abstract class BaseTrailMapFragment<T: ViewDataBinding>:
 
     /**************************************Map support*******************************************/
 
-    protected var map: GoogleMap?=null
-
-    /************************************Location support****************************************/
-
-    @Inject lateinit var userLocationFinder: UserLocationFinder
+    protected var map: GoogleMap? = null
 
     /************************************Life cycle**********************************************/
 
@@ -277,20 +273,16 @@ abstract class BaseTrailMapFragment<T: ViewDataBinding>:
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
                 context?.let { context ->
-
                     if (PermissionsHelper.isPermissionGranted(context, Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-                        val userLocation = async {
+                        val userLocation =
                             try {
-                                userLocationFinder.findLastLocation()
+                                userLocationViewModel.findLastLocationResult()
                             }
                             catch (e: UserLocationException) {
                                 e.printStackTrace()
                                 Log.w(TAG, "User location cannot be reached : ${e.message}")
                                 null
                             }
-                        }.await()
-
                         if (userLocation != null) {
                             map?.animateCamera(
                                 CameraUpdateFactory.newLatLngZoom(

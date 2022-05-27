@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.dataRequestTestSupport
+package com.sildian.apps.togetrail.firebaseTestSupport
 
 import com.google.firebase.FirebaseException
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository

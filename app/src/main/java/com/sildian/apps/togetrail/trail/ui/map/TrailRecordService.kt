@@ -1,17 +1,19 @@
 package com.sildian.apps.togetrail.trail.ui.map
 
 import android.app.Notification
-import android.app.Service
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationException
+import com.sildian.apps.togetrail.common.baseViewModels.ListDataHolder
 import com.sildian.apps.togetrail.common.utils.uiHelpers.NotificationHelper
 import com.sildian.apps.togetrail.trail.data.models.TrailPoint
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /*************************************************************************************************
@@ -19,7 +21,7 @@ import javax.inject.Inject
  ************************************************************************************************/
 
 @AndroidEntryPoint
-class TrailRecordService : Service() {
+class TrailRecordService : LifecycleService() {
 
     companion object {
 
@@ -60,26 +62,32 @@ class TrailRecordService : Service() {
 
     /*************************************Record actions*****************************************/
 
-    fun startRecord(lifeCycleOwner: LifecycleOwner,
-                    trailPointsObserver: Observer<List<TrailPoint>?>, errorObserver: Observer<UserLocationException?>)
-    {
-        if (this.trailRecordExecutor.isRecording) {
-            stopRecord(lifeCycleOwner)
+    fun startObservingTrailPointsRegistered(lifeCycleOwner: LifecycleOwner, trailPointsObserver: Observer<ListDataHolder<TrailPoint>>) {
+        trailRecordExecutor.trailPointsRegistered.observe(lifeCycleOwner, trailPointsObserver)
+    }
+
+    fun stopObservingTrailPointsRegistered(lifeCycleOwner: LifecycleOwner) {
+        trailRecordExecutor.trailPointsRegistered.removeObservers(lifeCycleOwner)
+    }
+
+    fun startRecord() {
+        lifecycleScope.launch {
+            if (trailRecordExecutor.isRecording()) {
+                stopRecord()
+            }
+            startForeground(NOTIFICATION_ID, notification)
+            trailRecordExecutor.start()
         }
-        startForeground(NOTIFICATION_ID, notification)
-        this.trailRecordExecutor.trailPointsRegisteredLiveData.observe(lifeCycleOwner, trailPointsObserver)
-        this.trailRecordExecutor.userLocationFailureLiveData.observe(lifeCycleOwner, errorObserver)
-        this.trailRecordExecutor.start()
     }
 
-    fun stopRecord(lifeCycleOwner: LifecycleOwner) {
-        this.trailRecordExecutor.trailPointsRegisteredLiveData.removeObservers(lifeCycleOwner)
-        this.trailRecordExecutor.userLocationFailureLiveData.removeObservers(lifeCycleOwner)
-        this.trailRecordExecutor.stop()
-        stopForeground(true)
+    fun stopRecord() {
+        lifecycleScope.launch {
+            trailRecordExecutor.stop()
+            stopForeground(true)
+        }
     }
 
-    fun isRecording(): Boolean = this.trailRecordExecutor.isRecording
+    fun isRecording(): Boolean = this.trailRecordExecutor.isRecording()
 
-    fun getTrailPoints(): List<TrailPoint> = this.trailRecordExecutor.trailPointsRegistered
+    fun getTrailPoints(): List<TrailPoint>? = this.trailRecordExecutor.trailPointsRegistered.value?.data
 }

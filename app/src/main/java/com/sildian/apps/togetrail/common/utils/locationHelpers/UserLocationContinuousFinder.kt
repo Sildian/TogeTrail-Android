@@ -5,6 +5,10 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.sildian.apps.togetrail.common.utils.DeviceUtilities
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -12,13 +16,46 @@ import javax.inject.Singleton
  * Allows to continuously update the user location
  ************************************************************************************************/
 
-@Singleton
-open class UserLocationContinuousFinder @Inject constructor(
-    protected val locationProviderClient: FusedLocationProviderClient)
+/***************************************Definition***********************************************/
+
+interface UserLocationContinuousFinder {
+
+    /**
+     * Starts location updates
+     * @throws UserLocationException if the request fails
+     */
+
+    fun startLocationUpdates(intervalMillis: Long, callback: LocationCallback)
+
+    /**
+     * Stops location updates
+     */
+
+    fun stopLocationUpdates(callback: LocationCallback)
+}
+
+/************************************Injection module********************************************/
+
+@Module
+@InstallIn(SingletonComponent::class)
+object UserLocationContinuousFinderModule {
+
+    @Singleton
+    @Provides
+    fun provideRealUserLocationContinuousFinder(locationProviderClient: FusedLocationProviderClient): UserLocationContinuousFinder =
+        RealUserLocationContinuousFinder(locationProviderClient)
+}
+
+/*********************************Real implementation*******************************************/
+
+class RealUserLocationContinuousFinder @Inject constructor(
+    private val locationProviderClient: FusedLocationProviderClient
+    )
+    : UserLocationContinuousFinder
 {
 
     @Throws(UserLocationException::class)
-    open fun startLocationUpdates(intervalMillis: Long, callback: LocationCallback) {
+    override fun startLocationUpdates(intervalMillis: Long, callback: LocationCallback) {
         if (DeviceUtilities.isGpsAvailable(locationProviderClient.applicationContext)) {
             val locationRequest = LocationRequest.create().apply {
                 interval = intervalMillis
@@ -44,7 +81,7 @@ open class UserLocationContinuousFinder @Inject constructor(
         }
     }
 
-    open fun stopLocationUpdates(callback: LocationCallback) {
+    override fun stopLocationUpdates(callback: LocationCallback) {
         this.locationProviderClient.removeLocationUpdates(callback)
     }
 }
