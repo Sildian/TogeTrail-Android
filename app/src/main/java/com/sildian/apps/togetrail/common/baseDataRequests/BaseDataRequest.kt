@@ -1,6 +1,10 @@
 package com.sildian.apps.togetrail.common.baseDataRequests
 
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.takeWhile
 
 /*************************************************************************************************
  * This file provides with base interface and abstract class to run data requests
@@ -84,4 +88,34 @@ abstract class SpecificDataRequest(private val dispatcher: CoroutineDispatcher) 
     final override fun isRunning(): Boolean = this.job?.isActive == true
 
     protected abstract suspend fun run()
+}
+
+/**Base for all requests using flows**/
+
+@ExperimentalCoroutinesApi
+abstract class DataFlowRequest<T: Any>(private val dispatcher: CoroutineDispatcher): DataRequest {
+
+    private var isRunning = false
+    var flow: Flow<T?>? = null ; protected set
+
+    final override suspend fun execute() {
+        withContext(this.dispatcher) {
+            isRunning = true
+            flow = provideFlow()
+                .flowOn(dispatcher)
+                .takeWhile { isRunning }
+                .catch { e ->
+                    isRunning = false
+                    throw e
+                }
+        }
+    }
+
+    final override suspend fun cancel() {
+        this.isRunning = false
+    }
+
+    final override fun isRunning(): Boolean = this.isRunning
+
+    abstract fun provideFlow(): Flow<T?>
 }

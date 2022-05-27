@@ -1,9 +1,9 @@
 package com.sildian.apps.togetrail.event.data.viewModels
 
 import com.sildian.apps.togetrail.chat.data.models.Message
-import com.sildian.apps.togetrail.common.baseDataRequests.FirebaseDocumentDataFlowRequest
 import com.sildian.apps.togetrail.common.baseViewModels.SingleDataHolder
 import com.sildian.apps.togetrail.common.baseViewModels.SingleDataViewModel
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.FirebaseDocumentDataFlowRequest
 import com.sildian.apps.togetrail.common.utils.coroutinesHelpers.CoroutineIODispatcher
 import com.sildian.apps.togetrail.event.data.models.Event
 import com.sildian.apps.togetrail.event.data.source.EventRepository

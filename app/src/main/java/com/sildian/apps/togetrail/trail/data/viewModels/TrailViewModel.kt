@@ -2,9 +2,9 @@ package com.sildian.apps.togetrail.trail.data.viewModels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.sildian.apps.togetrail.common.baseDataRequests.FirebaseDocumentDataFlowRequest
 import com.sildian.apps.togetrail.common.baseViewModels.SingleDataHolder
 import com.sildian.apps.togetrail.common.baseViewModels.SingleDataViewModel
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.FirebaseDocumentDataFlowRequest
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
 import com.sildian.apps.togetrail.common.utils.coroutinesHelpers.CoroutineIODispatcher
 import com.sildian.apps.togetrail.hiker.data.source.HikerRepository

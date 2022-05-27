@@ -1,8 +1,8 @@
 package com.sildian.apps.togetrail.hiker.data.viewModels
 
-import com.sildian.apps.togetrail.common.baseDataRequests.FirebaseDocumentDataFlowRequest
 import com.sildian.apps.togetrail.common.baseViewModels.SingleDataViewModel
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.FirebaseDocumentDataFlowRequest
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
 import com.sildian.apps.togetrail.common.utils.coroutinesHelpers.CoroutineIODispatcher
 import com.sildian.apps.togetrail.hiker.data.models.Hiker

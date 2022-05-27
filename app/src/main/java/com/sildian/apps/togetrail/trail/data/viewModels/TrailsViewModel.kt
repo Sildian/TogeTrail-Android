@@ -1,8 +1,8 @@
 package com.sildian.apps.togetrail.trail.data.viewModels
 
 import com.google.firebase.firestore.Query
-import com.sildian.apps.togetrail.common.baseDataRequests.FirebaseQueryDataFlowRequest
 import com.sildian.apps.togetrail.common.baseViewModels.ListDataViewModel
+import com.sildian.apps.togetrail.common.utils.cloudHelpers.FirebaseQueryDataFlowRequest
 import com.sildian.apps.togetrail.common.utils.coroutinesHelpers.CoroutineIODispatcher
 import com.sildian.apps.togetrail.trail.data.models.Trail
 import dagger.hilt.android.lifecycle.HiltViewModel
