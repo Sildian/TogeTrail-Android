@@ -22,8 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class EventViewModel @Inject constructor(
     @CoroutineIODispatcher dispatcher: CoroutineDispatcher,
-    val hikerRepository: HikerRepository,
-    val eventRepository: EventRepository
+    private val hikerRepository: HikerRepository,
+    private val eventRepository: EventRepository
 )
     : SingleDataViewModel<Event>(Event::class.java, dispatcher) {
 

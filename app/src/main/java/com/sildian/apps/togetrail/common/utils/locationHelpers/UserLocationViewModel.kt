@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class UserLocationViewModel @Inject constructor(
     @CoroutineIODispatcher dispatcher: CoroutineDispatcher,
-    val userLocationFinder: UserLocationFinder
+    private val userLocationFinder: UserLocationFinder
 )
     : SingleDataViewModel<Location>(Location::class.java, dispatcher)
 {

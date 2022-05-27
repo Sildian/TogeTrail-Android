@@ -19,9 +19,9 @@ import javax.inject.Inject
 @HiltViewModel
 class HikerViewModel @Inject constructor(
     @CoroutineIODispatcher dispatcher: CoroutineDispatcher,
-    val authRepository: AuthRepository,
-    val storageRepository: StorageRepository,
-    val hikerRepository: HikerRepository
+    private val authRepository: AuthRepository,
+    private val storageRepository: StorageRepository,
+    private val hikerRepository: HikerRepository
 )
     : SingleDataViewModel<Hiker>(Hiker::class.java, dispatcher) {
 

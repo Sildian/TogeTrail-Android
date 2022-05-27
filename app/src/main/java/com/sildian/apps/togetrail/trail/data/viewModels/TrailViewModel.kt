@@ -26,9 +26,9 @@ import javax.inject.Inject
 @HiltViewModel
 class TrailViewModel @Inject constructor(
     @CoroutineIODispatcher dispatcher: CoroutineDispatcher,
-    val storageRepository: StorageRepository,
-    val hikerRepository: HikerRepository,
-    val trailRepository: TrailRepository
+    private val storageRepository: StorageRepository,
+    private val hikerRepository: HikerRepository,
+    private val trailRepository: TrailRepository
 )
     : SingleDataViewModel<Trail>(Trail::class.java, dispatcher) {
 
