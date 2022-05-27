@@ -10,9 +10,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /*************************************************************************************************
@@ -38,6 +36,7 @@ interface EventRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun getEvent(eventId:String): Event?
 
     /**
@@ -47,6 +46,7 @@ interface EventRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun addEvent(event:Event): String?
 
     /**
@@ -55,6 +55,7 @@ interface EventRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun updateEvent(event:Event)
 
     /**
@@ -64,6 +65,7 @@ interface EventRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun updateEventAttachedTrail(eventId:String, trail:Trail)
 
     /**
@@ -73,6 +75,7 @@ interface EventRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun deleteEventAttachedTrail(eventId:String, trailId:String)
 
     /**
@@ -82,6 +85,7 @@ interface EventRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun updateEventRegisteredHiker(eventId:String, hiker:Hiker)
 
     /**
@@ -91,6 +95,7 @@ interface EventRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun deleteEventRegisteredHiker(eventId:String, hikerId:String)
 
     /**
@@ -100,6 +105,7 @@ interface EventRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun createOrUpdateEventMessage(eventId:String, message: Message)
 
     /**
@@ -109,6 +115,7 @@ interface EventRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun deleteEventMessage(eventId:String, messageId: String)
 }
 
@@ -130,130 +137,58 @@ class RealEventRepository @Inject constructor(): EventRepository {
     override fun getEventReference(eventId:String): DocumentReference =
         EventFirebaseQueries.getEvent(eventId)
 
-    @Throws(Exception::class)
     override suspend fun getEvent(eventId:String): Event? =
-        withContext(Dispatchers.IO) {
-            try {
-                EventFirebaseQueries
-                    .getEvent(eventId)
-                    .get()
-                    .await()
-                    ?.toObject(Event::class.java)
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
+        EventFirebaseQueries
+            .getEvent(eventId)
+            .get()
+            .await()
+            ?.toObject(Event::class.java)
 
-    @Throws(Exception::class)
     override suspend fun addEvent(event:Event): String? =
-        withContext(Dispatchers.IO){
-            try{
-                EventFirebaseQueries
-                    .createEvent(event)
-                    .await()
-                    .id
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
+        EventFirebaseQueries
+            .createEvent(event)
+            .await()
+            .id
 
-    @Throws(Exception::class)
     override suspend fun updateEvent(event:Event) {
-        withContext(Dispatchers.IO) {
-            try {
-                EventFirebaseQueries
-                    .updateEvent(event)
-                    .await()
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
+        EventFirebaseQueries
+            .updateEvent(event)
+            .await()
     }
 
-    @Throws(Exception::class)
     override suspend fun updateEventAttachedTrail(eventId:String, trail:Trail) {
-        withContext(Dispatchers.IO) {
-            try {
-                EventFirebaseQueries
-                    .updateAttachedTrail(eventId, trail)
-                    .await()
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
+        EventFirebaseQueries
+            .updateAttachedTrail(eventId, trail)
+            .await()
     }
 
-    @Throws(Exception::class)
     override suspend fun deleteEventAttachedTrail(eventId:String, trailId:String) {
-        withContext(Dispatchers.IO) {
-            try {
-                EventFirebaseQueries
-                    .deleteAttachedTrail(eventId, trailId)
-                    .await()
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
+        EventFirebaseQueries
+            .deleteAttachedTrail(eventId, trailId)
+            .await()
     }
 
-    @Throws(Exception::class)
     override suspend fun updateEventRegisteredHiker(eventId:String, hiker:Hiker) {
-        withContext(Dispatchers.IO) {
-            try {
-                EventFirebaseQueries
-                    .updateRegisteredHiker(eventId, hiker)
-                    .await()
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
+        EventFirebaseQueries
+            .updateRegisteredHiker(eventId, hiker)
+            .await()
     }
 
-    @Throws(Exception::class)
     override suspend fun deleteEventRegisteredHiker(eventId:String, hikerId:String) {
-        withContext(Dispatchers.IO) {
-            try {
-                EventFirebaseQueries
-                    .deleteRegisteredHiker(eventId, hikerId)
-                    .await()
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
+        EventFirebaseQueries
+            .deleteRegisteredHiker(eventId, hikerId)
+            .await()
     }
 
-    @Throws(Exception::class)
     override suspend fun createOrUpdateEventMessage(eventId:String, message: Message) {
-        withContext(Dispatchers.IO) {
-            try {
-                EventFirebaseQueries
-                    .createOrUpdateMessage(eventId, message)
-                    .await()
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
+        EventFirebaseQueries
+            .createOrUpdateMessage(eventId, message)
+            .await()
     }
 
-    @Throws(Exception::class)
     override suspend fun deleteEventMessage(eventId:String, messageId: String) {
-        withContext(Dispatchers.IO) {
-            try {
-                EventFirebaseQueries
-                    .deleteMessage(eventId, messageId)
-                    .await()
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
+        EventFirebaseQueries
+            .deleteMessage(eventId, messageId)
+            .await()
     }
 }

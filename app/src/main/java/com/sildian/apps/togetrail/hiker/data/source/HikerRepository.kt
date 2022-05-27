@@ -13,9 +13,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /*************************************************************************************************
@@ -41,6 +39,7 @@ interface HikerRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun getHiker(hikerId: String): Hiker?
 
     /**
@@ -49,6 +48,7 @@ interface HikerRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun updateHiker(hiker: Hiker)
 
     /**
@@ -57,6 +57,7 @@ interface HikerRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun deleteHiker(hiker: Hiker)
 
     /**
@@ -66,6 +67,7 @@ interface HikerRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun addHikerHistoryItem(hikerId: String, historyItem: HikerHistoryItem)
 
     /**
@@ -75,6 +77,7 @@ interface HikerRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun deleteHikerHistoryItems(hikerId: String, type: HikerHistoryType, relatedItemId: String)
 
     /**
@@ -84,6 +87,7 @@ interface HikerRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun updateHikerAttendedEvent(hikerId:String, event: Event)
 
     /**
@@ -93,6 +97,7 @@ interface HikerRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun deleteHikerAttendedEvent(hikerId: String, eventId: String)
 
     /**
@@ -102,6 +107,7 @@ interface HikerRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun updateHikerLikedTrail(hikerId:String, trail: Trail)
 
     /**
@@ -111,6 +117,7 @@ interface HikerRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun deleteHikerLikedTrail(hikerId: String, trailId: String)
 
     /**
@@ -120,6 +127,7 @@ interface HikerRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun updateHikerMarkedTrail(hikerId:String, trail: Trail)
 
     /**
@@ -129,6 +137,7 @@ interface HikerRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun deleteHikerMarkedTrail(hikerId: String, trailId: String)
 
     /**
@@ -139,6 +148,7 @@ interface HikerRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun getChatBetweenUsers(hikerId: String, interlocutorId: String): Duo?
 
     /**
@@ -149,6 +159,7 @@ interface HikerRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun createOrUpdateHikerChat(hikerId: String, duo: Duo)
 
     /**
@@ -159,6 +170,7 @@ interface HikerRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun deleteHikerChat(hikerId: String, interlocutorId: String)
 
     /**
@@ -169,6 +181,7 @@ interface HikerRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun getLastHikerMessage(hikerId: String, interlocutorId: String): Message?
 
     /**
@@ -180,6 +193,7 @@ interface HikerRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun createOrUpdateHikerMessage(hikerId: String, interlocutorId: String, message: Message)
 
     /**
@@ -191,6 +205,7 @@ interface HikerRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun deleteHikerMessage(hikerId: String, interlocutorId: String, messageId: String)
 }
 
@@ -212,299 +227,163 @@ class RealHikerRepository @Inject constructor(): HikerRepository {
     override fun getHikerReference(hikerId: String): DocumentReference =
         HikerFirebaseQueries.getHiker(hikerId)
 
-    @Throws(Exception::class)
     override suspend fun getHiker(hikerId: String): Hiker? =
-        withContext(Dispatchers.IO) {
-            try {
-                HikerFirebaseQueries
-                    .getHiker(hikerId)
-                    .get()
-                    .await()
-                    ?.toObject(Hiker::class.java)
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
+        HikerFirebaseQueries
+            .getHiker(hikerId)
+            .get()
+            .await()
+            ?.toObject(Hiker::class.java)
 
-    @Throws(Exception::class)
     override suspend fun updateHiker(hiker: Hiker) {
-        withContext(Dispatchers.IO) {
-            try {
-                HikerFirebaseQueries
-                    .createOrUpdateHiker(hiker)
-                    .await()
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
+        HikerFirebaseQueries
+            .createOrUpdateHiker(hiker)
+            .await()
     }
 
-    @Throws(Exception::class)
     override suspend fun deleteHiker(hiker: Hiker) {
-        withContext(Dispatchers.IO) {
-            try {
-                val historyItems = HikerFirebaseQueries
-                    .getHistoryItems(hiker.id)
-                    .get()
-                    .await()
-                historyItems.forEach { historyItem ->
-                    HikerFirebaseQueries.deleteHistoryItem(hiker.id, historyItem.id)
-                }
-                val attendedEvents = HikerFirebaseQueries
-                    .getAttendedEvents(hiker.id)
-                    .get()
-                    .await()
-                attendedEvents.forEach { attendedEvent ->
-                    HikerFirebaseQueries.deleteAttendedEvent(hiker.id, attendedEvent.id)
-                }
-                val likedTrails = HikerFirebaseQueries
-                    .getLikedTrails(hiker.id)
-                    .get()
-                    .await()
-                likedTrails.forEach { likedTrail ->
-                    HikerFirebaseQueries.deleteLikedTrail(hiker.id, likedTrail.id)
-                }
-                val markedTrails = HikerFirebaseQueries
-                    .getMarkedTrails(hiker.id)
-                    .get()
-                    .await()
-                markedTrails.forEach { markedTrail ->
-                    HikerFirebaseQueries.deleteMarkedTrail(hiker.id, markedTrail.id)
-                }
-                val chats = HikerFirebaseQueries
-                    .getChats(hiker.id)
-                    .get()
-                    .await()
-                chats.forEach { chat ->
-                    val messages = HikerFirebaseQueries
-                        .getMessages(hiker.id, chat.id)
-                        .get()
-                        .await()
-                    messages.forEach { message ->
-                        HikerFirebaseQueries.deleteMessage(hiker.id, chat.id, message.id)
-                    }
-                    HikerFirebaseQueries.deleteChat(hiker.id, chat.id)
-                }
-                HikerFirebaseQueries
-                    .deleteHiker(hiker)
-                    .await()
-            }
-            catch (e: Exception) {
-                throw e
-            }
+        val historyItems = HikerFirebaseQueries
+            .getHistoryItems(hiker.id)
+            .get()
+            .await()
+        historyItems.forEach { historyItem ->
+            HikerFirebaseQueries.deleteHistoryItem(hiker.id, historyItem.id)
         }
+        val attendedEvents = HikerFirebaseQueries
+            .getAttendedEvents(hiker.id)
+            .get()
+            .await()
+        attendedEvents.forEach { attendedEvent ->
+            HikerFirebaseQueries.deleteAttendedEvent(hiker.id, attendedEvent.id)
+        }
+        val likedTrails = HikerFirebaseQueries
+            .getLikedTrails(hiker.id)
+            .get()
+            .await()
+        likedTrails.forEach { likedTrail ->
+            HikerFirebaseQueries.deleteLikedTrail(hiker.id, likedTrail.id)
+        }
+        val markedTrails = HikerFirebaseQueries
+            .getMarkedTrails(hiker.id)
+            .get()
+            .await()
+        markedTrails.forEach { markedTrail ->
+            HikerFirebaseQueries.deleteMarkedTrail(hiker.id, markedTrail.id)
+        }
+        val chats = HikerFirebaseQueries
+            .getChats(hiker.id)
+            .get()
+            .await()
+        chats.forEach { chat ->
+            val messages = HikerFirebaseQueries
+                .getMessages(hiker.id, chat.id)
+                .get()
+                .await()
+            messages.forEach { message ->
+                HikerFirebaseQueries.deleteMessage(hiker.id, chat.id, message.id)
+            }
+            HikerFirebaseQueries.deleteChat(hiker.id, chat.id)
+        }
+        HikerFirebaseQueries
+            .deleteHiker(hiker)
+            .await()
     }
 
-    @Throws(Exception::class)
     override suspend fun addHikerHistoryItem(hikerId: String, historyItem: HikerHistoryItem) {
-        withContext(Dispatchers.IO) {
-            try {
-                HikerFirebaseQueries
-                    .addHistoryItem(hikerId, historyItem)
-                    .await()
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
+        HikerFirebaseQueries
+            .addHistoryItem(hikerId, historyItem)
+            .await()
     }
 
-    @Throws(Exception::class)
     override suspend fun deleteHikerHistoryItems(hikerId: String, type: HikerHistoryType, relatedItemId: String) {
-        withContext(Dispatchers.IO) {
-            try {
-                val historyItemsToDelete =
-                    HikerFirebaseQueries
-                        .getHistoryItemsToDelete(hikerId, type, relatedItemId)
-                        .get()
-                        .await()
-                historyItemsToDelete.forEach { historyItem ->
-                    HikerFirebaseQueries.deleteHistoryItem(hikerId, historyItem.id)
-                        .await()
-                }
-            }
-            catch (e: Exception) {
-                throw e
-            }
+        val historyItemsToDelete =
+            HikerFirebaseQueries
+                .getHistoryItemsToDelete(hikerId, type, relatedItemId)
+                .get()
+                .await()
+        historyItemsToDelete.forEach { historyItem ->
+            HikerFirebaseQueries.deleteHistoryItem(hikerId, historyItem.id)
+                .await()
         }
     }
 
-    @Throws(Exception::class)
-    override suspend fun updateHikerAttendedEvent(hikerId:String, event: Event){
-        withContext(Dispatchers.IO) {
-            try {
-                HikerFirebaseQueries
-                    .updateAttendedEvent(hikerId, event)
-                    .await()
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
+    override suspend fun updateHikerAttendedEvent(hikerId: String, event: Event) {
+        HikerFirebaseQueries
+            .updateAttendedEvent(hikerId, event)
+            .await()
     }
 
-    @Throws(Exception::class)
-    override suspend fun deleteHikerAttendedEvent(hikerId: String, eventId: String){
-        withContext(Dispatchers.IO) {
-            try {
-                HikerFirebaseQueries
-                    .deleteAttendedEvent(hikerId, eventId)
-                    .await()
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
+    override suspend fun deleteHikerAttendedEvent(hikerId: String, eventId: String) {
+        HikerFirebaseQueries
+            .deleteAttendedEvent(hikerId, eventId)
+            .await()
     }
 
-    @Throws(Exception::class)
-    override suspend fun updateHikerLikedTrail(hikerId:String, trail: Trail){
-        withContext(Dispatchers.IO) {
-            try {
-                HikerFirebaseQueries
-                    .updateLikedTrail(hikerId, trail)
-                    .await()
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
+    override suspend fun updateHikerLikedTrail(hikerId: String, trail: Trail) {
+        HikerFirebaseQueries
+            .updateLikedTrail(hikerId, trail)
+            .await()
     }
 
-    @Throws(Exception::class)
-    override suspend fun deleteHikerLikedTrail(hikerId: String, trailId: String){
-        withContext(Dispatchers.IO) {
-            try {
-                HikerFirebaseQueries
-                    .deleteLikedTrail(hikerId, trailId)
-                    .await()
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
+    override suspend fun deleteHikerLikedTrail(hikerId: String, trailId: String) {
+        HikerFirebaseQueries
+            .deleteLikedTrail(hikerId, trailId)
+            .await()
     }
 
-    @Throws(Exception::class)
-    override suspend fun updateHikerMarkedTrail(hikerId:String, trail: Trail){
-        withContext(Dispatchers.IO) {
-            try {
-                HikerFirebaseQueries
-                    .updateMarkedTrail(hikerId, trail)
-                    .await()
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
+    override suspend fun updateHikerMarkedTrail(hikerId: String, trail: Trail) {
+        HikerFirebaseQueries
+            .updateMarkedTrail(hikerId, trail)
+            .await()
     }
 
-    @Throws(Exception::class)
-    override suspend fun deleteHikerMarkedTrail(hikerId: String, trailId: String){
-        withContext(Dispatchers.IO) {
-            try {
-                HikerFirebaseQueries
-                    .deleteMarkedTrail(hikerId, trailId)
-                    .await()
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
+    override suspend fun deleteHikerMarkedTrail(hikerId: String, trailId: String) {
+        HikerFirebaseQueries
+            .deleteMarkedTrail(hikerId, trailId)
+            .await()
     }
-    
-    @Throws(Exception::class)
+
     override suspend fun getChatBetweenUsers(hikerId: String, interlocutorId: String): Duo? =
-        withContext(Dispatchers.IO) {
-            try {
-                HikerFirebaseQueries
-                    .getChat(hikerId, interlocutorId)
-                    .get()
-                    .await()
-                    .toObject(Duo::class.java)
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
+        HikerFirebaseQueries
+            .getChat(hikerId, interlocutorId)
+            .get()
+            .await()
+            .toObject(Duo::class.java)
 
-    @Throws(Exception::class)
     override suspend fun createOrUpdateHikerChat(hikerId: String, duo: Duo) {
-        withContext(Dispatchers.IO) {
-            try {
-                HikerFirebaseQueries
-                    .createOrUpdateChat(hikerId, duo)
-                    .await()
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
+        HikerFirebaseQueries
+            .createOrUpdateChat(hikerId, duo)
+            .await()
     }
 
-    @Throws(Exception::class)
     override suspend fun deleteHikerChat(hikerId: String, interlocutorId: String) {
-        withContext(Dispatchers.IO) {
-            try {
-                val messages = HikerFirebaseQueries
-                    .getMessages(hikerId, interlocutorId)
-                    .get()
-                    .await()
-                messages.forEach { message ->
-                    HikerFirebaseQueries.deleteMessage(hikerId, interlocutorId, message.id)
-                }
-                HikerFirebaseQueries
-                    .deleteChat(hikerId, interlocutorId)
-                    .await()
-            }
-            catch (e: Exception) {
-                throw e
-            }
+        val messages = HikerFirebaseQueries
+            .getMessages(hikerId, interlocutorId)
+            .get()
+            .await()
+        messages.forEach { message ->
+            HikerFirebaseQueries.deleteMessage(hikerId, interlocutorId, message.id)
         }
+        HikerFirebaseQueries
+            .deleteChat(hikerId, interlocutorId)
+            .await()
     }
-    
-    @Throws(Exception::class)
+
     override suspend fun getLastHikerMessage(hikerId: String, interlocutorId: String): Message? =
-        withContext(Dispatchers.IO) {
-            try {
-                HikerFirebaseQueries
-                    .getLastMessage(hikerId, interlocutorId)
-                    .get()
-                    .await()
-                    .documents.firstOrNull()?.toObject(Message::class.java)
-            }
-            catch(e: Exception) {
-                throw e
-            }
-        }
+        HikerFirebaseQueries
+            .getLastMessage(hikerId, interlocutorId)
+            .get()
+            .await()
+            .documents.firstOrNull()?.toObject(Message::class.java)
 
-    @Throws(Exception::class)
     override suspend fun createOrUpdateHikerMessage(hikerId: String, interlocutorId: String, message: Message) {
-        withContext(Dispatchers.IO) {
-            try {
-                HikerFirebaseQueries
-                    .createOrUpdateMessage(hikerId, interlocutorId, message)
-                    .await()
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
+        HikerFirebaseQueries
+            .createOrUpdateMessage(hikerId, interlocutorId, message)
+            .await()
     }
 
-    @Throws(Exception::class)
     override suspend fun deleteHikerMessage(hikerId: String, interlocutorId: String, messageId: String) {
-        withContext(Dispatchers.IO) {
-            try {
-                HikerFirebaseQueries
-                    .deleteMessage(hikerId, interlocutorId, messageId)
-                    .await()
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
+        HikerFirebaseQueries
+            .deleteMessage(hikerId, interlocutorId, messageId)
+            .await()
     }
 }

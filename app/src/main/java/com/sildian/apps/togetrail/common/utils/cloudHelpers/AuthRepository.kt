@@ -35,6 +35,7 @@ interface AuthRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun updateUserProfile(displayName: String, photoUri: String?)
 
     /**
@@ -42,6 +43,7 @@ interface AuthRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun resetUserPassword()
 
     /**
@@ -49,6 +51,7 @@ interface AuthRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun deleteUserAccount()
 }
 
@@ -73,30 +76,15 @@ class RealAuthRepository @Inject constructor(): AuthRepository {
         AuthFirebaseQueries.signUserOut()
     }
 
-    @Throws(Exception::class)
     override suspend fun updateUserProfile(displayName: String, photoUri: String?) {
-        try {
-            AuthFirebaseQueries.updateUserProfile(displayName, photoUri)?.await()
-        } catch (e: Exception) {
-            throw e
-        }
+        AuthFirebaseQueries.updateUserProfile(displayName, photoUri)?.await()
     }
 
-    @Throws(Exception::class)
     override suspend fun resetUserPassword() {
-        try {
-            AuthFirebaseQueries.resetUserPassword()?.await()
-        } catch (e: Exception) {
-            throw e
-        }
+        AuthFirebaseQueries.resetUserPassword()?.await()
     }
 
-    @Throws(Exception::class)
     override suspend fun deleteUserAccount() {
-        try {
-            AuthFirebaseQueries.deleteUserAccount()?.await()
-        } catch (e: Exception) {
-            throw e
-        }
+        AuthFirebaseQueries.deleteUserAccount()?.await()
     }
 }

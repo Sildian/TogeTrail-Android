@@ -7,9 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /*************************************************************************************************
@@ -26,6 +24,7 @@ interface TrailRepository {
      * @return the document reference
      */
 
+    @Throws(Exception::class)
     fun getTrailReference(trailId:String): DocumentReference
 
     /**
@@ -35,6 +34,7 @@ interface TrailRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun getTrail(trailId:String): Trail?
 
     /**
@@ -44,6 +44,7 @@ interface TrailRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun addTrail(trail:Trail): String?
 
     /**
@@ -52,6 +53,7 @@ interface TrailRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun updateTrail(trail:Trail)
 }
 
@@ -70,49 +72,25 @@ object TrailRepositoryModule {
 @ViewModelScoped
 class RealTrailRepository @Inject constructor(): TrailRepository {
 
-    override fun getTrailReference(trailId:String): DocumentReference =
+    override fun getTrailReference(trailId: String): DocumentReference =
         TrailFirebaseQueries.getTrail(trailId)
 
-    @Throws(Exception::class)
-    override suspend fun getTrail(trailId:String): Trail? =
-        withContext(Dispatchers.IO) {
-            try {
-                TrailFirebaseQueries
-                    .getTrail(trailId)
-                    .get()
-                    .await()
-                    ?.toObject(Trail::class.java)
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
+    override suspend fun getTrail(trailId: String): Trail? =
+        TrailFirebaseQueries
+            .getTrail(trailId)
+            .get()
+            .await()
+            ?.toObject(Trail::class.java)
 
-    @Throws(Exception::class)
-    override suspend fun addTrail(trail:Trail): String? =
-        withContext(Dispatchers.IO) {
-            try {
-                TrailFirebaseQueries
-                    .createTrail(trail)
-                    .await()
-                    .id
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
+    override suspend fun addTrail(trail: Trail): String? =
+        TrailFirebaseQueries
+            .createTrail(trail)
+            .await()
+            .id
 
-    @Throws(Exception::class)
     override suspend fun updateTrail(trail:Trail) {
-        withContext(Dispatchers.IO) {
-            try {
-                TrailFirebaseQueries
-                    .updateTrail(trail)
-                    .await()
-            }
-            catch (e: Exception) {
-                throw e
-            }
-        }
+        TrailFirebaseQueries
+            .updateTrail(trail)
+            .await()
     }
 }

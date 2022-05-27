@@ -23,6 +23,7 @@ interface StorageRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun uploadImage(filePath: String): String?
 
     /**
@@ -31,6 +32,7 @@ interface StorageRepository {
      * @throws Exception if the request fails
      */
 
+    @Throws(Exception::class)
     suspend fun deleteImage(url: String)
 }
 
@@ -49,26 +51,16 @@ object StorageRepositoryModule {
 @ViewModelScoped
 class RealStorageRepository @Inject constructor(): StorageRepository {
 
-    @Throws(Exception::class)
     override suspend fun uploadImage(filePath: String): String? =
-        try {
-            StorageFirebaseQueries.uploadImage(filePath)
-                .await()
-                .storage
-                .downloadUrl
-                .await()
-                .toString()
-        } catch (e: Exception) {
-            throw e
-        }
+        StorageFirebaseQueries.uploadImage(filePath)
+            .await()
+            .storage
+            .downloadUrl
+            .await()
+            .toString()
 
-    @Throws(Exception::class)
     override suspend fun deleteImage(url: String) {
-        try {
-            StorageFirebaseQueries.deleteImage(url)
-                .await()
-        } catch (e: Exception) {
-            throw e
-        }
+        StorageFirebaseQueries.deleteImage(url)
+            .await()
     }
 }
