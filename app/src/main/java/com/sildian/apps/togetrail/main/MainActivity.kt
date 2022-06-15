@@ -92,7 +92,8 @@ class MainActivity :
         private const val KEY_REQUEST_PERMISSION_LOCATION=2001
 
         /**Bundle keys for permissions**/
-        private const val KEY_BUNDLE_PERMISSION_LOCATION=Manifest.permission.ACCESS_FINE_LOCATION
+        private const val KEY_BUNDLE_PERMISSION_FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION
+        private const val KEY_BUNDLE_PERMISSION_COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION
     }
 
     /****************************************Data************************************************/
@@ -579,10 +580,10 @@ class MainActivity :
 
     /***********************************Permissions**********************************************/
 
-    private fun requestLocationPermission(){
+    private fun requestLocationPermission() {
         requestPermissions(
             KEY_REQUEST_PERMISSION_LOCATION,
-            arrayOf(KEY_BUNDLE_PERMISSION_LOCATION),
+            arrayOf(KEY_BUNDLE_PERMISSION_FINE_LOCATION, KEY_BUNDLE_PERMISSION_COARSE_LOCATION),
             this,
             R.string.message_permission_requested_message_location
         )

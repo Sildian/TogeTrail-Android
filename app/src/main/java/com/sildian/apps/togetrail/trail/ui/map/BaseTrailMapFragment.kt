@@ -90,7 +90,9 @@ abstract class BaseTrailMapFragment<T: ViewDataBinding>:
         super.onResume()
         this.mapView.onResume()
         baseActivity?.let { baseActivity ->
-            if (PermissionsHelper.isPermissionGranted(baseActivity, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            if (PermissionsHelper.isPermissionGranted(baseActivity, Manifest.permission.ACCESS_FINE_LOCATION)
+                || PermissionsHelper.isPermissionGranted(baseActivity, Manifest.permission.ACCESS_COARSE_LOCATION))
+            {
                 this.map?.isMyLocationEnabled = true
             }
         }
@@ -99,7 +101,9 @@ abstract class BaseTrailMapFragment<T: ViewDataBinding>:
     @Suppress("MissingPermission")
     override fun onPause() {
         baseActivity?.let { baseActivity ->
-            if (PermissionsHelper.isPermissionGranted(baseActivity, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            if (PermissionsHelper.isPermissionGranted(baseActivity, Manifest.permission.ACCESS_FINE_LOCATION)
+                || PermissionsHelper.isPermissionGranted(baseActivity, Manifest.permission.ACCESS_COARSE_LOCATION))
+            {
                 this.map?.isMyLocationEnabled = false
             }
         }
@@ -253,11 +257,9 @@ abstract class BaseTrailMapFragment<T: ViewDataBinding>:
         this.map?.setOnMapClickListener(this)
         this.map?.setOnMarkerClickListener(this)
         baseActivity?.let { baseActivity ->
-            if (PermissionsHelper.isPermissionGranted(
-                    baseActivity,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                )
-            ) {
+            if (PermissionsHelper.isPermissionGranted(baseActivity, Manifest.permission.ACCESS_FINE_LOCATION)
+                || PermissionsHelper.isPermissionGranted(baseActivity, Manifest.permission.ACCESS_COARSE_LOCATION))
+            {
                 this.map?.isMyLocationEnabled = true
             }
         }
@@ -272,8 +274,10 @@ abstract class BaseTrailMapFragment<T: ViewDataBinding>:
     protected fun zoomToUserLocation() {
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
-                context?.let { context ->
-                    if (PermissionsHelper.isPermissionGranted(context, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                baseActivity?.let { baseActivity ->
+                    if (PermissionsHelper.isPermissionGranted(baseActivity, Manifest.permission.ACCESS_FINE_LOCATION)
+                        || PermissionsHelper.isPermissionGranted(baseActivity, Manifest.permission.ACCESS_COARSE_LOCATION))
+                    {
                         val userLocation =
                             try {
                                 userLocationViewModel.findLastLocationResult()

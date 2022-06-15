@@ -7,11 +7,11 @@ apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'dagger.hilt.android.plugin'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     defaultConfig {
         applicationId "com.sildian.apps.togetrail"
         minSdkVersion 19
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 6
         versionName "0.1.2-beta"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -44,12 +44,14 @@ android {
 }
 
 dependencies {
+
+    /*****************************BASE AND GOOGLE LIBRARIES**************************************/
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'androidx.core:core-ktx:1.6.0'
-    implementation 'androidx.fragment:fragment-ktx:1.3.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
-    implementation 'com.google.android.gms:play-services-maps:18.0.2'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.fragment:fragment-ktx:1.4.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:runner:1.4.0'
@@ -59,12 +61,12 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
 
     //Material design
-    api 'com.google.android.material:material:1.4.0'
+    api 'com.google.android.material:material:1.6.1'
 
     //Lifecycle
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
 
     //Test utils
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
@@ -75,27 +77,28 @@ dependencies {
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2'
 
     //Google services
-    implementation 'com.google.android.gms:play-services-location:19.0.1'
+    implementation 'com.google.android.gms:play-services-maps:18.0.2'
+    implementation 'com.google.android.gms:play-services-location:20.0.0'
     implementation 'com.google.android.libraries.places:places:2.6.0'
 
     //Firebase
-    implementation 'com.google.firebase:firebase-core:20.1.2'
-    implementation 'com.google.firebase:firebase-analytics:20.1.2'
-    implementation 'com.google.firebase:firebase-crashlytics:18.2.9'
+    implementation 'com.google.firebase:firebase-core:21.0.0'
+    implementation 'com.google.firebase:firebase-analytics:21.0.0'
+    implementation 'com.google.firebase:firebase-crashlytics:18.2.11'
     implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
     implementation 'com.firebaseui:firebase-ui-firestore:7.2.0'
     implementation 'com.firebaseui:firebase-ui-storage:7.2.0'
 
     //Hilt
-    implementation 'com.google.dagger:hilt-android:2.40'
-    kapt 'com.google.dagger:hilt-compiler:2.40'
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
     /**************************************MY LIBRARIES******************************************/
 
     //Circular Slider
     implementation 'com.github.Sildian:CircularSlider-Android:1.0.0'
 
-    /**********************************EXTERNAL LIBRARIES****************************************/
+    /************************************OTHER LIBRARIES****************************************/
 
     //Mockito
     testImplementation 'org.mockito:mockito-core:4.0.0'
