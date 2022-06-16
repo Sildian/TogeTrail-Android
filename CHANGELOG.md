@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Changed
+- Upgrade target Android version to Android 12 (API 31) and upgrade lowest compatible Android version to Android 5 (API 21)
+
 ## [0.1.2-beta] - 2022-03-28
 ### Fixed
 - Fix some display issues
