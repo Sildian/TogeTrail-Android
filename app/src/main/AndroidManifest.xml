@@ -20,7 +20,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppSplashTheme">
+        android:theme="@style/AppTheme">
 
         <service
             android:name="com.sildian.apps.togetrail.trail.ui.map.TrailRecordService"
@@ -69,6 +69,7 @@
 
         <activity
             android:name=".main.MainActivity"
+            android:theme="@style/AppSplashTheme"
             android:configChanges="orientation|screenSize"
             android:exported="true">
             <intent-filter>
