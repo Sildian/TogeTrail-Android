@@ -10,7 +10,7 @@ android {
     compileSdkVersion 31
     defaultConfig {
         applicationId "com.sildian.apps.togetrail"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 31
         versionCode 6
         versionName "0.1.2-beta"
@@ -62,6 +62,9 @@ dependencies {
 
     //Material design
     api 'com.google.android.material:material:1.6.1'
+
+    //Splash screen
+    implementation 'androidx.core:core-splashscreen:1.0.0-rc01'
 
     //Lifecycle
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'

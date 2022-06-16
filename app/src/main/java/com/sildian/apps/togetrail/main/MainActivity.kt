@@ -15,6 +15,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.core.content.ContextCompat
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.GravityCompat
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.lifecycleScope
@@ -126,6 +127,7 @@ class MainActivity :
     /************************************Life cycle**********************************************/
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         JodaTimeAndroid.init(this)
         Places.initialize(applicationContext, resources.getString(R.string.google_maps_key))

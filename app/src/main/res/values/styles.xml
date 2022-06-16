@@ -16,6 +16,13 @@
         <item name="floatingActionButtonStyle">@style/FloatingActionButtonTheme</item>
     </style>
 
+    <style name="AppSplashTheme" parent = "Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/colorWhite</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_togetrail_logo</item>
+        <item name="windowSplashScreenAnimationDuration">200</item>
+        <item name="postSplashScreenTheme">@style/AppTheme</item>
+    </style>
+
     <!-- Login theme -->
     <style name="LoginTheme" parent="AppTheme">
         <item name="colorPrimary">@color/colorPrimary</item>
