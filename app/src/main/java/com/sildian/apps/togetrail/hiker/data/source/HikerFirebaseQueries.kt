@@ -55,6 +55,18 @@ object HikerFirebaseQueries {
         getCollection().document(id)
 
     /**
+     * Gets a list of hikers for which the name contains the given text
+     * @param text : the text that should be contained in the name
+     * @return a query
+     */
+
+    fun getHikersWithNameContainingText(text: String): Query =
+        getCollection()
+            .whereArrayContains("name", text)
+            .orderBy("name")
+            .limit(20)
+
+    /**
      * Creates or updates the given hiker
      * @param hiker : the hiker
      * @return a task result
