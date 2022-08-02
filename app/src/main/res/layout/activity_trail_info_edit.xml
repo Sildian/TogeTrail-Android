@@ -8,18 +8,9 @@
         android:orientation="vertical"
         tools:context=".trail.ui.infoEdit.TrailInfoEditActivity">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/activity_trail_info_edit_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:theme="@style/ToolbarTheme"
-                android:minHeight="?attr/actionBarSize" />
-
-        </com.google.android.material.appbar.AppBarLayout>
+        <include
+            layout="@layout/view_toolbar_simple"
+            android:id="@+id/activity_trail_info_edit_toolbar"/>
 
         <FrameLayout
             android:id="@+id/activity_trail_info_edit_fragment"

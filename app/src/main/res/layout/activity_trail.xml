@@ -8,28 +8,15 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         tools:context="com.sildian.apps.togetrail.trail.ui.map.TrailActivity">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/activity_trail_layout_toolbar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/activity_trail_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:theme="@style/ToolbarTheme"
-                android:minHeight="?attr/actionBarSize" />
-
-        </com.google.android.material.appbar.AppBarLayout>
+        <include
+            layout="@layout/view_toolbar_simple"
+            android:id="@+id/activity_trail_toolbar"/>
 
         <FrameLayout
             android:id="@+id/activity_trail_fragment"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@id/activity_trail_layout_toolbar"
+            app:layout_constraintTop_toBottomOf="@id/activity_trail_toolbar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>

@@ -135,7 +135,7 @@ class TrailInfoEditActivity : BaseActivity<ActivityTrailInfoEditBinding>() {
     }
 
     private fun initializeToolbar(){
-        setSupportActionBar(this.binding.activityTrailInfoEditToolbar)
+        setSupportActionBar(this.binding.activityTrailInfoEditToolbar.viewToolbarSimpleToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         when(this.currentAction){
             ACTION_TRAIL_EDIT_INFO -> supportActionBar?.setTitle(R.string.toolbar_trail_info)

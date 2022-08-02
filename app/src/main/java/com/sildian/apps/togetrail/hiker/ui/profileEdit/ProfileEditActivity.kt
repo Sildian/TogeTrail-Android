@@ -119,7 +119,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>() {
     }
 
     private fun initializeToolbar(){
-        setSupportActionBar(this.binding.activityProfileEditToolbar)
+        setSupportActionBar(this.binding.activityProfileEditToolbar.viewToolbarSimpleToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         when(this.currentAction){
             ACTION_PROFILE_EDIT_INFO ->

@@ -101,8 +101,8 @@ class EventEditActivity : BaseActivity<ActivityEventEditBinding>() {
         showFragment()
     }
 
-    private fun initializeToolbar(){
-        setSupportActionBar(this.binding.activityEventEditToolbar)
+    private fun initializeToolbar() {
+        setSupportActionBar(this.binding.activityEventEditToolbar.viewToolbarSimpleToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setTitle(R.string.toolbar_event)
     }

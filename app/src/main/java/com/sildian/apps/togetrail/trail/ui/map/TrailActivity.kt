@@ -214,7 +214,7 @@ class TrailActivity : BaseActivity<ActivityTrailBinding>() {
     }
 
     private fun initializeToolbar(){
-        setSupportActionBar(this.binding.activityTrailToolbar)
+        setSupportActionBar(this.binding.activityTrailToolbar.viewToolbarSimpleToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         when(this.currentAction){
             ACTION_TRAIL_SEE -> supportActionBar?.setTitle(R.string.toolbar_trail)

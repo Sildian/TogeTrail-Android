@@ -76,7 +76,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding>() {
     }
 
     private fun initializeToolbar() {
-        setSupportActionBar(this.binding.activityChatToolbar)
+        setSupportActionBar(this.binding.activityChatToolbar.viewToolbarSimpleToolbar)
         supportActionBar?.setTitle(R.string.toolbar_chat)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
