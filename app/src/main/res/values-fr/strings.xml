@@ -18,6 +18,7 @@
     <string name="menu_edit_edit">Modifier</string>
     <string name="menu_save_save">Enregistrer</string>
     <string name="menu_chat_chat">Discuter</string>
+    <string name="menu_search_search">Rechercher</string>
 
     <!-- Toolbar Names -->
     <string name="toolbar_hiker_profile">Randonneur</string>

@@ -1,6 +1,9 @@
 package com.sildian.apps.togetrail.chat.ui.chatRoom
 
 import android.content.Intent
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import androidx.databinding.ViewDataBinding
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
@@ -49,6 +52,30 @@ class ChatActivity : BaseActivity<ActivityChatBinding>() {
         return true
     }
 
+    /********************************Menu monitoring*********************************************/
+
+    /**Generates the menu within the toolbar**/
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        if (this.fragment is ChatSelectionFragment) {
+            menuInflater.inflate(R.menu.menu_search, menu)
+        } else {
+            menu?.clear()
+        }
+        return true
+    }
+
+    /**Click on menu item from toolbar**/
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.groupId == R.id.menu_search) {
+            if (item.itemId == R.id.menu_search_search) {
+                Log.d("ChatActivity", "Search")
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     /***********************************Data monitoring******************************************/
 
     override fun initializeData() {
@@ -72,6 +99,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding>() {
     override fun getLayoutId(): Int = R.layout.activity_chat
 
     override fun initializeUI() {
+        initFragmentTransactionCallback()
         initializeToolbar()
     }
 
@@ -86,6 +114,12 @@ class ChatActivity : BaseActivity<ActivityChatBinding>() {
     }
 
     /******************************Fragments monitoring******************************************/
+
+    private fun initFragmentTransactionCallback() {
+        supportFragmentManager.addFragmentOnAttachListener { fragmentManager, fragment ->
+            invalidateOptionsMenu()
+        }
+    }
 
     fun seeChatRoom(interlocutorId: String) {
         showChatRoomFragment(interlocutorId)
