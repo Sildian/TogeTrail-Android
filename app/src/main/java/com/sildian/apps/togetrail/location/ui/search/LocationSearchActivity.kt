@@ -3,7 +3,6 @@ package com.sildian.apps.togetrail.location.ui.search
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
-import androidx.core.widget.doOnTextChanged
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.AutocompletePrediction
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken
@@ -56,7 +55,7 @@ class LocationSearchActivity :
 
     override fun onResume() {
         super.onResume()
-        this.binding.activityLocationSearchTextFieldResearch.requestFocus()
+        this.binding.activityLocationSearchToolbar.requestResearchFocus()
     }
 
     /********************************Navigation control******************************************/
@@ -92,22 +91,18 @@ class LocationSearchActivity :
 
     override fun initializeUI() {
         initializeToolbar()
-        initializeResearchTextField()
         initializeLocationsPredictionsRecyclerView()
     }
 
     private fun initializeToolbar(){
-        setSupportActionBar(this.binding.activityLocationSearchToolbar)
+        setSupportActionBar(this.binding.activityLocationSearchToolbar.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title=""
-    }
-
-    @Suppress("UNUSED_ANONYMOUS_PARAMETER")
-    private fun initializeResearchTextField(){
-        this.binding.activityLocationSearchTextFieldResearch.doOnTextChanged { text, start, count, after ->
-            if (count >= 1) {
-                searchLocations()
-            }
+        supportActionBar?.title = ""
+        this.binding.activityLocationSearchToolbar.onResearchUpdated = { v, research ->
+            searchLocations(research)
+        }
+        this.binding.activityLocationSearchToolbar.onResearchCleared = { v ->
+            searchLocations("")
         }
     }
 
@@ -122,9 +117,9 @@ class LocationSearchActivity :
 
     /**********************************Location research*****************************************/
 
-    private fun searchLocations(){
+    private fun searchLocations(research: String) {
 
-        val typeFilter=if(this.fineResearch)
+        val typeFilter = if (this.fineResearch)
             TypeFilter.ADDRESS
         else
             TypeFilter.REGIONS
@@ -132,7 +127,7 @@ class LocationSearchActivity :
         val request=FindAutocompletePredictionsRequest.builder()
             .setSessionToken(this.autocompleteSessionToken)
             .setTypeFilter(typeFilter)
-            .setQuery(this.binding.activityLocationSearchTextFieldResearch.text.toString())
+            .setQuery(research)
             .build()
 
         this.placesClient.findAutocompletePredictions(request)

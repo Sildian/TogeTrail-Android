@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/view_toolbar_search_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ToolbarTheme"
+            android:minHeight="?attr/actionBarSize" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/components_margin_small"
+            android:layout_marginBottom="@dimen/components_margin_small"
+            android:layout_marginStart="@dimen/components_margin_enormous"
+            android:layout_marginEnd="@dimen/components_margin_enormous"
+            android:layout_gravity="center"
+            app:cardCornerRadius="@dimen/components_corner_small">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:animateLayoutChanges="true">
+
+                <EditText
+                    android:id="@+id/view_toolbar_search_text_field_research"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/components_margin_small"
+                    android:layout_marginEnd="@dimen/components_margin_small"
+                    tools:hint="@string/label_location_search"
+                    android:inputType="textCapSentences"
+                    android:lines="1"
+                    app:drawableStartCompat="@drawable/ic_search_black"
+                    android:drawablePadding="@dimen/components_margin_small" />
+
+                <ImageView
+                    android:id="@+id/view_toolbar_search_button_clear_research"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/components_margin_small"
+                    app:srcCompat="@drawable/ic_clear_black"
+                    android:contentDescription="@string/example_image_content_description"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </FrameLayout>
+
+</com.google.android.material.appbar.AppBarLayout>

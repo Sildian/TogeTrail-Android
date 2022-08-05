@@ -413,11 +413,11 @@ class MainActivity :
             .show()
     }
 
-    fun setQueriesToSearchAroundPoint(point: LatLng){
+    fun setQueriesToSearchAroundPoint(point: LatLng) {
         val latToDisplay = NumberUtilities.displayNumber(point.latitude, 4)
         val lngToDisplay = NumberUtilities.displayNumber(point.longitude, 4)
         val pointToDisplay = "$latToDisplay ; $lngToDisplay"
-        this.binding.activityMainTextFieldResearch.setText(pointToDisplay)
+        this.binding.activityMainToolbar.setCurrentResearch(pointToDisplay)
         this.trailsQuery = TrailFirebaseQueries.getTrailsAroundPoint(point)
         this.eventsQuery = EventFirebaseQueries.getEventsAroundPoint(point)
         when (this.fragment) {
@@ -429,8 +429,8 @@ class MainActivity :
 
     @Suppress("MemberVisibilityCanBePrivate")
     fun setQueriesToSearchAroundLocation(location:Location){
-        if(location.country!=null) {
-            this.binding.activityMainTextFieldResearch.setText(location.toString())
+        if (location.country != null) {
+            this.binding.activityMainToolbar.setCurrentResearch(location.toString())
             this.trailsQuery = TrailFirebaseQueries.getTrailsNearbyLocation(location)!!
             this.eventsQuery = EventFirebaseQueries.getEventsNearbyLocation(location)!!
             when (this.fragment) {
@@ -441,8 +441,7 @@ class MainActivity :
         }
     }
 
-    fun resetQueries(){
-        this.binding.activityMainTextFieldResearch.text = null
+    fun resetQueries() {
         this.trailsQuery = TrailFirebaseQueries.getLastTrails()
         this.eventsQuery = EventFirebaseQueries.getNextEvents()
         when (this.fragment) {
@@ -470,34 +469,33 @@ class MainActivity :
 
     override fun initializeUI() {
         initializeToolbar()
-        initializeSearchTextField()
-        initializeClearResearchButton()
         initializeNavigationView()
         initializeBottomNavigationView()
         initializeAddButton()
     }
 
-    private fun initializeToolbar(){
-        setSupportActionBar(this.binding.activityMainToolbar)
-        supportActionBar?.title=""
-    }
-
-    private fun initializeSearchTextField(){
-        this.binding.activityMainTextFieldResearch.setOnClickListener {
-            startLocationSearchActivity()
+    private fun initializeToolbar() {
+        setSupportActionBar(this.binding.activityMainToolbar.toolbar)
+        supportActionBar?.title = ""
+        this.binding.activityMainToolbar.onResearchFocusChange = { v, hasFocus ->
+            if (hasFocus) {
+                startLocationSearchActivity()
+                this.binding.activityMainToolbar.clearResearchFocus()
+            }
         }
-    }
-
-    private fun initializeClearResearchButton(){
-        this.binding.activityMainButtonResearchClear.setOnClickListener {
+        this.binding.activityMainToolbar.onResearchCleared = { v ->
             resetQueries()
         }
     }
 
-    private fun initializeNavigationView(){
+    private fun initializeNavigationView() {
         val toggle = ActionBarDrawerToggle(
-            this, this.binding.activityMainDrawerLayout, this.binding.activityMainToolbar,
-            R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+            this,
+            this.binding.activityMainDrawerLayout,
+            this.binding.activityMainToolbar.toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
         this.binding.activityMainDrawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         this.binding.activityMainNavigationView.setNavigationItemSelectedListener(this)
@@ -542,7 +540,7 @@ class MainActivity :
             nbUnreadMessagesBadge.backgroundColor = ContextCompat.getColor(this, android.R.color.holo_red_dark)
             if (!isNbUnreadMessagesBadgeShown) {
                 nbUnreadMessagesBadge.maxCharacterCount = 2
-                BadgeUtils.attachBadgeDrawable(nbUnreadMessagesBadge, this.binding.activityMainToolbar, R.id.menu_chat_chat)
+                BadgeUtils.attachBadgeDrawable(nbUnreadMessagesBadge, this.binding.activityMainToolbar.toolbar, R.id.menu_chat_chat)
                 isNbUnreadMessagesBadgeShown = true
             }
         }

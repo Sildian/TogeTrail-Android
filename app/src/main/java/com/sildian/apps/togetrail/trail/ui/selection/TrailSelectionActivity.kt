@@ -105,15 +105,17 @@ class TrailSelectionActivity : BaseActivity<ActivityTrailSelectionBinding>() {
             TrailFirebaseQueries.getLastTrails()
     }
 
-    private fun setResearchQuery(location: Location){
-        if(location.country!=null) {
-            this.trailsQueries[KEY_QUERY_CURRENT_RESEARCH] =
+    private fun setResearchQuery(location: Location?) {
+        this.trailsQueries[KEY_QUERY_CURRENT_RESEARCH] =
+            if (location?.country != null) {
                 TrailFirebaseQueries.getTrailsNearbyLocation(location)!!
-            this.binding.activityTrailSelectionPager.adapter?.notifyDataSetChanged()
-            val index = this.trailsQueries.keys.toList().indexOf(KEY_QUERY_CURRENT_RESEARCH)
-            this.binding.activityTrailSelectionPager.setCurrentItem(index, true)
-            showViewPager()
-        }
+            } else {
+                TrailFirebaseQueries.getLastTrails()
+            }
+        this.binding.activityTrailSelectionPager.adapter?.notifyDataSetChanged()
+        val index = this.trailsQueries.keys.toList().indexOf(KEY_QUERY_CURRENT_RESEARCH)
+        this.binding.activityTrailSelectionPager.setCurrentItem(index, true)
+        showViewPager()
     }
 
     /*************************************UI monitoring******************************************/
@@ -122,20 +124,22 @@ class TrailSelectionActivity : BaseActivity<ActivityTrailSelectionBinding>() {
 
     override fun initializeUI() {
         initializeToolbar()
-        initializeSearchTextField()
         initializeValidateButton()
         showViewPager()
     }
 
-    private fun initializeToolbar(){
-        setSupportActionBar(this.binding.activityTrailSelectionToolbar)
+    private fun initializeToolbar() {
+        setSupportActionBar(this.binding.activityTrailSelectionToolbar.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setTitle(R.string.toolbar_event_select_trails)
-    }
-
-    private fun initializeSearchTextField(){
-        this.binding.activityTrailSelectionTextFieldResearch.setOnClickListener {
-            startLocationSearchActivity()
+        this.binding.activityTrailSelectionToolbar.onResearchFocusChange = { v, hasFocus ->
+            if (hasFocus) {
+                startLocationSearchActivity()
+                this.binding.activityTrailSelectionToolbar.clearResearchFocus()
+            }
+        }
+        this.binding.activityTrailSelectionToolbar.onResearchCleared = { v ->
+            setResearchQuery(null)
         }
     }
 
@@ -211,12 +215,12 @@ class TrailSelectionActivity : BaseActivity<ActivityTrailSelectionBinding>() {
         }
     }
 
-    private fun handleLocationSearchResult(resultCode: Int, data: Intent?){
-        if(resultCode== Activity.RESULT_OK){
-            if(data!=null && data.hasExtra(LocationSearchActivity.KEY_BUNDLE_LOCATION)){
-                val location=data.getParcelableExtra<Location>(LocationSearchActivity.KEY_BUNDLE_LOCATION)
+    private fun handleLocationSearchResult(resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (data != null && data.hasExtra(LocationSearchActivity.KEY_BUNDLE_LOCATION)) {
+                val location = data.getParcelableExtra<Location>(LocationSearchActivity.KEY_BUNDLE_LOCATION)
                 location?.let { loc ->
-                    this.binding.activityTrailSelectionTextFieldResearch.setText(loc.toString())
+                    this.binding.activityTrailSelectionToolbar.setCurrentResearch(loc.toString())
                     setResearchQuery(loc)
                 }
             }
