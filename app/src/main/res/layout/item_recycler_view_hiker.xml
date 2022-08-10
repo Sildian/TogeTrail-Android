@@ -2,18 +2,14 @@
 <layout>
 
     <data>
+        <import type="android.view.View"/>
         <import type="com.bumptech.glide.request.RequestOptions"/>
-        <import type="android.graphics.Typeface"/>
-        <import type="com.sildian.apps.togetrail.common.utils.DateUtilities"/>
         <variable
-            name="chatViewHolder"
-            type="com.sildian.apps.togetrail.chat.ui.others.ChatAdapter.ChatViewHolder" />
+            name="hikerViewHolder"
+            type="com.sildian.apps.togetrail.hiker.ui.others.HikerAdapter.HikerViewHolder" />
         <variable
-            name="chat"
-            type="com.sildian.apps.togetrail.chat.data.models.Duo" />
-        <variable
-            name="date"
-            type="java.util.Date" />
+            name="hiker"
+            type="com.sildian.apps.togetrail.hiker.data.models.Hiker" />
     </data>
 
     <LinearLayout
@@ -23,21 +19,21 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="?attr/selectableItemBackground"
-        android:onClick="@{chatViewHolder::onChatClick}">
+        android:onClick="@{hikerViewHolder::onHikerClick}">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/components_size_medium"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
             <ImageView
-                android:id="@+id/item_recycler_view_chat_image"
+                android:id="@+id/item_recycler_view_hiker_image"
                 android:layout_width="@dimen/image_size_small"
                 android:layout_height="@dimen/image_size_small"
                 android:layout_margin="@dimen/components_margin_small"
                 app:srcCompat="@drawable/ic_person_black"
-                app:imgUrl="@{chat.interlocutorPhotoUrl}"
+                app:imgUrl="@{hiker.photoUrl}"
                 app:imgPlaceHolder="@{@drawable/ic_person_black}"
                 app:imgOptions="@{RequestOptions.circleCropTransform()}"
                 android:contentDescription="@string/example_image_content_description"/>
@@ -45,44 +41,42 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
+                android:layout_weight="1"
                 android:layout_margin="@dimen/components_margin_small"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/item_recycler_view_chat_text_name"
+                    android:id="@+id/item_recycler_view_hiker_text_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/text_size_title"
-                    android:textColor="@color/colorSecondaryDark"
-                    app:typeFace="@{chat.isLastMessageRead() ? Typeface.DEFAULT : Typeface.DEFAULT_BOLD}"
-                    android:text="@{chat.interlocutorName, default=@string/example_chat_user_name}"/>
+                    android:textColor="@color/colorBlack"
+                    android:text="@{hiker.name, default = @string/example_hiker_name}"/>
 
                 <TextView
-                    android:id="@+id/item_recycler_view_chat_text_last_message"
+                    android:id="@+id/item_recycler_view_hiker_text_live_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/components_margin_small"
-                    android:lines="1"
-                    android:ellipsize="end"
+                    android:gravity="center_vertical"
                     android:textSize="@dimen/text_size_title"
-                    android:textColor="@color/colorBlack"
-                    app:typeFace="@{chat.isLastMessageRead() ? Typeface.DEFAULT : Typeface.DEFAULT_BOLD}"
-                    android:text="@{chat.lastMessage.text, default=@string/example_chat_message}"/>
+                    android:text="@{hiker.liveLocation.fullAddress, default = @string/example_location}"
+                    android:visibility="@{hiker.liveLocation.fullAddress == null ? View.GONE : View.VISIBLE}"
+                    app:drawableStartCompat="@drawable/ic_home_black"
+                    app:drawableTint="@color/colorGray"
+                    android:drawablePadding="@dimen/components_margin_small"/>
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/item_recycler_view_chat_text_last_message_date"
-                android:layout_width="0dp"
+            <com.google.android.material.button.MaterialButton
+                style="@style/IconButtonStyle"
+                android:id="@+id/item_recycler_view_hiker_button_message"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_margin="@dimen/components_margin_small"
-                android:gravity="center"
-                android:textSize="@dimen/text_size_body"
-                android:textColor="@color/colorBlack"
-                app:typeFace="@{chat.isLastMessageRead() ? Typeface.DEFAULT : Typeface.DEFAULT_BOLD}"
-                android:text="@{chat.lastMessage==null ? `` : DateUtilities.displayDateAndTimeRelative(chat.lastMessage.date, date), default=@string/example_chat_date}"/>
+                app:icon="@drawable/ic_message_white"
+                app:iconTint="@color/colorSecondaryDark"
+                android:onClick="@{hikerViewHolder::onHikerMessageButtonClick}"/>
 
         </LinearLayout>
 

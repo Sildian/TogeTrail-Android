@@ -133,6 +133,7 @@
     <string name="label_hiker_history_trail_created">a créé une nouvelle rando en</string>
     <string name="label_hiker_history_event_created">a créé un nouvel évènement en</string>
     <string name="label_hiker_history_event_attended">a décidé de participer à un évènement en</string>
+    <string name="label_hiker_search">Rechercher un randonneur</string>
     <!-- Event -->
     <string name="label_event_main_info">Infos principales</string>
     <string name="label_event_name">Nom</string>

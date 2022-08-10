@@ -8,7 +8,7 @@
     -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -30,7 +30,7 @@
 
         <activity
             android:name="com.sildian.apps.togetrail.chat.ui.chatRoom.ChatActivity"
-            android:configChanges="orientation|screenSize"/>
+            android:configChanges="orientation|screenSize" />
         <activity
             android:name="com.sildian.apps.togetrail.location.ui.search.LocationSearchActivity"
             android:configChanges="orientation|screenSize" />
@@ -41,10 +41,13 @@
             android:name="com.sildian.apps.togetrail.event.ui.edit.EventEditActivity"
             android:configChanges="orientation|screenSize" />
         <activity
-            android:name="com.sildian.apps.togetrail.hiker.ui.profile.ProfileActivity"
+            android:name=".hiker.ui.profile.ProfileActivity"
             android:configChanges="orientation|screenSize" />
         <activity
-            android:name="com.sildian.apps.togetrail.hiker.ui.profileEdit.ProfileEditActivity"
+            android:name=".hiker.ui.profileEdit.ProfileEditActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".hiker.ui.search.HikerSearchActivity"
             android:configChanges="orientation|screenSize" />
         <activity
             android:name="com.sildian.apps.togetrail.trail.ui.selection.TrailSelectionActivity"
@@ -69,11 +72,12 @@
 
         <activity
             android:name=".main.MainActivity"
-            android:theme="@style/AppSplashTheme"
             android:configChanges="orientation|screenSize"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/AppSplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

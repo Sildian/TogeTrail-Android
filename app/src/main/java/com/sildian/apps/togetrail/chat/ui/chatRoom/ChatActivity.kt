@@ -1,7 +1,6 @@
 package com.sildian.apps.togetrail.chat.ui.chatRoom
 
 import android.content.Intent
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.databinding.ViewDataBinding
@@ -10,6 +9,7 @@ import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.databinding.ActivityChatBinding
 import com.sildian.apps.togetrail.hiker.ui.profile.ProfileActivity
+import com.sildian.apps.togetrail.hiker.ui.search.HikerSearchActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************
@@ -70,7 +70,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.groupId == R.id.menu_search) {
             if (item.itemId == R.id.menu_search_search) {
-                Log.d("ChatActivity", "Search")
+                startHikerSearchActivity()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -146,9 +146,14 @@ class ChatActivity : BaseActivity<ActivityChatBinding>() {
 
     /***********************************Navigation***********************************************/
 
-    private fun startProfileActivity(hikerId:String){
+    private fun startProfileActivity(hikerId:String) {
         val profileActivityIntent= Intent(this, ProfileActivity::class.java)
         profileActivityIntent.putExtra(ProfileActivity.KEY_BUNDLE_HIKER_ID, hikerId)
         startActivity(profileActivityIntent)
+    }
+
+    private fun startHikerSearchActivity() {
+        val hikerSearchActivityIntent = Intent(this, HikerSearchActivity::class.java)
+        startActivity(hikerSearchActivityIntent)
     }
 }

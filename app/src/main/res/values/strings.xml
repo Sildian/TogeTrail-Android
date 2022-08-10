@@ -134,6 +134,7 @@
     <string name="label_hiker_history_trail_created">created a new trail in</string>
     <string name="label_hiker_history_event_created">created a new event in</string>
     <string name="label_hiker_history_event_attended">decided to attend an event in</string>
+    <string name="label_hiker_search">Search a hiker</string>
     <!-- Event -->
     <string name="label_event_main_info">Main info</string>
     <string name="label_event_name">Name</string>

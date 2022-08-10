@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        tools:context=".hiker.ui.search.HikerSearchActivity">
+
+        <com.sildian.apps.togetrail.common.views.SearchToolbar
+            android:id="@+id/activity_hiker_search_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:researchTextHint="@string/label_hiker_search"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/activity_hiker_search_recycler_view_hikers_results"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:reverseLayout="false"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+    </LinearLayout>
+
+</layout>
