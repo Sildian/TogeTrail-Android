@@ -34,22 +34,11 @@ class ChatActivity : BaseActivity<ActivityChatBinding>() {
     /********************************Navigation control******************************************/
 
     override fun onBackPressed() {
-        if (this.fragment is ChatRoomFragment) {
-            showChatSelectionFragment()
-        }
-        else {
-            finishCancel()
-        }
+        navigateBack()
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        if (this.fragment is ChatRoomFragment) {
-            showChatSelectionFragment()
-        }
-        else {
-            finishCancel()
-        }
-        return true
+        return navigateBack()
     }
 
     /********************************Menu monitoring*********************************************/
@@ -128,14 +117,30 @@ class ChatActivity : BaseActivity<ActivityChatBinding>() {
     private fun showChatSelectionFragment() {
         supportActionBar?.setTitle(R.string.toolbar_chat)
         this.fragment = ChatSelectionFragment()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.activity_chat_fragment, this.fragment).commit()
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.activity_chat_fragment, this.fragment)
+            .addToBackStack(this.fragment.javaClass.simpleName)
+            .commit()
     }
 
     private fun showChatRoomFragment(interlocutorId: String) {
         this.fragment = ChatRoomFragment(interlocutorId)
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.activity_chat_fragment, this.fragment).commit()
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.activity_chat_fragment, this.fragment)
+            .addToBackStack(this.fragment.javaClass.simpleName)
+            .commit()
+    }
+
+    private fun navigateBack(): Boolean {
+        return if (supportFragmentManager.backStackEntryCount > 1) {
+            supportFragmentManager.popBackStack()
+            false
+        } else {
+            finishCancel()
+            true
+        }
     }
 
     /*********************************Hikers monitoring******************************************/
