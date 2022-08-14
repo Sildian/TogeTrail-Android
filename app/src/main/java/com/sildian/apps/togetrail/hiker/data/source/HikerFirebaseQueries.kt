@@ -57,12 +57,15 @@ object HikerFirebaseQueries {
     /**
      * Gets a list of hikers for which the name contains the given text
      * @param text : the text that should be contained in the name
+     * @param hikerNameToExclude : a hiker to exclude from the results (eg : current hiker)
      * @return a query
      */
 
-    fun getHikersWithNameContainingText(text: String): Query =
+    fun getHikersWithNameContainingText(text: String, hikerNameToExclude: String = ""): Query =
         getCollection()
-            .whereArrayContains("name", text)
+            .whereNotEqualTo("name", hikerNameToExclude)
+            .whereGreaterThanOrEqualTo("name", text)
+            .whereLessThanOrEqualTo("name", "$text\uf8ff")
             .orderBy("name")
             .limit(20)
 

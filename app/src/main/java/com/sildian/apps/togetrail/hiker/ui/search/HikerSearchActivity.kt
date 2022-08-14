@@ -6,6 +6,7 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.databinding.ActivityHikerSearchBinding
+import com.sildian.apps.togetrail.hiker.data.helpers.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.data.models.Hiker
 import com.sildian.apps.togetrail.hiker.data.source.HikerFirebaseQueries
 import com.sildian.apps.togetrail.hiker.ui.others.HikerAdapter
@@ -89,7 +90,7 @@ class HikerSearchActivity :
     private fun generateOptionsForAdapter(nameToSearch: String): FirestoreRecyclerOptions<Hiker> =
         DatabaseFirebaseHelper.generateOptionsForAdapter(
             Hiker::class.java,
-            HikerFirebaseQueries.getHikersWithNameContainingText(nameToSearch),
+            HikerFirebaseQueries.getHikersWithNameContainingText(nameToSearch, CurrentHikerInfo.currentHiker?.name?: ""),
             this
         )
 
