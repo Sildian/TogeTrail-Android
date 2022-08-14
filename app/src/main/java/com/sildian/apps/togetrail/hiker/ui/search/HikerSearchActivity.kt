@@ -30,9 +30,6 @@ class HikerSearchActivity :
 
         /**Logs**/
         private const val TAG = "HikerSearchActivity"
-
-        /**Bundle keys for Intents**/
-        const val KEY_BUNDLE_HIKER_ID = "KEY_BUNDLE_HIKER_ID"
     }
 
     /**********************************UI component**********************************************/
