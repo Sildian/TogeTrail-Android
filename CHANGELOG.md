@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Allow searching for a hiker
 ### Changed
 - Upgrade target Android version to Android 12 (API 31) and upgrade lowest compatible Android version to Android 5 (API 21)
 
