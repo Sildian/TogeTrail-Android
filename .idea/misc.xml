@@ -24,7 +24,7 @@
         <entry key="app/src/main/res/layout/dialog_fragment_message_write.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_chat_room.xml" value="0.13632246376811594" />
         <entry key="app/src/main/res/layout/fragment_chat_selection.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_event.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_event.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_event_edit.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_events_list.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.1" />

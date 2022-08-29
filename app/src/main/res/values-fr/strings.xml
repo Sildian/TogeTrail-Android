@@ -68,6 +68,8 @@
     <string name="button_event_validate_selected_trails">Valider</string>
     <string name="button_event_register_user">M\'inscrire</string>
     <string name="button_event_unregister_user">Me désinscrire</string>
+    <string name="button_event_cancel">Annuler</string>
+    <string name="button_event_restore">Rétablir</string>
 
     <!-- Labels -->
     <!-- Common -->

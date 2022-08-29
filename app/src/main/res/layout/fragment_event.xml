@@ -329,24 +329,13 @@
                 app:cardElevation="@dimen/components_elevation"
                 android:visibility="@{CurrentHikerInfo.INSTANCE.currentHiker==null ? View.GONE : View.VISIBLE}">
 
-                <com.google.android.material.button.MaterialButton
-                    style="@style/ClassicButtonStyle"
-                    android:id="@+id/fragment_event_button_register_user"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/components_margin_small"
-                    android:layout_marginBottom="@dimen/components_margin_small"
-                    android:layout_marginStart="@dimen/components_margin_medium"
-                    android:layout_marginEnd="@dimen/components_margin_medium"
-                    android:text="@string/button_event_register_user"
-                    android:visibility="@{eventFragment.isCurrentUserAuthor() || eventFragment.isCurrentUserRegistered() ? View.GONE : View.VISIBLE}"
-                    android:onClick="@{eventFragment::onRegisterUserButtonClick}"/>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:visibility="@{eventFragment.isCurrentUserAuthor() || !eventFragment.isCurrentUserRegistered() ? View.GONE : View.VISIBLE}">
+                    android:animateLayoutChanges="true"
+                    android:visibility="@{!eventFragment.isCurrentUserAuthor() ? View.VISIBLE : View.GONE}"
+                    tools:visibility="visible">
 
                     <TextView
                         android:id="@+id/fragment_event_text_user_registered"
@@ -360,7 +349,9 @@
                         app:drawableStartCompat="@drawable/ic_check"
                         android:drawablePadding="@dimen/components_margin_small"
                         android:textColor="@color/colorBlack"
-                        android:text="@string/label_event_user_registered" />
+                        android:text="@string/label_event_user_registered"
+                        android:visibility="@{eventFragment.isCurrentUserRegistered() ? View.VISIBLE : View.GONE}"
+                        tools:visibility="visible"/>
 
                     <com.google.android.material.button.MaterialButton
                         style="@style/ClassicButtonStyle"
@@ -372,22 +363,73 @@
                         android:layout_marginStart="@dimen/components_margin_medium"
                         android:layout_marginEnd="@dimen/components_margin_medium"
                         android:text="@string/button_event_unregister_user"
+                        android:visibility="@{eventFragment.isCurrentUserRegistered() ? View.VISIBLE : View.GONE}"
+                        tools:visibility="visible"
                         android:onClick="@{eventFragment::onUnregisterUserButtonClick}"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/ClassicButtonStyle"
+                        android:id="@+id/fragment_event_button_register_user"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/components_margin_small"
+                        android:layout_marginBottom="@dimen/components_margin_small"
+                        android:layout_marginStart="@dimen/components_margin_medium"
+                        android:layout_marginEnd="@dimen/components_margin_medium"
+                        android:text="@string/button_event_register_user"
+                        android:visibility="@{!eventFragment.isCurrentUserRegistered() ? View.VISIBLE : View.GONE}"
+                        tools:visibility="gone"
+                        android:onClick="@{eventFragment::onRegisterUserButtonClick}"/>
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/fragment_event_text_user_facilitate"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/components_margin_medium"
-                    android:layout_gravity="center"
-                    android:gravity="center_vertical"
-                    app:drawableStartCompat="@drawable/ic_check"
-                    android:drawablePadding="@dimen/components_margin_small"
-                    android:textColor="@color/colorBlack"
-                    android:text="@string/label_event_user_facilitate"
-                    android:visibility="@{eventFragment.isCurrentUserAuthor() ? View.VISIBLE : View.GONE}"/>
+                    android:orientation="horizontal"
+                    android:animateLayoutChanges="true"
+                    android:visibility="@{eventFragment.isCurrentUserAuthor() ? View.VISIBLE : View.GONE}"
+                    tools:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/fragment_event_text_user_facilitate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/components_margin_medium"
+                        android:layout_gravity="center"
+                        android:gravity="center_vertical"
+                        app:drawableStartCompat="@drawable/ic_check"
+                        android:drawablePadding="@dimen/components_margin_small"
+                        android:textColor="@color/colorBlack"
+                        android:text="@string/label_event_user_facilitate" />
+
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/ClassicButtonStyle"
+                        android:id="@+id/fragment_event_button_cancel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/components_margin_small"
+                        android:layout_marginBottom="@dimen/components_margin_small"
+                        android:layout_marginStart="@dimen/components_margin_medium"
+                        android:layout_marginEnd="@dimen/components_margin_medium"
+                        android:text="@string/button_event_cancel"
+                        android:visibility="@{!eventViewModel.data.data.isCanceled ? View.VISIBLE : View.GONE}"
+                        android:onClick="@{eventFragment::onCancelEventButtonClick}"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/ClassicButtonStyle"
+                        android:id="@+id/fragment_event_button_restore"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/components_margin_small"
+                        android:layout_marginBottom="@dimen/components_margin_small"
+                        android:layout_marginStart="@dimen/components_margin_medium"
+                        android:layout_marginEnd="@dimen/components_margin_medium"
+                        android:text="@string/button_event_restore"
+                        android:visibility="@{eventViewModel.data.data.isCanceled ? View.VISIBLE : View.GONE}"
+                        android:onClick="@{eventFragment::onRestoreEventButtonClick}"/>
+
+                </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 

@@ -183,6 +183,18 @@ class EventFragment(private val eventId: String?=null) :
         this.eventViewModel.unregisterUserFromEvent()
     }
 
+    @Suppress("UNUSED_PARAMETER")
+    fun onCancelEventButtonClick(view: View) {
+        this.eventViewModel.data.value?.data?.isCanceled = true
+        this.eventViewModel.saveEvent()
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun onRestoreEventButtonClick(view: View) {
+        this.eventViewModel.data.value?.data?.isCanceled = false
+        this.eventViewModel.saveEvent()
+    }
+
     /***********************************Hikers monitoring****************************************/
 
     override fun onHikerClick(hiker: Hiker) {

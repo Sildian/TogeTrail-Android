@@ -69,6 +69,8 @@
     <string name="button_event_validate_selected_trails">Validate</string>
     <string name="button_event_register_user">Register</string>
     <string name="button_event_unregister_user">Unregister</string>
+    <string name="button_event_cancel">Cancel</string>
+    <string name="button_event_restore">Restore</string>
 
     <!-- Labels -->
     <!-- Common -->
