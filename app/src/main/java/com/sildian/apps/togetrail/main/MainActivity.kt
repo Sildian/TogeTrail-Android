@@ -313,9 +313,9 @@ class MainActivity :
             }
             when {
                 hikerData?.data == null -> {
-                    this.hikerViewModel.cancelCurrentDataRequest()
-                    this.hikerChatViewModel.cancelCurrentDataRequest()
-                    this.hikerLikedTrailsViewModel.cancelCurrentDataRequest()
+                    this.hikerViewModel.cancelAllRunningDataRequests()
+                    this.hikerChatViewModel.cancelAllRunningDataRequests()
+                    this.hikerLikedTrailsViewModel.cancelAllRunningDataRequests()
                     updateNavigationViewUserItems()
                 }
                 !this.hikerViewModel.isDataRequestRunning() -> {

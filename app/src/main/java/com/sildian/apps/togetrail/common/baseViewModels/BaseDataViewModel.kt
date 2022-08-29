@@ -28,7 +28,7 @@ abstract class DataViewModel<T: Any>(protected val dataModelClass: Class<T>, pro
 
     /**Data**/
 
-    protected var currentDataRequest: DataRequest? = null
+    protected var runningDataRequests = arrayListOf<DataRequest>()
 
     /**Coroutines**/
 
@@ -40,7 +40,7 @@ abstract class DataViewModel<T: Any>(protected val dataModelClass: Class<T>, pro
 
     override fun onCleared() {
         removeAllOnPropertyChangedCallbacks()
-        cancelCurrentDataRequest()
+        cancelAllRunningDataRequests()
     }
 
     /**Callbacks monitoring**/
@@ -63,13 +63,23 @@ abstract class DataViewModel<T: Any>(protected val dataModelClass: Class<T>, pro
 
     /**Data request monitoring**/
 
-    fun cancelCurrentDataRequest() {
+    fun cancelAllRunningDataRequests() {
         viewModelScope.launch(this.exceptionHandler) {
-            currentDataRequest?.cancel()
+            runningDataRequests.forEach { dataRequest ->
+                dataRequest.cancel()
+                runningDataRequests.remove(dataRequest)
+            }
         }
     }
 
-    fun isDataRequestRunning(): Boolean = this.currentDataRequest?.isRunning() == true
+    fun isDataRequestRunning(): Boolean {
+        runningDataRequests.forEach { dataRequest ->
+            if (dataRequest.isRunning()) {
+                return true
+            }
+        }
+        return false
+    }
 }
 
 /***************************Monitors a data list of the given type T****************************/
@@ -90,8 +100,7 @@ abstract class ListDataViewModel<T: Any>(dataModelClass: Class<T>, dispatcher: C
     @ExperimentalCoroutinesApi
     protected fun loadDataFlow(dataRequest: DataFlowRequest<List<T>>) {
         viewModelScope.launch(this.exceptionHandler) {
-            currentDataRequest?.cancel()
-            currentDataRequest = dataRequest
+            runningDataRequests.add(dataRequest)
             dataRequest.execute()
             dataRequest.flow
                 ?.catch { e ->
@@ -133,8 +142,7 @@ abstract class SingleDataViewModel<T: Any>(dataModelClass: Class<T>, dispatcher:
     @ExperimentalCoroutinesApi
     protected fun loadDataFlow(dataRequest: DataFlowRequest<T>) {
         viewModelScope.launch(this.exceptionHandler) {
-            currentDataRequest?.cancel()
-            currentDataRequest = dataRequest
+            runningDataRequests.add(dataRequest)
             dataRequest.execute()
             dataRequest.flow
                 ?.catch { e ->
@@ -156,9 +164,8 @@ abstract class SingleDataViewModel<T: Any>(dataModelClass: Class<T>, dispatcher:
 
     protected fun loadData(dataRequest: LoadDataRequest<T>) {
         viewModelScope.launch(this.exceptionHandler) {
+            runningDataRequests.add(dataRequest)
             try {
-                currentDataRequest?.cancel()
-                currentDataRequest = dataRequest
                 dataRequest.execute()
                 dataRequest.data?.let { result ->
                     Log.d(TAG, "Successfully loaded ${dataModelClass.simpleName}")
@@ -171,43 +178,47 @@ abstract class SingleDataViewModel<T: Any>(dataModelClass: Class<T>, dispatcher:
             } catch (e: Throwable) {
                 Log.e(TAG, "Failed to load ${dataModelClass.simpleName} : ${e.message}")
                 mutableData.postValue(SingleDataHolder(mutableData.value?.data, e))
+            } finally {
+                runningDataRequests.remove(dataRequest)
             }
         }
     }
 
     protected suspend fun loadDataResult(dataRequest: LoadDataRequest<T>): T? {
-        currentDataRequest?.cancel()
-        currentDataRequest = dataRequest
+        runningDataRequests.add(dataRequest)
         dataRequest.execute()
+        runningDataRequests.remove(dataRequest)
         return dataRequest.data
     }
 
     protected fun saveData(dataRequest: SaveDataRequest<T>) {
         viewModelScope.launch(this.exceptionHandler) {
+            runningDataRequests.add(dataRequest)
             try {
-                currentDataRequest?.cancel()
-                currentDataRequest = dataRequest
                 dataRequest.execute()
                 Log.d(TAG, "Successfully saved ${dataModelClass.simpleName}")
                 mutableDataRequestState.postValue(DataRequestStateHolder(dataRequest, null))
             } catch (e: Throwable) {
                 Log.e(TAG, "Failed to save ${dataModelClass.simpleName} : ${e.message}")
                 mutableDataRequestState.postValue(DataRequestStateHolder(dataRequest, e))
+            } finally {
+                runningDataRequests.remove(dataRequest)
             }
         }
     }
 
     protected fun runSpecificRequest(dataRequest: SpecificDataRequest) {
         viewModelScope.launch(this.exceptionHandler) {
+            runningDataRequests.add(dataRequest)
             try {
-                currentDataRequest?.cancel()
-                currentDataRequest = dataRequest
                 dataRequest.execute()
                 Log.d(TAG, "Successfully finished running request ${dataRequest.javaClass.simpleName}")
                 mutableDataRequestState.postValue(DataRequestStateHolder(dataRequest, null))
             } catch (e: Throwable) {
                 Log.e(TAG, "Failed to run request ${dataRequest.javaClass.simpleName} : ${e.message}")
                 mutableDataRequestState.postValue(DataRequestStateHolder(dataRequest, e))
+            } finally {
+                runningDataRequests.remove(dataRequest)
             }
         }
     }

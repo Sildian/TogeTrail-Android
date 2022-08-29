@@ -84,7 +84,7 @@ class HikerViewModel @Inject constructor(
     }
 
     fun logoutUser() {
-        cancelCurrentDataRequest()
+        cancelAllRunningDataRequests()
         this.mutableData.postValue(null)
         runSpecificRequest(HikerLogoutDataRequest(this.dispatcher, this.authRepository))
     }
@@ -94,7 +94,7 @@ class HikerViewModel @Inject constructor(
     }
 
     fun deleteUserAccount() {
-        cancelCurrentDataRequest()
+        cancelAllRunningDataRequests()
         runSpecificRequest(HikerDeleteAccountDataRequest(
             this.dispatcher,
             this.authRepository,
