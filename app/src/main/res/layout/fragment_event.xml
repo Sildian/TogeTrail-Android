@@ -355,20 +355,6 @@
 
                     <com.google.android.material.button.MaterialButton
                         style="@style/ClassicButtonStyle"
-                        android:id="@+id/fragment_event_button_unregister_user"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/components_margin_small"
-                        android:layout_marginBottom="@dimen/components_margin_small"
-                        android:layout_marginStart="@dimen/components_margin_medium"
-                        android:layout_marginEnd="@dimen/components_margin_medium"
-                        android:text="@string/button_event_unregister_user"
-                        android:visibility="@{eventFragment.isCurrentUserRegistered() ? View.VISIBLE : View.GONE}"
-                        tools:visibility="visible"
-                        android:onClick="@{eventFragment::onUnregisterUserButtonClick}"/>
-
-                    <com.google.android.material.button.MaterialButton
-                        style="@style/ClassicButtonStyle"
                         android:id="@+id/fragment_event_button_register_user"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -376,8 +362,7 @@
                         android:layout_marginBottom="@dimen/components_margin_small"
                         android:layout_marginStart="@dimen/components_margin_medium"
                         android:layout_marginEnd="@dimen/components_margin_medium"
-                        android:text="@string/button_event_register_user"
-                        android:visibility="@{!eventFragment.isCurrentUserRegistered() ? View.VISIBLE : View.GONE}"
+                        android:text="@{eventFragment.isCurrentUserRegistered() ? @string/button_event_unregister_user : @string/button_event_register_user}"
                         tools:visibility="gone"
                         android:onClick="@{eventFragment::onRegisterUserButtonClick}"/>
 
@@ -412,22 +397,8 @@
                         android:layout_marginBottom="@dimen/components_margin_small"
                         android:layout_marginStart="@dimen/components_margin_medium"
                         android:layout_marginEnd="@dimen/components_margin_medium"
-                        android:text="@string/button_event_cancel"
-                        android:visibility="@{!eventViewModel.data.data.isCanceled ? View.VISIBLE : View.GONE}"
+                        android:text="@{eventViewModel.data.data.isCanceled ? @string/button_event_restore : @string/button_event_cancel}"
                         android:onClick="@{eventFragment::onCancelEventButtonClick}"/>
-
-                    <com.google.android.material.button.MaterialButton
-                        style="@style/ClassicButtonStyle"
-                        android:id="@+id/fragment_event_button_restore"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/components_margin_small"
-                        android:layout_marginBottom="@dimen/components_margin_small"
-                        android:layout_marginStart="@dimen/components_margin_medium"
-                        android:layout_marginEnd="@dimen/components_margin_medium"
-                        android:text="@string/button_event_restore"
-                        android:visibility="@{eventViewModel.data.data.isCanceled ? View.VISIBLE : View.GONE}"
-                        android:onClick="@{eventFragment::onRestoreEventButtonClick}"/>
 
                 </LinearLayout>
 

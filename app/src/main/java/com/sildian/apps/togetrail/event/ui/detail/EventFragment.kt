@@ -62,6 +62,7 @@ class EventFragment(private val eventId: String?=null) :
         this.binding.eventFragment = this
         this.binding.eventViewModel = this.eventViewModel
         observeEvent()
+        observeIsCurrentUserAuthor()
     }
 
     override fun loadData() {
@@ -77,8 +78,13 @@ class EventFragment(private val eventId: String?=null) :
             } ?:
             eventData?.data?.let { event ->
                 isCurrentUserAuthor.value = event.authorId == CurrentHikerInfo.currentHiker?.id
-                refreshUI()
             }
+        }
+    }
+    
+    private fun observeIsCurrentUserAuthor() {
+        this.isCurrentUserAuthor.observe(this) {
+            updateToolbar()
         }
     }
 
@@ -94,13 +100,9 @@ class EventFragment(private val eventId: String?=null) :
 
     override fun initializeUI() {
         initializeToolbar()
-    }
-
-    override fun refreshUI() {
-        updateToolbar()
-        updateRegisteredHikersRecyclerView()
-        updateAttachedTrailsRecyclerView()
-        updateMessagesRecyclerView()
+        initializeRegisteredHikersRecyclerView()
+        initializeAttachedTrailsRecyclerView()
+        initializeMessagesRecyclerView()
     }
 
     private fun initializeToolbar() {
@@ -109,46 +111,51 @@ class EventFragment(private val eventId: String?=null) :
     }
 
     private fun updateToolbar() {
-        if (this.eventViewModel.currentUserIsAuthor()) {
-            (this.baseActivity as EventActivity).allowEditMenu()
+        (this.baseActivity as EventActivity).setEditMenuAllowed(this.eventViewModel.currentUserIsAuthor())
+    }
+
+    private fun initializeRegisteredHikersRecyclerView() {
+        this.eventId?.let { eventId ->
+            this.registeredHikersAdapter = HikerPhotoAdapter(
+                DatabaseFirebaseHelper.generateOptionsForAdapter(
+                    Hiker::class.java,
+                    EventFirebaseQueries.getRegisteredHikers(eventId),
+                    activity as AppCompatActivity
+                ),
+                this,
+                this
+            )
+            this.binding.fragmentEventRecyclerViewRegisteredHikers.adapter =
+                this.registeredHikersAdapter
         }
     }
 
-    private fun updateRegisteredHikersRecyclerView(){
-        this.registeredHikersAdapter= HikerPhotoAdapter(
-            DatabaseFirebaseHelper.generateOptionsForAdapter(
-                Hiker::class.java,
-                EventFirebaseQueries.getRegisteredHikers(this.eventViewModel.data.value?.data?.id!!),
-                activity as AppCompatActivity
-            ),
-            this,
-            this
-        )
-        this.binding.fragmentEventRecyclerViewRegisteredHikers.adapter = this.registeredHikersAdapter
+    private fun initializeAttachedTrailsRecyclerView() {
+        this.eventId?.let { eventId ->
+            this.attachedTrailsAdapter = TrailHorizontalAdapter(
+                DatabaseFirebaseHelper.generateOptionsForAdapter(
+                    Trail::class.java,
+                    EventFirebaseQueries.getAttachedTrails(eventId),
+                    activity as AppCompatActivity
+                ),
+                this
+            )
+            this.binding.fragmentEventRecyclerViewAttachedTrails.adapter = this.attachedTrailsAdapter
+        }
     }
 
-    private fun updateAttachedTrailsRecyclerView(){
-        this.attachedTrailsAdapter= TrailHorizontalAdapter(
-            DatabaseFirebaseHelper.generateOptionsForAdapter(
-                Trail::class.java,
-                EventFirebaseQueries.getAttachedTrails(this.eventViewModel.data.value?.data?.id!!),
-                activity as AppCompatActivity
-            ),
-            this
-        )
-        this.binding.fragmentEventRecyclerViewAttachedTrails.adapter = this.attachedTrailsAdapter
-    }
-
-    private fun updateMessagesRecyclerView() {
-        this.messagesAdapter = PublicMessageAdapter(
-            DatabaseFirebaseHelper.generateOptionsForAdapter(
-                Message::class.java,
-                EventFirebaseQueries.getMessages(this.eventViewModel.data.value?.data?.id!!),
-                activity as AppCompatActivity
-            ),
-            this, this
-        )
-        this.binding.fragmentEventRecyclerViewMessages.adapter = this.messagesAdapter
+    private fun initializeMessagesRecyclerView() {
+        this.eventId?.let { eventId ->
+            this.messagesAdapter = PublicMessageAdapter(
+                DatabaseFirebaseHelper.generateOptionsForAdapter(
+                    Message::class.java,
+                    EventFirebaseQueries.getMessages(eventId),
+                    activity as AppCompatActivity
+                ),
+                this, this
+            )
+            this.binding.fragmentEventRecyclerViewMessages.adapter = this.messagesAdapter
+        }
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -175,23 +182,20 @@ class EventFragment(private val eventId: String?=null) :
 
     @Suppress("UNUSED_PARAMETER")
     fun onRegisterUserButtonClick(view:View){
-        this.eventViewModel.registerUserToEvent()
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    fun onUnregisterUserButtonClick(view:View){
-        this.eventViewModel.unregisterUserFromEvent()
+        this.isCurrentUserRegistered.value?.let { isRegistered ->
+            if (isRegistered) {
+                this.eventViewModel.unregisterUserFromEvent()
+            } else {
+                this.eventViewModel.registerUserToEvent()
+            }
+        }
     }
 
     @Suppress("UNUSED_PARAMETER")
     fun onCancelEventButtonClick(view: View) {
-        this.eventViewModel.data.value?.data?.isCanceled = true
-        this.eventViewModel.saveEvent()
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    fun onRestoreEventButtonClick(view: View) {
-        this.eventViewModel.data.value?.data?.isCanceled = false
+        this.eventViewModel.data.value?.data?.isCanceled?.let { isCanceled ->
+            this.eventViewModel.data.value?.data?.isCanceled = !isCanceled
+        }
         this.eventViewModel.saveEvent()
     }
 

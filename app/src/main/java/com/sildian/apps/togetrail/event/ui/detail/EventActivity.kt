@@ -62,10 +62,12 @@ class EventActivity : BaseActivity<ActivityEventBinding>() {
 
     /**Defines the menu items**/
 
-    fun allowEditMenu() {
+    fun setEditMenuAllowed(isEditMenuAllowed: Boolean) {
         if (this.menu != null) {
             this.menu?.clear()
-            menuInflater.inflate(R.menu.menu_edit, this.menu)
+            if (isEditMenuAllowed) {
+                menuInflater.inflate(R.menu.menu_edit, this.menu)
+            }
         }
     }
 
