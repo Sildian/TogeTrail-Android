@@ -42,6 +42,7 @@ object EventFirebaseQueries {
     fun getNextEvents(): Query =
         getCollection()
             .whereGreaterThan("beginDate", Date())
+            .whereEqualTo("canceled", false)
             .orderBy("beginDate", Query.Direction.ASCENDING)
 
     /**
@@ -71,12 +72,14 @@ object EventFirebaseQueries {
                     .whereEqualTo(FieldPath.of("meetingPoint", "country", "code"), location.country?.code)
                     .whereEqualTo(FieldPath.of("meetingPoint", "region", "code"), location.region.code)
                     .whereGreaterThan("beginDate", Date())
+                    .whereEqualTo("canceled", false)
                     .orderBy("beginDate", Query.Direction.ASCENDING)
             }
             location.country!=null -> {
                 getCollection()
                     .whereEqualTo(FieldPath.of("meetingPoint", "country", "code"), location.country.code)
                     .whereGreaterThan("beginDate", Date())
+                    .whereEqualTo("canceled", false)
                     .orderBy("beginDate", Query.Direction.ASCENDING)
             }
             else -> null

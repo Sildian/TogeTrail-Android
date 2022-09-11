@@ -147,6 +147,7 @@ object HikerFirebaseQueries {
 
     fun getAttendedEvents(hikerId:String): Query =
         getAttendedEventSubCollection(hikerId)
+            .whereEqualTo("canceled", false)
 
     /**
      * Updates an event for which the hiker attended

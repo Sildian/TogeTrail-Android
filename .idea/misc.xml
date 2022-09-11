@@ -41,7 +41,7 @@
         <entry key="app/src/main/res/layout/fragment_trail_selection.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_trails_list.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_recycler_view_chat.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/item_recycler_view_event_horizontal.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/item_recycler_view_event_horizontal.xml" value="0.335" />
         <entry key="app/src/main/res/layout/item_recycler_view_hiker.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_recycler_view_hiker_history.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_recycler_view_hiker_photo.xml" value="0.1" />
