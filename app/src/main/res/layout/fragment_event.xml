@@ -95,7 +95,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:animateLayoutChanges="true">
 
                         <TextView
                             android:id="@+id/fragment_event_text_name"
@@ -120,6 +121,37 @@
                             android:layout_marginEnd="@dimen/components_margin_medium"
                             android:textSize="@dimen/text_size_title"
                             android:text="@{MetricsHelper.displayNbDays(eventFragment.context, eventViewModel.data.data.nbDays), default=@string/example_event_nb_days}"/>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/components_margin_small"
+                            android:layout_marginBottom="@dimen/components_margin_small"
+                            android:layout_marginStart="@dimen/components_margin_medium"
+                            android:layout_marginEnd="@dimen/components_margin_medium"
+                            app:cardCornerRadius="@dimen/components_corner_small"
+                            app:cardElevation="0dp"
+                            app:strokeWidth="@dimen/components_stroke_medium"
+                            app:strokeColor="@color/colorRed"
+                            android:visibility="@{eventViewModel.data.data.canceled ? View.VISIBLE : View.GONE}" >
+
+                            <TextView
+                                android:id="@+id/fragment_event_text_canceled"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/components_margin_small"
+                                android:layout_marginBottom="@dimen/components_margin_small"
+                                android:layout_marginStart="@dimen/components_margin_medium"
+                                android:layout_marginEnd="@dimen/components_margin_medium"
+                                android:gravity="center_vertical"
+                                app:drawableStartCompat="@drawable/ic_cancel_black"
+                                app:drawableTint="@color/colorRed"
+                                android:drawablePadding="@dimen/components_margin_small"
+                                android:textSize="@dimen/text_size_important"
+                                android:textColor="@color/colorRed"
+                                android:text="@string/message_event_canceled" />
+
+                        </com.google.android.material.card.MaterialCardView>
 
                         <TextView
                             android:layout_width="wrap_content"

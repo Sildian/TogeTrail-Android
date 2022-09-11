@@ -224,6 +224,7 @@
     <string name="message_trail_name_unknown">Parcours inconnu</string>
     <string name="message_trail_poi_name_unknown">Point d\'intérêt inconnu</string>
     <string name="message_event_name_unknown">Evènement inconnu</string>
+    <string name="message_event_canceled">Cet événement a été annulé</string>
     <string name="message_no_location_available">L\'emplacement n\'est pas disponible</string>
     <string name="message_no_description_available">Aucune description n\'est disponible</string>
     <string name="message_no_photo_available">Aucune photo n\'est disponible</string>
