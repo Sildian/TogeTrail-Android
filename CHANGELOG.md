@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Allow canceling an event
 - Allow searching for a hiker
 ### Changed
 - Upgrade target Android version to Android 12 (API 31) and upgrade lowest compatible Android version to Android 5 (API 21)
