@@ -49,6 +49,13 @@ class FakeAuthRepository: AuthRepository {
         }
     }
 
+    override suspend fun changeUserEmailAddress(newEmailAddress: String) {
+        println("FAKE AuthRepository : Change user email address")
+        if (FirebaseSimulator.requestShouldFail) {
+            throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
+        }
+    }
+
     override suspend fun deleteUserAccount() {
         println("FAKE AuthRepository : Delete user account")
         if (FirebaseSimulator.requestShouldFail) {

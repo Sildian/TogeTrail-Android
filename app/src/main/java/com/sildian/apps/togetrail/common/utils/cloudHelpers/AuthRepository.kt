@@ -47,6 +47,15 @@ interface AuthRepository {
     suspend fun resetUserPassword()
 
     /**
+     * Sends an email to the user to let him change his email address
+     * @param newEmailAddress : the new email address
+     * @throws Exception if the request fails
+     */
+
+    @Throws(Exception::class)
+    suspend fun changeUserEmailAddress(newEmailAddress: String)
+
+    /**
      * Definitely deletes a user from Firebase
      * @throws Exception if the request fails
      */
@@ -82,6 +91,10 @@ class RealAuthRepository @Inject constructor(): AuthRepository {
 
     override suspend fun resetUserPassword() {
         AuthFirebaseQueries.resetUserPassword()?.await()
+    }
+
+    override suspend fun changeUserEmailAddress(newEmailAddress: String) {
+        AuthFirebaseQueries.changeUserEmailAddress(newEmailAddress)
     }
 
     override suspend fun deleteUserAccount() {

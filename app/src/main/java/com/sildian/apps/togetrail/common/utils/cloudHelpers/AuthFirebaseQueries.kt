@@ -23,7 +23,7 @@ object AuthFirebaseQueries {
      * Signs a user out
      */
 
-    fun signUserOut(){
+    fun signUserOut() {
         FirebaseAuth.getInstance().signOut()
     }
 
@@ -34,34 +34,43 @@ object AuthFirebaseQueries {
      * @return a task result
      */
 
-    fun updateUserProfile(displayName:String, photoUri:String?): Task<Void>? {
+    fun updateUserProfile(displayName: String, photoUri: String?): Task<Void>? {
         val user = getCurrentUser()
         val profileUpdates = UserProfileChangeRequest.Builder()
             .setDisplayName(displayName)
-            .setPhotoUri(if(photoUri!=null) Uri.parse(photoUri) else null)
+            .setPhotoUri(if(photoUri != null) Uri.parse(photoUri) else null)
             .build()
         return user?.updateProfile(profileUpdates)
     }
 
     /**
-     * Sends an email to the user to let you reset his password
+     * Sends an email to the user to let him reset his password
      * @return a task result
      */
 
-    fun resetUserPassword():Task<Void>?{
-        val userEmail= getCurrentUser()?.email
-        return if(userEmail!=null) {
+    fun resetUserPassword(): Task<Void>? {
+        val userEmail = getCurrentUser()?.email
+        return if (userEmail != null) {
             FirebaseAuth.getInstance().sendPasswordResetEmail(userEmail)
-        }else{
+        } else {
             null
         }
     }
+
+    /**
+     * Sends an email to the user to let him change his email
+     * @param newEmailAddress : the new email address
+     * @return a task result
+     */
+
+    fun changeUserEmailAddress(newEmailAddress: String): Task<Void>? =
+        getCurrentUser()?.verifyBeforeUpdateEmail(newEmailAddress)
 
     /**
      * Definitely deletes a user from Firebase
      * @return a task result
      */
 
-    fun deleteUserAccount():Task<Void>? =
+    fun deleteUserAccount(): Task<Void>? =
         getCurrentUser()?.delete()
 }

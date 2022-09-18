@@ -85,9 +85,9 @@ dependencies {
     implementation 'com.google.android.libraries.places:places:2.6.0'
 
     //Firebase
-    implementation 'com.google.firebase:firebase-core:21.0.0'
-    implementation 'com.google.firebase:firebase-analytics:21.0.0'
-    implementation 'com.google.firebase:firebase-crashlytics:18.2.11'
+    implementation 'com.google.firebase:firebase-core:21.1.1'
+    implementation 'com.google.firebase:firebase-analytics:21.1.1'
+    implementation 'com.google.firebase:firebase-crashlytics:18.2.13'
     implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
     implementation 'com.firebaseui:firebase-ui-firestore:7.2.0'
     implementation 'com.firebaseui:firebase-ui-storage:7.2.0'
