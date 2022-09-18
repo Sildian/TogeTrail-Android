@@ -93,6 +93,10 @@ class HikerViewModel @Inject constructor(
         runSpecificRequest(HikerResetPasswordDataRequest(this.dispatcher, this.authRepository))
     }
 
+    fun changeUserEmailAddress(newEmailAddress: String?) {
+        runSpecificRequest(HikerChangeEmailAddressDataRequest(this.dispatcher, this.authRepository, newEmailAddress))
+    }
+
     fun deleteUserAccount() {
         cancelAllRunningDataRequests()
         runSpecificRequest(HikerDeleteAccountDataRequest(
