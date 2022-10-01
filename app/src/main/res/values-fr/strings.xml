@@ -123,6 +123,7 @@
     <string name="label_hiker_description2">Quelques mots à propos de moi</string>
     <string name="label_hiker_email">Mon email</string>
     <string name="label_hiker_registration_date">Membre depuis</string>
+    <string name="label_hiker_write_email_address">Nouvelle adresse email</string>
     <string name="label_hiker_account">Mon compte</string>
     <string name="label_hiker_trails_created_sing">rando\ncréée</string>
     <string name="label_hiker_trails_created_plur">randos\ncréées</string>
@@ -263,6 +264,7 @@
     <string name="message_account_necessary">Un compte est nécessaire pour accéder à cette fonctionnalité</string>
     <string name="message_query_result_empty">Aucun résultat ne correspond à votre recherche</string>
     <string name="message_text_fields_empty">Certains champs sont vides</string>
+    <string name="message_hiker_email_address_change_confirmation">Votre adresse email a bien été modifiée</string>
     <string name="message_trail_info_empty">Les infos de la rando doivent être indiquées</string>
     <string name="message_trail_poi_info_empty">Les infos de chaque point d\'intérêt doivent être indiquées</string>
     <string name="message_trail_level_unknown">Le niveau de difficulté doit être indiqué</string>

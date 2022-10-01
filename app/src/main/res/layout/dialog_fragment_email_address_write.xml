@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <variable
+            name="emailAddressWriteDialogFragment"
+            type="com.sildian.apps.togetrail.hiker.ui.profileEdit.EmailAddressWriteDialogFragment" />
+    </data>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <EditText
+            android:id="@+id/dialog_fragment_email_address_write_text_field_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="@dimen/components_margin_medium"
+            android:layout_marginBottom="@dimen/components_margin_medium"
+            android:layout_marginStart="@dimen/components_margin_small"
+            android:layout_marginEnd="@dimen/components_margin_small"
+            android:textSize="@dimen/text_size_body"
+            android:inputType="textEmailAddress|textMultiLine"
+            android:hint="@string/label_hiker_write_email_address"/>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/IconButtonStyle"
+            android:id="@+id/dialog_fragment_email_address_write_button_validate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_send_message_white"
+            app:iconTint="@color/colorSecondaryDark"
+            android:onClick="@{emailAddressWriteDialogFragment::onValidateEmailAddressButtonClick}"/>
+
+    </LinearLayout>
+
+</layout>

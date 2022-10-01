@@ -124,6 +124,7 @@
     <string name="label_hiker_description2">Some words about me</string>
     <string name="label_hiker_email">My email</string>
     <string name="label_hiker_registration_date">Member since</string>
+    <string name="label_hiker_write_email_address">New email address</string>
     <string name="label_hiker_account">My account</string>
     <string name="label_hiker_trails_created_sing">created\ntrail</string>
     <string name="label_hiker_trails_created_plur">created\ntrails</string>
@@ -263,6 +264,7 @@
     <string name="message_account_necessary">An account is necessary to access this feature</string>
     <string name="message_query_result_empty">No result match your research</string>
     <string name="message_text_fields_empty">Some text fields are empty</string>
+    <string name="message_hiker_email_address_change_confirmation">Your email address was changed</string>
     <string name="message_trail_info_empty">You should provide the trail\'s info</string>
     <string name="message_trail_poi_info_empty">You should provide info for each point of interest</string>
     <string name="message_trail_level_unknown">The difficulty level should be indicated</string>

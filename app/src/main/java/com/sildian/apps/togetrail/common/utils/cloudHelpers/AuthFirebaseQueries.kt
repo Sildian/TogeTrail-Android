@@ -58,13 +58,13 @@ object AuthFirebaseQueries {
     }
 
     /**
-     * Sends an email to the user to let him change his email
+     * Updates the user's email address
      * @param newEmailAddress : the new email address
      * @return a task result
      */
 
     fun changeUserEmailAddress(newEmailAddress: String): Task<Void>? =
-        getCurrentUser()?.verifyBeforeUpdateEmail(newEmailAddress)
+        getCurrentUser()?.updateEmail(newEmailAddress)
 
     /**
      * Definitely deletes a user from Firebase

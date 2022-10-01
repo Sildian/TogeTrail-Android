@@ -3,6 +3,7 @@ package com.sildian.apps.togetrail.hiker.data.dataRequests
 import com.google.firebase.FirebaseException
 import com.sildian.apps.togetrail.dataRequestTestSupport.BaseDataRequestTest
 import com.sildian.apps.togetrail.firebaseTestSupport.FakeAuthRepository
+import com.sildian.apps.togetrail.firebaseTestSupport.FakeHikerRepository
 import com.sildian.apps.togetrail.firebaseTestSupport.FirebaseSimulator
 import com.sildian.apps.togetrail.hiker.data.models.Hiker
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -18,18 +19,23 @@ class HikerChangeEmailAddressDataRequestTest: BaseDataRequestTest() {
         runBlocking {
             FirebaseSimulator.requestShouldFail = true
             FirebaseSimulator.storageUrls.add("hikerAPhoto")
-            FirebaseSimulator.hikers.add(Hiker(id = "HA", name = "Hiker A", photoUrl = "hikerAPhoto"))
+            FirebaseSimulator.hikers.add(Hiker(id = "HA", name = "Hiker A", photoUrl = "hikerAPhoto", email = "ha@togetrail.com"))
             FirebaseSimulator.setCurrentUser("HA", "ha@togetrail.com", "Hiker A", "hikerAPhoto")
             try {
                 HikerChangeEmailAddressDataRequest(
                     dispatcher,
+                    FirebaseSimulator.hikers[0],
+                    "toto@togetrail.com",
                     FakeAuthRepository(),
-                    "toto@togetrail.com"
+                    FakeHikerRepository()
+
                 ).execute()
                 assertEquals("TRUE", "FALSE")
             } catch (e: FirebaseException) {
                 println(e.message)
             }
+            assertEquals("ha@togetrail.com", FirebaseSimulator.currentUser?.email)
+            assertEquals("ha@togetrail.com", FirebaseSimulator.hikers[0].email)
         }
     }
 
@@ -37,17 +43,22 @@ class HikerChangeEmailAddressDataRequestTest: BaseDataRequestTest() {
     fun given_nullUser_when_changeEmailAddress_then_checkNothingHappens() {
         runBlocking {
             FirebaseSimulator.storageUrls.add("hikerAPhoto")
-            FirebaseSimulator.hikers.add(Hiker(id = "HA", name = "Hiker A", photoUrl = "hikerAPhoto"))
+            FirebaseSimulator.hikers.add(Hiker(id = "HA", name = "Hiker A", photoUrl = "hikerAPhoto", email = "ha@togetrail.com"))
             try {
                 HikerChangeEmailAddressDataRequest(
                     dispatcher,
+                    FirebaseSimulator.hikers[0],
+                    "toto@togetrail.com",
                     FakeAuthRepository(),
-                    "toto@togetrail.com"
+                    FakeHikerRepository()
+
                 ).execute()
                 assertEquals("TRUE", "FALSE")
             } catch (e: NullPointerException) {
                 println(e.message)
             }
+            assertNull(FirebaseSimulator.currentUser)
+            assertEquals("ha@togetrail.com", FirebaseSimulator.hikers[0].email)
         }
     }
 
@@ -55,18 +66,23 @@ class HikerChangeEmailAddressDataRequestTest: BaseDataRequestTest() {
     fun given_nullEmail_when_changeEmailAddress_then_checkNothingHappens() {
         runBlocking {
             FirebaseSimulator.storageUrls.add("hikerAPhoto")
-            FirebaseSimulator.hikers.add(Hiker(id = "HA", name = "Hiker A", photoUrl = "hikerAPhoto"))
+            FirebaseSimulator.hikers.add(Hiker(id = "HA", name = "Hiker A", photoUrl = "hikerAPhoto", email = "ha@togetrail.com"))
             FirebaseSimulator.setCurrentUser("HA", "ha@togetrail.com", "Hiker A", "hikerAPhoto")
             try {
                 HikerChangeEmailAddressDataRequest(
                     dispatcher,
+                    FirebaseSimulator.hikers[0],
+                    null,
                     FakeAuthRepository(),
-                    null
+                    FakeHikerRepository()
+
                 ).execute()
                 assertEquals("TRUE", "FALSE")
             } catch (e: NullPointerException) {
                 println(e.message)
             }
+            assertEquals("ha@togetrail.com", FirebaseSimulator.currentUser?.email)
+            assertEquals("ha@togetrail.com", FirebaseSimulator.hikers[0].email)
         }
     }
 
@@ -74,18 +90,23 @@ class HikerChangeEmailAddressDataRequestTest: BaseDataRequestTest() {
     fun given_invalidEmail_when_changeEmailAddress_then_checkNothingHappens() {
         runBlocking {
             FirebaseSimulator.storageUrls.add("hikerAPhoto")
-            FirebaseSimulator.hikers.add(Hiker(id = "HA", name = "Hiker A", photoUrl = "hikerAPhoto"))
+            FirebaseSimulator.hikers.add(Hiker(id = "HA", name = "Hiker A", photoUrl = "hikerAPhoto", email = "ha@togetrail.com"))
             FirebaseSimulator.setCurrentUser("HA", "ha@togetrail.com", "Hiker A", "hikerAPhoto")
             try {
                 HikerChangeEmailAddressDataRequest(
                     dispatcher,
+                    FirebaseSimulator.hikers[0],
+                    "toto",
                     FakeAuthRepository(),
-                    "toto"
+                    FakeHikerRepository()
+
                 ).execute()
                 assertEquals("TRUE", "FALSE")
             } catch (e: IllegalArgumentException) {
                 println(e.message)
             }
+            assertEquals("ha@togetrail.com", FirebaseSimulator.currentUser?.email)
+            assertEquals("ha@togetrail.com", FirebaseSimulator.hikers[0].email)
         }
     }
 
@@ -93,13 +114,18 @@ class HikerChangeEmailAddressDataRequestTest: BaseDataRequestTest() {
     fun given_validEmail_when_changeEmailAddress_then_checkOperationIsSuccessful() {
         runBlocking {
             FirebaseSimulator.storageUrls.add("hikerAPhoto")
-            FirebaseSimulator.hikers.add(Hiker(id = "HA", name = "Hiker A", photoUrl = "hikerAPhoto"))
+            FirebaseSimulator.hikers.add(Hiker(id = "HA", name = "Hiker A", photoUrl = "hikerAPhoto", email = "ha@togetrail.com"))
             FirebaseSimulator.setCurrentUser("HA", "ha@togetrail.com", "Hiker A", "hikerAPhoto")
             HikerChangeEmailAddressDataRequest(
                 dispatcher,
+                FirebaseSimulator.hikers[0],
+                "toto@togetrail.com",
                 FakeAuthRepository(),
-                "toto@togetrail.com"
+                FakeHikerRepository()
+
             ).execute()
+            assertEquals("toto@togetrail.com", FirebaseSimulator.currentUser?.email)
+            assertEquals("toto@togetrail.com", FirebaseSimulator.hikers[0].email)
         }
     }
 }

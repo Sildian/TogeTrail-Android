@@ -94,7 +94,13 @@ class HikerViewModel @Inject constructor(
     }
 
     fun changeUserEmailAddress(newEmailAddress: String?) {
-        runSpecificRequest(HikerChangeEmailAddressDataRequest(this.dispatcher, this.authRepository, newEmailAddress))
+        runSpecificRequest(HikerChangeEmailAddressDataRequest(
+            this.dispatcher,
+            this.data.value?.data,
+            newEmailAddress,
+            this.authRepository,
+            this.hikerRepository)
+        )
     }
 
     fun deleteUserAccount() {

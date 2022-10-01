@@ -54,6 +54,12 @@ class FakeAuthRepository: AuthRepository {
         if (FirebaseSimulator.requestShouldFail) {
             throw FirebaseException(EXCEPTION_MESSAGE_REQUEST_FAILURE)
         }
+        FirebaseSimulator.currentUser?.uid?.let { uid ->
+            FirebaseSimulator.currentUser?.displayName?.let { name ->
+                val photoUri = FirebaseSimulator.currentUser?.photoUrl?.toString()
+                FirebaseSimulator.setCurrentUser(uid, newEmailAddress, name, photoUri)
+            }
+        }
     }
 
     override suspend fun deleteUserAccount() {

@@ -7,7 +7,9 @@ import androidx.lifecycle.lifecycleScope
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
+import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.databinding.FragmentProfileSettingsEditBinding
+import com.sildian.apps.togetrail.hiker.data.dataRequests.HikerChangeEmailAddressDataRequest
 import com.sildian.apps.togetrail.hiker.data.dataRequests.HikerDeleteAccountDataRequest
 import com.sildian.apps.togetrail.hiker.data.dataRequests.HikerResetPasswordDataRequest
 import com.sildian.apps.togetrail.hiker.data.viewModels.HikerViewModel
@@ -20,12 +22,17 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ProfileSettingsEditFragment(private val hikerId: String?=null) :
-    BaseFragment<FragmentProfileSettingsEditBinding>()
+    BaseFragment<FragmentProfileSettingsEditBinding>(),
+        EmailAddressWriteDialogFragment.EmailAddressWriteCallback
 {
 
     /*****************************************Data***********************************************/
 
     private val hikerViewModel: HikerViewModel by viewModels()
+
+    /**********************************UI component**********************************************/
+
+    private var emailAddressWriteDialogFragment: EmailAddressWriteDialogFragment? = null
 
     /***********************************Data monitoring******************************************/
 
@@ -43,23 +50,38 @@ class ProfileSettingsEditFragment(private val hikerId: String?=null) :
 
     private fun observeDataRequestState() {
         this.hikerViewModel.dataRequestState.observe(this) { dataRequestState ->
-            if (dataRequestState?.data is HikerResetPasswordDataRequest || dataRequestState?.data is HikerDeleteAccountDataRequest) {
+            if (dataRequestState?.data is HikerChangeEmailAddressDataRequest
+                || dataRequestState?.data is HikerResetPasswordDataRequest
+                || dataRequestState?.data is HikerDeleteAccountDataRequest
+            ) {
                 dataRequestState.error?.let { e ->
                     onQueryError(e)
-                } ?: handleSaveDataSuccess()
+                } ?: run {
+                    if (dataRequestState.data is HikerChangeEmailAddressDataRequest) {
+                        handleEmailAddressChangeRequestSuccess()
+                    } else {
+                        handleSaveDataSuccess()
+                    }
+                }
             }
         }
     }
 
     private fun loadHiker() {
         this.hikerId?.let { hikerId ->
-            this.hikerViewModel.loadHiker(hikerId)
+            this.hikerViewModel.loadHikerFlow(hikerId)
         }
     }
 
     /***********************************UI monitoring********************************************/
 
     override fun getLayoutId(): Int = R.layout.fragment_profile_settings_edit
+
+    @Suppress("UNUSED_PARAMETER")
+    fun onChangeEmailAddressButtonClick(view: View) {
+        this.emailAddressWriteDialogFragment = EmailAddressWriteDialogFragment(this)
+        this.emailAddressWriteDialogFragment?.show(childFragmentManager, "EmailAddressWriteDialogFragment")
+    }
 
     @Suppress("UNUSED_PARAMETER")
     fun onChangePasswordButtonClick(view: View){
@@ -71,7 +93,16 @@ class ProfileSettingsEditFragment(private val hikerId: String?=null) :
         requestDeleteUserAccountConfirmation()
     }
 
+    override fun validateEmailAddress(emailAddress: String) {
+        requestChangeEmailAddressConfirmation(emailAddress)
+    }
+
     /******************************Profile settings actions**************************************/
+
+    private fun requestChangeEmailAddressConfirmation(emailAddress: String) {
+        this.baseActivity?.showProgressDialog()
+        this.hikerViewModel.changeUserEmailAddress(emailAddress)
+    }
 
     @Suppress("UNUSED_ANONYMOUS_PARAMETER")
     private fun requestResetUserPasswordConfirmation() {
@@ -107,7 +138,18 @@ class ProfileSettingsEditFragment(private val hikerId: String?=null) :
         }
     }
 
-    private fun handleSaveDataSuccess(){
+    private fun handleEmailAddressChangeRequestSuccess() {
+        this.baseActivity?.dismissProgressDialog()
+        view?.let { view ->
+            SnackbarHelper.createSimpleSnackbar(
+                view,
+                null,
+                R.string.message_hiker_email_address_change_confirmation
+            ).show()
+        }
+    }
+
+    private fun handleSaveDataSuccess() {
         this.baseActivity?.dismissProgressDialog()
     }
 }

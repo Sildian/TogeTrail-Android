@@ -13,7 +13,7 @@ import kotlin.math.floor
 @Parcelize
 data class Hiker (
     val id:String="",
-    val email:String?=null,
+    var email:String?=null,
     var name:String?=null,
     var photoUrl:String?=null,
     var birthday: Date?=null,
