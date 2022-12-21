@@ -17,18 +17,15 @@ import java.util.*
  ************************************************************************************************/
 
 @Parcelize
-class TrailPointOfInterest(
-    override var latitude:Double=0.0,
-    override var longitude:Double=0.0,
-    override var elevation:Int?=null,
-    override var time:Date?=null,
+data class TrailPointOfInterest(
+    var latitude:Double=0.0,
+    var longitude:Double=0.0,
+    var elevation:Int?=null,
+    var time:Date?=null,
     var name:String?=null,
     var description:String?=null,
     var photoUrl:String?=null
-)
-    : TrailPoint(latitude, longitude, elevation, time),
-        Parcelable
-{
+) : Parcelable {
 
     /**
      * Checks that data are valid

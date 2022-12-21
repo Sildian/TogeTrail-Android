@@ -13,10 +13,9 @@ import java.util.*
  ************************************************************************************************/
 
 @Parcelize
-open class TrailPoint (
-    open var latitude:Double=0.0,
-    open var longitude:Double=0.0,
-    open var elevation:Int?=null,
-    open var time:Date?=null
-)
-    :Parcelable
+data class TrailPoint (
+    var latitude:Double=0.0,
+    var longitude:Double=0.0,
+    var elevation:Int?=null,
+    var time:Date?=null
+) : Parcelable
