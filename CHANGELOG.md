@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Allow searching for a hiker
 ### Changed
+- Upgrade target Android version to Android 13 (API 33)
 - Allow a user to change his / her email address
 - Allow canceling an event
 - Upgrade target Android version to Android 12 (API 31) and upgrade lowest compatible Android version to Android 5 (API 21)
