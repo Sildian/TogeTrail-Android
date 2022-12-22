@@ -1,13 +1,16 @@
 package com.sildian.apps.togetrail.common.utils.locationHelpers
 
+import android.content.Context
 import android.os.Looper
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.Priority
 import com.sildian.apps.togetrail.common.utils.DeviceUtilities
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -38,17 +41,19 @@ interface UserLocationContinuousFinder {
 
 @Module
 @InstallIn(SingletonComponent::class)
-object UserLocationContinuousFinderModule {
+interface UserLocationContinuousFinderModule {
 
     @Singleton
-    @Provides
-    fun provideRealUserLocationContinuousFinder(locationProviderClient: FusedLocationProviderClient): UserLocationContinuousFinder =
-        RealUserLocationContinuousFinder(locationProviderClient)
+    @Binds
+    fun bindRealUserLocationContinuousFinder(
+        userLocationContinuousFinder: RealUserLocationContinuousFinder
+    ): UserLocationContinuousFinder
 }
 
 /*********************************Real implementation*******************************************/
 
 class RealUserLocationContinuousFinder @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val locationProviderClient: FusedLocationProviderClient
     )
     : UserLocationContinuousFinder
@@ -56,12 +61,13 @@ class RealUserLocationContinuousFinder @Inject constructor(
 
     @Throws(UserLocationException::class)
     override fun startLocationUpdates(intervalMillis: Long, callback: LocationCallback) {
-        if (DeviceUtilities.isGpsAvailable(locationProviderClient.applicationContext)) {
-            val locationRequest = LocationRequest.create().apply {
-                interval = intervalMillis
-                fastestInterval = intervalMillis
-                priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            }
+        if (DeviceUtilities.isGpsAvailable(context)) {
+            val locationRequest = LocationRequest.Builder(
+                Priority.PRIORITY_HIGH_ACCURACY,
+                intervalMillis
+            )
+                .setMinUpdateIntervalMillis(intervalMillis)
+                .build()
             try {
                 this.locationProviderClient.requestLocationUpdates(
                     locationRequest,
