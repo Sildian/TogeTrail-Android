@@ -1,9 +1,11 @@
 package com.sildian.apps.togetrail.trail.ui.map
 
+import android.Manifest
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.provider.Settings
@@ -14,6 +16,7 @@ import android.view.animation.AnimationUtils
 import com.google.android.gms.maps.model.LatLng
 import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationException
+import com.sildian.apps.togetrail.common.utils.permissionsHelpers.PermissionsCallback
 import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
 import com.sildian.apps.togetrail.databinding.FragmentTrailMapRecordBinding
 import com.sildian.apps.togetrail.trail.data.models.TrailPoint
@@ -24,7 +27,14 @@ import dagger.hilt.android.AndroidEntryPoint
  ************************************************************************************************/
 
 @AndroidEntryPoint
-class TrailMapRecordFragment: BaseTrailMapGenerateFragment<FragmentTrailMapRecordBinding>() {
+class TrailMapRecordFragment: BaseTrailMapGenerateFragment<FragmentTrailMapRecordBinding>(), PermissionsCallback {
+
+    /**********************************Static items**********************************************/
+
+    companion object {
+        private const val KEY_REQUEST_PERMISSION_NOTIFICATIONS = 2001
+        private const val KEY_BUNDLE_PERMISSION_NOTIFICATIONS = Manifest.permission.POST_NOTIFICATIONS
+    }
 
     /*************************************Service************************************************/
 
@@ -98,7 +108,11 @@ class TrailMapRecordFragment: BaseTrailMapGenerateFragment<FragmentTrailMapRecor
         if (this.trailRecordService?.isRecording() == true) {
             stopRecord()
         } else {
-            startRecord()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                requestNotificationsPermission()
+            } else {
+                startRecord()
+            }
         }
     }
 
@@ -219,5 +233,24 @@ class TrailMapRecordFragment: BaseTrailMapGenerateFragment<FragmentTrailMapRecor
                 }
             }
         }
+    }
+
+    /***********************************Permissions**********************************************/
+
+    private fun requestNotificationsPermission() {
+        baseActivity?.requestPermissions(
+            KEY_REQUEST_PERMISSION_NOTIFICATIONS,
+            arrayOf(KEY_BUNDLE_PERMISSION_NOTIFICATIONS),
+            this,
+            R.string.message_permission_requested_message_notifications
+        )
+    }
+
+    override fun onPermissionsGranted(permissionsRequestCode: Int) {
+        startRecord()
+    }
+
+    override fun onPermissionsDenied(permissionsRequestCode: Int) {
+        startRecord()
     }
 }
