@@ -78,6 +78,7 @@ class ProfileFragment(private val hikerId: String? = null) :
 
     private fun initializeToolbar(){
         (activity as ProfileActivity).setSupportActionBar(this.binding.fragmentProfileToolbar)
+        (activity as ProfileActivity).supportActionBar?.title = ""
         (activity as ProfileActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 

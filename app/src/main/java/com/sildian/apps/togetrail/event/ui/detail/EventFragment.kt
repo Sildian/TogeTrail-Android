@@ -107,6 +107,7 @@ class EventFragment(private val eventId: String?=null) :
 
     private fun initializeToolbar() {
         (activity as EventActivity).setSupportActionBar(this.binding.fragmentEventToolbar)
+        (activity as EventActivity).supportActionBar?.title = ""
         (activity as EventActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 

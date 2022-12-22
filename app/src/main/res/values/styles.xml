@@ -129,24 +129,24 @@
         <item name="android:textColor">@color/colorSecondary</item>
         <item name="android:textSize">@dimen/text_size_body</item>
         <item name="android:textAllCaps">false</item>
-        <item name="shapeAppearance">@style/ShapeAppearanceOverlay.Main</item>
+        <item name="shapeAppearance">@style/ShapeAppearanceOverlayMain</item>
     </style>
     <style name="MapButtonLeftStyle" parent="@style/MapButtonStyle">
-        <item name="shapeAppearance">@style/ShapeAppearanceOverlay.Left</item>
+        <item name="shapeAppearance">@style/ShapeAppearanceOverlayLeft</item>
     </style>
 
     <!-- Classic buttons -->
     <style name="ClassicButtonStyle" parent="@style/Widget.MaterialComponents.Button">
         <item name="backgroundTint">@color/colorSecondaryDark</item>
         <item name="android:textSize">@dimen/text_size_body</item>
-        <item name="shapeAppearance">@style/ShapeAppearanceOverlay.Main</item>
+        <item name="shapeAppearance">@style/ShapeAppearanceOverlayMain</item>
     </style>
 
     <!-- Alert buttons -->
     <style name="CriticalButtonStyle" parent="@style/Widget.MaterialComponents.Button">
         <item name="backgroundTint">@color/colorRed</item>
         <item name="android:textSize">@dimen/text_size_body</item>
-        <item name="shapeAppearance">@style/ShapeAppearanceOverlay.Main</item>
+        <item name="shapeAppearance">@style/ShapeAppearanceOverlayMain</item>
     </style>
 
     <!-- Outline buttons -->
@@ -215,14 +215,14 @@
     </style>
 
     <!-- Main Shape appearance -->
-    <style name="ShapeAppearanceOverlay.Main">
+    <style name="ShapeAppearanceOverlayMain">
         <item name="cornerFamily">cut</item>
         <item name="cornerSizeTopLeft">@dimen/components_corner_medium</item>
         <item name="cornerSizeBottomRight">@dimen/components_corner_medium</item>
     </style>
 
     <!-- Left Shape appearance -->
-    <style name="ShapeAppearanceOverlay.Left">
+    <style name="ShapeAppearanceOverlayLeft">
         <item name="cornerFamily">cut</item>
         <item name="cornerSizeBottomRight">@dimen/components_corner_medium</item>
     </style>
