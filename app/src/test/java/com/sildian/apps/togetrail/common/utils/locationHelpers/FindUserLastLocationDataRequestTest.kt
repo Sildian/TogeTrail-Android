@@ -18,7 +18,10 @@ class FindUserLastLocationDataRequestTest: BaseUserLocationDataRequestTest() {
         runBlocking {
             val dataRequest = FindUserLastLocationDataRequest(
                 dispatcher,
-                FakeUserLocationFinder(locationProviderClient)
+                FakeUserLocationFinder(
+                    context,
+                    locationProviderClient
+                )
             )
             val location = try {
                 dataRequest.execute()
@@ -39,7 +42,10 @@ class FindUserLastLocationDataRequestTest: BaseUserLocationDataRequestTest() {
             locationManagerShadow.setLocationEnabled(false)
             val dataRequest = FindUserLastLocationDataRequest(
                 dispatcher,
-                FakeUserLocationFinder(locationProviderClient)
+                FakeUserLocationFinder(
+                    context,
+                    locationProviderClient
+                )
             )
             val location = try {
                 dataRequest.execute()
@@ -61,7 +67,10 @@ class FindUserLastLocationDataRequestTest: BaseUserLocationDataRequestTest() {
             UserLocationSimulator.lastLocation = null
             val dataRequest = FindUserLastLocationDataRequest(
                 dispatcher,
-                FakeUserLocationFinder(locationProviderClient)
+                FakeUserLocationFinder(
+                    context,
+                    locationProviderClient
+                )
             )
             val location = try {
                 dataRequest.execute()
@@ -87,7 +96,10 @@ class FindUserLastLocationDataRequestTest: BaseUserLocationDataRequestTest() {
             }
             val dataRequest = FindUserLastLocationDataRequest(
                 dispatcher,
-                FakeUserLocationFinder(locationProviderClient)
+                FakeUserLocationFinder(
+                    context,
+                    locationProviderClient
+                )
             )
             dataRequest.execute()
             assertEquals(44.713393, dataRequest.data?.latitude!!, 0.0)

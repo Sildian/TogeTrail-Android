@@ -40,7 +40,10 @@ class TrailRecordExecutorTest: BaseUserLocationDataRequestTest() {
         runBlocking {
             val trailRecordExecutor = TrailRecordExecutor(
                 dispatcher,
-                FakeUserLocationContinuousFinder(locationProviderClient)
+                FakeUserLocationContinuousFinder(
+                    context,
+                    locationProviderClient
+                )
             )
             trailRecordExecutor.start(1)
             trailRecordExecutor.stop()
@@ -59,7 +62,10 @@ class TrailRecordExecutorTest: BaseUserLocationDataRequestTest() {
             locationManagerShadow.setLocationEnabled(false)
             val trailRecordExecutor = TrailRecordExecutor(
                 dispatcher,
-                FakeUserLocationContinuousFinder(locationProviderClient)
+                FakeUserLocationContinuousFinder(
+                    context,
+                    locationProviderClient
+                )
             )
             trailRecordExecutor.start(1)
             trailRecordExecutor.stop()
@@ -79,7 +85,10 @@ class TrailRecordExecutorTest: BaseUserLocationDataRequestTest() {
             UserLocationSimulator.lastLocation = null
             val trailRecordExecutor = TrailRecordExecutor(
                 dispatcher,
-                FakeUserLocationContinuousFinder(locationProviderClient)
+                FakeUserLocationContinuousFinder(
+                    context,
+                    locationProviderClient
+                )
             )
             trailRecordExecutor.start(1)
             trailRecordExecutor.stop()
@@ -101,7 +110,10 @@ class TrailRecordExecutorTest: BaseUserLocationDataRequestTest() {
 
             val trailRecordExecutor = TrailRecordExecutor(
                 dispatcher,
-                FakeUserLocationContinuousFinder(locationProviderClient)
+                FakeUserLocationContinuousFinder(
+                    context,
+                    locationProviderClient
+                )
             )
 
             applicationShadow.grantPermissions(Manifest.permission.ACCESS_FINE_LOCATION)

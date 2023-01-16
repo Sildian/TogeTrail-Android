@@ -1,6 +1,7 @@
 package com.sildian.apps.togetrail.userLocationTestSupport
 
 import android.Manifest
+import android.content.Context
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
@@ -13,16 +14,19 @@ import com.sildian.apps.togetrail.common.utils.permissionsHelpers.PermissionsHel
  * Fake UserLocationContinuousFinder for tests
  ************************************************************************************************/
 
-class FakeUserLocationContinuousFinder(private val locationProviderClient: FusedLocationProviderClient)
+class FakeUserLocationContinuousFinder(
+    private val context: Context,
+    private val locationProviderClient: FusedLocationProviderClient
+    )
     : UserLocationContinuousFinder
 {
 
     override fun startLocationUpdates(intervalMillis: Long, callback: LocationCallback) {
         println("FAKE UserLocationContinuousFinder : Start location updates")
         when {
-            !(PermissionsHelper.isPermissionGranted(locationProviderClient.applicationContext, Manifest.permission.ACCESS_FINE_LOCATION)) ->
+            !(PermissionsHelper.isPermissionGranted(context, Manifest.permission.ACCESS_FINE_LOCATION)) ->
                 throw UserLocationException(UserLocationException.ErrorCode.ACCESS_NOT_GRANTED)
-            !DeviceUtilities.isGpsAvailable(locationProviderClient.applicationContext) ->
+            !DeviceUtilities.isGpsAvailable(context) ->
                 throw UserLocationException(UserLocationException.ErrorCode.GPS_UNAVAILABLE)
             else ->
                 callback.onLocationResult(LocationResult.create(listOf(UserLocationSimulator.lastLocation)))

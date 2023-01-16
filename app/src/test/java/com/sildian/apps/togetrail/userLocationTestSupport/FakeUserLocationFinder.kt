@@ -1,6 +1,7 @@
 package com.sildian.apps.togetrail.userLocationTestSupport
 
 import android.Manifest
+import android.content.Context
 import android.location.Location
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.sildian.apps.togetrail.common.utils.DeviceUtilities
@@ -12,14 +13,17 @@ import com.sildian.apps.togetrail.common.utils.permissionsHelpers.PermissionsHel
  * Fake UserLocationFinder for tests
  ************************************************************************************************/
 
-class FakeUserLocationFinder(private val locationProviderClient: FusedLocationProviderClient) : UserLocationFinder {
+class FakeUserLocationFinder(
+    private val context: Context,
+    private val locationProviderClient: FusedLocationProviderClient
+    ) : UserLocationFinder {
 
     override suspend fun findLastLocation(): Location {
         println("FAKE UserLocationHelper : Get last user location")
         when {
-            !(PermissionsHelper.isPermissionGranted(locationProviderClient.applicationContext, Manifest.permission.ACCESS_FINE_LOCATION)) ->
+            !(PermissionsHelper.isPermissionGranted(context, Manifest.permission.ACCESS_FINE_LOCATION)) ->
                 throw UserLocationException(UserLocationException.ErrorCode.ACCESS_NOT_GRANTED)
-            !DeviceUtilities.isGpsAvailable(locationProviderClient.applicationContext) ->
+            !DeviceUtilities.isGpsAvailable(context) ->
                 throw UserLocationException(UserLocationException.ErrorCode.GPS_UNAVAILABLE)
             UserLocationSimulator.lastLocation != null ->
                 return UserLocationSimulator.lastLocation!!

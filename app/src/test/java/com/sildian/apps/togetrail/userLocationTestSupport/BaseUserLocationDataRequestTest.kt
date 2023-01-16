@@ -12,6 +12,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows
+import org.robolectric.annotation.Config
 import org.robolectric.shadows.ShadowApplication
 import org.robolectric.shadows.ShadowLocationManager
 
@@ -21,6 +22,7 @@ import org.robolectric.shadows.ShadowLocationManager
 
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
+@Config(maxSdk = 33)
 abstract class BaseUserLocationDataRequestTest: BaseDataRequestTest() {
 
     protected lateinit var context: Context
