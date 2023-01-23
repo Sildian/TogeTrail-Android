@@ -13,12 +13,14 @@ import kotlin.math.sin
 object GeoUtilities {
 
     /**
+     * @deprecated : Use [com.sildian.apps.togetrail.common.core.geo.Position].distanceTo
      * Gets the distance between two geographical points (in meters)
      * @param pointA : the first point
      * @param pointB : the second point
      * @return the distance (in meters)
      */
 
+    @Deprecated(message = "Use [Position.distanceTo]")
     @JvmStatic
     fun getDistance(pointA:LatLng, pointB:LatLng):Int{
         val earthRadius=6371.0
