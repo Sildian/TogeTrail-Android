@@ -5,10 +5,12 @@ import kotlinx.android.parcel.Parcelize
 
 /*************************************************************************************************
  * Country
+ * @deprecated : Use [com.sildian.apps.togetrail.common.core.location.Location.Country]
  * @param code : the code is universal, no matter what language the device is using
  * @param name : the name depends on the language of the device
  ************************************************************************************************/
 
+@Deprecated("Use [common.core.location.Location.Country]")
 @Parcelize
 data class Country (
     val code:String="",

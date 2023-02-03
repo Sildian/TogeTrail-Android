@@ -8,8 +8,10 @@ import java.util.*
 
 /*************************************************************************************************
  * Provides with functions allowing to build a Location
+ * @deprecated : Use [com.sildian.apps.togetrail.common.core.location.toLocation] instead
  ************************************************************************************************/
 
+@Deprecated("Use [common.core.location.toLocation]")
 class LocationBuilder {
 
     /*******************Address components types (matching Google Places API)********************/

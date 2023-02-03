@@ -5,8 +5,10 @@ import kotlinx.android.parcel.Parcelize
 
 /*************************************************************************************************
  * Location
+ * @deprecated : Use [com.sildian.apps.togetrail.common.core.location]
  ************************************************************************************************/
 
+@Deprecated("Use [common.core.location.Location]")
 @Parcelize
 data class Location (
     val country:Country?=null,
