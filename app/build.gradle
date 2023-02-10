@@ -127,6 +127,9 @@ dependencies {
     //MP Android chart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
+    //Icu
+    implementation 'com.ibm.icu:icu4j:53.1'
+
     //Leak canary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 }

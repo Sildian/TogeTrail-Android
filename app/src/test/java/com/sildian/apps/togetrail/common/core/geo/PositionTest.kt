@@ -49,6 +49,19 @@ class PositionTest {
     }
 
     @Test
+    fun `GIVEN position WHEN invoking toString THEN result is lat lng`() {
+        //Given
+        val position = Random.nextPosition()
+
+        //When
+        val display = position.toString()
+
+        //Then
+        val expectedResult = "${position.latitude} ; ${position.longitude}"
+        assertEquals(expectedResult, display)
+    }
+
+    @Test
     fun `GIVEN two positions WHEN invoking distanceTo THEN result is distance between the two positions`() {
         //Given
         val positionA = Random.nextPosition(latitude = 40.0, longitude = -5.0)

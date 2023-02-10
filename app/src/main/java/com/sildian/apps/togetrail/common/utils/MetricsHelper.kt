@@ -28,6 +28,7 @@ object MetricsHelper {
 
     /**
      * Displays a distance with the appropriated metrics
+     * @deprecated : Use [com.sildian.apps.togetrail.common.core.geo.Distance.toString]
      * @param context : the context
      * @param distance : the distance (in meters)
      * @param showSuffix : true if a suffix should be displayed
@@ -35,6 +36,7 @@ object MetricsHelper {
      * @return a string containing the distance to display
      */
 
+    @Deprecated("Use [Distance.toString]")
     @JvmStatic
     fun displayDistance(context:Context, distance:Int?, showSuffix:Boolean, suffixBottom:Boolean):String {
         val metric = context.resources.getString(R.string.metric_kilometer)
@@ -54,6 +56,7 @@ object MetricsHelper {
 
     /**
      * Displays an altitude with the appropriated metrics
+     * @deprecated : Use [com.sildian.apps.togetrail.common.core.geo.Altitude.toString]
      * @param context : the context
      * @param altitude : the altitude (in meters)
      * @param showSuffix : true if a suffix should be displayed
@@ -62,6 +65,7 @@ object MetricsHelper {
      * @return a string containing the altitude to display
      */
 
+    @Deprecated("Use [Altitude.toString]")
     @JvmStatic
     private fun displayAltitude(context:Context, altitude:Int?, showSuffix:Boolean, suffix:String, suffixBottom: Boolean):String{
         val metric=context.resources.getString(R.string.metric_meter)
@@ -82,6 +86,7 @@ object MetricsHelper {
 
     /**
      * Displays an ascent with the appropriated metrics
+     * @deprecated : Use [com.sildian.apps.togetrail.common.core.geo.Derivation.toString]
      * @param context : the context
      * @param altitude : the altitude (in meters)
      * @param showSuffix : true if a suffix should be displayed
@@ -89,6 +94,7 @@ object MetricsHelper {
      * @return a string containing the ascent to display
      */
 
+    @Deprecated("Use [Derivation.toString]")
     @JvmStatic
     fun displayAscent(context:Context, altitude: Int?, showSuffix:Boolean, suffixBottom: Boolean):String{
         val suffix=context.resources.getString(R.string.label_trail_ascent_short)
@@ -103,6 +109,7 @@ object MetricsHelper {
 
     /**
      * Displays an descent with the appropriated metrics
+     * @deprecated : Use [com.sildian.apps.togetrail.common.core.geo.Derivation.toString]
      * @param context : the context
      * @param altitude : the altitude (in meters)
      * @param showSuffix : true if a suffix should be displayed
@@ -110,6 +117,7 @@ object MetricsHelper {
      * @return a string containing the descent to display
      */
 
+    @Deprecated("Use [Derivation.toString]")
     @JvmStatic
     fun displayDescent(context:Context, altitude: Int?, showSuffix:Boolean, suffixBottom: Boolean):String{
         val suffix=context.resources.getString(R.string.label_trail_descent_short)
@@ -124,6 +132,7 @@ object MetricsHelper {
 
     /**
      * Displays a max elevation with the appropriated metrics
+     * @deprecated : Use [com.sildian.apps.togetrail.common.core.geo.Altitude.toString]
      * @param context : the context
      * @param altitude : the altitude (in meters)
      * @param showSuffix : true if a suffix should be displayed
@@ -131,6 +140,7 @@ object MetricsHelper {
      * @return a string containing the max elevation to display
      */
 
+    @Deprecated("Use [Altitude.toString]")
     @JvmStatic
     fun displayMaxElevation(context:Context, altitude: Int?, showSuffix:Boolean, suffixBottom: Boolean):String{
         val suffix=context.resources.getString(R.string.label_trail_max_elevation_short)
@@ -145,6 +155,7 @@ object MetricsHelper {
 
     /**
      * Displays a min elevation with the appropriated metrics
+     * @deprecated : Use [com.sildian.apps.togetrail.common.core.geo.Altitude.toString]
      * @param context : the context
      * @param altitude : the altitude (in meters)
      * @param showSuffix : true if a suffix should be displayed
@@ -152,6 +163,7 @@ object MetricsHelper {
      * @return a string containing the min elevation to display
      */
 
+    @Deprecated("Use [Altitude.toString]")
     @JvmStatic
     fun displayMinElevation(context:Context, altitude: Int?, showSuffix:Boolean, suffixBottom: Boolean):String{
         val suffix=context.resources.getString(R.string.label_trail_min_elevation_short)
@@ -166,6 +178,7 @@ object MetricsHelper {
 
     /**
      * Displays an elevation with the appropriated metrics
+     * @deprecated : Use [com.sildian.apps.togetrail.common.core.geo.Altitude.toString]
      * @param context : the context
      * @param altitude : the altitude (in meters)
      * @param showSuffix : true if a suffix should be displayed
@@ -173,6 +186,7 @@ object MetricsHelper {
      * @return a string containing the elevation to display
      */
 
+    @Deprecated("Use [Altitude.toString]")
     @JvmStatic
     fun displayElevation(context:Context, altitude: Int?, showSuffix:Boolean, suffixBottom: Boolean):String{
         val suffix=context.resources.getString(R.string.label_trail_poi_elevation)

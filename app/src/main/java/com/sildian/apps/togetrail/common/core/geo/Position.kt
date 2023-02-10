@@ -27,6 +27,9 @@ data class Position(
             )
         }
     }
+
+    override fun toString(): String =
+        "$latitude ; $longitude"
 }
 
 fun Position.distanceTo(position: Position): Distance {

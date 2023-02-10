@@ -2,9 +2,23 @@ package com.sildian.apps.togetrail.common.core.geo
 
 import org.junit.Assert.*
 import org.junit.Test
+import java.text.NumberFormat
 import kotlin.random.Random
 
 class DerivationTest {
+
+    @Test
+    fun `GIVEN derivation WHEN invoking toString THEN result is formatted string with meters`() {
+        //Given
+        val derivation = Random.nextDerivation()
+
+        //When
+        val display = derivation.toString()
+
+        //Then
+        val expectedResult = NumberFormat.getInstance().format(derivation.meters) + " m"
+        assertEquals(expectedResult, display)
+    }
 
     @Test
     fun `GIVEN two derivations WHEN invoking plus operator THEN result is sum of the two derivations`() {

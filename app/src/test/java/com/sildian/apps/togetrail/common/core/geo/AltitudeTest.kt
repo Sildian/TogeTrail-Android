@@ -2,9 +2,23 @@ package com.sildian.apps.togetrail.common.core.geo
 
 import org.junit.Assert.*
 import org.junit.Test
+import java.text.NumberFormat
 import kotlin.random.Random
 
 class AltitudeTest {
+
+    @Test
+    fun `GIVEN altitude WHEN invoking toString THEN result is formatted string with meters`() {
+        //Given
+        val altitude = Random.nextAltitude()
+
+        //When
+        val display = altitude.toString()
+
+        //Then
+        val expectedResult = NumberFormat.getInstance().format(altitude.meters) + " m"
+        assertEquals(expectedResult, display)
+    }
 
     @Test
     fun `GIVEN altitudes A and B WHEN invoking derivationTo THEN result is derivation from A to B`() {
