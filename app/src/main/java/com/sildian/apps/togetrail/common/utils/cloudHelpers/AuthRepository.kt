@@ -15,6 +15,7 @@ import javax.inject.Inject
 
 /***************************************Definition***********************************************/
 
+@Deprecated("Use new [AuthRepository]")
 interface AuthRepository {
 
     /**
@@ -76,6 +77,7 @@ object AuthRepositoryModule {
 
 /*********************************Real implementation*******************************************/
 
+@Deprecated("Use new [AuthRepositoryImpl]")
 @ViewModelScoped
 class RealAuthRepository @Inject constructor(): AuthRepository {
 

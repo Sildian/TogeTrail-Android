@@ -11,6 +11,7 @@ import java.util.*
  * Provides with Firebase queries allowing to store files within cloud
  ************************************************************************************************/
 
+@Deprecated("Use [StorageService]")
 object StorageFirebaseQueries {
 
     /**

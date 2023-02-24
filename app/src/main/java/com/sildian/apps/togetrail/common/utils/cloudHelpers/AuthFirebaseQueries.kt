@@ -10,6 +10,7 @@ import com.google.firebase.auth.UserProfileChangeRequest
  * Provides with Firebase queries allowing to manage user authentication
  ************************************************************************************************/
 
+@Deprecated("Use [AuthService]")
 object AuthFirebaseQueries {
 
     /**

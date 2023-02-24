@@ -14,6 +14,7 @@ import javax.inject.Inject
 
 /***************************************Definition***********************************************/
 
+@Deprecated("User new [StorageRepository]")
 interface StorageRepository {
 
     /**
@@ -48,6 +49,7 @@ object StorageRepositoryModule {
 
 /*********************************Real implementation*******************************************/
 
+@Deprecated("Use new [StorageRepositoryImpl]")
 @ViewModelScoped
 class RealStorageRepository @Inject constructor(): StorageRepository {
 
