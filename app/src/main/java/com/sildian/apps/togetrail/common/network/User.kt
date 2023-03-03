@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.repositories.auth
+package com.sildian.apps.togetrail.common.network
 
 import android.os.Parcelable
 import com.google.firebase.auth.FirebaseUser
