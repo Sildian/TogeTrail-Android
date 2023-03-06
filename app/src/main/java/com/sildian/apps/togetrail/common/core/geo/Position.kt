@@ -1,12 +1,10 @@
 package com.sildian.apps.togetrail.common.core.geo
 
 import android.os.Parcelable
+import com.firebase.geofire.GeoFireUtils
+import com.firebase.geofire.GeoLocation
 import com.google.android.gms.maps.model.LatLng
-import com.google.firebase.firestore.GeoPoint
 import kotlinx.android.parcel.Parcelize
-import kotlin.math.acos
-import kotlin.math.cos
-import kotlin.math.sin
 
 @Parcelize
 data class Position(
@@ -32,14 +30,13 @@ data class Position(
         "$latitude ; $longitude"
 }
 
-fun Position.distanceTo(position: Position): Distance {
-    val earthRadius = 6371.0
-    val arg1: Double = sin(Math.toRadians(latitude)) * sin(Math.toRadians(position.latitude))
-    val arg2: Double = cos(Math.toRadians(latitude)) * cos(Math.toRadians(position.latitude)) *
-            cos(Math.toRadians(position.longitude - longitude))
-    val distanceInKMeters: Double = earthRadius * acos(arg1 + arg2)
-    return Distance(meters = (distanceInKMeters * 1000).toInt())
-}
+fun Position.distanceTo(position: Position): Distance =
+    Distance(
+        meters = GeoFireUtils.getDistanceBetween(
+            this.toGeoLocation(),
+            position.toGeoLocation()
+        ).toInt()
+    )
 
 fun Position.derivationTo(position: Position): Derivation =
     altitude.derivationTo(altitude = position.altitude)
@@ -47,15 +44,15 @@ fun Position.derivationTo(position: Position): Derivation =
 fun Position.derivationFrom(position: Position): Derivation =
     altitude.derivationFrom(altitude = position.altitude)
 
-fun GeoPoint.toPosition(): Position =
+fun GeoLocation.toPosition(): Position =
     Position(
         latitude = latitude,
         longitude = longitude,
         altitude = Altitude(meters = 0),
     )
 
-fun Position.toGePoint(): GeoPoint =
-    GeoPoint(latitude, longitude)
+fun Position.toGeoLocation(): GeoLocation =
+    GeoLocation(latitude, longitude)
 
 fun LatLng.toPosition(): Position =
     Position(

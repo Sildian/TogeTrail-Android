@@ -1,7 +1,8 @@
 package com.sildian.apps.togetrail.common.core.geo
 
+import com.firebase.geofire.GeoFireUtils
+import com.firebase.geofire.GeoLocation
 import com.google.android.gms.maps.model.LatLng
-import com.google.firebase.firestore.GeoPoint
 import org.junit.Assert.*
 import org.junit.Test
 import kotlin.random.Random
@@ -64,14 +65,18 @@ class PositionTest {
     @Test
     fun `GIVEN two positions WHEN invoking distanceTo THEN result is distance between the two positions`() {
         //Given
-        val positionA = Random.nextPosition(latitude = 40.0, longitude = -5.0)
-        val positionB = Random.nextPosition(latitude = 41.261388, longitude = -3.3125)
+        val positionA = Random.nextPosition()
+        val positionB = Random.nextPosition()
 
         //When
         val distance = positionA.distanceTo(positionB)
 
         //Then
-        val expectedResult = Distance(meters = 199872)
+        val geoLocationA = GeoLocation(positionA.latitude, positionA.longitude)
+        val geoLocationB = GeoLocation(positionB.latitude, positionB.longitude)
+        val expectedResult = Distance(
+            meters = GeoFireUtils.getDistanceBetween(geoLocationA, geoLocationB).toInt()
+        )
         assertEquals(expectedResult, distance)
     }
 
@@ -104,14 +109,14 @@ class PositionTest {
     }
 
     @Test
-    fun `GIVEN geoPoint WHEN mapping toPosition THEN result is position with correct lat lng`() {
+    fun `GIVEN geoLocation WHEN mapping toPosition THEN result is position with correct lat lng`() {
         //Given
         val latitude = Random.nextLatitude()
         val longitude = Random.nextLongitude()
-        val geoPoint = GeoPoint(latitude, longitude)
+        val geoLocation = GeoLocation(latitude, longitude)
 
         //When
-        val position = geoPoint.toPosition()
+        val position = geoLocation.toPosition()
 
         //Then
         val expectedResult = Position(
@@ -123,7 +128,7 @@ class PositionTest {
     }
 
     @Test
-    fun `GIVEN position WHEN mapping toGeoPoint THEN result is geoPoint with correct lat lng`() {
+    fun `GIVEN position WHEN mapping toGeoLocation THEN result is geoLocation with correct lat lng`() {
         //Given
         val latitude = Random.nextLatitude()
         val longitude = Random.nextLongitude()
@@ -134,11 +139,11 @@ class PositionTest {
         )
 
         //When
-        val geoPoint = position.toGePoint()
+        val geoLocation = position.toGeoLocation()
 
         //Then
-        val expectedResult = GeoPoint(latitude, longitude)
-        assertEquals(expectedResult, geoPoint)
+        val expectedResult = GeoLocation(latitude, longitude)
+        assertEquals(expectedResult, geoLocation)
     }
 
     @Test
