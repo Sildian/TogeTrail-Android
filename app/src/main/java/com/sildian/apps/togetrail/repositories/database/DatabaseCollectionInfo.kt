@@ -3,9 +3,15 @@ package com.sildian.apps.togetrail.repositories.database
 sealed interface DatabaseCollectionInfo {
     val collectionName: String
 
-    sealed class Hiker : DatabaseCollectionInfo {
+    sealed class HikerCollection : DatabaseCollectionInfo {
         override val collectionName: String = "hiker"
 
-        object Main : Hiker()
+        object Main : HikerCollection()
+    }
+
+    sealed class EventCollection : DatabaseCollectionInfo {
+        override val collectionName: String = "event"
+
+        object Main : EventCollection()
     }
 }

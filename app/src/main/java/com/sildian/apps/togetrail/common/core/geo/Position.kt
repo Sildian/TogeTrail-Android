@@ -54,6 +54,9 @@ fun GeoLocation.toPosition(): Position =
 fun Position.toGeoLocation(): GeoLocation =
     GeoLocation(latitude, longitude)
 
+fun Position.toGeoHash(): String =
+    GeoFireUtils.getGeoHashForLocation(this.toGeoLocation())
+
 fun LatLng.toPosition(): Position =
     Position(
         latitude = latitude,

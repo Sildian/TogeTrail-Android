@@ -10,6 +10,7 @@ import kotlin.math.sin
  * Provides with some functions related to geographical data
  ************************************************************************************************/
 
+@Deprecated("Not used any longer")
 object GeoUtilities {
 
     /**
@@ -32,6 +33,7 @@ object GeoUtilities {
     }
 
     /**
+     * @deprecated("The queries using geo points will be improved using radius instead of bounds")
      * Gets bounds around the given origin point
      * Removes 0.5 from latitude and longitude to calculate southWest point
      * Adds 0.5 to latitude and longitude to calculate northEast point
@@ -39,6 +41,7 @@ object GeoUtilities {
      * @return a bound
      */
 
+    @Deprecated("The queries using geo points will be improved using radius instead of bounds")
     @JvmStatic
     fun getBoundsAroundOriginPoint(originPoint:LatLng):LatLngBounds{
         val westLng=if(originPoint.longitude<=-179.5) -180.0 else originPoint.longitude-0.5

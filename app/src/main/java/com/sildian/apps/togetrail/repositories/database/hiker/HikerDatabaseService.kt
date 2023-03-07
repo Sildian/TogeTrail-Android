@@ -12,7 +12,7 @@ class HikerDatabaseService @Inject constructor(
     firebaseFirestore: FirebaseFirestore,
 ) {
 
-    private val collectionInfo = DatabaseCollectionInfo.Hiker.Main
+    private val collectionInfo = DatabaseCollectionInfo.HikerCollection.Main
     private val collection = firebaseFirestore.collection(collectionInfo.collectionName)
 
     fun getHiker(id:String): DocumentReference =
@@ -24,7 +24,6 @@ class HikerDatabaseService @Inject constructor(
             .whereGreaterThanOrEqualTo("name", text)
             .whereLessThanOrEqualTo("name", "$text\uf8ff")
             .orderBy("name")
-            .limit(20)
 
     fun createOrUpdateHiker(hiker: Hiker): Task<Void> =
         collection.document(hiker.id).set(hiker)
