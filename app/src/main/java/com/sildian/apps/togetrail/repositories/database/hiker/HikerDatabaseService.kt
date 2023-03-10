@@ -25,7 +25,7 @@ class HikerDatabaseService @Inject constructor(
             .whereLessThanOrEqualTo("name", "$text\uf8ff")
             .orderBy("name")
 
-    fun createOrUpdateHiker(hiker: Hiker): Task<Void> =
+    fun addOrUpdateHiker(hiker: Hiker): Task<Void> =
         collection.document(hiker.id).set(hiker)
 
     fun deleteHiker(hiker: Hiker) : Task<Void> =

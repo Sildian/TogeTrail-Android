@@ -14,4 +14,10 @@ sealed interface DatabaseCollectionInfo {
 
         object Main : EventCollection()
     }
+
+    sealed class TrailCollection : DatabaseCollectionInfo {
+        override val collectionName: String = "trail"
+
+        object Main : TrailCollection()
+    }
 }

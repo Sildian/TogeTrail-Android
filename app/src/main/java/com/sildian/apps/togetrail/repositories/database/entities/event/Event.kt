@@ -20,7 +20,7 @@ data class Event(
     val nbHikersRegistered: Int = 0,
 ) {
 
-    class Author(
+    data class Author(
         val id: String? = null,
         val name: String? = null,
         val photoUrl: String? = null,

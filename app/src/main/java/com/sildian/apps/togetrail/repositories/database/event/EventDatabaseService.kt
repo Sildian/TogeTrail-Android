@@ -63,7 +63,7 @@ class EventDatabaseService @Inject constructor(
                 .orderBy("startDate", Query.Direction.ASCENDING)
         }
 
-    fun createEvent(event: Event): Task<DocumentReference> =
+    fun addEvent(event: Event): Task<DocumentReference> =
         collection.add(event)
 
     fun updateEvent(event: Event): Task<Void>? =
