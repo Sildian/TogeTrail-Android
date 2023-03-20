@@ -3,7 +3,7 @@ package com.sildian.apps.togetrail.common.utils
 import org.junit.Assert.*
 import org.junit.Test
 
-class TextUtilitiesTest {
+class StringUtilsTest {
 
     @Test
     fun given_emptyEmail_when_isValidEmail_then_returnFalse() {

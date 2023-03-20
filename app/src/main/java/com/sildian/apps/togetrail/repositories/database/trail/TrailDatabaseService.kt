@@ -13,8 +13,8 @@ class TrailDatabaseService @Inject constructor(
     firebaseFirestore: FirebaseFirestore,
 ) {
 
-    private val databaseCollectionInfo = DatabaseCollectionInfo.TrailCollection.Main
-    private val collection = firebaseFirestore.collection(databaseCollectionInfo.collectionName)
+    private val collectionInfo = DatabaseCollectionInfo.TrailCollection.Main
+    private val collection = firebaseFirestore.collection(collectionInfo.collectionName)
 
     fun getTrail(id: String): DocumentReference =
         collection.document(id)

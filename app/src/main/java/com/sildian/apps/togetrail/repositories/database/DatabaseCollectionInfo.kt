@@ -19,5 +19,17 @@ sealed interface DatabaseCollectionInfo {
         override val collectionName: String = "trail"
 
         object Main : TrailCollection()
+
+        sealed class SubCollections : TrailCollection() {
+            abstract val subCollectionName: String
+
+            object TrailPointSubCollection : SubCollections() {
+                override val subCollectionName: String = "trailPoint"
+            }
+
+            object TrailPointOfInterestSubCollection : SubCollections() {
+                override val subCollectionName: String = "trailPointOfInterest"
+            }
+        }
     }
 }
