@@ -27,6 +27,7 @@ data class Trail(
 ) {
 
     enum class Level(val level: Int) {
+        Unknown(level = 0),
         Easy(level = 1),
         Medium(level = 2),
         Hard(level = 3),

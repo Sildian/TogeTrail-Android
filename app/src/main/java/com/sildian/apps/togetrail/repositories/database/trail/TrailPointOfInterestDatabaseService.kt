@@ -54,12 +54,4 @@ class TrailPointOfInterestDatabaseService @Inject constructor(
         collection(trailId = trailId)
             .document(trailPointOfInterest.number.toString())
             .set(trailPointOfInterest)
-
-    fun deleteTrailPointOfInterest(
-        trailId: String,
-        trailPointOfInterest: TrailPointOfInterest
-    ): Task<Void> =
-        collection(trailId = trailId)
-            .document(trailPointOfInterest.number.toString())
-            .delete()
 }
