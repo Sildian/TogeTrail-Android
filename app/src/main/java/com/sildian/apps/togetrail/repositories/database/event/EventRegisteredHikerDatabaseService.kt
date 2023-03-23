@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.event.data.source
+package com.sildian.apps.togetrail.repositories.database.event
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore

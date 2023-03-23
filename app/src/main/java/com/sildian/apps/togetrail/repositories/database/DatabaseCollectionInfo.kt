@@ -6,6 +6,21 @@ sealed interface DatabaseCollectionInfo {
     sealed class HikerCollection : DatabaseCollectionInfo {
         override val collectionName: String = "hiker"
         object Main : HikerCollection()
+        sealed class SubCollections : HikerCollection() {
+            abstract val subCollectionName: String
+            object HikerHistoryItemSubCollection : SubCollections() {
+                override val subCollectionName: String = "hikerHistoryItem"
+            }
+            object AttendedEventSubCollection : SubCollections() {
+                override val subCollectionName: String = "attendedEvent"
+            }
+            object LikedTrailSubCollection : SubCollections() {
+                override val subCollectionName: String = "likedTrail"
+            }
+            object MarkedTrailSubCollection : SubCollections() {
+                override val subCollectionName: String = "markedTrail"
+            }
+        }
     }
 
     sealed class EventCollection : DatabaseCollectionInfo {
