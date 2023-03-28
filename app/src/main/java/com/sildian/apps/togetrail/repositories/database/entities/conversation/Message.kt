@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.repositories.database.entities.event
+package com.sildian.apps.togetrail.repositories.database.entities.conversation
 
 import java.util.*
 

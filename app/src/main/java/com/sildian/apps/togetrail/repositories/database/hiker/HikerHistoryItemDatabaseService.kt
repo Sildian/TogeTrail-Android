@@ -17,7 +17,7 @@ class HikerHistoryItemDatabaseService @Inject constructor(
         DatabaseCollectionInfo
             .HikerCollection
             .SubCollections
-            .HikerHistoryItemSubCollection
+            .HistoryItemSubCollection
 
     private fun collection(hikerId: String) =
         firebaseFirestore
