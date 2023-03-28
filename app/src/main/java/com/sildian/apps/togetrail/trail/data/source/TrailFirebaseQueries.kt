@@ -11,6 +11,7 @@ import com.sildian.apps.togetrail.trail.data.models.Trail
  * Provides with Firebase queries on Trail
  ************************************************************************************************/
 
+@Deprecated("Use new DatabaseServices")
 object TrailFirebaseQueries {
 
     /*********************************Collection references**************************************/

@@ -50,8 +50,10 @@ class TrailPointOfInterestDatabaseService @Inject constructor(
     fun updateTrailPointOfInterest(
         trailId: String,
         trailPointOfInterest: TrailPointOfInterest
-    ): Task<Void> =
-        collection(trailId = trailId)
-            .document(trailPointOfInterest.number.toString())
-            .set(trailPointOfInterest)
+    ): Task<Void>? =
+        trailPointOfInterest.number?.let { poiNumber ->
+            collection(trailId = trailId)
+                .document(poiNumber.toString())
+                .set(trailPointOfInterest)
+        }
 }

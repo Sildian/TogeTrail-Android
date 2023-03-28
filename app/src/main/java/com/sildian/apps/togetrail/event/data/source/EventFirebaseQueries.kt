@@ -15,6 +15,7 @@ import java.util.*
  * Provides with Firebase queries on Event
  ************************************************************************************************/
 
+@Deprecated("Use new DatabaseServices")
 object EventFirebaseQueries {
 
     /*********************************Collection references**************************************/

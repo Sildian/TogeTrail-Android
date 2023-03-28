@@ -16,6 +16,7 @@ import com.sildian.apps.togetrail.trail.data.models.Trail
  * Provides with Firebase queries on Hiker
  ************************************************************************************************/
 
+@Deprecated("Use new DatabaseServices")
 object HikerFirebaseQueries {
 
     /*********************************Collection references**************************************/
