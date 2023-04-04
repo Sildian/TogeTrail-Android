@@ -1,5 +1,6 @@
 package com.sildian.apps.togetrail.repositories.storage
 
+import com.sildian.apps.togetrail.common.network.storageOperation
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -10,14 +11,18 @@ class StorageRepositoryImpl @Inject constructor(
 ) : StorageRepository {
 
     override suspend fun uploadImage(imageLocalPath: String): String =
-        storageService.uploadImage(imageLocalPath = imageLocalPath)
-            .await()
-            .storage
-            .downloadUrl
-            .await()
-            .toString()
+        storageOperation {
+            storageService.uploadImage(imageLocalPath = imageLocalPath)
+                .await()
+                .storage
+                .downloadUrl
+                .await()
+                .toString()
+        }
 
     override suspend fun deleteImage(imageUrl: String) {
-        storageService.deleteImage(imageUrl = imageUrl).await()
+        storageOperation {
+            storageService.deleteImage(imageUrl = imageUrl).await()
+        }
     }
 }

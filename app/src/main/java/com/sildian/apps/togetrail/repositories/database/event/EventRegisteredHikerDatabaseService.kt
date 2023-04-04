@@ -26,10 +26,12 @@ class EventRegisteredHikerDatabaseService @Inject constructor(
     fun getRegisteredHikers(eventId: String): Query =
         collection(eventId = eventId)
 
-    fun updateRegisteredHiker(eventId: String, hiker: Hiker): Task<Void> =
-        collection(eventId = eventId)
-            .document(hiker.id)
-            .set(hiker)
+    fun updateRegisteredHiker(eventId: String, hiker: Hiker): Task<Void>? =
+        hiker.id?.let { hikerId ->
+            collection(eventId = eventId)
+                .document(hikerId)
+                .set(hiker)
+        }
 
     fun deleteRegisteredHiker(eventId: String, hikerId: String): Task<Void> =
         collection(eventId = eventId)
