@@ -5,7 +5,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.sildian.apps.togetrail.common.core.nextString
-import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import kotlin.random.Random
 
@@ -65,6 +65,6 @@ class AuthOperationTest {
         val result = authOperation { user }
 
         // Then
-        Assert.assertEquals(user, result)
+        assertEquals(user, result)
     }
 }

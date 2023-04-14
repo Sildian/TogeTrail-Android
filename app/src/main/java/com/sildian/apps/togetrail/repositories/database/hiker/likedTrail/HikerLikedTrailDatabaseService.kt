@@ -1,13 +1,13 @@
-package com.sildian.apps.togetrail.repositories.database.hiker
+package com.sildian.apps.togetrail.repositories.database.hiker.likedTrail
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.sildian.apps.togetrail.repositories.database.DatabaseCollectionInfo
-import com.sildian.apps.togetrail.repositories.database.entities.event.Event
+import com.sildian.apps.togetrail.repositories.database.entities.trail.Trail
 import javax.inject.Inject
 
-class HikerAttendedEventDatabaseService @Inject constructor(
+class HikerLikedTrailDatabaseService @Inject constructor(
     private val firebaseFirestore: FirebaseFirestore,
 ) {
 
@@ -15,7 +15,7 @@ class HikerAttendedEventDatabaseService @Inject constructor(
         DatabaseCollectionInfo
             .HikerCollection
             .SubCollections
-            .AttendedEventSubCollection
+            .LikedTrailSubCollection
 
     private fun collection(hikerId: String) =
         firebaseFirestore
@@ -23,20 +23,19 @@ class HikerAttendedEventDatabaseService @Inject constructor(
             .document(hikerId)
             .collection(collectionInfo.subCollectionName)
 
-    fun getAttendedEvents(hikerId: String): Query =
+    fun getLikedTrails(hikerId: String): Query =
         collection(hikerId = hikerId)
-            .whereEqualTo("canceled", false)
-            .orderBy("startDate", Query.Direction.ASCENDING)
+            .orderBy("creationDate", Query.Direction.DESCENDING)
 
-    fun updateAttendedEvent(hikerId: String, event: Event): Task<Void>? =
-        event.id?.let { eventId ->
+    fun updateLikedTrail(hikerId: String, trail: Trail): Task<Void>? =
+        trail.id?.let { trailId ->
             collection(hikerId = hikerId)
-                .document(eventId)
-                .set(event)
+                .document(trailId)
+                .set(trail)
         }
 
-    fun deleteAttendedEvent(hikerId: String, eventId: String): Task<Void> =
+    fun deleteLikedTrail(hikerId: String, trailId: String): Task<Void> =
         collection(hikerId = hikerId)
-            .document(eventId)
+            .document(trailId)
             .delete()
 }

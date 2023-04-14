@@ -2,7 +2,7 @@ package com.sildian.apps.togetrail.common.network
 
 import com.google.firebase.storage.StorageException as FirebaseStorageException
 import com.sildian.apps.togetrail.common.core.nextUrlString
-import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.mockito.Mockito
 import kotlin.random.Random
@@ -49,7 +49,7 @@ class StorageOperationTest {
         val result = storageOperation { url }
 
         // Then
-        Assert.assertEquals(url, result)
+        assertEquals(url, result)
     }
 
     private fun Random.nextFirebaseStorageException(errorCode: Int): FirebaseStorageException =

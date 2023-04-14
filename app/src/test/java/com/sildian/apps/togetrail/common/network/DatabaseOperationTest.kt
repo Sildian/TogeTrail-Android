@@ -2,7 +2,7 @@ package com.sildian.apps.togetrail.common.network
 
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.sildian.apps.togetrail.common.core.nextString
-import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.mockito.Mockito
 import kotlin.random.Random
@@ -71,7 +71,7 @@ class DatabaseOperationTest {
         val result = databaseOperation { data }
 
         // Then
-        Assert.assertEquals(data, result)
+        assertEquals(data, result)
     }
 
     private fun Random.nextFirebaseFirestoreException(

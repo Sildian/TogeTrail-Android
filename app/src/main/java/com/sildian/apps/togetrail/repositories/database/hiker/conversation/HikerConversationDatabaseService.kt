@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.repositories.database.hiker
+package com.sildian.apps.togetrail.repositories.database.hiker.conversation
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FieldPath
