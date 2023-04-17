@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.repositories.database.conversation
+package com.sildian.apps.togetrail.repositories.database.conversation.message
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore

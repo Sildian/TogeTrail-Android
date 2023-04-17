@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.repositories.database.conversation
+package com.sildian.apps.togetrail.repositories.database.conversation.main
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
@@ -23,6 +23,6 @@ class ConversationDatabaseService @Inject constructor(
     fun addConversation(conversation: Conversation): Task<DocumentReference> =
         collection.add(conversation)
 
-    fun deleteConversation(conversationId: String): Task<Void> =
-        collection.document(conversationId).delete()
+    fun deleteConversation(id: String): Task<Void> =
+        collection.document(id).delete()
 }
