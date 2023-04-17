@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.repositories.database.trail
+package com.sildian.apps.togetrail.repositories.database.trail.main
 
 import com.firebase.geofire.GeoFireUtils
 import com.firebase.geofire.GeoLocation

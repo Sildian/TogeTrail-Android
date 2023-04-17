@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.repositories.database.trail
+package com.sildian.apps.togetrail.repositories.database.trail.trailPoint
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
@@ -15,16 +15,13 @@ class TrailPointDatabaseService @Inject constructor(
 ) {
 
     private val collectionInfo =
-        DatabaseCollectionInfo
-            .TrailCollection
-            .SubCollections
-            .TrailPointSubCollection
+        DatabaseCollectionInfo.TrailCollection.SubCollections.TrailPointSubCollection
 
     private fun collection(trailId: String) =
         firebaseFirestore
             .collection(collectionInfo.collectionName)
             .document(trailId)
-            .collection(collectionInfo.subCollectionName)
+            .collection(DatabaseCollectionInfo.TrailCollection.SubCollections.TrailPointSubCollection.subCollectionName)
 
     fun getAllTrailPoints(trailId: String) =
         collection(trailId = trailId)

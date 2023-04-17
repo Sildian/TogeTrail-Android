@@ -16,6 +16,7 @@ import javax.inject.Inject
 
 /***************************************Definition***********************************************/
 
+@Deprecated("Replaced by new repositories")
 interface TrailRepository {
 
     /**
