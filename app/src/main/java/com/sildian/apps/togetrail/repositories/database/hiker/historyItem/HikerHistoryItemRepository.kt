@@ -8,13 +8,13 @@ interface HikerHistoryItemRepository {
         hikerId: String,
     ): List<HikerHistoryItem>
 
-    suspend fun getHistoryItemsForTypeAndDetailsId(
+    suspend fun getHistoryItemsForActionAndItemId(
         hikerId: String,
-        type: HikerHistoryItem.Type,
-        detailsId: String,
+        action: HikerHistoryItem.Action,
+        itemId: String,
     ): List<HikerHistoryItem>
 
-    suspend fun addHistoryItem(
+    suspend fun addOrUpdateHistoryItem(
         hikerId: String,
         historyItem: HikerHistoryItem,
     )

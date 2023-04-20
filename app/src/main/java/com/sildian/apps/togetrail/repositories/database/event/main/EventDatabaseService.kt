@@ -20,6 +20,9 @@ class EventDatabaseService @Inject constructor(
     fun getEvent(id: String): DocumentReference =
         collection.document(id)
 
+    fun getEvents(ids: List<String>): Query =
+        collection.whereIn(FieldPath.documentId(), ids)
+
     fun getNextEvents(): Query =
         collection
             .whereGreaterThan("startDate", Date())
@@ -28,7 +31,7 @@ class EventDatabaseService @Inject constructor(
 
     fun getEventsFromAuthor(authorId: String): Query =
         collection
-            .whereEqualTo(FieldPath.of("author", "id"), authorId)
+            .whereEqualTo("authorId", authorId)
             .whereGreaterThan("startDate", Date())
             .orderBy("startDate", Query.Direction.ASCENDING)
 

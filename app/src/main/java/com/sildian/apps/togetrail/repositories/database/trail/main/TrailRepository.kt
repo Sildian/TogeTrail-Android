@@ -6,6 +6,7 @@ import com.sildian.apps.togetrail.repositories.database.entities.trail.Trail
 
 interface TrailRepository {
     suspend fun getTrail(id: String): Trail
+    suspend fun getTrails(ids: List<String>): List<Trail>
     suspend fun getLastTrails(): List<Trail>
     suspend fun getTrailsFromAuthor(authorId: String): List<Trail>
     suspend fun getTrailsNearbyLocation(location: Location): List<Trail>

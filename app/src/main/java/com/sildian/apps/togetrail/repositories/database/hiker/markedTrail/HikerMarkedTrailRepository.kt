@@ -1,9 +1,9 @@
 package com.sildian.apps.togetrail.repositories.database.hiker.markedTrail
 
-import com.sildian.apps.togetrail.repositories.database.entities.trail.Trail
+import com.sildian.apps.togetrail.repositories.database.entities.hiker.HikerTrail
 
 interface HikerMarkedTrailRepository {
-    suspend fun getMarkedTrails(hikerId: String): List<Trail>
-    suspend fun updateMarkedTrail(hikerId: String, trail: Trail)
+    suspend fun getMarkedTrails(hikerId: String): List<HikerTrail>
+    suspend fun updateMarkedTrail(hikerId: String, trail: HikerTrail)
     suspend fun deleteMarkedTrail(hikerId: String, trailId: String)
 }

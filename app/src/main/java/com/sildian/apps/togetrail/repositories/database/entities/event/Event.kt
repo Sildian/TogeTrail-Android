@@ -16,13 +16,6 @@ data class Event(
     val description: String? = null,
     val isCanceled: Boolean = false,
     val creationDate: Date? = null,
-    val author: Author? = null,
+    val authorId: String? = null,
     val nbHikersRegistered: Int = 0,
-) {
-
-    data class Author(
-        val id: String? = null,
-        val name: String? = null,
-        val photoUrl: String? = null,
-    )
-}
+)

@@ -23,6 +23,15 @@ class TrailRepositoryImpl @Inject constructor(
                 ?: throw DatabaseException.UnknownException()
         }
 
+    override suspend fun getTrails(ids: List<String>): List<Trail> =
+        databaseOperation {
+            databaseService
+                .getTrails(ids = ids)
+                .get()
+                .await()
+                .toObjects(Trail::class.java)
+        }
+
     override suspend fun getLastTrails(): List<Trail> =
         databaseOperation {
             databaseService

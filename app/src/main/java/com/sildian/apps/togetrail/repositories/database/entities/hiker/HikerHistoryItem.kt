@@ -1,25 +1,37 @@
 package com.sildian.apps.togetrail.repositories.database.entities.hiker
 
-import com.sildian.apps.togetrail.common.core.location.Location
 import java.util.*
 
 data class HikerHistoryItem(
     val date: Date? = null,
-    val type: Type? = null,
-    val details: Details? = null,
+    val action: Action? = null,
+    val item: Item? = null,
 ) {
-    
-    enum class Type {
+
+    val id: String?
+        get() {
+            val itemTypeDescription = item?.type?.description ?: return null
+            val itemId = item.id ?: return null
+            val timeStamp = date?.time ?: return null
+            return itemTypeDescription + "_" + itemId + "_" + timeStamp
+        }
+
+    enum class Action {
         HIKER_REGISTERED,
         TRAIL_CREATED,
         EVENT_CREATED,
         EVENT_ATTENDED,
     }
 
-    data class Details(
+    data class Item(
         val id: String? = null,
-        val name: String? = null,
-        val photoUrl: String? = null,
-        val location: Location? = null,
-    )
+        val type: Type? = null,
+    ) {
+
+        enum class Type(val description: String) {
+            HIKER("hiker"),
+            TRAIL("trail"),
+            EVENT("event"),
+        }
+    }
 }

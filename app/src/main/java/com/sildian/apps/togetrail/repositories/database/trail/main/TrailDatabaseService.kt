@@ -19,6 +19,9 @@ class TrailDatabaseService @Inject constructor(
     fun getTrail(id: String): DocumentReference =
         collection.document(id)
 
+    fun getTrails(ids: List<String>): Query =
+        collection.whereIn(FieldPath.documentId(), ids)
+
     fun getLastTrails(): Query =
         collection
             .orderBy("creationDate", Query.Direction.DESCENDING)
@@ -26,7 +29,7 @@ class TrailDatabaseService @Inject constructor(
 
     fun getTrailsFromAuthor(authorId: String): Query =
         collection
-            .whereEqualTo(FieldPath.of("author", "id"), authorId)
+            .whereEqualTo("authorId", authorId)
             .orderBy("creationDate", Query.Direction.DESCENDING)
 
     fun getTrailsNearbyLocation(location: Location): Query? =

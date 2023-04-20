@@ -4,7 +4,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.sildian.apps.togetrail.repositories.database.DatabaseCollectionInfo
-import com.sildian.apps.togetrail.repositories.database.entities.trail.Trail
+import com.sildian.apps.togetrail.repositories.database.entities.hiker.HikerTrail
 import javax.inject.Inject
 
 class HikerLikedTrailDatabaseService @Inject constructor(
@@ -27,7 +27,7 @@ class HikerLikedTrailDatabaseService @Inject constructor(
         collection(hikerId = hikerId)
             .orderBy("creationDate", Query.Direction.DESCENDING)
 
-    fun updateLikedTrail(hikerId: String, trail: Trail): Task<Void>? =
+    fun updateLikedTrail(hikerId: String, trail: HikerTrail): Task<Void>? =
         trail.id?.let { trailId ->
             collection(hikerId = hikerId)
                 .document(trailId)

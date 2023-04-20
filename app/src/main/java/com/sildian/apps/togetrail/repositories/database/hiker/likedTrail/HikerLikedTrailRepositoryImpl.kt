@@ -2,7 +2,7 @@ package com.sildian.apps.togetrail.repositories.database.hiker.likedTrail
 
 import com.sildian.apps.togetrail.common.network.DatabaseException
 import com.sildian.apps.togetrail.common.network.databaseOperation
-import com.sildian.apps.togetrail.repositories.database.entities.trail.Trail
+import com.sildian.apps.togetrail.repositories.database.entities.hiker.HikerTrail
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -10,16 +10,16 @@ class HikerLikedTrailRepositoryImpl @Inject constructor(
     private val databaseService: HikerLikedTrailDatabaseService,
 ) : HikerLikedTrailRepository {
 
-    override suspend fun getLikedTrails(hikerId: String): List<Trail> =
+    override suspend fun getLikedTrails(hikerId: String): List<HikerTrail> =
         databaseOperation {
             databaseService
                 .getLikedTrails(hikerId = hikerId)
                 .get()
                 .await()
-                .toObjects(Trail::class.java)
+                .toObjects(HikerTrail::class.java)
         }
 
-    override suspend fun updateLikedTrail(hikerId: String, trail: Trail) {
+    override suspend fun updateLikedTrail(hikerId: String, trail: HikerTrail) {
         databaseOperation {
             databaseService
                 .updateLikedTrail(hikerId = hikerId, trail = trail)

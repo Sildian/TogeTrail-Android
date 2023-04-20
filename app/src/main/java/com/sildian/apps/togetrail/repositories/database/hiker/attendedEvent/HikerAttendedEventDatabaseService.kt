@@ -4,7 +4,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.sildian.apps.togetrail.repositories.database.DatabaseCollectionInfo
-import com.sildian.apps.togetrail.repositories.database.entities.event.Event
+import com.sildian.apps.togetrail.repositories.database.entities.hiker.HikerEvent
 import javax.inject.Inject
 
 class HikerAttendedEventDatabaseService @Inject constructor(
@@ -28,7 +28,7 @@ class HikerAttendedEventDatabaseService @Inject constructor(
             .whereEqualTo("canceled", false)
             .orderBy("startDate", Query.Direction.ASCENDING)
 
-    fun updateAttendedEvent(hikerId: String, event: Event): Task<Void>? =
+    fun updateAttendedEvent(hikerId: String, event: HikerEvent): Task<Void>? =
         event.id?.let { eventId ->
             collection(hikerId = hikerId)
                 .document(eventId)

@@ -6,6 +6,7 @@ import com.sildian.apps.togetrail.repositories.database.entities.event.Event
 
 interface EventRepository {
     suspend fun getEvent(id: String): Event
+    suspend fun getEvents(ids: List<String>): List<Event>
     suspend fun getNextEvents(): List<Event>
     suspend fun getEventsFromAuthor(authorId: String): List<Event>
     suspend fun getEventsNearbyLocation(location: Location): List<Event>

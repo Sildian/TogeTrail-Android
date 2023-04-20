@@ -23,6 +23,15 @@ class EventRepositoryImpl @Inject constructor(
                 ?: throw DatabaseException.UnknownException()
         }
 
+    override suspend fun getEvents(ids: List<String>): List<Event> =
+        databaseOperation {
+            databaseService
+                .getEvents(ids = ids)
+                .get()
+                .await()
+                .toObjects(Event::class.java)
+        }
+
     override suspend fun getNextEvents(): List<Event> =
         databaseOperation {
             databaseService

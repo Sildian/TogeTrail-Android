@@ -20,6 +20,15 @@ class HikerRepositoryImpl @Inject constructor(
                 ?: throw DatabaseException.UnknownException()
         }
 
+    override suspend fun getHikers(ids: List<String>): List<Hiker> =
+        databaseOperation {
+            databaseService
+                .getHikers(ids = ids)
+                .get()
+                .await()
+                .toObjects(Hiker::class.java)
+        }
+
     override suspend fun getHikersWithNameContainingText(
         text: String,
         hikerNameToExclude: String,

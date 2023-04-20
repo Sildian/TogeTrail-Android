@@ -30,19 +30,22 @@ class HikerHistoryItemDatabaseService @Inject constructor(
             .orderBy("date", Query.Direction.DESCENDING)
             .limit(20)
 
-    fun getHistoryItemsForTypeAndDetailsId(
+    fun getHistoryItemsForActionAndItemId(
         hikerId: String,
-        type: HikerHistoryItem.Type,
-        detailsId: String,
+        action: HikerHistoryItem.Action,
+        itemId: String,
     ): Query =
         collection(hikerId = hikerId)
-            .whereEqualTo("type", type)
-            .whereEqualTo(FieldPath.of("details", "id"), detailsId)
+            .whereEqualTo("action", action)
+            .whereEqualTo(FieldPath.of("item", "id"), itemId)
             .orderBy("date", Query.Direction.DESCENDING)
 
-    fun addHistoryItem(hikerId: String, historyItem: HikerHistoryItem): Task<DocumentReference> =
-        collection(hikerId = hikerId)
-            .add(historyItem)
+    fun addOrUpdateHistoryItem(hikerId: String, historyItem: HikerHistoryItem): Task<Void>? =
+        historyItem.id?.let { historyItemId ->
+            collection(hikerId = hikerId)
+                .document(historyItemId)
+                .set(historyItem)
+        }
 
     fun deleteHistoryItem(hikerId: String, historyItemId: String): Task<Void> =
         collection(hikerId = hikerId)

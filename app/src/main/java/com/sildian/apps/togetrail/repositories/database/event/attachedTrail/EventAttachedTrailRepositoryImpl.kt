@@ -2,7 +2,7 @@ package com.sildian.apps.togetrail.repositories.database.event.attachedTrail
 
 import com.sildian.apps.togetrail.common.network.DatabaseException
 import com.sildian.apps.togetrail.common.network.databaseOperation
-import com.sildian.apps.togetrail.repositories.database.entities.trail.Trail
+import com.sildian.apps.togetrail.repositories.database.entities.event.EventTrail
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -10,16 +10,16 @@ class EventAttachedTrailRepositoryImpl @Inject constructor(
     private val databaseService: EventAttachedTrailDatabaseService,
 ) : EventAttachedTrailRepository {
 
-    override suspend fun getAttachedTrails(eventId: String): List<Trail> =
+    override suspend fun getAttachedTrails(eventId: String): List<EventTrail> =
         databaseOperation {
             databaseService
                 .getAttachedTrails(eventId = eventId)
                 .get()
                 .await()
-                .toObjects(Trail::class.java)
+                .toObjects(EventTrail::class.java)
         }
 
-    override suspend fun updateAttachedTrail(eventId: String, trail: Trail) {
+    override suspend fun updateAttachedTrail(eventId: String, trail: EventTrail) {
         databaseOperation {
             databaseService
                 .updateAttachedTrail(eventId = eventId, trail = trail)

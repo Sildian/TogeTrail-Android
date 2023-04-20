@@ -2,6 +2,7 @@ package com.sildian.apps.togetrail.repositories.database.hiker.main
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.sildian.apps.togetrail.repositories.database.DatabaseCollectionInfo
@@ -17,6 +18,9 @@ class HikerDatabaseService @Inject constructor(
 
     fun getHiker(id:String): DocumentReference =
         collection.document(id)
+
+    fun getHikers(ids: List<String>): Query =
+        collection.whereIn(FieldPath.documentId(), ids)
 
     fun getHikersWithNameContainingText(text: String, hikerNameToExclude: String = ""): Query =
         collection

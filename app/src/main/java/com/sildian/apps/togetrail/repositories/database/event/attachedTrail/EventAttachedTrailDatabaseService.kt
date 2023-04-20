@@ -4,7 +4,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.sildian.apps.togetrail.repositories.database.DatabaseCollectionInfo
-import com.sildian.apps.togetrail.repositories.database.entities.trail.Trail
+import com.sildian.apps.togetrail.repositories.database.entities.event.EventTrail
 import javax.inject.Inject
 
 class EventAttachedTrailDatabaseService @Inject constructor(
@@ -26,7 +26,7 @@ class EventAttachedTrailDatabaseService @Inject constructor(
     fun getAttachedTrails(eventId: String): Query =
         collection(eventId = eventId)
 
-    fun updateAttachedTrail(eventId: String, trail: Trail): Task<Void>? =
+    fun updateAttachedTrail(eventId: String, trail: EventTrail): Task<Void>? =
         trail.id?.let { trailId ->
             collection(eventId = eventId)
                 .document(trailId)

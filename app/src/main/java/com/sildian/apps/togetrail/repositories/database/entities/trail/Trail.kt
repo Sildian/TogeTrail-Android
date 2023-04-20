@@ -22,7 +22,7 @@ data class Trail(
     val measures: Measures? = null,
     val creationDate: Date? = null,
     val updateDate: Date? = null,
-    val author: Author? = null,
+    val authorId: String? = null,
     val nbLikes: Int = 0,
 ) {
 
@@ -39,11 +39,5 @@ data class Trail(
         val descent: Derivation? = null,
         val maxElevation: Altitude? = null,
         val minElevation: Altitude? = null,
-    )
-
-    data class Author(
-        val id: String? = null,
-        val name: String? = null,
-        val photoUrl: String? = null,
     )
 }

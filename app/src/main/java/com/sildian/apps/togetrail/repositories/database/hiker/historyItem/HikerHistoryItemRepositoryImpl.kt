@@ -1,5 +1,6 @@
 package com.sildian.apps.togetrail.repositories.database.hiker.historyItem
 
+import com.sildian.apps.togetrail.common.network.DatabaseException
 import com.sildian.apps.togetrail.common.network.databaseOperation
 import com.sildian.apps.togetrail.repositories.database.entities.hiker.HikerHistoryItem
 import kotlinx.coroutines.tasks.await
@@ -18,27 +19,28 @@ class HikerHistoryItemRepositoryImpl @Inject constructor(
                 .toObjects(HikerHistoryItem::class.java)
         }
 
-    override suspend fun getHistoryItemsForTypeAndDetailsId(
+    override suspend fun getHistoryItemsForActionAndItemId(
         hikerId: String,
-        type: HikerHistoryItem.Type,
-        detailsId: String
+        action: HikerHistoryItem.Action,
+        itemId: String
     ): List<HikerHistoryItem> =
         databaseOperation {
             databaseService
-                .getHistoryItemsForTypeAndDetailsId(
+                .getHistoryItemsForActionAndItemId(
                     hikerId = hikerId,
-                    type = type,
-                    detailsId = detailsId,
+                    action = action,
+                    itemId = itemId,
                 ).get()
                 .await()
                 .toObjects(HikerHistoryItem::class.java)
         }
 
-    override suspend fun addHistoryItem(hikerId: String, historyItem: HikerHistoryItem) {
+    override suspend fun addOrUpdateHistoryItem(hikerId: String, historyItem: HikerHistoryItem) {
         databaseOperation {
             databaseService
-                .addHistoryItem(hikerId = hikerId, historyItem = historyItem)
-                .await()
+                .addOrUpdateHistoryItem(hikerId = hikerId, historyItem = historyItem)
+                ?.await()
+                ?: throw DatabaseException.UnknownException()
         }
     }
 
