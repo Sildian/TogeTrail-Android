@@ -18,12 +18,12 @@ data class Trail(
     val location: Location? = null,
     val description: String? = null,
     val level: Level? = null,
-    val isLoop: Boolean = false,
+    val isLoop: Boolean? = null,
     val measures: Measures? = null,
     val creationDate: Date? = null,
     val updateDate: Date? = null,
     val authorId: String? = null,
-    val nbLikes: Int = 0,
+    val nbLikes: Int? = null,
 ) {
 
     enum class Level(val level: Int) {

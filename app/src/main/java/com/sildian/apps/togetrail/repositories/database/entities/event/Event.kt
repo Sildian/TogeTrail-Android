@@ -14,8 +14,8 @@ data class Event(
     val startDate: Date? = null,
     val endDate: Date? = null,
     val description: String? = null,
-    val isCanceled: Boolean = false,
+    val isCanceled: Boolean? = null,
     val creationDate: Date? = null,
     val authorId: String? = null,
-    val nbHikersRegistered: Int = 0,
+    val nbHikersRegistered: Int? = null,
 )

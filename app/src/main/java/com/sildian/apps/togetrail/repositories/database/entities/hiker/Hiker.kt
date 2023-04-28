@@ -12,7 +12,7 @@ data class Hiker(
     val home: Location? = null,
     val description: String? = null,
     val profileCreationDate: Date? = null,
-    val nbTrailsCreated: Int = 0,
-    val nbEventsCreated: Int = 0,
-    val nbEventsAttended: Int = 0,
+    val nbTrailsCreated: Int? = null,
+    val nbEventsCreated: Int? = null,
+    val nbEventsAttended: Int? = null,
 )

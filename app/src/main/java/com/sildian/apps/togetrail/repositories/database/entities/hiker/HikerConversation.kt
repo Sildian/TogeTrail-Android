@@ -7,5 +7,5 @@ data class HikerConversation(
     val name: String? = null,
     val photoUrl: String? = null,
     val lastMessage: Message? = null,
-    val nbUnreadMessages: Int = 0,
+    val nbUnreadMessages: Int? = null,
 )
