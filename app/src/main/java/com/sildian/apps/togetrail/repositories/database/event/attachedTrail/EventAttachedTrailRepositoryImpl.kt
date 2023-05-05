@@ -19,10 +19,10 @@ class EventAttachedTrailRepositoryImpl @Inject constructor(
                 .toObjects(EventTrail::class.java)
         }
 
-    override suspend fun updateAttachedTrail(eventId: String, trail: EventTrail) {
+    override suspend fun addOrUpdateAttachedTrail(eventId: String, trail: EventTrail) {
         databaseOperation {
             databaseService
-                .updateAttachedTrail(eventId = eventId, trail = trail)
+                .addOrUpdateAttachedTrail(eventId = eventId, trail = trail)
                 ?.await()
                 ?: throw DatabaseException.UnknownException()
         }

@@ -26,7 +26,7 @@ class EventAttachedTrailDatabaseService @Inject constructor(
     fun getAttachedTrails(eventId: String): Query =
         collection(eventId = eventId)
 
-    fun updateAttachedTrail(eventId: String, trail: EventTrail): Task<Void>? =
+    fun addOrUpdateAttachedTrail(eventId: String, trail: EventTrail): Task<Void>? =
         trail.id?.let { trailId ->
             collection(eventId = eventId)
                 .document(trailId)

@@ -4,6 +4,6 @@ import com.sildian.apps.togetrail.repositories.database.entities.hiker.HikerTrai
 
 interface HikerLikedTrailRepository {
     suspend fun getLikedTrails(hikerId: String): List<HikerTrail>
-    suspend fun updateLikedTrail(hikerId: String, trail: HikerTrail)
+    suspend fun addOrUpdateLikedTrail(hikerId: String, trail: HikerTrail)
     suspend fun deleteLikedTrail(hikerId: String, trailId: String)
 }

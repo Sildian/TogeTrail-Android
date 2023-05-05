@@ -30,7 +30,7 @@ class HikerConversationDatabaseService @Inject constructor(
                 FieldPath.of("lastMessage", "creationDate"), Query.Direction.DESCENDING
             )
 
-    fun updateConversation(hikerId: String, conversation: HikerConversation): Task<Void>? =
+    fun addOrUpdateConversation(hikerId: String, conversation: HikerConversation): Task<Void>? =
         conversation.id?.let { conversationId ->
             collection(hikerId = hikerId)
                 .document(conversationId)

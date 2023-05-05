@@ -26,7 +26,7 @@ class EventRegisteredHikerDatabaseService @Inject constructor(
     fun getRegisteredHikers(eventId: String): Query =
         collection(eventId = eventId)
 
-    fun updateRegisteredHiker(eventId: String, hiker: EventHiker): Task<Void>? =
+    fun addOrUpdateRegisteredHiker(eventId: String, hiker: EventHiker): Task<Void>? =
         hiker.id?.let { hikerId ->
             collection(eventId = eventId)
                 .document(hikerId)

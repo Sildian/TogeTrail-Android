@@ -19,10 +19,10 @@ class HikerLikedTrailRepositoryImpl @Inject constructor(
                 .toObjects(HikerTrail::class.java)
         }
 
-    override suspend fun updateLikedTrail(hikerId: String, trail: HikerTrail) {
+    override suspend fun addOrUpdateLikedTrail(hikerId: String, trail: HikerTrail) {
         databaseOperation {
             databaseService
-                .updateLikedTrail(hikerId = hikerId, trail = trail)
+                .addOrUpdateLikedTrail(hikerId = hikerId, trail = trail)
                 ?.await()
                 ?: throw DatabaseException.UnknownException()
         }

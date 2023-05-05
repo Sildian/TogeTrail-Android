@@ -28,7 +28,7 @@ class HikerAttendedEventDatabaseService @Inject constructor(
             .whereEqualTo("canceled", false)
             .orderBy("startDate", Query.Direction.ASCENDING)
 
-    fun updateAttendedEvent(hikerId: String, event: HikerEvent): Task<Void>? =
+    fun addOrUpdateAttendedEvent(hikerId: String, event: HikerEvent): Task<Void>? =
         event.id?.let { eventId ->
             collection(hikerId = hikerId)
                 .document(eventId)

@@ -4,6 +4,6 @@ import com.sildian.apps.togetrail.repositories.database.entities.event.EventTrai
 
 interface EventAttachedTrailRepository {
     suspend fun getAttachedTrails(eventId: String): List<EventTrail>
-    suspend fun updateAttachedTrail(eventId: String, trail: EventTrail)
+    suspend fun addOrUpdateAttachedTrail(eventId: String, trail: EventTrail)
     suspend fun deleteAttachedTrail(eventId: String, trailId: String)
 }

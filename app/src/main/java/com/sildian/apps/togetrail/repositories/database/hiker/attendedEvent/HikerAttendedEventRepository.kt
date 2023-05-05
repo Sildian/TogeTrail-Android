@@ -4,6 +4,6 @@ import com.sildian.apps.togetrail.repositories.database.entities.hiker.HikerEven
 
 interface HikerAttendedEventRepository {
     suspend fun getAttendedEvents(hikerId: String): List<HikerEvent>
-    suspend fun updateAttendedEvent(hikerId: String, event: HikerEvent)
+    suspend fun addOrUpdateAttendedEvent(hikerId: String, event: HikerEvent)
     suspend fun deleteAttendedEvent(hikerId: String, eventId: String)
 }

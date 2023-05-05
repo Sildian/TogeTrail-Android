@@ -27,7 +27,7 @@ class HikerMarkedTrailDatabaseService @Inject constructor(
         collection(hikerId = hikerId)
             .orderBy("creationDate", Query.Direction.DESCENDING)
 
-    fun updateMarkedTrail(hikerId: String, trail: HikerTrail): Task<Void>? =
+    fun addOrUpdateMarkedTrail(hikerId: String, trail: HikerTrail): Task<Void>? =
         trail.id?.let { trailId ->
             collection(hikerId = hikerId)
                 .document(trailId)

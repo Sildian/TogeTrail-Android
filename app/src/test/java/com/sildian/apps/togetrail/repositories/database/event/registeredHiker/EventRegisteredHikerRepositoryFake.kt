@@ -10,14 +10,14 @@ class EventRegisteredHikerRepositoryFake(
     private val hikers: List<EventHiker> = Random.nextEventHikersList(),
 ) : EventRegisteredHikerRepository {
 
-    var updateRegisteredHikerSuccessCount: Int = 0 ; private set
+    var addOrUpdateRegisteredHikerSuccessCount: Int = 0 ; private set
     var deleteRegisteredHikerSuccessCount: Int = 0 ; private set
 
     override suspend fun getRegisteredHikers(eventId: String): List<EventHiker> =
         error?.let { throw it } ?: hikers
 
-    override suspend fun updateRegisteredHiker(eventId: String, hiker: EventHiker) {
-        error?.let { throw it } ?: updateRegisteredHikerSuccessCount++
+    override suspend fun addOrUpdateRegisteredHiker(eventId: String, hiker: EventHiker) {
+        error?.let { throw it } ?: addOrUpdateRegisteredHikerSuccessCount++
     }
 
     override suspend fun deleteRegisteredHiker(eventId: String, hikerId: String) {

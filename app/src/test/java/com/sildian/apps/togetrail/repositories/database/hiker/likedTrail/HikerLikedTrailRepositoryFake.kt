@@ -10,14 +10,14 @@ class HikerLikedTrailRepositoryFake(
     private val trails: List<HikerTrail> = Random.nextHikerTrailsList(),
 ) : HikerLikedTrailRepository {
 
-    var updateLikedTrailSuccessCount: Int = 0 ; private set
+    var addOrUpdateLikedTrailSuccessCount: Int = 0 ; private set
     var deleteLikedTrailSuccessCount: Int = 0 ; private set
 
     override suspend fun getLikedTrails(hikerId: String): List<HikerTrail> =
         error?.let { throw it } ?: trails
 
-    override suspend fun updateLikedTrail(hikerId: String, trail: HikerTrail) {
-        error?.let { throw it } ?: updateLikedTrailSuccessCount++
+    override suspend fun addOrUpdateLikedTrail(hikerId: String, trail: HikerTrail) {
+        error?.let { throw it } ?: addOrUpdateLikedTrailSuccessCount++
     }
 
     override suspend fun deleteLikedTrail(hikerId: String, trailId: String) {

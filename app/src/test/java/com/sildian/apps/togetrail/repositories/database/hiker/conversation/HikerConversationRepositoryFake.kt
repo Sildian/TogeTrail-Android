@@ -10,14 +10,14 @@ class HikerConversationRepositoryFake(
     private val conversations: List<HikerConversation> = Random.nextHikerConversationsList(),
 ) : HikerConversationRepository {
 
-    var updateConversationSuccessCount: Int = 0 ; private set
+    var addOrUpdateConversationSuccessCount: Int = 0 ; private set
     var deleteConversationSuccessCount: Int = 0 ; private set
 
     override suspend fun getConversations(hikerId: String): List<HikerConversation> =
         error?.let { throw it } ?: conversations
 
-    override suspend fun updateConversation(hikerId: String, conversation: HikerConversation) {
-        error?.let { throw it } ?: updateConversationSuccessCount++
+    override suspend fun addOrUpdateConversation(hikerId: String, conversation: HikerConversation) {
+        error?.let { throw it } ?: addOrUpdateConversationSuccessCount++
     }
 
     override suspend fun deleteConversation(hikerId: String, conversationId: String) {

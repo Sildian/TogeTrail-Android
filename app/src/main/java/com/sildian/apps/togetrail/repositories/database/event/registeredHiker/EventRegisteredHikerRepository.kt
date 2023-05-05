@@ -4,6 +4,6 @@ import com.sildian.apps.togetrail.repositories.database.entities.event.EventHike
 
 interface EventRegisteredHikerRepository {
     suspend fun getRegisteredHikers(eventId: String): List<EventHiker>
-    suspend fun updateRegisteredHiker(eventId: String, hiker: EventHiker)
+    suspend fun addOrUpdateRegisteredHiker(eventId: String, hiker: EventHiker)
     suspend fun deleteRegisteredHiker(eventId: String, hikerId: String)
 }

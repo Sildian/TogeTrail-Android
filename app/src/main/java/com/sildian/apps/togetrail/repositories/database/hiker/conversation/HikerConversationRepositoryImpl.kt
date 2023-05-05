@@ -19,10 +19,10 @@ class HikerConversationRepositoryImpl @Inject constructor(
                 .toObjects(HikerConversation::class.java)
         }
 
-    override suspend fun updateConversation(hikerId: String, conversation: HikerConversation) {
+    override suspend fun addOrUpdateConversation(hikerId: String, conversation: HikerConversation) {
         databaseOperation {
             databaseService
-                .updateConversation(hikerId = hikerId, conversation = conversation)
+                .addOrUpdateConversation(hikerId = hikerId, conversation = conversation)
                 ?.await()
                 ?: throw DatabaseException.UnknownException()
         }

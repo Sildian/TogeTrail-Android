@@ -10,14 +10,14 @@ class EventAttachedTrailRepositoryFake(
     private val trails: List<EventTrail> = Random.nextEventTrailsList(),
 ) : EventAttachedTrailRepository {
 
-    var updateAttachedTrailSuccessCount: Int = 0 ; private set
+    var addOrUpdateAttachedTrailSuccessCount: Int = 0 ; private set
     var deleteAttachedTrailSuccessCount: Int = 0 ; private set
 
     override suspend fun getAttachedTrails(eventId: String): List<EventTrail> =
         error?.let { throw it } ?: trails
 
-    override suspend fun updateAttachedTrail(eventId: String, trail: EventTrail) {
-        error?.let { throw it } ?: updateAttachedTrailSuccessCount++
+    override suspend fun addOrUpdateAttachedTrail(eventId: String, trail: EventTrail) {
+        error?.let { throw it } ?: addOrUpdateAttachedTrailSuccessCount++
     }
 
     override suspend fun deleteAttachedTrail(eventId: String, trailId: String) {
