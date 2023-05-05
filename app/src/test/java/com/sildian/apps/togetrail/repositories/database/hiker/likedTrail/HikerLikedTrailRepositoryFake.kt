@@ -1,0 +1,26 @@
+package com.sildian.apps.togetrail.repositories.database.hiker.likedTrail
+
+import com.sildian.apps.togetrail.common.network.DatabaseException
+import com.sildian.apps.togetrail.repositories.database.entities.hiker.HikerTrail
+import com.sildian.apps.togetrail.repositories.database.entities.hiker.nextHikerTrailsList
+import kotlin.random.Random
+
+class HikerLikedTrailRepositoryFake(
+    private val error: DatabaseException? = null,
+    private val trails: List<HikerTrail> = Random.nextHikerTrailsList(),
+) : HikerLikedTrailRepository {
+
+    var updateLikedTrailSuccessCount: Int = 0 ; private set
+    var deleteLikedTrailSuccessCount: Int = 0 ; private set
+
+    override suspend fun getLikedTrails(hikerId: String): List<HikerTrail> =
+        error?.let { throw it } ?: trails
+
+    override suspend fun updateLikedTrail(hikerId: String, trail: HikerTrail) {
+        error?.let { throw it } ?: updateLikedTrailSuccessCount++
+    }
+
+    override suspend fun deleteLikedTrail(hikerId: String, trailId: String) {
+        error?.let { throw it } ?: deleteLikedTrailSuccessCount++
+    }
+}

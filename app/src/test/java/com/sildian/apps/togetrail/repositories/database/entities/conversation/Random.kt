@@ -22,3 +22,8 @@ fun Random.nextMessage(
         updateDate = updateDate,
         authorId = authorId,
     )
+
+fun Random.nextMessagesList(itemsCount: Int = nextInt(from = 0, until = 4)): List<Message> =
+    List(size = itemsCount) {
+        nextMessage()
+    }

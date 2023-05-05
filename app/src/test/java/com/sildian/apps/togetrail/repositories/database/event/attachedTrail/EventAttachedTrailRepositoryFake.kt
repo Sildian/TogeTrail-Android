@@ -1,0 +1,26 @@
+package com.sildian.apps.togetrail.repositories.database.event.attachedTrail
+
+import com.sildian.apps.togetrail.common.network.DatabaseException
+import com.sildian.apps.togetrail.repositories.database.entities.event.EventTrail
+import com.sildian.apps.togetrail.repositories.database.entities.event.nextEventTrailsList
+import kotlin.random.Random
+
+class EventAttachedTrailRepositoryFake(
+    private val error: DatabaseException? = null,
+    private val trails: List<EventTrail> = Random.nextEventTrailsList(),
+) : EventAttachedTrailRepository {
+
+    var updateAttachedTrailSuccessCount: Int = 0 ; private set
+    var deleteAttachedTrailSuccessCount: Int = 0 ; private set
+
+    override suspend fun getAttachedTrails(eventId: String): List<EventTrail> =
+        error?.let { throw it } ?: trails
+
+    override suspend fun updateAttachedTrail(eventId: String, trail: EventTrail) {
+        error?.let { throw it } ?: updateAttachedTrailSuccessCount++
+    }
+
+    override suspend fun deleteAttachedTrail(eventId: String, trailId: String) {
+        error?.let { throw it } ?: deleteAttachedTrailSuccessCount++
+    }
+}
