@@ -9,6 +9,6 @@ data class ConversationUI(
     val id: String,
     val name: String,
     val photoUrl: String?,
-    val lastMessage: Message?,
+    val lastMessage: MessageUI?,
     val nbUnreadMessages: Int,
 ) : Parcelable
