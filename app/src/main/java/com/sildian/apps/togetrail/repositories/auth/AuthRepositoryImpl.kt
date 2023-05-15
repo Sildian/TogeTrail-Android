@@ -3,11 +3,9 @@ package com.sildian.apps.togetrail.repositories.auth
 import com.sildian.apps.togetrail.common.network.User
 import com.sildian.apps.togetrail.common.network.authOperation
 import com.sildian.apps.togetrail.common.network.toUser
-import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-@ViewModelScoped
 class AuthRepositoryImpl @Inject constructor(
     private val authService: AuthService,
 ) : AuthRepository {
