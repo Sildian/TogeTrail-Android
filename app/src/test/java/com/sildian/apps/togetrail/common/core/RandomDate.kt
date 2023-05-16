@@ -13,16 +13,16 @@ fun Random.nextDate(
     Date(millis)
 
 fun Random.nextLocalDateTime(
-    year: Int = nextInt(from = Year.MIN_VALUE, until = Year.MAX_VALUE + 1),
+    year: Year = Year.of(nextInt(from = 1970, until = 2100)),
     month: Month = Month.values().random(),
-    day: Int = nextInt(from = 1, until = 32),
+    day: Int = nextInt(from = 1, until = month.length(year.isLeap)),
     hour: Int = nextInt(from = 0, until = 24),
     minute: Int = nextInt(from = 0, until = 60),
     second: Int = nextInt(from = 0, until = 60),
 ): LocalDateTime =
     LocalDateTime.of(
-        year,
-        month,
+        year.value,
+        month.value,
         day,
         hour,
         minute,
@@ -30,12 +30,12 @@ fun Random.nextLocalDateTime(
     )
 
 fun Random.nextLocalDate(
-    year: Int = nextInt(from = Year.MIN_VALUE, until = Year.MAX_VALUE + 1),
+    year: Year = Year.of(nextInt(from = 1970, until = 2100)),
     month: Month = Month.values().random(),
-    day: Int = nextInt(from = 1, until = 32),
+    day: Int = nextInt(from = 1, until = month.length(year.isLeap)),
 ): LocalDate =
     LocalDate.of(
-        year,
-        month,
+        year.value,
+        month.value,
         day,
     )
