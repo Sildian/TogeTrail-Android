@@ -7,7 +7,7 @@ import org.junit.Assert.*
 import org.junit.Test
 import kotlin.random.Random
 
-class EventMapperTest {
+class EventMappersTest {
 
     @Test
     fun `GIVEN EventUI WHEN invoking toDataModel THEN result is correct Event`() {
