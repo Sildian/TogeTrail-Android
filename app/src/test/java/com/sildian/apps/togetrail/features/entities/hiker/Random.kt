@@ -39,3 +39,18 @@ fun Random.nextHikerUI(
         nbEventsCreated = nbEventsCreated,
         nbEventsAttended = nbEventsAttended,
     )
+
+fun Random.nextHikerHistoryItemUI(
+    date: LocalDateTime = nextLocalDateTime(),
+    action: HikerHistoryItemUI.Action = HikerHistoryItemUI.Action.values().random(),
+    itemId: String = nextString(),
+    itemType: HikerHistoryItemUI.Item.Type = HikerHistoryItemUI.Item.Type.values().random(),
+): HikerHistoryItemUI =
+    HikerHistoryItemUI(
+        date = date,
+        action = action,
+        item = HikerHistoryItemUI.Item(
+            id = itemId,
+            type = itemType,
+        )
+    )
