@@ -80,3 +80,20 @@ fun Random.nextTrailPointUI(
         position = position,
         registrationTime = registrationTime,
     )
+
+fun Random.nextTrailPointOfInterestUI(
+    number: Int = nextInt(from = 0, until = 100),
+    position: Position = nextPosition(),
+    registrationTime: LocalDateTime? = nextLocalDateTime(),
+    name: String = nextString(),
+    description: String = nextString(),
+    photoUrl: String? = nextUrlString(),
+): TrailPointOfInterestUI =
+    TrailPointOfInterestUI(
+        number = number,
+        position = position,
+        registrationTime = registrationTime,
+        name = name,
+        description = description,
+        photoUrl = photoUrl,
+    )

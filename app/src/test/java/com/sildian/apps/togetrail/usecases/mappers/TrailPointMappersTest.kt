@@ -21,7 +21,7 @@ class TrailPointMappersTest {
     }
 
     @Test(expected = IllegalStateException::class)
-    fun `GIVEN trailPoint without number WHEN invoking toUIModel THEN throws IllegalStateException`() {
+    fun `GIVEN TrailPoint without number WHEN invoking toUIModel THEN throws IllegalStateException`() {
         // Given
         val trailPoint = Random.nextTrailPoint(number = null)
 
@@ -30,7 +30,7 @@ class TrailPointMappersTest {
     }
 
     @Test(expected = IllegalStateException::class)
-    fun `GIVEN trailPoint without position WHEN invoking toUIModel THEN throws IllegalStateException`() {
+    fun `GIVEN TrailPoint without position WHEN invoking toUIModel THEN throws IllegalStateException`() {
         // Given
         val trailPoint = Random.nextTrailPoint(position = null)
 

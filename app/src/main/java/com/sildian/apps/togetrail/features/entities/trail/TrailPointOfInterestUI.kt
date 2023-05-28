@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 data class TrailPointOfInterestUI(
     val number: Int,
     val position: Position,
-    val registrationTime: LocalDateTime,
+    val registrationTime: LocalDateTime?,
     val name: String,
     val description: String,
     val photoUrl: String?,
