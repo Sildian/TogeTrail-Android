@@ -69,3 +69,14 @@ fun Random.nextTrailUIMeasures(
         maxElevation = maxElevation,
         minElevation = minElevation,
     )
+
+fun Random.nextTrailPointUI(
+    number: Int = nextInt(from = 0, until = 100),
+    position: Position = nextPosition(),
+    registrationTime: LocalDateTime? = nextLocalDateTime(),
+): TrailPointUI =
+    TrailPointUI(
+        number = number,
+        position = position,
+        registrationTime = registrationTime,
+    )

@@ -9,5 +9,5 @@ import java.time.LocalDateTime
 data class TrailPointUI(
     val number: Int,
     val position: Position,
-    val registrationTime: LocalDateTime,
+    val registrationTime: LocalDateTime?,
 ) : Parcelable
