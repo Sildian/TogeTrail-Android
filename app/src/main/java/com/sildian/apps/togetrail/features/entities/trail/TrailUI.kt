@@ -38,11 +38,11 @@ data class TrailUI(
 
     @Parcelize
     data class Measures(
-        val duration: Duration?,
-        val distance: Distance?,
-        val ascent: Derivation?,
-        val descent: Derivation?,
-        val maxElevation: Altitude?,
-        val minElevation: Altitude?,
+        val duration: Duration? = null,
+        val distance: Distance? = null,
+        val ascent: Derivation? = null,
+        val descent: Derivation? = null,
+        val maxElevation: Altitude? = null,
+        val minElevation: Altitude? = null,
     ) : Parcelable
 }
