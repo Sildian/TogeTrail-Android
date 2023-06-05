@@ -1,8 +1,12 @@
 package com.sildian.apps.togetrail.repositories.database.entities.hiker
 
-import com.sildian.apps.togetrail.common.core.*
 import com.sildian.apps.togetrail.common.core.location.Location
 import com.sildian.apps.togetrail.common.core.location.nextLocation
+import com.sildian.apps.togetrail.common.utils.nextAlphaString
+import com.sildian.apps.togetrail.common.utils.nextDate
+import com.sildian.apps.togetrail.common.utils.nextEmailAddressString
+import com.sildian.apps.togetrail.common.utils.nextString
+import com.sildian.apps.togetrail.common.utils.nextUrlString
 import com.sildian.apps.togetrail.repositories.database.entities.conversation.nextMessage
 import com.sildian.apps.togetrail.repositories.database.entities.conversation.Message
 import java.util.*

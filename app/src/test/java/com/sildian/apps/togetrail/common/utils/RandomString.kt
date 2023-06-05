@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.common.core
+package com.sildian.apps.togetrail.common.utils
 
 import kotlin.random.Random
 

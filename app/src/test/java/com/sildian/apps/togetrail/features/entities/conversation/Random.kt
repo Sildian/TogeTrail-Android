@@ -1,8 +1,8 @@
 package com.sildian.apps.togetrail.features.entities.conversation
 
-import com.sildian.apps.togetrail.common.core.nextLocalDateTime
-import com.sildian.apps.togetrail.common.core.nextString
-import com.sildian.apps.togetrail.common.core.nextUrlString
+import com.sildian.apps.togetrail.common.utils.nextLocalDateTime
+import com.sildian.apps.togetrail.common.utils.nextString
+import com.sildian.apps.togetrail.common.utils.nextUrlString
 import java.time.LocalDateTime
 import kotlin.random.Random
 

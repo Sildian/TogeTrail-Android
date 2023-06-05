@@ -3,8 +3,8 @@ package com.sildian.apps.togetrail.common.core.location
 import com.google.android.libraries.places.api.model.AddressComponent
 import com.google.android.libraries.places.api.model.AddressComponents
 import com.google.android.libraries.places.api.model.Place
-import com.sildian.apps.togetrail.common.core.nextAlphaString
-import com.sildian.apps.togetrail.common.core.nextString
+import com.sildian.apps.togetrail.common.utils.nextAlphaString
+import com.sildian.apps.togetrail.common.utils.nextString
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 import org.mockito.Mockito

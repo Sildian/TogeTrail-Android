@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.common.core
+package com.sildian.apps.togetrail.common.utils
 
 import java.time.Duration
 import kotlin.random.Random

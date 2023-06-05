@@ -4,10 +4,10 @@ import com.sildian.apps.togetrail.common.core.geo.Position
 import com.sildian.apps.togetrail.common.core.geo.nextPosition
 import com.sildian.apps.togetrail.common.core.location.Location
 import com.sildian.apps.togetrail.common.core.location.nextLocation
-import com.sildian.apps.togetrail.common.core.nextLocalDate
-import com.sildian.apps.togetrail.common.core.nextLocalDateTime
-import com.sildian.apps.togetrail.common.core.nextString
-import com.sildian.apps.togetrail.common.core.nextUrlString
+import com.sildian.apps.togetrail.common.utils.nextLocalDate
+import com.sildian.apps.togetrail.common.utils.nextLocalDateTime
+import com.sildian.apps.togetrail.common.utils.nextString
+import com.sildian.apps.togetrail.common.utils.nextUrlString
 import java.time.LocalDate
 import java.time.LocalDateTime
 import kotlin.random.Random

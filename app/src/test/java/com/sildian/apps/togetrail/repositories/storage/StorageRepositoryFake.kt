@@ -2,7 +2,7 @@ package com.sildian.apps.togetrail.repositories.storage
 
 import android.net.Uri
 import androidx.core.net.toUri
-import com.sildian.apps.togetrail.common.core.nextUrlString
+import com.sildian.apps.togetrail.common.utils.nextUrlString
 import com.sildian.apps.togetrail.common.network.StorageException
 import kotlin.random.Random
 

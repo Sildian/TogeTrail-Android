@@ -1,7 +1,7 @@
 package com.sildian.apps.togetrail.common.core.location
 
-import com.sildian.apps.togetrail.common.core.nextAlphaString
-import com.sildian.apps.togetrail.common.core.nextString
+import com.sildian.apps.togetrail.common.utils.nextAlphaString
+import com.sildian.apps.togetrail.common.utils.nextString
 import kotlin.random.Random
 
 fun Random.nextLocation(

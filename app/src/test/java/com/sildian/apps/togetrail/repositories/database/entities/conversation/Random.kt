@@ -1,7 +1,7 @@
 package com.sildian.apps.togetrail.repositories.database.entities.conversation
 
-import com.sildian.apps.togetrail.common.core.nextDate
-import com.sildian.apps.togetrail.common.core.nextString
+import com.sildian.apps.togetrail.common.utils.nextDate
+import com.sildian.apps.togetrail.common.utils.nextString
 import java.util.*
 import kotlin.random.Random
 

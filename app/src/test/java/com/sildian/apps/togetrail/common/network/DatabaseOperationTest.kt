@@ -1,7 +1,7 @@
 package com.sildian.apps.togetrail.common.network
 
 import com.google.firebase.firestore.FirebaseFirestoreException
-import com.sildian.apps.togetrail.common.core.nextString
+import com.sildian.apps.togetrail.common.utils.nextString
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.mockito.Mockito

@@ -1,6 +1,6 @@
 package com.sildian.apps.togetrail.usecases.mappers
 
-import com.sildian.apps.togetrail.common.core.nextString
+import com.sildian.apps.togetrail.common.utils.nextString
 import com.sildian.apps.togetrail.features.entities.conversation.nextMessageUI
 import com.sildian.apps.togetrail.repositories.database.entities.conversation.nextMessage
 import org.junit.Assert.*

@@ -1,6 +1,5 @@
 package com.sildian.apps.togetrail.common.utils
 
-import com.sildian.apps.togetrail.common.core.nextDate
 import org.junit.Assert.*
 import org.junit.Test
 import java.util.Calendar

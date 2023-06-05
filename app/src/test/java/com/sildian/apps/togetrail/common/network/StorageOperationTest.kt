@@ -1,7 +1,7 @@
 package com.sildian.apps.togetrail.common.network
 
 import com.google.firebase.storage.StorageException as FirebaseStorageException
-import com.sildian.apps.togetrail.common.core.nextUrlString
+import com.sildian.apps.togetrail.common.utils.nextUrlString
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.mockito.Mockito

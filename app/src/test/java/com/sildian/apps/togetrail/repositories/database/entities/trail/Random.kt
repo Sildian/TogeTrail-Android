@@ -1,9 +1,12 @@
 package com.sildian.apps.togetrail.repositories.database.entities.trail
 
 import com.firebase.geofire.GeoLocation
-import com.sildian.apps.togetrail.common.core.*
 import com.sildian.apps.togetrail.common.core.geo.*
 import com.sildian.apps.togetrail.common.core.location.*
+import com.sildian.apps.togetrail.common.utils.nextDate
+import com.sildian.apps.togetrail.common.utils.nextDuration
+import com.sildian.apps.togetrail.common.utils.nextString
+import com.sildian.apps.togetrail.common.utils.nextUrlString
 import java.time.Duration
 import java.util.Date
 import kotlin.random.Random

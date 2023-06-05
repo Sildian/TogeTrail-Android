@@ -5,9 +5,9 @@ import com.sildian.apps.togetrail.common.core.geo.nextPosition
 import com.sildian.apps.togetrail.common.core.geo.toGeoLocation
 import com.sildian.apps.togetrail.common.core.location.Location
 import com.sildian.apps.togetrail.common.core.location.nextLocation
-import com.sildian.apps.togetrail.common.core.nextDate
-import com.sildian.apps.togetrail.common.core.nextString
-import com.sildian.apps.togetrail.common.core.nextUrlString
+import com.sildian.apps.togetrail.common.utils.nextDate
+import com.sildian.apps.togetrail.common.utils.nextString
+import com.sildian.apps.togetrail.common.utils.nextUrlString
 import java.util.*
 import kotlin.random.Random
 

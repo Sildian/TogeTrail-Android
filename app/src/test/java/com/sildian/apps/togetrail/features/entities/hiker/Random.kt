@@ -2,11 +2,11 @@ package com.sildian.apps.togetrail.features.entities.hiker
 
 import com.sildian.apps.togetrail.common.core.location.Location
 import com.sildian.apps.togetrail.common.core.location.nextLocation
-import com.sildian.apps.togetrail.common.core.nextEmailAddressString
-import com.sildian.apps.togetrail.common.core.nextLocalDate
-import com.sildian.apps.togetrail.common.core.nextLocalDateTime
-import com.sildian.apps.togetrail.common.core.nextString
-import com.sildian.apps.togetrail.common.core.nextUrlString
+import com.sildian.apps.togetrail.common.utils.nextEmailAddressString
+import com.sildian.apps.togetrail.common.utils.nextLocalDate
+import com.sildian.apps.togetrail.common.utils.nextLocalDateTime
+import com.sildian.apps.togetrail.common.utils.nextString
+import com.sildian.apps.togetrail.common.utils.nextUrlString
 import java.time.LocalDate
 import java.time.LocalDateTime
 import kotlin.random.Random

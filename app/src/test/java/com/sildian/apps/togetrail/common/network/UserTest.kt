@@ -2,9 +2,9 @@ package com.sildian.apps.togetrail.common.network
 
 import android.net.Uri
 import com.google.firebase.auth.FirebaseUser
-import com.sildian.apps.togetrail.common.core.nextAlphaString
-import com.sildian.apps.togetrail.common.core.nextEmailAddressString
-import com.sildian.apps.togetrail.common.core.nextUrlString
+import com.sildian.apps.togetrail.common.utils.nextAlphaString
+import com.sildian.apps.togetrail.common.utils.nextEmailAddressString
+import com.sildian.apps.togetrail.common.utils.nextUrlString
 import org.junit.Assert.*
 import org.junit.Test
 import org.mockito.Mockito
