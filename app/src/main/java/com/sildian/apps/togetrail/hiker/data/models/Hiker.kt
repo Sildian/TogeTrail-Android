@@ -10,6 +10,7 @@ import kotlin.math.floor
  * Hiker
  ************************************************************************************************/
 
+@Deprecated("Replaced by new Hiker and HikerUI")
 @Parcelize
 data class Hiker (
     val id:String="",

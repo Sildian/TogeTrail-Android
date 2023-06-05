@@ -10,6 +10,7 @@ import kotlinx.android.parcel.Parcelize
  * The difficulty level of a trail
  ************************************************************************************************/
 
+@Deprecated("Replaced by new Trail.Level and TrailUI.level")
 @Parcelize
 enum class TrailLevel (
     val value: Int,

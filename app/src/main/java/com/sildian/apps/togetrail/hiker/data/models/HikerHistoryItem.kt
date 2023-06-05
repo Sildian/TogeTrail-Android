@@ -16,6 +16,7 @@ import java.util.*
  * @param photoUrl : the photo url if a photo is attached to the item
  ************************************************************************************************/
 
+@Deprecated("Replaced by new HikerHistoryItem and HikerHistoryItemUI")
 @Parcelize
 data class HikerHistoryItem (
     val type: HikerHistoryType=HikerHistoryType.UNKNOWN,

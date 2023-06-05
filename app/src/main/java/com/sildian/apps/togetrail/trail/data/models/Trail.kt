@@ -13,6 +13,7 @@ import java.util.*
  * Trail
  ************************************************************************************************/
 
+@Deprecated("Replaced by new Trail and TrailUI")
 @Parcelize
 data class Trail (
     var id:String?=null,

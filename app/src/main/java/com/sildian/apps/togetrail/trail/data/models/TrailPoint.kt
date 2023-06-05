@@ -12,6 +12,7 @@ import java.util.*
  * @param time : the registered time of the point
  ************************************************************************************************/
 
+@Deprecated("Replaced by new TrailPoint and TrailPointUI")
 @Parcelize
 data class TrailPoint (
     var latitude:Double=0.0,

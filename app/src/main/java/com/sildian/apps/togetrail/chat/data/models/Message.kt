@@ -9,6 +9,7 @@ import java.util.*
  * A message is a text sent by a user to other users
  ************************************************************************************************/
 
+@Deprecated("Replaced by new Message and MessageUI")
 @Parcelize
 data class Message (
     var text: String = "",

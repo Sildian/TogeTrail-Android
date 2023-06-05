@@ -7,6 +7,7 @@ import kotlinx.android.parcel.Parcelize
  * Defines the status of an event
  ************************************************************************************************/
 
+@Deprecated("Not used any longer")
 @Parcelize
 enum class EventStatus (val value:Int) : Parcelable {
     FUTURE (1),

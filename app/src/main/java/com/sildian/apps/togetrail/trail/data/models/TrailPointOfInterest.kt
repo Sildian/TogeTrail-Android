@@ -16,6 +16,7 @@ import java.util.*
  * @param photoUrl : the url of the photo representing the place
  ************************************************************************************************/
 
+@Deprecated("Replaced by new TrailPointOfInterest and TrailPointOfInterestUI")
 @Parcelize
 data class TrailPointOfInterest(
     var latitude:Double=0.0,

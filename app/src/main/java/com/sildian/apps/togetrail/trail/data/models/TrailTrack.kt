@@ -11,6 +11,7 @@ import kotlinx.android.parcel.Parcelize
  * @param trailPointsOfInterest : in addition, some points of interest can add some information
  ************************************************************************************************/
 
+@Deprecated("Not used any longer")
 @Parcelize
 data class TrailTrack(
     val trailPoints:ArrayList<TrailPoint> = arrayListOf(),

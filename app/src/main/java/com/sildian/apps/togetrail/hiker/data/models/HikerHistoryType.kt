@@ -7,6 +7,7 @@ import kotlinx.android.parcel.Parcelize
  * Defines what kind of event an history item refers to
  ************************************************************************************************/
 
+@Deprecated("Replaced by new HikerHistoryItem.Action and HikerHistoryItemUI.Action")
 @Parcelize
 enum class HikerHistoryType : Parcelable {
     UNKNOWN,

@@ -7,6 +7,7 @@ import kotlinx.android.parcel.Parcelize
  * A Duo is a group composed by two members, allowing them to chat in a private space
  ************************************************************************************************/
 
+@Deprecated("Replaced by new HikerConversation and ConversationUI")
 @Parcelize
 data class Duo (
     val interlocutorId: String = "",

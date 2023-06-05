@@ -14,6 +14,7 @@ import java.util.*
  * An Event is organized by a hiker in order to trail with other hikers
  ************************************************************************************************/
 
+@Deprecated("Replaced by new Event and EventUI")
 @Parcelize
 data class Event(
     var id:String?=null,
