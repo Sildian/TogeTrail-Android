@@ -27,7 +27,6 @@ fun TrailUI.toDataModel(): Trail =
         isLoop = isLoop,
         measures = measures.toDataModel(),
         creationDate = creationDate.toDate(),
-        updateDate = updateDate.toDate(),
         authorId = authorId,
         nbLikes = nbLikes,
     )
@@ -57,12 +56,11 @@ fun Trail.toUIModel(currentUserId: String?): TrailUI {
     val source = source.orEmpty()
     val position = position?.toPosition() ?: throw IllegalStateException("Trail position should be provided")
     val location = location ?: throw IllegalStateException("Trail location should be provided")
-    val description = description ?: throw IllegalStateException("Trail description should be provided")
+    val description = description.orEmpty()
     val level = level?.toUIModel() ?: throw IllegalStateException("Trail level should be provided")
     val isLoop = isLoop ?: false
     val measures = measures?.toUIModel() ?: MeasuresUI()
     val creationDate = creationDate?.toLocalDateTime() ?: LocalDateTime.now()
-    val updateDate = updateDate?.toLocalDateTime() ?: LocalDateTime.now()
     val authorId = authorId.orEmpty()
     val isCurrentUserAuthor = currentUserId.isNullOrBlank().not() && currentUserId == authorId
     val nbLikes = nbLikes ?: 0
@@ -78,7 +76,6 @@ fun Trail.toUIModel(currentUserId: String?): TrailUI {
         isLoop = isLoop,
         measures = measures,
         creationDate = creationDate,
-        updateDate = updateDate,
         authorId = authorId,
         isCurrentUserAuthor = isCurrentUserAuthor,
         nbLikes = nbLikes,

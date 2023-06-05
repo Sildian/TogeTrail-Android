@@ -43,7 +43,7 @@ fun Hiker.toUIModel(currentUserId: String?): HikerUI {
         photoUrl = photoUrl,
         birthday = birthday,
         home = home,
-        description = description,
+        description = description.orEmpty(),
         profileCreationDate = profileCreationDate,
         isCurrentUser = isCurrentUser,
         nbTrailsCreated = nbTrailsCreated,

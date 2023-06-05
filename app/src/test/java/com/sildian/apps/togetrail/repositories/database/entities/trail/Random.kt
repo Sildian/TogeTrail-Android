@@ -21,7 +21,6 @@ fun Random.nextTrail(
     isLoop: Boolean? = nextBoolean(),
     measures: Trail.Measures? = nextTrailMeasures(),
     creationDate: Date? = nextDate(),
-    updateDate: Date? = nextDate(),
     authorId: String? = nextString(),
     nbLikes: Int? = nextInt(from = 0, until = 10),
 ): Trail =
@@ -38,7 +37,6 @@ fun Random.nextTrail(
         isLoop = isLoop,
         measures = measures,
         creationDate = creationDate,
-        updateDate = updateDate,
         authorId = authorId,
         nbLikes = nbLikes,
     )

@@ -58,15 +58,6 @@ class TrailMappersTest {
     }
 
     @Test(expected = IllegalStateException::class)
-    fun `GIVEN trail without description WHEN invoking toUIModel THEN throws IllegalStateException`() {
-        // Given
-        val trail = Random.nextTrail(description = null)
-
-        // When
-        trail.toUIModel(currentUserId = Random.nextString())
-    }
-
-    @Test(expected = IllegalStateException::class)
     fun `GIVEN trail without level WHEN invoking toUIModel THEN throws IllegalStateException`() {
         // Given
         val trail = Random.nextTrail(level = null)

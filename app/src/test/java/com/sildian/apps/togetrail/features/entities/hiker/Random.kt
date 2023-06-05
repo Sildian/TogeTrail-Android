@@ -18,7 +18,7 @@ fun Random.nextHikerUI(
     photoUrl: String? = nextUrlString(),
     birthday: LocalDate? = nextLocalDate(),
     home: Location? = nextLocation(),
-    description: String? = nextString(),
+    description: String = nextString(),
     profileCreationDate: LocalDateTime = nextLocalDateTime(),
     isCurrentUser: Boolean = nextBoolean(),
     nbTrailsCreated: Int = nextInt(from = 0, until = 10),

@@ -75,15 +75,6 @@ class EventMappersTest {
         event.toUIModel(currentUserId = Random.nextString())
     }
 
-    @Test(expected = IllegalStateException::class)
-    fun `GIVEN Event without description WHEN invoking toUIModel THEN throws IllegalStateException`() {
-        // Given
-        val event = Random.nextEvent(description = null)
-
-        // When
-        event.toUIModel(currentUserId = Random.nextString())
-    }
-
     @Test
     fun `GIVEN valid Event WHEN invoking toDataModel THEN result is correct EventUI`() {
         // Given

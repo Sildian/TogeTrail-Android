@@ -23,7 +23,6 @@ data class TrailUI(
     val isLoop: Boolean,
     val measures: Measures,
     val creationDate: LocalDateTime,
-    val updateDate: LocalDateTime,
     val authorId: String,
     val isCurrentUserAuthor: Boolean,
     val nbLikes: Int,

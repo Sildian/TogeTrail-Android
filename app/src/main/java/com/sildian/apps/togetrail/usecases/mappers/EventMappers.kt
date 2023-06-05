@@ -37,7 +37,7 @@ fun Event.toUIModel(currentUserId: String?): EventUI {
     val meetingLocation = meetingLocation ?: throw IllegalStateException("Event meeting location should be provided")
     val startDate = startDate?.toLocalDate() ?: throw IllegalStateException("Event start date should be provided")
     val endDate = endDate ?.toLocalDate() ?: throw IllegalStateException("Event end date should be provided")
-    val description = description ?: throw IllegalStateException("Event description should be provided")
+    val description = description.orEmpty()
     val isCanceled = isCanceled ?: false
     val creationDate = creationDate?.toLocalDateTime() ?: LocalDateTime.now()
     val authorId = authorId.orEmpty()

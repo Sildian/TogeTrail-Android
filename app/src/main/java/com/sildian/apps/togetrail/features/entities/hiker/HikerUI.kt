@@ -14,7 +14,7 @@ data class HikerUI(
     val photoUrl: String?,
     val birthday: LocalDate?,
     val home: Location?,
-    val description: String?,
+    val description: String,
     val profileCreationDate: LocalDateTime,
     val isCurrentUser: Boolean,
     val nbTrailsCreated: Int,

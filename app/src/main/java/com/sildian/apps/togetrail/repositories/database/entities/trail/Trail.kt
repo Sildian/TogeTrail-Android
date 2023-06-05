@@ -21,7 +21,6 @@ data class Trail(
     val isLoop: Boolean? = null,
     val measures: Measures? = null,
     val creationDate: Date? = null,
-    val updateDate: Date? = null,
     val authorId: String? = null,
     val nbLikes: Int? = null,
 ) {
