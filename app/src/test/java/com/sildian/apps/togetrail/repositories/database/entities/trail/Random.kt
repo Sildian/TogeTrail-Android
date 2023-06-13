@@ -89,17 +89,17 @@ fun Random.nextTrailPointOfInterest(
         photoUrl = photoUrl,
     )
 
-fun Random.nextTrailsList(itemsCount: Int = nextInt(from = 0, until = 4)): List<Trail> =
+fun Random.nextTrailsList(itemsCount: Int = nextInt(from = 1, until = 4)): List<Trail> =
     List(size = itemsCount) { index ->
         Trail(id = index.toString())
     }
 
-fun Random.nextTrailPointsList(itemsCount: Int = nextInt(from = 0, until = 4)): List<TrailPoint> =
+fun Random.nextTrailPointsList(itemsCount: Int = nextInt(from = 1, until = 4)): List<TrailPoint> =
     List(size = itemsCount) { index ->
         TrailPoint(number = index)
     }
 
-fun Random.nextTrailPointsOfInterestList(itemsCount: Int = nextInt(from = 0, until = 4)): List<TrailPointOfInterest> =
+fun Random.nextTrailPointsOfInterestList(itemsCount: Int = nextInt(from = 1, until = 4)): List<TrailPointOfInterest> =
     List(size = itemsCount) { index ->
         TrailPointOfInterest(number = index)
     }

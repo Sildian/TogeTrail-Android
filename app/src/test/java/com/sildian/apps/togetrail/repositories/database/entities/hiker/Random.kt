@@ -79,27 +79,27 @@ fun Random.nextHikerConversation(
         nbUnreadMessages = nbUnreadMessages,
     )
 
-fun Random.nextHikersList(itemsCount: Int = nextInt(from = 0, until = 4)): List<Hiker> =
+fun Random.nextHikersList(itemsCount: Int = nextInt(from = 1, until = 4)): List<Hiker> =
     List(size = itemsCount) { index ->
         Hiker(id = index.toString())
     }
 
-fun Random.nextHikerHistoryItemsList(itemsCount: Int = nextInt(from = 0, until = 4)): List<HikerHistoryItem> =
+fun Random.nextHikerHistoryItemsList(itemsCount: Int = nextInt(from = 1, until = 4)): List<HikerHistoryItem> =
     List(size = itemsCount) {
         HikerHistoryItem()
     }
 
-fun Random.nextHikerEventsList(itemsCount: Int = nextInt(from = 0, until = 4)): List<HikerEvent> =
+fun Random.nextHikerEventsList(itemsCount: Int = nextInt(from = 1, until = 4)): List<HikerEvent> =
     List(size = itemsCount) { index ->
         HikerEvent(id = index.toString())
     }
 
-fun Random.nextHikerTrailsList(itemsCount: Int = nextInt(from = 0, until = 4)): List<HikerTrail> =
+fun Random.nextHikerTrailsList(itemsCount: Int = nextInt(from = 1, until = 4)): List<HikerTrail> =
     List(size = itemsCount) { index ->
         HikerTrail(id = index.toString())
     }
 
-fun Random.nextHikerConversationsList(itemsCount: Int = nextInt(from = 0, until = 4)): List<HikerConversation> =
+fun Random.nextHikerConversationsList(itemsCount: Int = nextInt(from = 1, until = 4)): List<HikerConversation> =
     List(size = itemsCount) { index ->
         HikerConversation(id = index.toString())
     }

@@ -9,6 +9,7 @@ import kotlinx.coroutines.CoroutineDispatcher
  * Loads a trail from the database
  ************************************************************************************************/
 
+@Deprecated("Replaced by [GetSingleTrailUseCase]")
 class TrailLoadDataRequest(
     dispatcher: CoroutineDispatcher,
     private val trailId: String,

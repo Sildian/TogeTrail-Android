@@ -52,17 +52,17 @@ fun Random.nextEventHiker(
 ): EventHiker =
     EventHiker(id = id)
 
-fun Random.nextEventsList(itemsCount: Int = nextInt(from = 0, until = 4)): List<Event> =
+fun Random.nextEventsList(itemsCount: Int = nextInt(from = 1, until = 4)): List<Event> =
     List(size = itemsCount) { index ->
         nextEvent(id = index.toString())
     }
 
-fun Random.nextEventTrailsList(itemsCount: Int = nextInt(from = 0, until = 4)): List<EventTrail> =
+fun Random.nextEventTrailsList(itemsCount: Int = nextInt(from = 1, until = 4)): List<EventTrail> =
     List(size = itemsCount) { index ->
         nextEventTrail(id = index.toString())
     }
 
-fun Random.nextEventHikersList(itemsCount: Int = nextInt(from = 0, until = 4)): List<EventHiker> =
+fun Random.nextEventHikersList(itemsCount: Int = nextInt(from = 1, until = 4)): List<EventHiker> =
     List(size = itemsCount) { index ->
         nextEventHiker(id = index.toString())
     }

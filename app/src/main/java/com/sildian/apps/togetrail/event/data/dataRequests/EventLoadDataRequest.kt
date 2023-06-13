@@ -9,6 +9,7 @@ import kotlinx.coroutines.CoroutineDispatcher
  * Loads an event from the database
  ************************************************************************************************/
 
+@Deprecated("Replaced by [GetSingleEventUseCase]")
 class EventLoadDataRequest(
     dispatcher: CoroutineDispatcher,
     private val eventId: String,

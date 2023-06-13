@@ -9,6 +9,7 @@ import kotlinx.coroutines.CoroutineDispatcher
  * Loads a hiker from the database
  ************************************************************************************************/
 
+@Deprecated("Replaced by [GetSingleHikerUseCase]")
 class HikerLoadDataRequest(
     dispatcher: CoroutineDispatcher,
     private val hikerId: String,
