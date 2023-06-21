@@ -95,3 +95,8 @@ fun Random.nextTrailPointOfInterestUI(
         description = description,
         photoUrl = photoUrl,
     )
+
+fun Random.nextTrailsUIList(itemsCount: Int = nextInt(from = 1, until = 4)): List<TrailUI> =
+    List(size = itemsCount) { index ->
+        nextTrailUI(id = index.toString())
+    }

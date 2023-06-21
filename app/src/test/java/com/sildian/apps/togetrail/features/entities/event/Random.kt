@@ -42,3 +42,8 @@ fun Random.nextEventUI(
         isCurrentUserAuthor = isCurrentUserAuthor,
         nbHikersRegistered = nbHikersRegistered,
     )
+
+fun Random.nextEventsUIList(itemsCount: Int = nextInt(from = 1, until = 4)): List<EventUI> =
+    List(size = itemsCount) { index ->
+        nextEventUI(id = index.toString())
+    }
