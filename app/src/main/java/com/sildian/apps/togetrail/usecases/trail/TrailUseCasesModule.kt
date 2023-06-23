@@ -13,4 +13,9 @@ interface TrailUseCasesModule {
     fun bindGetSingleTrailUseCase(
         getSingleTrailUseCase: GetSingleTrailUseCaseImpl,
     ): GetSingleTrailUseCase
+
+    @Binds
+    fun bindSearchTrailsUseCase(
+        searchTrailsUseCase: SearchTrailsUseCaseImpl,
+    ): SearchTrailsUseCase
 }

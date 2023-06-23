@@ -13,4 +13,9 @@ interface EventUseCasesModule {
     fun bindGetSingleEventUseCase(
         getSingleEventUseCase: GetSingleEventUseCaseImpl,
     ): GetSingleEventUseCase
+
+    @Binds
+    fun bindSearchEventsUseCase(
+        searchEventsUseCase: SearchEventsUseCaseImpl,
+    ): SearchEventsUseCase
 }
