@@ -81,25 +81,25 @@ fun Random.nextHikerConversation(
 
 fun Random.nextHikersList(itemsCount: Int = nextInt(from = 1, until = 4)): List<Hiker> =
     List(size = itemsCount) { index ->
-        Hiker(id = index.toString())
+        nextHiker(id = index.toString())
     }
 
 fun Random.nextHikerHistoryItemsList(itemsCount: Int = nextInt(from = 1, until = 4)): List<HikerHistoryItem> =
-    List(size = itemsCount) {
-        HikerHistoryItem()
+    List(size = itemsCount) { index ->
+        nextHikerHistoryItem(itemId = index.toString())
     }
 
 fun Random.nextHikerEventsList(itemsCount: Int = nextInt(from = 1, until = 4)): List<HikerEvent> =
     List(size = itemsCount) { index ->
-        HikerEvent(id = index.toString())
+        nextHikerEvent(id = index.toString())
     }
 
 fun Random.nextHikerTrailsList(itemsCount: Int = nextInt(from = 1, until = 4)): List<HikerTrail> =
     List(size = itemsCount) { index ->
-        HikerTrail(id = index.toString())
+        nextHikerTrail(id = index.toString())
     }
 
 fun Random.nextHikerConversationsList(itemsCount: Int = nextInt(from = 1, until = 4)): List<HikerConversation> =
     List(size = itemsCount) { index ->
-        HikerConversation(id = index.toString())
+        nextHikerConversation(id = index.toString())
     }

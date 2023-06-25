@@ -13,4 +13,9 @@ interface HikerUseCasesModule {
     fun bindGetSingleHikerUseCase(
         getSingleHikerUseCase: GetSingleHikerUseCaseImpl,
     ): GetSingleHikerUseCase
+
+    @Binds
+    fun bindGetHikerHistoryItemsUseCase(
+        getHikerHistoryItemsUseCase: GetHikerHistoryItemsUseCaseImpl,
+    ): GetHikerHistoryItemsUseCase
 }

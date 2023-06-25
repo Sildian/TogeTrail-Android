@@ -54,3 +54,8 @@ fun Random.nextHikerHistoryItemUI(
             type = itemType,
         )
     )
+
+fun Random.nextHikerHistoryItemsUIList(itemsCount: Int = nextInt(from = 1, until = 4)): List<HikerHistoryItemUI> =
+    List(size = itemsCount) { index ->
+        nextHikerHistoryItemUI(itemId = index.toString())
+    }
