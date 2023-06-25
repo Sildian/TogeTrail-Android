@@ -23,7 +23,7 @@ fun Random.nextMessage(
         authorId = authorId,
     )
 
-fun Random.nextMessagesList(itemsCount: Int = nextInt(from = 0, until = 4)): List<Message> =
+fun Random.nextMessagesList(itemsCount: Int = nextInt(from = 1, until = 4)): List<Message> =
     List(size = itemsCount) {
         nextMessage()
     }

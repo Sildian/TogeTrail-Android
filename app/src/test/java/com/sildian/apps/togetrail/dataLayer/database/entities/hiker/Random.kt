@@ -85,8 +85,8 @@ fun Random.nextHikersList(itemsCount: Int = nextInt(from = 1, until = 4)): List<
     }
 
 fun Random.nextHikerHistoryItemsList(itemsCount: Int = nextInt(from = 1, until = 4)): List<HikerHistoryItem> =
-    List(size = itemsCount) { index ->
-        nextHikerHistoryItem(itemId = index.toString())
+    List(size = itemsCount) {
+        nextHikerHistoryItem()
     }
 
 fun Random.nextHikerEventsList(itemsCount: Int = nextInt(from = 1, until = 4)): List<HikerEvent> =

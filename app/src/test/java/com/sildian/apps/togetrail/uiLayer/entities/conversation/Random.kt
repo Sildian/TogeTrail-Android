@@ -35,3 +35,8 @@ fun Random.nextMessageUI(
         authorId = authorId,
         isCurrentUserAuthor = isCurrentUserAuthor,
     )
+
+fun Random.nextMessagesUIList(itemsCount: Int = nextInt(from = 1, until = 4)): List<MessageUI> =
+    List(size = itemsCount) {
+        nextMessageUI()
+    }

@@ -100,3 +100,13 @@ fun Random.nextTrailsUIList(itemsCount: Int = nextInt(from = 1, until = 4)): Lis
     List(size = itemsCount) { index ->
         nextTrailUI(id = index.toString())
     }
+
+fun Random.nextTrailPointsUIList(itemsCount: Int = nextInt(from = 1, until = 4)): List<TrailPointUI> =
+    List(size = itemsCount) { index ->
+        nextTrailPointUI(number = index)
+    }
+
+fun Random.nextTrailPointsOfInterestUIList(itemsCount: Int = nextInt(from = 1, until = 4)): List<TrailPointOfInterestUI> =
+    List(size = itemsCount) { index ->
+        nextTrailPointOfInterestUI(number = index)
+    }
