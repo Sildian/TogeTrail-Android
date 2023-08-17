@@ -1,35 +1,62 @@
 package com.sildian.apps.togetrail.uiLayer.entities.hiker
 
 import android.os.Parcelable
+import com.sildian.apps.togetrail.common.core.location.Location
 import kotlinx.android.parcel.Parcelize
 import java.time.LocalDateTime
 
-@Parcelize
-data class HikerHistoryItemUI(
-    val date: LocalDateTime,
-    val action: Action,
-    val item: Item,
-) : Parcelable {
+sealed interface HikerHistoryItemUI : Parcelable {
+    val date: LocalDateTime
+    val hikerInfo: HikerInfo
+    val itemInfo: ItemInfo
 
     @Parcelize
-    enum class Action : Parcelable {
-        HIKER_REGISTERED,
-        TRAIL_CREATED,
-        EVENT_CREATED,
-        EVENT_ATTENDED,
-    }
-
-    @Parcelize
-    data class Item(
+    data class HikerInfo(
         val id: String,
-        val type: Type,
-    ) : Parcelable {
+        val name: String,
+        val photoUrl: String?,
+    ) : Parcelable
 
-        @Parcelize
-        enum class Type : Parcelable {
-            HIKER,
-            TRAIL,
-            EVENT,
-        }
+    @Parcelize
+    data class ItemInfo(
+        val id: String,
+        val name: String,
+        val photoUrl: String?,
+        val location: Location?,
+    ) : Parcelable
+
+    @Parcelize
+    data class HikerRegistered(
+        override val date: LocalDateTime,
+        override val hikerInfo: HikerInfo,
+    ) : HikerHistoryItemUI {
+        override val itemInfo: ItemInfo
+            get() = ItemInfo(
+                id = hikerInfo.id,
+                name = hikerInfo.name,
+                photoUrl = hikerInfo.photoUrl,
+                location = null,
+            )
     }
+
+    @Parcelize
+    data class TrailCreated(
+        override val date: LocalDateTime,
+        override val hikerInfo: HikerInfo,
+        override val itemInfo: ItemInfo,
+    ) : HikerHistoryItemUI
+
+    @Parcelize
+    data class EventCreated(
+        override val date: LocalDateTime,
+        override val hikerInfo: HikerInfo,
+        override val itemInfo: ItemInfo,
+    ) : HikerHistoryItemUI
+
+    @Parcelize
+    data class EventAttended(
+        override val date: LocalDateTime,
+        override val hikerInfo: HikerInfo,
+        override val itemInfo: ItemInfo,
+    ) : HikerHistoryItemUI
 }

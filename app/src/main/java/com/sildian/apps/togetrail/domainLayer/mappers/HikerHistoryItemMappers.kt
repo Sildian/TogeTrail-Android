@@ -3,74 +3,83 @@ package com.sildian.apps.togetrail.domainLayer.mappers
 import com.sildian.apps.togetrail.common.utils.toDate
 import com.sildian.apps.togetrail.common.utils.toLocalDateTime
 import com.sildian.apps.togetrail.uiLayer.entities.hiker.HikerHistoryItemUI
-import com.sildian.apps.togetrail.uiLayer.entities.hiker.HikerHistoryItemUI.Action as ActionUI
-import com.sildian.apps.togetrail.uiLayer.entities.hiker.HikerHistoryItemUI.Item as ItemUI
-import com.sildian.apps.togetrail.uiLayer.entities.hiker.HikerHistoryItemUI.Item.Type as ItemTypeUI
+import com.sildian.apps.togetrail.uiLayer.entities.hiker.HikerHistoryItemUI.HikerInfo
+import com.sildian.apps.togetrail.uiLayer.entities.hiker.HikerHistoryItemUI.ItemInfo
+import com.sildian.apps.togetrail.uiLayer.entities.hiker.HikerHistoryItemUI.HikerRegistered
+import com.sildian.apps.togetrail.uiLayer.entities.hiker.HikerHistoryItemUI.TrailCreated
+import com.sildian.apps.togetrail.uiLayer.entities.hiker.HikerHistoryItemUI.EventCreated
+import com.sildian.apps.togetrail.uiLayer.entities.hiker.HikerHistoryItemUI.EventAttended
 import com.sildian.apps.togetrail.dataLayer.database.entities.hiker.HikerHistoryItem
-import com.sildian.apps.togetrail.dataLayer.database.entities.hiker.HikerHistoryItem.Action as Action
-import com.sildian.apps.togetrail.dataLayer.database.entities.hiker.HikerHistoryItem.Item as Item
+import com.sildian.apps.togetrail.dataLayer.database.entities.hiker.HikerHistoryItem.Action
+import com.sildian.apps.togetrail.dataLayer.database.entities.hiker.HikerHistoryItem.Item
+import kotlin.jvm.Throws
 import com.sildian.apps.togetrail.dataLayer.database.entities.hiker.HikerHistoryItem.Item.Type as ItemType
 
-fun HikerHistoryItemUI.toDataModel(): HikerHistoryItem =
-    HikerHistoryItem(
-        date = date.toDate(),
-        action = action.toDataModel(),
-        item = item.toDataModel(),
-    )
-
-private fun ActionUI.toDataModel(): Action =
-    when (this) {
-        ActionUI.HIKER_REGISTERED -> Action.HIKER_REGISTERED
-        ActionUI.TRAIL_CREATED -> Action.TRAIL_CREATED
-        ActionUI.EVENT_CREATED -> Action.EVENT_CREATED
-        ActionUI.EVENT_ATTENDED -> Action.EVENT_ATTENDED
+fun HikerHistoryItemUI.toDataModel(): HikerHistoryItem {
+    val date = date.toDate()
+    val action = when (this) {
+        is HikerRegistered -> Action.HIKER_REGISTERED
+        is TrailCreated -> Action.TRAIL_CREATED
+        is EventCreated -> Action.EVENT_CREATED
+        is EventAttended -> Action.EVENT_ATTENDED
     }
-
-private fun ItemUI.toDataModel(): Item =
-    Item(
-        id = id,
-        type = type.toDataModel(),
-    )
-
-private fun ItemTypeUI.toDataModel(): ItemType =
-    when (this) {
-        ItemTypeUI.HIKER -> ItemType.HIKER
-        ItemTypeUI.TRAIL -> ItemType.TRAIL
-        ItemTypeUI.EVENT -> ItemType.EVENT
+    val itemType = when (this) {
+        is HikerRegistered -> ItemType.HIKER
+        is TrailCreated -> ItemType.TRAIL
+        is EventCreated -> ItemType.EVENT
+        is EventAttended -> ItemType.EVENT
     }
-
-@Throws(IllegalStateException::class)
-fun HikerHistoryItem.toUIModel(): HikerHistoryItemUI {
-    val date = date?.toLocalDateTime() ?: throw IllegalStateException("History item date should be provided")
-    val action = action?.toUIModel() ?: throw IllegalStateException("History item action should be provided")
-    val item = item?.toUIModel() ?: throw IllegalStateException("History item should be provided")
-    return HikerHistoryItemUI(
+    return HikerHistoryItem(
         date = date,
         action = action,
-        item = item,
+        item = Item(
+            id = itemInfo.id,
+            type = itemType,
+        )
     )
 }
 
-private fun Action.toUIModel(): ActionUI =
-    when (this) {
-        Action.HIKER_REGISTERED -> ActionUI.HIKER_REGISTERED
-        Action.TRAIL_CREATED -> ActionUI.TRAIL_CREATED
-        Action.EVENT_CREATED -> ActionUI.EVENT_CREATED
-        Action.EVENT_ATTENDED -> ActionUI.EVENT_ATTENDED
+@Throws(IllegalStateException::class)
+fun HikerHistoryItem.toUIModel(
+    hikerInfo: HikerInfo,
+    itemInfo: ItemInfo,
+): HikerHistoryItemUI {
+    val date = date?.toLocalDateTime() ?: throw IllegalStateException("History item date should be provided")
+    if (action == null) {
+        throw IllegalStateException("History item action should be provided")
     }
-
-private fun Item.toUIModel(): ItemUI {
-    val id = id ?: throw IllegalStateException("Item id should be provided")
-    val type = type?.toUIModel() ?: throw IllegalStateException("Item type should be provided")
-    return ItemUI(
-        id = id,
-        type = type,
-    )
+    if (item?.id == null) {
+        throw IllegalStateException("History item id should be provided")
+    }
+    if (item.type == null) {
+        throw IllegalStateException("History item type should be provided")
+    }
+    when (action) {
+        Action.HIKER_REGISTERED ->
+            check(item.type == ItemType.HIKER) {
+                "History item action ($action) and item type (${item.type}) should be consistent"
+            }
+        Action.TRAIL_CREATED ->
+            check(item.type == ItemType.TRAIL) {
+                "History item action ($action) and item type (${item.type}) should be consistent"
+            }
+        Action.EVENT_CREATED ->
+            check(item.type == ItemType.EVENT) {
+                "History item action ($action) and item type (${item.type}) should be consistent"
+            }
+        Action.EVENT_ATTENDED ->
+            check(item.type == ItemType.EVENT) {
+                "History item action ($action) and item type (${item.type}) should be consistent"
+            }
+    }
+    return when (action) {
+        Action.HIKER_REGISTERED ->
+            HikerRegistered(date = date, hikerInfo = hikerInfo)
+        Action.TRAIL_CREATED ->
+            TrailCreated(date = date, hikerInfo = hikerInfo, itemInfo = itemInfo)
+        Action.EVENT_CREATED ->
+            EventCreated(date = date, hikerInfo = hikerInfo, itemInfo = itemInfo)
+        Action.EVENT_ATTENDED ->
+            EventAttended(date = date, hikerInfo = hikerInfo, itemInfo = itemInfo)
+    }
 }
-
-private fun ItemType.toUIModel(): ItemTypeUI =
-    when (this) {
-        ItemType.HIKER -> ItemTypeUI.HIKER
-        ItemType.TRAIL -> ItemTypeUI.TRAIL
-        ItemType.EVENT -> ItemTypeUI.EVENT
-    }
