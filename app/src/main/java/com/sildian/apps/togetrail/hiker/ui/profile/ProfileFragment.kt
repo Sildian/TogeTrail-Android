@@ -22,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ProfileFragment(private val hikerId: String? = null) :
     BaseFragment<FragmentProfileBinding>(),
-    HikerHistoryAdapter.OnHikerHistoryItemClick
+    HikerHistoryAdapterOld.OnHikerHistoryItemClick
 {
 
     /*****************************************Data***********************************************/
@@ -31,7 +31,7 @@ class ProfileFragment(private val hikerId: String? = null) :
 
     /**********************************UI component**********************************************/
 
-    private lateinit var historyItemAdapter: HikerHistoryAdapter
+    private lateinit var historyItemAdapter: HikerHistoryAdapterOld
 
     /***********************************Data monitoring******************************************/
 
@@ -84,7 +84,7 @@ class ProfileFragment(private val hikerId: String? = null) :
 
     private fun updateHistoryItemsRecyclerView(){
         this.hikerViewModel.data.value?.data?.let { hiker ->
-            this.historyItemAdapter = HikerHistoryAdapter(
+            this.historyItemAdapter = HikerHistoryAdapterOld(
                 DatabaseFirebaseHelper.generateOptionsForAdapter(
                     HikerHistoryItem::class.java,
                     HikerFirebaseQueries.getLastHistoryItems(hiker.id),

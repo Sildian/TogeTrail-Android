@@ -8,24 +8,26 @@ import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.databinding.ItemRecyclerViewHikerHistoryBinding
+import com.sildian.apps.togetrail.databinding.ItemRecyclerViewHikerHistoryOldBinding
 import com.sildian.apps.togetrail.hiker.data.models.HikerHistoryItem
 
 /*************************************************************************************************
  * Displays an hiker's history
+ * @deprecated : Replaced by [com.sildian.apps.togetrail.uiLayer.hikerProfile.details.HikerHistoryItemAdapter]
  ************************************************************************************************/
 
-class HikerHistoryAdapter (
+@Deprecated("Replaced by [com.sildian.apps.togetrail.uiLayer.hikerProfile.details.HikerHistoryItemAdapter]")
+class HikerHistoryAdapterOld (
     options:FirestoreRecyclerOptions<HikerHistoryItem>,
     private val hikerName: String,
     private val listener: OnHikerHistoryItemClick? = null
 )
-    : FirestoreRecyclerAdapter<HikerHistoryItem, HikerHistoryAdapter.HikerHistoryViewHolder>(options) {
+    : FirestoreRecyclerAdapter<HikerHistoryItem, HikerHistoryAdapterOld.HikerHistoryViewHolder>(options) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HikerHistoryViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding: ItemRecyclerViewHikerHistoryBinding =
-            DataBindingUtil.inflate(inflater, R.layout.item_recycler_view_hiker_history, parent, false)
+        val binding: ItemRecyclerViewHikerHistoryOldBinding =
+            DataBindingUtil.inflate(inflater, R.layout.item_recycler_view_hiker_history_old, parent, false)
         return HikerHistoryViewHolder(binding, this.listener)
     }
 
@@ -42,7 +44,7 @@ class HikerHistoryAdapter (
     /***********************************ViewHolders************************************************/
 
     class HikerHistoryViewHolder (
-        private val binding: ItemRecyclerViewHikerHistoryBinding,
+        private val binding: ItemRecyclerViewHikerHistoryOldBinding,
         private val listener: OnHikerHistoryItemClick? = null
     )
         : RecyclerView.ViewHolder(binding.root) {

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Deprecated -->
 <layout>
 
     <data>
@@ -6,7 +7,7 @@
         <import type="com.sildian.apps.togetrail.common.utils.DateUtilities"/>
         <variable
             name="hikerHistoryViewHolder"
-            type="com.sildian.apps.togetrail.hiker.ui.profile.HikerHistoryAdapter.HikerHistoryViewHolder" />
+            type="com.sildian.apps.togetrail.hiker.ui.profile.HikerHistoryAdapterOld.HikerHistoryViewHolder" />
         <variable
             name="hikerName"
             type="String" />
