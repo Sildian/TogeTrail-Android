@@ -3,7 +3,7 @@ package com.sildian.apps.togetrail.uiLayer.entities.event
 import android.os.Parcelable
 import com.sildian.apps.togetrail.common.core.geo.Position
 import com.sildian.apps.togetrail.common.core.location.Location
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
 import java.time.LocalDateTime
 

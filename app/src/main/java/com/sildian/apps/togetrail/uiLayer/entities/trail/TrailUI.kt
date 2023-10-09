@@ -6,7 +6,7 @@ import com.sildian.apps.togetrail.common.core.geo.Derivation
 import com.sildian.apps.togetrail.common.core.geo.Distance
 import com.sildian.apps.togetrail.common.core.geo.Position
 import com.sildian.apps.togetrail.common.core.location.Location
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.time.Duration
 import java.time.LocalDateTime
 

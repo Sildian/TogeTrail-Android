@@ -4,7 +4,7 @@ import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.sildian.apps.togetrail.R
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 /*************************************************************************************************
  * The difficulty level of a trail

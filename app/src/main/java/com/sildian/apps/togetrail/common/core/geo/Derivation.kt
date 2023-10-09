@@ -5,7 +5,7 @@ import com.ibm.icu.text.MeasureFormat
 import com.ibm.icu.util.Measure
 import com.ibm.icu.util.MeasureUnit
 import com.ibm.icu.util.ULocale
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Derivation(val meters: Int) : Parcelable {

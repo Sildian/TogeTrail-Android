@@ -2,7 +2,7 @@ package com.sildian.apps.togetrail.uiLayer.entities.hiker
 
 import android.os.Parcelable
 import com.sildian.apps.togetrail.common.core.location.Location
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
 import java.time.LocalDateTime
 

@@ -2,7 +2,7 @@ package com.sildian.apps.togetrail.chat.data.models
 
 import android.os.Parcelable
 import com.sildian.apps.togetrail.common.utils.DateUtilities
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
 /*************************************************************************************************

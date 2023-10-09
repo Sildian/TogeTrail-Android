@@ -1,7 +1,7 @@
 package com.sildian.apps.togetrail.uiLayer.entities.conversation
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.time.LocalDateTime
 
 @Parcelize

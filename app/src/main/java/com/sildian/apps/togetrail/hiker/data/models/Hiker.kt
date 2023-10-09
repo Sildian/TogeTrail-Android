@@ -2,7 +2,7 @@ package com.sildian.apps.togetrail.hiker.data.models
 
 import android.os.Parcelable
 import com.sildian.apps.togetrail.location.data.models.Location
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.util.*
 import kotlin.math.floor
 

@@ -4,9 +4,9 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.firebase.firestore.GeoPoint
 import com.sildian.apps.togetrail.location.data.models.Location
-import kotlinx.android.parcel.Parceler
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.parcel.RawValue
+import kotlinx.parcelize.Parceler
+import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
 import java.util.*
 
 /*************************************************************************************************

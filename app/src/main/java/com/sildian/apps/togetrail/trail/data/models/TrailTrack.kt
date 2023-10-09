@@ -3,7 +3,7 @@ package com.sildian.apps.togetrail.trail.data.models
 import android.os.Parcelable
 import com.google.android.gms.maps.model.LatLng
 import com.sildian.apps.togetrail.common.utils.GeoUtilities
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 /*************************************************************************************************
  * A TrailTrack is a path related to a trail

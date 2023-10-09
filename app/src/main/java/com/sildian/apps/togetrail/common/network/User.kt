@@ -2,7 +2,7 @@ package com.sildian.apps.togetrail.common.network
 
 import android.os.Parcelable
 import com.google.firebase.auth.FirebaseUser
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import kotlin.jvm.Throws
 
 @Parcelize
