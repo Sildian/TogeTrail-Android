@@ -41,7 +41,10 @@
             android:name="com.sildian.apps.togetrail.event.ui.edit.EventEditActivity"
             android:configChanges="orientation|screenSize" />
         <activity
-            android:name=".hiker.ui.profile.ProfileActivity"
+            android:name=".uiLayer.hikerProfile.HikerProfileActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".hiker.ui.profile.ProfileActivityOld"
             android:configChanges="orientation|screenSize" />
         <activity
             android:name=".hiker.ui.profileEdit.ProfileEditActivity"

@@ -2,7 +2,7 @@ package com.sildian.apps.togetrail.common.utils.locationHelpers
 
 import android.location.Location
 import com.sildian.apps.togetrail.common.baseViewModels.SingleDataViewModel
-import com.sildian.apps.togetrail.common.utils.coroutinesHelpers.CoroutineIODispatcher
+import com.sildian.apps.togetrail.common.coroutines.CoroutineIODispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject

@@ -116,6 +116,9 @@ dependencies {
     //Robolectric
     testImplementation 'org.robolectric:robolectric:4.7'
 
+    //Turbine
+    testImplementation 'app.cash.turbine:turbine:1.0.0'
+
     //Joda time
     implementation 'net.danlew:android.joda:2.10.9.1'
 

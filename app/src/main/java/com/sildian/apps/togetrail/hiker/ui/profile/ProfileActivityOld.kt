@@ -9,7 +9,7 @@ import com.sildian.apps.togetrail.chat.ui.chatRoom.ChatActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseQueries
-import com.sildian.apps.togetrail.databinding.ActivityProfileBinding
+import com.sildian.apps.togetrail.databinding.ActivityProfileOldBinding
 import com.sildian.apps.togetrail.event.ui.detail.EventActivity
 import com.sildian.apps.togetrail.hiker.data.helpers.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.ui.profileEdit.ProfileEditActivity
@@ -18,10 +18,12 @@ import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************
  * Allows to see a hiker's profile or related information
+ * @deprecated : Replaced by [com.sildian.apps.togetrail.uiLayer.hikerProfile.HikerProfileActivity]
  ************************************************************************************************/
 
+@Deprecated("Replaced by [com.sildian.apps.togetrail.uiLayer.hikerProfile.HikerProfileActivity]")
 @AndroidEntryPoint
-class ProfileActivity : BaseActivity<ActivityProfileBinding>() {
+class ProfileActivityOld : BaseActivity<ActivityProfileOldBinding>() {
 
     /**********************************Static items**********************************************/
 
@@ -103,7 +105,7 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding>() {
 
     /******************************UI monitoring**************************************************/
 
-    override fun getLayoutId(): Int = R.layout.activity_profile
+    override fun getLayoutId(): Int = R.layout.activity_profile_old
 
     override fun initializeUI() {
         showFragment()
@@ -124,7 +126,7 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding>() {
     /******************************Fragments monitoring******************************************/
 
     private fun showFragment(){
-        this.fragment=ProfileFragment(this.hikerId)
+        this.fragment=ProfileFragmentOld(this.hikerId)
         this.fragment?.let { fragment ->
             supportFragmentManager.beginTransaction()
                 .replace(R.id.activity_profile_fragment, fragment).commit()

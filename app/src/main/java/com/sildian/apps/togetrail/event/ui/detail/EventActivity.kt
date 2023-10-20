@@ -9,7 +9,7 @@ import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.databinding.ActivityEventBinding
 import com.sildian.apps.togetrail.event.ui.edit.EventEditActivity
-import com.sildian.apps.togetrail.hiker.ui.profile.ProfileActivity
+import com.sildian.apps.togetrail.hiker.ui.profile.ProfileActivityOld
 import com.sildian.apps.togetrail.trail.ui.map.TrailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -135,8 +135,8 @@ class EventActivity : BaseActivity<ActivityEventBinding>() {
     }
 
     private fun startProfileActivity(hikerId:String){
-        val profileActivityIntent=Intent(this, ProfileActivity::class.java)
-        profileActivityIntent.putExtra(ProfileActivity.KEY_BUNDLE_HIKER_ID, hikerId)
+        val profileActivityIntent=Intent(this, ProfileActivityOld::class.java)
+        profileActivityIntent.putExtra(ProfileActivityOld.KEY_BUNDLE_HIKER_ID, hikerId)
         startActivity(profileActivityIntent)
     }
 

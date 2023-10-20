@@ -51,6 +51,7 @@
     <string name="button_common_activate">Activate</string>
     <string name="button_common_select_photo">Select a photo</string>
     <string name="button_common_take_photo">Take a new photo</string>
+    <string name="button_common_retry">Retry</string>
     <!-- Location -->
     <string name="button_location_search_in_area">Search within this area</string>
     <!-- Chat -->

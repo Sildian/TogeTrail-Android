@@ -5,8 +5,8 @@
         <import type="android.view.View"/>
         <import type="com.bumptech.glide.request.RequestOptions"/>
         <variable
-            name="hikerViewModel"
-            type="com.sildian.apps.togetrail.hiker.data.viewModels.HikerViewModel" />
+            name="hikerProfileViewModel"
+            type="com.sildian.apps.togetrail.uiLayer.hikerProfile.HikerProfileViewModel" />
     </data>
 
     <FrameLayout
@@ -15,18 +15,54 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context=".hiker.ui.profile.ProfileFragment">
+        tools:context=".uiLayer.hikerProfile.details.HikerProfileDetailsFragment">
 
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="@{hikerViewModel.data==null ? View.VISIBLE : View.GONE}"/>
+            android:visibility="@{hikerProfileViewModel.hikerState.isLoading ? View.VISIBLE : View.GONE}"
+            tools:visibility="gone"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
+            android:visibility="@{hikerProfileViewModel.hikerState.error != null ? View.VISIBLE : View.GONE}"
+            tools:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_title"
+                android:text="@string/message_query_failure_title"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/components_margin_small"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_body"
+                android:text="@string/message_query_failure_message"/>
+
+            <com.google.android.material.button.MaterialButton
+                style="@style/ClassicButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/components_margin_small"
+                android:text="@string/button_common_retry"
+                android:onClick="@{(v) -> hikerProfileViewModel.loadAll()}"/>
+
+        </LinearLayout>
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{hikerViewModel.data==null ? View.GONE : View.VISIBLE}">
+            android:visibility="@{hikerProfileViewModel.hikerState.isLoading ? View.GONE : View.VISIBLE}"
+            tools:visibility="visible">
 
             <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
@@ -59,7 +95,7 @@
                                 android:layout_margin="@dimen/components_margin_medium"
                                 android:contentDescription="@string/example_image_content_description"
                                 app:srcCompat="@drawable/ic_person_white"
-                                app:imgUrl="@{hikerViewModel.data.data.photoUrl}"
+                                app:imgUrl="@{hikerProfileViewModel.hikerState.result.photoUrl}"
                                 app:imgPlaceHolder="@{@drawable/ic_person_white}"
                                 app:imgOptions="@{RequestOptions.circleCropTransform()}"/>
 
@@ -71,7 +107,8 @@
                                 android:textStyle="bold"
                                 android:textSize="@dimen/text_size_very_important"
                                 android:textColor="@color/colorSecondary"
-                                android:text="@{hikerViewModel.data.data.name, default=@string/example_hiker_name}"/>
+                                android:text="@{hikerProfileViewModel.hikerState.result.name}"
+                                tools:text="@string/example_hiker_name"/>
 
                             <TextView
                                 android:id="@+id/fragment_profile_text_live_location"
@@ -80,8 +117,9 @@
                                 android:alpha="0.60"
                                 android:textSize="@dimen/text_size_title"
                                 android:textColor="@color/colorWhite"
-                                android:text="@{hikerViewModel.data.data.liveLocation.fullAddress, default=@string/example_hiker_live_location}"
-                                android:visibility="@{hikerViewModel.data.data.liveLocation==null ? View.GONE : View.VISIBLE}"/>
+                                android:text="@{hikerProfileViewModel.hikerState.result.home.fullAddress}"
+                                tools:text="@string/example_hiker_live_location"
+                                android:visibility="@{hikerProfileViewModel.hikerState.result.home == null ? View.GONE : View.VISIBLE}"/>
 
                         </LinearLayout>
 
@@ -109,7 +147,8 @@
                                     android:textStyle="bold"
                                     android:textSize="@dimen/text_size_important"
                                     android:textColor="@color/colorSecondary"
-                                    android:text="@{String.valueOf(hikerViewModel.data.data.nbTrailsCreated), default=@string/example_number}" />
+                                    android:text="@{String.valueOf(hikerProfileViewModel.hikerState.result.nbTrailsCreated)}"
+                                    tools:text="@string/example_number"/>
 
                                 <TextView
                                     android:id="@+id/fragment_profile_label_nb_trails_created"
@@ -119,7 +158,8 @@
                                     android:alpha="0.60"
                                     android:textSize="@dimen/text_size_title"
                                     android:textColor="@color/colorWhite"
-                                    android:text="@{hikerViewModel.data.data.nbTrailsCreated > 1 ? @string/label_hiker_trails_created_plur : @string/label_hiker_trails_created_sing, default=@string/label_hiker_trails_created_plur}"/>
+                                    android:text="@{hikerProfileViewModel.hikerState.result.nbTrailsCreated > 1 ? @string/label_hiker_trails_created_plur : @string/label_hiker_trails_created_sing}"
+                                    tools:text="@string/label_hiker_trails_created_plur"/>
 
                             </LinearLayout>
 
@@ -139,7 +179,8 @@
                                     android:textStyle="bold"
                                     android:textSize="@dimen/text_size_important"
                                     android:textColor="@color/colorSecondary"
-                                    android:text="@{String.valueOf(hikerViewModel.data.data.nbEventsCreated), default=@string/example_number}" />
+                                    android:text="@{String.valueOf(hikerProfileViewModel.hikerState.result.nbEventsCreated)}"
+                                    tools:text="@string/example_number"/>
 
                                 <TextView
                                     android:id="@+id/fragment_profile_label_nb_events_created"
@@ -149,7 +190,8 @@
                                     android:alpha="0.60"
                                     android:textSize="@dimen/text_size_title"
                                     android:textColor="@color/colorWhite"
-                                    android:text="@{hikerViewModel.data.data.nbEventsCreated>1 ? @string/label_hiker_events_created_plur : @string/label_hiker_events_created_sing, default=@string/label_hiker_events_created_plur}"/>
+                                    android:text="@{hikerProfileViewModel.hikerState.result.nbEventsCreated > 1 ? @string/label_hiker_events_created_plur : @string/label_hiker_events_created_sing}"
+                                    tools:text="@string/label_hiker_events_created_plur"/>
 
                             </LinearLayout>
 
@@ -169,7 +211,8 @@
                                     android:textStyle="bold"
                                     android:textSize="@dimen/text_size_important"
                                     android:textColor="@color/colorSecondary"
-                                    android:text="@{String.valueOf(hikerViewModel.data.data.nbEventsAttended), default=@string/example_number}" />
+                                    android:text="@{String.valueOf(hikerProfileViewModel.hikerState.result.nbEventsAttended)}"
+                                    tools:text="@string/example_number"/>
 
                                 <TextView
                                     android:id="@+id/fragment_profile_label_nb_events_registered"
@@ -179,7 +222,8 @@
                                     android:alpha="0.60"
                                     android:textSize="@dimen/text_size_title"
                                     android:textColor="@color/colorWhite"
-                                    android:text="@{hikerViewModel.data.data.nbEventsAttended>1 ? @string/label_hiker_events_registered_plur : @string/label_hiker_events_registered_sing, default=@string/label_hiker_events_registered_plur}"/>
+                                    android:text="@{hikerProfileViewModel.hikerState.result.nbEventsAttended > 1 ? @string/label_hiker_events_registered_plur : @string/label_hiker_events_registered_sing}"
+                                    tools:text="@string/label_hiker_events_registered_plur"/>
 
                             </LinearLayout>
 
@@ -231,7 +275,8 @@
                         android:layout_marginEnd="@dimen/components_margin_medium"
                         android:alpha="0.87"
                         android:textColor="@color/colorBlack"
-                        android:text="@{hikerViewModel.data.data.description ?? @string/message_hiker_no_description_available, default=@string/example_hiker_description}"/>
+                        android:text="@{hikerProfileViewModel.hikerState.result.description.isEmpty() ? @string/message_hiker_no_description_available : hikerProfileViewModel.hikerState.result.description}"
+                        tools:text="@string/example_hiker_description"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -251,7 +296,9 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:reverseLayout="false"/>
+                        app:reverseLayout="false"
+                        app:items="@{hikerProfileViewModel.historyItemsState.result}"
+                        app:onItemClick="@{hikerProfileViewModel::onHikerHistoryItemClick}"/>
 
                 </LinearLayout>
 

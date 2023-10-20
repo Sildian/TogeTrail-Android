@@ -4,7 +4,7 @@ import com.sildian.apps.togetrail.common.baseViewModels.SingleDataViewModel
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthRepository
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.FirebaseDocumentDataFlowRequest
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.StorageRepository
-import com.sildian.apps.togetrail.common.utils.coroutinesHelpers.CoroutineIODispatcher
+import com.sildian.apps.togetrail.common.coroutines.CoroutineIODispatcher
 import com.sildian.apps.togetrail.hiker.data.models.Hiker
 import com.sildian.apps.togetrail.hiker.data.source.HikerRepository
 import com.sildian.apps.togetrail.hiker.data.dataRequests.*

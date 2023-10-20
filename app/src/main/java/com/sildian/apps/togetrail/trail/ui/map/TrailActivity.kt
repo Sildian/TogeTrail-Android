@@ -13,7 +13,7 @@ import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseQueries
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.databinding.ActivityTrailBinding
-import com.sildian.apps.togetrail.hiker.ui.profile.ProfileActivity
+import com.sildian.apps.togetrail.hiker.ui.profile.ProfileActivityOld
 import com.sildian.apps.togetrail.trail.ui.infoEdit.TrailInfoEditActivity
 import com.sildian.apps.togetrail.trail.data.models.Trail
 import com.sildian.apps.togetrail.trail.data.helpers.TrailBuildException
@@ -292,8 +292,8 @@ class TrailActivity : BaseActivity<ActivityTrailBinding>() {
     }
 
     private fun startProfileActivity(hikerId: String) {
-        val profileActivityIntent = Intent(this, ProfileActivity::class.java)
-        profileActivityIntent.putExtra(ProfileActivity.KEY_BUNDLE_HIKER_ID, hikerId)
+        val profileActivityIntent = Intent(this, ProfileActivityOld::class.java)
+        profileActivityIntent.putExtra(ProfileActivityOld.KEY_BUNDLE_HIKER_ID, hikerId)
         startActivity(profileActivityIntent)
     }
 

@@ -7,7 +7,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.sildian.apps.togetrail.common.baseDataRequests.DataFlowRequest
 import com.sildian.apps.togetrail.common.baseViewModels.ListDataHolder
 import com.sildian.apps.togetrail.common.utils.GeoUtilities
-import com.sildian.apps.togetrail.common.utils.coroutinesHelpers.CoroutineIODispatcher
+import com.sildian.apps.togetrail.common.coroutines.CoroutineIODispatcher
 import com.sildian.apps.togetrail.common.utils.locationHelpers.UpdateUserLocationDataFlowRequest
 import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationContinuousFinder
 import com.sildian.apps.togetrail.common.utils.locationHelpers.UserLocationException

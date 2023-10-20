@@ -48,7 +48,7 @@ import com.sildian.apps.togetrail.hiker.data.helpers.*
 import com.sildian.apps.togetrail.hiker.data.viewModels.HikerChatViewModel
 import com.sildian.apps.togetrail.hiker.data.viewModels.HikerViewModel
 import com.sildian.apps.togetrail.hiker.ui.profileEdit.ProfileEditActivity
-import com.sildian.apps.togetrail.hiker.ui.profile.ProfileActivity
+import com.sildian.apps.togetrail.hiker.ui.profile.ProfileActivityOld
 import com.sildian.apps.togetrail.location.data.models.Location
 import com.sildian.apps.togetrail.location.ui.search.LocationSearchActivity
 import com.sildian.apps.togetrail.trail.ui.list.TrailsListFragment
@@ -621,8 +621,8 @@ class MainActivity :
     }
 
     private fun startProfileActivity(){
-        val profileActivityIntent=Intent(this, ProfileActivity::class.java)
-        profileActivityIntent.putExtra(ProfileActivity.KEY_BUNDLE_HIKER_ID, this.hikerViewModel.data.value?.data?.id)
+        val profileActivityIntent=Intent(this, ProfileActivityOld::class.java)
+        profileActivityIntent.putExtra(ProfileActivityOld.KEY_BUNDLE_HIKER_ID, this.hikerViewModel.data.value?.data?.id)
         startActivity(profileActivityIntent)
     }
 

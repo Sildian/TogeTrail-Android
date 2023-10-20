@@ -7,7 +7,7 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.DatabaseFirebaseHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
-import com.sildian.apps.togetrail.databinding.FragmentProfileBinding
+import com.sildian.apps.togetrail.databinding.FragmentProfileOldBinding
 import com.sildian.apps.togetrail.hiker.data.models.HikerHistoryItem
 import com.sildian.apps.togetrail.hiker.data.models.HikerHistoryType
 import com.sildian.apps.togetrail.hiker.data.source.HikerFirebaseQueries
@@ -17,11 +17,13 @@ import dagger.hilt.android.AndroidEntryPoint
 /*************************************************************************************************
  * Shows a hiker's profile
  * @param hikerId : the hiker's id
+ * @deprecated : Replaced by [com.sildian.apps.togetrail.uiLayer.hikerProfile.details.HikerProfileDetailsFragment]
  ************************************************************************************************/
 
+@Deprecated("Replaced by [com.sildian.apps.togetrail.uiLayer.hikerProfile.details.HikerProfileDetailsFragment]")
 @AndroidEntryPoint
-class ProfileFragment(private val hikerId: String? = null) :
-    BaseFragment<FragmentProfileBinding>(),
+class ProfileFragmentOld(private val hikerId: String? = null) :
+    BaseFragment<FragmentProfileOldBinding>(),
     HikerHistoryAdapterOld.OnHikerHistoryItemClick
 {
 
@@ -66,7 +68,7 @@ class ProfileFragment(private val hikerId: String? = null) :
 
     /***********************************UI monitoring********************************************/
 
-    override fun getLayoutId(): Int = R.layout.fragment_profile
+    override fun getLayoutId(): Int = R.layout.fragment_profile_old
 
     override fun initializeUI(){
         initializeToolbar()
@@ -77,9 +79,9 @@ class ProfileFragment(private val hikerId: String? = null) :
     }
 
     private fun initializeToolbar(){
-        (activity as ProfileActivity).setSupportActionBar(this.binding.fragmentProfileToolbar)
-        (activity as ProfileActivity).supportActionBar?.title = ""
-        (activity as ProfileActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (activity as ProfileActivityOld).setSupportActionBar(this.binding.fragmentProfileToolbar)
+        (activity as ProfileActivityOld).supportActionBar?.title = ""
+        (activity as ProfileActivityOld).supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun updateHistoryItemsRecyclerView(){
@@ -114,9 +116,9 @@ class ProfileFragment(private val hikerId: String? = null) :
     override fun onHistoryItemClick(historyItem: HikerHistoryItem) {
         historyItem.itemId?.let { itemId ->
             when (historyItem.type) {
-                HikerHistoryType.TRAIL_CREATED -> (activity as ProfileActivity).seeTrail(itemId)
-                HikerHistoryType.EVENT_CREATED -> (activity as ProfileActivity).seeEvent(itemId)
-                HikerHistoryType.EVENT_ATTENDED -> (activity as ProfileActivity).seeEvent(itemId)
+                HikerHistoryType.TRAIL_CREATED -> (activity as ProfileActivityOld).seeTrail(itemId)
+                HikerHistoryType.EVENT_CREATED -> (activity as ProfileActivityOld).seeEvent(itemId)
+                HikerHistoryType.EVENT_ATTENDED -> (activity as ProfileActivityOld).seeEvent(itemId)
                 else -> { }
             }
         }

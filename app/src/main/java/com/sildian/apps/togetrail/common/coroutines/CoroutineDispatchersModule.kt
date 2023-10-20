@@ -1,4 +1,4 @@
-package com.sildian.apps.togetrail.common.utils.coroutinesHelpers
+package com.sildian.apps.togetrail.common.coroutines
 
 import dagger.Module
 import dagger.Provides
@@ -7,10 +7,6 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Qualifier
-
-/*************************************************************************************************
- * Dependency injection module related to user coroutine dispatchers
- ************************************************************************************************/
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)

@@ -12,7 +12,7 @@ import com.sildian.apps.togetrail.hiker.data.helpers.CurrentHikerInfo
 import com.sildian.apps.togetrail.hiker.data.models.Hiker
 import com.sildian.apps.togetrail.hiker.data.source.HikerFirebaseQueries
 import com.sildian.apps.togetrail.hiker.ui.others.HikerAdapter
-import com.sildian.apps.togetrail.hiker.ui.profile.ProfileActivity
+import com.sildian.apps.togetrail.hiker.ui.profile.ProfileActivityOld
 
 /*************************************************************************************************
  * Lets the user search for a hiker by typing a name
@@ -113,8 +113,8 @@ class HikerSearchActivity :
     /***************************************Navigation*******************************************/
 
     private fun startProfileActivity(hikerId: String) {
-        val profileActivityIntent = Intent(this, ProfileActivity::class.java)
-        profileActivityIntent.putExtra(ProfileActivity.KEY_BUNDLE_HIKER_ID, hikerId)
+        val profileActivityIntent = Intent(this, ProfileActivityOld::class.java)
+        profileActivityIntent.putExtra(ProfileActivityOld.KEY_BUNDLE_HIKER_ID, hikerId)
         startActivity(profileActivityIntent)
     }
 
