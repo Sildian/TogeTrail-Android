@@ -5,22 +5,22 @@ sealed interface DatabaseCollectionInfo {
 
     sealed class HikerCollection : DatabaseCollectionInfo {
         override val collectionName: String = "hiker"
-        object Main : HikerCollection()
+        data object Main : HikerCollection()
         sealed class SubCollections : HikerCollection() {
             abstract val subCollectionName: String
-            object HistoryItemSubCollection : SubCollections() {
+            data object HistoryItemSubCollection : SubCollections() {
                 override val subCollectionName: String = "historyItem"
             }
-            object AttendedEventSubCollection : SubCollections() {
+            data object AttendedEventSubCollection : SubCollections() {
                 override val subCollectionName: String = "attendedEvent"
             }
-            object LikedTrailSubCollection : SubCollections() {
+            data object LikedTrailSubCollection : SubCollections() {
                 override val subCollectionName: String = "likedTrail"
             }
-            object MarkedTrailSubCollection : SubCollections() {
+            data object MarkedTrailSubCollection : SubCollections() {
                 override val subCollectionName: String = "markedTrail"
             }
-            object ConversationSubCollection : SubCollections() {
+            data object ConversationSubCollection : SubCollections() {
                 override val subCollectionName: String = "conversation"
             }
         }
@@ -28,16 +28,16 @@ sealed interface DatabaseCollectionInfo {
 
     sealed class EventCollection : DatabaseCollectionInfo {
         override val collectionName: String = "event"
-        object Main : EventCollection()
+        data object Main : EventCollection()
         sealed class SubCollections : EventCollection() {
             abstract val subCollectionName: String
-            object AttachedTrailSubCollection : SubCollections() {
+            data object AttachedTrailSubCollection : SubCollections() {
                 override val subCollectionName: String = "attachedTrail"
             }
-            object RegisteredHikerSubCollection : SubCollections() {
+            data object RegisteredHikerSubCollection : SubCollections() {
                 override val subCollectionName: String = "registeredHiker"
             }
-            object MessageSubCollection : SubCollections() {
+            data object MessageSubCollection : SubCollections() {
                 override val subCollectionName: String = "message"
             }
         }
@@ -45,13 +45,13 @@ sealed interface DatabaseCollectionInfo {
 
     sealed class TrailCollection : DatabaseCollectionInfo {
         override val collectionName: String = "trail"
-        object Main : TrailCollection()
+        data object Main : TrailCollection()
         sealed class SubCollections : TrailCollection() {
             abstract val subCollectionName: String
-            object TrailPointSubCollection : SubCollections() {
+            data object TrailPointSubCollection : SubCollections() {
                 override val subCollectionName: String = "trailPoint"
             }
-            object TrailPointOfInterestSubCollection : SubCollections() {
+            data object TrailPointOfInterestSubCollection : SubCollections() {
                 override val subCollectionName: String = "trailPointOfInterest"
             }
         }
@@ -59,10 +59,10 @@ sealed interface DatabaseCollectionInfo {
 
     sealed class ConversationCollection : DatabaseCollectionInfo {
         override val collectionName: String = "conversation"
-        object Main : ConversationCollection()
+        data object Main : ConversationCollection()
         sealed class SubCollections : ConversationCollection() {
             abstract val subCollectionName: String
-            object MessageSubCollection : SubCollections() {
+            data object MessageSubCollection : SubCollections() {
                 override val subCollectionName: String = "message"
             }
         }

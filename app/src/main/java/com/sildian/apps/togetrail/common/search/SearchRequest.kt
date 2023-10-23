@@ -5,7 +5,7 @@ import com.sildian.apps.togetrail.common.core.location.Location
 
 sealed interface SearchRequest {
 
-    object Default : SearchRequest
+    data object Default : SearchRequest
 
     data class FromAuthor(val authorId: String) : SearchRequest
 

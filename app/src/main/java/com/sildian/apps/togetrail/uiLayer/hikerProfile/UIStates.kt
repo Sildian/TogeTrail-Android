@@ -15,7 +15,7 @@ sealed interface HikerState : Parcelable {
     val result: HikerUI? get() = (this as? Result)?.hiker
 
     @Parcelize
-    object Loading : HikerState
+    data object Loading : HikerState
     @Parcelize
     data class Error(val e: Throwable) : HikerState
     @Parcelize
@@ -31,7 +31,7 @@ sealed interface HikerHistoryItemsState : Parcelable {
     val result: List<HikerHistoryItemUI> get() = (this as? Result)?.historyItems ?: emptyList()
 
     @Parcelize
-    object Loading : HikerHistoryItemsState
+    data object Loading : HikerHistoryItemsState
     @Parcelize
     data class Error(val e: Throwable) : HikerHistoryItemsState
     @Parcelize
