@@ -11,20 +11,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.sildian.apps.togetrail.R
-import com.sildian.apps.togetrail.dataLayer.auth.AuthRepository
 import com.sildian.apps.togetrail.databinding.FragmentHikerProfileDetailsBinding
 import com.sildian.apps.togetrail.uiLayer.hikerProfile.HikerProfileViewModel
 import com.sildian.apps.togetrail.uiLayer.hikerProfile.HikerState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class HikerProfileDetailsFragment : Fragment() {
-
-    // TODO Replace by a usecase to get the current user
-    @Inject
-    lateinit var authRepository: AuthRepository
 
     private val hikerProfileViewModel: HikerProfileViewModel by activityViewModels()
 
@@ -95,7 +89,7 @@ class HikerProfileDetailsFragment : Fragment() {
         when {
             hikerState is HikerState.Result && hikerState.hiker.isCurrentUser ->
                 binding?.fragmentProfileToolbar?.inflateMenu(R.menu.menu_edit)
-            authRepository.getCurrentUser() != null ->
+            hikerProfileViewModel.isUserConnected ->
                 binding?.fragmentProfileToolbar?.inflateMenu(R.menu.menu_chat)
             else ->
                 binding?.fragmentProfileToolbar?.menu?.clear()

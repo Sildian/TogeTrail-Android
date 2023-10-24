@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sildian.apps.togetrail.common.coroutines.CoroutineIODispatcher
+import com.sildian.apps.togetrail.domainLayer.auth.GetCurrentUserUseCase
 import com.sildian.apps.togetrail.domainLayer.hiker.GetHikerHistoryItemsUseCase
 import com.sildian.apps.togetrail.domainLayer.hiker.GetSingleHikerUseCase
 import com.sildian.apps.togetrail.uiLayer.entities.hiker.HikerHistoryItemUI
@@ -24,6 +25,7 @@ import javax.inject.Inject
 class HikerProfileViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     @CoroutineIODispatcher private val coroutineDispatcher: CoroutineDispatcher,
+    private val getCurrentUserUseCase: GetCurrentUserUseCase,
     private val getSingleHikerUseCase: GetSingleHikerUseCase,
     private val getHikerHistoryItemsUseCase: GetHikerHistoryItemsUseCase,
 ) : ViewModel() {
@@ -31,6 +33,13 @@ class HikerProfileViewModel @Inject constructor(
     private val hikerId: String = requireNotNull(
         savedStateHandle[HikerProfileActivity.KEY_BUNDLE_HIKER_ID]
     )
+
+    val isUserConnected: Boolean get() =
+        try {
+            getCurrentUserUseCase() != null
+        } catch (e: Throwable) {
+            false
+        }
 
     private val _hikerState = MutableStateFlow<HikerState>(
         value = HikerState.Loading

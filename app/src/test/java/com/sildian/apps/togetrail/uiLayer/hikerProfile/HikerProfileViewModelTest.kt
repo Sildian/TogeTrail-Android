@@ -4,7 +4,10 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.sildian.apps.togetrail.common.coroutines.CoroutineTestRule
+import com.sildian.apps.togetrail.common.network.nextUser
 import com.sildian.apps.togetrail.common.utils.nextString
+import com.sildian.apps.togetrail.domainLayer.auth.GetCurrentUserUseCase
+import com.sildian.apps.togetrail.domainLayer.auth.GetCurrentUserUseCaseFake
 import com.sildian.apps.togetrail.domainLayer.hiker.GetHikerHistoryItemsUseCase
 import com.sildian.apps.togetrail.domainLayer.hiker.GetHikerHistoryItemsUseCaseFake
 import com.sildian.apps.togetrail.domainLayer.hiker.GetSingleHikerUseCase
@@ -31,6 +34,7 @@ class HikerProfileViewModelTest {
 
     private fun initViewModel(
         hikerId: String = Random.nextString(),
+        getCurrentUserUseCase: GetCurrentUserUseCase = GetCurrentUserUseCaseFake(),
         getSingleHikerUseCase: GetSingleHikerUseCase = GetSingleHikerUseCaseFake(),
         getHikerHistoryItemsUseCase: GetHikerHistoryItemsUseCase = GetHikerHistoryItemsUseCaseFake(),
     ): HikerProfileViewModel =
@@ -39,9 +43,43 @@ class HikerProfileViewModelTest {
                 set(HikerProfileActivity.KEY_BUNDLE_HIKER_ID, hikerId)
             },
             coroutineDispatcher = coroutineTestRule.dispatcher,
+            getCurrentUserUseCase = getCurrentUserUseCase,
             getSingleHikerUseCase = getSingleHikerUseCase,
             getHikerHistoryItemsUseCase = getHikerHistoryItemsUseCase,
         )
+
+    @Test
+    fun `GIVEN error WHEN isUserConnected THEN isUserConnected is false`() {
+        // Given
+        val viewModel = initViewModel(
+            getCurrentUserUseCase = GetCurrentUserUseCaseFake(error = IllegalStateException()),
+        )
+
+        // When Then
+        assertFalse(viewModel.isUserConnected)
+    }
+
+    @Test
+    fun `GIVEN null user WHEN isUserConnected THEN isUserConnected is false`() {
+        // Given
+        val viewModel = initViewModel(
+            getCurrentUserUseCase = GetCurrentUserUseCaseFake(user = null),
+        )
+
+        // When Then
+        assertFalse(viewModel.isUserConnected)
+    }
+
+    @Test
+    fun `GIVEN user WHEN isUserConnected THEN isUserConnected is true`() {
+        // Given
+        val viewModel = initViewModel(
+            getCurrentUserUseCase = GetCurrentUserUseCaseFake(user = Random.nextUser()),
+        )
+
+        // When Then
+        assertTrue(viewModel.isUserConnected)
+    }
 
     @Test
     fun `GIVEN error WHEN loadHiker THEN HikerState is Error`() = runTest {
@@ -123,7 +161,10 @@ class HikerProfileViewModelTest {
     fun `GIVEN nothing WHEN onEditMenuButtonClick THEN trigger NavigateToHikerProfileEdit event`() = runTest {
         val viewModel = initViewModel()
         viewModel.navigationEvent.test {
+            // Given When
             viewModel.onEditMenuButtonClick()
+
+            // Then
             assertEquals(HikerProfileNavigationEvent.NavigateToHikerProfileEdit, awaitItem())
             cancelAndIgnoreRemainingEvents()
         }
@@ -134,7 +175,10 @@ class HikerProfileViewModelTest {
         val hikerId = Random.nextString()
         val viewModel = initViewModel(hikerId = hikerId)
         viewModel.navigationEvent.test {
+            // Given When
             viewModel.onConversationMenuButtonClick()
+
+            // Then
             assertEquals(HikerProfileNavigationEvent.NavigateToConversation(interlocutorId = hikerId), awaitItem())
             cancelAndIgnoreRemainingEvents()
         }

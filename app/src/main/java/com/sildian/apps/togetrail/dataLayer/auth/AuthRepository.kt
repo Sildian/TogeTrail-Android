@@ -4,7 +4,7 @@ import com.sildian.apps.togetrail.common.network.AuthException
 import com.sildian.apps.togetrail.common.network.User
 
 interface AuthRepository {
-    @Throws(AuthException::class)
+    @Throws(AuthException::class, IllegalStateException::class)
     fun getCurrentUser(): User?
     @Throws(AuthException::class)
     fun signUserOut()
