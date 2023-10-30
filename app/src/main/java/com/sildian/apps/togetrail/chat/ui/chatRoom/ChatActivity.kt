@@ -8,8 +8,8 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.databinding.ActivityChatBinding
-import com.sildian.apps.togetrail.hiker.ui.profile.ProfileActivityOld
 import com.sildian.apps.togetrail.hiker.ui.search.HikerSearchActivity
+import com.sildian.apps.togetrail.uiLayer.hikerProfile.HikerProfileActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 /*************************************************************************************************
@@ -152,9 +152,12 @@ class ChatActivity : BaseActivity<ActivityChatBinding>() {
     /***********************************Navigation***********************************************/
 
     private fun startProfileActivity(hikerId:String) {
-        val profileActivityIntent= Intent(this, ProfileActivityOld::class.java)
-        profileActivityIntent.putExtra(ProfileActivityOld.KEY_BUNDLE_HIKER_ID, hikerId)
-        startActivity(profileActivityIntent)
+        startActivity(
+            HikerProfileActivity.newIntent(
+                context = this,
+                hikerId = hikerId,
+            )
+        )
     }
 
     private fun startHikerSearchActivity() {

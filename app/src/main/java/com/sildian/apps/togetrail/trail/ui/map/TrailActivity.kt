@@ -13,11 +13,11 @@ import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseQueries
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.databinding.ActivityTrailBinding
-import com.sildian.apps.togetrail.hiker.ui.profile.ProfileActivityOld
 import com.sildian.apps.togetrail.trail.ui.infoEdit.TrailInfoEditActivity
 import com.sildian.apps.togetrail.trail.data.models.Trail
 import com.sildian.apps.togetrail.trail.data.helpers.TrailBuildException
 import com.sildian.apps.togetrail.trail.data.viewModels.TrailViewModel
+import com.sildian.apps.togetrail.uiLayer.hikerProfile.HikerProfileActivity
 import dagger.hilt.android.AndroidEntryPoint
 import io.ticofab.androidgpxparser.parser.GPXParser
 import org.xmlpull.v1.XmlPullParserException
@@ -292,9 +292,12 @@ class TrailActivity : BaseActivity<ActivityTrailBinding>() {
     }
 
     private fun startProfileActivity(hikerId: String) {
-        val profileActivityIntent = Intent(this, ProfileActivityOld::class.java)
-        profileActivityIntent.putExtra(ProfileActivityOld.KEY_BUNDLE_HIKER_ID, hikerId)
-        startActivity(profileActivityIntent)
+        startActivity(
+            HikerProfileActivity.newIntent(
+                context = this,
+                hikerId = hikerId,
+            )
+        )
     }
 
     //TODO it the trail is too big, it may fail to pass to the intent. An other way needs to be found to edit a trail.

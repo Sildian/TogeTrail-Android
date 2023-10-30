@@ -48,7 +48,6 @@ import com.sildian.apps.togetrail.hiker.data.helpers.*
 import com.sildian.apps.togetrail.hiker.data.viewModels.HikerChatViewModel
 import com.sildian.apps.togetrail.hiker.data.viewModels.HikerViewModel
 import com.sildian.apps.togetrail.hiker.ui.profileEdit.ProfileEditActivity
-import com.sildian.apps.togetrail.hiker.ui.profile.ProfileActivityOld
 import com.sildian.apps.togetrail.location.data.models.Location
 import com.sildian.apps.togetrail.location.ui.search.LocationSearchActivity
 import com.sildian.apps.togetrail.trail.ui.list.TrailsListFragment
@@ -58,6 +57,7 @@ import com.sildian.apps.togetrail.trail.data.models.Trail
 import com.sildian.apps.togetrail.trail.data.viewModels.HikerLikedTrailsViewModel
 import com.sildian.apps.togetrail.trail.data.viewModels.HikerMarkedTrailsViewModel
 import com.sildian.apps.togetrail.trail.data.source.TrailFirebaseQueries
+import com.sildian.apps.togetrail.uiLayer.hikerProfile.HikerProfileActivity
 import dagger.hilt.android.AndroidEntryPoint
 import net.danlew.android.joda.JodaTimeAndroid
 
@@ -620,10 +620,13 @@ class MainActivity :
         )
     }
 
-    private fun startProfileActivity(){
-        val profileActivityIntent=Intent(this, ProfileActivityOld::class.java)
-        profileActivityIntent.putExtra(ProfileActivityOld.KEY_BUNDLE_HIKER_ID, this.hikerViewModel.data.value?.data?.id)
-        startActivity(profileActivityIntent)
+    private fun startProfileActivity() {
+        startActivity(
+            HikerProfileActivity.newIntent(
+                context = this,
+                hikerId = this.hikerViewModel.data.value?.data?.id.orEmpty(),
+            )
+        )
     }
 
     private fun startProfileEditActivity(){

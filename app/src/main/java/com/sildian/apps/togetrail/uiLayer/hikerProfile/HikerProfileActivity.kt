@@ -3,7 +3,6 @@ package com.sildian.apps.togetrail.uiLayer.hikerProfile
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -29,8 +28,8 @@ class HikerProfileActivity : AppCompatActivity() {
 
     private var binding: ActivityHikerProfileBinding? = null
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(
             this,
             R.layout.activity_hiker_profile,
