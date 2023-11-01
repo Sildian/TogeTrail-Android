@@ -66,6 +66,7 @@ class HikerProfileDetailsFragment : Fragment() {
 
     private fun initToolbar() {
         binding?.fragmentProfileToolbar?.title = ""
+        binding?.fragmentProfileToolbar?.setNavigationIcon(R.drawable.ic_back_white)
         binding?.fragmentProfileToolbar?.setNavigationOnClickListener {
             activity?.onBackPressedDispatcher?.onBackPressed()
         }
@@ -86,13 +87,16 @@ class HikerProfileDetailsFragment : Fragment() {
     }
 
     private fun onHikerState(hikerState: HikerState) {
-        when {
-            hikerState is HikerState.Result && hikerState.hiker.isCurrentUser ->
-                binding?.fragmentProfileToolbar?.inflateMenu(R.menu.menu_edit)
-            hikerProfileViewModel.isUserConnected ->
-                binding?.fragmentProfileToolbar?.inflateMenu(R.menu.menu_chat)
-            else ->
-                binding?.fragmentProfileToolbar?.menu?.clear()
+        binding?.fragmentProfileToolbar?.apply {
+            menu.clear()
+            when {
+                hikerState is HikerState.Result && hikerState.hiker.isCurrentUser ->
+                    inflateMenu(R.menu.menu_edit)
+                hikerProfileViewModel.isUserConnected ->
+                    inflateMenu(R.menu.menu_chat)
+                else ->
+                    Unit
+            }
         }
     }
 
