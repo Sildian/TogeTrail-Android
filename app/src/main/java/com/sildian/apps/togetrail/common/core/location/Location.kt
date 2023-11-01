@@ -22,11 +22,11 @@ data class Location(
 
     @Parcelize
     data class Country(
-        val code: String,
-        val name: String,
+        val code: String? = null,
+        val name: String? = null,
     ) : Parcelable {
 
-        override fun toString(): String = name
+        override fun toString(): String = name.orEmpty()
 
         override fun equals(other: Any?): Boolean =
             other is Country && other.code == code
@@ -37,11 +37,11 @@ data class Location(
 
     @Parcelize
     data class Region(
-        val code: String,
-        val name: String,
+        val code: String? = null,
+        val name: String? = null,
     ) : Parcelable {
 
-        override fun toString(): String = name
+        override fun toString(): String = name.orEmpty()
 
         override fun equals(other: Any?): Boolean =
             other is Region && other.code == code

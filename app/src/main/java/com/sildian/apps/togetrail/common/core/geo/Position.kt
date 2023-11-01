@@ -8,9 +8,9 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Position(
-    val latitude: Double,
-    val longitude: Double,
-    val altitude: Altitude,
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0,
+    val altitude: Altitude = Altitude(),
 ) : Parcelable {
 
     init {

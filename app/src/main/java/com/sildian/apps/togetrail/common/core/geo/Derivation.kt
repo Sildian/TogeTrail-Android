@@ -8,7 +8,7 @@ import com.ibm.icu.util.ULocale
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Derivation(val meters: Int) : Parcelable {
+data class Derivation(val meters: Int = 0) : Parcelable {
 
     override fun toString(): String =
         MeasureFormat.getInstance(ULocale.getDefault(), MeasureFormat.FormatWidth.SHORT)

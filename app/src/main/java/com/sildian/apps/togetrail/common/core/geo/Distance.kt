@@ -10,7 +10,7 @@ import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Distance(val meters: Int) : Parcelable {
+data class Distance(val meters: Int = 0) : Parcelable {
 
     @IgnoredOnParcel
     val kilometers: Double get() = meters.toDouble() / 1000
