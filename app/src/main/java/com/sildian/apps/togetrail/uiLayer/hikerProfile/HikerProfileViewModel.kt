@@ -66,6 +66,7 @@ class HikerProfileViewModel @Inject constructor(
                     val hiker = getSingleHikerUseCase(id = hikerId)
                     HikerState.Result(hiker = hiker)
                 } catch (e: Throwable) {
+                    e.printStackTrace()
                     HikerState.Error(e = e)
                 }
         }
@@ -78,6 +79,7 @@ class HikerProfileViewModel @Inject constructor(
                     val historyItems = getHikerHistoryItemsUseCase(hikerId = hikerId)
                     HikerHistoryItemsState.Result(historyItems = historyItems)
                 } catch (e: Throwable) {
+                    e.printStackTrace()
                     HikerHistoryItemsState.Error(e = e)
                 }
         }
