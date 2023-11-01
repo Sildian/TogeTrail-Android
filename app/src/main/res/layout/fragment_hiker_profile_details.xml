@@ -61,7 +61,7 @@
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{hikerProfileViewModel.hikerState.isLoading ? View.GONE : View.VISIBLE}"
+            android:visibility="@{hikerProfileViewModel.hikerState.result != null ? View.VISIBLE : View.GONE}"
             tools:visibility="visible">
 
             <com.google.android.material.appbar.AppBarLayout
@@ -298,7 +298,8 @@
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         app:reverseLayout="false"
                         app:items="@{hikerProfileViewModel.historyItemsState.result}"
-                        app:onItemClick="@{hikerProfileViewModel::onHikerHistoryItemClick}"/>
+                        app:onItemClick="@{hikerProfileViewModel::onHikerHistoryItemClick}"
+                        tools:listitem="@layout/item_recycler_view_hiker_history_item"/>
 
                 </LinearLayout>
 
