@@ -223,6 +223,7 @@
     <string name="message_unknown_short">\?</string>
     <string name="message_user_unknown">Unknown user</string>
     <string name="message_hiker_no_description_available">I haven\'t told anything about me yet</string>
+    <string name="message_hiker_history_items_empty">I have no history yet</string>
     <string name="message_trail_name_unknown">Unknown trail</string>
     <string name="message_trail_poi_name_unknown">Unknown point of interest</string>
     <string name="message_event_name_unknown">Unknown event</string>

@@ -15,7 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context=".uiLayer.hikerProfile.details.HikerProfileDetailsFragment">
+        tools:context=".uiLayer.hikerProfile.details.HikerProfileDetailsFragment"
+        android:animateLayoutChanges="true">
 
         <ProgressBar
             android:layout_width="wrap_content"
@@ -38,6 +39,7 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:textSize="@dimen/text_size_title"
+                android:textColor="@color/colorBlack"
                 android:text="@string/message_query_failure_title"/>
 
             <TextView
@@ -290,16 +292,34 @@
                         android:textColor="@color/colorSecondaryDark"
                         android:text="@string/label_hiker_history"/>
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/fragment_profile_recycler_view_history_items"
+                    <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:reverseLayout="false"
-                        app:items="@{hikerProfileViewModel.historyItemsState.result}"
-                        app:onItemClick="@{hikerProfileViewModel::onHikerHistoryItemClick}"
-                        tools:listitem="@layout/item_recycler_view_hiker_history_item"/>
+                        android:layout_height="match_parent"
+                        android:animateLayoutChanges="true">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/fragment_profile_recycler_view_history_items"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="@{hikerProfileViewModel.historyItemsState.result != null ? View.VISIBLE : View.GONE}"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            app:reverseLayout="false"
+                            app:items="@{hikerProfileViewModel.historyItemsState.result}"
+                            app:onItemClick="@{hikerProfileViewModel::onHikerHistoryItemClick}"
+                            tools:listitem="@layout/item_recycler_view_hiker_history_item"
+                            tools:visibility="visible"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/message_hiker_history_items_empty"
+                            android:textSize="@dimen/text_size_body"
+                            android:visibility="@{hikerProfileViewModel.historyItemsState.result.size() == 0 ? View.VISIBLE : View.GONE}"
+                            tools:visibility="gone"/>
+
+                    </FrameLayout>
 
                 </LinearLayout>
 
