@@ -10,17 +10,17 @@ data class HikerHistoryItem(
 
     val id: String?
         get() {
-            val itemTypeDescription = item?.type?.description ?: return null
-            val itemId = item.id ?: return null
+            val actionDescription = action?.description ?: return null
+            val itemId = item?.id ?: return null
             val timeStamp = date?.time ?: return null
-            return itemTypeDescription + "_" + itemId + "_" + timeStamp
+            return actionDescription + "_" + itemId + "_" + timeStamp
         }
 
-    enum class Action {
-        HIKER_REGISTERED,
-        TRAIL_CREATED,
-        EVENT_CREATED,
-        EVENT_ATTENDED,
+    enum class Action(val description: String) {
+        HIKER_REGISTERED("hiker_registered"),
+        TRAIL_CREATED("trail_created"),
+        EVENT_CREATED("event_created"),
+        EVENT_ATTENDED("event_attended"),
     }
 
     data class Item(
