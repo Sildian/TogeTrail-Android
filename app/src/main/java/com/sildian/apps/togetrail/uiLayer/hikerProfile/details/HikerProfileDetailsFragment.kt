@@ -24,11 +24,6 @@ class HikerProfileDetailsFragment : Fragment() {
 
     private var binding: FragmentHikerProfileDetailsBinding? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        collectStates()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -48,6 +43,7 @@ class HikerProfileDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
+        collectStates()
         hikerProfileViewModel.loadAll()
     }
 
@@ -57,8 +53,8 @@ class HikerProfileDetailsFragment : Fragment() {
     }
 
     private fun collectStates() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(state = Lifecycle.State.STARTED) {
                 hikerProfileViewModel.hikerState.collect(::onHikerState)
             }
         }
