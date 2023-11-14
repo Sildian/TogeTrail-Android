@@ -12,6 +12,7 @@ import kotlinx.coroutines.CoroutineDispatcher
  * Saves a hiker within the database
  ************************************************************************************************/
 
+@Deprecated("Replaced by [UpdateHikerProfileUseCase]")
 class HikerSaveDataRequest(
     dispatcher: CoroutineDispatcher,
     hiker: Hiker?,

@@ -9,10 +9,13 @@ class StorageRepositoryFake(
     private val imageUrl: String = Random.nextUrlString(),
 ) : StorageRepository {
 
+    var uploadImageSuccessCount: Int = 0 ; private set
     var deleteImageSuccessCount: Int = 0 ; private set
 
-    override suspend fun uploadImage(imageLocalPath: String): String =
-        error?.let { throw it } ?: imageUrl
+    override suspend fun uploadImage(imageLocalPath: String): String {
+        error?.let { throw it } ?: uploadImageSuccessCount++
+        return imageUrl
+    }
 
     override suspend fun deleteImage(imageUrl: String) {
         error?.let { throw it } ?: deleteImageSuccessCount++
