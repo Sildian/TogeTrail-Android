@@ -4,7 +4,7 @@ import com.sildian.apps.togetrail.uiLayer.entities.hiker.HikerUI
 
 class UpdateHikerProfileUseCaseFake(
     private val error: Throwable? = null,
-) : UpdateHikerUseCase {
+) : UpdateHikerProfileUseCase {
 
     var successCount: Int = 0 ; private set
 

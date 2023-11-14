@@ -22,8 +22,8 @@ class UpdateHikerProfileUseCaseImplTest {
         authRepository: AuthRepository = AuthRepositoryFake(),
         storageRepository: StorageRepository = StorageRepositoryFake(),
         hikerRepository: HikerRepository = HikerRepositoryFake(),
-    ): UpdateHikerUseCase =
-        UpdateHikerUseCaseImpl(
+    ): UpdateHikerProfileUseCase =
+        UpdateHikerProfileUseCaseImpl(
             authRepository = authRepository,
             storageRepository = storageRepository,
             hikerRepository = hikerRepository,

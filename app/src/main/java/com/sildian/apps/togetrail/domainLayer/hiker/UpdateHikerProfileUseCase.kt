@@ -11,7 +11,7 @@ import com.sildian.apps.togetrail.uiLayer.entities.hiker.HikerUI
 import javax.inject.Inject
 import kotlin.jvm.Throws
 
-interface UpdateHikerUseCase {
+interface UpdateHikerProfileUseCase {
 
     @Throws(AuthException::class, StorageException::class, DatabaseException::class)
     suspend operator fun invoke(
@@ -21,11 +21,11 @@ interface UpdateHikerUseCase {
     )
 }
 
-class UpdateHikerUseCaseImpl @Inject constructor(
+class UpdateHikerProfileUseCaseImpl @Inject constructor(
     private val authRepository: AuthRepository,
     private val storageRepository: StorageRepository,
     private val hikerRepository: HikerRepository,
-) : UpdateHikerUseCase {
+) : UpdateHikerProfileUseCase {
 
     override suspend operator fun invoke(
         hiker: HikerUI,
