@@ -8,7 +8,7 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.utils.uiHelpers.DialogHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.SnackbarHelper
-import com.sildian.apps.togetrail.databinding.FragmentProfileSettingsEditBinding
+import com.sildian.apps.togetrail.databinding.FragmentProfileSettingsEditOldBinding
 import com.sildian.apps.togetrail.hiker.data.dataRequests.HikerChangeEmailAddressDataRequest
 import com.sildian.apps.togetrail.hiker.data.dataRequests.HikerDeleteAccountDataRequest
 import com.sildian.apps.togetrail.hiker.data.dataRequests.HikerResetPasswordDataRequest
@@ -21,8 +21,8 @@ import dagger.hilt.android.AndroidEntryPoint
  ************************************************************************************************/
 
 @AndroidEntryPoint
-class ProfileSettingsEditFragment(private val hikerId: String?=null) :
-    BaseFragment<FragmentProfileSettingsEditBinding>(),
+class ProfileSettingsEditFragmentOld(private val hikerId: String?=null) :
+    BaseFragment<FragmentProfileSettingsEditOldBinding>(),
         EmailAddressWriteDialogFragment.EmailAddressWriteCallback
 {
 
@@ -75,7 +75,7 @@ class ProfileSettingsEditFragment(private val hikerId: String?=null) :
 
     /***********************************UI monitoring********************************************/
 
-    override fun getLayoutId(): Int = R.layout.fragment_profile_settings_edit
+    override fun getLayoutId(): Int = R.layout.fragment_profile_settings_edit_old
 
     @Suppress("UNUSED_PARAMETER")
     fun onChangeEmailAddressButtonClick(view: View) {

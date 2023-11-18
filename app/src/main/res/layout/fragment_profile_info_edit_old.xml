@@ -7,7 +7,7 @@
         <import type="com.sildian.apps.togetrail.common.utils.DateUtilities"/>
         <variable
             name="profileInfoEditFragment"
-            type="com.sildian.apps.togetrail.hiker.ui.profileEdit.ProfileInfoEditFragment" />
+            type="com.sildian.apps.togetrail.hiker.ui.profileEdit.ProfileInfoEditFragmentOld" />
         <variable
             name="hikerViewModel"
             type="com.sildian.apps.togetrail.hiker.data.viewModels.HikerViewModel" />
@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context=".hiker.ui.profileEdit.ProfileInfoEditFragment">
+        tools:context=".hiker.ui.profileEdit.ProfileInfoEditFragmentOld">
 
         <ProgressBar
             android:layout_width="wrap_content"

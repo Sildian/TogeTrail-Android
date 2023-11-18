@@ -10,7 +10,7 @@ import com.sildian.apps.togetrail.R
 import com.sildian.apps.togetrail.common.baseControllers.BaseActivity
 import com.sildian.apps.togetrail.common.baseControllers.BaseFragment
 import com.sildian.apps.togetrail.common.baseControllers.BaseImagePickerFragment
-import com.sildian.apps.togetrail.databinding.ActivityProfileEditBinding
+import com.sildian.apps.togetrail.databinding.ActivityProfileEditOldBinding
 import com.sildian.apps.togetrail.location.ui.search.LocationSearchActivity
 import com.sildian.apps.togetrail.location.data.models.Location
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,7 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
  ************************************************************************************************/
 
 @AndroidEntryPoint
-class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>() {
+class ProfileEditActivityOld : BaseActivity<ActivityProfileEditOldBinding>() {
 
     /**********************************Static items**********************************************/
 
@@ -111,7 +111,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>() {
 
     /******************************UI monitoring**************************************************/
 
-    override fun getLayoutId(): Int = R.layout.activity_profile_edit
+    override fun getLayoutId(): Int = R.layout.activity_profile_edit_old
 
     override fun initializeUI() {
         initializeToolbar()
@@ -153,9 +153,9 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>() {
     private fun showFragment(fragmentId:Int){
         when(fragmentId){
             ID_FRAGMENT_INFO ->
-                this.fragment= ProfileInfoEditFragment(this.hikerId)
+                this.fragment= ProfileInfoEditFragmentOld(this.hikerId)
             ID_FRAGMENT_SETTINGS ->
-                this.fragment=ProfileSettingsEditFragment(this.hikerId)
+                this.fragment=ProfileSettingsEditFragmentOld(this.hikerId)
         }
         this.fragment?.let { fragment ->
             supportFragmentManager.beginTransaction()

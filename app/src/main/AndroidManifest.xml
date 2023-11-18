@@ -47,7 +47,7 @@
             android:name=".hiker.ui.profile.ProfileActivityOld"
             android:configChanges="orientation|screenSize" />
         <activity
-            android:name=".hiker.ui.profileEdit.ProfileEditActivity"
+            android:name=".hiker.ui.profileEdit.ProfileEditActivityOld"
             android:configChanges="orientation|screenSize" />
         <activity
             android:name=".hiker.ui.search.HikerSearchActivity"

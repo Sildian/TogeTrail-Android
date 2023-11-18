@@ -12,7 +12,7 @@ import com.sildian.apps.togetrail.common.utils.cloudHelpers.AuthFirebaseQueries
 import com.sildian.apps.togetrail.databinding.ActivityProfileOldBinding
 import com.sildian.apps.togetrail.event.ui.detail.EventActivity
 import com.sildian.apps.togetrail.hiker.data.helpers.CurrentHikerInfo
-import com.sildian.apps.togetrail.hiker.ui.profileEdit.ProfileEditActivity
+import com.sildian.apps.togetrail.hiker.ui.profileEdit.ProfileEditActivityOld
 import com.sildian.apps.togetrail.trail.ui.map.TrailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -136,9 +136,9 @@ class ProfileActivityOld : BaseActivity<ActivityProfileOldBinding>() {
     /***********************************Navigation***********************************************/
 
     private fun startProfileEditActivity(){
-        val profileEditActivityIntent=Intent(this, ProfileEditActivity::class.java)
-        profileEditActivityIntent.putExtra(ProfileEditActivity.KEY_BUNDLE_PROFILE_ACTION, ProfileEditActivity.ACTION_PROFILE_EDIT_INFO)
-        profileEditActivityIntent.putExtra(ProfileEditActivity.KEY_BUNDLE_HIKER_ID, this.hikerId)
+        val profileEditActivityIntent=Intent(this, ProfileEditActivityOld::class.java)
+        profileEditActivityIntent.putExtra(ProfileEditActivityOld.KEY_BUNDLE_PROFILE_ACTION, ProfileEditActivityOld.ACTION_PROFILE_EDIT_INFO)
+        profileEditActivityIntent.putExtra(ProfileEditActivityOld.KEY_BUNDLE_HIKER_ID, this.hikerId)
         startActivity(profileEditActivityIntent)
     }
 

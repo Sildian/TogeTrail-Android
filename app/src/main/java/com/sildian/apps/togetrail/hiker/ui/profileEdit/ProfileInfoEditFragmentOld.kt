@@ -9,7 +9,7 @@ import com.sildian.apps.togetrail.common.baseControllers.BaseImagePickerFragment
 import com.sildian.apps.togetrail.common.utils.DateUtilities
 import com.sildian.apps.togetrail.common.utils.uiHelpers.PickerHelper
 import com.sildian.apps.togetrail.common.utils.uiHelpers.TextFieldHelper
-import com.sildian.apps.togetrail.databinding.FragmentProfileInfoEditBinding
+import com.sildian.apps.togetrail.databinding.FragmentProfileInfoEditOldBinding
 import com.sildian.apps.togetrail.hiker.data.dataRequests.HikerSaveDataRequest
 import com.sildian.apps.togetrail.hiker.data.viewModels.HikerViewModel
 import com.sildian.apps.togetrail.location.data.models.Location
@@ -21,8 +21,8 @@ import dagger.hilt.android.AndroidEntryPoint
  ************************************************************************************************/
 
 @AndroidEntryPoint
-class ProfileInfoEditFragment(private val hikerId: String?=null) :
-    BaseImagePickerFragment<FragmentProfileInfoEditBinding>()
+class ProfileInfoEditFragmentOld(private val hikerId: String?=null) :
+    BaseImagePickerFragment<FragmentProfileInfoEditOldBinding>()
 {
 
     /*****************************************Data***********************************************/
@@ -103,7 +103,7 @@ class ProfileInfoEditFragment(private val hikerId: String?=null) :
 
     /***********************************UI monitoring********************************************/
 
-    override fun getLayoutId(): Int = R.layout.fragment_profile_info_edit
+    override fun getLayoutId(): Int = R.layout.fragment_profile_info_edit_old
 
     override fun getAddPhotoBottomSheetId(): Int = R.id.fragment_profile_info_edit_bottom_sheet_add_photo
 
@@ -133,7 +133,7 @@ class ProfileInfoEditFragment(private val hikerId: String?=null) :
 
     @Suppress("UNUSED_PARAMETER")
     fun onLiveLocationTextFieldClick(view:View) {
-        (activity as ProfileEditActivity).searchLocation()
+        (activity as ProfileEditActivityOld).searchLocation()
     }
 
     /*******************************Photos monitoring********************************************/
