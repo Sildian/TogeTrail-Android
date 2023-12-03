@@ -7,8 +7,10 @@ import androidx.core.content.ContextCompat
 
 /*************************************************************************************************
  * Provides with some functions allowing to monitor permissions
+ * * @deprecated : See [com.sildian.apps.togetrail.common.context.PermissionRequestLauncher]
  ************************************************************************************************/
 
+@Deprecated("See [com.sildian.apps.togetrail.common.context.PermissionRequestLauncher]")
 object PermissionsHelper {
 
     /**
