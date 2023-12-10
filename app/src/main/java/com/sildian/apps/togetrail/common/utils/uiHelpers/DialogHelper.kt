@@ -14,12 +14,14 @@ import com.sildian.apps.togetrail.R
  * Provides with some functions allowing to create dialogs
  ************************************************************************************************/
 
+@Deprecated("Replaced by [com.sildian.apps.togetrail.common.context.AlertDialogs]")
 object DialogHelper {
 
     /**
      * Creates a progress dialog
      * @param context : the context
      * @return the dialog ready to be shown
+     * @deprecated : Replaced by [com.sildian.apps.togetrail.common.context.showProgressDialog]
      */
 
     @JvmStatic
@@ -38,6 +40,7 @@ object DialogHelper {
      * @param titleId : the resId for the title
      * @param messageId : the resId for the message
      * @param callback : the button click callback
+     * @deprecated : Replaced by [com.sildian.apps.togetrail.common.context.showInfoDialog]
      */
 
     @Suppress("UNUSED_ANONYMOUS_PARAMETER")
@@ -62,6 +65,7 @@ object DialogHelper {
      * @param messageId : the resId for the message
      * @param listener : the listener for the onClick callbacks
      * @return the dialog ready to be shown
+     * @deprecated : Replaced by [com.sildian.apps.togetrail.common.context.showQuestionDialog]
      */
 
     @JvmStatic
@@ -85,6 +89,7 @@ object DialogHelper {
      * @param messageId : the resId for the message
      * @param listener : the listener for the onClick callbacks
      * @return the dialog ready to be shown
+     * @deprecated : Replaced by [com.sildian.apps.togetrail.common.context.showQuestionDialog]
      */
 
     @JvmStatic

@@ -10,6 +10,7 @@ import com.sildian.apps.togetrail.R
  * Provides with some functions allowing to create Snackbars
  ************************************************************************************************/
 
+@Deprecated("Replaced by [com.sildian.apps.togetrail.common.context.showSnackbar]")
 object SnackbarHelper {
 
     /**
@@ -18,6 +19,7 @@ object SnackbarHelper {
      * @param anchorView : the view on top of which the snackbar should appear, if needed
      * @param textId : the resId for the text
      * @return the Snackbar
+     * @deprecated : Replaced by [com.sildian.apps.togetrail.common.context.showSnackbar]
      */
 
     @JvmStatic
@@ -37,6 +39,7 @@ object SnackbarHelper {
      * @param actionButtonId : the resId for the action button text
      * @param actionCallback : the action callback
      * @return the Snackbar
+     * @deprecated : Replaced by [com.sildian.apps.togetrail.common.context.showSnackbar]
      */
 
     @JvmStatic
