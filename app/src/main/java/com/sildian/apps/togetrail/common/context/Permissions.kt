@@ -9,42 +9,32 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 
-fun ComponentActivity.registerForSinglePermissionRequest(
-    permission: Permission,
-    callback: PermissionRequestLauncher.Callback,
-): PermissionRequestLauncher =
-    SinglePermissionRequestLauncher(
-        permission = permission,
-        activityResultLauncher = registerForActivityResult(
-            ActivityResultContracts.RequestPermission(),
-        ) { isGranted ->
-            if (isGranted) callback.onGranted() else callback.onDenied()
-        },
-        activity = this,
-        callback = callback,
-    )
-
-fun ComponentActivity.registerForMultiplePermissionRequest(
-    permissions: Array<Permission>,
-    callback: PermissionRequestLauncher.Callback,
-): PermissionRequestLauncher =
-    MultiplePermissionRequestLauncher(
-        permissions = permissions,
-        activityResultLauncher = registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
-        ) { isGranted ->
-            if (isGranted.containsValue(false)) callback.onDenied() else callback.onGranted()
-        },
-        activity = this,
-        callback = callback,
-    )
-
-private fun Context.isPermissionGranted(permission: Permission): Boolean =
-    Build.VERSION.SDK_INT < permission.minSdkRequiringPermission
-            || ContextCompat.checkSelfPermission(this, permission.permissionName) == PackageManager.PERMISSION_GRANTED
+enum class Permission(val permissionName: String, val minSdkRequiringPermission: Int) {
+    WriteExternalStorage(
+        permissionName = Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        minSdkRequiringPermission = Build.VERSION_CODES.M,
+    ),
+    Camera(
+        permissionName = Manifest.permission.CAMERA,
+        minSdkRequiringPermission = Build.VERSION_CODES.M,
+    ),
+    AccessFineLocation(
+        permissionName = Manifest.permission.ACCESS_FINE_LOCATION,
+        minSdkRequiringPermission = Build.VERSION_CODES.M,
+    ),
+    AccessCoarseLocation(
+        permissionName = Manifest.permission.ACCESS_COARSE_LOCATION,
+        minSdkRequiringPermission = Build.VERSION_CODES.M,
+    ),
+    PostNotifications(
+        permissionName = Manifest.permission.POST_NOTIFICATIONS,
+        minSdkRequiringPermission = Build.VERSION_CODES.TIRAMISU,
+    ),
+}
 
 abstract class PermissionRequestLauncher(
     private val callback: Callback,
@@ -151,25 +141,54 @@ private class MultiplePermissionRequestLauncher(
     }
 }
 
-enum class Permission(val permissionName: String, val minSdkRequiringPermission: Int) {
-    WriteExternalStorage(
-        permissionName = Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        minSdkRequiringPermission = Build.VERSION_CODES.M,
-    ),
-    Camera(
-        permissionName = Manifest.permission.CAMERA,
-        minSdkRequiringPermission = Build.VERSION_CODES.M,
-    ),
-    AccessFineLocation(
-        permissionName = Manifest.permission.ACCESS_FINE_LOCATION,
-        minSdkRequiringPermission = Build.VERSION_CODES.M,
-    ),
-    AccessCoarseLocation(
-        permissionName = Manifest.permission.ACCESS_COARSE_LOCATION,
-        minSdkRequiringPermission = Build.VERSION_CODES.M,
-    ),
-    PostNotifications(
-        permissionName = Manifest.permission.POST_NOTIFICATIONS,
-        minSdkRequiringPermission = Build.VERSION_CODES.TIRAMISU,
-    ),
-}
+private fun Context.isPermissionGranted(permission: Permission): Boolean =
+    Build.VERSION.SDK_INT < permission.minSdkRequiringPermission
+            || ContextCompat.checkSelfPermission(this, permission.permissionName) == PackageManager.PERMISSION_GRANTED
+
+fun ComponentActivity.registerForSinglePermissionRequest(
+    permission: Permission,
+    callback: PermissionRequestLauncher.Callback,
+): PermissionRequestLauncher =
+    SinglePermissionRequestLauncher(
+        permission = permission,
+        activityResultLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission(),
+        ) { isGranted ->
+            if (isGranted) callback.onGranted() else callback.onDenied()
+        },
+        activity = this,
+        callback = callback,
+    )
+
+fun ComponentActivity.registerForMultiplePermissionRequest(
+    permissions: Array<Permission>,
+    callback: PermissionRequestLauncher.Callback,
+): PermissionRequestLauncher =
+    MultiplePermissionRequestLauncher(
+        permissions = permissions,
+        activityResultLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { isGranted ->
+            if (isGranted.containsValue(false)) callback.onDenied() else callback.onGranted()
+        },
+        activity = this,
+        callback = callback,
+    )
+
+fun Fragment.registerForSinglePermissionRequest(
+    permission: Permission,
+    callback: PermissionRequestLauncher.Callback,
+): PermissionRequestLauncher =
+    requireActivity().registerForSinglePermissionRequest(
+        permission = permission,
+        callback = callback,
+    )
+
+fun Fragment.registerForMultiplePermissionRequest(
+    permissions: Array<Permission>,
+    callback: PermissionRequestLauncher.Callback,
+): PermissionRequestLauncher =
+    requireActivity().registerForMultiplePermissionRequest(
+        permissions = permissions,
+        callback = callback,
+    )

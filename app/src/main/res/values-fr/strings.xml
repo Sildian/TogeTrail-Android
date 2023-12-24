@@ -277,6 +277,8 @@
     <string name="message_event_no_trail_attached">Au moins 1 rando doit être sélectionnée</string>
     <string name="message_user_location_failure">Echec lors de la récupération de votre position</string>
     <string name="message_device_gps_unavailable">Le GPS ne semble pas activé</string>
+    <string name="message_device_gallery_unavailable">La gallerie ne semble pas disponible</string>
+    <string name="message_device_camera_unavailable">L\'appareil photo ne semble pas disponible</string>
     <!-- Notifications -->
     <string name="message_trail_recording_title">Une randonnée est en cours d\'enregistrement</string>
     <string name="message_trail_recording_message">TogeTrail utilise votre position pour enregistrer votre parcours</string>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <variable
+            name="imagePickerViewModel"
+            type="com.sildian.apps.togetrail.common.ui.imagePicker.ImagePickerViewModel" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/TransparentButtonStyle"
+            android:id="@+id/fragment_profile_info_edit_button_select_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/components_margin_medium"
+            android:textColor="@color/colorSecondaryDark"
+            android:text="@string/button_common_select_photo"
+            app:icon="@drawable/ic_select_photo_black"
+            app:iconTint="@color/colorSecondaryDark"
+            android:onClick="@{() -> imagePickerViewModel.onGetPictureButtonClick()}"/>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/TransparentButtonStyle"
+            android:id="@+id/fragment_profile_info_edit_button_take_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/components_margin_medium"
+            android:textColor="@color/colorSecondaryDark"
+            android:text="@string/button_common_take_photo"
+            app:icon="@drawable/ic_take_photo_black"
+            app:iconTint="@color/colorSecondaryDark"
+            android:onClick="@{() -> imagePickerViewModel.onTakePictureButtonClick()}"/>
+
+    </LinearLayout>
+
+</layout>
