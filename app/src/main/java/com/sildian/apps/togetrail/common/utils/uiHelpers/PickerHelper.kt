@@ -3,8 +3,8 @@ package com.sildian.apps.togetrail.common.utils.uiHelpers
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.sildian.apps.togetrail.common.utils.DateUtilities
-import com.sildian.apps.togetrail.common.views.DatePickerDialogFragment
-import com.sildian.apps.togetrail.common.views.TimePickerDialogFragment
+import com.sildian.apps.togetrail.common.views.DatePickerDialogFragmentOld
+import com.sildian.apps.togetrail.common.views.TimePickerDialogFragmentOld
 import java.util.*
 
 /*************************************************************************************************
@@ -27,7 +27,7 @@ object PickerHelper {
             editText.setText(DateUtilities.displayDateShort(initialValue))
         }
         editText.setOnClickListener {
-            DatePickerDialogFragment(editText)
+            DatePickerDialogFragmentOld(editText)
                 .show(activity.supportFragmentManager, "datePicker")
         }
     }
@@ -46,7 +46,7 @@ object PickerHelper {
             editText.setText(DateUtilities.displayTime(initialValue))
         }
         editText.setOnClickListener {
-            TimePickerDialogFragment(editText)
+            TimePickerDialogFragmentOld(editText)
                 .show(activity.supportFragmentManager, "timePicker")
         }
     }

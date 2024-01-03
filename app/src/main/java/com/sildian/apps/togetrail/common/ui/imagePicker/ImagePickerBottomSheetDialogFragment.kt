@@ -177,7 +177,7 @@ class ImagePickerBottomSheetDialogFragment : BottomSheetDialogFragment() {
     private fun onPictureSelected(uri: Uri) {
         setFragmentResult(
             requestKey = KEY_REQUEST_PICTURE,
-            result = bundleOf(KEY_BUNDLE_PICTURE_URI to uri.path)
+            result = bundleOf(KEY_RESULT_PICTURE_URI to uri.path)
         )
         dismiss()
     }
@@ -186,13 +186,13 @@ class ImagePickerBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
         private const val TAG = "ImagePickerBottomSheetDialogFragment"
         private const val KEY_REQUEST_PICTURE = "KEY_REQUEST_PICTURE"
-        private const val KEY_BUNDLE_PICTURE_URI = "KEY_BUNDLE_PICTURE_URI"
+        private const val KEY_RESULT_PICTURE_URI = "KEY_RESULT_PICTURE_URI"
 
         fun show(fragmentManager: FragmentManager, onPictureSelected: (uri: String) -> Unit) {
             if (fragmentManager.findFragmentByTag(TAG) == null) {
                 ImagePickerBottomSheetDialogFragment().apply {
                     setFragmentResultListener(requestKey = KEY_REQUEST_PICTURE) { _, bundle ->
-                        onPictureSelected(requireNotNull(bundle.getString(KEY_BUNDLE_PICTURE_URI)))
+                        onPictureSelected(requireNotNull(bundle.getString(KEY_RESULT_PICTURE_URI)))
                     }
                 }.show(fragmentManager, TAG)
             }

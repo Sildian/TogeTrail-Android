@@ -14,9 +14,11 @@ import java.util.*
 /**************************************************************************************************
  * Provides a dialog fragment allowing the user to pick a Time
  * @Param callView : the view calling the timePickerDialogFragment
+ * @deprecated : Replaced by [com.sildian.apps.togetrail.common.ui.dateTimePicker.TimePickerDialogFragment]
  *************************************************************************************************/
 
-class TimePickerDialogFragment(private val callView: EditText)
+@Deprecated("Replaced by [com.sildian.apps.togetrail.common.ui.dateTimePicker.TimePickerDialogFragment]")
+class TimePickerDialogFragmentOld(private val callView: EditText)
     : DialogFragment(),
     TimePickerDialog.OnTimeSetListener
 {

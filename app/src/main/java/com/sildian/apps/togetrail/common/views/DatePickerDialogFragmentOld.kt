@@ -14,9 +14,11 @@ import java.util.*
 /**************************************************************************************************
  * Provides a dialog fragment allowing the user to pick a Date within a calendar
  * @Param callView : the view calling the datePickerDialogFragment
+ * @deprecated : Replaced by [com.sildian.apps.togetrail.common.ui.dateTimePicker.DatePickerDialogFragment]
  *************************************************************************************************/
 
-class DatePickerDialogFragment(private val callView: EditText)
+@Deprecated("Replaced by [com.sildian.apps.togetrail.common.ui.dateTimePicker.DatePickerDialogFragment]")
+class DatePickerDialogFragmentOld(private val callView: EditText)
     : DialogFragment(),
     DatePickerDialog.OnDateSetListener
 {
