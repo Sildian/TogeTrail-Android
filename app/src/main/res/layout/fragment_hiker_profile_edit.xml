@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <import type="android.view.View"/>
+        <import type="com.bumptech.glide.request.RequestOptions"/>
+        <import type="java.time.format.DateTimeFormatter"/>
+        <import type="java.time.format.FormatStyle"/>
+        <import type="com.sildian.apps.togetrail.uiLayer.hikerProfile.edit.HikerProfileEditTextField"/>
+        <variable
+            name="hikerProfileEditViewModel"
+            type="com.sildian.apps.togetrail.uiLayer.hikerProfile.edit.HikerProfileEditViewModel" />
+    </data>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="uiLayer.hikerProfile.edit.HikerProfileEditFragment">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/fragment_profile_info_edit_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/ToolbarWrappedStyle"
+                android:minHeight="?attr/actionBarSize" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="@{hikerProfileEditViewModel.hikerEditState.isInitializing ? View.VISIBLE : View.GONE}"
+                tools:visibility="gone"/>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="@{hikerProfileEditViewModel.hikerEditState.isInitializing ? View.GONE : View.VISIBLE}">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/components_margin_medium"
+                        android:layout_marginBottom="@dimen/components_margin_small"
+                        android:layout_marginStart="@dimen/components_margin_medium"
+                        android:layout_marginEnd="@dimen/components_margin_medium"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/text_size_title"
+                        android:textColor="@color/colorSecondaryDark"
+                        android:text="@string/label_hiker_info"/>
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center">
+
+                        <ImageView
+                            android:id="@+id/fragment_profile_info_edit_image_view_photo"
+                            android:layout_width="@dimen/image_size_medium"
+                            android:layout_height="@dimen/image_size_medium"
+                            android:layout_marginTop="@dimen/components_margin_small"
+                            android:layout_marginBottom="@dimen/components_margin_small"
+                            android:layout_marginStart="@dimen/components_margin_medium"
+                            android:layout_marginEnd="@dimen/components_margin_medium"
+                            android:contentDescription="@string/example_image_content_description"
+                            app:srcCompat="@drawable/ic_person_black"
+                            app:imgUrl="@{hikerProfileEditViewModel.hikerEditState.data.photoUrl}"
+                            app:imgPlaceHolder="@{@drawable/ic_person_black}"
+                            app:imgOptions="@{RequestOptions.circleCropTransform()}"/>
+
+                        <ImageButton
+                            android:id="@+id/fragment_profile_info_edit_button_add_picture"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom|end"
+                            android:contentDescription="@string/example_image_content_description"
+                            app:srcCompat="@drawable/ic_add_photo_black"
+                            android:onClick="@{() -> hikerProfileEditViewModel.onAddPictureButtonClick()}"/>
+
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:baselineAligned="false">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/TextInputFieldStyle"
+                            android:id="@+id/fragment_profile_info_edit_text_field_layout_name"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginTop="@dimen/components_margin_small"
+                            android:layout_marginBottom="@dimen/components_margin_small"
+                            android:layout_marginStart="@dimen/components_margin_medium"
+                            android:layout_marginEnd="@dimen/components_margin_small"
+                            android:hint="@string/label_hiker_name"
+                            app:errorEnabled="true"
+                            app:isError="@{hikerProfileEditViewModel.hikerEditState.errors.contains(HikerProfileEditTextField.Name)}"
+                            app:errorText="@{@string/message_text_field_empty}">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/fragment_profile_info_edit_text_field_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textCapSentences"
+                                android:text="@{hikerProfileEditViewModel.hikerEditState.data.name}"
+                                app:onTextChanged="@{(text) -> hikerProfileEditViewModel.onNameFieldUpdated(text)}"/>
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/TextInputFieldStyle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginTop="@dimen/components_margin_small"
+                            android:layout_marginBottom="@dimen/components_margin_small"
+                            android:layout_marginStart="@dimen/components_margin_small"
+                            android:layout_marginEnd="@dimen/components_margin_medium"
+                            android:hint="@string/label_hiker_birthday"
+                            app:startIconDrawable="@drawable/ic_date_black">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/fragment_profile_info_edit_text_field_dropdown_birthday"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="date"
+                                android:focusable="false"
+                                android:text="@{hikerProfileEditViewModel.hikerEditState.data.birthday.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT))}"
+                                android:onClick="@{() -> hikerProfileEditViewModel.onBirthdayFieldClick()}"/>
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/components_margin_medium"
+                        android:layout_marginBottom="@dimen/components_margin_small"
+                        android:layout_marginStart="@dimen/components_margin_medium"
+                        android:layout_marginEnd="@dimen/components_margin_medium"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/text_size_title"
+                        android:textColor="@color/colorSecondaryDark"
+                        android:text="@string/label_hiker_live_location"/>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/TextInputFieldStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/components_margin_small"
+                        android:layout_marginBottom="@dimen/components_margin_small"
+                        android:layout_marginStart="@dimen/components_margin_medium"
+                        android:layout_marginEnd="@dimen/components_margin_small"
+                        android:hint="@string/label_hiker_live_location">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/fragment_profile_info_edit_text_field_home"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textCapSentences|textMultiLine"
+                            android:focusable="false"
+                            android:text="@{hikerProfileEditViewModel.hikerEditState.data.home.fullAddress}"
+                            android:onClick="@{() -> hikerProfileEditViewModel.onHomeFieldClick()}"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/components_margin_medium"
+                        android:layout_marginBottom="@dimen/components_margin_small"
+                        android:layout_marginStart="@dimen/components_margin_medium"
+                        android:layout_marginEnd="@dimen/components_margin_medium"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/text_size_title"
+                        android:textColor="@color/colorSecondaryDark"
+                        android:text="@string/label_hiker_description"/>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/TextInputFieldStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/components_margin_small"
+                        android:layout_marginBottom="@dimen/components_margin_small"
+                        android:layout_marginStart="@dimen/components_margin_medium"
+                        android:layout_marginEnd="@dimen/components_margin_medium"
+                        android:hint="@string/label_hiker_description2">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/fragment_profile_info_edit_text_field_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textCapSentences|textMultiLine"
+                            android:text="@{hikerProfileEditViewModel.hikerEditState.data.description}"
+                            app:onTextChanged="@{(text) -> hikerProfileEditViewModel.onDescriptionFieldUpdated(text)}"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+            </ScrollView>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</layout>

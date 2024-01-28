@@ -267,7 +267,10 @@
     <!-- Toasts / Snackbars -->
     <string name="message_account_necessary">Un compte est nécessaire pour accéder à cette fonctionnalité</string>
     <string name="message_query_result_empty">Aucun résultat ne correspond à votre recherche</string>
+    <string name="message_no_update">Aucune modification à enregistrer</string>
     <string name="message_text_fields_empty">Certains champs sont vides</string>
+    <string name="message_save_failure">L\'enregistrement des modifications a échoué</string>
+    <string name="message_save_success">Les modifications ont été enregistrées avec succès</string>
     <string name="message_hiker_email_address_change_confirmation">Votre adresse email a bien été modifiée</string>
     <string name="message_trail_info_empty">Les infos de la rando doivent être indiquées</string>
     <string name="message_trail_poi_info_empty">Les infos de chaque point d\'intérêt doivent être indiquées</string>

@@ -2,16 +2,16 @@ package com.sildian.apps.togetrail.common.dataBinding
 
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
-import android.view.View
 import android.widget.CompoundButton
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.ToggleButton
 import androidx.annotation.DrawableRes
+import androidx.core.widget.doOnTextChanged
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.button.MaterialButtonToggleGroup
+import com.google.android.material.textfield.TextInputLayout
 import com.sildian.apps.circularsliderlibrary.CircularSlider
 import com.sildian.apps.circularsliderlibrary.ValueFormatter
 
@@ -71,6 +71,22 @@ object DataBindingAdapters {
     }
 
     @JvmStatic
+    @BindingAdapter("onTextChanged")
+    fun bindOnTextChanged(textView: TextView, onTextChangedListener: OnTextChangedListener?) {
+        onTextChangedListener?.let {
+            textView.doOnTextChanged { text, _, _, _ ->
+                onTextChangedListener.onTextChanged(text = text?.toString())
+            }
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("isError", "errorText")
+    fun bindError(textInputLayout: TextInputLayout, isError: Boolean, errorText: String) {
+        textInputLayout.error = errorText.takeIf { isError }
+    }
+
+    @JvmStatic
     @BindingAdapter("valueFormatter")
     fun bindValueFormatter(circularSlider: CircularSlider, valueFormatter: ValueFormatter?) {
         circularSlider.valueFormatter = valueFormatter
@@ -82,5 +98,9 @@ object DataBindingAdapters {
         listener?.let {
             circularSlider.addOnValueChangedListener(listener)
         }
+    }
+
+    fun interface OnTextChangedListener {
+        fun onTextChanged(text: String?)
     }
 }

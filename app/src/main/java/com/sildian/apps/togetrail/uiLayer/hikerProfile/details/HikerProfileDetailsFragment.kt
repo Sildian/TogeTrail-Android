@@ -44,20 +44,14 @@ class HikerProfileDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         collectStates()
-        hikerProfileViewModel.loadAll()
+        if (savedInstanceState == null) {
+            hikerProfileViewModel.loadAll()
+        }
     }
 
     override fun onDestroyView() {
         binding = null
         super.onDestroyView()
-    }
-
-    private fun collectStates() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(state = Lifecycle.State.STARTED) {
-                hikerProfileViewModel.hikerState.collect(::onHikerState)
-            }
-        }
     }
 
     private fun initToolbar() {
@@ -78,6 +72,14 @@ class HikerProfileDetailsFragment : Fragment() {
                 }
                 else ->
                     false
+            }
+        }
+    }
+
+    private fun collectStates() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(state = Lifecycle.State.STARTED) {
+                hikerProfileViewModel.hikerState.collect(::onHikerState)
             }
         }
     }

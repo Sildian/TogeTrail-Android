@@ -46,6 +46,6 @@ class UpdateHikerProfileUseCaseImpl @Inject constructor(
             hiker
         }
         hikerRepository.addOrUpdateHiker(hiker = updatedHiker.toDataModel())
-        authRepository.updateUser(name = hiker.name, photoUrl = newImageUrl)
+        authRepository.updateUser(name = updatedHiker.name, photoUrl = updatedHiker.photoUrl)
     }
 }

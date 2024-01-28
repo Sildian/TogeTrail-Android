@@ -267,7 +267,10 @@
     <!-- Toasts / Snackbars -->
     <string name="message_account_necessary">An account is necessary to access this feature</string>
     <string name="message_query_result_empty">No result match your research</string>
+    <string name="message_no_update">No update to save</string>
     <string name="message_text_fields_empty">Some text fields are empty</string>
+    <string name="message_save_failure">The update failed</string>
+    <string name="message_save_success">The update was saved successfully</string>
     <string name="message_hiker_email_address_change_confirmation">Your email address was changed</string>
     <string name="message_trail_info_empty">You should provide the trail\'s info</string>
     <string name="message_trail_poi_info_empty">You should provide info for each point of interest</string>

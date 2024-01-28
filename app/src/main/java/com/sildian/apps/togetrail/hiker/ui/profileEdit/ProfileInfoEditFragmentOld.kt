@@ -18,8 +18,10 @@ import dagger.hilt.android.AndroidEntryPoint
 /*************************************************************************************************
  * Lets the user edit its profile's information
  * @param hikerId : the hiker's id
+ * @deprecated : Replaced by [com.sildian.apps.togetrail.uiLayer.hikerProfile.edit.HikerProfileEditFragment]
  ************************************************************************************************/
 
+@Deprecated("Replaced by [com.sildian.apps.togetrail.uiLayer.hikerProfile.edit.HikerProfileEditFragment]")
 @AndroidEntryPoint
 class ProfileInfoEditFragmentOld(private val hikerId: String?=null) :
     BaseImagePickerFragment<FragmentProfileInfoEditOldBinding>()

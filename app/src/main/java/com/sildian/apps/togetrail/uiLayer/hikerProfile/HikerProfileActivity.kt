@@ -18,6 +18,7 @@ import com.sildian.apps.togetrail.databinding.ActivityHikerProfileBinding
 import com.sildian.apps.togetrail.event.ui.detail.EventActivity
 import com.sildian.apps.togetrail.trail.ui.map.TrailActivity
 import com.sildian.apps.togetrail.uiLayer.hikerProfile.details.HikerProfileDetailsFragment
+import com.sildian.apps.togetrail.uiLayer.hikerProfile.edit.HikerProfileEditFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -61,7 +62,7 @@ class HikerProfileActivity : AppCompatActivity() {
     private fun onNavigationEvent(navigationEvent: HikerProfileNavigationEvent) {
         when (navigationEvent) {
             is HikerProfileNavigationEvent.NavigateToHikerProfileEdit ->
-                TODO("Not implemented yet")
+                navigateToHikerProfileEdit()
             is HikerProfileNavigationEvent.NavigateToTrail ->
                 navigateToTrail(trailId = navigationEvent.trailId)
             is HikerProfileNavigationEvent.NavigateToEvent ->
@@ -75,6 +76,14 @@ class HikerProfileActivity : AppCompatActivity() {
         navigateTo(
             fragment = HikerProfileDetailsFragment.newInstance(),
             tag = HikerProfileDetailsFragment.TAG,
+            container = requireNotNull(binding?.activityHikerProfileFragmentContainer?.id),
+        )
+    }
+
+    private fun navigateToHikerProfileEdit() {
+        navigateTo(
+            fragment = HikerProfileEditFragment.newInstance(),
+            tag = HikerProfileEditFragment.TAG,
             container = requireNotNull(binding?.activityHikerProfileFragmentContainer?.id),
         )
     }
