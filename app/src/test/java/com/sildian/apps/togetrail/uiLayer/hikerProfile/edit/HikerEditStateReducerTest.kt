@@ -26,6 +26,22 @@ class HikerEditStateReducerTest {
     }
 
     @Test
+    fun `GIVEN UpdateTextField with unchanged value WHEN reduce THEN do not update`() {
+        // Given
+        val hiker = Random.nextHikerUI()
+        val state = HikerEditState.Initialized.NotEdited(hiker = hiker)
+        val field = HikerProfileEditTextField.Name
+        val newValue = hiker.name
+        val action = HikerProfileEditAction.UpdateTextField(field = field, value = newValue)
+
+        // When
+        val newState = state.reduce(action = action)
+
+        // Then
+        assertEquals(state, newState)
+    }
+
+    @Test
     fun `GIVEN UpdateTextField Name WHEN reduce THEN update name`() {
         // Given
         val hiker = Random.nextHikerUI()

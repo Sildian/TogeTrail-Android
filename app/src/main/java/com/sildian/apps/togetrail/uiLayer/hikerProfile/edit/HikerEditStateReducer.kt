@@ -18,8 +18,15 @@ fun HikerEditState.reduce(action: HikerProfileEditAction): HikerEditState {
 
 private fun HikerEditState.Initialized.updateTextField(
     action: HikerProfileEditAction.UpdateTextField
-): HikerEditState.Initialized.Edited =
-    HikerEditState.Initialized.Edited(
+): HikerEditState.Initialized {
+    val currentValue = when (action.field) {
+        HikerProfileEditTextField.Name -> hiker.name
+        HikerProfileEditTextField.Description -> hiker.description
+    }
+    if (action.value == currentValue) {
+        return this
+    }
+    return HikerEditState.Initialized.Edited(
         hiker = when (action.field) {
             HikerProfileEditTextField.Name -> hiker.copy(name = action.value)
             HikerProfileEditTextField.Description -> hiker.copy(description = action.value)
@@ -27,7 +34,8 @@ private fun HikerEditState.Initialized.updateTextField(
         oldPhotoUrl = oldPhotoUrl,
         newPhotoUri = newPhotoUri,
         errorFields = errorFields.let {
-            val isCurrentFieldError = action.field.isEmptyFieldAllowed.not() && action.value.isBlank()
+            val isCurrentFieldError =
+                action.field.isEmptyFieldAllowed.not() && action.value.isBlank()
             if (isCurrentFieldError) {
                 it.plus(action.field).distinct()
             } else {
@@ -35,6 +43,7 @@ private fun HikerEditState.Initialized.updateTextField(
             }
         }
     )
+}
 
 private fun HikerEditState.Initialized.updatePhoto(
     action: HikerProfileEditAction.UpdatePhoto
