@@ -88,7 +88,6 @@ class EventRepositoryImpl @Inject constructor(
             databaseService
                 .updateEvent(event = event)
                 ?.await()
-                ?: throw DatabaseException.UnknownException()
         }
     }
 }

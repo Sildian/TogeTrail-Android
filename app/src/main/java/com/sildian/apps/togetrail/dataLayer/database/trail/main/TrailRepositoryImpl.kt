@@ -88,7 +88,6 @@ class TrailRepositoryImpl @Inject constructor(
             databaseService
                 .updateTrail(trail = trail)
                 ?.await()
-                ?: throw DatabaseException.UnknownException()
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.sildian.apps.togetrail.dataLayer.database.trail.trailPointOfInterest
 
-import com.sildian.apps.togetrail.common.network.DatabaseException
 import com.sildian.apps.togetrail.common.network.databaseOperation
 import com.sildian.apps.togetrail.dataLayer.database.entities.trail.TrailPointOfInterest
 import kotlinx.coroutines.tasks.await
@@ -42,7 +41,6 @@ class TrailPointOfInterestRepositoryImpl @Inject constructor(
                     trailId = trailId,
                     trailPointOfInterest = trailPointOfInterest
                 )?.await()
-                ?: throw DatabaseException.UnknownException()
         }
     }
 }

@@ -46,7 +46,6 @@ class HikerRepositoryImpl @Inject constructor(
             databaseService
                 .addOrUpdateHiker(hiker = hiker)
                 ?.await()
-                ?: throw DatabaseException.UnknownException()
         }
     }
 

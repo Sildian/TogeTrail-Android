@@ -1,6 +1,5 @@
 package com.sildian.apps.togetrail.dataLayer.database.event.message
 
-import com.sildian.apps.togetrail.common.network.DatabaseException
 import com.sildian.apps.togetrail.common.network.databaseOperation
 import com.sildian.apps.togetrail.dataLayer.database.entities.conversation.Message
 import kotlinx.coroutines.tasks.await
@@ -24,7 +23,6 @@ class EventMessageRepositoryImpl @Inject constructor(
             databaseService
                 .addOrUpdateMessage(eventId = eventId, message = message)
                 ?.await()
-                ?: throw DatabaseException.UnknownException()
         }
     }
 

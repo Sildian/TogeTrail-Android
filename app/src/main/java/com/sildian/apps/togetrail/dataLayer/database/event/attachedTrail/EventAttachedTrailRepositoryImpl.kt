@@ -1,6 +1,5 @@
 package com.sildian.apps.togetrail.dataLayer.database.event.attachedTrail
 
-import com.sildian.apps.togetrail.common.network.DatabaseException
 import com.sildian.apps.togetrail.common.network.databaseOperation
 import com.sildian.apps.togetrail.dataLayer.database.entities.event.EventTrail
 import kotlinx.coroutines.tasks.await
@@ -24,7 +23,6 @@ class EventAttachedTrailRepositoryImpl @Inject constructor(
             databaseService
                 .addOrUpdateAttachedTrail(eventId = eventId, trail = trail)
                 ?.await()
-                ?: throw DatabaseException.UnknownException()
         }
     }
 

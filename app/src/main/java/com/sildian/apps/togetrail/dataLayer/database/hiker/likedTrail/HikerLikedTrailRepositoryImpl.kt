@@ -1,6 +1,5 @@
 package com.sildian.apps.togetrail.dataLayer.database.hiker.likedTrail
 
-import com.sildian.apps.togetrail.common.network.DatabaseException
 import com.sildian.apps.togetrail.common.network.databaseOperation
 import com.sildian.apps.togetrail.dataLayer.database.entities.hiker.HikerTrail
 import kotlinx.coroutines.tasks.await
@@ -24,7 +23,6 @@ class HikerLikedTrailRepositoryImpl @Inject constructor(
             databaseService
                 .addOrUpdateLikedTrail(hikerId = hikerId, trail = trail)
                 ?.await()
-                ?: throw DatabaseException.UnknownException()
         }
     }
 

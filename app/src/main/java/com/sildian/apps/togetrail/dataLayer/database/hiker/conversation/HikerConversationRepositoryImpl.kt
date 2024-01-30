@@ -1,6 +1,5 @@
 package com.sildian.apps.togetrail.dataLayer.database.hiker.conversation
 
-import com.sildian.apps.togetrail.common.network.DatabaseException
 import com.sildian.apps.togetrail.common.network.databaseOperation
 import com.sildian.apps.togetrail.dataLayer.database.entities.hiker.HikerConversation
 import kotlinx.coroutines.tasks.await
@@ -24,7 +23,6 @@ class HikerConversationRepositoryImpl @Inject constructor(
             databaseService
                 .addOrUpdateConversation(hikerId = hikerId, conversation = conversation)
                 ?.await()
-                ?: throw DatabaseException.UnknownException()
         }
     }
 

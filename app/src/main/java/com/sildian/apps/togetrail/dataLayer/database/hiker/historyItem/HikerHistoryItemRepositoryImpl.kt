@@ -1,6 +1,5 @@
 package com.sildian.apps.togetrail.dataLayer.database.hiker.historyItem
 
-import com.sildian.apps.togetrail.common.network.DatabaseException
 import com.sildian.apps.togetrail.common.network.databaseOperation
 import com.sildian.apps.togetrail.dataLayer.database.entities.hiker.HikerHistoryItem
 import kotlinx.coroutines.tasks.await
@@ -40,7 +39,6 @@ class HikerHistoryItemRepositoryImpl @Inject constructor(
             databaseService
                 .addOrUpdateHistoryItem(hikerId = hikerId, historyItem = historyItem)
                 ?.await()
-                ?: throw DatabaseException.UnknownException()
         }
     }
 

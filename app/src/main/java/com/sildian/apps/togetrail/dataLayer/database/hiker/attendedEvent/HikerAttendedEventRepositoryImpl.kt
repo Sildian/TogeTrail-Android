@@ -1,6 +1,5 @@
 package com.sildian.apps.togetrail.dataLayer.database.hiker.attendedEvent
 
-import com.sildian.apps.togetrail.common.network.DatabaseException
 import com.sildian.apps.togetrail.common.network.databaseOperation
 import com.sildian.apps.togetrail.dataLayer.database.entities.hiker.HikerEvent
 import kotlinx.coroutines.tasks.await
@@ -24,7 +23,6 @@ class HikerAttendedEventRepositoryImpl @Inject constructor(
             databaseService
                 .addOrUpdateAttendedEvent(hikerId = hikerId, event = event)
                 ?.await()
-                ?: throw DatabaseException.UnknownException()
         }
     }
 
