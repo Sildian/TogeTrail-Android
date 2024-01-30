@@ -54,10 +54,11 @@ class DatePickerDialogFragment : DialogFragment(), DatePickerDialog.OnDateSetLis
             if (fragmentManager.findFragmentByTag(TAG) == null) {
                 DatePickerDialogFragment().apply {
                     arguments = bundleOf(KEY_ARG_DATE to selectedDate)
+                    show(fragmentManager, TAG)
                     setFragmentResultListener(requestKey = KEY_REQUEST_DATE) { _, bundle ->
                         onDateSelected(bundle.getSerializable(KEY_RESULT_DATE) as LocalDate)
                     }
-                }.show(fragmentManager, TAG)
+                }
             }
         }
     }

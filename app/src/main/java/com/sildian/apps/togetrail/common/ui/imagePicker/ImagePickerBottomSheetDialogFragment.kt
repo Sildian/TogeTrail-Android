@@ -191,10 +191,11 @@ class ImagePickerBottomSheetDialogFragment : BottomSheetDialogFragment() {
         fun show(fragmentManager: FragmentManager, onPictureSelected: (uri: String) -> Unit) {
             if (fragmentManager.findFragmentByTag(TAG) == null) {
                 ImagePickerBottomSheetDialogFragment().apply {
+                    show(fragmentManager, TAG)
                     setFragmentResultListener(requestKey = KEY_REQUEST_PICTURE) { _, bundle ->
                         onPictureSelected(requireNotNull(bundle.getString(KEY_RESULT_PICTURE_URI)))
                     }
-                }.show(fragmentManager, TAG)
+                }
             }
         }
     }
