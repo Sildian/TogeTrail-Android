@@ -54,10 +54,11 @@ class TimePickerDialogFragment : DialogFragment(), TimePickerDialog.OnTimeSetLis
             if (fragmentManager.findFragmentByTag(TAG) == null) {
                 TimePickerDialogFragment().apply {
                     arguments = bundleOf(KEY_ARG_TIME to selectedTime)
+                    show(fragmentManager, TAG)
                     setFragmentResultListener(requestKey = KEY_REQUEST_TIME) { _, bundle ->
                         onTimeSelected(bundle.getSerializable(KEY_RESULT_TIME) as LocalTime)
                     }
-                }.show(fragmentManager, TAG)
+                }
             }
         }
     }
