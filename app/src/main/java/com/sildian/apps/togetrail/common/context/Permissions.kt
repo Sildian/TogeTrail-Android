@@ -11,6 +11,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 
 enum class Permission(val permissionName: String, val minSdkRequiringPermission: Int) {
@@ -65,13 +66,14 @@ private class SinglePermissionRequestLauncher(
     private val permission: Permission,
     private val activityResultLauncher: ActivityResultLauncher<String>,
     private var activity: ComponentActivity?,
+    private var lifecycle: Lifecycle?,
     callback: Callback,
 ) : PermissionRequestLauncher(
     callback = callback,
 ), DefaultLifecycleObserver {
 
     init {
-        requireNotNull(activity).lifecycle.addObserver(this)
+        requireNotNull(lifecycle).addObserver(this)
     }
 
     override fun isGranted(): Boolean =
@@ -89,8 +91,9 @@ private class SinglePermissionRequestLauncher(
 
     override fun onDestroy(owner: LifecycleOwner) {
         activityResultLauncher.unregister()
-        requireNotNull(activity).lifecycle.removeObserver(this)
+        requireNotNull(lifecycle).removeObserver(this)
         activity = null
+        lifecycle = null
         super.onDestroy(owner)
     }
 }
@@ -99,13 +102,14 @@ private class MultiplePermissionRequestLauncher(
     private val permissions: Array<Permission>,
     private val activityResultLauncher: ActivityResultLauncher<Array<String>>,
     private var activity: ComponentActivity?,
+    private var lifecycle: Lifecycle?,
     callback: Callback,
 ): PermissionRequestLauncher(
     callback = callback,
 ), DefaultLifecycleObserver {
 
     init {
-        requireNotNull(activity).lifecycle.addObserver(this)
+        requireNotNull(lifecycle).addObserver(this)
     }
 
     override fun isGranted(): Boolean {
@@ -135,8 +139,9 @@ private class MultiplePermissionRequestLauncher(
 
     override fun onDestroy(owner: LifecycleOwner) {
         activityResultLauncher.unregister()
-        requireNotNull(activity).lifecycle.removeObserver(this)
+        requireNotNull(lifecycle).removeObserver(this)
         activity = null
+        lifecycle = null
         super.onDestroy(owner)
     }
 }
@@ -157,6 +162,7 @@ fun ComponentActivity.registerForSinglePermissionRequest(
             if (isGranted) callback.onGranted() else callback.onDenied()
         },
         activity = this,
+        lifecycle = lifecycle,
         callback = callback,
     )
 
@@ -172,6 +178,7 @@ fun ComponentActivity.registerForMultiplePermissionRequest(
             if (isGranted.containsValue(false)) callback.onDenied() else callback.onGranted()
         },
         activity = this,
+        lifecycle = lifecycle,
         callback = callback,
     )
 
@@ -179,8 +186,15 @@ fun Fragment.registerForSinglePermissionRequest(
     permission: Permission,
     callback: PermissionRequestLauncher.Callback,
 ): PermissionRequestLauncher =
-    requireActivity().registerForSinglePermissionRequest(
+    SinglePermissionRequestLauncher(
         permission = permission,
+        activityResultLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission(),
+        ) { isGranted ->
+            if (isGranted) callback.onGranted() else callback.onDenied()
+        },
+        activity = requireActivity(),
+        lifecycle = lifecycle,
         callback = callback,
     )
 
@@ -188,7 +202,14 @@ fun Fragment.registerForMultiplePermissionRequest(
     permissions: Array<Permission>,
     callback: PermissionRequestLauncher.Callback,
 ): PermissionRequestLauncher =
-    requireActivity().registerForMultiplePermissionRequest(
+    MultiplePermissionRequestLauncher(
         permissions = permissions,
+        activityResultLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { isGranted ->
+            if (isGranted.containsValue(false)) callback.onDenied() else callback.onGranted()
+        },
+        activity = requireActivity(),
+        lifecycle = lifecycle,
         callback = callback,
     )
