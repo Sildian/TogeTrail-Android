@@ -3,6 +3,7 @@ package com.sildian.apps.togetrail.common.ui.imagePicker
 import android.content.ActivityNotFoundException
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -175,6 +176,7 @@ class ImagePickerBottomSheetDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun onPictureSelected(uri: Uri) {
+        Log.i("PICTURE", "Image selected : $uri")
         setFragmentResult(
             requestKey = KEY_REQUEST_PICTURE,
             result = bundleOf(KEY_RESULT_PICTURE_URI to uri.path)
