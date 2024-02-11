@@ -47,13 +47,16 @@ private fun HikerEditState.Initialized.updateTextField(
 
 private fun HikerEditState.Initialized.updatePhoto(
     action: HikerProfileEditAction.UpdatePhoto
-): HikerEditState.Initialized =
-    HikerEditState.Initialized.Edited(
-        hiker = hiker,
-        oldPhotoUrl = hiker.photoUrl,
-        newPhotoUri = action.uri,
+): HikerEditState.Initialized {
+    val oldPhotoUrl = hiker.photoUrl
+    val newPhotoUri = action.uri
+    return HikerEditState.Initialized.Edited(
+        hiker = hiker.copy(photoUrl = newPhotoUri),
+        oldPhotoUrl = oldPhotoUrl,
+        newPhotoUri = newPhotoUri,
         errorFields = errorFields,
     )
+}
 
 private fun HikerEditState.Initialized.updateBirthday(
     action: HikerProfileEditAction.UpdateBirthday

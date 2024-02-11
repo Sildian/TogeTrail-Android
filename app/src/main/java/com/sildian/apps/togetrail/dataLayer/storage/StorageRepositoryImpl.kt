@@ -8,9 +8,9 @@ class StorageRepositoryImpl @Inject constructor(
     private val storageService: StorageService
 ) : StorageRepository {
 
-    override suspend fun uploadImage(imageLocalPath: String): String =
+    override suspend fun uploadImage(imageUri: String): String =
         storageOperation {
-            storageService.uploadImage(imageLocalPath = imageLocalPath)
+            storageService.uploadImage(imageUri = imageUri)
                 .await()
                 .storage
                 .downloadUrl

@@ -59,14 +59,19 @@ class UpdateHikerProfileUseCaseImplTest {
         )
     }
 
-    @Test(expected = StorageException::class)
-    fun `GIVEN StorageException with imagesUrls WHEN invoke THEN throws StorageException`() = runTest {
+    @Test
+    fun `GIVEN hiker and images and StorageException WHEN invoke THEN hiker is updated without images`() = runTest {
         // Given
         val hiker = Random.nextHikerUI()
         val imageUrlToDelete = Random.nextUrlString()
         val imageUriToAdd = Random.nextUrlString()
+        val authRepository = AuthRepositoryFake()
+        val storageRepository = StorageRepositoryFake(error = StorageException.UnknownException())
+        val hikerRepository = HikerRepositoryFake()
         val useCase = initUseCase(
-            storageRepository = StorageRepositoryFake(error = StorageException.UnknownException()),
+            authRepository = authRepository,
+            storageRepository = storageRepository,
+            hikerRepository = hikerRepository,
         )
 
         // When
@@ -75,6 +80,39 @@ class UpdateHikerProfileUseCaseImplTest {
             imageUrlToDeleteFromStorage = imageUrlToDelete,
             imageUriToAddInStorage = imageUriToAdd,
         )
+
+        // Then
+        assertEquals(1, hikerRepository.addOrUpdateHikerSuccessCount)
+        assertEquals(1, authRepository.updateUserSuccessCount)
+        assertEquals(0, storageRepository.deleteImageSuccessCount)
+        assertEquals(0, storageRepository.uploadImageSuccessCount)
+    }
+
+    @Test
+    fun `GIVEN hiker without images WHEN invoke THEN hiker is updated without images`() = runTest {
+        // Given
+        val hiker = Random.nextHikerUI()
+        val authRepository = AuthRepositoryFake()
+        val storageRepository = StorageRepositoryFake()
+        val hikerRepository = HikerRepositoryFake()
+        val useCase = initUseCase(
+            authRepository = authRepository,
+            storageRepository = storageRepository,
+            hikerRepository = hikerRepository,
+        )
+
+        // When
+        useCase(
+            hiker = hiker,
+            imageUrlToDeleteFromStorage = null,
+            imageUriToAddInStorage = null,
+        )
+
+        // Then
+        assertEquals(1, hikerRepository.addOrUpdateHikerSuccessCount)
+        assertEquals(1, authRepository.updateUserSuccessCount)
+        assertEquals(0, storageRepository.deleteImageSuccessCount)
+        assertEquals(0, storageRepository.uploadImageSuccessCount)
     }
 
     @Test
@@ -104,32 +142,5 @@ class UpdateHikerProfileUseCaseImplTest {
         assertEquals(1, authRepository.updateUserSuccessCount)
         assertEquals(1, storageRepository.deleteImageSuccessCount)
         assertEquals(1, storageRepository.uploadImageSuccessCount)
-    }
-
-    @Test
-    fun `GIVEN hiker without images WHEN invoke THEN hiker is updated`() = runTest {
-        // Given
-        val hiker = Random.nextHikerUI()
-        val authRepository = AuthRepositoryFake()
-        val storageRepository = StorageRepositoryFake()
-        val hikerRepository = HikerRepositoryFake()
-        val useCase = initUseCase(
-            authRepository = authRepository,
-            storageRepository = storageRepository,
-            hikerRepository = hikerRepository,
-        )
-
-        // When
-        useCase(
-            hiker = hiker,
-            imageUrlToDeleteFromStorage = null,
-            imageUriToAddInStorage = null,
-        )
-
-        // Then
-        assertEquals(1, hikerRepository.addOrUpdateHikerSuccessCount)
-        assertEquals(1, authRepository.updateUserSuccessCount)
-        assertEquals(0, storageRepository.deleteImageSuccessCount)
-        assertEquals(0, storageRepository.uploadImageSuccessCount)
     }
 }

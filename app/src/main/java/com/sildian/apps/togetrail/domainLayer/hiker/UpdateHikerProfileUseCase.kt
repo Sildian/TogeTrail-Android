@@ -32,14 +32,8 @@ class UpdateHikerProfileUseCaseImpl @Inject constructor(
         imageUrlToDeleteFromStorage: String?,
         imageUriToAddInStorage: String?
     ) {
-        if (imageUrlToDeleteFromStorage != null) {
-            storageRepository.deleteImage(imageUrl = imageUrlToDeleteFromStorage)
-        }
-        val newImageUrl = if (imageUriToAddInStorage != null) {
-            storageRepository.uploadImage(imageLocalPath = imageUriToAddInStorage)
-        } else {
-            null
-        }?.toString()
+        deleteOldImageFromStorage(imageUrl = imageUrlToDeleteFromStorage)
+        val newImageUrl = uploadNewImageToStorage(imageUri = imageUriToAddInStorage)
         val updatedHiker = if (newImageUrl != null) {
             hiker.copy(photoUrl = newImageUrl)
         } else {
@@ -48,4 +42,24 @@ class UpdateHikerProfileUseCaseImpl @Inject constructor(
         hikerRepository.addOrUpdateHiker(hiker = updatedHiker.toDataModel())
         authRepository.updateUser(name = updatedHiker.name, photoUrl = updatedHiker.photoUrl)
     }
+
+    private suspend fun deleteOldImageFromStorage(imageUrl: String?) {
+        if (imageUrl != null) {
+            try {
+                storageRepository.deleteImage(imageUrl = imageUrl)
+            } catch (e: Throwable) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private suspend fun uploadNewImageToStorage(imageUri: String?): String? =
+        imageUri?.let {
+            try {
+                storageRepository.uploadImage(imageUri = imageUri)
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                null
+            }
+        }
 }

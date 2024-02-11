@@ -179,7 +179,7 @@ class ImagePickerBottomSheetDialogFragment : BottomSheetDialogFragment() {
         Log.i("PICTURE", "Image selected : $uri")
         setFragmentResult(
             requestKey = KEY_REQUEST_PICTURE,
-            result = bundleOf(KEY_RESULT_PICTURE_URI to uri.path)
+            result = bundleOf(KEY_RESULT_PICTURE_URI to uri.toString())
         )
         dismiss()
     }

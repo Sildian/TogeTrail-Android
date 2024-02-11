@@ -137,7 +137,7 @@ class HikerEditStateReducerTest {
 
         // Then
         val expectedState = HikerEditState.Initialized.Edited(
-            hiker = hiker,
+            hiker = hiker.copy(photoUrl = newPhotoUri),
             oldPhotoUrl = hiker.photoUrl,
             newPhotoUri = newPhotoUri,
             errorFields = emptyList(),

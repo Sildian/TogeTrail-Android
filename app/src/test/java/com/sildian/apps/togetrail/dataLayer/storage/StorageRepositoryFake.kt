@@ -12,7 +12,7 @@ class StorageRepositoryFake(
     var uploadImageSuccessCount: Int = 0 ; private set
     var deleteImageSuccessCount: Int = 0 ; private set
 
-    override suspend fun uploadImage(imageLocalPath: String): String {
+    override suspend fun uploadImage(imageUri: String): String {
         error?.let { throw it } ?: uploadImageSuccessCount++
         return imageUrl
     }
