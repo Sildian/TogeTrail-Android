@@ -13,8 +13,12 @@
     <color name="colorGray">#9E9E9E</color>
     <color name="colorGrayUltraLight">#F5F5F5</color>
     <color name="colorGreen">#388E3C</color>
+    <color name="colorGreenDark">#1B5E20</color>
+    <color name="colorGreenUltraLight">#C8E6C9</color>
     <color name="colorPurple">#673ab7</color>
     <color name="colorBlue">#1976d2</color>
     <color name="colorYellow">#FBC02D</color>
     <color name="colorRed">#D32F2F</color>
+    <color name="colorRedDark">#B71C1C</color>
+    <color name="colorRedUltraLight">#FFCDD2</color>
 </resources>

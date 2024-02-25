@@ -12,6 +12,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.sildian.apps.togetrail.R
+import com.sildian.apps.togetrail.common.context.SnackbarIntent
 import com.sildian.apps.togetrail.common.context.navigateBack
 import com.sildian.apps.togetrail.common.context.showSnackbar
 import com.sildian.apps.togetrail.common.ui.dateTimePicker.DatePickerDialogFragment
@@ -145,6 +146,7 @@ class HikerProfileEditFragment : Fragment() {
         requireContext().showSnackbar(
             view = requireView(),
             message = getString(R.string.message_save_failure),
+            intent = SnackbarIntent.Error,
             actionText = getString(R.string.button_common_retry),
             onActionClick = hikerProfileEditViewModel::onSaveMenuButtonClick,
         )
@@ -154,6 +156,7 @@ class HikerProfileEditFragment : Fragment() {
         requireContext().showSnackbar(
             view = requireView(),
             message = getString(R.string.message_save_success),
+            intent = SnackbarIntent.Success,
         )
         requireActivity().navigateBack()
     }
