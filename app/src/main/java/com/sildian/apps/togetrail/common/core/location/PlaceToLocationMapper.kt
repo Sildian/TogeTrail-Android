@@ -10,6 +10,7 @@ const val ADMIN_AREA_NAME_SEPARATOR_2 = '-'
 
 fun Place.toLocation(): Location =
     Location(
+        id = id.orEmpty(),
         country = extractCountry(),
         region = extractRegion(),
         fullAddress = extractFullAddress(),

@@ -26,7 +26,7 @@ class PlaceToLocationMapperTest {
         val location = place.toLocation()
 
         // Then
-        val expectedResult = Location(country = null)
+        val expectedResult = Location(id = place.id!!, country = null)
         assertEquals(expectedResult, location)
     }
 
@@ -45,6 +45,7 @@ class PlaceToLocationMapperTest {
 
         // Then
         val expectedResult = Location(
+            id = place.id!!,
             country = Location.Country(code = placeCountry.shortName.orEmpty(), name = placeCountry.name)
         )
         assertEquals(expectedResult, location)
@@ -64,7 +65,7 @@ class PlaceToLocationMapperTest {
         val location = place.toLocation()
 
         // Then
-        val expectedResult = Location(region = null)
+        val expectedResult = Location(id = place.id!!, region = null)
         assertEquals(expectedResult, location)
     }
 
@@ -86,6 +87,7 @@ class PlaceToLocationMapperTest {
 
         // Then
         val expectedResult = Location(
+            id = place.id!!,
             region = Location.Region(code = placeAdminAreaLv1.shortName.orEmpty(), name = placeAdminAreaLv1.name),
         )
         assertEquals(expectedResult, location)
@@ -116,6 +118,7 @@ class PlaceToLocationMapperTest {
         // Then
         val expectedRegionCode = "${nameParts.first.take(1)}${nameParts.second.take(1)}"
         val expectedResult = Location(
+            id = place.id!!,
             region = Location.Region(code = expectedRegionCode, name = placeAdminAreaLv1.name),
         )
         assertEquals(expectedResult, location)
@@ -141,6 +144,7 @@ class PlaceToLocationMapperTest {
         // Then
         val expectedRegionCode = name.take(2)
         val expectedResult = Location(
+            id = place.id!!,
             region = Location.Region(code = expectedRegionCode, name = placeAdminAreaLv1.name),
         )
         assertEquals(expectedResult, location)
@@ -160,11 +164,12 @@ class PlaceToLocationMapperTest {
         val location = place.toLocation()
 
         // Then
-        val expectedResult = Location(fullAddress = address)
+        val expectedResult = Location(id = place.id!!, fullAddress = address)
         assertEquals(expectedResult, location)
     }
 
     private fun Random.nextPlace(
+        id: String? = nextString(),
         country: AddressComponent? = nextPlaceCountry(),
         adminAreaLv1: AddressComponent? = nextPlaceAdminAreaLv1(),
         address: String? = nextString(),
@@ -173,6 +178,7 @@ class PlaceToLocationMapperTest {
             Mockito.`when`(asList()).thenReturn(listOf(country, adminAreaLv1))
         }
         return Mockito.mock(Place::class.java).apply {
+            Mockito.`when`(this.id).thenReturn(id)
             Mockito.`when`(this.address).thenReturn(address)
             Mockito.`when`(this.addressComponents).thenReturn(addressComponents)
         }
